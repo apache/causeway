@@ -56,6 +56,7 @@ import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryFindA
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -94,7 +95,6 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCo
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtime.services.RequestScopedService;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
@@ -126,13 +126,14 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * @param storeLifecycleListener 
      */
     public PersistenceSession5(
+            final MetaModelContext metaModelContext,
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final StoreLifecycleListener storeLifecycleListener, 
             final FixturesInstalledStateHolder stateHolder) {
 
-        super(authenticationSession, jdoPersistenceManagerFactory, stateHolder);
-        this.transactionService = IsisContext.getTransactionService();
+        super(metaModelContext, authenticationSession, jdoPersistenceManagerFactory, stateHolder);
+        this.transactionService = metaModelContext.getTransactionService();
         this.storeLifecycleListener = storeLifecycleListener;
     }
 
@@ -165,7 +166,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 PersistenceQueryFindUsingApplibQueryDefault.class,
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
-        objectAdapterContext = ObjectAdapterContext.openContext(authenticationSession, specificationLoader, this);
+        objectAdapterContext = ObjectAdapterContext.openContext(super.metaModelContext, authenticationSession, this);
 
         // tell the proxy of all request-scoped services to instantiate the underlying
         // services, store onto the thread-local and inject into them...
@@ -451,9 +452,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         Object result;
         try {
-            final Class<?> cls = clsOf(rootOid);
-            final Object jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(rootOid);
-            FetchPlan fetchPlan = persistenceManager.getFetchPlan();
+            val specLoader = super.getSpecificationLoader();
+            val cls = clsOf(rootOid);
+            val jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(specLoader, rootOid);
+            val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
             result = persistenceManager.getObjectById(cls, jdoObjectId);
         } catch (final RuntimeException e) {
@@ -487,9 +489,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             return Collections.emptyMap();
         }
 
+        val specLoader = super.getSpecificationLoader();
+        
         final List<Object> dnOids = new ArrayList<>(rootOids.size());
-        for (final RootOid rootOid : rootOids) {
-            final Object id = JdoObjectIdSerializer.toJdoObjectId(rootOid);
+        for (val rootOid : rootOids) {
+            final Object id = JdoObjectIdSerializer.toJdoObjectId(specLoader, rootOid);
             if(id instanceof SingleFieldIdentity) {
                 dnOids.add(id);
             } else if (id instanceof String && ((String) id).contains("[OID]")) {

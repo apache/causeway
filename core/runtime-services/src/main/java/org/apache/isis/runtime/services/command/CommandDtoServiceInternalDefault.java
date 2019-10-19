@@ -41,7 +41,6 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
@@ -178,19 +177,17 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         propertyDto.setNewValue(newValue);
     }
 
-    // //////////////////////////////////////
-
-    // -- injected services
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return objectAdapterProvider;
+    }
+    
+    // -- DEPENDENCIES
+    
     @Inject CommandContext commandContext;
     @Inject private BookmarkService bookmarkService;
     @Inject SpecificationLoader specificationLoader;
     @Inject IsisSessionFactory isisSessionFactory;
-
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return IsisContext.getObjectAdapterProvider();
-    }
-
-
+    @Inject ObjectAdapterProvider objectAdapterProvider;
 
 
 }

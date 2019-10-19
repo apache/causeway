@@ -33,16 +33,16 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
-import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 
@@ -51,6 +51,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     @Inject FactoryService factoryService;
     @Inject ServiceRegistry serviceRegistry;
+    @Inject SpecificationLoader specLoader;
 
     @Override
     public HomePageAction getHomePageAction() {
@@ -60,9 +61,6 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
     private final _Lazy<HomePageAction> homePage = _Lazy.threadSafe(this::lookupHomePageAction);
 
     private HomePageAction lookupHomePageAction() {
-
-        val metaModelContext = MetaModelContext.current();
-        val specLoader = metaModelContext.getSpecificationLoader();
 
         val viewModelTypes = IsisBeanTypeRegistry.current().getViewModelTypes();
 
@@ -132,8 +130,6 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
             return null; 
         }
 
-        val metaModelContext = MetaModelContext.current();
-        val specLoader = metaModelContext.getSpecificationLoader();
         val spec = specLoader.loadSpecification(type);
         if(!spec.isViewModel()) {
             return null;
@@ -158,19 +154,16 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
             return null;
         }
 
-        val metaModelContext = MetaModelContext.current();
-        val objectAdapterProvider = metaModelContext.getObjectAdapterProvider();
-
-        final ObjectAdapter adapterForHomePageActionDeclaringPojo;
+        final ManagedObject adapterForHomePageActionDeclaringPojo;
 
         if(spec.isViewModel()) {
             val viewModelPojo = factoryService.instantiate(spec.getCorrespondingClass());
-            adapterForHomePageActionDeclaringPojo = objectAdapterProvider.adapterFor(viewModelPojo);
+            adapterForHomePageActionDeclaringPojo = ManagedObject.of(spec, viewModelPojo);
         } else if(spec.isManagedBean()) {
 
             adapterForHomePageActionDeclaringPojo = 
                     serviceRegistry.streamRegisteredBeansOfType(spec.getCorrespondingClass())
-                    .map(objectAdapterProvider::adapterForBean)
+                    .map(bean->ManagedObject.of(spec, bean.getInstance().getFirst()))
                     .findFirst()
                     .orElseThrow(_Exceptions::unexpectedCodeReach);
 

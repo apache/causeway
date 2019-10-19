@@ -26,7 +26,6 @@ import javax.inject.Named;
 
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -40,14 +39,9 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_MANIFEST_ATTRIBUTES = "manifestAttributes";
-
-    @Inject
-    private WebAppConfigBean webAppConfigBean;
-
     private static final String ID_APPLICATION_NAME = "applicationName";
     private static final String ID_APPLICATION_VERSION = "applicationVersion";
     private static final String ID_ABOUT_MESSAGE = "aboutMessage";
-
 
     public static class LabelVisibleOnlyIfNonEmpty extends Label {
 
@@ -86,7 +80,7 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
         add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, webAppConfigBean.getAboutMessage()));
 
         if(jarManifestModel == null) {
-            jarManifestModel = new JarManifestModel(metaInfManifestIs);
+            jarManifestModel = new JarManifestModel(super.commonContext,  metaInfManifestIs);
         }
 
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));

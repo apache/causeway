@@ -23,11 +23,10 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
@@ -56,7 +55,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         processMethodContext.removeMethod(method);
 
         final FacetHolder collection = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(createCollectionClearFacet(method, getMethod, collection));
+        super.addFacet(createCollectionClearFacet(method, getMethod, collection));
     }
 
     private CollectionClearFacet createCollectionClearFacet(

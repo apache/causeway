@@ -42,11 +42,13 @@ public class JsonParserHelper {
 
     private final RendererContext rendererContext;
     private final ObjectSpecification objectSpec;
+    private final JsonValueEncoder jsonValueEncoder;
 
-    public JsonParserHelper(
-            final RendererContext rendererContext, ObjectSpecification objectSpecification) {
+    public JsonParserHelper(RendererContext rendererContext, ObjectSpecification objectSpecification) {
         this.objectSpec = objectSpecification;
         this.rendererContext = rendererContext;
+        this.jsonValueEncoder = rendererContext.getServiceRegistry()
+                .lookupServiceElseFail(JsonValueEncoder.class);
     }
 
 
@@ -75,7 +77,7 @@ public class JsonParserHelper {
      *            - expected to be either a String or a Map (ie from within a
      *            List, built by parsing a JSON structure).
      */
-    public ObjectAdapter objectAdapterFor(final JsonRepresentation argRepr) {
+    ObjectAdapter objectAdapterFor(final JsonRepresentation argRepr) {
 
         if (argRepr == null) {
             return null;
@@ -98,7 +100,7 @@ public class JsonParserHelper {
         // value (encodable)
         if (objectSpec.isEncodeable()) {
             try {
-                return JsonValueEncoder.asAdapter(objectSpec, argValueRepr, null);
+                return jsonValueEncoder.asAdapter(objectSpec, argValueRepr, null);
             }catch(IllegalArgumentException ex) {
                 argRepr.mapPut("invalidReason", ex.getMessage());
                 throw ex;

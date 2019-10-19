@@ -22,6 +22,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -41,6 +42,8 @@ import org.apache.isis.security.authentication.AuthenticationSession;
  */
 public interface RuntimeContext {
 
+    MetaModelContext getMetaModelContext();
+    
     AuthenticationSession getAuthenticationSession();
     IsisConfiguration getConfiguration();
     IsisConfigurationLegacy getConfigurationLegacy();

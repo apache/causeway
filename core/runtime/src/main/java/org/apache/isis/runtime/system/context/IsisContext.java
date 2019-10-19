@@ -18,38 +18,20 @@
  */
 package org.apache.isis.runtime.system.context;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.runtime.system.context.session.RuntimeContext;
-import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.authorization.manager.AuthorizationManager;
 
 import lombok.val;
 
@@ -93,72 +75,6 @@ public interface IsisContext {
     // -- CONVENIENT SHORTCUTS
 
     /**
-     * @return new instance of ManagedObjectContext
-     */
-    public static RuntimeContext newManagedObjectContext() {
-        return new RuntimeContextBase() {}; 
-    }
-
-    /**
-     * @return framework's IsisConfigurationLegacy
-     * @throws NoSuchElementException - if IsisConfigurationLegacy not managed
-     */
-    public static IsisConfigurationLegacy getConfigurationLegacy() {
-        return MetaModelContext.current().getConfigurationLegacy();
-    }
-    
-    /**
-     * @return framework's IsisConfiguration
-     * @throws NoSuchElementException - if IsisConfiguration not managed
-     */
-    public static IsisConfiguration getConfiguration() {
-        return MetaModelContext.current().getConfiguration();
-    }
-
-    /**
-     * @return framework's SpecificationLoader
-     * @throws NoSuchElementException - if SpecificationLoader not managed
-     */
-    public static SpecificationLoader getSpecificationLoader() {
-        return MetaModelContext.current().getSpecificationLoader();
-        //return _Spring.getSingletonElseFail(SpecificationLoader.class);
-    }
-
-    /**
-     * @return framework's ServicesInjector
-     * @throws NoSuchElementException - if ServicesInjector not managed
-     */
-    public static ServiceInjector getServiceInjector() {
-        return MetaModelContext.current().getServiceInjector();
-        //return _Spring.getSingletonElseFail(ServiceInjector.class);
-    }
-
-    /**
-     * @return framework's ServiceRegistry
-     * @throws NoSuchElementException - if ServiceRegistry not managed
-     */
-    public static ServiceRegistry getServiceRegistry() {
-        return MetaModelContext.current().getServiceRegistry();
-        //return _Spring.getSingletonElseFail(ServiceRegistry.class);
-    }
-
-    /**
-     * @return framework's IsisSessionFactory 
-     * @throws NoSuchElementException - if IsisSessionFactory not resolvable
-     */
-    public static IsisSessionFactory getSessionFactory() {
-        return _Spring.getSingletonElseFail(IsisSessionFactory.class);
-    }
-
-    /**
-     * @return framework's TransactionService 
-     * @throws NoSuchElementException - if TransactionService not resolvable
-     */
-    public static TransactionService getTransactionService() {
-        return _Spring.getSingletonElseFail(TransactionService.class);
-    }
-
-    /**
      * @return framework's current IsisSession (if any)
      * @throws IllegalStateException - if IsisSessionFactory not resolvable
      */
@@ -176,22 +92,22 @@ public interface IsisContext {
     }
 
     // likely to be extended to support multiple PlatformTransactionManagers, by selecting one by its name
-    public static TransactionTemplate createTransactionTemplate() {
-        val txMan = _Spring.getSingletonElseFail(PlatformTransactionManager.class);
-        return new TransactionTemplate(txMan);
-    }
+//    public static TransactionTemplate createTransactionTemplate() {
+//        val txMan = getSingletonElseFail(PlatformTransactionManager.class);
+//        return new TransactionTemplate(txMan);
+//    }
 
-    /**
-     * @return framework's ServiceRegistry
-     * @throws NoSuchElementException - if ServiceRegistry not managed
-     */
-    public static ObjectAdapterProvider getObjectAdapterProvider() {
-        return _Spring.getSingletonElseFail(ObjectAdapterService.class);
-    }
+//    /**
+//     * @return framework's ServiceRegistry
+//     * @throws NoSuchElementException - if ServiceRegistry not managed
+//     */
+//    public static ObjectAdapterProvider getObjectAdapterProvider() {
+//        return getSingletonElseFail(ObjectAdapterService.class);
+//    }
 
-    public static Function<Object, ObjectAdapter> pojoToAdapter() {
-        return getObjectAdapterProvider()::adapterFor;
-    }
+//    public static Function<Object, ObjectAdapter> pojoToAdapter() {
+//        return getObjectAdapterProvider()::adapterFor;
+//    }
 
     public static Function<RootOid, ObjectAdapter> rootOidToAdapter() {
         return rootOid -> {
@@ -211,13 +127,13 @@ public interface IsisContext {
                 .map(IsisSession::getAuthenticationSession);
     }
 
-    public static AuthenticationManager getAuthenticationManager() {
-        return _Spring.getSingletonElseFail(AuthenticationManager.class);
-    }
-
-    public static AuthorizationManager getAuthorizationManager() {
-        return _Spring.getSingletonElseFail(AuthorizationManager.class);
-    }
+//    public static AuthenticationManager getAuthenticationManager() {
+//        return getSingletonElseFail(AuthenticationManager.class);
+//    }
+//
+//    public static AuthorizationManager getAuthorizationManager() {
+//        return getSingletonElseFail(AuthorizationManager.class);
+//    }
 
 
 }

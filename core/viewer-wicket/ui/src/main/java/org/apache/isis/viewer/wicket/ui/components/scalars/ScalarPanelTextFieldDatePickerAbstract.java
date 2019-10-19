@@ -43,7 +43,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldW
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
-public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializable> extends ScalarPanelTextFieldAbstract<T>  {
+public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializable>
+extends ScalarPanelTextFieldAbstract<T>  {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,7 +71,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
     @Override
     protected TextField<T> createTextField(final String id) {
-        return new TextFieldWithDateTimePicker<>(id, newTextFieldValueModel(), cls, converter);
+        return new TextFieldWithDateTimePicker<>(super.getCommonContext(), id, newTextFieldValueModel(), cls, converter);
     }
 
 
@@ -127,18 +128,5 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     protected Integer getLengthAdjustHint() {
         return null;
     }
-
-
-
-    @Inject WicketViewerSettings settings;
-    @Override
-    protected WicketViewerSettings getSettings() {
-        return settings;
-    }
-
-    private LocaleProvider getLocaleProvider() {
-        return IsisContext.getServiceRegistry().lookupServiceElseFail(LocaleProvider.class);
-    }
-
 
 }

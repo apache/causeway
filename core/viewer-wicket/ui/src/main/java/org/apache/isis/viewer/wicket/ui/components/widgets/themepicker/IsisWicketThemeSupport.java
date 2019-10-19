@@ -20,9 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.config.IsisConfiguration;
 
 import de.agilecoders.wicket.core.settings.ThemeProvider;
 import lombok.val;
@@ -37,19 +36,10 @@ public interface IsisWicketThemeSupport {
     ThemeProvider getThemeProvider();
     List<String> getEnabledThemeNames();
 
-
-    // -- LOOKUP
-
-    static IsisWicketThemeSupport getInstance() {
-        return _Context.computeIfAbsent(IsisWicketThemeSupport.class, ()->createInstance());
-    }
-
     // -- FACTORY
 
-    /*private*/ static IsisWicketThemeSupport createInstance() {
-
-
-        val configuration = IsisContext.getConfiguration();
+    @Deprecated
+    static IsisWicketThemeSupport createInstanceFromConfig(IsisConfiguration configuration) {
 
         val themeSupportClassName = configuration.getViewer().getWicket().getThemes().getProvider();
 

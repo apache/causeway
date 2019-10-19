@@ -23,8 +23,6 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -39,6 +37,8 @@ import org.apache.isis.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
+
+import lombok.val;
 
 /**
  * Processes the {@link Value} annotation.
@@ -83,7 +83,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
      */
     private ValueFacet create(final Class<?> cls, final FacetHolder holder) {
         
-        IsisConfiguration config = MetaModelContext.current().getConfiguration();
+        val config = super.getMetaModelContext().getConfiguration();
 
         // create from annotation, if present
         final Value annotation = Annotations.getAnnotation(cls, Value.class);

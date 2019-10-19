@@ -1,4 +1,4 @@
-/**
+/*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
  *  this work for additional information regarding copyright ownership.
@@ -23,12 +23,16 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.common.v1.OidDto;
 
+import lombok.val;
+
 public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 
+    @Inject private BookmarkService bookmarkService;
+    
     @Override
     public Object unmarshal(final OidDto oidDto) throws Exception {
 
-        final Bookmark bookmark = Bookmark.from(oidDto);
+        val bookmark = Bookmark.from(oidDto);
 
         return bookmarkService.lookup(bookmark, BookmarkService.FieldResetPolicy.DONT_REFRESH);
     }
@@ -38,15 +42,9 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
         if(domainObject == null) {
             return null;
         }
-        final Bookmark bookmark = getBookmarkService().bookmarkFor(domainObject);
+        val bookmark = bookmarkService.bookmarkFor(domainObject);
         return bookmark.toOidDto();
     }
 
-
-
-    protected BookmarkService getBookmarkService() {
-        return bookmarkService;
-    }
-
-    @Inject BookmarkService bookmarkService;
+    
 }

@@ -23,9 +23,20 @@ import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContextAware;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facetapi.MultiTypedFacet;
 
-public abstract class FacetFactoryAbstract implements FacetFactory, MetaModelContext.Delegating {
+import lombok.Getter;
+import lombok.Setter;
+
+public abstract class FacetFactoryAbstract 
+implements FacetFactory, MetaModelContextAware, MetaModelContext.Delegating {
+    
+    @Getter(onMethod = @__({@Override})) @Setter(onMethod = @__({@Override}))
+    private MetaModelContext metaModelContext;
     
     private final List<FeatureType> featureTypes;
 
@@ -49,16 +60,21 @@ public abstract class FacetFactoryAbstract implements FacetFactory, MetaModelCon
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
     }
+    
+    // -- FACET UTILITIES
 
+    public void addFacet(final Facet facet) {
+        FacetUtil.addFacet(facet);
+    }
+    
+    public void addFacet(final MultiTypedFacet facet) {
+        FacetUtil.addFacet(facet);
+    }
+    
+    
     // -- METHOD UTILITITES
     
     protected static final Class<?>[] NO_PARAMETERS_TYPES = new Class<?>[0];
-    
-    // -- DEPENDENCIES
 
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return MetaModelContext.current();
-    }
 
 }

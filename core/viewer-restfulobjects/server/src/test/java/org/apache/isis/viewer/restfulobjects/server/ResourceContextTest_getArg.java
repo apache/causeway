@@ -29,13 +29,14 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.springframework.web.context.WebApplicationContext;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
@@ -53,8 +54,7 @@ import static org.junit.Assert.assertThat;
 
 public class ResourceContextTest_getArg {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    @Rule public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock HttpHeaders mockHttpHeaders;
     @Mock HttpServletRequest mockHttpServletRequest;
@@ -66,49 +66,44 @@ public class ResourceContextTest_getArg {
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock PersistenceSession mockPersistenceSession;
     @Mock SpecificationLoader mockSpecificationLoader;
+    @Mock WebApplicationContext webApplicationContext;
 
     private ResourceContext resourceContext;
-
+    private MetaModelContext metaModelContext;
 
     @Before
     public void setUp() throws Exception {
 
         // PRODUCTION;
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 //                .serviceInjector(mockServiceInjector)
                 //                .serviceRegistry(mockServiceRegistry)
                 //                .translationService(mockTranslationService)
                 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 //                .authenticationSessionProvider(mockAuthenticationSessionProvider)
-                .build());
+                .build();
 
-        _Context.put(IsisSessionFactory.class, mockIsisSessionFactory, false);
 
-        context.checking(new Expectations() {
-            {
+        context.checking(new Expectations() {{
+                
+                allowing(webApplicationContext).getBean(MetaModelContext.class);
+                will(returnValue(metaModelContext));
+            
+                allowing(mockServletContext).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
+                will(returnValue(webApplicationContext));
+            
+                allowing(mockHttpServletRequest).getServletContext();
+                will(returnValue(mockServletContext));
+                
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
-                //[ISIS-1976] IsisSessionFactory does no longer live on the ServletContext
-                //                allowing(mockHttpServletRequest).getServletContext();
-                //                will(returnValue(mockServletContext));
-                //                allowing(mockServletContext).getAttribute("org.apache.isis.webapp.isisSessionFactory");
-                //                will(returnValue(mockIsisSessionFactory));
-                //                allowing(mockIsisSessionFactory).getServiceInjector();
-                //                will(returnValue(mockServicesInjector));
-                //                allowing(mockIsisSessionFactory).getConfiguration();
-                //                will(returnValue(mockConfiguration));
-                allowing(mockIsisSessionFactory).getCurrentSession();
-                will(returnValue(mockIsisSession));
+                
                 allowing(mockIsisSession).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));
-//                allowing(mockIsisSessionFactory).getSpecificationLoader();
-//                will(returnValue(mockSpecificationLoader));
-                //                allowing(mockIsisSession).getPersistenceSession();
-                //                will(returnValue(mockPersistenceSession));
-            }
-        });
+         
+        }});
     }
 
     @Test
@@ -148,16 +143,6 @@ public class ResourceContextTest_getArg {
         final Integer arg = resourceContext.getArg(RequestParameter.PAGE);
         assertThat(arg, equalTo(RequestParameter.PAGE.getDefault()));
     }
-
-    private void givenServletRequestQueryString(final String queryString) {
-        context.checking(new Expectations() {
-            {
-                oneOf(mockHttpServletRequest).getQueryString();
-                will(returnValue(queryString));
-            }
-        });
-    }
-
 
     private void givenServletRequestParameterMapEmpty() {
         final HashMap<Object, Object> parameterMap = _Maps.newHashMap();

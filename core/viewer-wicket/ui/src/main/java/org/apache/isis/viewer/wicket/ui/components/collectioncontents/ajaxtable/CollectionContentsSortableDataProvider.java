@@ -19,12 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Ordering;
+import java.util.function.Predicate;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
@@ -32,6 +31,7 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -45,6 +45,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+
+import lombok.val;
 
 /**
  * Part of the {@link AjaxFallbackDefaultDataTable} API.
@@ -61,7 +63,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
     @Override
     public IModel<ObjectAdapter> model(final ObjectAdapter adapter) {
-        return new EntityModel(adapter);
+        return EntityModel.ofAdapter(model.getCommonContext(), adapter);
     }
 
     @Override
@@ -84,8 +86,8 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
         final List<ObjectAdapter> adapters = model.getObject();
 
-        final Iterable<ObjectAdapter> visibleAdapters =
-                Iterables.filter(adapters, ignoreHidden());
+        final List<ObjectAdapter> visibleAdapters =
+                _Lists.filter(adapters, ignoreHidden());
 
         // need to create a list from the iterable, then back to an iterable
         // because guava's Ordering class doesn't support sorting of iterable -> iterable
@@ -107,17 +109,17 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     }
 
     private List<ObjectAdapter> sortedCopy(
-            final Iterable<ObjectAdapter> adapters,
+            final List<ObjectAdapter> adapters,
             final SortParam<String> sort) {
 
+        val copy = _Lists.newArrayList(adapters);
+        
         final ObjectAssociation sortProperty = lookupAssociationFor(sort);
-        if(sortProperty == null) {
-            return _Lists.newArrayList(adapters);
+        if(sortProperty != null) {
+            Collections.sort(copy, orderingBy(sortProperty, sort.isAscending()));
         }
-
-        final Ordering<ObjectAdapter> ordering =
-                orderingBy(sortProperty, sort.isAscending());
-        return ordering.sortedCopy(adapters);
+        
+        return copy;
     }
 
     private ObjectAssociation lookupAssociationFor(final SortParam<String> sort) {
@@ -141,7 +143,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     private Predicate<ObjectAdapter> ignoreHidden() {
         return new Predicate<ObjectAdapter>() {
             @Override
-            public boolean apply(ObjectAdapter input) {
+            public boolean test(ObjectAdapter input) {
                 final InteractionResult visibleResult = InteractionUtils.isVisibleResult(input.getSpecification(), createVisibleInteractionContext(input));
                 return visibleResult.isNotVetoing();
             }
@@ -154,41 +156,36 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
                 Where.ALL_TABLES);
     }
 
-    private static Ordering<ObjectAdapter> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
-        final Ordering<ObjectAdapter> ordering = new Ordering<ObjectAdapter>(){
+    private static Comparator<ManagedObject> orderingBy(
+            ObjectAssociation sortProperty, 
+            boolean ascending) {
+        
+        return new Comparator<ManagedObject>(){
 
             @Override
-            public int compare(final ObjectAdapter p, final ObjectAdapter q) {
-                final ManagedObject pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
-                final ManagedObject qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
-                Ordering<ManagedObject> naturalOrdering;
-                if(ascending){
-                    naturalOrdering = ORDERING_BY_NATURAL.nullsFirst();
-                } else {
-                    naturalOrdering = ORDERING_BY_NATURAL.reverse().nullsLast();
-                }
-                return naturalOrdering.compare(pSort, qSort);
+            public int compare(ManagedObject p, ManagedObject q) {
+                val pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
+                val qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
+                
+                return (ascending ? NATURAL_NULL_FIRST : NATURAL_NULL_FIRST.reversed())
+                        .compare(pSort, qSort);
             }
         };
-        return ordering;
+        
     }
 
-    private static Ordering<ManagedObject> ORDERING_BY_NATURAL = new Ordering<ManagedObject>(){
+    private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        public int compare(final ManagedObject p, final ManagedObject q) {
-            final Object pPojo = p.getPojo();
-            final Object qPojo = q.getPojo();
+        public int compare(ManagedObject p, ManagedObject q) {
+            val pPojo = p.getPojo();
+            val qPojo = q.getPojo();
             if(!(pPojo instanceof Comparable) || !(qPojo instanceof Comparable)) {
                 return 0;
             }
-            return naturalOrdering(pPojo, qPojo);
+            return _NullSafe.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
         }
-        @SuppressWarnings("rawtypes")
-        private int naturalOrdering(final Object pPojo, final Object qPojo) {
-            Comparable pComparable = (Comparable) pPojo;
-            Comparable qComparable = (Comparable) qPojo;
-            return Ordering.natural().compare(pComparable, qComparable);
-        }
+        
     };
 
 

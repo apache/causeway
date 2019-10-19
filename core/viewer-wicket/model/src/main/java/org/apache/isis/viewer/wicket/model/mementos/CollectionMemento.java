@@ -25,7 +25,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.val;
 
@@ -37,10 +36,9 @@ public class CollectionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static ObjectSpecification owningSpecFor(
-            final OneToManyAssociation association) {
-
-        val specificationLoader = IsisContext.getSpecificationLoader();
+    private static ObjectSpecification owningSpecFor(OneToManyAssociation association) {
+        
+        val specificationLoader = association.getMetaModelContext().getSpecificationLoader();
         val specId = ObjectSpecId.of(association.getIdentifier().toClassIdentityString());
         return specificationLoader.lookupBySpecIdElseLoad(specId);
     }

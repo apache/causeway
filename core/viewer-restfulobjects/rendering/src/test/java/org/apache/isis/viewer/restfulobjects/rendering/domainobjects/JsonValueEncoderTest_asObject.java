@@ -22,13 +22,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -36,24 +34,22 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-@RunWith(JMock.class)
 public class JsonValueEncoderTest_asObject {
 
-    private final Mockery context = new JUnit4Mockery();
+    @Rule public JUnitRuleMockery2 context = 
+            JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private ObjectAdapter mockObjectAdapter;
-    private ObjectSpecification mockObjectSpec;
-    private EncodableFacet mockEncodableFacet;
-    private ObjectAdapterProvider mockAdapterManager;
+    @Mock private ObjectSpecification mockObjectSpec;
+    @Mock private EncodableFacet mockEncodableFacet;
+    @Mock private ObjectAdapter mockObjectAdapter;
+    @Mock private ObjectAdapterProvider mockAdapterManager;
 
-    private Object encoded;
-
-    private JsonRepresentation representation;
+    private JsonValueEncoder jsonValueEncoder;
 
     @Before
     public void setUp() throws Exception {
@@ -69,18 +65,18 @@ public class JsonValueEncoderTest_asObject {
         mockEncodableFacet = context.mock(EncodableFacet.class);
         mockAdapterManager = context.mock(ObjectAdapterProvider.class);
 
-        JsonValueEncoder.testSetAdapterManager(mockAdapterManager::adapterFor);
-        encoded = new Object();
+        jsonValueEncoder = JsonValueEncoder.forTesting(mockAdapterManager);
+        
     }
 
     @After
     public void tearDown() throws Exception {
-        JsonValueEncoder.testSetAdapterManager(null);
+        
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenAdapterIsNull() throws Exception {
-        JsonValueEncoder.asObject(null, null);
+        jsonValueEncoder.asObject(null, null);
     }
 
     @Test
@@ -103,7 +99,7 @@ public class JsonValueEncoderTest_asObject {
                 will(returnValue(true));
             }
         });
-        assertEquals(true, JsonValueEncoder.asObject(mockObjectAdapter, null));
+        assertEquals(true, jsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
@@ -126,7 +122,7 @@ public class JsonValueEncoderTest_asObject {
                 will(returnValue(123));
             }
         });
-        assertEquals(123, JsonValueEncoder.asObject(mockObjectAdapter, null));
+        assertEquals(123, jsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
@@ -149,7 +145,7 @@ public class JsonValueEncoderTest_asObject {
                 will(returnValue(123456789L));
             }
         });
-        assertEquals(123456789L, JsonValueEncoder.asObject(mockObjectAdapter, null));
+        assertEquals(123456789L, jsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
@@ -172,7 +168,7 @@ public class JsonValueEncoderTest_asObject {
                 will(returnValue(12345.6789));
             }
         });
-        assertEquals(12345.6789, JsonValueEncoder.asObject(mockObjectAdapter, null));
+        assertEquals(12345.6789, jsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
@@ -188,7 +184,7 @@ public class JsonValueEncoderTest_asObject {
                 will(returnValue(value));
             }
         });
-        assertEquals(value, JsonValueEncoder.asObject(mockObjectAdapter, null));
+        assertEquals(value, jsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
@@ -204,7 +200,7 @@ public class JsonValueEncoderTest_asObject {
                 will(returnValue(value));
             }
         });
-        assertEquals(value, JsonValueEncoder.asObject(mockObjectAdapter, null));
+        assertEquals(value, jsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
@@ -217,7 +213,7 @@ public class JsonValueEncoderTest_asObject {
                 will(returnValue("encodedString"));
             }
         });
-        final Object actual = JsonValueEncoder.asObject(mockObjectAdapter, null);
+        final Object actual = jsonValueEncoder.asObject(mockObjectAdapter, null);
         assertSame("encodedString", actual);
     }
 

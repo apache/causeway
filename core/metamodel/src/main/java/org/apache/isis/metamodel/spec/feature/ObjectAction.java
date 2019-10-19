@@ -38,7 +38,8 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
@@ -57,6 +58,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.specimpl.MixedInMember;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import lombok.val;
 
 public interface ObjectAction extends ObjectMember {
 
@@ -227,6 +230,10 @@ public interface ObjectAction extends ObjectMember {
 
         private Util() {
         }
+        
+        private static boolean isPrototyping(ManagedObject adapter) {
+            return MetaModelContext.from(adapter).getSystemEnvironment().isPrototyping();
+        }
 
         public static String nameFor(final ObjectAction objAction) {
             final String actionName = objAction.getName();
@@ -301,14 +308,13 @@ public interface ObjectAction extends ObjectMember {
             return cssClassFacet != null ? cssClassFacet.cssClass(objectAdapter) : null;
         }
 
-
-        @SuppressWarnings("deprecation")
         public static List<ObjectAction> findTopLevel(
                 final ManagedObject adapter) {
-            final List<ObjectAction> topLevelActions = _Lists.newArrayList();
+            
+            val topLevelActions = _Lists.<ObjectAction>newArrayList();
 
             addTopLevelActions(adapter, ActionType.USER, topLevelActions);
-            if(IsisSystemEnvironment.get().isPrototyping()) {
+            if(isPrototyping(adapter)) {
                 addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
             }
             return topLevelActions;
@@ -335,16 +341,14 @@ public interface ObjectAction extends ObjectMember {
 
         }
 
-
-        @SuppressWarnings("deprecation")
         public static List<ObjectAction> findForAssociation(
                 final ManagedObject adapter,
                 final ObjectAssociation association) {
 
-            final List<ObjectAction> associatedActions = _Lists.newArrayList();
+            val associatedActions = _Lists.<ObjectAction>newArrayList();
 
             addActions(adapter, ActionType.USER, association, associatedActions);
-            if(IsisSystemEnvironment.get().isPrototyping()) {
+            if(isPrototyping(adapter)) {
                 addActions(adapter, ActionType.PROTOTYPE, association, associatedActions);
             }
 

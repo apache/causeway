@@ -22,11 +22,12 @@ package org.apache.isis.viewer.wicket.ui.pages.actionprompt;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.val;
 
 /**
  * Web page representing an action invocation.
@@ -37,7 +38,11 @@ public class ActionPromptPage extends PageAbstract {
     private static final long serialVersionUID = 1L;
 
     public ActionPromptPage(final ActionModel model) {
-        super(new PageParameters(), model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
+        super(
+                new PageParameters(), 
+                model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), 
+                ComponentType.ACTION_PROMPT);
+        
         addChildComponents(themeDiv, model);
 
         if(model.isBookmarkable()) {
@@ -46,15 +51,15 @@ public class ActionPromptPage extends PageAbstract {
         addBookmarkedPages(themeDiv);
     }
 
-    /**
-     * Required for bookmarking of actions.
-     */
-    public ActionPromptPage(final PageParameters pageParameters) {
-        this(pageParameters, IsisContext.getSpecificationLoader());
-    }
+//    /**
+//     * Required for bookmarking of actions.
+//     */
+//    public ActionPromptPage(final PageParameters pageParameters) {
+//        this(pageParameters, IsisContext.getSpecificationLoader());
+//    }
 
-    public ActionPromptPage(final PageParameters pageParameters, final SpecificationLoader specificationLoader) {
-        this(pageParameters, buildModel(pageParameters, specificationLoader));
+    public ActionPromptPage(IsisWebAppCommonContext commonContext, PageParameters pageParameters) {
+        this(pageParameters, buildModel(commonContext, pageParameters));
     }
 
     public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
@@ -66,9 +71,10 @@ public class ActionPromptPage extends PageAbstract {
     }
 
     private static ActionModel buildModel(
-            final PageParameters pageParameters,
-            final SpecificationLoader specificationLoader) {
-        final ActionModel actionModel = ActionModel.createForPersistent(pageParameters, specificationLoader);
+            IsisWebAppCommonContext commonContext,
+            PageParameters pageParameters) {
+        
+        val actionModel = ActionModel.createForPersistent(commonContext, pageParameters);
         return actionModel;
     }
 }

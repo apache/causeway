@@ -22,7 +22,6 @@ import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -78,7 +77,7 @@ final class OidUtils {
     private static Object domainObjectForAny(final RendererContext rendererContext, final RootOid rootOid) {
 
         val specId = rootOid.getObjectSpecId();
-        val spec = MetaModelContext.current().getSpecificationLoader().lookupBySpecIdElseLoad(specId);
+        val spec = rendererContext.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
         if(spec == null) {
             // eg "NONEXISTENT:123"
             return null;

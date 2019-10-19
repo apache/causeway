@@ -30,7 +30,7 @@ import javax.servlet.annotation.WebListener;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.webapp.IsisWebAppContextListener;
 
 import lombok.val;
@@ -87,13 +87,11 @@ public interface WebModule {
     /**
      * @return Stream of 'discovered' WebModules, whether applicable or not is not decided here 
      */
-    static Stream<WebModule> discoverWebModules() {
+    static Stream<WebModule> discoverWebModules(ServiceRegistry serviceRegistry) {
 
         // modules are discovered by Spring, order of filters is relevant/critical 
 
-        val webModules = IsisContext.getServiceRegistry()
-                .select(WebModule.class);
-
+        val webModules = serviceRegistry.select(WebModule.class);
         return webModules.stream();
     }
 

@@ -16,22 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.wicket.ui.validation;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.wicket.validation.IValidator;
+
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.Getter;
 
 /**
- * For backward compatibility only.
+ * Provides the <em>common context</em> for all implementing sub-classes.
+ * @since 2.0
+ *
  */
-@Deprecated
-public class RestfulObjectsApplicationException extends org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException {
+public abstract class ValidatorBase<T> implements IValidator<T> {
 
-    public RestfulObjectsApplicationException(
-            final RestfulResponse.HttpStatusCode httpStatusCode,
-            final String message,
-            final Throwable cause,
-            final JsonRepresentation body) {
-        super(httpStatusCode, message, cause, body);
+    private static final long serialVersionUID = 1L;
+    
+    @Getter protected final transient IsisWebAppCommonContext commonContext;
+    
+    protected ValidatorBase(IsisWebAppCommonContext commonContext) {
+        this.commonContext = commonContext;
     }
+    
 }

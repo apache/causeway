@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
@@ -48,7 +47,7 @@ public class DisabledFacetOnCollectionDerivedFromViewModelFacetFactory extends F
         final DisabledFacetAbstract.Semantics semantics = Util.inferSemanticsFrom(facet);
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DisabledFacetOnCollectionDerivedFromRecreatableObject(facetHolder, semantics));
+        super.addFacet(new DisabledFacetOnCollectionDerivedFromRecreatableObject(facetHolder, semantics));
     }
 
 

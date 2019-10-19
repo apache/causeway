@@ -52,8 +52,9 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract2}.
  */
-public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements CollectionSelectorProvider,
-BulkActionsProvider {
+public class CollectionPanel 
+extends PanelAbstract<EntityCollectionModel> 
+implements CollectionSelectorProvider, BulkActionsProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -142,7 +143,8 @@ BulkActionsProvider {
                 return null;
             }
 
-            toggleboxColumn = new ObjectAdapterToggleboxColumn();
+            toggleboxColumn = new ObjectAdapterToggleboxColumn(super.commonContext);
+            
             final OnSelectionHandler handler = new OnSelectionHandler() {
 
                 private static final long serialVersionUID = 1L;

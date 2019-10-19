@@ -61,7 +61,8 @@ import lombok.val;
 public class OneToOneAssociationDefault extends ObjectAssociationAbstract implements OneToOneAssociation {
 
     public OneToOneAssociationDefault(final FacetedMethod facetedMethod) {
-        this(facetedMethod, specificationOf(facetedMethod.getType()));
+        this(facetedMethod, facetedMethod.getMetaModelContext()
+                .getSpecificationLoader().loadSpecification(facetedMethod.getType()));
     }
 
     protected OneToOneAssociationDefault(

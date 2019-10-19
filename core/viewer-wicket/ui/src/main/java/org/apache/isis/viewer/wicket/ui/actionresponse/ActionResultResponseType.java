@@ -32,7 +32,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
@@ -41,6 +40,7 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -48,7 +48,8 @@ public enum ActionResultResponseType {
     OBJECT {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter); // intercepts collections
+            val commonContext = model.getCommonContext();
+            final ObjectAdapter actualAdapter = determineActualAdapter(commonContext, resultAdapter); // intercepts collections
             return toEntityPage(model, actualAdapter, null);
         }
 
@@ -61,9 +62,9 @@ public enum ActionResultResponseType {
     COLLECTION {
         @Override
         public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
+            val collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel);
             // take a copy of the actionModel, because the original can get mutated (specifically: its arguments cleared)
-            final ActionModel actionModelCopy = actionModel.copy();
+            val actionModelCopy = actionModel.copy();
             collectionModel.setActionHint(actionModelCopy);
             return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
         }
@@ -71,7 +72,8 @@ public enum ActionResultResponseType {
     VALUE {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            ValueModel valueModel = new ValueModel(resultAdapter);
+            val commonContext = model.getCommonContext();
+            ValueModel valueModel = new ValueModel(commonContext, resultAdapter);
             valueModel.setActionHint(model);
             final ValuePage valuePage = new ValuePage(valueModel);
             return ActionResultResponse.toPage(valuePage);
@@ -114,7 +116,8 @@ public enum ActionResultResponseType {
     VOID {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final VoidModel voidModel = new VoidModel();
+            val commonContext = model.getCommonContext();
+            final VoidModel voidModel = new VoidModel(commonContext);
             voidModel.setActionHint(model);
             return ActionResultResponse.toPage(new VoidReturnPage(voidModel));
         }
@@ -130,7 +133,8 @@ public enum ActionResultResponseType {
     }
 
     private static ObjectAdapter determineActualAdapter(
-            final ObjectAdapter resultAdapter) {
+            IsisWebAppCommonContext commonContext, 
+            ObjectAdapter resultAdapter) {
 
         if (resultAdapter.getSpecification().isNotCollection()) {
             return resultAdapter;
@@ -139,8 +143,8 @@ public enum ActionResultResponseType {
             final List<Object> pojoList = asList(resultAdapter);
             final Object pojo = pojoList.get(0);
 
-            val pojoToAdapter = IsisContext.pojoToAdapter();
-            val actualAdapter = pojoToAdapter.apply(pojo);
+            //XXX lombok issue, cannot use val here
+            final ObjectAdapter actualAdapter = commonContext.getPojoToAdapter().apply(pojo);
 
             return actualAdapter;
         }
@@ -153,7 +157,7 @@ public enum ActionResultResponseType {
 
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
+        final EntityPage entityPage = new EntityPage(model.getCommonContext(), actualAdapter, exIfAny);
 
         return ActionResultResponse.toPage(entityPage);
     }

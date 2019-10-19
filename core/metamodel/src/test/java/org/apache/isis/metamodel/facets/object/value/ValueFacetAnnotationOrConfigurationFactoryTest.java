@@ -49,6 +49,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         super.setUp();
 
         facetFactory = new ValueFacetAnnotationOrConfigurationFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     @Override

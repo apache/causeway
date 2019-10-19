@@ -30,7 +30,6 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.val;
 
@@ -66,7 +65,7 @@ public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
             final Class<?> cls, 
             final FacetHolder holder) {
 
-        val serviceRegistry = IsisContext.getServiceRegistry();
+        val serviceRegistry = super.getServiceRegistry();
 
         val evaluators = serviceRegistry
                 .select(ApplicationTenancyEvaluator.class)

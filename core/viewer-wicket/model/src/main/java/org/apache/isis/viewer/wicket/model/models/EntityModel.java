@@ -22,6 +22,8 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -46,7 +48,10 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -61,9 +66,7 @@ implements ObjectAdapterModel, UiHintContainer {
 
     private static final long serialVersionUID = 1L;
 
-    // //////////////////////////////////////////////////////////
-    // factory methods for PageParameters
-    // //////////////////////////////////////////////////////////
+    // -- FACTORY METHODS FOR PAGE PARAMETERS
 
     /**
      * Factory method for creating {@link PageParameters} to represent an
@@ -158,55 +161,70 @@ implements ObjectAdapterModel, UiHintContainer {
     private ConcurrencyException concurrencyException;
 
 
+    // -- FACTORIES
 
-    // //////////////////////////////////////////////////////////
-    // constructors
-    // //////////////////////////////////////////////////////////
+    public static EntityModel ofParameters(
+            IsisWebAppCommonContext commonContext, 
+            PageParameters pageParameters) {
+        return ofMemento(commonContext, commonContext.mementoFor(rootOidFrom(pageParameters)));
+    }
+    
+    public static EntityModel ofAdapter(
+            IsisWebAppCommonContext commonContext,
+            ManagedObject adapter) {
+        
+        val adapterMemento = commonContext.mementoFor(adapter);
+        return ofMemento(commonContext, adapterMemento);
+    }
 
+    public static EntityModel ofMemento(
+            IsisWebAppCommonContext commonContext,
+            ObjectAdapterMemento adapterMemento) {
+        
+        return ofMemento(commonContext, adapterMemento, /*propertyScalarModels*/null);
+    }
+
+    private static EntityModel ofMemento(
+            IsisWebAppCommonContext commonContext,
+            ObjectAdapterMemento adapterMemento,
+            @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels) {
+        
+        return new EntityModel(commonContext, adapterMemento, propertyScalarModels, 
+                Mode.VIEW, RenderingHint.REGULAR);
+    }
+    
+    /**
+     * As used by TreeModel (same as {@link #ofAdapter(IsisWebAppCommonContext, ObjectAdapter)}
+     */
+    protected EntityModel(
+            IsisWebAppCommonContext commonContext,
+            ObjectAdapter adapter) {
+        
+        this(commonContext, 
+                commonContext.mementoFor(adapter), 
+                /*propertyScalarModels*/null, 
+                Mode.VIEW, RenderingHint.REGULAR);
+    }
+    
     /**
      * As used by ScalarModel
      */
-    public EntityModel(
-            final Mode mode,
-            final RenderingHint renderingHint) {
-        this(_Maps.<PropertyMemento, ScalarModel>newHashMap(), null, mode, renderingHint);
-    }
-
-    public EntityModel(final PageParameters pageParameters) {
-        this(ObjectAdapterMemento.ofRootOid(rootOidFrom(pageParameters)));
-    }
-
-    public EntityModel(final ObjectAdapter adapter) {
-        this(ObjectAdapterMemento.ofAdapter(adapter));
-        setObject(adapter);
-    }
-
-    public EntityModel(final ObjectAdapterMemento adapterMemento) {
-        this(adapterMemento, _Maps.<PropertyMemento, ScalarModel>newHashMap());
-    }
-
-    public EntityModel(
-            final ObjectAdapterMemento adapterMemento,
-            final Map<PropertyMemento, ScalarModel> propertyScalarModels) {
-        this(propertyScalarModels, adapterMemento);
-    }
-
-    // this constructor was introduced just so that, when debugging, could distinguish between EntityModel instantiated
-    // in its own right, vs instantiated via the cloneWithLayoutMetadata.
-    private EntityModel(
-            final Map<PropertyMemento, ScalarModel> propertyScalarModels,
-            final ObjectAdapterMemento adapterMemento) {
-        this(propertyScalarModels, adapterMemento, Mode.VIEW, RenderingHint.REGULAR);
+    protected EntityModel(IsisWebAppCommonContext commonContext, Mode mode, RenderingHint renderingHint) {
+        this(commonContext, null, _Maps.<PropertyMemento, ScalarModel>newHashMap(), 
+                mode, renderingHint);
     }
 
     private EntityModel(
-            final Map<PropertyMemento, ScalarModel> propertyScalarModels,
-            final ObjectAdapterMemento adapterMemento,
-            final Mode mode,
-            final RenderingHint renderingHint) {
+            IsisWebAppCommonContext commonContext,
+            ObjectAdapterMemento adapterMemento,
+            @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels,
+            Mode mode,
+            RenderingHint renderingHint) {
+        
+        super(commonContext);
         this.adapterMemento = adapterMemento;
         this.pendingModel = new PendingModel(this);
-        this.propertyScalarModels = propertyScalarModels;
+        this.propertyScalarModels = propertyScalarModels!=null ? propertyScalarModels : _Maps.<PropertyMemento, ScalarModel>newHashMap();
         this.mode = mode;
         this.renderingHint = renderingHint;
     }
@@ -288,7 +306,7 @@ implements ObjectAdapterModel, UiHintContainer {
 
     private BookmarkPolicyFacet getBookmarkPolicyFacetIfAny() {
         final ObjectSpecId specId = getObjectAdapterMemento().getObjectSpecId();
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(specId);
+        final ObjectSpecification objectSpec = super.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
         return objectSpec.getFacet(BookmarkPolicyFacet.class);
     }
 
@@ -315,7 +333,7 @@ implements ObjectAdapterModel, UiHintContainer {
     }
 
     private ObjectSpecification getSpecificationFor(ObjectSpecId objectSpecId) {
-        return getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
+        return super.getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
     }
 
     // //////////////////////////////////////////////////////////
@@ -342,7 +360,7 @@ implements ObjectAdapterModel, UiHintContainer {
     @Override
     public void setObject(final ObjectAdapter adapter) {
         super.setObject(adapter);
-        adapterMemento = ObjectAdapterMemento.ofAdapter(adapter);
+        adapterMemento = ObjectAdapterMemento.ofAdapter(adapter, super.getMementoSupport());
     }
 
     public void setObjectMemento(final ObjectAdapterMemento memento) {
@@ -383,7 +401,7 @@ implements ObjectAdapterModel, UiHintContainer {
     public void resetPropertyModels() {
         adapterMemento.resetVersion();
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
-            OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
+            OneToOneAssociation otoa = pm.getProperty(super.getSpecificationLoader());
             val scalarModel = propertyScalarModels.get(pm);
             val adapter = getObject();
             val associatedAdapter =
@@ -490,10 +508,11 @@ implements ObjectAdapterModel, UiHintContainer {
     // Pending
     // //////////////////////////////////////////////////////////
 
+    @RequiredArgsConstructor
     private static final class PendingModel extends Model<ObjectAdapterMemento> {
         private static final long serialVersionUID = 1L;
 
-        private final EntityModel entityModel;
+        @NonNull private final EntityModel entityModel;
 
         /**
          * Whether pending has been set (could have been set to null)
@@ -504,18 +523,13 @@ implements ObjectAdapterModel, UiHintContainer {
          */
         private ObjectAdapterMemento pending;
 
-
-        public PendingModel(EntityModel entityModel) {
-            this.entityModel = entityModel;
-        }
-
         @Override
         public ObjectAdapterMemento getObject() {
             if (hasPending) {
                 return pending;
             }
             final ObjectAdapter adapter = entityModel.getObject();
-            return ObjectAdapterMemento.ofAdapter(adapter);
+            return ObjectAdapterMemento.ofAdapter(adapter, entityModel.getMementoSupport());
         }
 
         @Override
@@ -623,9 +637,6 @@ implements ObjectAdapterModel, UiHintContainer {
         return true;
 
     }
-
-
-
 
 
 }

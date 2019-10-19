@@ -39,12 +39,11 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.JdoMetamodelUtil;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
@@ -141,9 +140,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //protected final ServiceInjector servicesInjector;
 
-    private final MetaModelContext context;
     private final PostProcessor postProcessor;
-    private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
     // -- ASSOCIATIONS
@@ -226,9 +223,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
         this.facetProcessor = facetProcessor;
-
-        this.context = MetaModelContext.current();
-        this.specificationLoader = context.getSpecificationLoader();
         this.postProcessor = postProcessor;
     }
 
@@ -766,10 +760,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 .filter(ContributeeMember.Predicates.regularElse(contributed));
     }
 
-
-
     private Stream<ManagedBeanAdapter> streamManagedBeans() {
-        return context.getServiceRegistry().streamRegisteredBeans();
+        return getMetaModelContext().getServiceRegistry().streamRegisteredBeans();
     }
 
     // -- CONTRIBUTEE ASSOCIATIONS (PROPERTIES AND COLLECTIONS)
@@ -789,7 +781,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             Consumer<ObjectAssociation> onNewContributeeAssociation) {
 
         val serviceClass = serviceBean.getBeanClass();
-        val specification = specificationLoader.loadSpecification(serviceClass,
+        val specification = getSpecificationLoader().loadSpecification(serviceClass,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         if (specification == this) {
             return;
@@ -1079,7 +1071,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+        return getMetaModelContext().getSpecificationLoader();
     }
 
     protected BeanSort sortOf(ObjectSpecification spec) {

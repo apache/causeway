@@ -48,10 +48,11 @@ public class CollectionContentsAsIconsPanel extends PanelAbstract<EntityCollecti
         final EntityCollectionModel model = getModel();
         final List<ObjectAdapter> adapterList = model.getObject();
         final RepeatingView entityInstances = new RepeatingView(ID_ENTITY_INSTANCE);
+        
         add(entityInstances);
         for (final ObjectAdapter adapter : adapterList) {
             final String childId = entityInstances.newChildId();
-            final EntityModel entityModel = new EntityModel(adapter);
+            final EntityModel entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
             final EntityHeaderPanel entitySummaryPanel = new EntityHeaderPanel(childId, entityModel);
             entityInstances.add(entitySummaryPanel);
         }

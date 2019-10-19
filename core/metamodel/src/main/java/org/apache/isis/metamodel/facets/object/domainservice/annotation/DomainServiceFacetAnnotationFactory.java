@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
@@ -49,6 +49,12 @@ implements MetaModelRefiner {
     public DomainServiceFacetAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
+    
+    @Override
+    public void setMetaModelContext(MetaModelContext metaModelContext) {
+        super.setMetaModelContext(metaModelContext);
+        mixinOnlyValidator.setMetaModelContext(metaModelContext);
+    }
 
     @SuppressWarnings("deprecation") // because we specifically want to handle deprecated enum use here
     @Override
@@ -62,10 +68,10 @@ implements MetaModelRefiner {
         val domainServiceFacet = new DomainServiceFacetAnnotation(
                 facetHolder,
                 domainServiceAnnotation.repositoryFor(), domainServiceAnnotation.nature());
-        FacetUtil.addFacet(domainServiceFacet);
+        super.addFacet(domainServiceFacet);
 
 
-        FacetUtil.addFacet(
+        super.addFacet(
                 new IconFacetDerivedFromDomainServiceAnnotation(
                         facetHolder,
                         domainServiceAnnotation.repositoryFor()));

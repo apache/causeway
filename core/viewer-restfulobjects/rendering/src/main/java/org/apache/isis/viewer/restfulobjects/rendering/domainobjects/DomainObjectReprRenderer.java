@@ -452,25 +452,23 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    //
-    // ///////////////////////////////////////////////////////////////////
 
-    public static Object valueOrRef(final RendererContext resourceContext, final ManagedObject objectAdapter, final ObjectSpecification objectSpec) {
-        if(ManagedObject.promote(objectAdapter).isValue()) {
+    public static Object valueOrRef(RendererContext context, JsonValueEncoder jsonValueEncoder, ManagedObject adapter) {
+        
+        val spec = adapter.getSpecification();
+        if(spec.isValue()) {
             String format = null; // TODO
-            return JsonValueEncoder.asObject(objectAdapter, format);
+            return jsonValueEncoder.asObject(adapter, format);
         }
-        val titleFacet = objectSpec.getFacet(TitleFacet.class);
-        final String title = titleFacet.title(objectAdapter);
+        val titleFacet = spec.getFacet(TitleFacet.class);
+        final String title = titleFacet.title(adapter);
         return DomainObjectReprRenderer.newLinkToBuilder(
-                resourceContext, 
+                context, 
                 Rel.VALUE, 
-                ManagedObject.promote(objectAdapter))
+                ManagedObject.promote(adapter))
                 .withTitle(title)
                 .build();
     }
-
 
 
 }

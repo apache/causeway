@@ -21,46 +21,30 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.Getter;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
  * Isis' dependencies.
  */
-public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
+public abstract class ModelAbstract<T> 
+extends LoadableDetachableModel<T> 
+implements IsisWebAppCommonContext.Delegating {
 
     private static final long serialVersionUID = 1L;
 
-    public ModelAbstract() {
+    @Getter private final transient IsisWebAppCommonContext commonContext;
+
+    public ModelAbstract(IsisWebAppCommonContext commonContext) {
+        this.commonContext = commonContext;
     }
 
-    public ModelAbstract(final T t) {
+    public ModelAbstract(IsisWebAppCommonContext commonContext, T t) {
         super(t);
+        this.commonContext = commonContext;
     }
 
-
-    // //////////////////////////////////////////////////////////////
-    // Dependencies
-    // //////////////////////////////////////////////////////////////
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession().orElse(null);
-    }
-
-    protected IsisSession getCurrentSession() {
-        return IsisSession.currentOrElseNull();
-    }
-
-    public SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
-    protected ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
-    }
-
+    
 }

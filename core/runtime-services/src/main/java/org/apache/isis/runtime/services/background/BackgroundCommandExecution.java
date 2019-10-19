@@ -20,15 +20,12 @@ package org.apache.isis.runtime.services.background;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.runtime.system.context.IsisContext;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -57,14 +54,14 @@ public abstract class BackgroundCommandExecution extends CommandExecutionAbstrac
     @Override
     protected void doExecute(Object context) {
 
-        final List<Command> commands = _Lists.newArrayList();
-        IsisContext.getTransactionService().executeWithinTransaction(() -> {
+        val commands = _Lists.<Command>newArrayList();
+        transactionService.executeWithinTransaction(() -> {
             commands.addAll(findBackgroundCommandsToExecute());
         });
 
         log.debug("Found {} to execute", commands.size());
 
-        for (final Command command : commands) {
+        for (val command : commands) {
             execute((CommandWithDto) command, transactionService);
         }
     }
@@ -73,7 +70,5 @@ public abstract class BackgroundCommandExecution extends CommandExecutionAbstrac
      * Mandatory hook method
      */
     protected abstract List<? extends Command> findBackgroundCommandsToExecute();
-
-    @Inject TransactionService transactionService;
 
 }

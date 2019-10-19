@@ -152,7 +152,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         SemanticsOf semanticsOf = action.getSemantics();
 
-        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(button, semanticsOf);
+        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(super.getTranslationService(), button, semanticsOf);
     }
 
     @Override
@@ -193,7 +193,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             ObjectAdapter targetAdapter = getActionModel().getTargetAdapter();
 
             // forward onto the target page with the concurrency exception
-            final EntityPage entityPage = new EntityPage(targetAdapter, ex);
+            final EntityPage entityPage = new EntityPage(getActionModel().getCommonContext(), targetAdapter, ex);
 
             setResponsePage(entityPage);
 

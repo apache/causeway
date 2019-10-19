@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -63,7 +62,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
         CssClassFacet cssClassFacet = createFromConfiguredRegexIfPossible(name, facetHolder);
 
         // no-op if null
-        FacetUtil.addFacet(cssClassFacet);
+        super.addFacet(cssClassFacet);
     }
 
 
@@ -82,7 +81,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
         CssClassFacet cssClassFacet = createFromConfiguredRegexIfPossible(id, objectMember);
 
         // no-op if null
-        FacetUtil.addFacet(cssClassFacet);
+        super.addFacet(cssClassFacet);
     }
 
     // -- cssClassFromPattern

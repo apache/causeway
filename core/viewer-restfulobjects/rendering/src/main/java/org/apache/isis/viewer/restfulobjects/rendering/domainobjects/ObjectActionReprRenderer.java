@@ -41,6 +41,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 
+import lombok.val;
+
 public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectActionReprRenderer, ObjectAction> {
 
     public ObjectActionReprRenderer(RendererContext rendererContext) {
@@ -185,11 +187,10 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             return null;
         }
         final List<Object> list = _Lists.newArrayList();
-        for (final ManagedObject choiceAdapter : choiceAdapters) {
+        for (val choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();
-            final ObjectSpecification choiceSpec = choiceAdapter.getSpecification();
-            list.add(DomainObjectReprRenderer.valueOrRef(rendererContext, choiceAdapter, choiceSpec));
+            list.add(DomainObjectReprRenderer.valueOrRef(rendererContext, super.getJsonValueEncoder(), choiceAdapter));
         }
         return list;
     }
@@ -201,8 +202,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         }
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification defaultSpec = param.getSpecification();
-        final ObjectSpecification defaultSpec = defaultAdapter.getSpecification();
-        return DomainObjectReprRenderer.valueOrRef(rendererContext, defaultAdapter, defaultSpec);
+        return DomainObjectReprRenderer.valueOrRef(rendererContext, super.getJsonValueEncoder(), defaultAdapter);
     }
 
     // ///////////////////////////////////////////////////

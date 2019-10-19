@@ -27,10 +27,12 @@ import java.util.Map;
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+
+import lombok.val;
 
 public class StandaloneData extends Data {
 
@@ -117,13 +119,16 @@ public class StandaloneData extends Data {
     //
     // ///////////////////////////////////////////////////////
 
-    public ObjectAdapter getAdapter() {
+    public ObjectAdapter getAdapter(
+            ObjectAdapterProvider objectAdapterProvider,
+            SpecificationLoader specificationLoader) {
+        
         if (objectAsSerializable != null) {
-            return IsisContext.pojoToAdapter().apply(objectAsSerializable);
+            return objectAdapterProvider.adapterFor(objectAsSerializable);
         } else {
-            final ObjectSpecification spec = 
-                    getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(getClassName()));
-            final EncodableFacet encodeableFacet = spec.getFacet(EncodableFacet.class);
+            val spec = 
+                    specificationLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(getClassName()));
+            val encodeableFacet = spec.getFacet(EncodableFacet.class);
             return encodeableFacet.fromEncodedString(objectAsEncodedString);
         }
     }

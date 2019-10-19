@@ -22,14 +22,11 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
-
-import lombok.val;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 /**
  * Backing model for actions of application services menu bar (typically, as
  * displayed along the top or side of the page).
@@ -43,7 +40,8 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
     /**
      * @param menuBar - may be null in special case of rendering the tertiary menu on the error page.
      */
-    public ServiceActionsModel(final DomainServiceLayout.MenuBar menuBar) {
+    public ServiceActionsModel(IsisWebAppCommonContext commonContext, DomainServiceLayout.MenuBar menuBar) {
+        super(commonContext);
         this.menuBar = menuBar;
     }
 
@@ -56,7 +54,7 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
 
     @Override
     protected List<ObjectAdapter> load() {
-        return streamServiceAdapters()
+        return super.getCommonContext().streamServiceAdapters()
                 .filter(with(menuBar))
                 .collect(Collectors.toList());
     }
@@ -69,11 +67,5 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
                     (facet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
         };
     }
-
-    protected Stream<ObjectAdapter> streamServiceAdapters() {
-        val metaModelContext = MetaModelContext.current();
-        return metaModelContext.streamServiceAdapters();
-    }
-
 
 }

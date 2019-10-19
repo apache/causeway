@@ -27,13 +27,20 @@ import org.datanucleus.state.ReferentialStateManagerImpl;
 import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.fieldmanager.FieldManager;
 
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 
+/**
+ * @deprecated This is bad practice: The lifecycle of persistent entities is usually decoupled from the lifecycle of a managed bean
+ */
+@Deprecated
 public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
 
+    private final ServiceInjector serviceInjector = null;
+    
     public JDOStateManagerForIsis(ExecutionContext ec, AbstractClassMetaData cmd) {
         super(ec, cmd);
+//        this.serviceInjector = (ServiceInjector) ec.getProperty("serviceInjector");
+//        requires(serviceInjector, "serviceInjector");
     }
 
     public enum Hint {
@@ -213,10 +220,9 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
     }
 
     protected void mapIntoIsis(Persistable pc) {
-        IsisContext.getServiceInjector().injectServicesInto(pc);
+        if(serviceInjector!=null) {
+            serviceInjector.injectServicesInto(pc);
+        }
     }
-
-    IsisSessionFactory getSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
+    
 }

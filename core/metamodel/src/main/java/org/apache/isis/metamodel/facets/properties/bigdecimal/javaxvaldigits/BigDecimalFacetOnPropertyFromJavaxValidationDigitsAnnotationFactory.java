@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 
 import javax.validation.constraints.Digits;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
@@ -47,7 +46,7 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory
         if (digits == null) {
             return;
         }
-        FacetUtil.addFacet(create(processMethodContext, digits));
+        super.addFacet(create(processMethodContext, digits));
     }
 
     private BigDecimalValueFacet create(final ProcessMethodContext processMethodContext, final Digits annotation) {

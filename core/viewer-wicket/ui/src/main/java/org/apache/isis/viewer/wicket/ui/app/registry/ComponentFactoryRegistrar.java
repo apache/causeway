@@ -21,8 +21,7 @@ package org.apache.isis.viewer.wicket.ui.app.registry;
 
 import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -37,6 +36,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 public interface ComponentFactoryRegistrar {
 
     public static class ComponentFactoryList implements Iterable<ComponentFactory> {
+        
         private final List<ComponentFactory> componentFactories = _Lists.newArrayList();
 
         public void add(ComponentFactory componentFactory) {
@@ -65,7 +65,7 @@ public interface ComponentFactoryRegistrar {
             int indexOfFirst = -1;
             for (int i = 0; i < componentFactories.size(); i++) {
                 ComponentFactory factory = componentFactories.get(i);
-                if (predicate.apply(factory)) {
+                if (predicate.test(factory)) {
                     componentFactories.remove(i);
                     if (indexOfFirst == -1) {
                         indexOfFirst = i;
@@ -80,7 +80,7 @@ public interface ComponentFactoryRegistrar {
         private static Predicate<ComponentFactory> matching(final ComponentType componentType) {
             return new Predicate<ComponentFactory>() {
                 @Override
-                public boolean apply(ComponentFactory input) {
+                public boolean test(ComponentFactory input) {
                     return input.getComponentType() == componentType;
                 }
             };
@@ -89,7 +89,7 @@ public interface ComponentFactoryRegistrar {
         private static Predicate<ComponentFactory> matching(final Class<? extends ComponentFactory> toReplace) {
             return new Predicate<ComponentFactory>() {
                 @Override
-                public boolean apply(ComponentFactory input) {
+                public boolean test(ComponentFactory input) {
                     return toReplace.isAssignableFrom(input.getClass());
                 }
             };

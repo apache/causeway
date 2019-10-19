@@ -19,9 +19,9 @@
 package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -39,12 +39,13 @@ public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
     public ActionPromptHeaderPanel(String id, final ActionModel model) {
         super(id, model);
 
-        ObjectAdapter targetAdapter = model.getTargetAdapter();
+        _Blackhole.consume(model.getTargetAdapter()); // side-effect: loads the model
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentEntityModel());
 
 
-        final Label label = new Label(ID_ACTION_NAME, new AbstractReadOnlyModel<String>() {
+        final Label label = new Label(ID_ACTION_NAME, new IModel<String>() {
+            private static final long serialVersionUID = 1L;
             @Override
             public String getObject() {
                 final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());

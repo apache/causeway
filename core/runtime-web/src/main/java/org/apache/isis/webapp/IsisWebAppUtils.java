@@ -16,19 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.specloader.specimpl;
+package org.apache.isis.webapp;
 
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
+import javax.servlet.ServletContext;
 
-public class FacetedMethodsBuilderContext {
-    public final SpecificationLoader specificationLoader;
-    public final FacetProcessor facetProcessor;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
-    public FacetedMethodsBuilderContext(
-            final SpecificationLoader specificationLoader,
-            final FacetProcessor facetProcessor) {
-        this.specificationLoader = specificationLoader;
-        this.facetProcessor = facetProcessor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.val;
+
+/**
+ * @since 2.0
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class IsisWebAppUtils {
+
+    public static <T> T getManagedBean(Class<T> requiredType, ServletContext servletContext) {
+        val webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+        return webApplicationContext.getBean(requiredType);
     }
+    
 }

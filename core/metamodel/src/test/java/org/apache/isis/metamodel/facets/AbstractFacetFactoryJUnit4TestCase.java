@@ -34,6 +34,8 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContextAware;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -56,35 +58,26 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    protected SpecificationLoader mockSpecificationLoader;
-    @Mock
-    protected PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
-    @Mock
-    protected MethodRemover mockMethodRemover;
-    @Mock
-    protected FacetHolder mockFacetHolder;
-    @Mock
-    protected ServiceInjector mockServiceInjector;
-    @Mock
-    protected ServiceRegistry mockServiceRegistry;
-    @Mock
-    protected TranslationService mockTranslationService;
-    @Mock   
-    protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock protected SpecificationLoader mockSpecificationLoader;
+    @Mock protected PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    @Mock protected MethodRemover mockMethodRemover;
+    @Mock protected FacetHolder mockFacetHolder;
+    @Mock protected ServiceInjector mockServiceInjector;
+    @Mock protected ServiceRegistry mockServiceRegistry;
+    @Mock protected TranslationService mockTranslationService;
+    @Mock protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
+    @Mock protected ObjectSpecification mockOnType;
+    @Mock protected ObjectSpecification mockObjSpec;
+    @Mock protected OneToOneAssociation mockOneToOneAssociation;
+    @Mock protected OneToManyAssociation mockOneToManyAssociation;
+    @Mock protected OneToOneActionParameter mockOneToOneActionParameter;
+    @Mock protected ObjectAdapterProvider mockObjectAdapterProvider;
+    @Mock protected MetamodelEventService mockMetamodelEventService;
+
+    
+    protected MetaModelContext metaModelContext;
     protected IdentifiedHolder facetHolder;
-
-    @Mock    protected ObjectSpecification mockOnType;
-    @Mock    protected ObjectSpecification mockObjSpec;
-    @Mock    protected OneToOneAssociation mockOneToOneAssociation;
-    @Mock    protected OneToManyAssociation mockOneToManyAssociation;
-    @Mock    protected OneToOneActionParameter mockOneToOneActionParameter;
-    //    @Mock    protected EventBusService mockEventBusService;
-    @Mock    protected ObjectAdapterProvider mockObjectAdapterProvider;
-
-    @Mock    protected MetamodelEventService mockMetamodelEventService;
-
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
 
@@ -105,12 +98,11 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     public void setUpFacetedMethodAndParameter() throws Exception {
 
         // PRODUCTION
-
-        MetaModelContext.preset(MetaModelContext.builder()
-                .specificationLoader(mockSpecificationLoader)
-                .serviceInjector(mockServiceInjector)
-                .serviceRegistry(mockServiceRegistry)
-                .build());
+        metaModelContext = MetaModelContext_forTesting.builder()
+                        .specificationLoader(mockSpecificationLoader)
+                        .serviceInjector(mockServiceInjector)
+                        .serviceRegistry(mockServiceRegistry)
+                        .build();
 
         context.checking(new Expectations() {{
 
@@ -131,6 +123,11 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
         facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(AbstractFacetFactoryTest.Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
+        
+        ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);
+        facetedMethod.setMetaModelContext(metaModelContext);
+        facetedMethodParameter.setMetaModelContext(metaModelContext);
+        
     }
 
     @After

@@ -31,13 +31,11 @@ import com.fasterxml.jackson.databind.node.TextNode;
 
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -46,6 +44,7 @@ import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.hamcrest.Matchers.is;
@@ -53,17 +52,18 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
-@RunWith(JMock.class)
 public class JsonValueEncoderTest_asAdapter {
 
-    private final Mockery context = new JUnit4Mockery();
+    @Rule public JUnitRuleMockery2 context = 
+            JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
+    @Mock private ObjectSpecification mockObjectSpec;
+    @Mock private EncodableFacet mockEncodableFacet;
+    @Mock private ObjectAdapter mockObjectAdapter;
+    @Mock private ObjectAdapterProvider mockAdapterManager;
+    
     private JsonRepresentation representation;
-    private ObjectSpecification mockObjectSpec;
-    private EncodableFacet mockEncodableFacet;
-    private ObjectAdapter mockObjectAdapter;
-
-    private ObjectAdapterProvider mockAdapterManager;
+    private JsonValueEncoder jsonValueEncoder;
 
     @Before
     public void setUp() throws Exception {
@@ -72,44 +72,44 @@ public class JsonValueEncoderTest_asAdapter {
         mockObjectAdapter = context.mock(ObjectAdapter.class);
         mockAdapterManager = context.mock(ObjectAdapterProvider.class);
 
-        JsonValueEncoder.testSetAdapterManager(mockAdapterManager::adapterFor);
+        jsonValueEncoder = JsonValueEncoder.forTesting(mockAdapterManager);
 
         representation = new JsonRepresentation(TextNode.valueOf("aString"));
     }
 
     @After
     public void tearDown() throws Exception {
-        JsonValueEncoder.testSetAdapterManager(null);
+        
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void whenSpecIsNull() throws Exception {
-        JsonValueEncoder.asAdapter(null, representation, null);
+        jsonValueEncoder.asAdapter(null, representation, null);
     }
 
     @Test
     public void whenReprIsNull() throws Exception {
-        assertThat(JsonValueEncoder.asAdapter(mockObjectSpec, null, null), is(Matchers.nullValue()));
+        assertThat(jsonValueEncoder.asAdapter(mockObjectSpec, null, null), is(Matchers.nullValue()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenReprIsAnArray() throws Exception {
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        JsonValueEncoder.asAdapter(mockObjectSpec, JsonRepresentation.newArray(), null);
+        jsonValueEncoder.asAdapter(mockObjectSpec, JsonRepresentation.newArray(), null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenReprIsAMap() throws Exception {
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        assertNull(JsonValueEncoder.asAdapter(mockObjectSpec, JsonRepresentation.newMap(), null));
+        assertNull(jsonValueEncoder.asAdapter(mockObjectSpec, JsonRepresentation.newMap(), null));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenSpecDoesNotHaveAnEncodableFacet() throws Exception {
         allowingObjectSpecHas(EncodableFacet.class, null);
 
-        assertNull(JsonValueEncoder.asAdapter(mockObjectSpec, representation, null));
+        assertNull(jsonValueEncoder.asAdapter(mockObjectSpec, representation, null));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -156,7 +156,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
     }
 
     @Test
@@ -183,7 +183,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -198,7 +198,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = JsonRepresentation.newMap("foo", "bar");
 
         // when
-        JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
     }
 
     @Test
@@ -225,7 +225,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -245,7 +245,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
     }
 
     @Test
@@ -272,7 +272,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -287,7 +287,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = JsonRepresentation.newMap("foo", "bar");
 
         // when
-        JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
     }
 
     @Test
@@ -305,7 +305,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -320,7 +320,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = JsonRepresentation.newMap("foo", "bar");
 
         // when
-        JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
     }
 
     @Test
@@ -338,7 +338,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -353,7 +353,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = JsonRepresentation.newMap("foo", "bar");
 
         // when
-        JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
     }
 
     @Test
@@ -371,7 +371,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = JsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);

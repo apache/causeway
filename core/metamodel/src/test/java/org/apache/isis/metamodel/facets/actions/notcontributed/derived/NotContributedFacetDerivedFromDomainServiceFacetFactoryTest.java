@@ -45,6 +45,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
     @Before
     public void setUp() throws Exception {
         facetFactory = new NotContributedFacetDerivedFromDomainServiceFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     //TODO[2142] NatureOfService.VIEW_MENU_ONLY was deprecated, remove ?

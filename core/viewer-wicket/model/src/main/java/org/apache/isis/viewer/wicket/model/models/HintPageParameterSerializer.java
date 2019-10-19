@@ -19,18 +19,16 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
+
+import lombok.val;
 
 class HintPageParameterSerializer implements Serializable {
 
@@ -39,18 +37,23 @@ class HintPageParameterSerializer implements Serializable {
 
     private HintPageParameterSerializer() {}
 
-    public static void hintStoreToPageParameters(final PageParameters pageParameters, final EntityModel entityModel) {
-        ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
-        hintStoreToPageParameters(pageParameters, objectAdapterMemento);
+    public static void hintStoreToPageParameters(
+            final PageParameters pageParameters, 
+            final EntityModel entityModel) {
+        
+        val hintStore = entityModel.getCommonContext().lookupServiceElseFail(HintStore.class);
+        val objectAdapterMemento = entityModel.getObjectAdapterMemento();
+        hintStoreToPageParameters(pageParameters, objectAdapterMemento, hintStore);
     }
 
-    public static void hintStoreToPageParameters(
+    static void hintStoreToPageParameters(
             final PageParameters pageParameters,
-            final ObjectAdapterMemento objectAdapterMemento) {
+            final ObjectAdapterMemento objectAdapterMemento,
+            final HintStore hintStore) {
+        
         if(objectAdapterMemento == null) {
             return;
         }
-        final HintStore hintStore = getHintStore();
         final Bookmark bookmark = objectAdapterMemento.asHintingBookmarkIfSupported();
         Set<String> hintKeys = hintStore.findHintKeys(bookmark);
         for (String hintKey : hintKeys) {
@@ -58,37 +61,32 @@ class HintPageParameterSerializer implements Serializable {
         }
     }
 
+//XXX not used
+//    private static void updateHintStoreUNUSED(
+//            final PageParameters pageParameters,
+//            final ObjectAdapterMemento objectAdapterMemento,
+//            final HintStore hintStore) {
+//        
+//        if(objectAdapterMemento == null) {
+//            return;
+//        }
+//        Set<String> namedKeys = pageParameters.getNamedKeys();
+//        if (namedKeys.contains("no-hints")) {
+//            hintStore.removeAll(objectAdapterMemento.asHintingBookmarkIfSupported());
+//            return;
+//        }
+//        List<ComponentHintKey> newComponentHintKeys = _Lists.newArrayList();
+//        for (String namedKey : namedKeys) {
+//            if (namedKey.startsWith(PREFIX)) {
+//                String value = pageParameters.get(namedKey).toString(null);
+//                String key = namedKey.substring(5);
+//                final ComponentHintKey componentHintKey = ComponentHintKey.create(key);
+//                newComponentHintKeys.add(componentHintKey);
+//                final Bookmark bookmark = objectAdapterMemento.asHintingBookmarkIfSupported();
+//                componentHintKey.set(bookmark, value);
+//            }
+//        }
+//    }
 
-    public static void updateHintStoreUNUSED(
-            final PageParameters pageParameters,
-            final ObjectAdapterMemento objectAdapterMemento) {
-        if(objectAdapterMemento == null) {
-            return;
-        }
-        Set<String> namedKeys = pageParameters.getNamedKeys();
-        if (namedKeys.contains("no-hints")) {
-            getHintStore().removeAll(objectAdapterMemento.asHintingBookmarkIfSupported());
-            return;
-        }
-        List<ComponentHintKey> newComponentHintKeys = _Lists.newArrayList();
-        for (String namedKey : namedKeys) {
-            if (namedKey.startsWith(PREFIX)) {
-                String value = pageParameters.get(namedKey).toString(null);
-                String key = namedKey.substring(5);
-                final ComponentHintKey componentHintKey = ComponentHintKey.create(key);
-                newComponentHintKeys.add(componentHintKey);
-                final Bookmark bookmark = objectAdapterMemento.asHintingBookmarkIfSupported();
-                componentHintKey.set(bookmark, value);
-            }
-        }
-    }
-
-    private static HintStore getHintStore() {
-        return IsisContext.getServiceRegistry().lookupServiceElseFail(HintStore.class);
-    }
-
-    private static IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
 
 }

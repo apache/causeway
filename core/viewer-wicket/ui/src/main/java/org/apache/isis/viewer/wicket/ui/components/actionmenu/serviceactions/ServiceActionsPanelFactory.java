@@ -26,9 +26,6 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.MenuBars;
-import org.apache.isis.applib.services.menu.MenuBarsService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -41,7 +38,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
 
     private final static long serialVersionUID = 1L;
-
+    
     public ServiceActionsPanelFactory() {
         super(ComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);
     }
@@ -63,17 +60,13 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
     public Component createComponent(final String id, final IModel<?> model) {
         final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
 
-        final MenuBarsService menuBarsService =
-                getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
+        final MenuBars menuBars = super.getCommonContext().getMenuBarsService().menuBars();
 
-        final MenuBars menuBars = menuBarsService.menuBars();
-
-        final List<CssMenuItem> menuItems = ServiceActionUtil.buildMenu(menuBars, serviceActionsModel);
+        final List<CssMenuItem> menuItems = ServiceActionUtil.buildMenu(
+                super.getCommonContext(), menuBars, serviceActionsModel);
 
         return new ServiceActionsPanel(id, menuItems);
     }
 
-    ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
-    }
+
 }

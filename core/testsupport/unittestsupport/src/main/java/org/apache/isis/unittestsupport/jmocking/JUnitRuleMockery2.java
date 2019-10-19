@@ -36,6 +36,7 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 
 import static java.lang.annotation.ElementType.FIELD;
@@ -69,7 +70,10 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * Factory method.
      */
     public static JUnitRuleMockery2 createFor(final Mode mode) {
-        IsisSystemEnvironment.get().setUnitTesting(true);
+        
+        _Context.computeIfAbsent(IsisSystemEnvironment.class, IsisSystemEnvironment::new)
+        .setUnitTesting(true);
+        
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
         if (mode == Mode.INTERFACES_AND_CLASSES) {
             jUnitRuleMockery2.setImposteriser(Imposterisers.getDefault());

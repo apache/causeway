@@ -21,9 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-
-import com.google.common.base.Charsets;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.request.resource.CharSequenceResource;
@@ -43,7 +42,7 @@ public class IsisClobPanel extends IsisBlobOrClobPanelAbstract<Clob> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Charset CHARSET = Charsets.UTF_8;
+    private static final Charset CHARSET = StandardCharsets.UTF_8;
 
     public IsisClobPanel(final String id, final ScalarModel model) {
         super(id, model);

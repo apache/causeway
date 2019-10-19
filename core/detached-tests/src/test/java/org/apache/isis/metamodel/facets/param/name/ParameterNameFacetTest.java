@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
@@ -35,6 +36,8 @@ import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 /**
  * Detached from its module because we need the javac -parameter flag set when compiling this test 
@@ -47,7 +50,12 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
     @Before
     public void setUp() throws Exception {
         programmingModel = new ProgrammingModelFacetsJava8();
-        ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
+        
+        val metaModelContext = MetaModelContext_forTesting.builder().build();
+        
+        ((ProgrammingModelAbstract)programmingModel)
+        .init(new ProgrammingModelInitFilterDefault(), metaModelContext);
+        
         super.setUpFacetedMethodAndParameter();
     }
 

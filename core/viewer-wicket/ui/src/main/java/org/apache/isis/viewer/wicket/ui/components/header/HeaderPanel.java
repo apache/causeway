@@ -41,11 +41,15 @@ import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
+import lombok.val;
+
 /**
  * A panel for the default page header
  */
 public class HeaderPanel extends PanelAbstract<Model<String>> {
 
+    private static final long serialVersionUID = 1L;
+    
     private static final String ID_USER_NAME = "userName";
     private static final String ID_PRIMARY_MENU_BAR = "primaryMenuBar";
     private static final String ID_SECONDARY_MENU_BAR = "secondaryMenuBar";
@@ -97,17 +101,20 @@ public class HeaderPanel extends PanelAbstract<Model<String>> {
     }
 
     private UserProfileService getUserProfileService() {
+        
+        val commonContext = super.getCommonContext();
+        
         return new UserProfileService() {
             @Override
             public String userProfileName() {
                 if(getPage() instanceof ErrorPage) {
-                    return getAuthenticationSession().getUserName();
+                    return commonContext.getAuthenticationSession().getUserName();
                 }
                 try {
-                    final UserProfileService userProfileService = lookupService(UserProfileService.class);
+                    val userProfileService = commonContext.lookupServiceElseFail(UserProfileService.class);
                     return userProfileService.userProfileName();
                 } catch (final Exception e) {
-                    return getAuthenticationSession().getUserName();
+                    return commonContext.getAuthenticationSession().getUserName();
                 }
             }
         };
@@ -125,8 +132,12 @@ public class HeaderPanel extends PanelAbstract<Model<String>> {
         }
     }
 
-    private void addMenuBar(final MarkupContainer container, final String id, final DomainServiceLayout.MenuBar menuBar) {
-        final ServiceActionsModel model = new ServiceActionsModel(menuBar);
+    private void addMenuBar(
+            final MarkupContainer container, 
+            final String id, 
+            final DomainServiceLayout.MenuBar menuBar) {
+        
+        final ServiceActionsModel model = new ServiceActionsModel(super.getCommonContext(), menuBar);
         Component menuBarComponent = getComponentFactoryRegistry().createComponent(ComponentType.SERVICE_ACTIONS, id, model);
         menuBarComponent.add(AttributeAppender.append("class", menuBar.name().toLowerCase(Locale.ENGLISH)));
         container.add(menuBarComponent);

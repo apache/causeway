@@ -35,7 +35,10 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
@@ -52,6 +55,10 @@ import lombok.val;
 
 public class IsisModuleSecurityRealm extends AuthorizingRealm implements SecurityRealm {
 
+    @Inject protected ServiceInjector serviceInjector;
+    @Inject protected IsisSessionFactory isisSessionFactory;
+    @Inject protected PlatformTransactionManager txMan;
+    
     @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
     @Getter @Setter private boolean autoCreateUser = true;
 
@@ -260,11 +267,10 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     }
 
     <V> V execute(final Supplier<V> closure) {
-        return getSessionFactory().doInSession(
+        return isisSessionFactory.doInSession(
                 new Callable<V>() {
                     @Override
                     public V call() {
-                        val serviceInjector = IsisContext.getServiceInjector();
                         serviceInjector.injectServicesInto(closure);
                         return doExecute(closure);
                     }
@@ -273,7 +279,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     }
 
     <V> V doExecute(final Supplier<V> closure) {
-        val txTemplate = IsisContext.createTransactionTemplate();
+        val txTemplate = new TransactionTemplate(txMan);
         return txTemplate.execute(status->closure.get());
     }
 
@@ -284,8 +290,6 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     }
 
 
-    protected IsisSessionFactory getSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
+
 
 }

@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
@@ -50,24 +51,21 @@ public class ObjectActionLayoutXmlDefaultTest {
 
     private ObjectActionDefault action;
 
-    @Mock
-    private FacetedMethod mockFacetedMethod;
+    @Mock private FacetedMethod mockFacetedMethod;
+    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private SpecificationLoader mockSpecificationLoader;
+    @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
-    @Mock
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    private MetaModelContext metaModelContext;
 
     @Before
     public void setUp() throws Exception {
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
-                .build());
+                .build();
 
         context.checking(new Expectations() {
             {

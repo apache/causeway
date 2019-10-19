@@ -24,7 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
 
 import lombok.val;
@@ -32,17 +33,29 @@ import lombok.val;
 public abstract class AuthenticationSessionStrategyAbstract implements AuthenticationSessionStrategy {
 
     public static final int STATUS_UNAUTHORIZED = 401;
+    
+    private AuthenticationManager authenticationManager;
+    
+    protected AuthenticationManager getAuthenticationManager(ServletRequest servletRequest) {
+        if(authenticationManager==null) {
+            val servletContext = getServletContext(servletRequest);
+            val webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            authenticationManager = webApplicationContext.getBean(AuthenticationManager.class);
+        }
+        return authenticationManager;
+    }
 
-    protected HttpSession getHttpSession(final ServletRequest servletRequest) {
+    protected HttpSession getHttpSession(ServletRequest servletRequest) {
         val httpServletRequest = (HttpServletRequest) servletRequest;
         return httpServletRequest.getSession();
     }
 
-    protected ServletContext getServletContext(final ServletRequest servletRequest) {
+    protected ServletContext getServletContext(ServletRequest servletRequest) {
         val httpSession = getHttpSession(servletRequest);
         return httpSession.getServletContext();
     }
 
+    
     @Override
     public final void invalidate(
             final HttpServletRequest httpServletRequest, 
@@ -51,10 +64,5 @@ public abstract class AuthenticationSessionStrategyAbstract implements Authentic
         bind(httpServletRequest, httpServletResponse, null);
         httpServletResponse.setStatus(STATUS_UNAUTHORIZED);
     }
-
-    protected AuthenticationManager authenticationManager() {
-        return IsisContext.getAuthenticationManager();
-    }
-        
     
 }

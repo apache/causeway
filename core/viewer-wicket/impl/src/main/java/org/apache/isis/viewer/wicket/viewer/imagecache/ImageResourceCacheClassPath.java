@@ -24,12 +24,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.Specification;
@@ -52,7 +51,7 @@ public class ImageResourceCacheClassPath implements ImageResourceCache {
     private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg", "svg");
     private static final String FALLBACK_IMAGE = "Default.png";
 
-    private final Map<ImageResourceCacheKey, ResourceReference> resourceReferenceByKey = Maps.newConcurrentMap();
+    private final Map<ImageResourceCacheKey, ResourceReference> resourceReferenceByKey = _Maps.newConcurrentHashMap();
     private final PackageResourceReference fallbackResource;
 
     public ImageResourceCacheClassPath() {

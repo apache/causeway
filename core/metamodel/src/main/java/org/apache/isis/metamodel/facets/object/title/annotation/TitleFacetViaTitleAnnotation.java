@@ -27,7 +27,6 @@ import java.util.function.Function;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -35,6 +34,7 @@ import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -120,7 +120,6 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
         final StringBuilder stringBuilder = new StringBuilder();
@@ -153,7 +152,10 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
             return stringBuilder.toString().trim();
         } catch (final RuntimeException ex) {
-            if(!IsisSystemEnvironment.get().isUnitTesting()) {
+            
+            val isUnitTesting = super.getMetaModelContext().getSystemEnvironment().isUnitTesting();
+            
+            if(!isUnitTesting) {
                 log.warn("Title failure", ex);    
             }
             return "Failed Title";

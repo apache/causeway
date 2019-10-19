@@ -27,7 +27,6 @@ import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
@@ -79,7 +78,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
                 Boolean emailExists = getIsisSessionFactory().doInSession(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
-                        val serviceRegistry = IsisContext.getServiceRegistry();
+                        val serviceRegistry = getServiceRegistry();
                         val userRegistrationService = serviceRegistry
                                 .lookupServiceElseFail(UserRegistrationService.class);
                         return userRegistrationService.emailExists(email);

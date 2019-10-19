@@ -16,20 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.metamodel.facets.members.describedas.annotprop;
-
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
+package org.apache.isis.metamodel;
 
 /**
- * @deprecated
+ * 
+ * @since 2.0
+ *
  */
-@Deprecated
-public class DescribedAsFacetOnMemberAnnotation extends DescribedAsFacetAbstract {
+public interface MetaModelContextAware {
 
-    public DescribedAsFacetOnMemberAnnotation(final String value, final FacetHolder holder) {
-        super(value, holder);
-    }
-
+    void setMetaModelContext(MetaModelContext metaModelContext);
 }

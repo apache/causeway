@@ -26,7 +26,6 @@ import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -74,7 +73,7 @@ implements MetaModelRefiner {
                 // do nothing
             } else {
                 final BigDecimalValueFacet facet = new BigDecimalFacetFallback(holder);
-                FacetUtil.addFacet(facet);
+                super.addFacet(facet);
             }
         } else {
 
@@ -91,7 +90,7 @@ implements MetaModelRefiner {
             Integer length = valueElseDefaults(jdoColumnAnnotation.length(), existingLength, DEFAULT_LENGTH);
             Integer scale = valueElseDefaults(jdoColumnAnnotation.scale(), existingScale, DEFAULT_SCALE);
             final BigDecimalValueFacet facet = new BigDecimalFacetDerivedFromJdoColumn(holder, length, scale);
-            FacetUtil.addFacet(facet);
+            super.addFacet(facet);
         }
     }
 

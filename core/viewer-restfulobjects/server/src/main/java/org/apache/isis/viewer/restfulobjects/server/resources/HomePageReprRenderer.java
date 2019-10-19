@@ -21,7 +21,6 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -58,7 +57,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             addLinkToSelf();
         }
 
-        val metaModelContext = MetaModelContext.current();
+        val metaModelContext = super.getRendererContext().getMetaModelContext();
 
         addLinkToUser(getRendererContext().getAuthenticationSession());
         addLinkToMenuBars();

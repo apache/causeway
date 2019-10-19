@@ -31,8 +31,9 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.cdi._CDI;
+import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
@@ -41,9 +42,9 @@ import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.ServiceUtil;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
+import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.authorization.manager.AuthorizationManager;
@@ -51,73 +52,74 @@ import org.apache.isis.security.authorization.manager.AuthorizationManager;
 import lombok.Getter;
 import lombok.val;
 
-class MetaModelContext_usingCDI implements MetaModelContext {
+
+class MetaModelContext_usingIoc implements MetaModelContext {
+
+    private final IocContainer iocContainer;
+    public MetaModelContext_usingIoc(IocContainer iocContainer) {
+        this.iocContainer = iocContainer;
+    }
 
     @Getter(lazy=true) 
     private final IsisConfigurationLegacy configurationLegacy = 
     _Config.getConfiguration();
 
     @Getter(lazy=true) 
-    private final IsisConfiguration configuration = 
-    _CDI.getSingletonElseFail(IsisConfiguration.class);
+    private final IsisSystemEnvironment systemEnvironment = 
+    getSingletonElseFail(IsisSystemEnvironment.class);
     
     @Getter(lazy=true) 
+    private final IsisConfiguration configuration = 
+    getSingletonElseFail(IsisConfiguration.class);
+
+    @Getter(lazy=true) 
     private final ObjectAdapterProvider objectAdapterProvider =
-    _CDI.getSingletonElseFail(ObjectAdapterProvider.class);
+    getSingletonElseFail(PersistenceSessionServiceInternal.class);
 
     @Getter(lazy=true) 
     private final ServiceInjector serviceInjector =
-    _CDI.getSingletonElseFail(ServiceInjector.class);
+    getSingletonElseFail(ServiceInjector.class);
 
     @Getter(lazy=true) 
     private final ServiceRegistry serviceRegistry =
-    _CDI.getSingletonElseFail(ServiceRegistry.class);
+    getSingletonElseFail(ServiceRegistry.class);
 
     @Getter(lazy=true) 
     private final SpecificationLoader specificationLoader = 
-    _CDI.getSingletonElseFail(SpecificationLoader.class);
+    getSingletonElseFail(SpecificationLoader.class);
 
     @Getter(lazy=true) 
     private final AuthenticationSessionProvider authenticationSessionProvider =
-    _CDI.getSingletonElseFail(AuthenticationSessionProvider.class);
+    getSingletonElseFail(AuthenticationSessionProvider.class);
 
     @Getter(lazy=true) 
     private final TranslationService translationService =
-    _CDI.getSingletonElseFail(TranslationService.class);
+    getSingletonElseFail(TranslationService.class);
 
     @Getter(lazy=true) 
     private final AuthorizationManager authorizationManager =
-    _CDI.getSingletonElseFail(AuthorizationManager.class); 
+    getSingletonElseFail(AuthorizationManager.class); 
 
     @Getter(lazy=true) 
     private final AuthenticationManager authenticationManager =
-    _CDI.getSingletonElseFail(AuthenticationManager.class);
+    getSingletonElseFail(AuthenticationManager.class);
 
     @Getter(lazy=true) 
     private final TitleService titleService =
-    _CDI.getSingletonElseFail(TitleService.class);
-
-    //        @Getter(lazy=true) 
-    //        private final ObjectAdapterService objectAdapterService =
-    //        _CDI.getSingletonElseFail(ObjectAdapterService.class);
+    getSingletonElseFail(TitleService.class);
 
     @Getter(lazy=true) 
     private final RepositoryService repositoryService =
-    _CDI.getSingletonElseFail(RepositoryService.class);
+    getSingletonElseFail(RepositoryService.class);
 
     @Getter(lazy=true) 
     private final TransactionService transactionService =
-    _CDI.getSingletonElseFail(TransactionService.class);
+    getSingletonElseFail(TransactionService.class);
 
     @Getter(lazy=true) 
     private final HomePageResolverService homePageResolverService =
-    _CDI.getSingletonElseFail(HomePageResolverService.class);
+    getSingletonElseFail(HomePageResolverService.class);
 
-
-    @Override
-    public final AuthenticationSession getAuthenticationSession() {
-        return getAuthenticationSessionProvider().getAuthenticationSession();
-    }
 
     @Override
     public final ObjectSpecification getSpecification(final Class<?> type) {
@@ -138,36 +140,46 @@ class MetaModelContext_usingCDI implements MetaModelContext {
 
     @Override
     public Stream<ObjectAdapter> streamServiceAdapters() {
-        return serviceAdapters.get().values().stream();
+        return objectAdaptersForBeansOfKnownSort.get().values().stream();
     }
 
     @Override
     public ObjectAdapter lookupServiceAdapterById(final String serviceId) {
-        return serviceAdapters.get().get(serviceId);
+        return objectAdaptersForBeansOfKnownSort.get().get(serviceId);
     }
 
+    // -- LOOKUP
+
+    @Override
+    public <T> T getSingletonElseFail(Class<T> type) {
+        return iocContainer.getSingletonElseFail(type);
+    }
 
     // -- HELPER
 
-    private final _Lazy<Map<String, ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
+    private final _Lazy<Map<String, ObjectAdapter>> objectAdaptersForBeansOfKnownSort = 
+            _Lazy.threadSafe(this::collectBeansOfKnownSort);
 
-    private Map<String, ObjectAdapter> initServiceAdapters() {
+    private Map<String, ObjectAdapter> collectBeansOfKnownSort() {
 
         val objectAdapterProvider = getObjectAdapterProvider();
 
-        return getServiceRegistry().streamRegisteredBeans()
+        return getServiceRegistry()
+                .streamRegisteredBeans()
                 .map(objectAdapterProvider::adapterForBean) 
-                .peek(serviceAdapter->{
-                    val oid = serviceAdapter.getOid();
-                    if(oid.isTransient()) {
-                        val msg = "ObjectAdapter for 'Bean' is expected not to be 'transient' " + oid;
-                        throw _Exceptions.unrecoverable(msg);
-                    }
-                })
+                .peek(this::guardAgainsTransient)
                 .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
     }
 
-    // -------------------------------------------------------------------------------
+    private void guardAgainsTransient(ObjectAdapter objectAdapter) {
+        val oid = objectAdapter.getOid();
+        if(oid.isTransient()) {
+            val msg = "ObjectAdapter for 'Bean' is expected not to be 'transient' " + oid;
+            throw _Exceptions.unrecoverable(msg);
+        }
+    }
+
+
 
 
 }

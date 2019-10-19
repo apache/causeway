@@ -22,16 +22,18 @@ import java.io.IOException;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.runtime.system.context.IsisContext;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -58,6 +60,8 @@ import lombok.val;
 })
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {
+    
+    @Inject private ServiceRegistry serviceRegistry; 
 
     @BeforeEach
     void beforeEach() {
@@ -67,7 +71,6 @@ class SpringServiceProvisioningTest {
     @Test
     void builtInServices_shouldBeSetUp() throws IOException {
 
-        val serviceRegistry = IsisContext.getServiceRegistry();
         val managedServices = serviceRegistry.streamRegisteredBeans()
                 .map(ManagedBeanAdapter::getBeanClass)
                 .map(Class::getName)

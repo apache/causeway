@@ -32,6 +32,7 @@ import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -65,6 +66,7 @@ class DomainModelTest_usingBadDomain {
     
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private SpecificationLoader specificationLoader;
     @Inject private ApplicationContext applicationContext;
     
     
@@ -76,7 +78,7 @@ class DomainModelTest_usingBadDomain {
     @Test
     void ambiguousTitle_shouldFail() {
            
-        val validateDomainModel = new ValidateDomainModel();
+        val validateDomainModel = new ValidateDomainModel(specificationLoader);
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
         assertTrue(validateDomainModel.anyMatchesContaining(
@@ -87,7 +89,7 @@ class DomainModelTest_usingBadDomain {
     @Test
     void orphanedActionSupport_shouldFail() {
            
-        val validateDomainModel = new ValidateDomainModel();
+        val validateDomainModel = new ValidateDomainModel(specificationLoader);
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
         assertTrue(validateDomainModel.anyMatchesContaining(
@@ -109,7 +111,7 @@ class DomainModelTest_usingBadDomain {
     @Test
     void orphanedPropertySupport_shouldFail() {
            
-        val validateDomainModel = new ValidateDomainModel();
+        val validateDomainModel = new ValidateDomainModel(specificationLoader);
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
         assertTrue(validateDomainModel.anyMatchesContaining(
@@ -120,7 +122,7 @@ class DomainModelTest_usingBadDomain {
     @Test
     void orphanedCollectionSupport_shouldFail() {
            
-        val validateDomainModel = new ValidateDomainModel();
+        val validateDomainModel = new ValidateDomainModel(specificationLoader);
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
         assertTrue(validateDomainModel.anyMatchesContaining(
@@ -131,7 +133,7 @@ class DomainModelTest_usingBadDomain {
     @Test @Disabled("this case has no vaildation refiner yet")
     void invalidPropertyAnnotationOnAction_shouldFail() {
         
-        val validateDomainModel = new ValidateDomainModel();
+        val validateDomainModel = new ValidateDomainModel(specificationLoader);
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
         assertTrue(validateDomainModel.anyMatchesContaining(

@@ -31,14 +31,13 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.Getter;
 
 public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvider<ObjectAdapterMemento> {
 
@@ -47,12 +46,15 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     protected static final String NULL_PLACEHOLDER = "$$_isis_null_$$";
     private static final String NULL_DISPLAY_TEXT = "";
 
-    private final ScalarModel scalarModel;
-    private final WicketViewerSettings wicketViewerSettings;
+    @Getter private final ScalarModel scalarModel;
+    @Getter private final transient IsisWebAppCommonContext commonContext;
+    @Getter private final transient WicketViewerSettings wicketViewerSettings;
 
-    public ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel, final WicketViewerSettings wicketViewerSettings) {
+    public ObjectAdapterMementoProviderAbstract(ScalarModel scalarModel) {
+        
         this.scalarModel = scalarModel;
-        this.wicketViewerSettings = wicketViewerSettings;
+        this.commonContext = scalarModel.getCommonContext();
+        this.wicketViewerSettings = commonContext.lookupServiceElseFail(WicketViewerSettings.class);
     }
 
     @Override
@@ -82,7 +84,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             return NULL_PLACEHOLDER;
         }
         final ObjectSpecId objectSpecId = choice.getObjectSpecId();
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
+        final ObjectSpecification spec = commonContext.getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
 
         // support enums that are implementing an interface; only know this late in the day
         // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their objectSpecId
@@ -129,29 +131,6 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         }
 
         return matches;
-    }
-
-
-    protected ScalarModel getScalarModel() {
-        return scalarModel;
-    }
-
-
-    ///////////////////////////////////////////////////////
-    // Dependencies (from context)
-    ///////////////////////////////////////////////////////
-
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
-
-    public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession().orElse(null);
     }
 
 

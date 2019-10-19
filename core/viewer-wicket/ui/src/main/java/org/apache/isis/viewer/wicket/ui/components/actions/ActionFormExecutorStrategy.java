@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
@@ -79,9 +77,11 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
     public void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget targetIfany) {
+        
         ActionResultResponse resultResponse = ActionResultResponseType
                 .determineAndInterpretResult(model, targetIfany, resultAdapter);
-        resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
+        
+        resultResponse.getHandlingStrategy().handleResults(model.getCommonContext(), resultResponse);
     }
 
 
@@ -92,14 +92,5 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
         this.actionPrompt = actionPrompt;
     }
 
-
-    ///////////////////////////////////////////////////////
-    // Dependencies (from context)
-    ///////////////////////////////////////////////////////
-
-
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
 
 }

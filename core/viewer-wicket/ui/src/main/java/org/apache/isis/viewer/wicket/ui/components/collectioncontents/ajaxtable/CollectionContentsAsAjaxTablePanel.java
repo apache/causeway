@@ -63,12 +63,15 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
+import lombok.val;
+
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public class CollectionContentsAsAjaxTablePanel
-extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
+extends PanelAbstract<EntityCollectionModel> 
+implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -164,8 +167,9 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
             final ObjectAdapterMemento parentAdapterMementoIfAny,
             final int maxTitleParented,
             final int maxTitleStandalone) {
+        
         final int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
-        columns.add(new ObjectAdapterTitleColumn(parentAdapterMementoIfAny, maxTitleLength));
+        columns.add(new ObjectAdapterTitleColumn(super.commonContext, parentAdapterMementoIfAny, maxTitleLength));
     }
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
@@ -312,7 +316,10 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
         final String describedAs = mapIfPresentElse(property.getFacet(DescribedAsFacet.class), 
                 DescribedAsFacet::value, null);
 
+        val commonContext = super.getCommonContext();
+        
         return new ObjectAdapterPropertyColumn(
+                commonContext,
                 getModel().getType(), 
                 Model.of(property.getName()), 
                 property.getId(), 

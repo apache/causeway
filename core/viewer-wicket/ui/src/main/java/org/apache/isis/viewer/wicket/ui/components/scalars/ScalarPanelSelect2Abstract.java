@@ -43,6 +43,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
+import lombok.val;
+
 public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
@@ -233,11 +235,11 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             final ObjectAdapterMemento proposedValue;
 
             if (proposedValueObj instanceof List) {
-                final List proposedValueObjAsList = (List) proposedValueObj;
+                val proposedValueObjAsList = (List<ObjectAdapterMemento>) proposedValueObj;
                 if (proposedValueObjAsList.isEmpty()) {
                     return;
                 }
-                final ObjectAdapterMemento oam = (ObjectAdapterMemento) proposedValueObjAsList.get(0);
+                final ObjectAdapterMemento oam = proposedValueObjAsList.get(0);
                 final ObjectSpecId objectSpecId = oam.getObjectSpecId();
                 proposedValue = ObjectAdapterMemento
                         .wrapMementoList(proposedValueObjAsList, objectSpecId);

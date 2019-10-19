@@ -18,18 +18,14 @@
  */
 package org.apache.isis.metamodel.facets.fallback;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.ConfigPropsForPropertyOrParameterLayout;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
@@ -76,17 +72,16 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final int pagedStandalone = getConfiguration().getViewers().getPaged().getStandalone();
         final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
 
-        FacetUtil.addFacet(describedAsFacet);
+        super.addFacet(describedAsFacet);
         // commenting these out, think this whole isNoop business is a little bogus
         //FacetUtil.addFacet(new ImmutableFacetNever(holder)); 
-        FacetUtil.addFacet(titleFacet);
-        FacetUtil.addFacet(pagedFacet);
+        super.addFacet(titleFacet);
+        super.addFacet(pagedFacet);
 
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final List<Facet> facets = _Lists.newArrayList();
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
@@ -94,47 +89,44 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final String id = facetedMethod.getIdentifier().getMemberName();
         String defaultName = StringExtensions.asNaturalName2(id);
 
-        facets.add(new NamedFacetDefault(defaultName, facetedMethod));
+        super.addFacet(new NamedFacetDefault(defaultName, facetedMethod));
 
-        facets.add(new DescribedAsFacetNone(facetedMethod));
-        facets.add(new HelpFacetNone(facetedMethod));
+        super.addFacet(new DescribedAsFacetNone(facetedMethod));
+        super.addFacet(new HelpFacetNone(facetedMethod));
 
 
         final FeatureType featureType = facetedMethod.getFeatureType();
         if (featureType.isProperty()) {
-            facets.add(new MaxLengthFacetUnlimited(facetedMethod));
-            facets.add(new MultiLineFacetNone(true, facetedMethod));
+            super.addFacet(new MaxLengthFacetUnlimited(facetedMethod));
+            super.addFacet(new MultiLineFacetNone(true, facetedMethod));
 
-            facets.add(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getViewers().getPropertyLayout()));
+            super.addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getViewers().getPropertyLayout()));
         }
         if (featureType.isAction()) {
-            facets.add(new ActionDefaultsFacetNone(facetedMethod));
-            facets.add(new ActionChoicesFacetNone(facetedMethod));
+            super.addFacet(new ActionDefaultsFacetNone(facetedMethod));
+            super.addFacet(new ActionChoicesFacetNone(facetedMethod));
         }
         if (featureType.isCollection()) {
-            facets.add(new PagedFacetFromConfiguration(getConfiguration().getViewers().getPaged().getParented(), facetedMethod));
+            super.addFacet(new PagedFacetFromConfiguration(getConfiguration().getViewers().getPaged().getParented(), facetedMethod));
         }
-
-        FacetUtil.addFacets(facets);
+        
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final List<Facet> facets = new ArrayList<Facet>();
 
         final TypedHolder typedHolder = processParameterContext.getFacetHolder();
         if (typedHolder.getFeatureType().isActionParameter()) {
-            facets.add(new NamedFacetNone(typedHolder));
-            facets.add(new DescribedAsFacetNone(typedHolder));
-            facets.add(new HelpFacetNone(typedHolder));
-            facets.add(new MultiLineFacetNone(false, typedHolder));
+            super.addFacet(new NamedFacetNone(typedHolder));
+            super.addFacet(new DescribedAsFacetNone(typedHolder));
+            super.addFacet(new HelpFacetNone(typedHolder));
+            super.addFacet(new MultiLineFacetNone(false, typedHolder));
 
-            facets.add(new MaxLengthFacetUnlimited(typedHolder));
+            super.addFacet(new MaxLengthFacetUnlimited(typedHolder));
 
-            facets.add(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getViewers().getParameterLayout()));
+            super.addFacet(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getViewers().getParameterLayout()));
         }
 
-        FacetUtil.addFacets(facets);
     }
 
     private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, ConfigPropsForPropertyOrParameterLayout configPropsHolder) {

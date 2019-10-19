@@ -19,9 +19,15 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
@@ -437,6 +443,23 @@ public final class _Strings {
             return scanner.hasNext() ? scanner.next() : "";
         }
     }
+    
+    public static List<String> readAllLines(@Nullable final InputStream input, Charset charset) throws IOException {
+        requires(charset, "charset");
+        if(input==null) {
+            return Collections.emptyList();
+        }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
+            List<String> result = new ArrayList<>();
+            for (;;) {
+                String line = reader.readLine();
+                if (line == null)
+                    break;
+                result.add(line);
+            }
+            return result;
+        }
+    }
 
     // -- BYTE ARRAY CONVERSION
 
@@ -552,5 +575,7 @@ public final class _Strings {
                 .map(String::trim)
                 .filter(not(String::isEmpty));
     }
+
+
 
 }

@@ -18,23 +18,19 @@
  */
 package org.apache.isis.testdomain.shiro;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
@@ -43,6 +39,11 @@ import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.val;
 
@@ -65,17 +66,15 @@ import lombok.val;
 class ShiroSecmanTest extends AbstractShiroTest {
 
     @Inject SecurityModuleConfig securityConfig;
+    @Inject ServiceInjector serviceInjector;
 
-    @BeforeAll
-    static void beforeClass() {
-        //    Build and set the SecurityManager used to build Subject instances used in your tests
-        //    This typically only needs to be done once per class if your shiro.ini doesn't change,
-        //    otherwise, you'll need to do this logic in each test that is different
-        setSecurityManager("classpath:shiro-secman.ini");
+    @BeforeEach
+    void beforeEach() {
+        setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
     }
-
-    @AfterAll
-    static void afterClass() {
+    
+    @AfterEach
+    void afterEach() {
         tearDownShiro();
     }
 

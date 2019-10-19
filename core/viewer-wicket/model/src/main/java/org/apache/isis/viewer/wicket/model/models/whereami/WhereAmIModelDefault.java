@@ -23,11 +23,10 @@ import java.util.LinkedList;
 import java.util.stream.Stream;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.util.pchain.ParentChain;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -40,21 +39,23 @@ class WhereAmIModelDefault implements WhereAmIModel {
 
     private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
     private final EntityModel startOfChain;
+    private final IsisWebAppCommonContext commonContext;
 
     private boolean isWhereAmIEnabled;
     private int maxChainLength;
-
+    
     private static int configHash = 0;
 
     public WhereAmIModelDefault(EntityModel startOfChain) {
         this.startOfChain = startOfChain;
+        this.commonContext = startOfChain.getCommonContext();
 
-        overrideFromConfigIfNew(IsisContext.getConfigurationLegacy(), IsisContext.getConfiguration());
+        overrideFromConfigIfNew(commonContext.getConfiguration());
 
         final ObjectAdapter adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();
 
-        ParentChain.of(IsisContext.getSpecificationLoader()::loadSpecification)
+        ParentChain.of(commonContext.getSpecificationLoader()::loadSpecification)
         .streamParentChainOf(startNode, maxChainLength)
         .forEach(reversedChainOfParents::addFirst);
     }
@@ -84,12 +85,11 @@ class WhereAmIModelDefault implements WhereAmIModel {
     // -- HELPER
 
     private EntityModel toEntityModel(Object domainObject) {
-        val pojoToAdapter = IsisContext.pojoToAdapter();
-        val objectAdapter = pojoToAdapter.apply(domainObject);
-        return new EntityModel(objectAdapter);
+        val objectAdapter = commonContext.getObjectAdapterProvider().adapterFor(domainObject);
+        return EntityModel.ofAdapter(commonContext, objectAdapter);
     }
 
-    private void overrideFromConfigIfNew(IsisConfigurationLegacy configurationLegacy, IsisConfiguration configuration) {
+    private void overrideFromConfigIfNew(IsisConfiguration configuration) {
 
         //[ahuber] without evidence that this significantly improves performance,
         // (skipping 2 hash-table lookups) we use the smart update idiom here ...
@@ -100,9 +100,10 @@ class WhereAmIModelDefault implements WhereAmIModel {
 
         // that's the hash of the object (we don't care about the actual config values)
         // assuming that, we get a new (immutable) config instance each app's life-cycle:
-        final int newConfigHash = System.identityHashCode(configurationLegacy);
-        if(newConfigHash == configHash)
+        final int newConfigHash = System.identityHashCode(configuration);
+        if(newConfigHash == configHash) {
             return;
+        }
 
         configHash = newConfigHash;
 

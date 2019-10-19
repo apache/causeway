@@ -18,12 +18,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.entity.fieldset;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
-
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -34,6 +33,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -54,6 +54,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+
+import lombok.val;
 
 public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
 
@@ -77,7 +79,12 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         // the UI is only ever built once.
         childComponents = buildGui();
-        childScalarPanelAbstract2s = FluentIterable.from(childComponents).filter(ScalarPanelAbstract2.class).toList();
+        childScalarPanelAbstract2s = 
+                _NullSafe.stream(childComponents)
+                .filter(ScalarPanelAbstract2.class::isInstance)
+                .map(ScalarPanelAbstract2.class::cast)
+                .collect(Collectors.toList());
+                
     }
 
     @Override
@@ -98,13 +105,13 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         String groupName = fieldSet.getName();
 
-        final ImmutableList<ObjectAssociation> associations = getObjectAssociations();
+        val associations = getObjectAssociations();
 
         final List<LinkAndLabel> memberGroupActions = _Lists.newArrayList();
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
         div.addOrReplace(propertyRv);
 
-        for (final ObjectAssociation association : associations) {
+        for (val association : associations) {
             final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
             propertyRv.addOrReplace(propertyRvContainer);
             final Component component = addPropertyToForm(getModel(), (OneToOneAssociation) association,
@@ -143,7 +150,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         return childComponents;
     }
 
-    private ImmutableList<ObjectAssociation> getObjectAssociations() {
+    private List<ObjectAssociation> getObjectAssociations() {
         final List<PropertyLayoutData> properties = this.fieldSet.getProperties();
         // changed to NO_CHECK because more complex BS3 layouts trip concurrency exception
         // (haven't investigated as to why).
@@ -151,7 +158,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         return getObjectAssociations(properties, adapter);
     }
 
-    private ImmutableList<ObjectAssociation> getObjectAssociations(
+    private List<ObjectAssociation> getObjectAssociations(
             final List<PropertyLayoutData> properties,
             final ObjectAdapter adapter) {
 
@@ -164,11 +171,11 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         // or not moves to ScalarPanelAbstract2#onConfigure(...)
         //
 
-        return FluentIterable.from(properties)
+        val oas = _NullSafe.stream(properties)
                 .filter((final PropertyLayoutData propertyLayoutData) -> {
                     return propertyLayoutData.getMetadataError() == null;
                 })
-                .transform((final PropertyLayoutData propertyLayoutData)->{
+                .map((final PropertyLayoutData propertyLayoutData)->{
                     ObjectSpecification adapterSpecification = adapter.getSpecification();
                     try {
                         // this shouldn't happen, but has been reported (https://issues.apache.org/jira/browse/ISIS-1574),
@@ -191,7 +198,9 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                     }
                     return true;
                 })
-                .toList();
+                .collect(Collectors.toList());
+        
+        return Collections.unmodifiableList(oas);
     }
 
     private Component addPropertyToForm(

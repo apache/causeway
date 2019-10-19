@@ -77,10 +77,13 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
 
 
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argumentsIfAvailable) {
+        
+        val commonContext = super.getCommonContext();
+        
         final List<ObjectAdapter> choices =
-                scalarModel.getChoices(argumentsIfAvailable, getAuthenticationSession());
+                scalarModel.getChoices(argumentsIfAvailable, commonContext.getAuthenticationSession());
 
-        return _Lists.map(choices, ObjectAdapterMemento::ofAdapter);
+        return _Lists.map(choices, commonContext::mementoFor);
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -166,7 +169,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     @Override
     protected ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(final ObjectAdapter[] argsIfAvailable) {
         final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(argsIfAvailable);
-        return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos, wicketViewerSettings);
+        return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos);
     }
 
     @Override

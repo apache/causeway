@@ -34,10 +34,9 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.runtime.system.internal.IsisTimeZoneInitializer;
@@ -46,6 +45,7 @@ import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.authorization.manager.AuthorizationManager;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -66,6 +66,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Inject private AuthenticationManager authenticationManager;
     @Inject private RuntimeEventService runtimeEventService;
     @Inject private SpecificationLoader specificationLoader;
+    @Inject private MetaModelContext metaModelContext;
 
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
@@ -79,14 +80,13 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         log.info("Initialising Isis System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
-        final IsisConfigurationLegacy configuration = _Config.getConfiguration();
-        //log.info("resource stream source: {}", configuration.getResourceStreamSource());
+        val configurationLegacy = _Config.getConfiguration();
 
-        localeInitializer.initLocale(configuration);
-        timeZoneInitializer.initTimeZone(configuration);
+        localeInitializer.initLocale(configurationLegacy);
+        timeZoneInitializer.initTimeZone(configurationLegacy);
 
         runtimeEventService.fireAppPreMetamodel();
-
+        
         val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Init")
         
         .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
@@ -94,7 +94,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
         .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
         .addRunnable("AuthenticationManager::init", authenticationManager::init)
-        .addRunnable("AuthorizationManager::init", IsisContext.getAuthorizationManager()::init);
+        .addRunnable("AuthorizationManager::init", getAuthorizationManager()::init);
 
         taskList.submit(_ConcurrentContext.forkJoin());
         taskList.await();
@@ -113,7 +113,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         runtimeEventService.fireAppPreDestroy();
         authenticationManager.shutdown();
-        IsisContext.getAuthorizationManager().shutdown();
+        getAuthorizationManager().shutdown();
         //specificationLoader.shutdown(); // lifecycle is managed by IoC
     }
 
@@ -126,7 +126,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         closeSession();
 
-        val isisSession = new IsisSession(runtimeEventService, authenticationSession);
+        val isisSession = new IsisSession(metaModelContext, runtimeEventService, authenticationSession);
         isisSession.open();
         openSessions.add(isisSession);
         return isisSession;
@@ -180,7 +180,10 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         }
     }
 
-
+    private AuthorizationManager getAuthorizationManager() {
+        return metaModelContext.getServiceRegistry()
+                .lookupServiceElseFail(AuthorizationManager.class);
+    }
 
 
 }

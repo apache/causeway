@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.about;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -30,28 +29,32 @@ import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import java.util.stream.Collectors;
 
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Splitter;
-
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.metamodel.commons.CloseableExtensions;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final List<String> VERSION_KEY_CANDIDATES = Arrays.asList("Implementation-Version", "Build-Time");
+//    private static final List<String> VERSION_KEY_CANDIDATES = 
+//            Arrays.asList("Implementation-Version", "Build-Time");
 
     private final List<JarManifestAttributes> manifests = _Lists.newArrayList();
 
     /**
+     * @param commonContext 
      * @param metaInfManifestIs provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
      */
-    public JarManifestModel(InputStream metaInfManifestIs) {
+    public JarManifestModel(IsisWebAppCommonContext commonContext, InputStream metaInfManifestIs) {
 
+        super(commonContext);
+        
         Manifest manifest;
         try {
             manifest = new Manifest(metaInfManifestIs);
@@ -151,7 +154,13 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         strippedPath = stripSuffix(strippedPath, "!");
 
         // split the path into parts, and reverse
-        List<String> parts = _Lists.newArrayList(Splitter.on(CharMatcher.anyOf("/\\")).split(strippedPath));
+        List<String> parts = _Strings.splitThenStream(strippedPath, "/")
+        .flatMap(s->_Strings.splitThenStream(s, "\\"))
+        .filter(_Strings::isNotEmpty)
+        .collect(Collectors.toList());
+        
+        //XXX legacy of
+        //List<String> parts = _Lists.newArrayList(Splitter.on(CharMatcher.anyOf("/\\")).split(strippedPath));
         Collections.reverse(parts);
 
         // searching from the end, return the jar name if possible

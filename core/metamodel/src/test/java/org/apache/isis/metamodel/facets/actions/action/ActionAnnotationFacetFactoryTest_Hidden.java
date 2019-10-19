@@ -23,7 +23,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
@@ -37,6 +36,7 @@ public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFac
 
     private void processHidden(
             ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processHidden(processMethodContext, actionIfAny);
     }
@@ -51,20 +51,20 @@ public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFac
         }
 
         // given
-        final Class<?> cls = Customer.class;
+        val cls = Customer.class;
         actionMethod = findMethod(cls, "someAction");
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(
+        val processMethodContext = new ProcessMethodContext(
                 cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processHidden(facetFactory, processMethodContext);
 
         // then
-        final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
+        val hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
         Assert.assertNotNull(hiddenFacet);
         assertThat(hiddenFacet.where(), is(Where.REFERENCES_PARENT));
 
-        final Facet hiddenFacetImpl = facetedMethod.getFacet(HiddenFacetForActionAnnotation.class);
+        val hiddenFacetImpl = facetedMethod.getFacet(HiddenFacetForActionAnnotation.class);
         Assert.assertNotNull(hiddenFacetImpl);
         Assert.assertTrue(hiddenFacet == hiddenFacetImpl);
     }

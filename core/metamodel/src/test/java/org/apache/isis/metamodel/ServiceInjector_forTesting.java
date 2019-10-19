@@ -28,10 +28,15 @@ import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 import static java.util.Objects.requireNonNull;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@RequiredArgsConstructor
 class ServiceInjector_forTesting implements ServiceInjector {
 
+    @NonNull private final MetaModelContext metaModelContext;
+    
     private ServiceInjector delegate;
 
     @Override
@@ -40,7 +45,7 @@ class ServiceInjector_forTesting implements ServiceInjector {
         if(delegate==null) {
 
             // lookup the MetaModelContextBean's list of singletons
-            val mmc = MetaModelContext.current();
+            val mmc = metaModelContext;
             if(!(mmc instanceof MetaModelContext_forTesting)) {
                 return null;
             }

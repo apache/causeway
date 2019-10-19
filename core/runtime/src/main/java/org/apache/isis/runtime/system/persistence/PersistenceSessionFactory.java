@@ -18,6 +18,7 @@
  */
 package org.apache.isis.runtime.system.persistence;
 
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.IsisJdoRuntimePlugin;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -28,7 +29,7 @@ public interface PersistenceSessionFactory {
 
     PersistenceSession createPersistenceSession(AuthenticationSession authenticationSession);
 
-    void init();
+    void init(MetaModelContext metaModelContext);
 
     void catalogNamedQueries(final SpecificationLoader specificationLoader);
 

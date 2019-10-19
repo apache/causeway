@@ -127,7 +127,7 @@ public interface ObjectAdapter extends ManagedObject {
         }
 
         public static String unwrapPojoStringElse(final ManagedObject adapter, String orElse) {
-            final Object obj = unwrapPojo(adapter);
+            final Object obj = ManagedObject.unwrapPojo(adapter);
             if (obj == null) {
                 return null;
             }

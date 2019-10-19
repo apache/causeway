@@ -44,20 +44,22 @@ import java.util.stream.Collectors;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
+import lombok.val;
+
 public class ObjectAdapterMementoProviderForReferenceChoices
-extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProviderForChoices {
+extends ObjectAdapterMementoProviderAbstract 
+implements ObjectAdapterMementoProviderForChoices {
 
     private static final long serialVersionUID = 1L;
     private final List<ObjectAdapterMemento> choiceMementos;
 
     public ObjectAdapterMementoProviderForReferenceChoices(
-            final ScalarModel model,
-            final WicketViewerSettings wicketViewerSettings,
-            final List<ObjectAdapterMemento> choiceMementos) {
-        super(model, wicketViewerSettings);
+            ScalarModel model,
+            List<ObjectAdapterMemento> choiceMementos) {
+        
+        super(model);
         this.choiceMementos = choiceMementos;
     }
 
@@ -77,8 +79,8 @@ extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProv
             if(NULL_PLACEHOLDER.equals(input)) {
                 return null;
             }
-            final RootOid oid = RootOid.deString(input);
-            return ObjectAdapterMemento.ofRootOid(oid);
+            val rootOid = RootOid.deString(input);
+            return super.getCommonContext().mementoFor(rootOid);
         };
         return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
     }

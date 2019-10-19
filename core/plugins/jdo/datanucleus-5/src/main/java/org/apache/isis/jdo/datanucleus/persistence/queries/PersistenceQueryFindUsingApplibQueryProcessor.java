@@ -27,7 +27,6 @@ import javax.jdo.Query;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.jdo.datanucleus.metamodel.JdoPropertyUtils;
-import org.apache.isis.jdo.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.jdo.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.container.query.QueryCardinality;
@@ -36,6 +35,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -65,17 +65,18 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     // special case handling
     private List<?> getResultsPk(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
-        final IsisJdoSupport_v3_2 isisJdoSupport = isisJdoSupport();
-
-        final String queryName = persistenceQuery.getQueryName();
+        val queryName = persistenceQuery.getQueryName();
         final Map<String, Object> map = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
-        final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
+        val spec = persistenceQuery.getSpecification();
+        
+        val serviceRegistry = spec.getMetaModelContext().getServiceRegistry();
+        val isisJdoSupport = isisJdoSupport(serviceRegistry);
 
-        final Class<?> cls = objectSpec.getCorrespondingClass();
-        if(!JdoPropertyUtils.hasPrimaryKeyProperty(objectSpec)) {
+        val cls = spec.getCorrespondingClass();
+        if(!JdoPropertyUtils.hasPrimaryKeyProperty(spec)) {
             throw new UnsupportedOperationException("cannot search by primary key for DataStore-assigned entities");
         }
-        final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(objectSpec);
+        final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(spec);
         final String pkOtoaId = pkOtoa.getId();
         final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
 
@@ -99,15 +100,15 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
 
     private List<?> getResults(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
-        final IsisJdoSupport_v3_2 isisJdoSupport = isisJdoSupport();
-
-        final String queryName = persistenceQuery.getQueryName();
+        val queryName = persistenceQuery.getQueryName();
         final Map<String, Object> argumentsByParameterName = unwrap(
                 persistenceQuery.getArgumentsAdaptersByParameterName());
         final QueryCardinality cardinality = persistenceQuery.getCardinality();
-        final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
-
-        final Class<?> cls = objectSpec.getCorrespondingClass();
+        val spec = persistenceQuery.getSpecification();
+        val cls = spec.getCorrespondingClass();
+        
+        val serviceRegistry = spec.getMetaModelContext().getServiceRegistry();
+        val isisJdoSupport = isisJdoSupport(serviceRegistry);
 
         /* FIXME[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
          * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead 

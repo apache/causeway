@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.commons.ClassExtensions;
@@ -81,6 +82,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         this.parentAction = objectAction;
         this.peer = peer;
     }
+    
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return parentAction.getMetaModelContext();
+    }
 
     @Override
     public FeatureType getFeatureType() {
@@ -132,7 +138,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectSpecification getSpecification() {
-        return ObjectMemberAbstract.specificationOf(peer.getType());
+        return getSpecificationLoader().loadSpecification(peer.getType());
     }
 
     @Override

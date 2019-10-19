@@ -120,7 +120,8 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid> implements GridSystemService<G> {
+public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid>
+implements GridSystemService<G> {
 
     private final Class<G> gridImplementation;
     private final String tns;

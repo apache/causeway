@@ -49,45 +49,17 @@ import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.Getter;
 import lombok.val;
 
 @Vetoed
 public class DataNucleusApplicationComponents5 implements ApplicationScopedComponent {
 
-    ///////////////////////////////////////////////////////////////////////////
-    // JRebel support
-    ///////////////////////////////////////////////////////////////////////////
-
-    private static DataNucleusApplicationComponents5 instance;
-
-    /**
-     * For JRebel plugin
-     */
-    public static MetaDataManager getMetaDataManager() {
-        return instance != null
-                ? ((JDOPersistenceManagerFactory)instance.persistenceManagerFactory)
-                        .getNucleusContext().getMetaDataManager()
-                        : null;
-    }
-
-    public static void markAsStale() {
-        if(instance != null) {
-            instance.stale = true;
-        }
-    }
-
-    private boolean stale = false;
-    public boolean isStale() {
-        return stale;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-
     private final Set<String> persistableClassNameSet;
     private final IsisConfiguration configuration;
     private final Map<String, String> datanucleusProps;
 
-    private PersistenceManagerFactory persistenceManagerFactory;
+    @Getter private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents5(
             final IsisConfiguration configuration,
@@ -101,8 +73,6 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
         persistenceManagerFactory = createPmfAndSchemaIfRequired(
                 this.persistableClassNameSet, this.datanucleusProps);
 
-        // for JRebel plugin
-        instance = this;
     }
 
     /**
@@ -112,7 +82,6 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
      * @since 2.0.0
      */
     public void shutdown() {
-        instance = null;
         if(persistenceManagerFactory != null) {
             DataNucleusLifeCycleHelper.cleanUp(persistenceManagerFactory);
             persistenceManagerFactory = null;
@@ -259,10 +228,6 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
                 namedQueryByName.put(namedQuery.getName(), namedQuery);
             }
         }
-    }
-
-    public PersistenceManagerFactory getPersistenceManagerFactory() {
-        return persistenceManagerFactory;
     }
 
 

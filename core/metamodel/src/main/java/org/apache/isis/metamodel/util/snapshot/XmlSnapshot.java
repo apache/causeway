@@ -50,7 +50,6 @@ import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
@@ -125,14 +124,14 @@ public class XmlSnapshot implements Snapshot {
      * Start a snapshot at the root object, using own namespace manager.
      *
      */
-    public XmlSnapshot(final ObjectAdapter rootAdapter) {
+    public XmlSnapshot(final ManagedObject rootAdapter) {
         this(rootAdapter, new XmlSchema());
     }
 
     /**
      * Start a snapshot at the root object, using supplied namespace manager.
      */
-    public XmlSnapshot(final ObjectAdapter rootAdapter, final XmlSchema schema) {
+    public XmlSnapshot(final ManagedObject rootAdapter, final XmlSchema schema) {
 
         if (log.isDebugEnabled()) {
             log.debug(".ctor({}{}{})", log("rootObj", rootAdapter), andlog("schema", schema),
@@ -178,7 +177,7 @@ public class XmlSnapshot implements Snapshot {
         return paths;
     }
 
-    private String andlog(final String label, final ObjectAdapter object) {
+    private String andlog(final String label, final ManagedObject object) {
         return ", " + log(label, object);
     }
 
@@ -196,7 +195,7 @@ public class XmlSnapshot implements Snapshot {
      * this is achieved simply by using appendXml passing in a new schemaManager -
      * see {@link XmlSnapshot}).
      */
-    private Place appendXml(final ObjectAdapter object) {
+    private Place appendXml(final ManagedObject object) {
 
         if (log.isDebugEnabled()) {
             log.debug("appendXml({})", log("obj", object));
@@ -546,7 +545,7 @@ public class XmlSnapshot implements Snapshot {
         // case.
     }
 
-    private String log(final String label, final ObjectAdapter adapter) {
+    private String log(final String label, final ManagedObject adapter) {
         return log(label, (adapter == null ? "(null)" : adapter.titleString() + "[" + oidAsString(adapter) + "]"));
     }
 

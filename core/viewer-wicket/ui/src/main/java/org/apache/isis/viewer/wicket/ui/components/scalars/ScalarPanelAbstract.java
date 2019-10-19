@@ -71,9 +71,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
-    private static final String ID_EDIT_PROPERTY = "editProperty";
-    private static final String ID_FEEDBACK = "feedback";
-
     public enum CompactType {
         INPUT_CHECKBOX,
         SPAN

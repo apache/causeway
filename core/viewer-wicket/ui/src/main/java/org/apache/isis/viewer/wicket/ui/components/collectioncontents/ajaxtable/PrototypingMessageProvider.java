@@ -25,8 +25,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.base._Timing.StopWatch;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 /**
@@ -41,6 +39,7 @@ import org.apache.isis.runtime.system.context.IsisContext;
 class PrototypingMessageProvider {
 
     public static IModel<String> getTookTimingMessageModel() {
+        
         return new Model<String>() {
 
             private static final long serialVersionUID = 1L;
@@ -56,10 +55,6 @@ class PrototypingMessageProvider {
     // -- HELPER
 
     private static String getTookTimingMessage() {
-
-        if(!IsisSystemEnvironment.get().isPrototyping()) {
-            return "";
-        }
 
         final StringBuilder tookTimingMessage = new StringBuilder();
 

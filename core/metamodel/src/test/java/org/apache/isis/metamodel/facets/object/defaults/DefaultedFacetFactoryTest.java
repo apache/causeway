@@ -35,6 +35,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
         super.setUp();
 
         facetFactory = new DefaultedFacetAnnotationElseConfigurationFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     @Override

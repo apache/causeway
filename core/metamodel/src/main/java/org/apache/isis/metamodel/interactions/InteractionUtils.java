@@ -28,6 +28,8 @@ import org.apache.isis.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
+import lombok.val;
+
 public final class InteractionUtils {
 
     private InteractionUtils() {
@@ -59,7 +61,7 @@ public final class InteractionUtils {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
         final Stream<Facet> facets = facetHolder.streamFacets().filter(isA(ValidatingInteractionAdvisor.class));
         facets.forEach(facet->{
-            final ValidatingInteractionAdvisor advisor = (ValidatingInteractionAdvisor) facet;
+            val advisor = (ValidatingInteractionAdvisor) facet;
             result.advise(advisor.invalidates(context), advisor);
         });
         return result;

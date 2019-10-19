@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.object.layout;
 import java.lang.reflect.Method;
 
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
@@ -52,6 +51,6 @@ public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
             processClassContext.removeMethod(method);
             facet = new LayoutFacetMethod(method, facetHolder);
         }
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 }

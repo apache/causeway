@@ -63,11 +63,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime-web</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-spring</artifactId>
             <exclusions>
@@ -90,6 +85,10 @@
             	<exclusion>
             		<groupId>org.slf4j</groupId>
             		<artifactId>slf4j-api</artifactId>
+            	</exclusion>
+            	<exclusion>
+            		<groupId>com.google.guava</groupId>
+            		<artifactId>guava</artifactId>
             	</exclusion>
             </exclusions>
         </dependency>

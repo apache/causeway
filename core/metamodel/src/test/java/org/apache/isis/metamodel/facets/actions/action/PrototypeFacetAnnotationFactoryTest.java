@@ -48,6 +48,7 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
         super.setUp();
 
         facetFactory = new ActionAnnotationFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     @Override

@@ -218,7 +218,8 @@ public final class _With<T> {
      */
     public static <T> T requires(@Nullable T obj, String paramName) {
         if (obj == null) {
-            throw new NullPointerException(String.format("Parameter/Field '%s' is required to be present (not null).", paramName));
+            val msg = String.format("Parameter/Field '%s' is required to be present (not null).", paramName);
+            throw new IllegalArgumentException(msg);
         }
         return obj;
     }

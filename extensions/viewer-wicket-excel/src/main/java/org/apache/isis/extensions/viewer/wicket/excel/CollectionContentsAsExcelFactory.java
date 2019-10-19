@@ -31,7 +31,9 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsExcel}.
  */
-public class CollectionContentsAsExcelFactory extends ComponentFactoryAbstract implements CollectionContentsAsFactory {
+public class CollectionContentsAsExcelFactory 
+extends ComponentFactoryAbstract 
+implements CollectionContentsAsFactory {
 
     private static final long serialVersionUID = 1L;
 

@@ -38,14 +38,14 @@ public class TranslationsResolverWicketTest {
 
         @Test
         public void simple() throws Exception {
-            final File file = TranslationsResolverWicket.newFile("c:/foo", "bar");
+            final File file = TranslationsResolverWicket.newFile("c:/foo", "bar").toFile();
             final String absolutePath = file.getAbsolutePath();
             assertThat(absolutePath, is("c:\\foo\\bar"));
         }
 
         @Test
         public void nestedChild() throws Exception {
-            final File file = TranslationsResolverWicket.newFile("c:/foo", "bar/baz");
+            final File file = TranslationsResolverWicket.newFile("c:/foo", "bar/baz").toFile();
             final String absolutePath = file.getAbsolutePath();
             assertThat(absolutePath, is("c:\\foo\\bar\\baz"));
         }

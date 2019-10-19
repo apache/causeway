@@ -21,14 +21,8 @@ package org.apache.isis.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -46,7 +40,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
         CssClassFaFacet cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
 
         // no-op if null
-        FacetUtil.addFacet(cssClassFaFacet);
+        super.addFacet(cssClassFaFacet);
     }
 
     @Override

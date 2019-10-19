@@ -30,7 +30,8 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facets.Annotations;
@@ -108,12 +109,17 @@ import org.apache.isis.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
 import org.apache.isis.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
+import lombok.Setter;
 import lombok.val;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcessor {
+public class DeriveFacetsPostProcessor 
+implements ObjectSpecificationPostProcessor, MetaModelContextAware {
+    
+    @Setter(onMethod = @__(@Override))
+    private MetaModelContext metaModelContext;
 
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
@@ -226,18 +232,18 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         if (projectionFacet == null) {
             return;
         }
-        FacetUtil.addFacet(projectionFacet);
+        this.addFacet(projectionFacet);
         val titleFacet = objectSpecification.getFacet(TitleFacet.class);
         if(canOverwrite(titleFacet)) {
-            FacetUtil.addFacet(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            this.addFacet(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
         val iconFacet = objectSpecification.getFacet(IconFacet.class);
         if(canOverwrite(iconFacet)) {
-            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            this.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
         val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
         if(canOverwrite(cssClassFacet)) {
-            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            this.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
     }
 
@@ -288,7 +294,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
                     final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet = 
                             new CollectionDomainEventFacetForCollectionAnnotation(
                                     collectionDomainEventType, collection);
-                    FacetUtil.addFacet(collectionDomainEventFacet);
+                    this.addFacet(collectionDomainEventFacet);
                 }
 
                 final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =
@@ -328,7 +334,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
                     final PropertyDomainEventFacetForPropertyAnnotation propertyDomainEventFacet =
                             new PropertyDomainEventFacetForPropertyAnnotation(
                                     propertyDomainEventType, getterFacetIfAny, property);
-                    FacetUtil.addFacet(propertyDomainEventFacet);
+                    this.addFacet(propertyDomainEventFacet);
                 }
             }
             final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
@@ -373,7 +379,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ObjectSpecification returnSpec = objectAction.getReturnType();
         final DescribedAsFacet specFacet = returnSpec.getFacet(DescribedAsFacet.class);
         if(existsAndIsDoOp(specFacet)) {
-            FacetUtil.addFacet(new DescribedAsFacetOnMemberDerivedFromType(specFacet, facetedMethodFor(objectAction)));
+            this.addFacet(new DescribedAsFacetOnMemberDerivedFromType(specFacet, facetedMethodFor(objectAction)));
         }
     }
 
@@ -398,7 +404,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            FacetUtil.addFacet(
+            this.addFacet(
                     new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
         }
     }
@@ -413,7 +419,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ObjectSpecification paramSpec = parameter.getSpecification();
         final ChoicesFacet specFacet = paramSpec.getFacet(ChoicesFacet.class);
         if(existsAndIsDoOp(specFacet)) {
-            FacetUtil.addFacet(
+            this.addFacet(
                     new ActionParameterChoicesFacetDerivedFromChoicesFacet(
                             peerFor(parameter)));
         }
@@ -432,7 +438,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         //TODO: this ought to check if a do-op; if you come across this, you can probably change it (just taking smaller steps for now)
         //if(existsAndIsDoOp(specFacet)) {
         if(specFacet != null) {
-            FacetUtil.addFacet(new DescribedAsFacetOnParameterDerivedFromType(specFacet, peerFor(parameter)));
+            this.addFacet(new DescribedAsFacetOnParameterDerivedFromType(specFacet, peerFor(parameter)));
         }
     }
 
@@ -446,7 +452,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ObjectSpecification paramSpec = parameter.getSpecification();
         final TypicalLengthFacet specFacet = paramSpec.getFacet(TypicalLengthFacet.class);
         if(existsAndIsDoOp(specFacet)) {
-            FacetUtil.addFacet(new TypicalLengthFacetOnParameterDerivedFromType(specFacet, peerFor(parameter)));
+            this.addFacet(new TypicalLengthFacetOnParameterDerivedFromType(specFacet, peerFor(parameter)));
         }
     }
 
@@ -460,7 +466,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ObjectSpecification propertySpec = property.getSpecification();
         final ChoicesFacet specFacet = propertySpec.getFacet(ChoicesFacet.class);
         if(existsAndIsDoOp(specFacet)) {
-            FacetUtil.addFacet(
+            this.addFacet(
                     new PropertyChoicesFacetDerivedFromChoicesFacet(facetedMethodFor(property)));
         }
     }
@@ -475,7 +481,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ObjectSpecification propertySpec = property.getSpecification();
         final DefaultedFacet specFacet = propertySpec.getFacet(DefaultedFacet.class);
         if(existsAndIsDoOp(specFacet)) {
-            FacetUtil.addFacet(
+            this.addFacet(
                     new PropertyDefaultFacetDerivedFromDefaultedFacet(
                             specFacet, facetedMethodFor(property)));
         }
@@ -491,7 +497,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ObjectSpecification propertySpec = property.getSpecification();
         final TypicalLengthFacet specFacet = propertySpec.getFacet(TypicalLengthFacet.class);
         if(existsAndIsDoOp(specFacet)) {
-            FacetUtil.addFacet(
+            this.addFacet(
                     new TypicalLengthFacetOnPropertyDerivedFromType(specFacet, facetedMethodFor(property)));
         }
     }
@@ -506,7 +512,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ObjectSpecification returnSpec = objectAssociation.getSpecification();
         final DescribedAsFacet specFacet = returnSpec.getFacet(DescribedAsFacet.class);
         if(existsAndIsDoOp(specFacet)) {
-            FacetUtil.addFacet(
+            this.addFacet(
                     new DescribedAsFacetOnMemberDerivedFromType(specFacet, facetedMethodFor(objectAssociation)));
         }
     }
@@ -524,7 +530,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ViewModelFacet specFacet = propertySpec.getFacet(ViewModelFacet.class);
         if(existsAndIsDoOp(specFacet)) {
             final DisabledFacetAbstract.Semantics semantics = inferSemanticsFrom(specFacet);
-            FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromRecreatableObject(facetedMethodFor(property), semantics));
+            this.addFacet(new DisabledFacetOnPropertyDerivedFromRecreatableObject(facetedMethodFor(property), semantics));
         }
     }
 
@@ -539,7 +545,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ObjectSpecification onType = property.getOnType();
         final ImmutableFacet specFacet = onType.getFacet(ImmutableFacet.class);
         if(existsAndIsDoOp(specFacet)) {
-            FacetUtil.addFacet(
+            this.addFacet(
                     new DisabledFacetOnPropertyDerivedFromImmutable(facetedMethodFor(property)));
         }
     }
@@ -557,7 +563,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ViewModelFacet specFacet = collectionSpec.getFacet(ViewModelFacet.class);
         if(existsAndIsDoOp(specFacet)) {
             final DisabledFacetAbstract.Semantics semantics = inferSemanticsFrom(specFacet);
-            FacetUtil.addFacet(new DisabledFacetOnCollectionDerivedFromRecreatableObject(facetedMethodFor(collection), semantics));
+            this.addFacet(new DisabledFacetOnCollectionDerivedFromRecreatableObject(facetedMethodFor(collection), semantics));
         }
 
     }
@@ -572,7 +578,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ObjectSpecification onType = collection.getOnType();
         final ImmutableFacet specFacet = onType.getFacet(ImmutableFacet.class);
         if(existsAndIsDoOp(specFacet)) {
-            FacetUtil.addFacet(
+            this.addFacet(
                     new DisabledFacetOnCollectionDerivedFromImmutable(specFacet, facetedMethodFor(collection)));
         }
     }
@@ -583,7 +589,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         if(collectionParam.containsDoOpFacet(ActionParameterDefaultsFacet.class)) {
             return;
         }
-        FacetUtil.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
+        this.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
     }
 
     private void addCollectionParamChoicesFacetIfNoneAlready(
@@ -594,7 +600,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
             return;
         }
 
-        FacetUtil.addFacet(
+        this.addFacet(
                 new ActionParameterChoicesFacetFromParentedCollection(
                         scalarOrCollectionParam, otma));
     }
@@ -606,10 +612,14 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
     private List<ActionType> inferActionTypes() {
         final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);
-        if (IsisSystemEnvironment.get().isPrototyping()) {
+        if (metaModelContext.getSystemEnvironment().isPrototyping()) {
             actionTypes.add(ActionType.PROTOTYPE);
         }
         return actionTypes;
+    }
+    
+    private void addFacet(Facet facet) {
+        FacetUtil.addFacet(facet);
     }
 
 }

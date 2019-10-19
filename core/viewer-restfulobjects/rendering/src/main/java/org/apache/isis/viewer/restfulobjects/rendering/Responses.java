@@ -32,10 +32,12 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.rendering.util.JsonWriterUtil;
+
+import lombok.val;
 
 public final class Responses {
 
@@ -89,8 +91,7 @@ public final class Responses {
 
         final MediaType mediaType = renderer.getMediaType();
 
-        final Date now = IsisContext.getServiceRegistry()
-                .lookupServiceElseFail(ClockService.class).nowAsDateTime().toDate();
+        final Date now = now(renderer);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
@@ -99,8 +100,16 @@ public final class Responses {
                 .header("Date", dateFormat.format(now))
                 .type(mediaType)
                 .cacheControl(caching.getCacheControl())
-                .entity(JsonWriterUtil.jsonFor(entityRepresentation));
+                .entity(JsonWriterUtil.jsonFor(entityRepresentation, inferPrettyPrinting(renderer)));
         return addLastModifiedAndETagIfAvailable(response, version);
+    }
+
+    private static Date now(ReprRenderer<?, ?> renderer) {
+        if(renderer instanceof ReprRendererAbstract) {
+            ((ReprRendererAbstract<?, ?>)renderer).getRendererContext().getServiceRegistry()
+            .lookupServiceElseFail(ClockService.class).nowAsDateTime().toDate();
+        }
+        return new Date();
     }
 
     protected static Response.ResponseBuilder of(final RestfulResponse.HttpStatusCode httpStatusCode) {
@@ -129,4 +138,19 @@ public final class Responses {
         final String utcTime = ISODateTimeFormat.basicDateTime().print(new DateTime(time));
         return new EntityTag(utcTime, true);
     }
+    
+    public static JsonMapper.PrettyPrinting inferPrettyPrinting(ReprRenderer<?, ?> renderer) {
+
+        if(renderer instanceof ReprRendererAbstract) {
+            val systemEnvironment =  ((ReprRendererAbstract<?, ?>) renderer).getRendererContext()
+                    .getMetaModelContext().getSystemEnvironment();
+            return systemEnvironment.isPrototyping()
+                    ? JsonMapper.PrettyPrinting.ENABLE 
+                            : JsonMapper.PrettyPrinting.DISABLE;
+        }
+        
+        return JsonMapper.PrettyPrinting.DISABLE;
+        
+    }
+
 }

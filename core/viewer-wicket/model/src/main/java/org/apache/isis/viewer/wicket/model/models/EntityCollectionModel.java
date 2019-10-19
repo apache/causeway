@@ -51,6 +51,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectAdapterMementoSupport;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -58,6 +59,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFinder;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -82,6 +84,83 @@ implements LinksProvider, UiHintContainer {
     private static final int PAGE_SIZE_DEFAULT_FOR_PARENTED = 12;
     private static final int PAGE_SIZE_DEFAULT_FOR_STANDALONE = 25;
 
+    // -- TOP LEVEL FACTORIES
+
+    public static EntityCollectionModel createParented(EntityModel modelWithCollectionLayoutMetadata) {
+        return parentedOf(modelWithCollectionLayoutMetadata);
+    }
+
+    public static EntityCollectionModel createStandalone(
+            ObjectAdapter collectionAsAdapter, 
+            ModelAbstract<?> model) {
+
+        // dynamically determine the spec of the elements
+        // (ie so a List<Object> can be rendered according to the runtime type of its elements,
+        // rather than the compile-time type
+        val lowestCommonSuperclassFinder = new LowestCommonSuperclassFinder();
+
+        val mementoSupport = model.getMementoSupport();
+
+        val mementoList = streamElementsOf(collectionAsAdapter) // pojos
+                .peek(lowestCommonSuperclassFinder::collect)
+                .map(pojo->ObjectAdapterMemento.ofPojo(pojo, mementoSupport))
+                .collect(Collectors.toList());
+
+        val specificationLoader = model.getSpecificationLoader();
+
+        val elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
+                .map(specificationLoader::loadSpecification)
+                .orElse(collectionAsAdapter.getSpecification().getElementSpecification());
+
+        final Class<?> elementType;
+        int pageSize = PAGE_SIZE_DEFAULT_FOR_STANDALONE;
+        if (elementSpec != null) {
+            elementType = elementSpec.getCorrespondingClass();
+            pageSize = pageSize(elementSpec.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_STANDALONE);
+        } else {
+            elementType = Object.class;
+        }
+
+        return standaloneOf(model.getCommonContext(), elementType, mementoList, pageSize);
+    }
+
+    // -- LOW LEVEL FACTORIES (PRIVATE)
+
+    private static EntityCollectionModel parentedOf(EntityModel entityModel) {
+
+        val type = Type.PARENTED;
+
+        val collection = collectionFor(entityModel);
+        val typeOf = forName(collection.getSpecification());
+        val pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
+        val sortedByFacet = collection.getFacet(SortedByFacet.class);
+
+        val colModel = new EntityCollectionModel(
+                entityModel.getCommonContext(), type, entityModel, typeOf, pageSize);
+
+        colModel.collectionMemento = new CollectionMemento(collection);
+        colModel.sortedBy = sortedByFacet != null ? sortedByFacet.value(): null;
+        
+        return colModel;
+    }
+
+    private static EntityCollectionModel standaloneOf(
+            IsisWebAppCommonContext commonContext, 
+            Class<?> typeOf, 
+            List<ObjectAdapterMemento> mementoList, 
+            int pageSize) {
+
+        val type = Type.STANDALONE;
+        val entityModel = (EntityModel)null;
+
+        val colModel = new EntityCollectionModel(commonContext, type, entityModel, typeOf, pageSize);
+        colModel.mementoList = mementoList;
+        return colModel;
+
+    }
+
+    // -- VARIANTS
+
     public enum Type {
         /**
          * A simple list of object mementos, eg the result of invoking an action
@@ -91,24 +170,24 @@ implements LinksProvider, UiHintContainer {
          */
         STANDALONE {
             @Override
-            List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
+            List<ObjectAdapter> load(EntityCollectionModel colModel) {
 
                 //XXX lombok issue, cannot use val here 
-                boolean isBulkLoad = IsisContext.getConfiguration()
+                boolean isBulkLoad = colModel.getConfiguration()
                         .getPersistor().getDatanucleus().getStandaloneCollection().isBulkLoad();
-                
+
                 return isBulkLoad
-                        ? loadElementsInBulk(entityCollectionModel).collect(Collectors.toList())
-                                : loadElementsOneByOne(entityCollectionModel).collect(Collectors.toList());
+                        ? loadElementsInBulk(colModel).collect(Collectors.toList())
+                                : loadElementsOneByOne(colModel).collect(Collectors.toList());
             }
 
-            private Stream<ObjectAdapter> loadElementsInBulk(final EntityCollectionModel model) {
+            private Stream<ObjectAdapter> loadElementsInBulk(EntityCollectionModel colModel) {
 
                 //XXX lombok issue, cannot use val here 
                 PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
                         .orElseThrow(()->_Exceptions.unrecoverable("no PersistenceSession available"));
 
-                final Stream<RootOid> rootOids = stream(model.mementoList)
+                final Stream<RootOid> rootOids = stream(colModel.mementoList)
                         .map(ObjectAdapterMemento::asBookmarkIfSupported)
                         .filter(_NullSafe::isPresent)
                         .map(Oid.Factory::ofBookmark);
@@ -127,28 +206,31 @@ implements LinksProvider, UiHintContainer {
             }
 
             @Override
-            void setObject(final EntityCollectionModel entityCollectionModel, final List<ObjectAdapter> list) {
+            void setObject(EntityCollectionModel colModel, List<ObjectAdapter> adapterList) {
 
-                entityCollectionModel.mementoList = _NullSafe.stream(list)
-                        .map(ObjectAdapterMemento::ofAdapter)
+                //XXX lombok issue, cannot use val here 
+                ObjectAdapterMementoSupport mementoSupport = colModel.getMementoSupport();
+
+                colModel.mementoList = _NullSafe.stream(adapterList)
+                        .map(adapter->ObjectAdapterMemento.ofAdapter(adapter, mementoSupport))
                         .filter(_NullSafe::isPresent)
                         .collect(Collectors.toList());
             }
 
             @Override
-            public String getId(final EntityCollectionModel entityCollectionModel) {
+            public String getId(EntityCollectionModel colModel) {
                 return null;
             }
 
             @Override
-            public String getName(final EntityCollectionModel model) {
-                PluralFacet facet = model.getTypeOfSpecification().getFacet(PluralFacet.class);
+            public String getName(EntityCollectionModel colModel) {
+                PluralFacet facet = colModel.getTypeOfSpecification().getFacet(PluralFacet.class);
                 return facet.value();
             }
 
             @Override
-            public int getCount(final EntityCollectionModel model) {
-                return model.mementoList.size();
+            public int getCount(EntityCollectionModel colModel) {
+                return colModel.mementoList.size();
             }
 
             @Override
@@ -157,41 +239,39 @@ implements LinksProvider, UiHintContainer {
             }
 
         },
+
         /**
          * A collection of an entity (eg Order/OrderDetail).
          */
         PARENTED {
             @Override
-            List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
+            List<ObjectAdapter> load(EntityCollectionModel colModel) {
 
-                final ObjectAdapter adapter = entityCollectionModel.getParentObjectAdapterMemento().getObjectAdapter();
+                final ObjectAdapter adapter = colModel.getParentObjectAdapterMemento().getObjectAdapter();
 
-                final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection(
-                        entityCollectionModel.getSpecificationLoader());
+                final OneToManyAssociation collection = colModel.collectionMemento.getCollection(
+                        colModel.getSpecificationLoader());
 
                 final ManagedObject collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
 
                 final List<Object> objectList = asIterable(collectionAsAdapter);
 
-                final Class<? extends Comparator<?>> sortedBy = entityCollectionModel.sortedBy;
+                final Class<? extends Comparator<?>> sortedBy = colModel.sortedBy;
                 if(sortedBy != null) {
                     @SuppressWarnings("unchecked")
                     final Comparator<Object> comparator = (Comparator<Object>) InstanceUtil.createInstance(sortedBy);
-                    IsisContext.getServiceInjector().injectServicesInto(comparator);
+                    colModel.getCommonContext().injectServicesInto(comparator);
                     Collections.sort(objectList, comparator);
                 }
 
-                //XXX lombok issue, cannot use val here 
-                Function<Object, ObjectAdapter> pojoToAdapter = IsisContext.pojoToAdapter();
-
                 final List<ObjectAdapter> adapterList =
-                        _Lists.map(objectList, pojoToAdapter);
+                        _Lists.map(objectList, colModel.getPojoToAdapter());
 
                 return adapterList;
             }
 
             @SuppressWarnings("unchecked")
-            private List<Object> asIterable(final ManagedObject collectionAsAdapter) {
+            private List<Object> asIterable(ManagedObject collectionAsAdapter) {
                 if(collectionAsAdapter==null) {
                     return Collections.emptyList();
                 }
@@ -200,23 +280,23 @@ implements LinksProvider, UiHintContainer {
             }
 
             @Override
-            void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list) {
+            void setObject(EntityCollectionModel colModel, List<ObjectAdapter> list) {
                 // no-op
                 throw new UnsupportedOperationException();
             }
 
-            @Override public String getId(final EntityCollectionModel model) {
-                return model.getCollectionMemento().getCollectionId();
+            @Override public String getId(EntityCollectionModel colModel) {
+                return colModel.getCollectionMemento().getCollectionId();
             }
 
             @Override
-            public String getName(EntityCollectionModel model) {
-                return model.getCollectionMemento().getCollectionName();
+            public String getName(EntityCollectionModel colModel) {
+                return colModel.getCollectionMemento().getCollectionName();
             }
 
             @Override
-            public int getCount(EntityCollectionModel model) {
-                return load(model).size();
+            public int getCount(EntityCollectionModel colModel) {
+                return load(colModel).size();
             }
 
             @Override
@@ -240,40 +320,6 @@ implements LinksProvider, UiHintContainer {
 
 
     /**
-     * Factory.
-     */
-    public static EntityCollectionModel createStandalone(
-            final ObjectAdapter collectionAsAdapter) {
-
-        // dynamically determine the spec of the elements
-        // (ie so a List<Object> can be rendered according to the runtime type of its elements,
-        // rather than the compile-time type
-        final LowestCommonSuperclassFinder lowestCommonSuperclassFinder = new LowestCommonSuperclassFinder();
-
-        final List<ObjectAdapterMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
-                .peek(lowestCommonSuperclassFinder::collect)
-                .map(ObjectAdapterMemento::ofPojo)
-                .collect(Collectors.toList());
-
-        val specificationLoader = IsisContext.getSpecificationLoader();
-
-        final ObjectSpecification elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
-                .map(specificationLoader::loadSpecification)
-                .orElse(collectionAsAdapter.getSpecification().getElementSpecification());
-
-        final Class<?> elementType;
-        int pageSize = PAGE_SIZE_DEFAULT_FOR_STANDALONE;
-        if (elementSpec != null) {
-            elementType = elementSpec.getCorrespondingClass();
-            pageSize = pageSize(elementSpec.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_STANDALONE);
-        } else {
-            elementType = Object.class;
-        }
-
-        return new EntityCollectionModel(elementType, mementoList, pageSize);
-    }
-
-    /**
      * The {@link ActionModel model} of the {@link ObjectAction action}
      * that generated this {@link EntityCollectionModel}.
      *
@@ -292,13 +338,6 @@ implements LinksProvider, UiHintContainer {
      */
     public void setActionHint(ActionModel actionModelHint) {
         this.actionModelHint = actionModelHint;
-    }
-
-    /**
-     * Factory.
-     */
-    public static EntityCollectionModel createParented(final EntityModel modelWithCollectionLayoutMetadata) {
-        return new EntityCollectionModel(modelWithCollectionLayoutMetadata);
     }
 
     private final Type type;
@@ -348,42 +387,34 @@ implements LinksProvider, UiHintContainer {
      */
     private ActionModel actionModelHint;
 
-    private EntityCollectionModel(final Class<?> typeOf, final List<ObjectAdapterMemento> mementoList, final int pageSize) {
-        this.type = Type.STANDALONE;
-        this.entityModel = null;
-        this.typeOf = typeOf;
-        this.mementoList = mementoList;
-        this.pageSize = pageSize;
-        this.toggledMementosList = _Lists.newArrayList();
-    }
+    private EntityCollectionModel(
+            IsisWebAppCommonContext commonContext,
+            Type type, 
+            EntityModel entityModel, 
+            Class<?> typeOf, 
+            int pageSize) {
 
-    private EntityCollectionModel(final EntityModel entityModel) {
-        this.type = Type.PARENTED;
+        super(commonContext);
+        this.type = type;
         this.entityModel = entityModel;
-
-        final OneToManyAssociation collection = collectionFor(entityModel.getObjectAdapterMemento(), getLayoutData());
-        this.typeOf = forName(collection.getSpecification());
-
-        this.collectionMemento = new CollectionMemento(collection);
-
-        this.pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
-
-        final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
-        this.sortedBy = sortedByFacet != null ? sortedByFacet.value(): null;
-
-        this.toggledMementosList = _Lists.newArrayList();
+        this.typeOf = typeOf;
+        this.pageSize = pageSize;
+        this.toggledMementosList = _Lists.<ObjectAdapterMemento>newArrayList();
     }
 
 
-    private OneToManyAssociation collectionFor(
-            final ObjectAdapterMemento parentObjectAdapterMemento,
-            final CollectionLayoutData collectionLayoutData) {
+    private static OneToManyAssociation collectionFor(EntityModel entityModel) {
+
+        val parentObjectAdapterMemento = entityModel.getObjectAdapterMemento();
+        val collectionLayoutData = entityModel.getCollectionLayoutData();
+        val specificationLoader = entityModel.getSpecificationLoader();
+
         if(collectionLayoutData == null) {
             throw new IllegalArgumentException("EntityModel must have a CollectionLayoutMetadata");
         }
         final String collectionId = collectionLayoutData.getId();
         final ObjectSpecId objectSpecId = parentObjectAdapterMemento.getObjectSpecId();
-        final ObjectSpecification objectSpec = IsisContext.getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
+        final ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
         final OneToManyAssociation otma = (OneToManyAssociation) objectSpec.getAssociation(collectionId);
         return otma;
     }
@@ -458,7 +489,7 @@ implements LinksProvider, UiHintContainer {
      */
     public void setObjectList(ObjectAdapter resultAdapter) {
         this.mementoList = streamElementsOf(resultAdapter)
-                .map(ObjectAdapterMemento::ofPojo)
+                .map(pojo->ObjectAdapterMemento.ofPojo(pojo, super.getMementoSupport()))
                 .collect(Collectors.toList());
     }
 
@@ -493,7 +524,8 @@ implements LinksProvider, UiHintContainer {
 
 
     public void toggleSelectionOn(ObjectAdapter selectedAdapter) {
-        ObjectAdapterMemento selectedAsMemento = ObjectAdapterMemento.ofAdapter(selectedAdapter);
+        ObjectAdapterMemento selectedAsMemento = ObjectAdapterMemento
+                .ofAdapter(selectedAdapter, super.getMementoSupport());
 
         // try to remove; if couldn't, then mustn't have been in there, in which case add.
         boolean removed = toggledMementosList.remove(selectedAsMemento);
@@ -521,7 +553,8 @@ implements LinksProvider, UiHintContainer {
     }
 
     public EntityCollectionModel asDummy() {
-        return new EntityCollectionModel(typeOf, Collections.<ObjectAdapterMemento>emptyList(), pageSize);
+        return standaloneOf(
+                super.getCommonContext(), typeOf, Collections.<ObjectAdapterMemento>emptyList(), pageSize);
     }
 
     // //////////////////////////////////////
@@ -560,7 +593,6 @@ implements LinksProvider, UiHintContainer {
         }
         getEntityModel().clearHint(component, attributeName);
     }
-
 
 
 }

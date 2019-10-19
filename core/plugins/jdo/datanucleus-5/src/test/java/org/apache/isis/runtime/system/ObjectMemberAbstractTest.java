@@ -19,15 +19,6 @@
 
 package org.apache.isis.runtime.system;
 
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import org.datanucleus.enhancement.Persistable;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -37,6 +28,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.consent.Consent;
@@ -69,6 +61,15 @@ import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 public class ObjectMemberAbstractTest {
 
     @Rule
@@ -78,31 +79,24 @@ public class ObjectMemberAbstractTest {
 
     private ObjectAdapter persistentAdapter;
     private ObjectAdapter transientAdapter;
+    protected MetaModelContext metaModelContext;
 
-    @Mock
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Mock
-    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
-    @Mock
-    private AuthenticationSession mockAuthenticationSession;
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
-
-    @Mock
-    private ObjectSpecification mockSpecForCustomer;
-
-    @Mock
-    private Persistable mockPersistable;
+    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    @Mock private AuthenticationSession mockAuthenticationSession;
+    @Mock private SpecificationLoader mockSpecificationLoader;
+    @Mock private ObjectSpecification mockSpecForCustomer;
+    @Mock private Persistable mockPersistable;
 
     @Before
     public void setUp() throws Exception {
         //org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
-                .build());
+                .build();
 
         context.checking(new Expectations() {{
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
@@ -122,8 +116,8 @@ public class ObjectMemberAbstractTest {
                 .withPojo(mockPersistable)
                 .build();
 
-        testMember = new ObjectMemberAbstractImpl("id");
-
+        testMember = new ObjectMemberAbstractImpl(metaModelContext, "id");
+        
         context.checking(new Expectations() {{
             allowing(mockSpecificationLoader).lookupBySpecIdElseLoad(ObjectSpecId.of("CUS"));
             will(returnValue(mockSpecForCustomer));
@@ -244,8 +238,9 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
         }
     }
 
-    protected ObjectMemberAbstractImpl(final String id) {
+    protected ObjectMemberAbstractImpl(MetaModelContext mmc, final String id) {
         super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY);
+        super.getFacetedMethod().setMetaModelContext(mmc);
     }
 
     /**

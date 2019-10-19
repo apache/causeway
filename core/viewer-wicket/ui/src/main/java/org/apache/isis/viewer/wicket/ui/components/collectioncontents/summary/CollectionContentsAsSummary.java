@@ -25,8 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Iterables;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.AbstractItem;
@@ -177,15 +175,8 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         }
 
         private static List<Number> asNumbers(List<BigDecimal> values) {
-            return _Lists.newArrayList(Iterables.transform(values, BIGDECIMAL_TO_NUMBER));
+            return _Lists.map(values, Number.class::cast);
         }
-
-        private static final com.google.common.base.Function<BigDecimal, Number> BIGDECIMAL_TO_NUMBER = new com.google.common.base.Function<BigDecimal, Number>(){
-            @Override
-            public Number apply(BigDecimal value) {
-                return value;
-            }
-        };
 
 
     }

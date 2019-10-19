@@ -36,11 +36,18 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public EntityIconAndTitlePanelFactory(final ComponentType componentType, final @SuppressWarnings("rawtypes") Class componentClass) {
+    public EntityIconAndTitlePanelFactory(
+            ComponentType componentType, 
+            Class<?> componentClass) {
+        
         super(componentType, componentClass);
     }
 
-    public EntityIconAndTitlePanelFactory(final ComponentType componentType, final String name, final @SuppressWarnings("rawtypes") Class componentClass) {
+    public EntityIconAndTitlePanelFactory(
+            ComponentType componentType, 
+            String name, 
+            Class<?> componentClass) {
+        
         super(componentType, name, componentClass);
     }
 

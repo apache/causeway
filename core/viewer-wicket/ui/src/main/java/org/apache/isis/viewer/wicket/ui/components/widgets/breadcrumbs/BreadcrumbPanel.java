@@ -20,9 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
 import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.util.function.Predicate;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -37,12 +35,13 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import lombok.val;
 
 public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
@@ -93,15 +92,14 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
             @Override
             public void query(String term, int page, Response<EntityModel> response) {
                 final List<EntityModel> breadCrumbList = _Lists.newArrayList(breadcrumbModel.getList());
-                final List<EntityModel> checkedList = _Lists.newArrayList(
-                        Iterables.filter(breadCrumbList, new Predicate<EntityModel>() {
+                final List<EntityModel> checkedList = _Lists.filter(breadCrumbList, 
+                        new Predicate<EntityModel>() {
                             @Override
-                            public boolean apply(final EntityModel input) {
+                            public boolean test(final EntityModel input) {
                                 final Object id = getIdValue(input);
                                 return id != null;
                             }
-                        })
-                        );
+                        });
                 response.addAll(checkedList);
             }
 
@@ -113,6 +111,8 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         };
         final Select2Choice<EntityModel> breadcrumbChoice = new Select2Choice<>(ID_BREADCRUMBS, entityModel, choiceProvider);
 
+        val commonContext = super.getCommonContext();
+        
         breadcrumbChoice.add(
                 new AjaxFormComponentUpdatingBehavior("change"){
 
@@ -123,8 +123,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                         final String oidStr = breadcrumbChoice.getInput();
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
-                            final MessageBroker messageBroker = getIsisSessionFactory().getCurrentSession()
-                                    .getAuthenticationSession().getMessageBroker();
+                            val messageBroker = commonContext.getAuthenticationSession().getMessageBroker();
                             messageBroker.addWarning("Cannot find object");
                             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
                             target.appendJavaScript(feedbackMsg);

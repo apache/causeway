@@ -21,7 +21,6 @@ package org.apache.isis.security.shiro;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Singleton;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;

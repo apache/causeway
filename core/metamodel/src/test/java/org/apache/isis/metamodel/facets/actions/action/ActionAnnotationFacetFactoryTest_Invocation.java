@@ -66,8 +66,9 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         // expect
         allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
         expectRemoveMethod(actionMethod);
-
-        _Config.put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
+        
+        super.metaModelContext.getConfiguration()
+        .getReflector().getFacet().getActionAnnotation().getDomainEvent().setPostForDefault(true);
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
@@ -186,7 +187,8 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
         expectRemoveMethod(actionMethod);
 
-        _Config.put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
+        super.metaModelContext.getConfiguration()
+        .getReflector().getFacet().getActionAnnotation().getDomainEvent().setPostForDefault(true);
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(

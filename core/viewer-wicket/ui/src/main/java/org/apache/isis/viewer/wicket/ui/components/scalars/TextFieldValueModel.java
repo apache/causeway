@@ -19,13 +19,14 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
-import java.util.function.Function;
 
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+
+import lombok.val;
 
 /**
  * For custom {@link ScalarPanelTextFieldAbstract}s to use as the {@link Model}
@@ -37,7 +38,6 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
 
     public interface ScalarModelProvider {
         ScalarModel getModel();
-        Function<Object, ObjectAdapter> pojoToAdapter();
     }
 
     private final ScalarModelProvider scalarModelProvider;
@@ -60,11 +60,14 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
 
     @Override
     public void setObject(final T object) {
+        
+        val scalarModel = scalarModelProvider.getModel();
+        
         if (object == null) {
-            scalarModelProvider.getModel().setObject(null);
+            scalarModel.setObject(null);
         } else {
-            final ObjectAdapter objectAdapter = scalarModelProvider.pojoToAdapter().apply(object);
-            scalarModelProvider.getModel().setObject(objectAdapter);
+            val objectAdapter = scalarModel.getCommonContext().getPojoToAdapter().apply(object);
+            scalarModel.setObject(objectAdapter);
         }
     }
 

@@ -21,7 +21,6 @@ package org.apache.isis.jdo.metamodel.facets.prop.primarykey;
 import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.metamodel.JdoMetamodelUtil;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -49,8 +48,8 @@ public class JdoPrimaryKeyAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new JdoPrimaryKeyFacetAnnotation(holder));
-        FacetUtil.addFacet(new OptionalFacetDerivedFromJdoPrimaryKeyAnnotation(holder));
-        FacetUtil.addFacet(new DisabledFacetDerivedFromJdoPrimaryKeyAnnotation(holder));
+        super.addFacet(new JdoPrimaryKeyFacetAnnotation(holder));
+        super.addFacet(new OptionalFacetDerivedFromJdoPrimaryKeyAnnotation(holder));
+        super.addFacet(new DisabledFacetDerivedFromJdoPrimaryKeyAnnotation(holder));
     }
 }

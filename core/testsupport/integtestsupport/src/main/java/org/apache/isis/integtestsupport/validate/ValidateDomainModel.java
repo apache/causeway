@@ -28,13 +28,13 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.spec.DomainModelException;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -43,15 +43,15 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2
+@RequiredArgsConstructor
 public class ValidateDomainModel implements Runnable {
 
+    private final SpecificationLoader specificationLoader;
     private ValidationFailures validationFailures;
 
     @Override
     public void run() {
 
-        val specificationLoader = IsisContext.getSpecificationLoader();
-        
         specificationLoader.createMetaModel();
         
         this.validationFailures = specificationLoader.getValidationResult();

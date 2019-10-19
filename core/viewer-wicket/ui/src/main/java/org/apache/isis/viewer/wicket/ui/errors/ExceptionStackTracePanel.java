@@ -140,7 +140,6 @@ public class ExceptionStackTracePanel extends Panel {
 
     }
 
-    @Inject
-    PageClassRegistry pageClassRegistry;
+    @Inject PageClassRegistry pageClassRegistry;
 
 }

@@ -26,11 +26,10 @@ import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 /**
@@ -58,7 +57,8 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
         attachActionDefaultsFacetIfParameterDefaultsMethodIsFound(processMethodContext);
     }
 
-    private static void attachActionDefaultsFacetIfParameterDefaultsMethodIsFound(final ProcessMethodContext processMethodContext) {
+    private void attachActionDefaultsFacetIfParameterDefaultsMethodIsFound(
+            final ProcessMethodContext processMethodContext) {
 
         Method defaultsMethod = findDefaultsMethodReturning(processMethodContext, Object[].class);
         if (defaultsMethod == null) {
@@ -72,7 +72,7 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         final ActionDefaultsFacetViaMethod facet = new ActionDefaultsFacetViaMethod(defaultsMethod, facetedMethod);
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     private static Method findDefaultsMethodReturning(final ProcessMethodContext processMethodContext, final Class<?> returnType) {

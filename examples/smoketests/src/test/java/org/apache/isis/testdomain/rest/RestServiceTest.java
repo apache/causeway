@@ -36,7 +36,7 @@ import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 import lombok.val;
 
 @SpringBootTest(
-        classes = {RestService.class},
+        classes = {RestEndpointTestService.class},
         properties = {
                 "logging.config=log4j2-test.xml",
         },
@@ -48,7 +48,7 @@ import lombok.val;
 class RestServiceTest {
 
     @LocalServerPort int port; // just for reference (not used)
-    @Inject RestService restService;
+    @Inject RestEndpointTestService restService;
 
     @Test
     void bookOfTheWeek_viaRestEndpoint() {

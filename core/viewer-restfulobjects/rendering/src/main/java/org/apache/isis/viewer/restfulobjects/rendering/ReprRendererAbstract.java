@@ -26,7 +26,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -34,13 +33,18 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
 
+import lombok.Getter;
 import lombok.val;
 
-public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
+public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> 
+implements ReprRenderer<R, T> {
 
-    protected final RendererContext rendererContext;
+    @Getter protected final RendererContext rendererContext;
+    @Getter protected final JsonValueEncoder jsonValueEncoder;
+    
     private final LinkFollowSpecs linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
@@ -56,6 +60,9 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
             final RepresentationType representationType,
             final JsonRepresentation representation) {
         this.rendererContext = rendererContext;
+        this.jsonValueEncoder = rendererContext.getServiceRegistry()
+                .lookupServiceElseFail(JsonValueEncoder.class);
+                
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
         this.representation = representation;
@@ -70,11 +77,6 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
 
     protected InteractionInitiatedBy getInteractionInitiatedBy() {
         return interactionInitiatedBy;
-    }
-
-
-    public RendererContext getRendererContext() {
-        return rendererContext;
     }
 
     public LinkFollowSpecs getLinkFollowSpecs() {
@@ -206,7 +208,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     }
 
     protected Stream<ObjectAdapter> streamServiceAdapters() {
-        val metaModelContext = MetaModelContext.current();
+        val metaModelContext = rendererContext.getMetaModelContext();
         return metaModelContext.streamServiceAdapters();
     }
 

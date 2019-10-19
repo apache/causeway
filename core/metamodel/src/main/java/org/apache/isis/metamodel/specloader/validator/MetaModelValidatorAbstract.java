@@ -22,14 +22,20 @@ package org.apache.isis.metamodel.specloader.validator;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 public abstract class MetaModelValidatorAbstract 
-implements MetaModelValidator {
+implements MetaModelValidator, MetaModelContextAware {
 
     protected final ValidationFailures failures = new ValidationFailures();
+    
+    @Getter @Setter(onMethod = @__(@Override))
+    private MetaModelContext metaModelContext;
     
     /**
      * Collect any {@link ValidationFailure} to given validationFailures. 
@@ -52,7 +58,7 @@ implements MetaModelValidator {
     }
     
     protected IsisConfiguration getConfiguration() {
-        return MetaModelContext.current().getConfiguration();
+        return metaModelContext.getConfiguration();
     }
     
 }

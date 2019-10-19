@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilter;
@@ -45,6 +46,7 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private ProgrammingModelInitFilter programmingModelInitFilter;
+    @Inject private MetaModelContext metaModelContext;
      
     private _Lazy<ProgrammingModel> programmingModel = 
             _Lazy.threadSafe(this::createProgrammingModel);
@@ -63,7 +65,7 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         }
 
         // finalize the programming model (make it immutable)
-        programmingModel.init(programmingModelInitFilter);
+        programmingModel.init(programmingModelInitFilter, metaModelContext);
         
         if(log.isInfoEnabled()) {
             

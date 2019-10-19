@@ -20,17 +20,20 @@ package org.apache.isis.commons.internal.environment;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.commons.internal.ioc.IocContainer;
+import org.apache.isis.commons.internal.ioc.spring.IocContainerSpring;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -43,25 +46,18 @@ import lombok.extern.log4j.Log4j2;
 @Service @Singleton @Log4j2
 public class IsisSystemEnvironment {
     
-    @Autowired 
-    private ApplicationContext springContext;
-
-    /**
-     * @deprecated - this is provided only as a stepping stone for code that currently uses static method calls
-     *               rather than having this bean injected.
-     */
-    @Deprecated
-    public static IsisSystemEnvironment get() {
-        return _Context.computeIfAbsent(IsisSystemEnvironment.class, IsisSystemEnvironment::new);
-    }
+    @Inject private ApplicationContext springContext;
+    
+    @Getter private IocContainer iocContainer; 
 
     // -- LIFE-CYCLE
     
     @PostConstruct
     public void postConstruct() {
         
+        this.iocContainer = IocContainerSpring.of(springContext);
         
-        _Spring.reinit(springContext);
+        System.err.println("####### IsisSystemEnvironment postconst " + this.hashCode());    
         
         // when NOT bootstrapped with Spring, postConstruct() never gets called
         
@@ -76,13 +72,17 @@ public class IsisSystemEnvironment {
         }
         _Context.putSingleton(IsisSystemEnvironment.class, this);
         
-        System.err.println("####### IsisSystemEnvironment postconst " + this.hashCode());
-        
     }
     
     @PreDestroy
     public void preDestroy() {
         System.err.println("####### IsisSystemEnvironment destroy " + this.hashCode());
+    }
+    
+    @EventListener(ContextRefreshedEvent.class)
+    public void onContextRefreshed(ContextRefreshedEvent event) {
+        // happens after all @PostConstruct
+        log.info("Context was refreshed.");
     }
     
     @EventListener(ContextClosedEvent.class)
@@ -91,7 +91,14 @@ public class IsisSystemEnvironment {
         // as a consequence, no managed bean should touch the _Context during its post-construct phase
         // as it has already been cleared here
         log.info("Context about to close.");
+        this.iocContainer = null;
         _Context.clear();
+    }
+    
+    // -- SHORTCUTS
+    
+    public IocContainer ioc() {
+        return getIocContainer();
     }
     
     // -- SETUP

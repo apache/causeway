@@ -29,27 +29,28 @@ import javax.servlet.ServletResponse;
 import javax.transaction.TransactionalException;
 
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.webapp.IsisWebAppUtils;
+
+import lombok.val;
 
 //@WebFilter(servletNames= {"RestfulObjectsRestEasyDispatcher"}) //[ahuber] to support 
 //Servlet 3.0 annotations @WebFilter, @WebListener or others 
 //with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class IsisTransactionFilterForRestfulObjects implements Filter {
 
-    private _Lazy<TransactionService> transactionService = 
-            _Lazy.threadSafe(IsisContext::getTransactionService);
+    private TransactionService transactionService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        // too early ... transactionService = IsisContext.getTransactionService();
+        val servletContext = filterConfig.getServletContext();
+        transactionService = IsisWebAppUtils.getManagedBean(TransactionService.class, servletContext);
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
             throws IOException, ServletException {
 
-        transactionService.get().executeWithinTransaction(()->{
+        transactionService.executeWithinTransaction(()->{
 
             try {
                 chain.doFilter(request, response);

@@ -24,16 +24,14 @@ import org.junit.runners.model.Statement;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class ExceptionRecognizerTranslate implements MethodRule {
-
-    public static ExceptionRecognizerTranslate create() {
-        return new ExceptionRecognizerTranslate();
-    }
-    private ExceptionRecognizerTranslate(){}
-
+    
+    private final ServiceRegistry serviceRegistry;
 
     @Override
     public Statement apply(final Statement statement, final FrameworkMethod frameworkMethod, final Object o) {
@@ -62,7 +60,7 @@ public class ExceptionRecognizerTranslate implements MethodRule {
      * Simply invokes {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer#recognize(Throwable)} for all registered {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}s for the provided exception, so that the message will be translated.
      */
     private void recognize(final Throwable ex) {
-        getServiceRegistry()
+        serviceRegistry
         .select(ExceptionRecognizer.class)
         .stream()
         .forEach(exceptionRecognizer->{
@@ -71,11 +69,7 @@ public class ExceptionRecognizerTranslate implements MethodRule {
     }
 
     IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
-
-    private ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
+        return serviceRegistry.lookupServiceElseFail(IsisSessionFactory.class);
     }
 
 }

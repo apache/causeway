@@ -46,38 +46,47 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+
+import lombok.val;
 
 public class ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete
 extends ObjectAdapterMementoProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(
-            final ScalarModel model, final WicketViewerSettings wicketViewerSettings) {
-        super(model, wicketViewerSettings);
+    public ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(ScalarModel model) {
+        super(model);
     }
 
     @Override
     protected List<ObjectAdapterMemento> obtainMementos(String term) {
-        final List<ObjectAdapter> autoCompleteChoices = _Lists.newArrayList();
+        
+        val commonContext = super.getCommonContext();
+        
+        val autoCompleteChoices = _Lists.<ObjectAdapter>newArrayList();
         if (getScalarModel().hasAutoComplete()) {
             final List<ObjectAdapter> autoCompleteAdapters =
-                    getScalarModel().getAutoComplete(term, getAuthenticationSession());
+                    getScalarModel().getAutoComplete(term, commonContext.getAuthenticationSession());
             autoCompleteChoices.addAll(autoCompleteAdapters);
         }
-        return _Lists.map(autoCompleteChoices, ObjectAdapterMemento::ofAdapter);
+        
+        return _Lists.map(autoCompleteChoices, commonContext::mementoFor);
+        
     }
 
     @Override
     public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
+        val commonContext = super.getCommonContext();
+        
         final Function<String, ObjectAdapterMemento> function = (final String input)->{
             if(NULL_PLACEHOLDER.equals(input)) {
                 return null;
             }
-            final RootOid oid = RootOid.deString(input);
-            return ObjectAdapterMemento.ofRootOid(oid);
+            val rootOid = RootOid.deString(input);
+            val memento = commonContext.mementoFor(rootOid);
+            return memento;
+            
         };
         return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
     }

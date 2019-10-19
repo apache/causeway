@@ -27,8 +27,8 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContextAware;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
@@ -74,6 +74,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected FacetHolder facetHolder;
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
+    protected MetaModelContext_forTesting metaModelContext;
 
     public static class IdentifiedHolderImpl extends FacetHolderImpl implements IdentifiedHolder {
 
@@ -115,18 +116,22 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockObjectAdapterProvider = context.mock(ObjectAdapterProvider.class);
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .translationService(mockTranslationService)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
-                .build());
+                .build();
 
         context.checking(new Expectations() {{
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
         }});
+        
+        ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);
+        facetedMethod.setMetaModelContext(metaModelContext);
+        facetedMethodParameter.setMetaModelContext(metaModelContext);
     }
 
 

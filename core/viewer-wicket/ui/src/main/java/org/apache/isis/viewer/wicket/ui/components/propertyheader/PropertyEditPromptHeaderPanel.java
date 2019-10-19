@@ -39,7 +39,10 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
 
         ObjectAdapter targetAdapter = model.getParentEntityModel().load();
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
+        getComponentFactoryRegistry().addOrReplaceComponent(
+                this, 
+                ComponentType.ENTITY_ICON_AND_TITLE, 
+                EntityModel.ofAdapter(model.getCommonContext(), targetAdapter));
 
         final Label label = new Label(ID_PROPERTY_NAME, new IModel<String>() {
             private static final long serialVersionUID = 1L;

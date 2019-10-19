@@ -31,9 +31,12 @@ import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfigModule;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.metamodel.IsisMetamodelModule;
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContexts;
 import org.apache.isis.runtime.IsisRuntimeModule;
 import org.apache.isis.runtime.services.IsisRuntimeServicesModule;
 import org.apache.isis.wrapper.IsisWrapperModule;
@@ -56,12 +59,11 @@ public class IsisBoot implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         // just make sure we wait for the context
-        // (its passed over to ServiceRegistryDefault)
     }
 
     @Bean @Singleton //XXX as used by _Spring utility
     public OrderComparator orderComparator() {
         return new AnnotationAwareOrderComparator();
     }
-
+  
 }

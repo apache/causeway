@@ -19,46 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
-import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
-import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
-import de.agilecoders.wicket.core.settings.IBootstrapSettings;
-import de.agilecoders.wicket.core.settings.ITheme;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
-import lombok.extern.log4j.Log4j2;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
-import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.*;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.DialogMode;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
-import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
-import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
-import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -69,7 +36,13 @@ import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.devutils.debugbar.IDebugBarContributor;
 import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.*;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -85,14 +58,49 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.request.resource.ResourceReference;
 
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.DialogMode;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
+import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
+import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.core.settings.ITheme;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
+import lombok.extern.log4j.Log4j2;
+
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
 @Log4j2
-public abstract class PageAbstract extends WebPage implements ActionPromptProvider {
+public abstract class PageAbstract extends WebPageBase implements ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
-
+    
     /**
      * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
      */
@@ -102,18 +110,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // not to be confused with the bootstrap theme...
     // is simply a CSS class derived from the application's name
     private static final String ID_THEME = "theme";
-
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
-
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     private static final String ID_ACTION_PROMPT_SIDEBAR = "actionPromptSidebar";
-
     private static final String ID_PAGE_TITLE = "pageTitle";
-
     private static final String ID_FAVICON = "favicon";
-
     public static final String ID_MENU_LINK = "menuLink";
-
     public static final String UIHINT_FOCUS = "focus";
 
     /**
@@ -123,9 +125,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     public static ThreadLocal<ExceptionModel> EXCEPTION = new ThreadLocal<>();
 
     private final List<ComponentType> childComponentIds;
-
-    @Inject private WebAppConfigBean webAppConfigBean;
-    @Inject private PageClassRegistry pageClassRegistry;
 
     /**
      * Top-level &lt;div&gt; to which all content is added.
@@ -140,9 +139,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             final PageParameters pageParameters,
             final String title,
             final ComponentType... childComponentIds) {
+        
         super(pageParameters);
 
         try {
+            
             // for breadcrumbs support
             getSession().bind();
 
@@ -182,12 +183,15 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             log.error("Failed to construct page, going back to sign in page", ex);
 
             // REVIEW: similar code in WebRequestCycleForIsis
-            final Stream<ExceptionRecognizer> exceptionRecognizers = getServiceRegistry()
+            final Stream<ExceptionRecognizer> exceptionRecognizers = commonContext.getServiceRegistry()
                     .select(ExceptionRecognizer.class)
                     .stream();
 
             final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-            final ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
+            
+            final ExceptionModel exceptionModel = ExceptionModel.create(commonContext, recognizedMessageIfAny, ex);
+            
+            
 
             getSession().invalidate();
             getSession().clear();
@@ -264,7 +268,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
 
-        final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour();
+        final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour(commonContext);
         jGrowlBehaviour.renderFeedbackMessages(response);
 
         String applicationCss = webAppConfigBean.getApplicationCss();
@@ -276,7 +280,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
 
-        String liveReloadUrl = getConfiguration().getViewer().getWicket().getLiveReloadUrl();
+        String liveReloadUrl = commonContext.getConfiguration().getViewer().getWicket().getLiveReloadUrl();
         if(liveReloadUrl != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         }
@@ -318,6 +322,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return !isIePre9();
     }
 
+    @SuppressWarnings("deprecation")
     private boolean isIePre9() {
         final WebClientInfo clientInfo = WebSession.get().getClientInfo();
         final ClientProperties properties = clientInfo.getProperties();
@@ -391,6 +396,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
                 container.add(bookmarks);
 
                 bookmarks.add(new Behavior() {
+                    private static final long serialVersionUID = 1L;
+
                     @Override
                     public void onConfigure(Component component) {
                         super.onConfigure(component);
@@ -402,11 +409,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private boolean isShowBookmarks() {
-        return getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowChooser();
+        return commonContext.getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowChooser();
     }
 
     protected boolean isShowBreadcrumbs() {
-        return getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
+        return commonContext.getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
     }
 
     protected void bookmarkPageIfShown(final BookmarkableModel<?> model) {
@@ -448,8 +455,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         default:
             final DialogMode dialogMode =
                     sort == BeanSort.MANAGED_BEAN
-                            ? getConfiguration().getViewer().getWicket().getDialogModeForMenu()
-                            : getConfiguration().getViewer().getWicket().getDialogMode();
+                            ? commonContext.getConfiguration().getViewer().getWicket().getDialogModeForMenu()
+                            : commonContext.getConfiguration().getViewer().getWicket().getDialogMode();
             switch (dialogMode) {
             case SIDEBAR:
                 return actionPromptSidebar;
@@ -500,37 +507,17 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
     }
 
-
-
     // -- getComponentFactoryRegistry (Convenience)
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
     }
 
-
     // -- DEPS
 
-    protected IsisConfigurationLegacy getConfigurationLegacy() {
-        return IsisContext.getConfigurationLegacy();
-    }
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
-
-    protected ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
-    }
-
-    protected ServiceInjector getServiceInjector() {
-        return IsisContext.getServiceInjector();
-    }
-
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession().orElse(null);
+        return getCommonContext().getAuthenticationSession();
     }
-
-
 
 
 }

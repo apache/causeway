@@ -322,7 +322,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     // //////////////////////////////////////
 
     protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
+        return isisSessionFactory;
     }
 
     protected PersistenceSession getPersistenceSession() {
@@ -342,5 +342,6 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject TransactionService transactionService;
     @Inject CommandContext commandContext;
     @Inject SpecificationLoader specificationLoader;
+    @Inject IsisSessionFactory isisSessionFactory;
 
 }

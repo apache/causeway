@@ -30,9 +30,7 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public StringPanelFactory() {
-        super(
-                StringPanel.class,
-                String.class);
+        super(StringPanel.class, String.class);
     }
 
     @Override

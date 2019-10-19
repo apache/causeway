@@ -83,6 +83,7 @@ implements ScalarModelSubscriber2 {
             final Component parentPanel,
             final WicketViewerSettings settings,
             final T model) {
+        
         super(id, model);
         this.parentPanel = parentPanel;
         this.settings = settings;
@@ -154,7 +155,7 @@ implements ScalarModelSubscriber2 {
                 target.add(getForm());
             }
         };
-        okButton.add(new JGrowlBehaviour());
+        okButton.add(new JGrowlBehaviour(super.getCommonContext()));
         setDefaultButton(okButton);
         add(okButton);
         return okButton;
@@ -304,7 +305,7 @@ implements ScalarModelSubscriber2 {
     }
 
     private boolean isWithinPrompt() {
-        return FormExecutorContext.Util.isWithinPrompt(this.formExecutorContext);
+        return this.formExecutorContext.isWithinPrompt();
     }
 
     private void rebuildGuiAfterInlinePromptDone(final AjaxRequestTarget target) {

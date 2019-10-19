@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.param.choices.enums;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
@@ -49,7 +48,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
             return;
         }
 
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(facetHolder));
+        super.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(facetHolder));
     }
 
 

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.sessiontemplate;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -27,18 +29,22 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 public abstract class AbstractIsisSessionTemplate {
+    
+    @Inject protected TransactionService transactionService;
+    @Inject protected IsisSessionFactory isisSessionFactory;
+    @Inject protected SpecificationLoader specificationLoader;
 
     /**
      * Sets up an {@link IsisSession} then passes along any calling framework's context.
      */
     public void execute(final AuthenticationSession authSession, final Object context) {
         try {
-            getIsisSessionFactory().openSession(authSession);
+            isisSessionFactory.openSession(authSession);
             PersistenceSession persistenceSession = getPersistenceSession();
             persistenceSession.getServiceInjector().injectServicesInto(this);
             doExecute(context);
         } finally {
-            getIsisSessionFactory().closeSession();
+            isisSessionFactory.closeSession();
         }
     }
 
@@ -56,7 +62,7 @@ public abstract class AbstractIsisSessionTemplate {
      * transaction handling.
      */
     protected void doExecute(final Object context) {
-        getTransactionService().executeWithinTransaction(()->{
+        transactionService.executeWithinTransaction(()->{
             doExecuteWithTransaction(context);
         });
     }
@@ -74,20 +80,9 @@ public abstract class AbstractIsisSessionTemplate {
 
     // //////////////////////////////////////
 
-    protected TransactionService getTransactionService() {
-        return IsisContext.getTransactionService();
-    }    
-
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession().orElse(null);
-    }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
     }
 
 

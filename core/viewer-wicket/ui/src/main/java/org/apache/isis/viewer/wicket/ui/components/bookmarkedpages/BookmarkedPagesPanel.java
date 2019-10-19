@@ -35,7 +35,6 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -49,7 +48,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -200,8 +198,8 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
     protected Component addHelpText(final BookmarkedPagesModel bookmarkedPagesModel) {
 
-        IModel<String> helpTextModel = new AbstractReadOnlyModel<String>() {
-            private static final long serialVersionUID = -2445813533787596379L;
+        IModel<String> helpTextModel = new IModel<String>() {
+            private static final long serialVersionUID = 1;
 
             @Override
             public String getObject() {
@@ -210,7 +208,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
         };
 
         Label helpText = new Label(ID_BOOKMARKS_HELP_TEXT, helpTextModel) {
-            private static final long serialVersionUID = -8364098044839077580L;
+            private static final long serialVersionUID = 1;
 
             @Override
             protected void onConfigure() {
@@ -223,11 +221,5 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
         return helpText;
     }
 
-    // ///////////////////////////////////////////////
-    // Dependency Injection
-    // ///////////////////////////////////////////////
-
-    @Inject
-    private ImageResourceCache imageCache;
 
 }

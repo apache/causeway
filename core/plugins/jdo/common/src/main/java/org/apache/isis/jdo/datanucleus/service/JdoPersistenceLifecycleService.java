@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.IsisJdoRuntimePlugin;
 import org.apache.isis.runtime.system.context.session.AppLifecycleEvent;
@@ -43,7 +44,9 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public class JdoPersistenceLifecycleService {
 
+    @Inject private MetaModelContext metaModelContext;
     @Inject private SpecificationLoader specificationLoader;
+    
     private PersistenceSessionFactory persistenceSessionFactory;
 
     @PostConstruct
@@ -139,7 +142,7 @@ public class JdoPersistenceLifecycleService {
     private void create() {
         persistenceSessionFactory = 
                 IsisJdoRuntimePlugin.get().getPersistenceSessionFactory();
-        persistenceSessionFactory.init();
+        persistenceSessionFactory.init(metaModelContext);
     }
 
     private void init() {

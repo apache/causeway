@@ -36,15 +36,15 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import lombok.Getter;
 
 public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAjaxIndicatorAware {
 
@@ -54,12 +54,17 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
 
     final AjaxDeferredBehaviour ajaxDeferredBehaviourIfAny;
 
-    public ActionLink(String id, ActionModel model) {
-        this(id, model, null);
-    }
-    ActionLink(String id, ActionModel model, ObjectAction action) {
+    @Getter protected final transient IsisWebAppCommonContext commonContext;
+
+//    public ActionLink(String id, ActionModel model) {
+//        this(id, model, null);
+//    }
+    
+    ActionLink(IsisWebAppCommonContext commonContext, String id, ActionModel model, ObjectAction action) {
         super(id, model);
 
+        this.commonContext = commonContext;
+        
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
         this.indicatorAppenderIfAny =
                 useIndicatorForNoArgAction
@@ -106,7 +111,7 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
     public ObjectAction getObjectAction() {
         return objectAction != null
                 ? objectAction
-                        : (objectAction = getActionModel().getActionMemento().getAction(getSpecificationLoader()));
+                        : (objectAction = getActionModel().getActionMemento().getAction(commonContext.getSpecificationLoader()));
     }
 
 
@@ -174,8 +179,8 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
             //
             // there is similar code for editing properties (ScalarPanelAbstract2)
             //
-            IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getMessageBroker().addMessage(ex.getMessage());
-            throw new RestartResponseException(new EntityPage(getActionModel().getTargetAdapter()));
+            commonContext.getAuthenticationSession().getMessageBroker().addMessage(ex.getMessage());
+            throw new RestartResponseException(new EntityPage(commonContext, getActionModel().getTargetAdapter()));
         }
     }
 
@@ -192,13 +197,8 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                         : null;
     }
 
-
     protected WicketViewerSettings getSettings() {
         return ((WicketViewerSettingsAccessor) Application.get()).getSettings();
-    }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
     }
 
     AjaxDeferredBehaviour determineDeferredBehaviour() {

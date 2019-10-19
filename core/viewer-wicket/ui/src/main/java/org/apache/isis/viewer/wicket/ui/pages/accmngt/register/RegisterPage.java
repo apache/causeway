@@ -70,6 +70,8 @@ public class RegisterPage extends AccountManagementPageAbstract {
             } else {
                 UserDetails userDetails = newUserDetails();
                 addOrReplace(new RegisterPanel("content", userDetails, uuidValue.toString()) {
+                    private static final long serialVersionUID = 1L;
+
                     @Override
                     protected MarkupContainer newExtraFieldsContainer(String id) {
                         return RegisterPage.this.newExtraFieldsContainer(id);

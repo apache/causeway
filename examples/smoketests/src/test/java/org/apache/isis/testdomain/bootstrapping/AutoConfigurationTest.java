@@ -29,10 +29,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
+import org.apache.isis.metamodel.MetaModelContexts;
 import org.apache.isis.testdomain.Incubating;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -51,7 +52,8 @@ import lombok.val;
 @Smoketest
 @SpringBootTest(
         classes = { 
-                //AutoConfigurationTest.BeanPostProcessor_forTesting.class,
+                IsisSystemEnvironment.class,
+                MetaModelContexts.class,
                 IsisBeanFactoryPostProcessorForSpring.class,
                 Configuration_usingStereotypes.class
         },
@@ -67,6 +69,7 @@ import lombok.val;
 class AutoConfigurationTest {
     
     @Inject private ApplicationContext applicationContext;
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
 
     //XXX for debugging and experimenting
     @Component
@@ -88,7 +91,7 @@ class AutoConfigurationTest {
     @BeforeEach
     void beforeEach() {
         assertNotNull(applicationContext);
-        _Spring.reinit(applicationContext);
+        assertNotNull(isisSystemEnvironment);
     }
     
     @Test
@@ -119,7 +122,7 @@ class AutoConfigurationTest {
         
         val myService = applicationContext.getBean(MyService.class);
         assertNotNull(myService);
-        assertNotNull(_Spring.getSingletonElseFail(MyService.class));
+        assertNotNull(isisSystemEnvironment.getIocContainer().getSingletonElseFail(MyService.class));
         
     }
     

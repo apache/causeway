@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -40,7 +38,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModelForReference;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -57,6 +54,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+
+import lombok.val;
 
 /**
  * Panel for rendering scalars which of are of reference type (as opposed to
@@ -342,23 +341,26 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
         if (getModel().hasChoices()) {
             List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
-            return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), wicketViewerSettings, choiceMementos);
+            return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
         }
 
         if(getModel().hasAutoComplete()) {
-            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(getModel(), wicketViewerSettings);
+            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(getModel());
         }
 
-        return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel(), wicketViewerSettings);
+        return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel());
     }
 
     // called by setProviderAndCurrAndPending
     private List<ObjectAdapterMemento> obtainChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
-        final List<ObjectAdapter> choices = _Lists.newArrayList();
+        
+        val commonContext = super.getCommonContext();
+        
+        val choices = _Lists.<ObjectAdapter>newArrayList();
         if(getModel().hasChoices()) {
-            choices.addAll(getModel().getChoices(argsIfAvailable, getAuthenticationSession()));
+            choices.addAll(getModel().getChoices(argsIfAvailable, commonContext.getAuthenticationSession()));
         }
-        return _Lists.map(choices, ObjectAdapterMemento::ofAdapter);
+        return _Lists.map(choices, commonContext::mementoFor);
     }
 
     // called by setProviderAndCurrAndPending
@@ -464,10 +466,6 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         return "referencePanel";
     }
 
-
-    // //////////////////////////////////////
-
-    @Inject WicketViewerSettings wicketViewerSettings;
 
 }
 

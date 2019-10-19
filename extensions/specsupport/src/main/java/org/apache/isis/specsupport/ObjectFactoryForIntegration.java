@@ -21,14 +21,17 @@ package org.apache.isis.specsupport;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import cucumber.api.java.ObjectFactory;
 import cucumber.runtime.CucumberException;
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ObjectFactoryForIntegration implements ObjectFactory {
+    
+    private final ServiceInjector serviceInjector;
     private final Map<Class<?>, Object> instances = _Maps.newHashMap();
 
     @Override
@@ -50,10 +53,9 @@ public class ObjectFactoryForIntegration implements ObjectFactory {
         if (instance == null) {
             instance = this.newInstance(type);
 
-            val injector = IsisContext.getServiceInjector();
-            if(injector != null) {
+            if(serviceInjector != null) {
                 instance = this.cacheInstance(type, instance);
-                injector.injectServicesInto(instance);
+                serviceInjector.injectServicesInto(instance);
             } else {
                 // don't cache
             }

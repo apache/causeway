@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.objectvalue.mandatory;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -32,6 +33,8 @@ import org.apache.isis.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.metamodel.interactions.ProposedHolder;
 import org.apache.isis.metamodel.interactions.ValidityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract implements MandatoryFacet {
 
@@ -61,15 +64,16 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
     @Override
     public final boolean isRequiredButNull(final ManagedObject adapter) {
         if(!isInvertedSemantics()) {
-            final Object object = ObjectAdapter.Util.unwrapPojo(adapter);
-            if (object == null) {
-                return true;
-            }
+            val pojo = ManagedObject.unwrapPojo(adapter);
+            
             // special case string handling.
-            final String str = ObjectAdapter.Util.unwrapPojoStringElse(adapter, null);
-            return str != null && str.length() == 0;
+            if(pojo instanceof String) {
+                return _Strings.isEmpty((String)pojo);
+            }
+            
+            return pojo == null;
         } else {
-            return false;
+            return false; // policy is not enforced
         }
     }
 

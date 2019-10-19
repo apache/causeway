@@ -182,7 +182,7 @@ public final class _Lists {
         return transform(input, stream->stream.map(mapper));
     }
 
-    public static <T> List<T> filter(@Nullable Collection<T> input, Predicate<T> filter) {
+    public static <T> List<T> filter(@Nullable Collection<T> input, Predicate<? super T> filter) {
         return transform(input, stream->stream.filter(filter));
     }
 

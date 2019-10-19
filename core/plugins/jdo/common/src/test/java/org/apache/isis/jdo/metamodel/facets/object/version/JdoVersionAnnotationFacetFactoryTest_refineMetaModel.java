@@ -27,6 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
@@ -61,9 +62,16 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
         mockParentType = context.mock(ObjectSpecification.class, "mockParenttype");
         mockGrandParentType = context.mock(ObjectSpecification.class, "mockGrandParenttype");
 
+        val mockMetaModelContext = context.mock(MetaModelContext.class, "mockMetaModelContext");
+        
         sequence = context.sequence("inorder");
 
-        validator = new MetaModelValidatorAbstract() {};
+        validator = new MetaModelValidatorAbstract() {
+            {
+                setMetaModelContext(mockMetaModelContext);
+            }
+        };
+        
         newValidatorVisitor = new JdoVersionAnnotationFacetFactory().newValidatorVisitor();
                 
     }

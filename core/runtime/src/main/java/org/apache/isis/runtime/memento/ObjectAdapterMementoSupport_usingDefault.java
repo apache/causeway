@@ -20,39 +20,49 @@ package org.apache.isis.runtime.memento;
 
 import java.util.UUID;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
  * 
- * adapter to LAST KNOWN GOOD
+ * @since 2.0 
  *
  */
-public class ObjectAdapterMementoSupport_usingLKG 
+@Service @Singleton
+public class ObjectAdapterMementoSupport_usingDefault 
 implements ObjectAdapterMementoSupport {
+    
+    @Inject @Getter private SpecificationLoader specificationLoader;
 
     @Override
     public ObjectAdapterMemento mementoForRootOid(RootOid rootOid) {
-        val delegate = ObjectAdapterMemento_LastKnownGood.createPersistent(rootOid);
-        return ObjectAdapterMementoDelegator.of(delegate);
+        val delegate = ObjectAdapterMementoDefault.createPersistent(rootOid, specificationLoader);
+        return ObjectAdapterMementoDelegator.of(delegate, specificationLoader);
     }
 
     @Override
-    public ObjectAdapterMemento mementoForAdapter(ObjectAdapter adapter) {
-        val delegate = ObjectAdapterMemento_LastKnownGood.createOrNull(adapter);
+    public ObjectAdapterMemento mementoForAdapter(ManagedObject adapter) {
+        val delegate = ObjectAdapterMementoDefault.createOrNull(adapter);
         if(delegate==null) {
             return null;
         }
-        return ObjectAdapterMementoDelegator.of(delegate);
+        return ObjectAdapterMementoDelegator.of(delegate, specificationLoader);
     }
 
     @Override
@@ -72,7 +82,8 @@ implements ObjectAdapterMementoSupport {
 
         private static final long serialVersionUID = 1L;
 
-        private final ObjectAdapterMemento_LastKnownGood delegate;
+        private final ObjectAdapterMementoDefault delegate;
+        private final SpecificationLoader specificationLoader;
 
         @Override
         public UUID getStoreKey() {
@@ -111,20 +122,16 @@ implements ObjectAdapterMementoSupport {
 
         @Override
         public ObjectAdapter getObjectAdapter() {
-            return delegate.getObjectAdapter(persistenceSession(), specificationLoader());
+            return delegate.getObjectAdapter(persistenceSession(), specificationLoader);
         }
 
         @Override
         public void resetVersion() {
-            delegate.resetVersion(persistenceSession(), specificationLoader());
+            delegate.resetVersion(persistenceSession(), specificationLoader);
         }
 
         private PersistenceSession persistenceSession() {
             return IsisContext.getPersistenceSession().get();
-        }
-
-        private SpecificationLoader specificationLoader() {
-            return IsisContext.getSpecificationLoader();
         }
 
     }

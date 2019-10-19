@@ -68,12 +68,12 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -89,26 +89,29 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         return new ActionModel(this);
     }
 
-
-    //////////////////////////////////////////////////
-    // Factory methods
-    //////////////////////////////////////////////////
-
-
+    // -- FACTORY METHODS
+    
     /**
      * @param entityModel
      * @param action
      * @return
      */
-    public static ActionModel create(final EntityModel entityModel, final ObjectAction action) {
-        final ActionMemento homePageActionMemento = new ActionMemento(action);
-        return new ActionModel(entityModel, homePageActionMemento);
+    public static ActionModel create(EntityModel entityModel, ObjectAction action) {
+        val homePageActionMemento = new ActionMemento(action);
+        val actionModel = new ActionModel(entityModel, homePageActionMemento);
+        return actionModel;
     }
-
+    
     public static ActionModel createForPersistent(
-            final PageParameters pageParameters,
-            final SpecificationLoader specificationLoader) {
-        return new ActionModel(pageParameters, specificationLoader);
+            IsisWebAppCommonContext commonContext, 
+            PageParameters pageParameters) {
+        
+        val entityModel = newEntityModelFrom(commonContext, pageParameters);
+        val actionMemento = newActionMementoFrom(commonContext, pageParameters);
+        val actionModel = new ActionModel(entityModel, actionMemento);
+        actionModel.setArgumentsIfPossible(pageParameters);
+        actionModel.setContextArgumentIfPossible(pageParameters);
+        return actionModel;
     }
 
     /**
@@ -116,10 +119,9 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
      *
      * see {@link #ActionModel(PageParameters, SpecificationLoader)}
      */
-    public static PageParameters createPageParameters(
-            final ObjectAdapter adapter, final ObjectAction objectAction) {
+    public static PageParameters createPageParameters(ObjectAdapter adapter, ObjectAction objectAction) {
 
-        final PageParameters pageParameters = PageParametersUtils.newPageParameters();
+        val pageParameters = PageParametersUtils.newPageParameters();
 
         //        final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
         //                adapter.getOid().enString():
@@ -129,15 +131,15 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
 
-        final ActionType actionType = objectAction.getType();
+        val actionType = objectAction.getType();
         PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
 
-        final ObjectSpecification actionOnTypeSpec = objectAction.getOnType();
+        val actionOnTypeSpec = objectAction.getOnType();
         if (actionOnTypeSpec != null) {
             PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
         }
 
-        final String actionId = determineActionId(objectAction);
+        val actionId = determineActionId(objectAction);
         PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
 
         return pageParameters;
@@ -264,30 +266,28 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
      */
     private final Map<Integer, ActionArgumentModel> arguments = _Maps.newHashMap();
 
-
-    private ActionModel(final PageParameters pageParameters, final SpecificationLoader specificationLoader) {
-        this(newEntityModelFrom(pageParameters), newActionMementoFrom(pageParameters, specificationLoader));
-
-        setArgumentsIfPossible(pageParameters);
-        setContextArgumentIfPossible(pageParameters);
-    }
-
+    
     private static ActionMemento newActionMementoFrom(
-            final PageParameters pageParameters,
-            final SpecificationLoader specificationLoader) {
+            IsisWebAppCommonContext commonContext,
+            PageParameters pageParameters) {
+        
         final ObjectSpecId owningSpec = ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters));
         final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
-        return new ActionMemento(owningSpec, actionType, actionNameParms, specificationLoader);
+        return new ActionMemento(owningSpec, actionType, actionNameParms, commonContext.getSpecificationLoader());
     }
 
 
-    private static EntityModel newEntityModelFrom(final PageParameters pageParameters) {
-        final RootOid oid = oidFor(pageParameters);
-        if(oid.isTransient()) {
+    private static EntityModel newEntityModelFrom(
+            IsisWebAppCommonContext commonContext,
+            PageParameters pageParameters) {
+        
+        val rootOid = oidFor(pageParameters);
+        if(rootOid.isTransient()) {
             return null;
         } else {
-            return new EntityModel(ObjectAdapterMemento.ofRootOid(oid));
+            val memento = commonContext.mementoFor(rootOid);
+            return EntityModel.ofMemento(commonContext, memento);
         }
     }
 
@@ -297,7 +297,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
 
-    private ActionModel(final EntityModel entityModel, final ActionMemento actionMemento) {
+    private ActionModel(EntityModel entityModel, ActionMemento actionMemento) {
+        super(entityModel.getCommonContext());
         this.entityModel = entityModel;
         this.actionMemento = actionMemento;
     }
@@ -309,14 +310,16 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     /**
      * Copy constructor, as called by {@link #copy()}.
+     * @param commonContext 
      */
-    private ActionModel(final ActionModel actionModel) {
+    private ActionModel(ActionModel actionModel) {
+        super(actionModel.getCommonContext());
         this.entityModel = actionModel.entityModel;
         this.actionMemento = actionModel.actionMemento;
 
         primeArgumentModels();
-        final Map<Integer, ActionArgumentModel> argumentModelByIdx = actionModel.arguments;
-        for (final Map.Entry<Integer,ActionArgumentModel> argumentModel : argumentModelByIdx.entrySet()) {
+        val argumentModelByIdx = actionModel.arguments;
+        for (val argumentModel : argumentModelByIdx.entrySet()) {
             setArgument(argumentModel.getKey(), argumentModel.getValue().getObject());
         }
     }
@@ -465,18 +468,17 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
 
-        final Stream<RoutingService> routingServices = getServiceRegistry()
+        final Stream<RoutingService> routingServices = super.getServiceRegistry()
                 .select(RoutingService.class)
                 .stream();
 
         val resultPojo = resultAdapter != null ? resultAdapter.getPojo() : null;
-        val pojoToAdapter = IsisContext.pojoToAdapter();
 
         return routingServices
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
                 .filter(_NullSafe::isPresent)
-                .map(pojoToAdapter)
+                .map(super.getPojoToAdapter())
                 .filter(_NullSafe::isPresent)
                 .findFirst()
                 .orElse(ManagedObject.promote(resultAdapter));
@@ -542,11 +544,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     @Override
     public void reset() {
-    }
-
-    @Override
-    public boolean isWithinPrompt() {
-        return Util.isWithinPrompt(this);
     }
 
     public void clearArguments() {

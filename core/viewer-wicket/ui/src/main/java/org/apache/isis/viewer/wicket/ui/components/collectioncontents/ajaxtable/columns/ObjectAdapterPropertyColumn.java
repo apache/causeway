@@ -38,6 +38,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 /**
  * A {@link ColumnAbstract column} within a
@@ -59,14 +60,16 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
     private final String describedAs;
 
     public ObjectAdapterPropertyColumn(
-            final EntityCollectionModel.Type type,
-            final IModel<String> columnNameModel,
-            final String sortProperty,
-            final String propertyName,
-            final boolean escaped,
-            final String parentTypeName,
-            final String describedAs) {
-        super(columnNameModel, sortProperty);
+            IsisWebAppCommonContext commonContext, 
+            EntityCollectionModel.Type type,
+            IModel<String> columnNameModel,
+            String sortProperty,
+            String propertyName,
+            boolean escaped,
+            String parentTypeName,
+            String describedAs) {
+        
+        super(commonContext, columnNameModel, sortProperty);
         this.type = type;
         this.propertyExpression = propertyName;
         this.escaped = escaped;
@@ -102,7 +105,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
     private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
 
         final ObjectAdapter adapter = rowModel.getObject();
-        final EntityModel entityModel = new EntityModel(adapter);
+        final EntityModel entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
         final OneToOneAssociation property = (OneToOneAssociation) adapter.getSpecification().getAssociation(propertyExpression);
         final PropertyMemento pm = new PropertyMemento(property);
 

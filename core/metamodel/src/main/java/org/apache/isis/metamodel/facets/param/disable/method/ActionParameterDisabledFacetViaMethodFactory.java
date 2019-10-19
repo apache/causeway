@@ -26,7 +26,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
@@ -82,7 +81,7 @@ public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBa
 
                 final Facet facet = new ActionParameterDisabledFacetViaMethod(disableMethod,
                         translationService, translationContext, facetHolder);
-                FacetUtil.addFacet(facet);
+                super.addFacet(facet);
                 return;
             }
 

@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.object.defaults.annotcfg;
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -40,7 +39,7 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        FacetUtil.addFacet(create(processClassContext.getCls(), processClassContext.getFacetHolder()));
+        super.addFacet(create(processClassContext.getCls(), processClassContext.getFacetHolder()));
     }
 
     private DefaultedFacetAbstract create(final Class<?> cls, final FacetHolder holder) {

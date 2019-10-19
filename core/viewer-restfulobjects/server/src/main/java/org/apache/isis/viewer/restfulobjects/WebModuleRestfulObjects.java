@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects;
 
-import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -83,7 +82,8 @@ public final class WebModuleRestfulObjects implements WebModule  {
         // add IsisSessionFilters
 
         {
-            final Dynamic filter = ctx.addFilter("IsisSessionFilterForRestfulObjects", IsisRestfulObjectsSessionFilter.class);
+            val filter = ctx.addFilter(
+                    "IsisSessionFilterForRestfulObjects", IsisRestfulObjectsSessionFilter.class);
 
             // this is mapped to the entire application; 
             // however the IsisSessionFilter will 
@@ -104,7 +104,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
         }
 
         {
-            final Dynamic filter = ctx.addFilter("RestfulObjectsRestEasyDispatcher", 
+            val filter = ctx.addFilter("RestfulObjectsRestEasyDispatcher", 
                     "org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects");
             filter.addMappingForServletNames(null, true, RESTEASY_DISPATCHER); 
         }

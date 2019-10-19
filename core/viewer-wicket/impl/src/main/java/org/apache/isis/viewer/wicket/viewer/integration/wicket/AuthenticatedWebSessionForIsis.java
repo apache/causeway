@@ -27,7 +27,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;
@@ -37,6 +36,10 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.Getter;
+import lombok.val;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -45,7 +48,7 @@ import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
  * associated with the same session).
  */
 public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession 
-implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
+implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppCommonContext.Delegating {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,13 +58,21 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
         return (AuthenticatedWebSessionForIsis) Session.get();
     }
 
-    private final BookmarkedPagesModel bookmarkedPagesModel = new BookmarkedPagesModel();
-    private final BreadcrumbModel breadcrumbModel = new BreadcrumbModel();
+    @Getter protected IsisWebAppCommonContext commonContext; 
+    
+    private BreadcrumbModel breadcrumbModel;
+    private BookmarkedPagesModel bookmarkedPagesModel;
 
     private AuthenticationSession authenticationSession;
 
-    public AuthenticatedWebSessionForIsis(final Request request) {
+    public AuthenticatedWebSessionForIsis(Request request) {
         super(request);
+    }
+    
+    public void init(IsisWebAppCommonContext commonContext) {
+        this.commonContext = commonContext;
+        bookmarkedPagesModel = new BookmarkedPagesModel(commonContext);
+        breadcrumbModel = new BreadcrumbModel(commonContext);
     }
 
     @Override
@@ -159,7 +170,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
     // /////////////////////////////////////////////////
 
     protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
+        return commonContext.getAuthenticationManager();
     }
 
     // /////////////////////////////////////////////////
@@ -172,8 +183,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
             final SessionLoggingService.CausedBy causedBy) {
 
 
-        final IsisSessionFactory isisSessionFactory = getIsisSessionFactoryIfAny();
-        final SessionLoggingService sessionLoggingService = getSessionLoggingService();
+        val isisSessionFactory = getIsisSessionFactory();
+        val sessionLoggingService = getSessionLoggingService();
 
         final Runnable loggingTask = ()->{
             // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
@@ -192,7 +203,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
     protected SessionLoggingService getSessionLoggingService() {
         try {
             final SessionLoggingService service = 
-                    IsisContext.getServiceRegistry().lookupService(SessionLoggingService.class)
+                    commonContext.getServiceRegistry().lookupService(SessionLoggingService.class)
                     .orElseGet(SessionLoggingService.Stderr::new);
             return service;
         } catch (Exception e) {
@@ -201,26 +212,17 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
         }
 
     }
+    
+    protected IsisSessionFactory getIsisSessionFactory() {
+        return commonContext.lookupServiceElseFail(IsisSessionFactory.class);
+    }
 
     @Override
-    public synchronized void replaceSession() {
+    public void replaceSession() {
         // do nothing here because this will lead to problems with Shiro
         // see https://issues.apache.org/jira/browse/ISIS-1018
     }
 
-    // -- HELPER
-
-    private IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
-
-    private IsisSessionFactory getIsisSessionFactoryIfAny() {
-        try {
-            return getIsisSessionFactory();
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
 
 }

@@ -59,6 +59,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     public void setUp() throws Exception {
         _Config.clear();
         facetFactory = new DomainObjectLayoutFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     @Override

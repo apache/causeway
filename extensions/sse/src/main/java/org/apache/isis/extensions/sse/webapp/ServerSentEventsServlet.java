@@ -21,8 +21,9 @@ package org.apache.isis.extensions.sse.webapp;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
+import javax.inject.Inject;
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,13 +31,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.applib.util.JaxbAdapters;
-import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.extensions.sse.api.SseChannel;
 import org.apache.isis.extensions.sse.api.SseService;
 import org.apache.isis.extensions.sse.markup.ListeningMarkup;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.val;
 
@@ -53,13 +52,12 @@ public class ServerSentEventsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ExecutorService threadPool;
 
-    private final _Lazy<SseService> eventStreamService_Lazy =
-            _Lazy.threadSafe(this::lookupEventStreamService);
+    @Inject private SseService sseService;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        threadPool = Executors.newCachedThreadPool();
+        threadPool = ForkJoinPool.commonPool();
     }
 
     @Override
@@ -71,9 +69,8 @@ public class ServerSentEventsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        val backgroundExecutionService = this.eventStreamService_Lazy.get();
         val eventStreamType = parseEventStreamType(request);
-        val eventStream = eventStreamType.flatMap(backgroundExecutionService::lookupByType)
+        val eventStream = eventStreamType.flatMap(sseService::lookupByType)
                 .orElse(null);
 
         if(eventStream==null) {
@@ -157,10 +154,6 @@ public class ServerSentEventsServlet extends HttpServlet {
         } catch (Exception e) {
             return Optional.empty();
         }
-    }
-
-    private SseService lookupEventStreamService() {
-        return IsisContext.getServiceRegistry().lookupServiceElseFail(SseService.class);
     }
 
 }

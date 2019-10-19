@@ -22,18 +22,22 @@ package org.apache.isis.runtime.memento;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.runtime.memento.ObjectAdapterMementoDefault.RecreateStrategy;
+
+import lombok.val;
 
 /**
  * @since 2.0
@@ -68,37 +72,27 @@ public interface ObjectAdapterMemento extends Serializable {
 
     void resetVersion();
 
-    // -- DEPRECATIONS
-
-    //  @Deprecated
-    //  default ObjectAdapter getObjectAdapter(
-    //          ConcurrencyChecking noCheck, 
-    //          PersistenceSession persistenceSession,
-    //          SpecificationLoader specificationLoader) {
-    //      return getObjectAdapter();
-    //  }
-
     // -- FACTORIES
 
-    static ObjectAdapterMemento ofRootOid(RootOid rootOid) {
+    static ObjectAdapterMemento ofRootOid(RootOid rootOid, ObjectAdapterMementoSupport support) {
         if(rootOid==null) {
             return null;
         }
-        return support().mementoForRootOid(rootOid);
+        return support.mementoForRootOid(rootOid);
     }
 
-    static ObjectAdapterMemento ofAdapter(ObjectAdapter adapter) {
+    static ObjectAdapterMemento ofAdapter(ManagedObject adapter, ObjectAdapterMementoSupport support) {
         if(adapter==null) {
             return null;
         }
-        return support().mementoForAdapter(adapter);
+        return support.mementoForAdapter(adapter);
     }
 
-    static ObjectAdapterMemento ofPojo(Object pojo) {
+    static ObjectAdapterMemento ofPojo(Object pojo, ObjectAdapterMementoSupport support) {
         if(pojo==null) {
             return null;
         }
-        return support().mementoForPojo(pojo);
+        return support.mementoForPojo(pojo);
     }
 
     static ObjectAdapterMemento wrapMementoList(
@@ -125,29 +119,17 @@ public interface ObjectAdapterMemento extends Serializable {
 
 
     static ObjectAdapterMemento ofIterablePojos(
-            final Object iterablePojos,
-            ObjectSpecId specId) {
+            Object iterablePojos,
+            ObjectSpecId specId,
+            ObjectAdapterMementoSupport support) {
 
-        final List<ObjectAdapterMemento> listOfMementos = _NullSafe.stream((Iterable<?>) iterablePojos)
-                .map(ObjectAdapterMemento::ofPojo)
+        val listOfMementos = _NullSafe.stream((Iterable<?>) iterablePojos)
+                .map(pojo->ofPojo(pojo, support))
                 .collect(Collectors.toList());
-        final ObjectAdapterMemento memento =
+        val memento =
                 ObjectAdapterMemento.wrapMementoList(listOfMementos, specId);
         return memento;
     }
-
-
-    // -- SPI
-
-    final static ObjectAdapterMementoSupport support = 
-            new ObjectAdapterMementoSupport_usingLKG();
-
-    //TODO[2112] performance optimization: inject ObjectAdapterMementoSupport at call-site?
-    static ObjectAdapterMementoSupport support() {
-        return support;
-        //return ObjectAdapterMementoSupport.current();
-    }
-
 
 
 }

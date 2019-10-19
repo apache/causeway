@@ -26,12 +26,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -157,7 +155,6 @@ public interface ManagedObject {
      * @deprecated use {@link ObjectSpecification#getIconName(ManagedObject))} instead, 
      * (proposed for removal, to keep the API slim)
      */
-    @Deprecated
     default public String getIconName() {
         return getSpecification().getIconName(this);
     }
@@ -218,18 +215,18 @@ public interface ManagedObject {
     
     // -- SHORTCUTS
     
-    /**
-     * Uses the currently available {@link SpecificationLoader} to
-     * @param pojo
-     * @return
-     * @apiNote its not well thought through yet what to do with null argument
-     */
-    public static ManagedObject forPojo(Object pojo) {
-        if(pojo==null) {
-            return null;
-        }
-        return of(MetaModelContext.current()::getSpecification, pojo);
-    }
+//    /**
+//     * Uses the currently available {@link SpecificationLoader} to
+//     * @param pojo
+//     * @return
+//     * @apiNote its not well thought through yet what to do with null argument
+//     */
+//    public static ManagedObject forPojo(Object pojo) {
+//        if(pojo==null) {
+//            return null;
+//        }
+//        return of(MetaModelContext.current()::getSpecification, pojo);
+//    }
     
     // -- UNWRAPPING
     
@@ -314,6 +311,8 @@ public interface ManagedObject {
     static Oid _oid(ManagedObject adapter) {
         return promote(adapter).getOid();
     }
+
+
 
 
 

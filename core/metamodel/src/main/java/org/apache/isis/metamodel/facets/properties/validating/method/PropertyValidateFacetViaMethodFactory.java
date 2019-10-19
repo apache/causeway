@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.commons.StringExtensions;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
@@ -70,7 +69,7 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
         final PropertyValidateFacetViaMethod facet = new PropertyValidateFacetViaMethod(method, translationService, translationContext, facetHolder);
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
 

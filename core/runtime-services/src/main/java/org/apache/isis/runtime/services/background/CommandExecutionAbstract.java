@@ -29,6 +29,8 @@ import org.apache.isis.runtime.sessiontemplate.AbstractIsisSessionTemplate;
  */
 public abstract class CommandExecutionAbstract extends AbstractIsisSessionTemplate {
 
+    @Inject protected CommandExecutorService commandExecutorService;
+    
     private final CommandExecutorService.SudoPolicy sudoPolicy;
 
     protected CommandExecutionAbstract(final CommandExecutorService.SudoPolicy sudoPolicy) {
@@ -52,7 +54,5 @@ public abstract class CommandExecutionAbstract extends AbstractIsisSessionTempla
         });
     }
 
-    // //////////////////////////////////////
 
-    @Inject CommandExecutorService commandExecutorService;
 }

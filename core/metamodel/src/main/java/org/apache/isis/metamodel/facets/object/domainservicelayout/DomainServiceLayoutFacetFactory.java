@@ -23,7 +23,6 @@ import java.util.Objects;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
@@ -57,7 +56,7 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
                 .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED) // redundant since _Annotations
                 .orElse(DomainServiceLayout.MenuBar.PRIMARY);
         
-        FacetUtil.addFacet(new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
+        super.addFacet(new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
 
         val named = domainServiceLayoutIfAny
                 .map(DomainServiceLayout::named)
@@ -65,7 +64,7 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
                 .filter(Objects::nonNull)
                 .orElse(null);
         
-        FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(named, facetHolder));
+        super.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(named, facetHolder));
     }
 
 }

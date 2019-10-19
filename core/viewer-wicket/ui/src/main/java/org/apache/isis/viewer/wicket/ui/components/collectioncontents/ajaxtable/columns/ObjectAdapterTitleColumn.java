@@ -31,6 +31,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
 
@@ -44,8 +45,12 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
         return (parentAdapterMementoIfAny != null? "Related ":"") + "Object";
     }
 
-    public ObjectAdapterTitleColumn(final ObjectAdapterMemento parentAdapterMementoIfAny, final int maxTitleLength) {
-        super(columnName(parentAdapterMementoIfAny, maxTitleLength)); // i18n
+    public ObjectAdapterTitleColumn(
+            IsisWebAppCommonContext commonContext, 
+            ObjectAdapterMemento parentAdapterMementoIfAny, 
+            int maxTitleLength) {
+        
+        super(commonContext, columnName(parentAdapterMementoIfAny, maxTitleLength)); // i18n
         this.parentAdapterMementoIfAny = parentAdapterMementoIfAny;
     }
 
@@ -58,7 +63,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
 
     private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
         final ObjectAdapter adapter = rowModel.getObject();
-        final EntityModel model = new EntityModel(adapter);
+        final EntityModel model = EntityModel.ofAdapter(super.getCommonContext(), adapter);
         model.setRenderingHint(parentAdapterMementoIfAny != null? RenderingHint.PARENTED_TITLE_COLUMN: RenderingHint.STANDALONE_TITLE_COLUMN);
         model.setContextAdapterIfAny(parentAdapterMementoIfAny);
         // will use EntityLinkSimplePanelFactory as model is an EntityModel

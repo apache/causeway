@@ -30,6 +30,9 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.Getter;
 
 /**
  * Represents a {@link AbstractColumn} within a
@@ -41,13 +44,16 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
 
     private static final long serialVersionUID = 1L;
-
-    public ColumnAbstract(final String columnName) {
-        this(Model.of(columnName), null);
+    
+    @Getter private final transient IsisWebAppCommonContext commonContext;
+    
+    public ColumnAbstract(IsisWebAppCommonContext commonContext, String columnName) {
+        this(commonContext, Model.of(columnName), null);
     }
 
-    public ColumnAbstract(final IModel<String> columnNameModel, final String sortColumn) {
+    public ColumnAbstract(IsisWebAppCommonContext commonContext, final IModel<String> columnNameModel, final String sortColumn) {
         super(columnNameModel, sortColumn);
+        this.commonContext = commonContext;
     }
 
     protected ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {

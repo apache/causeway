@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ActionType;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -35,6 +34,7 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 /**
  * See also {@link BulkActionsHelper}.
@@ -58,7 +58,7 @@ public class AssociatedWithActionsHelper implements Serializable {
 
         final ObjectSpecification objectSpec = getObjectSpecification();
 
-        final List<ActionType> actionTypes = inferActionTypes();
+        final List<ActionType> actionTypes = inferActionTypes(collectionModel.getCommonContext());
         final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED);
 
         return objectActions
@@ -72,11 +72,10 @@ public class AssociatedWithActionsHelper implements Serializable {
         return parentAdapter.getSpecification();
     }
 
-    @SuppressWarnings("deprecation")
-    private static List<ActionType> inferActionTypes() {
+    private List<ActionType> inferActionTypes(IsisWebAppCommonContext commonContext) {
         final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);
-        if ( IsisSystemEnvironment.get().isPrototyping() ) {
+        if ( commonContext.getSystemEnvironment().isPrototyping() ) {
             actionTypes.add(ActionType.PROTOTYPE);
         }
         return actionTypes;

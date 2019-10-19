@@ -23,18 +23,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.val;
 
 public class BreadcrumbModel implements Serializable {
 
@@ -42,9 +43,16 @@ public class BreadcrumbModel implements Serializable {
 
     private static final int MAX_SIZE = 5;
 
-    private final Map<String, Bookmark> bookmarkByOidStr = Maps.newHashMap();
-    private final Map<Bookmark, String> oidStrByBookmark = Maps.newHashMap();
+    private final Map<String, Bookmark> bookmarkByOidStr = _Maps.newHashMap();
+    private final Map<Bookmark, String> oidStrByBookmark = _Maps.newHashMap();
     private final List<Bookmark> list = _Lists.newArrayList();
+    
+    private final transient IsisWebAppCommonContext commonContext;
+    
+    public BreadcrumbModel(IsisWebAppCommonContext commonContext) {
+        super();
+        this.commonContext = commonContext;
+    }
 
     public List<EntityModel> getList() {
         List<EntityModel> entityModels = _Lists.newArrayList();
@@ -162,9 +170,9 @@ public class BreadcrumbModel implements Serializable {
     }
 
     protected EntityModel toEntityModel(final Bookmark bookmark) {
-        RootOid rootOid = Factory.ofBookmark(bookmark);
-        ObjectAdapterMemento oam = ObjectAdapterMemento.ofRootOid(rootOid);
-        return new EntityModel(oam);
+        val rootOid = Factory.ofBookmark(bookmark);
+        val objectAdapterMemento = commonContext.mementoFor(rootOid);
+        return EntityModel.ofMemento(commonContext, objectAdapterMemento);
     }
 
     private void remove(final String rootOid, final Bookmark bookmark) {

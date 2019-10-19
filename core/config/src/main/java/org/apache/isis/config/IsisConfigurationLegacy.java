@@ -208,7 +208,7 @@ public interface IsisConfigurationLegacy {
 
     // -- TO STRING
 
-    default public String toStringFormatted() {
+    default public String toStringFormatted(IsisSystemEnvironment isisSystemEnvironment) {
 
         val sb = new StringBuilder();
         val configuration = this.subset("isis");
@@ -217,7 +217,7 @@ public interface IsisConfigurationLegacy {
                 ConfigurationConstants.maskIfProtected(configuration.copyToMap(), TreeMap::new);
 
         String head = String.format("APACHE ISIS %s (%s) ", 
-                getVersion(), IsisSystemEnvironment.get().getDeploymentType().name());
+                getVersion(), isisSystemEnvironment.getDeploymentType().name());
         final int fillCount = 46-head.length();
         final int fillLeft = fillCount/2;
         final int fillRight = fillCount-fillLeft;

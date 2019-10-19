@@ -27,9 +27,6 @@ import lombok.val;
 
 public class MetaModelValidatorForConflictingOptionality extends MetaModelValidatorAbstract {
 
-    public MetaModelValidatorForConflictingOptionality() {
-    }
-    
     public Facet flagIfConflict(final MandatoryFacet facet, final String message) {
         if(conflictingOptionality(facet)) {
             addFailure(facet, message);

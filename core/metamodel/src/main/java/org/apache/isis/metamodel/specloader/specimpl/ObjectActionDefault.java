@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResultSet;
@@ -56,14 +57,12 @@ import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.ValidityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
-import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.metamodel.spec.ActionType;
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.schema.cmd.v1.CommandDto;
 
 import lombok.val;
 
@@ -188,8 +187,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         for (int paramNum = 0; paramNum < parameterCount; paramNum++) {
             final FacetedMethodParameter paramPeer = paramPeers.get(paramNum);
 
-            final ObjectSpecification specification = ObjectMemberAbstract
-                    .specificationOf(paramPeer.getType());
+            super.specificationOf(paramPeer.getType()); // preload
 
             // previously we threw an exception here if the specification represented a collection.  No longer!
             final ObjectActionParameter parameter =

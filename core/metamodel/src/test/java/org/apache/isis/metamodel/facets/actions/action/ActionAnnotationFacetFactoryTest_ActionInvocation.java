@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -48,6 +49,7 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
 
     private void processInvocation(
             ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processInvocation(processMethodContext, actionIfAny);
     }
@@ -56,6 +58,7 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
     public void setUp() throws Exception {
         super.setUp();
         this.facetFactory =  new ActionAnnotationFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
@@ -152,7 +155,8 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
-
+        facetHolderWithParms.setMetaModelContext(super.metaModelContext);
+        
         processInvocation(facetFactory, new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getFacet(ActionInvocationFacet.class);
@@ -163,9 +167,12 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
 
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
-        final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
-        final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-
+        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
+        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
+        facetFactoryForChoices.setMetaModelContext(metaModelContext);
+        facetFactoryForDisable.setMetaModelContext(metaModelContext);
+        
+        
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(final int x, final long y) {
@@ -200,6 +207,7 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] { int.class, long.class });
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
+        facetHolderWithParms.setMetaModelContext(metaModelContext);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms);
         processInvocation(facetFactory, processMethodContext);

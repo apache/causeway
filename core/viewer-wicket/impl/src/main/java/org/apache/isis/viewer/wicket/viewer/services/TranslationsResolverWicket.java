@@ -21,29 +21,24 @@ package org.apache.isis.viewer.wicket.viewer.services;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.io.CharSource;
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
-
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.WebAppConstants;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -54,17 +49,17 @@ import lombok.extern.log4j.Log4j2;
 public class TranslationsResolverWicket implements TranslationsResolver {
 
     @Override
-    @Programmatic
-    public List<String> readLines(final String file) {
+    public List<String> readLines(final String fileName) {
         final ServletContext servletContext = getServletContext();
 
         final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
         try {
             if(configLocation != null) {
                 log.info( "Reading translations relative to config override location: {}", configLocation );
-                return Files.readLines(newFile(configLocation, file), Charsets.UTF_8);
+                
+                return Files.readAllLines(newFile(configLocation, fileName), StandardCharsets.UTF_8);
             } else {
-                final URL url = servletContext.getResource("/WEB-INF/" + file);
+                final URL url = servletContext.getResource("/WEB-INF/" + fileName);
                 return readLines(url);
             }
         } catch (final RuntimeException | IOException ignored) {
@@ -72,11 +67,10 @@ public class TranslationsResolverWicket implements TranslationsResolver {
         }
     }
 
-    static File newFile(final String dir, final String file) {
+    static Path newFile(final String dir, final String fileName) {
         final File base = new File(dir);
         final Path path = base.toPath();
-        final Path resolve = path.resolve(file);
-        return resolve.toFile();
+        return path.resolve(fileName);
     }
 
     protected ServletContext getServletContext() {
@@ -84,20 +78,18 @@ public class TranslationsResolverWicket implements TranslationsResolver {
     }
 
     private static final Pattern nonEmpty = Pattern.compile("^(#:|msgid|msgstr).+$");
+    
     private static List<String> readLines(final URL url) throws IOException {
         if(url == null) {
             return null;
         }
-        final CharSource charSource = Resources.asCharSource(url, Charsets.UTF_8);
-        final ImmutableList<String> strings = charSource.readLines();
-        return Collections.unmodifiableList(
-                _Lists.newArrayList(
-                        Iterables.filter(strings, new Predicate<String>() {
-                            @Override
-                            public boolean apply(final String input) {
-                                return input != null && nonEmpty.matcher(input).matches();
-                            }
-                        })));
+        
+        val lines = _Strings.readAllLines(url.openStream(), StandardCharsets.UTF_8);
+        val acceptedLines = lines.stream()
+        .filter(input->input != null && nonEmpty.matcher(input).matches())
+        .collect(Collectors.toList());
+        
+        return Collections.unmodifiableList(acceptedLines);
     }
 
     protected IsisWicketApplication getIsisWicketApplication() {

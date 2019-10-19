@@ -24,9 +24,8 @@ import java.util.Optional;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.commons.ToString;
-import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
@@ -45,7 +44,10 @@ import lombok.Getter;
  */
 public class IsisSession extends RuntimeContextBase {
 
-    private RuntimeEventService runtimeEventService;
+    private final RuntimeEventService runtimeEventService;
+    
+    @Getter(onMethod = @__(@Override))
+    private final AuthenticationSession authenticationSession;
 
     /**
      * Set to System.nanoTime() when session opens.
@@ -60,24 +62,13 @@ public class IsisSession extends RuntimeContextBase {
      * since it must keep track of all opened sessions
      */
     IsisSession(
+            final MetaModelContext mmc,
             final RuntimeEventService runtimeEventService,
             final AuthenticationSession authenticationSession) {
 
-        super(  IsisContext.getConfiguration(),
-                IsisContext.getConfigurationLegacy(),
-                IsisContext.getServiceInjector(),
-                IsisContext.getServiceRegistry(),
-                IsisContext.getSpecificationLoader(),
-                authenticationSession,
-                IsisContext.getObjectAdapterProvider(),
-                IsisContext.getTransactionService(),
-                ()->IsisContext.getServiceRegistry()
-                .lookupServiceElseFail(HomePageResolverService.class)
-                .getHomePageAction()
-                );
-
+        super(mmc);
+        this.authenticationSession = authenticationSession; // binds this session to given authenticationSession 
         this.runtimeEventService = runtimeEventService;
-
     }
 
     // -- CURRENT

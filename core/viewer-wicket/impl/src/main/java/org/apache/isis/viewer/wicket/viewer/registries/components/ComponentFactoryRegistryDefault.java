@@ -20,15 +20,12 @@
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-
-import com.google.common.base.Supplier;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -36,12 +33,19 @@ import org.apache.wicket.model.IModel;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
+import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.val;
 
 /**
  * Implementation of {@link ComponentFactoryRegistry} that delegates to a
@@ -50,17 +54,14 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 @Service
 public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry {
 
-    private final Multimap<ComponentType, ComponentFactory> componentFactoriesByType;
+    @Inject private ComponentFactoryRegistrar componentFactoryRegistrar;
+    @Inject private MetaModelContext metaModelContext;
+    
+    private ListMultimap<ComponentType, ComponentFactory> componentFactoriesByType;
 
-    @Inject
-    public ComponentFactoryRegistryDefault(final ComponentFactoryRegistrar componentFactoryRegistrar) {
-        componentFactoriesByType = Multimaps.newListMultimap(new HashMap<ComponentType, Collection<ComponentFactory>>(), new Supplier<List<ComponentFactory>>() {
-            @Override
-            public List<ComponentFactory> get() {
-                return _Lists.newArrayList();
-            }
-        });
-
+    @PostConstruct
+    public void init() {
+        componentFactoriesByType = _Multimaps.newListMultimap();
         registerComponentFactories(componentFactoryRegistrar);
     }
 
@@ -73,22 +74,34 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
      */
     protected void registerComponentFactories(final ComponentFactoryRegistrar componentFactoryRegistrar) {
 
-        final ComponentFactoryList componentFactories = new ComponentFactoryList();
+        val componentFactories = new ComponentFactoryList();
+        
         componentFactoryRegistrar.addComponentFactories(componentFactories);
 
-        for (final ComponentFactory componentFactory : componentFactories) {
-            registerComponentFactory(componentFactory);
+        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        
+        for (val componentFactory : componentFactories) {
+            registerComponentFactory(commonContext, componentFactory);
         }
 
         ensureAllComponentTypesRegistered();
     }
 
-    protected void registerComponentFactory(final ComponentFactory componentFactory) {
-        componentFactoriesByType.put(componentFactory.getComponentType(), componentFactory);
+    private void registerComponentFactory(
+            final IsisWebAppCommonContext commonContext, 
+            final ComponentFactory componentFactory) {
+        
+        // handle dependency injection for factories
+        commonContext.getServiceInjector().injectServicesInto(componentFactory);
+        if(componentFactory instanceof ComponentFactoryAbstract) {
+            ((ComponentFactoryAbstract)componentFactory).setCommonContext(commonContext);
+        }
+        
+        componentFactoriesByType.putElement(componentFactory.getComponentType(), componentFactory);
     }
 
     private void ensureAllComponentTypesRegistered() {
-        for (final ComponentType componentType : ComponentType.values()) {
+        for (val componentType : ComponentType.values()) {
             final Collection<ComponentFactory> componentFactories = componentFactoriesByType.get(componentType);
             if (componentFactories.isEmpty()) {
                 throw new IllegalStateException("No component factories registered for " + componentType);
@@ -171,7 +184,8 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
 
     @Override
     public Collection<ComponentFactory> listComponentFactories() {
-        return componentFactoriesByType.values();
+        return componentFactoriesByType.streamElements()
+                .collect(Collectors.toList());
     }
 
 }

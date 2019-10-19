@@ -21,9 +21,8 @@ package org.apache.isis.viewer.wicket.ui.panels;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.google.common.base.Throwables;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -44,15 +43,14 @@ import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisRequestCycle;
-import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.MessageBroker;
@@ -66,6 +64,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -239,7 +238,15 @@ implements FormExecutor {
 
             // irrespective, capture error in the Command, and propagate
             if (command != null) {
-                command.internal().setException(Throwables.getStackTraceAsString(ex));
+                
+                val stackTraceAsString = 
+                _Exceptions.streamStacktraceLines(ex, 1000)
+                .collect(Collectors.joining("\n"));
+                
+                command.internal().setException(stackTraceAsString);
+                
+                //XXX legacy of
+                //command.internal().setException(Throwables.getStackTraceAsString(ex));
             }
 
             // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)
@@ -275,12 +282,12 @@ implements FormExecutor {
         }
     }
 
-    private static boolean differs(
+    private boolean differs(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter resultAdapter) {
 
-        final ObjectAdapterMemento targetOam = ObjectAdapterMemento.ofAdapter(targetAdapter);
-        final ObjectAdapterMemento resultOam = ObjectAdapterMemento.ofAdapter(resultAdapter);
+        final ObjectAdapterMemento targetOam = getCommonContext().mementoFor(targetAdapter);
+        final ObjectAdapterMemento resultOam = getCommonContext().mementoFor(resultAdapter);
 
         return differs(targetOam, resultOam);
     }
@@ -346,12 +353,12 @@ implements FormExecutor {
 
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage =new EntityPage(targetAdapter, ex);
-
+        final EntityPage entityPage = new EntityPage(model.getCommonContext() , targetAdapter, ex);
+        
         // force any changes in state etc to happen now prior to the redirect;
         // in the case of an object being returned, this should cause our page mementos
         // (eg EntityModel) to hold the correct state.  I hope.
-        IsisContext.getTransactionService().flushTransaction();
+        getCommonContext().getTransactionService().flushTransaction();
 
         // "redirect-after-post"
         val requestCycle = RequestCycle.get();
@@ -464,7 +471,7 @@ implements FormExecutor {
             // recognized
             raiseWarning(target, feedbackForm, recognizedErrorIfAny);
 
-            val txState = IsisContext.getTransactionService().currentTransactionState();
+            //val txState = getCommonContext().getTransactionService().currentTransactionState();
 
             //FIXME[2125] what's the replacement for this?
             //txManager.getCurrentTransaction().clearAbortCause();
@@ -494,40 +501,38 @@ implements FormExecutor {
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
 
-
-    protected IsisSession getCurrentSession() {
-        return IsisSession.currentOrElseNull();
+    private IsisWebAppCommonContext getCommonContext() {
+        return model.getCommonContext();
     }
 
     protected ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
+        return getCommonContext().getServiceRegistry();
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return getCommonContext().getSpecificationLoader();
     }
 
     protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
+        return getCommonContext().lookupServiceElseFail(IsisSessionFactory.class);
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return getCurrentSession().getAuthenticationSession();
+        return getCommonContext().getAuthenticationSession();
     }
 
     private MessageService getMessageService() {
-        return getServiceRegistry().lookupServiceElseFail(MessageService.class);
+        return getCommonContext().lookupServiceElseFail(MessageService.class);
     }
 
     protected WicketViewerSettings getSettings() {
-        return getServiceRegistry().lookupServiceElseFail(WicketViewerSettings.class);
+        return getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
     }
 
     // request-scoped
     private Optional<CommandContext> currentCommandContext() {
         return getServiceRegistry().lookupService(CommandContext.class);
     }
-
 
     ///////////////////////////////////////////////////////////////////////////////
 

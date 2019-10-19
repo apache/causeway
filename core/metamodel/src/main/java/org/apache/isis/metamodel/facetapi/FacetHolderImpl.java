@@ -27,14 +27,22 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContextAware;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * For base subclasses or, more likely, to help write tests.
  */
-public class FacetHolderImpl implements FacetHolder {
+public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
 
+    @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
+    private MetaModelContext metaModelContext;
+    
     private final Map<Class<? extends Facet>, Facet> facetsByClass = new ConcurrentHashMap<>();
     private final Set<Class<? extends Facet>> implementedFacetInterfaces = new HashSet<>();
 

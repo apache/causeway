@@ -18,29 +18,28 @@
  */
 package org.apache.isis.viewer.wicket.viewer;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.ITargetRespondListener {
 
+    @Inject private QueryResultsCache queryResultsCache;
+    
     @Override
     public void onTargetRespond(final AjaxRequestTarget target) {
 
         if(log.isDebugEnabled()) {
             log.debug("RESPOND PHASE STARTED: resetting cache");
         }
-
-        final QueryResultsCache queryResultsCache = lookupQueryResultsCache();
+        
         queryResultsCache.resetForNextTransaction();
     }
 
-    private QueryResultsCache lookupQueryResultsCache() {
-        return IsisContext.getServiceRegistry().lookupService(QueryResultsCache.class).orElse(null);
-    }
 
 }

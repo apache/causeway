@@ -30,6 +30,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
@@ -49,6 +51,8 @@ public class TitleFacetViaMethodTest {
 
     private DomainObjectWithProblemInItsTitleMethod pojo;
 
+    private MetaModelContext metaModelContext;
+
     public static class DomainObjectWithProblemInItsTitleMethod {
         public String title() {
             throw new NullPointerException();
@@ -58,6 +62,9 @@ public class TitleFacetViaMethodTest {
     @Before
     public void setUp() throws Exception {
 
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .build();
+        
         pojo = new DomainObjectWithProblemInItsTitleMethod();
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ObjectAdapter.class);
@@ -66,6 +73,10 @@ public class TitleFacetViaMethodTest {
 
         mockery.checking(new Expectations() {
             {
+                
+                allowing(mockFacetHolder).getMetaModelContext();
+                will(returnValue(metaModelContext));
+                
                 allowing(mockOwningAdapter).getPojo();
                 will(returnValue(pojo));
             }

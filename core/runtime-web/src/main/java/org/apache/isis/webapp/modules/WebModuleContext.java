@@ -28,6 +28,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
@@ -59,8 +60,8 @@ public class WebModuleContext {
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
 
-    @NonNull @Getter 
-    private final IsisConfiguration configuration;
+    @NonNull @Getter private final IsisConfiguration configuration;
+    @NonNull @Getter private final ServiceRegistry serviceRegistry;
     
     private List<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
@@ -116,7 +117,7 @@ public class WebModuleContext {
 
     public void prepare() {
         webModules =
-                WebModule.discoverWebModules()
+                WebModule.discoverWebModules(serviceRegistry)
                 .peek(module->module.prepare(this)) // prepare context
                 .collect(Collectors.toList());
     }

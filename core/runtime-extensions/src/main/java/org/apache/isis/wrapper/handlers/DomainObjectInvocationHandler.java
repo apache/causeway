@@ -54,6 +54,7 @@ import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -100,13 +101,14 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     protected final Set<String> jdoMethodsProvidedByEnhancement = _Sets.newHashSet();
 
     public DomainObjectInvocationHandler(
+            final MetaModelContext metaModelContext,
             final T delegate,
             final EnumSet<ExecutionMode> mode,
             final ProxyContextHandler proxy) {
         
-        super(delegate, mode);
+        super(metaModelContext.getServiceRegistry(), delegate, mode);
 
-        this.mmContext = MetaModelContext.current();
+        this.mmContext = metaModelContext;
         this.proxy = proxy;
         this.executionMode = mode;
 
@@ -418,7 +420,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = ObjectAdapter.Util.unwrapPojo(currentReferencedAdapter);
+            val currentReferencedObj = ManagedObject.unwrapPojo(currentReferencedAdapter);
 
             val propertyAccessEvent = new PropertyAccessEvent(
                     getDelegate(), property.getIdentifier(), currentReferencedObj);
@@ -491,7 +493,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = ObjectAdapter.Util.unwrapPojo(currentReferencedAdapter);
+            val currentReferencedObj = ManagedObject.unwrapPojo(currentReferencedAdapter);
 
             val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getIdentifier());
 
@@ -653,16 +655,16 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val returnedAdapter = objectAction.execute(
                     targetAdapter, mixedInAdapter, argAdapters,
                     interactionInitiatedBy);
-            return ObjectAdapter.Util.unwrapPojo(returnedAdapter);
+            return ManagedObject.unwrapPojo(returnedAdapter);
             
         });
         
     }
 
     private void checkValidity(
-            final ObjectAdapter targetAdapter, 
+            final ManagedObject targetAdapter, 
             final ObjectAction objectAction, 
-            final ObjectAdapter[] argAdapters) {
+            final ManagedObject[] argAdapters) {
         
         val interactionResult = objectAction.isProposedArgumentSetValid(targetAdapter, argAdapters,
                 getInteractionInitiatedBy()).getInteractionResult();
@@ -704,7 +706,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private final Where where = Where.ANYWHERE;
 
     private void checkVisibility(
-            final ObjectAdapter targetObjectAdapter,
+            final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
         
         val visibleConsent = objectMember.isVisible(targetObjectAdapter, getInteractionInitiatedBy(), where);
@@ -713,7 +715,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private void checkUsability(
-            final ObjectAdapter targetObjectAdapter,
+            final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
         
         val interactionResult = objectMember.isUsable(
@@ -882,7 +884,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return mmContext.getAuthenticationSession();
+        return mmContext.getAuthenticationSessionProvider().getAuthenticationSession();
     }
 
     protected ObjectAdapterProvider getObjectAdapterProvider() {

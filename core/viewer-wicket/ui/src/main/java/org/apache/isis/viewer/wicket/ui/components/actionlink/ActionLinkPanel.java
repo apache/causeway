@@ -28,8 +28,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
@@ -86,16 +84,6 @@ public class ActionLinkPanel extends PanelAbstract<ActionModel> {
 
     private AbstractLink newLink(final String linkId, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
         return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
-    }
-
-
-    // ///////////////////////////////////////////////////////////////////
-    // Convenience
-    // ///////////////////////////////////////////////////////////////////
-
-    protected PageClassRegistry getPageClassRegistry() {
-        final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor) getApplication();
-        return pcra.getPageClassRegistry();
     }
 
 }

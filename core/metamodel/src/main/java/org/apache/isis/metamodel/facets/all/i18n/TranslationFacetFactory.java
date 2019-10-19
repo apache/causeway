@@ -20,10 +20,8 @@ package org.apache.isis.metamodel.facets.all.i18n;
 
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.ContributeeMemberFacetFactory;
@@ -32,8 +30,6 @@ import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 
 public class TranslationFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
-
-    private TranslationService translationService;
 
     public TranslationFacetFactory() {
         super(FeatureType.EVERYTHING);
@@ -91,10 +87,10 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
             return;
         }
 
-        final TranslationService translationService = lookupTranslationService();
+        final TranslationService translationService = getTranslationService();
         NamedFacetTranslated facetTranslated = new NamedFacetTranslated(context, originalText, translationService, facetHolder);
         facetTranslated.setUnderlyingFacet(facet);
-        FacetUtil.addFacet(facetTranslated);
+        super.addFacet(facetTranslated);
     }
 
     void translateDescription(final FacetHolder facetHolder, final String context) {
@@ -109,8 +105,8 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
             return;
         }
 
-        final TranslationService translationService = lookupTranslationService();
-        FacetUtil.addFacet(new DescribedAsFacetTranslated(context, originalText, translationService, holder));
+        final TranslationService translationService = getTranslationService();
+        super.addFacet(new DescribedAsFacetTranslated(context, originalText, translationService, holder));
 
     }
 
@@ -118,21 +114,6 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
         return originalText == null || _Strings.isNullOrEmpty(originalText.trim());
     }
 
-    // //////////////////////////////////////
 
-    /**
-     * Looks up from {@link ServiceInjector}.
-     *
-     * <p>
-     *     There is guaranteed to be an instance because <code>TranslationServicePo</code> (in runtime) is annotated
-     *     as a {@link org.apache.isis.applib.annotation.DomainService &#64;DomainService}.
-     * </p>
-     */
-    TranslationService lookupTranslationService() {
-        if(translationService == null) {
-            translationService = getTranslationService();
-        }
-        return translationService;
-    }
 
 }

@@ -48,18 +48,17 @@ import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+
+import lombok.val;
 
 public class ObjectAdapterMementoProviderForReferenceObjectAutoComplete
 extends ObjectAdapterMementoProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ObjectAdapterMementoProviderForReferenceObjectAutoComplete(
-            final ScalarModel model,
-            final WicketViewerSettings wicketViewerSettings) {
-        super(model, wicketViewerSettings);
+    public ObjectAdapterMementoProviderForReferenceObjectAutoComplete(ScalarModel model) {
+        super(model);
     }
 
     @Override
@@ -68,20 +67,25 @@ extends ObjectAdapterMementoProviderAbstract {
         final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
         final List<ManagedObject> autoCompleteAdapters =
                 autoCompleteFacet.execute(term,InteractionInitiatedBy.USER);
-        return _Lists.map(autoCompleteAdapters, a->ObjectAdapterMemento.ofAdapter(ManagedObject.promote(a)));
+        
+        val commonContext = super.getCommonContext();
+        
+        return _Lists.map(autoCompleteAdapters, commonContext::mementoFor);
     }
 
     @Override
     public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
+        
+        val commonContext = super.getCommonContext();
 
         return _NullSafe.stream(ids)
                 .map(id -> {
                     if(NULL_PLACEHOLDER.equals(id)) {
                         return null;
                     }
-                    final RootOid oid = RootOid.deString(id);
-                    final ObjectAdapterMemento oam = ObjectAdapterMemento.ofRootOid(oid);
-                    return oam;
+                    val rootOid = RootOid.deString(id);
+                    val memento = commonContext.mementoFor(rootOid);
+                    return memento;
                 })
                 .collect(Collectors.toList());
 

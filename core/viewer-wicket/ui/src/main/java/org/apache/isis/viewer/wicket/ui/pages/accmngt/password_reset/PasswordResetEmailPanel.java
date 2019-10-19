@@ -27,36 +27,33 @@ import javax.inject.Inject;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
-import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
+import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 
 /**
  * A panel with a form for creation of new users
  */
-public class PasswordResetEmailPanel extends Panel {
+public class PasswordResetEmailPanel extends PanelBase<Void> {
 
     private static final long serialVersionUID = 1L;
 
     @Inject private transient EmailNotificationService emailNotificationService;
-    @Inject private transient EmailService emailService;
     @Inject private transient EmailVerificationUrlService emailVerificationUrlService;
     @Inject private transient PageNavigationService pageNavigationService;
-    @Inject private transient WebAppConfigBean webAppConfigBean;
+//    @Inject private transient WebAppConfigBean webAppConfigBean;
 
     /**
      * Constructor
@@ -73,7 +70,7 @@ public class PasswordResetEmailPanel extends Panel {
         final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
-        emailField.add(EmailAvailableValidator.EXISTS);
+        emailField.add(EmailAvailableValidator.exists(commonContext));
 
         FormGroup formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);

@@ -35,8 +35,13 @@ public class WelcomePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     // TODO update this message once Bootstrap is used for UI
-    private static final String DEFAULT_MESSAGE = "Apache Isis' Wicket Viewer combines the power of Apache Wicket " + "for web UIs with Apache Isis for domain modelling.  " + "Out-of-the box you get a fully-functional webapp just from " + "your domain objects; you can then customize the UI by "
-            + "writing custom Wicket components, replacing the page layouts or " + "simply by altering the CSS";
+    private static final String DEFAULT_MESSAGE = 
+            "Apache Isis' Wicket Viewer combines the power of Apache Wicket " + 
+                    "for web UIs with Apache Isis for domain modelling.  " + 
+                    "Out-of-the box you get a fully-functional webapp just from " + 
+                    "your domain objects; you can then customize the UI by " + 
+                    "writing custom Wicket components, replacing the page layouts or " + 
+                    "simply by altering the CSS";
 
 
     public WelcomePanelFactory() {
@@ -50,7 +55,7 @@ public class WelcomePanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        return new WelcomePanel(id, new WelcomeModel(DEFAULT_MESSAGE));
+        return new WelcomePanel(id, new WelcomeModel(getCommonContext(), DEFAULT_MESSAGE));
     }
 
 }

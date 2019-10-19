@@ -18,19 +18,17 @@
  */
 package org.apache.isis.viewer.wicket.ui.errors;
 
-import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
@@ -45,18 +43,25 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
     private final String mainMessage;
 
-    public static ExceptionModel create(String recognizedMessageIfAny, Exception ex) {
-        return new ExceptionModel(recognizedMessageIfAny, ex);
+    public static ExceptionModel create(
+            IsisWebAppCommonContext commonContext, String recognizedMessageIfAny, Exception ex) {
+        
+        return new ExceptionModel(commonContext, recognizedMessageIfAny, ex);
     }
 
     /**
      * Three cases: authorization exception, else recognized, else or not recognized.
+     * @param commonContext 
      * @param recognizedMessageIfAny
      * @param ex
      */
-    private ExceptionModel(String recognizedMessageIfAny, Exception ex) {
+    private ExceptionModel(IsisWebAppCommonContext commonContext, String recognizedMessageIfAny, Exception ex) {
+        
+        super(commonContext);
 
-        final ObjectMember.AuthorizationException authorizationException = causalChainOf(ex, ObjectMember.AuthorizationException.class);
+        final ObjectMember.AuthorizationException authorizationException = 
+                causalChainOf(ex, ObjectMember.AuthorizationException.class);
+        
         if(authorizationException != null) {
             this.authorizationCause = true;
             this.mainMessage = authorizationException.getMessage();
@@ -69,11 +74,17 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
                 this.recognized =false;
 
                 // see if we can find a NonRecoverableException in the stack trace
-                Iterable<NonRecoverableException> appEx = Iterables.filter(Throwables.getCausalChain(ex), NonRecoverableException.class);
-                Iterator<NonRecoverableException> iterator = appEx.iterator();
-                NonRecoverableException nonRecoverableException = iterator.hasNext() ? iterator.next() : null;
+                
+                NonRecoverableException nonRecoverableException =
+                _Exceptions.streamCausalChain(ex)
+                .filter(NonRecoverableException.class::isInstance)
+                .map(NonRecoverableException.class::cast)
+                .findFirst()
+                .orElse(null);
 
-                this.mainMessage = nonRecoverableException != null? nonRecoverableException.getMessage() : MAIN_MESSAGE_IF_NOT_RECOGNIZED;
+                this.mainMessage = nonRecoverableException != null
+                        ? nonRecoverableException.getMessage() 
+                                : MAIN_MESSAGE_IF_NOT_RECOGNIZED;
             }
         }
         stackTraceDetailList = asStackTrace(ex);
@@ -88,7 +99,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
     private static <T extends Exception> T causalChainOf(Exception ex, Class<T> exType) {
 
-        final List<Throwable> causalChain = Throwables.getCausalChain(ex);
+        final List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
         for (Throwable cause : causalChain) {
             if(exType.isAssignableFrom(cause.getClass())) {
                 return _Casts.uncheckedCast(cause);
@@ -144,7 +155,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
     private static List<StackTraceDetail> asStackTrace(Throwable ex) {
         List<StackTraceDetail> stackTrace = _Lists.newArrayList();
-        List<Throwable> causalChain = Throwables.getCausalChain(ex);
+        List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
         boolean firstTime = true;
         for(Throwable cause: causalChain) {
             if(!firstTime) {
@@ -162,7 +173,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     private static List<List<StackTraceDetail>> asStackTraces(Throwable ex) {
         List<List<StackTraceDetail>> stackTraces = _Lists.newArrayList();
 
-        List<Throwable> causalChain = Throwables.getCausalChain(ex);
+        List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
         for(Throwable cause: causalChain) {
             List<StackTraceDetail> stackTrace = _Lists.newArrayList();
             append(cause, stackTrace);

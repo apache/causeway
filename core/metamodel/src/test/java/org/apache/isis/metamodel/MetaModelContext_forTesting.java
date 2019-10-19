@@ -33,19 +33,24 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.authorization.manager.AuthorizationManager;
+
+import static java.util.Objects.requireNonNull;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -53,15 +58,26 @@ import lombok.Singular;
 import lombok.val;
 
 @Builder @Getter
-final class MetaModelContext_forTesting implements MetaModelContext {
+public final class MetaModelContext_forTesting implements MetaModelContext {
+    
+//    public static MetaModelContext current() {
+//        return _Context.getElseFail(MetaModelContext.class);
+//    }
+    
+    public static MetaModelContext buildDefault() {
+        return MetaModelContext_forTesting.builder()
+        .build();
+    }
+    
+//    public static void preset(MetaModelContext primed) {
+//        _Context.clear();
+//        _Context.putSingleton(MetaModelContext.class, primed);
+//    }
 
     private ObjectAdapterProvider objectAdapterProvider;
 
-    @Builder.Default
-    private ServiceInjector serviceInjector = new ServiceInjector_forTesting();
-
-    @Builder.Default
-    private ServiceRegistry serviceRegistry = new ServiceRegistry_forTesting();
+    private ServiceInjector serviceInjector;
+    private ServiceRegistry serviceRegistry; 
 
     @Builder.Default
     private MetamodelEventService metamodelEventService = 
@@ -69,9 +85,14 @@ final class MetaModelContext_forTesting implements MetaModelContext {
     .build();
     
     @Builder.Default
-    private IsisConfiguration configuration = newIsisConfiguration(); // just config defaults
+    private IsisSystemEnvironment systemEnvironment = newIsisSystemEnvironment();
+    
+    @Builder.Default
+    private IsisConfiguration configuration = newIsisConfiguration();
 
     private SpecificationLoader specificationLoader;
+    
+    private ProgrammingModel programmingModel;
 
     private AuthenticationSessionProvider authenticationSessionProvider;
 
@@ -124,13 +145,21 @@ final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return serviceAdaptersById.get(serviceId);
     }
+    
+    // -- LOOKUP
 
+    @Override
+    public <T> T getSingletonElseFail(Class<T> type) {
+        return getSystemEnvironment().ioc().getSingletonElseFail(type);
+    }
+    
     public Stream<Object> streamSingletons() {
 
         val fields = _Lists.of(
                 getConfigurationLegacy(),
                 getConfiguration(),
                 objectAdapterProvider,
+                systemEnvironment,
                 serviceInjector,
                 serviceRegistry,
                 metamodelEventService,
@@ -143,10 +172,19 @@ final class MetaModelContext_forTesting implements MetaModelContext {
                 titleService,
                 repositoryService,
                 transactionService,
-                transactionState);
+                transactionState,
+                this);
 
         return Stream.concat(fields.stream(), getSingletons().stream())
                 .filter(_NullSafe::isPresent);
+    }
+    
+    
+    
+    private static IsisSystemEnvironment newIsisSystemEnvironment() {
+        val env = new IsisSystemEnvironment();
+        env.setUnitTesting(true);
+        return env;
     }
     
     private static IsisConfiguration newIsisConfiguration() {
@@ -159,5 +197,43 @@ final class MetaModelContext_forTesting implements MetaModelContext {
         });
         return config;
     }
+
+    @Override
+    public ServiceRegistry getServiceRegistry() {
+        if(serviceRegistry==null) {
+            serviceRegistry = new ServiceRegistry_forTesting((MetaModelContext)this);
+        }
+        return serviceRegistry;
+    }
+    
+    @Override
+    public ServiceInjector getServiceInjector() {
+        if(serviceInjector==null) {
+            serviceInjector = new ServiceInjector_forTesting((MetaModelContext)this);
+        }
+        return serviceInjector;
+    }
+    
+    @Override
+    public SpecificationLoader getSpecificationLoader() {
+        if(specificationLoader==null) {
+            
+            val configuration = requireNonNull(getConfiguration());
+            val environment = requireNonNull(getSystemEnvironment());
+            val serviceRegistry = requireNonNull(getServiceRegistry());
+            val serviceInjector = requireNonNull(getServiceInjector());
+            val programmingModel = requireNonNull(getProgrammingModel());
+
+            specificationLoader = SpecificationLoaderDefault.getInstance(
+                    configuration, 
+                    environment, 
+                    serviceRegistry, 
+                    serviceInjector, 
+                    programmingModel);
+            
+        }
+        return specificationLoader;
+    }
+
 
 }

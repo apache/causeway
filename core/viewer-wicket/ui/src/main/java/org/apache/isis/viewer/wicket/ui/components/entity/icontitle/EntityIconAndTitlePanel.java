@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -33,16 +31,11 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.metamodel.facets.object.projection.ProjectionFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -125,8 +118,10 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
         if(adapterIfAny != null) {
 
-            final String iconName = adapterIfAny.getIconName();
-            final CssClassFaFacet cssClassFaFacet = adapterIfAny.getSpecification().getFacet(CssClassFaFacet.class);
+            val spec = adapterIfAny.getSpecification();
+            
+            final String iconName = spec.getIconName(adapterIfAny);
+            final CssClassFaFacet cssClassFaFacet = spec.getFacet(CssClassFaFacet.class);
             if (iconName != null || cssClassFaFacet == null) {
                 link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapterIfAny));
                 Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
@@ -161,7 +156,8 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
             val redirectToAdapter =
                     projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
 
-                    redirectToModel = new EntityModel(ManagedObject.promote(redirectToAdapter));
+                    redirectToModel = EntityModel.ofAdapter(super.getCommonContext(), redirectToAdapter); 
+
         } else {
             redirectToModel = entityModel;
         }
@@ -170,7 +166,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
-        final BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>(ID_ENTITY_LINK, pageClass, pageParameters) {
+        final BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>(
+                ID_ENTITY_LINK, pageClass, pageParameters) {
+            
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -238,31 +236,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     }
 
 
-
-    // ///////////////////////////////////////////////////////////////////
-    // Convenience
-    // ///////////////////////////////////////////////////////////////////
-
-    protected PageClassRegistry getPageClassRegistry() {
-        final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor) getApplication();
-        return pcra.getPageClassRegistry();
-    }
-
-
-    // ///////////////////////////////////////////////
-    // Dependency Injection
-    // ///////////////////////////////////////////////
-
-
-    @Inject private ImageResourceCache imageCache;
-    protected ImageResourceCache getImageCache() {
-        return imageCache;
-    }
-
-    @Inject private WicketViewerSettings settings;
-    @Override
-    protected WicketViewerSettings getSettings() {
-        return settings;
-    }
+    
 
 }

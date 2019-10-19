@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.runtime.system.SystemConstants;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
@@ -89,15 +88,13 @@ public final class PanelUtil {
     }
 
     public static void addConfirmationDialogIfAreYouSureSemantics(
-            final Component component,
-            final SemanticsOf semanticsOf) {
+            TranslationService translationService,
+            Component component,
+            SemanticsOf semanticsOf) {
 
         if (!semanticsOf.isAreYouSure()) {
             return;
         }
-
-        final TranslationService translationService =
-                IsisContext.getServiceRegistry().lookupServiceElseFail(TranslationService.class);
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 

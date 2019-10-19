@@ -129,7 +129,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                                 defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder)
                         );
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
-            FacetUtil.addFacet(collectionDomainEventFacet);
+            super.addFacet(collectionDomainEventFacet);
         }
 
         if(EventUtil.eventTypeIsPostable(
@@ -138,7 +138,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 CollectionDomainEvent.Default.class,
                 getConfiguration().getReflector().getFacet().getCollectionAnnotation().getDomainEvent().isPostForDefault()
                 )) {
-            FacetUtil.addFacet(collectionDomainEventFacet);
+            super.addFacet(collectionDomainEventFacet);
         }
 
 
@@ -165,7 +165,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                         collectionDomainEventFacet.getEventType(), getterFacet, 
                         collectionAddToFacet, collectionDomainEventFacet, holder, getServiceRegistry());
             }
-            FacetUtil.addFacet(replacementFacet);
+            super.addFacet(replacementFacet);
         }
 
         final CollectionRemoveFromFacet collectionRemoveFromFacet = holder.getFacet(CollectionRemoveFromFacet.class);
@@ -180,7 +180,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 // default
                 replacementFacet = new CollectionRemoveFromFacetForDomainEventFromDefault(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, getServiceRegistry(), holder);
             }
-            FacetUtil.addFacet(replacementFacet);
+            super.addFacet(replacementFacet);
         }
 
     }
@@ -205,7 +205,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         // check for @Collection(hidden=...)
         val facet = HiddenFacetForCollectionAnnotation.create(collectionIfAny, holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processEditing(final ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
@@ -214,7 +214,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         // check for @Collection(editing=...)
         val facet = DisabledFacetForCollectionAnnotation.create(collectionIfAny, holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processNotPersisted(final ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
@@ -223,7 +223,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         // search for @Collection(notPersisted=...)
         val facet = NotPersistedFacetForCollectionAnnotation.create(collectionIfAny, holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
 
@@ -255,7 +255,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
             facet = inferFromGenericReturnType(processMethodContext);
         }
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     private TypeOfFacet inferFromGenericReturnType(final ProcessMethodContext processMethodContext) {

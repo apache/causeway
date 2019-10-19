@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.ComponentTag;
@@ -34,9 +32,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
@@ -147,7 +143,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     }
 
     private boolean addCredit(final int num) {
-        final Credit credit = Credit.create(getConfigurationLegacy(), num);
+        final Credit credit = Credit.create(super.getCommonContext().getConfigurationLegacy(), num);
         final WebMarkupContainer creditLink = newLink(credit);
         if(credit.isDefined()) {
             creditLink.add(new CreditImage(credit.getImageId(), credit.getImage()));
@@ -235,7 +231,5 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         final ThemeChooser themeChooser = new ThemeChooser(ID_THEME_PICKER);
         addOrReplace(themeChooser);
     }
-
-    @Inject private WebAppConfigBean webAppConfigBean;
 
 }

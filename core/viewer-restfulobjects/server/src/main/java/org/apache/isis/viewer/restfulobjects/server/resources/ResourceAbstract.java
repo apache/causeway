@@ -38,6 +38,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -92,7 +93,7 @@ public abstract class ResourceAbstract {
             final Where where,
             final RepresentationService.Intent intent,
             final String urlUnencodedQueryString) {
-        if (!IsisContext.getSessionFactory().isInSession()) {
+        if (!IsisSession.isInSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
         if (IsisContext.getAuthenticationSession() == null) {
@@ -139,7 +140,8 @@ public abstract class ResourceAbstract {
 
     protected ObjectAdapter getServiceAdapter(final String serviceId) {
 
-        val metaModelContext = MetaModelContext.current();
+        val metaModelContext = resourceContext.getServiceRegistry()
+                .lookupServiceElseFail(MetaModelContext.class);
 
         final ObjectAdapter serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceId);
         if(serviceAdapter==null) {

@@ -20,28 +20,31 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 
 import java.io.IOException;
 
-import org.apache.isis.commons.internal.context._Context;
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
+
+import lombok.val;
 
 public final class JsonWriterUtil {
 
     private JsonWriterUtil(){}
 
-    public static String jsonFor(final Object object) {
-        final JsonMapper.PrettyPrinting prettyPrinting = inferPrettyPrinting();
+    public static String jsonFor(Object object, JsonMapper.PrettyPrinting prettyPrinting) {
         try {
             return JsonMapper.instance(prettyPrinting).write(object);
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-    private static JsonMapper.PrettyPrinting inferPrettyPrinting() {
-        return IsisSystemEnvironment.get().isPrototyping()
+    
+    public static String jsonFor(Object object, @Nullable IsisSystemEnvironment systemEnvironment) {
+        val prettyPrinting = (systemEnvironment!=null && systemEnvironment.isPrototyping())
                 ? JsonMapper.PrettyPrinting.ENABLE 
                         : JsonMapper.PrettyPrinting.DISABLE;
+        return jsonFor(object, prettyPrinting);
     }
+
+    
 }

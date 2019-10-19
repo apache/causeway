@@ -18,11 +18,6 @@
  */
 package org.apache.isis.testdomain.shiro;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
@@ -30,16 +25,22 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -60,13 +61,14 @@ import lombok.extern.log4j.Log4j2;
 class ShiroLdapTest extends AbstractShiroTest {
 
     @Inject LdapServerService ldapServerService;
+    @Inject ServiceInjector serviceInjector;
 
-    @BeforeAll
-    static void beforeClass() {
+    @BeforeEach
+    void beforeEach() {
         // Build and set the SecurityManager used to build Subject instances used in your tests
         // This typically only needs to be done once per class if your shiro.ini doesn't change,
         // otherwise, you'll need to do this logic in each test that is different
-        setSecurityManager("classpath:shiro-ldap.ini");
+        setSecurityManager(serviceInjector, "classpath:shiro-ldap.ini");
     }
 
     @AfterAll

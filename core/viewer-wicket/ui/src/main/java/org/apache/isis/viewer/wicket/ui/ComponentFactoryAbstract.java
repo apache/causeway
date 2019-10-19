@@ -24,6 +24,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Adapter implementation for {@link ComponentFactory}.
@@ -31,25 +35,31 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     private static final long serialVersionUID = 1L;
+    
+    @Getter @Setter private transient IsisWebAppCommonContext commonContext;
 
     private final ComponentType componentType;
     private final String name;
 
     private final Class<?> componentClass;
 
-    public ComponentFactoryAbstract(final ComponentType componentType) {
+    public ComponentFactoryAbstract(ComponentType componentType) {
         this(componentType, null, null);
     }
 
-    public ComponentFactoryAbstract(final ComponentType componentType, final String name) {
+    public ComponentFactoryAbstract(ComponentType componentType, String name) {
         this(componentType, name, null);
     }
 
-    public ComponentFactoryAbstract(final ComponentType componentType, @SuppressWarnings("rawtypes") Class componentClass) {
+    public ComponentFactoryAbstract(ComponentType componentType, Class<?> componentClass) {
         this(componentType, null, componentClass);
     }
 
-    public ComponentFactoryAbstract(final ComponentType componentType, final String name, @SuppressWarnings("rawtypes") Class componentClass) {
+    public ComponentFactoryAbstract(
+            ComponentType componentType, 
+            String name, 
+            Class<?> componentClass) {
+        
         this.componentType = componentType;
         this.name = name != null ? name : getClass().getSimpleName();
         if(componentClass != null && ComponentFactory.class.isAssignableFrom(componentClass)) {

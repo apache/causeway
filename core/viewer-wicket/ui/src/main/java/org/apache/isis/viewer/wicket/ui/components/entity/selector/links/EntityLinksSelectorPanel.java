@@ -19,11 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.selector.links;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
+import java.util.function.Predicate;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -55,6 +52,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import lombok.val;
 
 /**
  * Provides a list of links for selecting other views that support
@@ -374,12 +372,12 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
 
     private List<ComponentFactory> findOtherComponentFactories(final EntityModel model, final ComponentFactory ignoreFactory) {
         final List<ComponentFactory> componentFactories = getComponentFactoryRegistry().findComponentFactories(componentType, model);
-        ArrayList<ComponentFactory> otherFactories = _Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
+        val otherFactories = _Lists.filter(componentFactories, new Predicate<ComponentFactory>() {
             @Override
-            public boolean apply(final ComponentFactory input) {
+            public boolean test(final ComponentFactory input) {
                 return input != ignoreFactory;
             }
-        }));
+        });
         return ordered(otherFactories);
     }
 

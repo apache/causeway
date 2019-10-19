@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
@@ -72,6 +73,12 @@ implements MetaModelRefiner {
 
     public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
+    }
+    
+    @Override
+    public void setMetaModelContext(MetaModelContext metaModelContext) {
+        super.setMetaModelContext(metaModelContext);
+        conflictingOptionalityValidator.setMetaModelContext(metaModelContext);
     }
     
     @Override
@@ -149,7 +156,7 @@ implements MetaModelRefiner {
                 PropertyDomainEvent.Default.class,
                 getConfiguration().getReflector().getFacet().getPropertyAnnotation().getDomainEvent().isPostForDefault()
                 )) {
-            FacetUtil.addFacet(propertyDomainEventFacet);
+            super.addFacet(propertyDomainEventFacet);
         }
 
 
@@ -172,7 +179,7 @@ implements MetaModelRefiner {
                 replacementFacet = new PropertySetterFacetForDomainEventFromDefault(
                         propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder);
             }
-            FacetUtil.addFacet(replacementFacet);
+            super.addFacet(replacementFacet);
         }
 
         final PropertyClearFacet clearFacet = holder.getFacet(PropertyClearFacet.class);
@@ -189,7 +196,7 @@ implements MetaModelRefiner {
                 replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
                         propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder);
             }
-            FacetUtil.addFacet(replacementFacet);
+            super.addFacet(replacementFacet);
         }
     }
 
@@ -214,7 +221,7 @@ implements MetaModelRefiner {
         // search for @Property(hidden=...)
         val hiddenFacet = HiddenFacetForPropertyAnnotation.create(propertyIfAny, facetHolder);
 
-        FacetUtil.addFacet(hiddenFacet);
+        super.addFacet(hiddenFacet);
     }
 
     void processEditing(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
@@ -223,7 +230,7 @@ implements MetaModelRefiner {
         // search for @Property(editing=...)
         val disabledFacet = DisabledFacetForPropertyAnnotation.create(propertyIfAny, facetHolder);
 
-        FacetUtil.addFacet(disabledFacet);
+        super.addFacet(disabledFacet);
     }
 
     void processCommand(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
@@ -242,7 +249,7 @@ implements MetaModelRefiner {
         val commandFacet = CommandFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), facetHolder, getServiceInjector());
 
-        FacetUtil.addFacet(commandFacet);
+        super.addFacet(commandFacet);
     }
 
     void processProjecting(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
@@ -252,7 +259,7 @@ implements MetaModelRefiner {
         val projectingFacet = ProjectingFacetFromPropertyAnnotation
                 .create(propertyIfAny, facetHolder);
 
-        FacetUtil.addFacet(projectingFacet);
+        super.addFacet(projectingFacet);
 
     }
 
@@ -275,7 +282,7 @@ implements MetaModelRefiner {
         val facet = PublishedPropertyFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
 
@@ -287,7 +294,7 @@ implements MetaModelRefiner {
         // search for @Property(maxLength=...)
         val facet = MaxLengthFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processMustSatisfy(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
@@ -296,7 +303,7 @@ implements MetaModelRefiner {
         // search for @Property(mustSatisfy=...)
         val facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(propertyIfAny, holder, getServiceInjector());
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processNotPersisted(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
@@ -305,7 +312,7 @@ implements MetaModelRefiner {
         // search for @Property(notPersisted=...)
         val facet = NotPersistedFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processOptional(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
@@ -318,13 +325,13 @@ implements MetaModelRefiner {
         val nullableIfAny = processMethodContext.synthesizeOnMethod(Nullable.class);
         val facet2 =
                 MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableIfAny, method, holder);
-        FacetUtil.addFacet(facet2);
+        super.addFacet(facet2);
         conflictingOptionalityValidator.flagIfConflict(
                 facet2, "Conflicting @Nullable with other optionality annotation");
 
         // search for @Property(optional=...)
         val facet3 = MandatoryFacetForPropertyAnnotation.create(propertyIfAny, method, holder);
-        FacetUtil.addFacet(facet3);
+        super.addFacet(facet3);
         conflictingOptionalityValidator.flagIfConflict(
                 facet3, "Conflicting Property#optionality with other optionality annotation");
     }
@@ -338,13 +345,13 @@ implements MetaModelRefiner {
         val facet = RegExFacetForPatternAnnotationOnProperty.create(patternIfAny, returnType, holder);
 
         if (facet != null) {
-            FacetUtil.addFacet(facet);
+            super.addFacet(facet);
             return;
         }
         
         // else search for @Property(pattern=...)
         val facet2 = RegExFacetForPropertyAnnotation.create(propertyIfAny, returnType, holder);
-        FacetUtil.addFacet(facet2);
+        super.addFacet(facet2);
         
         
     }
@@ -356,7 +363,7 @@ implements MetaModelRefiner {
         // else search for @Property(maxLength=...)
         val facet = FileAcceptFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     // //////////////////////////////////////

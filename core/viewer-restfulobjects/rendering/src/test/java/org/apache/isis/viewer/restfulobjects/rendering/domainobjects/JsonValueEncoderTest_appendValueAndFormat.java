@@ -44,30 +44,28 @@ import static org.junit.Assert.assertThat;
 
 public class JsonValueEncoderTest_appendValueAndFormat {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    @Rule public JUnitRuleMockery2 context = 
+        JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
+    @Mock private ObjectSpecification mockObjectSpec;
+    @Mock private EncodableFacet mockEncodableFacet;
+    @Mock private ObjectAdapter mockObjectAdapter;
+    @Mock private ObjectAdapterProvider mockAdapterManager;
+    
     private JsonRepresentation representation;
-    @Mock
-    private ObjectSpecification mockObjectSpec;
-    @Mock
-    private EncodableFacet mockEncodableFacet;
-    @Mock
-    private ObjectAdapter mockObjectAdapter;
-    @Mock
-    private ObjectAdapterProvider mockAdapterManager;
+    private JsonValueEncoder jsonValueEncoder;
 
     @Before
     public void setUp() {
-        JsonValueEncoder.testSetAdapterManager(mockAdapterManager::adapterFor);
-
+        
+        jsonValueEncoder = JsonValueEncoder.forTesting(mockAdapterManager);
+        
         representation = JsonRepresentation.newMap();
     }
 
     @After
     public void tearDown() {
-        JsonValueEncoder.testSetAdapterManager(null);
+
     }
 
     @Test
@@ -75,7 +73,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(String.class);
         allowingObjectAdapterToReturn("aString");
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("aString"));
 
@@ -88,7 +86,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(Boolean.class);
         allowingObjectAdapterToReturn(Boolean.TRUE);
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isBoolean("value"), is(true));
         assertThat(representation.getBoolean("value"), is(Boolean.TRUE));
 
@@ -100,7 +98,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(boolean.class);
         allowingObjectAdapterToReturn(true);
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isBoolean("value"), is(true));
         assertThat(representation.getBoolean("value"), is(true));
 
@@ -112,7 +110,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(Byte.class);
         allowingObjectAdapterToReturn(Byte.valueOf((byte)123));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getByte("value"), is(Byte.valueOf((byte)123)));
 
@@ -125,7 +123,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(byte.class);
         allowingObjectAdapterToReturn((byte)123);
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getByte("value"), is((byte)123));
 
@@ -138,7 +136,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(Short.class);
         allowingObjectAdapterToReturn(Short.valueOf((short)12345));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getShort("value"), is(Short.valueOf((short)12345)));
 
@@ -151,7 +149,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(short.class);
         allowingObjectAdapterToReturn((short)12345);
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getShort("value"), is((short)12345));
 
@@ -164,7 +162,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(Integer.class);
         allowingObjectAdapterToReturn(Integer.valueOf(12345678));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getInt("value"), is(Integer.valueOf(12345678)));
 
@@ -177,7 +175,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(int.class);
         allowingObjectAdapterToReturn(12345678);
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getInt("value"), is(12345678));
 
@@ -190,7 +188,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(Long.class);
         allowingObjectAdapterToReturn(Long.valueOf(12345678901234L));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getLong("value"), is(Long.valueOf(12345678901234L)));
 
@@ -203,7 +201,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(long.class);
         allowingObjectAdapterToReturn(12345678901234L);
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getLong("value"), is(12345678901234L));
 
@@ -216,7 +214,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(Float.class);
         allowingObjectAdapterToReturn(Float.valueOf((float)123.45));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getFloat("value"), is(Float.valueOf((float)123.45)));
 
@@ -229,7 +227,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(Float.class);
         allowingObjectAdapterToReturn((float)123.45);
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getFloat("value"), is((float)123.45));
 
@@ -242,7 +240,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(Double.class);
         allowingObjectAdapterToReturn(Double.valueOf(12345.6789));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getDouble("value"), is(Double.valueOf(12345.6789)));
 
@@ -255,7 +253,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(double.class);
         allowingObjectAdapterToReturn(12345.6789);
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getDouble("value"), is(12345.6789));
 
@@ -268,7 +266,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(Character.class);
         allowingObjectAdapterToReturn(Character.valueOf('a'));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getChar("value"), is(Character.valueOf('a')));
 
@@ -281,7 +279,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(char.class);
         allowingObjectAdapterToReturn('a');
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getChar("value"), is('a'));
 
@@ -294,7 +292,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(java.util.Date.class);
         allowingObjectAdapterToReturn(asDateTime("2014-04-25T12:34:45Z"));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
 
@@ -307,7 +305,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(java.sql.Date.class);
         allowingObjectAdapterToReturn(asSqlDate("2014-04-25"));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25"));
 
@@ -320,7 +318,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(org.joda.time.DateTime.class);
         allowingObjectAdapterToReturn(new org.joda.time.DateTime(asDateTime("2014-04-25T12:34:45Z")));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
 
@@ -333,7 +331,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(org.joda.time.LocalDateTime.class);
         allowingObjectAdapterToReturn(new org.joda.time.LocalDateTime(asDateTime("2014-04-25T12:34:45Z")));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
 
@@ -346,7 +344,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(org.joda.time.LocalDate.class);
         allowingObjectAdapterToReturn(new org.joda.time.LocalDate(2014,4,25));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25"));
 
@@ -360,7 +358,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         final long time = asDateTime("2014-04-25T12:34:45Z").getTime();
         allowingObjectAdapterToReturn(new Timestamp(time));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
         assertThat(representation.isLong("value"), is(true));
         assertThat(representation.getLong("value"), is(time));
 
@@ -373,7 +371,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(BigInteger.class);
         allowingObjectAdapterToReturn(new BigInteger("12345678901234567890"));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, "big-integer(22)", false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, "big-integer(22)", false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.isBigInteger("value"), is(true));
         assertThat(representation.getBigInteger("value"), is(new BigInteger("12345678901234567890")));
@@ -387,7 +385,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingObjectSpecToReturnSpecIdFor(BigDecimal.class);
         allowingObjectAdapterToReturn(new BigDecimal("12345678901234567890.1234"));
 
-        JsonValueEncoder.appendValueAndFormat(mockObjectSpec, mockObjectAdapter, representation, "big-decimal(27,4)", false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, "big-decimal(27,4)", false);
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.isBigDecimal("value"), is(true));
         assertThat(representation.getBigDecimal("value"), is(new BigDecimal("12345678901234567890.1234")));
@@ -402,6 +400,9 @@ public class JsonValueEncoderTest_appendValueAndFormat {
             {
                 oneOf(mockObjectSpec).getSpecId();
                 will(returnValue(ObjectSpecId.of(cls.getName())));
+                
+                allowing(mockObjectSpec).getFacet(EncodableFacet.class);
+                will(returnValue(null));
             }
         });
     }
@@ -411,6 +412,9 @@ public class JsonValueEncoderTest_appendValueAndFormat {
             {
                 oneOf(mockObjectAdapter).getPojo();
                 will(returnValue(pojo));
+                
+                allowing(mockObjectAdapter).getSpecification();
+                will(returnValue(mockObjectSpec));
             }
         });
     }

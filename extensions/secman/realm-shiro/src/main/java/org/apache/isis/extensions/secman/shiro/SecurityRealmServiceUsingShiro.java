@@ -18,17 +18,26 @@
  */
 package org.apache.isis.extensions.secman.shiro;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmService;
 
+import lombok.val;
+
 @Service
 public class SecurityRealmServiceUsingShiro implements SecurityRealmService {
+    
+    @Inject private ServiceInjector serviceInjector;
 
     @Override
     public SecurityRealm getCurrentRealm() {
-        return ShiroUtils.getIsisModuleSecurityRealm();
+        val realm = ShiroUtils.getIsisModuleSecurityRealm();
+        serviceInjector.injectServicesInto(realm);
+        return realm;
     }
 
 }

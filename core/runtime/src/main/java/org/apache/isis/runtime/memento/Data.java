@@ -26,8 +26,6 @@ import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 public class Data implements Encodable, Serializable {
 
@@ -74,10 +72,5 @@ public class Data implements Encodable, Serializable {
     public String toString() {
         return className + "/" + oid;
     }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
 
 }

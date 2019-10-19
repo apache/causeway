@@ -63,10 +63,10 @@ import lombok.val;
 
 public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelContext.Delegating {
 
-    protected static ObjectSpecification specificationOf(final Class<?> type) {
-        return type == null 
-                ? null 
-                        : MetaModelContext.current().getSpecificationLoader().loadSpecification(type);
+    protected ObjectSpecification specificationOf(final Class<?> type) {
+        return type != null 
+                ? getMetaModelContext().getSpecificationLoader().loadSpecification(type)
+                        : null;
     }
 
     // -- fields
@@ -462,7 +462,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelCon
 
     @Override
     public MetaModelContext getMetaModelContext() {
-        return MetaModelContext.current();
+        return facetedMethod.getMetaModelContext();
     }
 
 }

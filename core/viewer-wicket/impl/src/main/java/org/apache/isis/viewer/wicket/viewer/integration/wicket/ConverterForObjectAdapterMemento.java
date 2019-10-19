@@ -27,7 +27,9 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -35,9 +37,12 @@ import lombok.val;
  * {@link ObjectAdapterMemento}s, converting to-and-from their {@link Oid}'s
  * string representation.
  */
+@RequiredArgsConstructor
 public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapterMemento> {
 
     private static final long serialVersionUID = 1L;
+    
+    private final transient IsisWebAppCommonContext commonContext;
 
     /**
      * Converts string representation of {@link Oid} to
@@ -49,8 +54,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
             return null;
         }
         val rootOid = RootOid.deStringEncoded(value);
-
-        return ObjectAdapterMemento.ofRootOid(rootOid);
+        return commonContext.mementoFor(rootOid);
     }
 
     /**

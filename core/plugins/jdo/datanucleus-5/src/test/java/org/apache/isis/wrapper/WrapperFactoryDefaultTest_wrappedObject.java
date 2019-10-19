@@ -32,12 +32,15 @@ import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
@@ -82,43 +85,26 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    @Mock
-    private ObjectAdapterProvider mockAdapterManager;
-    @Mock
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Mock
-    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
-    @Mock
-    private MessageService mockMessageService;
-    @Mock
-    private CommandContext mockCommandContext;
-    @Mock
-    private Command mockCommand;
-    @Mock
-    private CommandDtoServiceInternal mockCommandDtoServiceInternal;
-    @Mock
-    private ObjectSpecification mockOnType;
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
-
-    @Mock
-    private IsisSessionFactory mockIsisSessionFactory;
-
-    @Mock
-    private ObjectSpecificationDefault mockEmployeeSpec;
+    @Mock private ObjectAdapterProvider mockAdapterManager;
+    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    @Mock private MessageService mockMessageService;
+    @Mock private CommandContext mockCommandContext;
+    @Mock private Command mockCommand;
+    @Mock private CommandDtoServiceInternal mockCommandDtoServiceInternal;
+    @Mock private ObjectSpecification mockOnType;
+    @Mock private SpecificationLoader mockSpecificationLoader;
+    @Mock private IsisSessionFactory mockIsisSessionFactory;
+    @Mock private ObjectSpecificationDefault mockEmployeeSpec;
+    @Mock private FactoryService mockFactoryService;
+    @Mock private TransactionService mockTransactionService;
+    
     private ObjectMember employeeNameMember;
 
-    @Mock
-    private ObjectSpecificationDefault mockStringSpec;
-
-    @Mock
-    private ObjectAdapter mockEmployeeAdapter;
-
-    @Mock
-    private ObjectAdapter mockAdapterForStringSmith;
-    @Mock
-    private ObjectAdapter mockAdapterForStringJones;
-
+    @Mock private ObjectSpecificationDefault mockStringSpec;
+    @Mock private ObjectAdapter mockEmployeeAdapter;
+    @Mock private ObjectAdapter mockAdapterForStringSmith;
+    @Mock private ObjectAdapter mockAdapterForStringJones;
 
     private final SimpleSession session = new SimpleSession("tester", Collections.<String>emptyList());
 
@@ -128,20 +114,28 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private Employee employeeWO;
 
     private WrapperFactoryDefault wrapperFactory;
+    
+    protected MetaModelContext metaModelContext;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
 
         // PRODUCTION
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .singleton(wrapperFactory = createWrapperFactory())
                 .singleton(mockCommandContext)
                 .singleton(mockCommandDtoServiceInternal)
-                .build());
+                .singleton(mockFactoryService)
+                .singleton(mockIsisSessionFactory)
+                .singleton(mockTransactionService)
+                .build();
+        
+        metaModelContext.getServiceInjector().injectServicesInto(wrapperFactory);
 
         employeeRepository = new EmployeeRepositoryImpl();
 
@@ -242,6 +236,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         final Method employeeClearNameMethod = methodOf(Employee.class, "clearName");
         employeeNameMember = new OneToOneAssociationDefault(
                 facetedMethodForProperty(
+                        metaModelContext,
                         employeeSetNameMethod, employeeGetNameMethod, employeeModifyNameMethod, employeeClearNameMethod, employeeHideNameMethod, employeeDisableNameMethod, employeeValidateNameMethod));
 
         context.checking(new Expectations() {
@@ -417,8 +412,10 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     // //////////////////////////////////////
 
     private FacetedMethod facetedMethodForProperty(
+            MetaModelContext mmc,
             Method init, Method accessor, Method modify, Method clear, Method hide, Method disable, Method validate) {
         FacetedMethod facetedMethod = FacetedMethod.createForProperty(accessor.getDeclaringClass(), accessor);
+        facetedMethod.setMetaModelContext(mmc);
         FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(mockOnType, accessor, facetedMethod));
         FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(init, facetedMethod));
         FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modify, facetedMethod));

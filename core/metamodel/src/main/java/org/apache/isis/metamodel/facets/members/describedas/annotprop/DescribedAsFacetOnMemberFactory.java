@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.members.describedas.annotprop;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -40,7 +39,7 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
         // facet derived from type moved to post-processor
 
         // no-op if null
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     @Override

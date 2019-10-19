@@ -38,7 +38,6 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditObjectsConfiguration;
@@ -52,7 +51,6 @@ import org.apache.isis.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.viewer.wicket.ui.DialogMode;
 
 import lombok.Data;
-import lombok.Getter;
 
 
 /**
@@ -71,13 +69,6 @@ public class IsisConfiguration {
 
     @Autowired
     private ConfigurableEnvironment environment;
-    
-    /**
-     * Not populated by Spring!
-     * @deprecated maybe using {@link #environment} is the better choice!?
-     */
-    @Getter(lazy = true) @Deprecated
-    private final Map<String, String> rawKeyValueMap = _Spring.copySpringEnvironmentToMap(environment);
     
     private final Authentication authentication = new Authentication();
     @Data

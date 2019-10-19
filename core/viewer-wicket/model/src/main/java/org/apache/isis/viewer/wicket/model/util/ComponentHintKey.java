@@ -27,44 +27,39 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * Scoped by the {@link Component component's path}.
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComponentHintKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static ComponentHintKey create(final Provider<Component> pathProvider, final String key) {
+    public static ComponentHintKey create(Provider<Component> pathProvider, String key) {
         return new ComponentHintKey(pathProvider, null, key, null);
     }
 
-    public static ComponentHintKey create(final Component path, final String key) {
+    public static ComponentHintKey create(Component path, String key) {
         return new ComponentHintKey(null, path, key, null);
     }
 
-    public static ComponentHintKey create(
-            final String fullKey) {
+    public static ComponentHintKey create(String fullKey) {
         return new ComponentHintKey(null, null, null, fullKey);
     }
 
-    private Provider<Component> componentProvider;
-    private Component component;
+    private final Provider<Component> componentProvider;
+    private final Component component;
     private final String keyName;
     private final String fullKey;
-
-    private ComponentHintKey(
-            final Provider<Component> componentProvider,
-            final Component component,
-            final String keyName,
-            final String fullKey) {
-        this.componentProvider = componentProvider;
-        this.component = component;
-        this.keyName = keyName;
-        this.fullKey = fullKey;
-    }
+    
+    @Getter @Setter private transient HintStore hintStore;
 
     public String getKey() {
         return fullKey != null
@@ -87,7 +82,7 @@ public class ComponentHintKey implements Serializable {
             return;
         }
         if(value != null) {
-            getHintStore().set(bookmark, getKey(), value);
+            hintStore.set(bookmark, getKey(), value);
         } else {
             remove(bookmark);
         }
@@ -97,7 +92,7 @@ public class ComponentHintKey implements Serializable {
         if(bookmark == null) {
             return null;
         }
-        return getHintStore().get(bookmark, getKey());
+        return hintStore.get(bookmark, getKey());
     }
 
 
@@ -106,7 +101,7 @@ public class ComponentHintKey implements Serializable {
             return;
         }
         final String key = getKey();
-        getHintStore().remove(bookmark, key);
+        hintStore.remove(bookmark, key);
     }
 
     public void hintTo(
@@ -144,11 +139,6 @@ public class ComponentHintKey implements Serializable {
             public void remove(final Bookmark bookmark) {
             }
         };
-    }
-
-
-    HintStore getHintStore() {
-        return IsisContext.getServiceRegistry().lookupServiceElseFail(HintStore.class);
     }
 
 

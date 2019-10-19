@@ -23,7 +23,8 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.FacetFactory;
 
-public class MetaModelValidatorForDeprecatedMethodPrefix extends MetaModelValidatorForDeprecatedAbstract {
+@Deprecated //not used any more?
+class MetaModelValidatorForDeprecatedMethodPrefix extends MetaModelValidatorForDeprecatedAbstract {
 
     private final String methodPrefix;
 

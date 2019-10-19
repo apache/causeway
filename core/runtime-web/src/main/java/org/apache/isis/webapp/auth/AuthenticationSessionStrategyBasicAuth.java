@@ -72,7 +72,8 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
         val password = matcher.group(2);
 
         val authenticationRequestPwd = new AuthenticationRequestPassword(user, password);
-        val authenticationSession = authenticationManager().authenticate(authenticationRequestPwd);
+        val authenticationManager = super.getAuthenticationManager(httpServletRequest);
+        val authenticationSession = authenticationManager.authenticate(authenticationRequestPwd);
         return authenticationSession;
     }
 

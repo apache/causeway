@@ -36,7 +36,6 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -75,7 +74,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response services() {
         init(RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val metaModelContext = MetaModelContext.current();
+        val metaModelContext = super.getResourceContext().getMetaModelContext();
 
         final Stream<ObjectAdapter> serviceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(NATURE_REST_ALSO);

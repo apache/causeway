@@ -29,8 +29,10 @@ import java.util.function.Supplier;
 import org.apache.isis.applib.services.wrapper.AsyncWrap;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -51,6 +53,12 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     private WrapperFactory wrapper;
     
     @With(AccessLevel.PACKAGE) @NonNull
+    private IsisSessionFactory isisSessionFactory;
+    
+    @With(AccessLevel.PACKAGE) @NonNull
+    private TransactionService transactionService;
+    
+    @With(AccessLevel.PACKAGE) @NonNull
     private T domainObject;
     
     /*getter is API*/
@@ -67,7 +75,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     @NonNull
     @Getter(onMethod = @__({@Override})) 
     @With(value = AccessLevel.PUBLIC, onMethod = @__(@Override)) 
-    private Consumer<Exception> exceptionHandler;  
+    private Consumer<Exception> exceptionHandler;
 
         
     // -- METHOD REFERENCE MATCHERS (WITH RETURN VALUE)
@@ -177,16 +185,15 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     
     private <R> Future<R> submit(Supplier<R> actionInvocation) {
         
-        val transactionService = IsisContext.getTransactionService();
+        
         val authenticationSession = IsisContext.getAuthenticationSession().get();
-        //val transactionLatch = IsisTransactionAspectSupport.transactionLatch();
         
         Callable<R> asyncTask = ()->{
 
             try {
                 //transactionLatch.await(); // wait for transaction of the calling thread to complete
 
-                return IsisContext.getSessionFactory().doInSession(
+                return isisSessionFactory.doInSession(
                         ()->transactionService.executeWithinTransaction(actionInvocation),
                         authenticationSession);
 

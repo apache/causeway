@@ -24,8 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.config.internal._Config;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -74,7 +72,7 @@ implements ImperativeFacet {
             return null;
         }
 
-        boolean filterForVisibility = MetaModelContext.current().getConfiguration().getReflector().getFacet().isFilterVisibility();
+        boolean filterForVisibility = super.getMetaModelContext().getConfiguration().getReflector().getFacet().isFilterVisibility();
         if(filterForVisibility) {
             final ObjectAdapter referencedAdapter = getObjectAdapterProvider().adapterFor(referencedObject);
             final boolean visible = ObjectAdapter.Util

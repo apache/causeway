@@ -26,13 +26,12 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
@@ -93,7 +92,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, i, paramAsHolder));
+            super.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, i, paramAsHolder));
         }
     }
     

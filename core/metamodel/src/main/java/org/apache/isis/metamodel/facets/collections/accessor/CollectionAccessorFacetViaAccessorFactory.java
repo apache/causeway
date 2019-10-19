@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
@@ -55,11 +54,11 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(
+        super.addFacet(
                 new CollectionAccessorFacetViaAccessor(
                         typeSpec, accessorMethod, holder));
 
-        FacetUtil.addFacet(CollectionSemanticsFacetDefault.forCollection(accessorMethod, holder));
+        super.addFacet(CollectionSemanticsFacetDefault.forCollection(accessorMethod, holder));
     }
 
 

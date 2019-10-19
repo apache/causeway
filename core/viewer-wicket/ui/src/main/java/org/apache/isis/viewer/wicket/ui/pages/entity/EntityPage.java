@@ -49,6 +49,9 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.val;
 
 /**
  * Web page representing an entity.
@@ -65,10 +68,10 @@ public class EntityPage extends PageAbstract {
 
     /**
      * Called reflectively, in support of
-     * {@link BookmarkablePageLink bookmarkable} links.
+     * {@link BookmarkablePageLink} links. //FIXME we've added commonContext, hence will likely fail 
      */
-    public EntityPage(final PageParameters pageParameters) {
-        this(pageParameters, createEntityModel(pageParameters));
+    public EntityPage(IsisWebAppCommonContext commonContext, PageParameters pageParameters) {
+        this(pageParameters, createEntityModel(commonContext, pageParameters));
     }
 
     @Override
@@ -84,42 +87,52 @@ public class EntityPage extends PageAbstract {
      * @param parameters The page parameters with the OID
      * @return An EntityModel for the requested OID
      */
-    private static EntityModel createEntityModel(final PageParameters parameters) {
+    private static EntityModel createEntityModel(
+            IsisWebAppCommonContext commonContext, 
+            PageParameters parameters) {
+        
         String oid = EntityModel.oidStr(parameters);
         if (Strings.isEmpty(oid)) {
             throw new RestartResponseException(Application.get().getHomePage());
         }
-        return new EntityModel(parameters);
+        return EntityModel.ofParameters(commonContext, parameters);
     }
 
     private EntityPage(final PageParameters pageParameters, final EntityModel entityModel) {
         this(pageParameters, entityModel, null);
     }
 
-    public EntityPage(final ObjectAdapter adapter) {
-        this(adapter, null);
+    public EntityPage(IsisWebAppCommonContext commonContext, ObjectAdapter adapter) {
+        this(commonContext, adapter, null);
     }
 
     /**
      * Ensure that any {@link ConcurrencyException} that might have occurred already
      * (eg from an action invocation) is show.
      */
-    public EntityPage(final ObjectAdapter adapter, final ConcurrencyException exIfAny) {
-        this(PageParametersUtils.newPageParameters(), newEntityModel(adapter, exIfAny));
+    public EntityPage(
+            IsisWebAppCommonContext commonContext, 
+            ObjectAdapter adapter, 
+            ConcurrencyException exIfAny) {
+        
+        this(PageParametersUtils.newPageParameters(), newEntityModel(commonContext, adapter, exIfAny));
     }
 
     private static EntityModel newEntityModel(
-            final ObjectAdapter adapter,
-            final ConcurrencyException exIfAny) {
-        final EntityModel model = new EntityModel(adapter);
-        model.setException(exIfAny);
-        return model;
+            IsisWebAppCommonContext commonContext,
+            ObjectAdapter adapter,
+            ConcurrencyException exIfAny) {
+        
+        val entityModel = EntityModel.ofAdapter(commonContext, adapter);
+        entityModel.setException(exIfAny);
+        return entityModel;
     }
 
     private EntityPage(
             final PageParameters pageParameters,
             final EntityModel entityModel,
             final String titleString) {
+        
         super(pageParameters, titleString, ComponentType.ENTITY);
 
         this.model = entityModel;

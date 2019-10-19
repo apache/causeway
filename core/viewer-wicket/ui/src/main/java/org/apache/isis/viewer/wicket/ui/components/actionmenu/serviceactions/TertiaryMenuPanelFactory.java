@@ -25,13 +25,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.layout.menubars.MenuBars;
-import org.apache.isis.applib.services.menu.MenuBarsService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+
+import lombok.val;
 
 /**
  * {@link org.apache.isis.viewer.wicket.ui.ComponentFactory} for a {@link org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanel} to represent the
@@ -40,7 +38,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
 
     private final static long serialVersionUID = 1L;
-
+    
     public TertiaryMenuPanelFactory() {
         super(ComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);
     }
@@ -53,7 +51,7 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
         if(!(model instanceof ServiceActionsModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
+        val serviceActionsModel = (ServiceActionsModel) model;
         final DomainServiceLayout.MenuBar menuBar = serviceActionsModel.getMenuBar();
         final boolean applicability = menuBar == DomainServiceLayout.MenuBar.TERTIARY || menuBar == null;
         return appliesIf(applicability);
@@ -61,19 +59,15 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
+        val serviceActionsModel = (ServiceActionsModel) model;
 
-        final MenuBarsService menuBarsService =
-                getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
+        val menuBars = super.getCommonContext().getMenuBarsService().menuBars();
 
-        final MenuBars menuBars = menuBarsService.menuBars();
-
-        final List<CssMenuItem> menuItems = ServiceActionUtil.buildMenu(menuBars, serviceActionsModel);
+        final List<CssMenuItem> menuItems = ServiceActionUtil.buildMenu(
+                super.getCommonContext(), menuBars, serviceActionsModel);
+        
         return new TertiaryActionsPanel(id, menuItems);
     }
 
-    ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
-    }
 
 }

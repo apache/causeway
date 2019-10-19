@@ -23,6 +23,7 @@ import java.util.Objects;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.assertions.IsisAssertException;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -37,10 +38,11 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.Data;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -53,18 +55,18 @@ import lombok.extern.log4j.Log4j2;
 final public class ObjectAdapterContext {
 
     public static ObjectAdapterContext openContext(
+            MetaModelContext mmc,
             AuthenticationSession authenticationSession, 
-            SpecificationLoader specificationLoader, 
             PersistenceSession persistenceSession) {
-        final ObjectAdapterContext objectAdapterContext = 
-                new ObjectAdapterContext(authenticationSession, 
-                        specificationLoader, persistenceSession);
+        
+        val objectAdapterContext = 
+                new ObjectAdapterContext(mmc, authenticationSession, persistenceSession);
         objectAdapterContext.open();
         return objectAdapterContext;
     }
 
     private final PersistenceSession persistenceSession; 
-    private final SpecificationLoader specificationLoader;
+    @Getter private final SpecificationLoader specificationLoader;
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     private final ObjectAdapterContext_ServiceLookup serviceLookupMixin;
@@ -76,11 +78,11 @@ final public class ObjectAdapterContext {
     private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
 
     private ObjectAdapterContext(
+            MetaModelContext mmc,
             AuthenticationSession authenticationSession, 
-            SpecificationLoader specificationLoader, 
             PersistenceSession persistenceSession) {
 
-        val runtimeContext = IsisContext.newManagedObjectContext();
+        val runtimeContext = new RuntimeContextBase(mmc) {};
 
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession, runtimeContext);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
@@ -92,8 +94,8 @@ final public class ObjectAdapterContext {
         this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(runtimeContext);
 
         this.persistenceSession = persistenceSession;
-        this.specificationLoader = specificationLoader;
-        this.serviceInjector = IsisContext.getServiceInjector();
+        this.specificationLoader = mmc.getSpecificationLoader();
+        this.serviceInjector = mmc.getServiceInjector();
 
         this.objectAdapterFactories = new ObjectAdapterContext_Factories(runtimeContext, persistenceSession);
     }

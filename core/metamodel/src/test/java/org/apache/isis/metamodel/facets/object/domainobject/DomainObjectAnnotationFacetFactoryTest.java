@@ -30,9 +30,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -74,6 +72,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     public void setUp() throws Exception {
         _Config.clear();
         facetFactory = new DomainObjectAnnotationFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     @Override
@@ -96,39 +95,24 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
     
     void allowingAuditObjectsToReturn(AuditObjectsConfiguration value) {
-        
-        val config = new IsisConfiguration();
-        
         if(value!=null) {
+            val config = super.metaModelContext.getConfiguration();
             config.getServices().getAudit().setObjects(value);
         }
-        
-        MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(config)
-                .build());
     }
     
     void allowingPublishObjectsToReturn(PublishObjectsConfiguration value) {
-        val config = new IsisConfiguration();
         if(value!=null) {
+            val config = super.metaModelContext.getConfiguration();
             config.getServices().getPublish().setObjects(value);
         }
-        MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(config)
-                .build());
     }
     
     void allowingObjectsEditingToReturn(EditingObjectsConfiguration value) {
-        
-        val config = new IsisConfiguration();
-
         if(value!=null) {
+            val config = super.metaModelContext.getConfiguration();
             config.getObjects().setEditing(value);
         }
-        
-        MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(config)
-                .build());
     }
 
 

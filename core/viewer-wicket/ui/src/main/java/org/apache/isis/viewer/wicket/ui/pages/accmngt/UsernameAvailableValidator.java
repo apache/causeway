@@ -19,33 +19,41 @@
 package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
 import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
 /**
  * Validates that an username is or is not already in use by someone else
  */
-public class UsernameAvailableValidator implements IValidator<String> {
+public class UsernameAvailableValidator extends ValidatorBase<String> {
+
 
     private static final long serialVersionUID = 1L;
-    public static final UsernameAvailableValidator INSTANCE = new UsernameAvailableValidator();
 
-    private UsernameAvailableValidator() {
+    public static UsernameAvailableValidator instance(IsisWebAppCommonContext commonContext) { 
+        return new UsernameAvailableValidator(commonContext);
     }
-
+    
+    private UsernameAvailableValidator(IsisWebAppCommonContext commonContext) {
+        super(commonContext);
+    }
+    
     @Override
     public void validate(final IValidatable<String> validatable) {
 
-        val userRegistrationService = getServiceRegistry().lookupServiceElseFail(UserRegistrationService.class);
-
-        getIsisSessionFactory().doInSession(() -> {
+        val userRegistrationService = super.getCommonContext()
+                .lookupServiceElseFail(UserRegistrationService.class);
+        
+        val isisSessionFactory = super.getCommonContext()
+                .lookupServiceElseFail(IsisSessionFactory.class);
+        
+        isisSessionFactory.doInSession(() -> {
 
             final String username = validatable.getValue();
             boolean usernameExists = userRegistrationService.usernameExists(username);
@@ -57,11 +65,4 @@ public class UsernameAvailableValidator implements IValidator<String> {
 
     }
 
-    ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
-    }
-
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
 }

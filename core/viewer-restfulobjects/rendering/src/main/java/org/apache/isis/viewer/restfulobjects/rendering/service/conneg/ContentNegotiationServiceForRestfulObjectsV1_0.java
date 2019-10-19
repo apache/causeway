@@ -42,7 +42,6 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -61,8 +60,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
-
-import static org.apache.isis.config.internal._Config.getConfiguration;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -318,7 +315,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     private ObjectSpecification elementSpecFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
         final TypeOfFacet typeOfFacet = objectAndActionInvocation.getAction().getFacet(TypeOfFacet.class);
-        return typeOfFacet != null ? typeOfFacet.valueSpec() :  getSpecificationLoader().loadSpecification(Object.class) ;
+        return typeOfFacet != null 
+                ? typeOfFacet.valueSpec() 
+                        : specificationLoader.loadSpecification(Object.class) ;
     }
 
     private Collection<ObjectAdapter> objectAdaptersFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
@@ -415,12 +414,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         return true;
     }
 
-    private SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
-    @Inject
-    IsisConfiguration configuration;
-
+    @Inject protected IsisConfiguration configuration;
+    @Inject protected SpecificationLoader specificationLoader;
 
 }

@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.spec.feature;
 
 import java.util.Comparator;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -36,6 +35,8 @@ import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 /**
  * Provides reflective access to an action or a field on a domain object.
@@ -203,29 +204,16 @@ public interface ObjectMember extends ObjectFeature {
         }
     }
 
-    class Functions {
-
-        private Functions(){}
-        public static Function<ObjectMember, String> getId() {
-            return ObjectMember::getId;
-        }
-
-    }
-
     class Util {
 
         private Util(){}
 
         public static <T extends ObjectMember> Map<String, T> mapById(final Stream<T> members) {
 
-            // fails if there are multiple members with the same id...
-            //            return _Maps.newHashMap(Maps.uniqueIndex(members, ObjectMember.Functions.getId()));
-
-            final Map<String, T> memberById = _Maps.newLinkedHashMap();
+            val memberById = _Maps.<String, T>newLinkedHashMap();
             members.forEach(member->{
-                final String id = Functions.getId().apply(member);
                 // if there are multiple members with same id, just disregard
-                memberById.put(id, member);
+                memberById.put(member.getId(), member);
             });
             return memberById;
         }

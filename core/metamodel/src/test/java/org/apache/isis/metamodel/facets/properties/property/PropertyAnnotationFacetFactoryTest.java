@@ -86,10 +86,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     PropertyAnnotationFacetFactory facetFactory;
     Method propertyMethod;
 
-    @Mock
-    ObjectSpecification mockTypeSpec;
-    @Mock
-    ObjectSpecification mockReturnTypeSpec;
+    @Mock ObjectSpecification mockTypeSpec;
+    @Mock ObjectSpecification mockReturnTypeSpec;
 
     void expectRemoveMethod(final Method actionMethod) {
         context.checking(new Expectations() {{
@@ -165,6 +163,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     public void setUp() throws Exception {
         _Config.clear();
         facetFactory = new PropertyAnnotationFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     @Override

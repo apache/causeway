@@ -19,6 +19,7 @@
 
 package org.apache.isis.metamodel.services.registry;
 
+import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -28,6 +29,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -44,8 +46,7 @@ import lombok.val;
 @DomainService(nature = NatureOfService.DOMAIN)
 public final class ServiceRegistryDefault implements ServiceRegistry {
     
-    //XXX to enforce provisioning order, this is a depends-on relationship! 
-    @SuppressWarnings("unused")
+    // enforces provisioning order (this is a depends-on relationship) 
     @Inject private IsisSystemEnvironment isisSystemEnvironment; 
     
     @Override
@@ -57,7 +58,12 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     public Stream<ManagedBeanAdapter> streamRegisteredBeans() {
         return managedBeansById.get().values().stream();
     }
-
+    
+    @Override
+    public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers) {
+        return isisSystemEnvironment.getIocContainer()
+                .select(type, _Spring.filterQualifiers(qualifiers));
+    }
     
     // -- HELPER
 
@@ -69,7 +75,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
         val filter = IsisBeanTypeRegistry.current();
         val managedBeanAdapterByName = _Maps.<String, ManagedBeanAdapter>newHashMap();
 
-        _Spring.streamAllBeans()
+        isisSystemEnvironment.getIocContainer().streamAllBeans()
         .filter(_NullSafe::isPresent)
         .filter(bean->filter.isManagedBean(bean.getBeanClass())) // do not register unknown sort
         .forEach(bean->{
@@ -79,5 +85,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
         return managedBeanAdapterByName;
     }
+
+
 
 }

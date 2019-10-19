@@ -19,10 +19,6 @@
 
 package org.apache.isis.metamodel.facets.object.callbacks;
 
-import java.util.ArrayList;
-
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
@@ -43,15 +39,13 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
     public void process(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-        val facets = new ArrayList<Facet>();
 
         val method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            facets.add(new CreatedCallbackFacetViaMethod(method, facetHolder));
+            super.addFacet(new CreatedCallbackFacetViaMethod(method, facetHolder));
             processClassContext.removeMethod(method);
         }
         
-        FacetUtil.addFacets(facets);
     }
 
 }

@@ -25,7 +25,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
@@ -90,7 +89,7 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
         final TranslationService translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
         final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassAndNameIdentityString();
-        FacetUtil.addFacet(new DisableForContextFacetViaMethod(disableMethod, translationService, translationContext, facetHolder));
+        super.addFacet(new DisableForContextFacetViaMethod(disableMethod, translationService, translationContext, facetHolder));
     }
 
 }

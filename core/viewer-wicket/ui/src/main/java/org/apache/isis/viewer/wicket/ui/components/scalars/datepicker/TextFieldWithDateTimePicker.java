@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 
 import java.util.Locale;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -32,10 +31,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
@@ -56,7 +53,13 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
     private final DateTimeConfig config;
 
-    public TextFieldWithDateTimePicker(String id, IModel<T> model, Class<T> type, DateConverter<T> converter) {
+    public TextFieldWithDateTimePicker(
+            IsisWebAppCommonContext commonContext, 
+            String id, 
+            IModel<T> model, 
+            Class<T> type, 
+            DateConverter<T> converter) {
+        
         super(id, model, type);
 
         DateTimeConfig config = new DateTimeConfig();
@@ -83,8 +86,8 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
         // seems not to do anything...
         //config.allowKeyboardNavigation(true);
 
-        final String datePickerMinDate = getConfiguration().getViewer().getWicket().getDatePicker().getMinDate();
-        final String datePickerMaxDate = getConfiguration().getViewer().getWicket().getDatePicker().getMaxDate();
+        final String datePickerMinDate = commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMinDate();
+        final String datePickerMaxDate = commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMaxDate();
 
         config.minDate(datePickerMinDate);
         config.maxDate(datePickerMaxDate);
@@ -151,16 +154,16 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
         return $(this).chain("datetimepicker", config).get();
     }
 
-    IsisConfigurationLegacy getConfigurationLegacy() {
-        return IsisContext.getConfigurationLegacy();
-    }
-
-    IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
-
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
+//    IsisConfigurationLegacy getConfigurationLegacy() {
+//        return IsisContext.getConfigurationLegacy();
+//    }
+//
+//    IsisConfiguration getConfiguration() {
+//        return IsisContext.getConfiguration();
+//    }
+//
+//    IsisSessionFactory getIsisSessionFactory() {
+//        return IsisContext.getSessionFactory();
+//    }
 
 }

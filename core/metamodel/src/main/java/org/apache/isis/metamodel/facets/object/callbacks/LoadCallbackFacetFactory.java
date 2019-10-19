@@ -20,10 +20,7 @@
 package org.apache.isis.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
@@ -46,22 +43,20 @@ public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
     public void process(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-        val facets = new ArrayList<Facet>();
 
         Method method = null;
         method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, LOADING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
-            facets.add(new LoadingCallbackFacetViaMethod(method, facetHolder));
+            super.addFacet(new LoadingCallbackFacetViaMethod(method, facetHolder));
         }
 
         method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, LOADED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
-            facets.add(new LoadedCallbackFacetViaMethod(method, facetHolder));
+            super.addFacet(new LoadedCallbackFacetViaMethod(method, facetHolder));
         }
 
-        FacetUtil.addFacets(facets);
     }
 
 }

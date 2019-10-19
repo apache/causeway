@@ -19,31 +19,22 @@
 
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
  */
-public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutorContext> extends PanelAbstract<T> {
+public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutorContext> 
+extends PanelAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
 
     public PromptFormPanelAbstract(final String id, final T model) {
         super(id, model);
-    }
-
-    // -- dependencies
-    @Inject WicketViewerSettings settings;
-    @Override
-    protected WicketViewerSettings getSettings() {
-        return settings;
     }
 
 

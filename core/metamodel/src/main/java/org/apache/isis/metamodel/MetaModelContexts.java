@@ -18,19 +18,24 @@
  */
 package org.apache.isis.metamodel;
 
+import javax.inject.Singleton;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+
 /**
  * 
  * @since 2.0
  *
  */
-public final class MetaModelContexts {
+@Configuration
+public class MetaModelContexts {
 
-    final static MetaModelContext usingCDI() {
-        return new MetaModelContext_usingCDI();
-    }
-
-    final static MetaModelContext usingSpring() {
-        return new MetaModelContext_usingSpring();
+    @Bean @Singleton
+    public MetaModelContext metaModelContext(IsisSystemEnvironment systemEnvironment) {
+        return new MetaModelContext_usingIoc(systemEnvironment.getIocContainer());
     }
 
 }

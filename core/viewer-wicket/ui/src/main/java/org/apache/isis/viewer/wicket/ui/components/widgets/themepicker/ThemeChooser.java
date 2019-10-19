@@ -18,7 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
-import org.apache.isis.config.IsisConfiguration;
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -30,8 +31,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import de.agilecoders.wicket.core.Bootstrap;
@@ -46,6 +46,7 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
 import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitTheme;
 import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
+import lombok.Getter;
 
 /**
  * A panel used as a Navbar item to change the application theme/skin
@@ -147,15 +148,7 @@ public class ThemeChooser extends Panel {
         setVisible(shouldShow);
     }
 
-    private IsisWicketThemeSupport getThemeSupport() {
-        return IsisWicketThemeSupport.getInstance();
-    }
-
-    private IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
-
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
+    @Inject @Getter private IsisWicketThemeSupport themeSupport;
+    @Inject @Getter private IsisConfiguration configuration;
+    @Inject @Getter private IsisSessionFactory isisSessionFactory;
 }

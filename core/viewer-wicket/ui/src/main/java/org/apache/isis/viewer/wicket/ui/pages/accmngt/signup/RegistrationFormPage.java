@@ -27,7 +27,6 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 
 /**
  * A page for self-registering a new user after confirmation of her email account.

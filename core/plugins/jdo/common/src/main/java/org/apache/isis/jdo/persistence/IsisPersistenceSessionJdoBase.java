@@ -35,10 +35,10 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceQueryFactory;
 import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -57,8 +57,9 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     protected final SpecificationLoader specificationLoader;
     protected final AuthenticationSession authenticationSession;
 
-    @Getter 
-    protected final ServiceInjector serviceInjector;
+    @Getter protected final MetaModelContext metaModelContext;
+    @Getter protected final ServiceInjector serviceInjector;
+    
     protected final ServiceRegistry serviceRegistry;
 
     protected final CommandContext commandContext;
@@ -81,7 +82,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
      * Used to create the {@link #persistenceManager} when {@link #open()}ed.
      */
     protected final PersistenceManagerFactory jdoPersistenceManagerFactory;
-
+    
     IsisTransactionManagerJdo transactionManager;
 
     /**
@@ -101,6 +102,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
      * persisted objects and persist changes to the object that are saved.
      */
     protected IsisPersistenceSessionJdoBase(
+            final MetaModelContext metaModelContext,
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledStateHolder fixturesInstalledStateHolder) {
@@ -109,14 +111,15 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
             log.debug("creating {}", this);
         }
 
-        this.serviceInjector = IsisContext.getServiceInjector();
-        this.serviceRegistry = IsisContext.getServiceRegistry();
+        this.metaModelContext = metaModelContext;
+        this.serviceInjector = metaModelContext.getServiceInjector();
+        this.serviceRegistry = metaModelContext.getServiceRegistry();
         this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
         this.fixturesInstalledStateHolder = fixturesInstalledStateHolder;
 
         // injected
-        this.configuration = IsisContext.getConfiguration();
-        this.specificationLoader = IsisContext.getSpecificationLoader();
+        this.configuration = metaModelContext.getConfiguration();
+        this.specificationLoader = metaModelContext.getSpecificationLoader();
         this.authenticationSession = authenticationSession;
 
         this.commandContext = lookupService(CommandContext.class);
@@ -132,7 +135,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.persistenceQueryFactory = PersistenceQueryFactory.of(
                 obj->this.getObjectAdapterProvider().adapterFor(obj), 
                 this.specificationLoader);
-        this.transactionManager = new IsisTransactionManagerJdo(this);
+        this.transactionManager = new IsisTransactionManagerJdo(serviceRegistry, this);
 
         this.state = State.NOT_INITIALIZED;
     }

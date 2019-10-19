@@ -21,16 +21,18 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
 public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
 
     private static final long serialVersionUID = 1L;
 
-    public BookmarkableModel() {
-        super();
+    public BookmarkableModel(IsisWebAppCommonContext commonContext) {
+        super(commonContext);
     }
 
-    public BookmarkableModel(T t) {
-        super(t);
+    public BookmarkableModel(IsisWebAppCommonContext commonContext, T t) {
+        super(commonContext, t);
     }
 
 

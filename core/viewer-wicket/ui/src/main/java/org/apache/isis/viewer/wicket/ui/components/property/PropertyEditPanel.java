@@ -27,7 +27,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -106,7 +105,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
             ObjectAdapter targetAdapter = scalarModel.getParentEntityModel().load();
 
             // page redirect/handling
-            final EntityPage entityPage = new EntityPage(targetAdapter, null);
+            final EntityPage entityPage = new EntityPage(super.getCommonContext(), targetAdapter, null);
             setResponsePage(entityPage);
 
             getMessageBroker().addWarning(ex.getMessage());
@@ -115,6 +114,8 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
     private WebMarkupContainer addHeader() {
         WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void onConfigure() {
                 super.onConfigure();
@@ -125,15 +126,6 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
         addOrReplace(header);
         return header;
     }
-
-
-
-    ///////////////////////////////////////////////////////
-    // Dependencies (from context)
-    ///////////////////////////////////////////////////////
-
-    protected MessageBroker getMessageBroker() {
-        return getAuthenticationSession().getMessageBroker();
-    }
+ 
 
 }

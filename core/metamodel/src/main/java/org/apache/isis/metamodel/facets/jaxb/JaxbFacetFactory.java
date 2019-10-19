@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
@@ -79,7 +78,7 @@ implements MetaModelRefiner {
         final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
                 annotation.value());
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     private void processXmlAccessorTypeFacet(final ProcessClassContext processClassContext) {
@@ -94,7 +93,7 @@ implements MetaModelRefiner {
         final XmlAccessorTypeFacetDefault facet =
                 new XmlAccessorTypeFacetDefault(holder, annotation.value());
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     // -- METHOD CONTEXT
@@ -127,7 +126,7 @@ implements MetaModelRefiner {
         final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
                 annotation.value());
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     private void processXmlTransient(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
@@ -141,7 +140,7 @@ implements MetaModelRefiner {
         final FacetHolder holder = processMethodContext.getFacetHolder();
         final XmlTransientFacet facet = new XmlTransientFacetDefault(holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     // --

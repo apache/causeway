@@ -21,7 +21,6 @@ package org.apache.isis.runtime.system.session;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
@@ -38,6 +37,7 @@ public class IsisRequestCycle {
 
     // -- SUPPORTING ISIS TRANSACTION FILTER FOR RESTFUL OBJECTS ...
 
+    private final IsisSessionFactory isisSessionFactory;
     private final TransactionTemplate transactionTemplate;
     private TransactionStatus txStatus;
 
@@ -45,7 +45,6 @@ public class IsisRequestCycle {
 
     public void onBeginRequest(AuthenticationSession authenticationSession) {
 
-        val isisSessionFactory = IsisContext.getSessionFactory();
         isisSessionFactory.openSession(authenticationSession);
 
         txStatus = transactionTemplate.getTransactionManager().getTransaction(null);
@@ -74,7 +73,6 @@ public class IsisRequestCycle {
             transactionTemplate.getTransactionManager().commit(txStatus);
 
         } finally {
-            val isisSessionFactory = IsisContext.getSessionFactory();
             isisSessionFactory.closeSession();
         }
 

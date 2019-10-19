@@ -28,8 +28,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.jquery.util.Strings2;
@@ -38,7 +36,7 @@ public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SUBSCRIBING_LINK = "subscribingLink";
+//    private static final String ID_SUBSCRIBING_LINK = "subscribingLink";
     private static final String ID_COPY_LINK = "copyLink";
     private static final String ID_SIMPLE_CLIPBOARD_MODAL_WINDOW = "simpleClipboardModalWindow";
 
@@ -122,14 +120,6 @@ public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
     private void addSimpleClipboardModalWindow() {
         simpleClipboardModalWindow = SimpleClipboardModalWindow.newModalWindow(ID_SIMPLE_CLIPBOARD_MODAL_WINDOW);
         addOrReplace(simpleClipboardModalWindow);
-    }
-
-
-    // //////////////////////////////////////
-
-    protected PageClassRegistry getPageClassRegistry() {
-        final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor) getApplication();
-        return pcra.getPageClassRegistry();
     }
 
 

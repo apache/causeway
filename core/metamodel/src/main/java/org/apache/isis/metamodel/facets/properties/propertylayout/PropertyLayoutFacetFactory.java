@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -66,7 +65,7 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
     void processCssClass(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
         val cssClassFacet = CssClassFacetForPropertyLayoutAnnotation
                 .create(propertyLayout, holder);
-        FacetUtil.addFacet(cssClassFacet);
+        super.addFacet(cssClassFacet);
     }
 
     void processDescribedAs(
@@ -74,7 +73,7 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
             final Optional<PropertyLayout> propertyLayout) {
         
         val describedAsFacet = DescribedAsFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        FacetUtil.addFacet(describedAsFacet);
+        super.addFacet(describedAsFacet);
 
     }
 
@@ -90,29 +89,29 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
         val promptStyleFacet = PromptStyleFacetForPropertyLayoutAnnotation
                 .create(propertyLayout, getConfiguration(), holder);
 
-        FacetUtil.addFacet(promptStyleFacet);
+        super.addFacet(promptStyleFacet);
     }
 
     void processHidden(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
         val hiddenFacet = HiddenFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        FacetUtil.addFacet(hiddenFacet);
+        super.addFacet(hiddenFacet);
     }
 
     void processLabelAt(
             final FacetHolder holder,
             final Optional<PropertyLayout> propertyLayout) {
         val labelAtFacet = LabelAtFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        FacetUtil.addFacet(labelAtFacet);
+        super.addFacet(labelAtFacet);
     }
 
     void processMultiLine(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
         val multiLineFacet = MultiLineFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        FacetUtil.addFacet(multiLineFacet);
+        super.addFacet(multiLineFacet);
     }
 
     void processNamed(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
         val namedFacet = NamedFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        FacetUtil.addFacet(namedFacet);
+        super.addFacet(namedFacet);
     }
 
     void processRenderedAdjusted(
@@ -120,7 +119,7 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
             final Optional<PropertyLayout> propertyLayout) {
         val renderedAdjustedFacet = RenderedAdjustedFacetForPropertyLayoutAnnotation
                 .create(propertyLayout, holder);
-        FacetUtil.addFacet(renderedAdjustedFacet);
+        super.addFacet(renderedAdjustedFacet);
     }
 
     void processTypicalLength(
@@ -128,14 +127,14 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
             final Optional<PropertyLayout> propertyLayout) {
         val typicalLengthFacet = TypicalLengthFacetForPropertyLayoutAnnotation
                 .create(propertyLayout, holder);
-        FacetUtil.addFacet(typicalLengthFacet);
+        super.addFacet(typicalLengthFacet);
     }
 
     void processUnchanging(
             final FacetHolder holder,
             final Optional<PropertyLayout> propertyLayout) {
         val unchangingFacet = UnchangingFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
-        FacetUtil.addFacet(unchangingFacet);
+        super.addFacet(unchangingFacet);
     }
 
     @Override
@@ -143,42 +142,42 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
 
         // cssClass
         CssClassFacet cssClassFacet = null;
-        FacetUtil.addFacet(cssClassFacet);
+        super.addFacet(cssClassFacet);
 
 
         // describedAs
         DescribedAsFacet describedAsFacet = null;
-        FacetUtil.addFacet(describedAsFacet);
+        super.addFacet(describedAsFacet);
 
 
         // hidden
         HiddenFacet hiddenFacet = null;
-        FacetUtil.addFacet(hiddenFacet);
+        super.addFacet(hiddenFacet);
 
 
         // labelAt
         LabelAtFacet labelAtFacet = null;
-        FacetUtil.addFacet(labelAtFacet);
+        super.addFacet(labelAtFacet);
 
 
         // multiLine
         MultiLineFacet multiLineFacet = null;
-        FacetUtil.addFacet(multiLineFacet);
+        super.addFacet(multiLineFacet);
 
 
         // named
         NamedFacet namedFacet = null;
-        FacetUtil.addFacet(namedFacet);
+        super.addFacet(namedFacet);
 
 
         // renderedAsDayBefore
         RenderedAdjustedFacet renderedAdjustedFacet = null;
-        FacetUtil.addFacet(renderedAdjustedFacet);
+        super.addFacet(renderedAdjustedFacet);
 
 
         // typicalLength
         TypicalLengthFacet typicalLengthFacet = null;
-        FacetUtil.addFacet(typicalLengthFacet);
+        super.addFacet(typicalLengthFacet);
 
     }
 

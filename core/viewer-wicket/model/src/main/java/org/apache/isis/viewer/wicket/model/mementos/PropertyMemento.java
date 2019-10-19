@@ -25,7 +25,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 import lombok.val;
@@ -34,9 +33,9 @@ public class PropertyMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static ObjectSpecification owningSpecFor(
-            final OneToOneAssociation property) {
-        val specificationLoader = IsisContext.getSpecificationLoader();
+    private static ObjectSpecification owningSpecFor(OneToOneAssociation property) {
+        
+        val specificationLoader = property.getMetaModelContext().getSpecificationLoader();
         return specificationLoader.lookupBySpecIdElseLoad(
                 ObjectSpecId.of(property.getIdentifier().toClassIdentityString()));
     }

@@ -52,7 +52,8 @@ public class OneToManyAssociationDefault
 extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     public OneToManyAssociationDefault(final FacetedMethod facetedMethod) {
-        this(facetedMethod, specificationOf(facetedMethod.getType()));
+        this(facetedMethod, facetedMethod.getMetaModelContext()
+                .getSpecificationLoader().loadSpecification(facetedMethod.getType()));
     }
 
     protected OneToManyAssociationDefault(

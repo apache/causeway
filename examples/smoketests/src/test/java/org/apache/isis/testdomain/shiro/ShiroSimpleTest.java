@@ -31,20 +31,27 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.testdomain.Smoketest;
 
 import lombok.val;
 
 @Smoketest
 class ShiroSimpleTest extends AbstractShiroTest {
+    
+    
 
     @BeforeAll
     static void beforeClass() {
+        
+        val serviceInjector = Mockito.mock(ServiceInjector.class);
+        
         //0.  Build and set the SecurityManager used to build Subject instances used in your tests
         //    This typically only needs to be done once per class if your shiro.ini doesn't change,
         //    otherwise, you'll need to do this logic in each test that is different
-        setSecurityManager("classpath:shiro-simple.ini");
+        setSecurityManager(serviceInjector, "classpath:shiro-simple.ini");
     }
 
     @AfterAll

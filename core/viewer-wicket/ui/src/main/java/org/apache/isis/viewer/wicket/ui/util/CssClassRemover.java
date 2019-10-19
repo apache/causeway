@@ -19,16 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import java.util.Set;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
+import java.util.stream.Collectors;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Implementation of {@link AttributeAppender} that appends the provided CSS
@@ -46,9 +43,9 @@ public class CssClassRemover extends AttributeModifier {
     protected String newValue(String currentValue, String valueToRemove) {
         if (currentValue == null) return "";
 
-        Set<String> classes = _Sets.newHashSet(Splitter.on(" ").split(currentValue));
-        classes.remove(valueToRemove);
-        return Joiner.on(" ").join(classes);
+        return _Strings.splitThenStream(currentValue, " ")
+        .filter(x->x.equals(valueToRemove))
+        .collect(Collectors.joining(" "));
     }
 
 }

@@ -30,12 +30,12 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -45,7 +45,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
  *     <a href="http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs3">Bootsnip</a>
  * </p>
  */
-public class TertiaryActionsPanel extends Panel {
+public class TertiaryActionsPanel extends PanelBase {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,7 +62,8 @@ public class TertiaryActionsPanel extends Panel {
                 if (subMenuItem.hasSubMenuItems()) {
                     addFolderItem(subMenuItem, listItem);
                 } else {
-                    ServiceActionUtil.addLeafItem(subMenuItem, listItem, TertiaryActionsPanel.this);
+                    ServiceActionUtil.addLeafItem(
+                            TertiaryActionsPanel.super.commonContext, subMenuItem, listItem, TertiaryActionsPanel.this);
                 }
             }
         };
@@ -112,7 +113,7 @@ public class TertiaryActionsPanel extends Panel {
 
     private void addFolderItem(CssMenuItem subMenuItem, ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = TertiaryActionsPanel.this;
-        ServiceActionUtil.addFolderItem(subMenuItem, listItem, parent, ServiceActionUtil.SeparatorStrategy.WITHOUT_SEPARATORS);
+        ServiceActionUtil.addFolderItem(super.commonContext, subMenuItem, listItem, parent, ServiceActionUtil.SeparatorStrategy.WITHOUT_SEPARATORS);
     }
 
     @Override

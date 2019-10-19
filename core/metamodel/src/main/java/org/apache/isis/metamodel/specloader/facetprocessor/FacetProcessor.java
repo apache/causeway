@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -62,7 +61,7 @@ import lombok.val;
 public class FacetProcessor {
 
     @NonNull private final ProgrammingModel programmingModel;
-    private ServiceInjector serviceInjector;
+    @NonNull private final MetaModelContext metaModelContext;
 
     /**
      * Class<FacetFactory> => FacetFactory
@@ -128,8 +127,6 @@ public class FacetProcessor {
     
     public void init() {
         cleanUp(); 
-        
-        serviceInjector = MetaModelContext.current().getServiceInjector();
         programmingModel.streamFactories()
         .forEach(this::registerFactory);
     }
@@ -141,7 +138,6 @@ public class FacetProcessor {
     private void cleanUp() {
         clearCaches();
         factories.clear();
-        serviceInjector = null;
         factoryByFactoryType.clear();
     }
     
@@ -156,7 +152,7 @@ public class FacetProcessor {
      * processing.
      */
     public void injectDependenciesInto(FacetFactory factory) {
-        serviceInjector.injectServicesInto(factory);
+        metaModelContext.getServiceInjector().injectServicesInto(factory);
     }
 
     /**
@@ -343,6 +339,8 @@ public class FacetProcessor {
             FeatureType featureType, 
             boolean isMixinMain) {
         
+        facetedMethod.setMetaModelContext(metaModelContext);
+        
         val processMethodContext =
                 new ProcessMethodContext(
                         cls, 
@@ -356,6 +354,8 @@ public class FacetProcessor {
 
 
     public void processMemberOrder(ObjectMember facetHolder) {
+        
+        //((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);
         
         val processMemberContext =
                 new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(facetHolder);
@@ -389,6 +389,8 @@ public class FacetProcessor {
             MethodRemover methodRemover,
             FacetedMethodParameter facetedMethodParameter) {
         
+        facetedMethodParameter.setMetaModelContext(metaModelContext);
+        
         for (val featureType : FeatureType.PARAMETERS_ONLY) {
             processParams(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter, featureType);
         }
@@ -401,6 +403,8 @@ public class FacetProcessor {
             MethodRemover methodRemover,
             FacetedMethodParameter facetedMethodParameter,
             FeatureType featureType) {
+        
+        facetedMethodParameter.setMetaModelContext(metaModelContext);
         
         val processParameterContext =
                 new ProcessParameterContext(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter);

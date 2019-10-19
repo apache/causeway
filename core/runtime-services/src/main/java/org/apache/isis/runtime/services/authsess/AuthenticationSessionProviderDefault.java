@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.metamodel.services.user.UserServiceDefault;
+import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
@@ -33,6 +34,9 @@ import org.apache.isis.security.authentication.standard.SimpleSession;
 @Service
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 
+    @Inject protected UserServiceDefault userServiceDefault;
+    @Inject protected IsisSessionFactory isisSessionFactory;
+    
     /**
      * This class and {@link UserServiceDefault} both call each other, so the code below is carefully
      * ordered to ensure no infinite loop.
@@ -54,10 +58,10 @@ public class AuthenticationSessionProviderDefault implements AuthenticationSessi
         }
 
         // otherwise...
-        return isisSessionFactory.getCurrentSession().getAuthenticationSession();
+        return IsisSession.current()
+                .map(IsisSession::getAuthenticationSession)
+                .orElse(null);
     }
-
-    @Inject UserServiceDefault  userServiceDefault;
-    @Inject IsisSessionFactory isisSessionFactory;
+    
 
 }

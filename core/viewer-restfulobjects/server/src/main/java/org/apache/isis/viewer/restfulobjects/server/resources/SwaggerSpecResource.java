@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -30,12 +31,17 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.webapp.IsisWebAppUtils;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Path("/swagger")
 public class SwaggerSpecResource {
 
     @Context HttpHeaders httpHeaders;
+    @Context HttpServletRequest httpServletRequest;
 
     @Path("/private")
     @GET
@@ -68,8 +74,16 @@ public class SwaggerSpecResource {
     }
 
     private String swagger(final SwaggerService.Visibility visibility) {
-        final SwaggerService.Format format = deriveFrom(httpHeaders);
-        String spec = IsisContext.getSessionFactory().doInSession(new MyCallable(visibility, format));
+        
+        val servletContext = httpServletRequest.getServletContext();
+        
+        val swaggerService = IsisWebAppUtils.getManagedBean(SwaggerService.class, servletContext);
+        val isisSessionFactory = IsisWebAppUtils.getManagedBean(IsisSessionFactory.class, servletContext);
+        
+        val format = deriveFrom(httpHeaders);
+        val callable = new MyCallable(swaggerService, visibility, format);
+        
+        val spec = isisSessionFactory.doInSession(callable);
         return spec;
     }
 
@@ -91,24 +105,15 @@ public class SwaggerSpecResource {
         return SwaggerService.Format.JSON;
     }
 
+    @RequiredArgsConstructor
+    static class MyCallable implements Callable<String> {
 
-    class MyCallable implements Callable<String> {
-
-        SwaggerService swaggerService;
-
+        private final SwaggerService swaggerService;
         private final SwaggerService.Visibility visibility;
         private final SwaggerService.Format format;
 
-        public MyCallable(
-                final SwaggerService.Visibility visibility,
-                final SwaggerService.Format format) {
-            this.visibility = visibility;
-            this.format = format;
-        }
-
         @Override
         public String call() throws Exception {
-            swaggerService = IsisContext.getServiceRegistry().lookupServiceElseFail(SwaggerService.class);
             return swaggerService.generateSwaggerSpec(visibility, format);
         }
 

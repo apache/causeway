@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Reduction;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.val;
@@ -53,13 +52,7 @@ public interface ServiceRegistry {
      * @return non-null
      * 
      */
-    default public <T> Bin<T> select(
-            final Class<T> type, Annotation[] qualifiers){
-
-        //CDI variant, just keep comment as a reference
-        //return _CDI.select(type, _CDI.filterQualifiers(qualifiers)); 
-        return _Spring.select(type, _Spring.filterQualifiers(qualifiers));
-    }
+    public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers);
 
     /**
      * Obtains a Bin container containing any matching instances for the given required type. 

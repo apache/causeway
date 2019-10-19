@@ -18,7 +18,6 @@ package org.apache.isis.metamodel.facets.object.grid;
 
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 
@@ -36,7 +35,7 @@ public class GridFacetFactory extends FacetFactoryAbstract {
             return;
         }
         val facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(GridFacetDefault.create(facetHolder, gridService.get()));
+        super.addFacet(GridFacetDefault.create(facetHolder, gridService.get()));
     }
     
     private final _Lazy<GridService> gridService = _Lazy.threadSafe(()->

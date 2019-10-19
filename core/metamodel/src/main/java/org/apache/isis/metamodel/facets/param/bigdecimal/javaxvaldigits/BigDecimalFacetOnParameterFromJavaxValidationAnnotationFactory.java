@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import javax.validation.constraints.Digits;
 
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
@@ -43,7 +42,7 @@ public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory exte
 
         processParameterContext.synthesizeOnParameter(Digits.class)
         .ifPresent(digits->{
-            FacetUtil.addFacet(create(digits, processParameterContext.getFacetHolder()));
+            super.addFacet(create(digits, processParameterContext.getFacetHolder()));
         });
         
     }

@@ -37,15 +37,14 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.runtime.system.SystemConstants;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
@@ -59,9 +58,10 @@ public final class ServiceActionUtil {
     private ServiceActionUtil(){}
 
     static void addLeafItem(
-            final CssMenuItem menuItem,
-            final ListItem<CssMenuItem> listItem,
-            final MarkupContainer parent) {
+            IsisWebAppCommonContext commonContext, 
+            CssMenuItem menuItem,
+            ListItem<CssMenuItem> listItem,
+            MarkupContainer parent) {
 
         Fragment leafItem;
         if (!menuItem.isSeparator()) {
@@ -88,7 +88,7 @@ public final class ServiceActionUtil {
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
                 if (menuItem.requiresImmediateConfirmation()) {
-                    addConfirmationDialog(subMenuItemLink);
+                    addConfirmationDialog(commonContext, subMenuItemLink);
                 }
 
             }
@@ -162,10 +162,11 @@ public final class ServiceActionUtil {
     }
 
     static void addFolderItem(
-            final CssMenuItem subMenuItem,
-            final ListItem<CssMenuItem> listItem,
-            final MarkupContainer parent,
-            final SeparatorStrategy separatorStrategy) {
+            IsisWebAppCommonContext commonContext,
+            CssMenuItem subMenuItem,
+            ListItem<CssMenuItem> listItem,
+            MarkupContainer parent,
+            SeparatorStrategy separatorStrategy) {
 
         listItem.add(new CssClassAppender("dropdown-submenu"));
 
@@ -183,9 +184,9 @@ public final class ServiceActionUtil {
                 CssMenuItem subMenuItem = listItem.getModelObject();
 
                 if (subMenuItem.hasSubMenuItems()) {
-                    addFolderItem(subMenuItem, listItem, parent, SeparatorStrategy.WITHOUT_SEPARATORS);
+                    addFolderItem(commonContext, subMenuItem, listItem, parent, SeparatorStrategy.WITHOUT_SEPARATORS);
                 } else {
-                    addLeafItem(subMenuItem, listItem, parent);
+                    addLeafItem(commonContext, subMenuItem, listItem, parent);
                 }
             }
         };
@@ -193,15 +194,15 @@ public final class ServiceActionUtil {
     }
 
     public static List<CssMenuItem> buildMenu(
-            final MenuBars menuBars,
-            final ServiceActionsModel serviceActionsModel) {
+            IsisWebAppCommonContext commonContext,
+            MenuBars menuBars,
+            ServiceActionsModel serviceActionsModel) {
 
         // TODO: remove hard-coded dependency on BS3
         final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(serviceActionsModel.getMenuBar());
 
         // we no longer use ServiceActionsModel#getObject() because the model only holds the services for the
         // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
-        val metaModelContext = MetaModelContext.current();
 
         final List<CssMenuItem> menuItems = _Lists.newArrayList();
         for (final BS3Menu menu : menuBar.getMenus()) {
@@ -215,12 +216,12 @@ public final class ServiceActionUtil {
                 for (final ServiceActionLayoutData actionLayoutData : menuSection.getServiceActions()) {
                     val serviceSpecId = actionLayoutData.getObjectType();
 
-                    val serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceSpecId);
+                    val serviceAdapter = commonContext.lookupServiceAdapterById(serviceSpecId);
                     if(serviceAdapter == null) {
                         // service not recognized, presumably the menu layout is out of sync with actual configured modules
                         continue;
                     }
-                    final EntityModel entityModel = new EntityModel(serviceAdapter);
+                    final EntityModel entityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
                     final ObjectAction objectAction = serviceAdapter.getSpecification()
                             .getObjectAction(actionLayoutData.getId());
                     if(objectAction == null) {
@@ -251,11 +252,10 @@ public final class ServiceActionUtil {
     }
 
 
-    private static void addConfirmationDialog(
-            final Component component) {
+    private static void addConfirmationDialog(IsisWebAppCommonContext commonContext, Component component) {
 
         val translationService =
-                IsisContext.getServiceRegistry().lookupServiceElseFail(TranslationService.class);
+                commonContext.lookupServiceElseFail(TranslationService.class);
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 

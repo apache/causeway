@@ -18,13 +18,15 @@
  */
 package org.apache.isis.runtime.services.xmlsnapshot;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 /**
  * This service allows an XML document to be generated capturing the data of a root entity and specified related
@@ -37,12 +39,14 @@ import org.apache.isis.runtime.system.context.IsisContext;
  */
 @Service
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
+    
+    @Inject private SpecificationLoader specificationLoader;
 
     static class XmlSnapshotServiceDefaultBuilder implements XmlSnapshotService.Builder{
 
         private final XmlSnapshotBuilder builder;
-        public XmlSnapshotServiceDefaultBuilder(final Object domainObject) {
-            builder = new XmlSnapshotBuilder(domainObject);
+        public XmlSnapshotServiceDefaultBuilder(SpecificationLoader specificationLoader, Object domainObject) {
+            builder = new XmlSnapshotBuilder(specificationLoader, domainObject);
         }
 
         @Override
@@ -67,7 +71,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
      */
     @Override
     public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) {
-        final ObjectAdapter adapter = IsisContext.pojoToAdapter().apply(domainObject);
+        final ManagedObject adapter = ManagedObject.of(specificationLoader::loadSpecification, domainObject);
         return new XmlSnapshot(adapter);
     }
 
@@ -78,7 +82,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
      */
     @Override
     public Builder builderFor(final Object domainObject) {
-        return new XmlSnapshotServiceDefaultBuilder(domainObject);
+        return new XmlSnapshotServiceDefaultBuilder(specificationLoader, domainObject);
     }
 
 

@@ -22,14 +22,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Maps;
-
 import org.apache.wicket.Session;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -91,7 +90,7 @@ public class HintStoreUsingWicketSession implements HintStore {
         LinkedHashMap<String, String> hints =
                 (LinkedHashMap<String, String>) Session.get().getAttribute(sessionAttribute);
         if(hints == null) {
-            hints = Maps.newLinkedHashMap();
+            hints = _Maps.newLinkedHashMap();
             Session.get().setAttribute(sessionAttribute, hints);
         }
         return hints;

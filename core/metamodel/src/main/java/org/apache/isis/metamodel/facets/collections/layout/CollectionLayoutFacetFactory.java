@@ -19,7 +19,6 @@
 package org.apache.isis.metamodel.facets.collections.layout;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -49,39 +48,39 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
         // cssClass
         CssClassFacet cssClassFacet = CssClassFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
-        FacetUtil.addFacet(cssClassFacet);
+        super.addFacet(cssClassFacet);
 
 
         // describedAs
         DescribedAsFacet describedAsFacet =
                 DescribedAsFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
-        FacetUtil.addFacet(describedAsFacet);
+        super.addFacet(describedAsFacet);
 
 
         // hidden
         HiddenFacet hiddenFacet = HiddenFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
-        FacetUtil.addFacet(hiddenFacet);
+        super.addFacet(hiddenFacet);
 
 
         // defaultView
         DefaultViewFacet defaultViewFacet =
                 DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, getConfiguration(), facetHolder);
-        FacetUtil.addFacet(defaultViewFacet);
+        super.addFacet(defaultViewFacet);
 
 
         // named
         NamedFacet namedFacet = NamedFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
-        FacetUtil.addFacet(namedFacet);
+        super.addFacet(namedFacet);
 
 
         // paged
         PagedFacet pagedFacet = PagedFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
-        FacetUtil.addFacet(pagedFacet);
+        super.addFacet(pagedFacet);
 
 
         // sortedBy
         SortedByFacet sortedByFacet = SortedByFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
-        FacetUtil.addFacet(sortedByFacet);
+        super.addFacet(sortedByFacet);
 
     }
 
@@ -90,32 +89,32 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
         // cssClass
         CssClassFacet cssClassFacet = null;
-        FacetUtil.addFacet(cssClassFacet);
+        super.addFacet(cssClassFacet);
 
 
         // describedAs
         DescribedAsFacet describedAsFacet = null;
-        FacetUtil.addFacet(describedAsFacet);
+        super.addFacet(describedAsFacet);
 
 
         // hidden
         HiddenFacet hiddenFacet = null;
-        FacetUtil.addFacet(hiddenFacet);
+        super.addFacet(hiddenFacet);
 
 
         // named
         NamedFacet namedFacet = null;
-        FacetUtil.addFacet(namedFacet);
+        super.addFacet(namedFacet);
 
 
         // paged
         PagedFacet pagedFacet = null;
-        FacetUtil.addFacet(pagedFacet);
+        super.addFacet(pagedFacet);
 
 
         // sortedBy
         SortedByFacet sortedByFacet = null;
-        FacetUtil.addFacet(sortedByFacet);
+        super.addFacet(sortedByFacet);
 
 
     }

@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.param.defaults.fromtype;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacet;
@@ -53,7 +52,7 @@ public class ActionParameterDefaultFacetDerivedFromTypeFactory extends FacetFact
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            FacetUtil.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
+            super.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
         }
     }
 

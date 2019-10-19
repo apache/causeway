@@ -19,12 +19,10 @@
 package org.apache.isis.viewer.wicket.ui.components.layout.bs3.col;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -170,15 +168,16 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
 
         // tab groups
         final List<BS3TabGroup> tabGroupsWithNonEmptyTabs =
-                FluentIterable.from(bs3Col.getTabGroups())
+                _NullSafe.stream(bs3Col.getTabGroups())
                 .filter(new Predicate<BS3TabGroup>() {
-                    @Override public boolean apply(@Nullable final BS3TabGroup bs3TabGroup) {
+                    @Override public boolean test(@Nullable final BS3TabGroup bs3TabGroup) {
                         final List<BS3Tab> bs3TabsWithRows = _NullSafe.stream(bs3TabGroup.getTabs())
                                 .filter(BS3Tab.Predicates.notEmpty())
                                 .collect(Collectors.toList());
                         return !bs3TabsWithRows.isEmpty();
                     }
-                }).toList();
+                })
+                .collect(Collectors.toList());
         if(!tabGroupsWithNonEmptyTabs.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent tabGroupRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_TAB_GROUPS);
@@ -221,12 +220,14 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
 
 
         // fieldsets
-        final List<FieldSet> fieldSetsWithProperties = FluentIterable.from(bs3Col.getFieldSets())
+        final List<FieldSet> fieldSetsWithProperties = 
+                _NullSafe.stream(bs3Col.getFieldSets())
                 .filter(new Predicate<FieldSet>() {
-                    @Override public boolean apply(@Nullable final FieldSet fieldSet) {
+                    @Override public boolean test(@Nullable final FieldSet fieldSet) {
                         return !fieldSet.getProperties().isEmpty();
                     }
-                }).toList();
+                })
+                .collect(Collectors.toList());
         if(!fieldSetsWithProperties.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent fieldSetRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_FIELD_SETS);
@@ -247,13 +248,15 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
 
         // collections
         final List<CollectionLayoutData> collections =
-                FluentIterable.from(bs3Col.getCollections()).filter(
+                _NullSafe.stream(bs3Col.getCollections())
+                .filter(
                         new Predicate<CollectionLayoutData>() {
                             @Override
-                            public boolean apply(final CollectionLayoutData collectionLayoutData) {
+                            public boolean test(final CollectionLayoutData collectionLayoutData) {
                                 return collectionLayoutData.getMetadataError() == null;
                             }
-                        }).toList();
+                        })
+                .collect(Collectors.toList());
         if(!collections.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent collectionRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_COLLECTIONS);

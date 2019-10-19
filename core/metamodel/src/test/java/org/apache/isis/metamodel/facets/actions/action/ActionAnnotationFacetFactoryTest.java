@@ -28,8 +28,6 @@ import org.junit.After;
 import org.junit.Before;
 
 import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
@@ -69,6 +67,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         // PRODUCTION
 
         facetFactory = new ActionAnnotationFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         context.checking(new Expectations() {{
             allowing(mockServiceRegistry).lookupServiceElseFail(AuthenticationSessionProvider.class);
@@ -80,6 +79,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         }});
 
         actionMethod = findMethod(Customer.class, "someAction");
+        
     }
 
     @Override
@@ -106,21 +106,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
     }
 
     void allowingCommandConfigurationToReturn(CommandActionsConfiguration value) {
-        val config = new IsisConfiguration();
+        val config = metaModelContext.getConfiguration();
         config.getServices().getCommand().setActions(value);
-        
-        MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(config)
-                .build());
     }
 
     void allowingPublishingConfigurationToReturn(PublishActionsConfiguration value) {
-        val config = new IsisConfiguration();
+        val config = metaModelContext.getConfiguration();
         config.getServices().getPublish().setActions(value);
-        
-        MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(config)
-                .build());
     }
 
 }

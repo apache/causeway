@@ -27,13 +27,13 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.metamodel.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -49,8 +49,10 @@ import org.apache.isis.security.authorization.manager.AuthorizationManager;
 public interface MetaModelContext {
 
     // -- INTERFACE
-
+    @Deprecated
     IsisConfigurationLegacy getConfigurationLegacy();
+    
+    IsisSystemEnvironment getSystemEnvironment();
     
     /**
      * 
@@ -74,8 +76,6 @@ public interface MetaModelContext {
 
     TranslationService getTranslationService();
 
-    AuthenticationSession getAuthenticationSession();
-
     AuthorizationManager getAuthorizationManager();
 
     AuthenticationManager getAuthenticationManager();
@@ -95,21 +95,13 @@ public interface MetaModelContext {
     Stream<ObjectAdapter> streamServiceAdapters();
 
     ObjectAdapter lookupServiceAdapterById(String serviceId);
-
-    // -- PRESET INSTANCES
-
-    static MetaModelContext current() {
-        return _Context.computeIfAbsent(MetaModelContext.class, 
-                __->MetaModelContexts.usingSpring()); // default
-    }
-
-    static void preset(MetaModelContext metaModelContext) {
-        _Context.clear();
-        _Context.putSingleton(MetaModelContext.class, metaModelContext);
-    }
-
-    static MetaModelContext_forTestingBuilder builder() {
-        return MetaModelContext_forTesting.builder();
+    
+    <T> T getSingletonElseFail(Class<T> type);
+    
+    // -- EXTRACTORS
+    
+    public static MetaModelContext from(ManagedObject adapter) {
+        return adapter.getSpecification().getMetaModelContext();
     }
 
     // -- DELEGATION - FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
@@ -121,6 +113,11 @@ public interface MetaModelContext {
         @Override
         public default IsisConfigurationLegacy getConfigurationLegacy() {
             return getMetaModelContext().getConfigurationLegacy();
+        }
+        
+        @Override
+        default IsisSystemEnvironment getSystemEnvironment() {
+            return getMetaModelContext().getSystemEnvironment();
         }
         
         @Override
@@ -158,9 +155,8 @@ public interface MetaModelContext {
             return getMetaModelContext().getTranslationService();
         }
 
-        @Override
-        public default AuthenticationSession getAuthenticationSession() {
-            return getMetaModelContext().getAuthenticationSession();
+        default AuthenticationSession getAuthenticationSession() {
+            return getAuthenticationSessionProvider().getAuthenticationSession();
         }
 
         @Override
@@ -211,6 +207,11 @@ public interface MetaModelContext {
         @Override
         default ObjectAdapter lookupServiceAdapterById(String serviceId) {
             return getMetaModelContext().lookupServiceAdapterById(serviceId);
+        }
+        
+        @Override
+        default <T> T getSingletonElseFail(Class<T> type) {
+            return getMetaModelContext().getSingletonElseFail(type);
         }
 
     }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
 /**
  * Model providing welcome text.
  */
@@ -26,7 +28,8 @@ public class WelcomeModel extends ModelAbstract<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public WelcomeModel(final String message) {
+    public WelcomeModel(IsisWebAppCommonContext commonContext, String message) {
+        super(commonContext);
         setObject(message);
     }
 

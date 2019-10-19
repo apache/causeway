@@ -33,8 +33,9 @@ public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbs
     private final Class<?>[] scalarTypes;
 
     public ComponentFactoryScalarAbstract(
-            final @SuppressWarnings("rawtypes") Class componentClass,
-            final Class<?>... scalarTypes) {
+            Class<?> componentClass,
+            Class<?>... scalarTypes) {
+        
         super(ComponentType.SCALAR_NAME_AND_VALUE, componentClass);
         this.scalarTypes = scalarTypes;
     }

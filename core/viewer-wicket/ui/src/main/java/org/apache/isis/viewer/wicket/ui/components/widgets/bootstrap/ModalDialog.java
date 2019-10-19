@@ -36,6 +36,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable
  */
 public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
 
+    private static final long serialVersionUID = 1L;
+    
     private CloseHandler closeHandlerIfAny;
 
     public ModalDialog(String markupId) {

@@ -36,20 +36,23 @@ import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
 
 
-    public ObjectAdapterToggleboxColumn() {
-        this(null, null);
+    public ObjectAdapterToggleboxColumn(IsisWebAppCommonContext commonContext) {
+        this(commonContext, null, null);
     }
 
     public ObjectAdapterToggleboxColumn(
-            final OnSelectionHandler onSelectionHandler,
-            final OnConcurrencyExceptionHandler onConcurrencyExceptionHandler) {
-        super("");
+            IsisWebAppCommonContext commonContext,
+            OnSelectionHandler onSelectionHandler,
+            OnConcurrencyExceptionHandler onConcurrencyExceptionHandler) {
+        
+        super(commonContext, "");
         this.onSelectionHandler = onSelectionHandler;
         this.onConcurrencyExceptionHandler = onConcurrencyExceptionHandler;
     }

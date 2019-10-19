@@ -33,6 +33,8 @@ import de.agilecoders.wicket.core.util.Attributes;
  */
 public class FormGroup extends WebMarkupContainer {
 
+    private static final long serialVersionUID = 1L;
+    
     private final FormComponent<?> formComponent;
 
     /**

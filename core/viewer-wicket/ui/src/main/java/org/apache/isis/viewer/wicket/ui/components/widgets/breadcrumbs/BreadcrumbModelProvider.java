@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
-
 public interface BreadcrumbModelProvider {
 
     BreadcrumbModel getBreadcrumbModel();

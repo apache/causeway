@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.object.bookmarkpolicy.bookmarkable;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -42,12 +41,12 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        FacetUtil.addFacet(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
+        super.addFacet(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        FacetUtil.addFacet(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
+        super.addFacet(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
     }
 
     /**

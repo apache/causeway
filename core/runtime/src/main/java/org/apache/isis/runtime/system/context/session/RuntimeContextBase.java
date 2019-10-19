@@ -39,10 +39,11 @@ import org.apache.isis.runtime.memento.Data;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -50,34 +51,38 @@ import lombok.val;
  * @since 2.0
  *
  */
-@RequiredArgsConstructor
 public abstract class RuntimeContextBase implements RuntimeContext {
 
     // -- FINAL FIELDS
 
-    @Getter protected final IsisConfiguration configuration;
-    @Getter protected final IsisConfigurationLegacy configurationLegacy;
-    @Getter protected final ServiceInjector serviceInjector;
-    @Getter protected final ServiceRegistry serviceRegistry;
-    @Getter protected final SpecificationLoader specificationLoader;
-    @Getter protected final AuthenticationSession authenticationSession;
+    @Getter(onMethod = @__(@Override)) protected final MetaModelContext metaModelContext;
+    @Getter(onMethod = @__(@Override)) protected final IsisConfiguration configuration;
+    @Getter(onMethod = @__(@Override)) protected final IsisConfigurationLegacy configurationLegacy;
+    @Getter(onMethod = @__(@Override)) protected final ServiceInjector serviceInjector;
+    @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
+    @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
+    
     @Getter protected final ObjectAdapterProvider objectAdapterProvider;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<HomePageAction> homePageActionResolver;
 
-    // -- NO ARG CONSTRUCTOR
+    // -- SINGLE ARG CONSTRUCTOR
 
-    protected RuntimeContextBase() {
-        val mmc = MetaModelContext.current();
-        configuration = mmc.getConfiguration();
-        configurationLegacy = mmc.getConfigurationLegacy();
-        serviceInjector = mmc.getServiceInjector();
-        serviceRegistry = mmc.getServiceRegistry();
-        specificationLoader = mmc.getSpecificationLoader();
-        authenticationSession = mmc.getAuthenticationSession();
-        objectAdapterProvider = mmc.getObjectAdapterProvider();
-        transactionService = mmc.getTransactionService();
-        homePageActionResolver = mmc::getHomePageAction;
+    protected RuntimeContextBase(MetaModelContext mmc) {
+        this.metaModelContext= mmc;
+        this.configuration = mmc.getConfiguration();
+        this.configurationLegacy = mmc.getConfigurationLegacy();
+        this.serviceInjector = mmc.getServiceInjector();
+        this.serviceRegistry = mmc.getServiceRegistry();
+        this.specificationLoader = mmc.getSpecificationLoader();
+        this.objectAdapterProvider = mmc.getObjectAdapterProvider();
+        this.transactionService = mmc.getTransactionService();
+        this.homePageActionResolver = mmc::getHomePageAction;
+    }
+    
+    @Override
+    public AuthenticationSession getAuthenticationSession() {
+        return metaModelContext.getAuthenticationSessionProvider().getAuthenticationSession();
     }
 
     @Override
@@ -111,8 +116,12 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         // we do the logout (removes this session from those valid)
         // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
         final AuthenticationSession authenticationSession = getAuthenticationSession();
-        IsisContext.getAuthenticationManager().closeSession(authenticationSession);
-        IsisContext.getSessionFactory().closeSession();	
+        
+        val authenticationManager = getServiceRegistry().lookupServiceElseFail(AuthenticationManager.class);
+        authenticationManager.closeSession(authenticationSession);
+        
+        val isisSessionFactory = getServiceRegistry().lookupServiceElseFail(IsisSessionFactory.class);
+        isisSessionFactory.closeSession();	
     }
 
     // -- ENTITY SUPPORT

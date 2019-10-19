@@ -53,8 +53,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 //@Singleton
 public class IsisWebAppContextListener implements ServletContextListener {
     
-    private @Inject ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
-    private @Inject IsisConfiguration isisConfiguration;
+    @Inject private ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
+    @Inject private IsisConfiguration isisConfiguration;
 
     // -- INTERFACE IMPLEMENTATION
 
@@ -65,16 +65,16 @@ public class IsisWebAppContextListener implements ServletContextListener {
             log.error("skipping initialization, Spring should already have provisioned all configured Beans");
             return;
         }
-        if(!isSpringContextAvailable()) {
-            log.error("skipping initialization, SpringContext is required to be initialzed already");
-            return;
-        }
-        if(!isServletContextAvailable()) {
-            log.error("skipping initialization, a ServletContext is required on the _Context prior to this");
-            return;
-        }
-
-        val servletContext = _Context.getIfAny(ServletContext.class);
+//        if(!isSpringContextAvailable()) {
+//            log.error("skipping initialization, SpringContext is required to be initialzed already");
+//            return;
+//        }
+//        if(!isServletContextAvailable()) {
+//            log.error("skipping initialization, a ServletContext is required on the _Context prior to this");
+//            return;
+//        }
+        
+        val servletContext = event.getServletContext();
 
         //[ahuber] set the ServletContext initializing thread as preliminary default until overridden by
         // IsisWicketApplication#init() or others that better know what ClassLoader to use as application default.
@@ -86,7 +86,7 @@ public class IsisWebAppContextListener implements ServletContextListener {
 
         _Resources.putContextPathIfPresent(contextPath);
 
-        final WebModuleContext webModuleContext = new WebModuleContext(isisConfiguration);
+        final WebModuleContext webModuleContext = new WebModuleContext(isisConfiguration, serviceRegistry);
         webModuleContext.prepare();
 
         _Context.putSingleton(WebModuleContext.class, webModuleContext);
@@ -112,12 +112,12 @@ public class IsisWebAppContextListener implements ServletContextListener {
         return serviceRegistry!=null;
     }
 
-    private static boolean isSpringContextAvailable() {
-        return _Context.getIfAny(ApplicationContext.class)!=null;
-    }
+//    private static boolean isSpringContextAvailable() {
+//        return _Context.getIfAny(ApplicationContext.class)!=null;
+//    }
 
-    private static boolean isServletContextAvailable() {
-        return _Context.getIfAny(ServletContext.class)!=null;
-    }
+//    private static boolean isServletContextAvailable() {
+//        return _Context.getIfAny(ServletContext.class)!=null;
+//    }
 
 }

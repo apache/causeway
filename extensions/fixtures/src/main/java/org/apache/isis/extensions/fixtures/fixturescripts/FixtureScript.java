@@ -32,6 +32,7 @@ import javax.inject.Inject;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.AbstractViewModel;
@@ -998,7 +999,7 @@ extends AbstractViewModel {
      * Convenience method, simply delegates to {@link IsisContext#createTransactionTemplate}.
      */
     protected TransactionTemplate transactionTemplate() {
-        return IsisContext.createTransactionTemplate();
+        return new TransactionTemplate(txMan);
     }
 
 
@@ -1020,7 +1021,7 @@ extends AbstractViewModel {
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;
     @Inject protected SessionManagementService sessionManagementService;
-
+    @Inject protected PlatformTransactionManager txMan;
 
 
 }

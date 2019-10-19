@@ -20,44 +20,79 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
+import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
 
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
+import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtime.memento.ObjectAdapterMementoSupport;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class ScalarModel_isScalarSubtypingAnyOf_Test {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    @Rule public JUnitRuleMockery2 context = 
+            JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    ObjectSpecification mockObjectSpecification;
+    @Mock ObjectSpecification mockObjectSpecification;
+    @Mock EntityModel mockEntityModel;
+    @Mock ObjectAdapterMementoSupport mockObjectAdapterMementoSupport;
+    @Mock ObjectAdapterProvider mockObjectAdapterProvider; 
+    
+    MetaModelContext metaModelContext;
 
     public static class A {}
     public static class B extends A {}
     public static class C extends B {}
 
-    @org.junit.Test
+    @Before
+    public void setup() {
+        
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .objectAdapterProvider(mockObjectAdapterProvider)
+                .singleton(mockObjectAdapterMementoSupport)
+                .build();
+        
+        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        
+        context.checking(new Expectations() {{
+            
+            allowing(mockEntityModel).getCommonContext();
+            will(returnValue(commonContext));
+
+
+        }});
+        
+    }
+    
+    @Test
     public void when_super() {
         assertThat(newScalarModelFor(A.class).isScalarTypeSubtypeOf(B.class), is(equalTo(false)));
     }
 
-    @org.junit.Test
+    @Test
     public void when_same() {
         assertThat(newScalarModelFor(B.class).isScalarTypeSubtypeOf(B.class), is(equalTo(true)));
     }
 
-    @org.junit.Test
+    @Test
     public void when_sub() {
         assertThat(newScalarModelFor(C.class).isScalarTypeSubtypeOf(B.class), is(equalTo(true)));
     }
 
     private ScalarModel newScalarModelFor(final Class<?> result) {
-        final ScalarModel scalarModel = new ScalarModel(null, null) {
+        val scalarModel = new ScalarModel(mockEntityModel, null) {
+            private static final long serialVersionUID = 1L;
+
             @Override public ObjectSpecification getTypeOfSpecification() {
                 return mockObjectSpecification;
             }

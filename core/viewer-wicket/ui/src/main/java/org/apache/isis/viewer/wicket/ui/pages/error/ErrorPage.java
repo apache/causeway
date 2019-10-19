@@ -27,12 +27,13 @@ import org.apache.isis.applib.services.error.ErrorDetails;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.errors.StackTraceDetail;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+
+import lombok.val;
 
 /**
  * Web page representing the home page (showing a welcome message).
@@ -50,8 +51,9 @@ public class ErrorPage extends PageAbstract {
 
         addBookmarkedPages(themeDiv);
 
-        final ErrorReportingService errorReportingService = IsisContext.getServiceRegistry()
+        val errorReportingService = super.getCommonContext().getServiceRegistry()
                 .lookupService(ErrorReportingService.class).orElse(null);
+        
         if(errorReportingService != null) {
 
             final String mainMessage = exceptionModel.getMainMessage();

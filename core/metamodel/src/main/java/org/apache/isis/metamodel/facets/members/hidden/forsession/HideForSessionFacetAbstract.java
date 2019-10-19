@@ -38,8 +38,7 @@ public abstract class HideForSessionFacetAbstract extends FacetAbstract implemen
         return HideForSessionFacet.class;
     }
 
-    public HideForSessionFacetAbstract(
-            final FacetHolder holder) {
+    public HideForSessionFacetAbstract(FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
     }
 

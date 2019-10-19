@@ -24,9 +24,10 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.junit.Ignore;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -60,7 +61,7 @@ public class SimpleObjectsStepDef extends SpringIntegrationTest {
 
     @cucumber.api.java.Before //TODO is there another way to make scenarios transactional?
     public void beforeScenario(){
-        val txTemplate = IsisContext.createTransactionTemplate();
+        val txTemplate = new TransactionTemplate(txMan);
         val status = txTemplate.getTransactionManager().getTransaction(null);
         afterScenario = () -> {
             txTemplate.getTransactionManager().rollback(status);
@@ -87,6 +88,7 @@ public class SimpleObjectsStepDef extends SpringIntegrationTest {
 
     @Inject protected SimpleObjects simpleObjects;
     @Inject private FixtureScripts fixtureScripts;
+    @Inject private PlatformTransactionManager txMan; 
 
 
 }

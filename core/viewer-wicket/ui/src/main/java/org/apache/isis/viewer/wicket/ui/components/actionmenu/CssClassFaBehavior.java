@@ -29,6 +29,8 @@ import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
  */
 public class CssClassFaBehavior extends Behavior {
 
+    private static final long serialVersionUID = 1L;
+    
     private final String cssClassFa;
     private final CssClassFaPosition position;
 

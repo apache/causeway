@@ -40,7 +40,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -68,8 +68,8 @@ public class Memento implements Serializable {
     // constructor, Encodeable
     ////////////////////////////////////////////////
 
-    public Memento(final ObjectAdapter adapter) {
-        data = adapter == null ? null : createData(adapter);
+    public Memento(final ManagedObject adapter) {
+        data = (adapter == null) ? null : createData( ManagedObject.promote(adapter) );
         log.debug("created memento for {}", this);
     }
 
@@ -190,19 +190,13 @@ public class Memento implements Serializable {
     // recreateObject
     ////////////////////////////////////////////////
 
-    public ObjectAdapter recreateObject() {
+    public ObjectAdapter recreateObject(SpecificationLoader specLoader, PersistenceSession persistenceSession) {
         if (data == null) {
             return null;
         }
-        final ObjectSpecification spec =
-                getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(data.getClassName()));
-
-        final Oid oid = getOid();
-
-        return IsisContext.getPersistenceSession().get().
-                adapterOfMemento(spec, oid, data);
-        //return IsisSession.currentOrElseNull().adapterOfMemento(spec, oid, data);
-
+        val spec = specLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(data.getClassName()));
+        val oid = getOid();
+        return persistenceSession.adapterOfMemento(spec, oid, data);
     }
 
 
@@ -213,14 +207,6 @@ public class Memento implements Serializable {
     @Override
     public String toString() {
         return "[" + (data == null ? null : data.getClassName() + "/" + data.getOid() + data) + "]";
-    }
-
-    // ///////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // ///////////////////////////////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
     }
 
 }

@@ -48,6 +48,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
     @Before
     public void setUp() throws Exception {
         facetFactory = new ActionLayoutFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     @Test

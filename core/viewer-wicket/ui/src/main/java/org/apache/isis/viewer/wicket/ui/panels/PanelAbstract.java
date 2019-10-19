@@ -19,35 +19,19 @@
 
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import java.util.function.Function;
-
-import javax.inject.Inject;
-
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
+ * @param <M>
  */
-// TODO mgrigorov: extend GenericPanel and make T the type of the model object, not the model
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
+public abstract class PanelAbstract<T extends IModel<?>> extends PanelBase {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,11 +45,11 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
         this(id, null);
     }
 
-    public PanelAbstract(final ComponentType componentType, final T model) {
+    public PanelAbstract(final ComponentType componentType, final IModel<?> model) {
         this(componentType.getWicketId(), model);
     }
 
-    public PanelAbstract(final String id, final T model) {
+    public PanelAbstract(final String id, final IModel<?> model) {
         super(id, model);
         this.componentType = ComponentType.lookup(id);
     }
@@ -79,6 +63,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public T getModel() {
         return (T) getDefaultModel();
     }
@@ -105,92 +90,12 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
     public void permanentlyHide(final String... ids) {
         Components.permanentlyHide(this, ids);
     }
-
-
-    // ///////////////////////////////////////////////////////////////////
-    // Hint support
-    // ///////////////////////////////////////////////////////////////////
-
-    public UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(this);
-    }
-
-
-    // ///////////////////////////////////////////////////////////////////
-    // Convenience
-    // ///////////////////////////////////////////////////////////////////
-
-    /**
-     * The underlying {@link AuthenticationSession Isis session} wrapped in the
-     * {@link #getWebSession() Wicket session}.
-     *
-     * @return
-     */
-    public AuthenticationSession getAuthenticationSession() {
-        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
-    }
-
-
-    // /////////////////////////////////////////////////
-    // Dependency Injection
-    // /////////////////////////////////////////////////
-
-    protected ComponentFactoryRegistry getComponentFactoryRegistry() {
-        return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
-    }
-
-
-    // /////////////////////////////////////////////////
-    // *Provider impl.
-    // /////////////////////////////////////////////////
-
-    /**
-     * Helper method that looks up a domain service by type
-     *
-     * @param serviceClass The class of the domain service to lookup
-     * @param <S> The type of the domain service to lookup
-     * @return The found domain service
-     */
-    protected <S> S lookupService(final Class<S> serviceClass) {
-        return IsisContext.getServiceRegistry().lookupService(serviceClass).orElse(null);
-    }
-
-
-    protected void addConfirmationDialogIfAreYouSureSemantics(final Component component, final SemanticsOf semanticsOf) {
-        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(component, semanticsOf);
-    }
-
-    // ///////////////////////////////////////////////////////////////////
-    // Dependencies (from IsisContext)
-    // ///////////////////////////////////////////////////////////////////
-
-    public Function<Object, ObjectAdapter> pojoToAdapter() {
-        return IsisContext.pojoToAdapter();
-    }
-
-    protected IsisConfigurationLegacy getConfigurationLegacy() {
-        return IsisContext.getConfigurationLegacy();
-    }
-
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
-
-    public SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
-    protected ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
-    }
-
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
-
-    @Inject WicketViewerSettings settings;
-    protected WicketViewerSettings getSettings() {
-        return settings;
+    
+    protected void addConfirmationDialogIfAreYouSureSemantics(
+            Component component, 
+            SemanticsOf semanticsOf) {
+        
+        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(super.translationService, component, semanticsOf);
     }
 
 

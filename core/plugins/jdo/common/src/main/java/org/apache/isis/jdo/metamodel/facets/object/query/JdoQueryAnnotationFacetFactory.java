@@ -26,7 +26,6 @@ import javax.jdo.annotations.Query;
 
 import org.apache.isis.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
@@ -55,14 +54,14 @@ implements MetaModelRefiner {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         if (namedQueriesAnnotation != null) {
-            FacetUtil.addFacet(new JdoQueriesFacetAnnotation(
+            super.addFacet(new JdoQueriesFacetAnnotation(
                     namedQueriesAnnotation.value(), facetHolder));
             return;
         }
 
         final Query namedQueryAnnotation = Annotations.getAnnotation(cls, Query.class);
         if (namedQueryAnnotation != null) {
-            FacetUtil.addFacet(new JdoQueryFacetAnnotation(
+            super.addFacet(new JdoQueryFacetAnnotation(
                     namedQueryAnnotation, facetHolder));
         }
     }

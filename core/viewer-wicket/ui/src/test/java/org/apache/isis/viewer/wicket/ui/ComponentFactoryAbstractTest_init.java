@@ -20,14 +20,28 @@ package org.apache.isis.viewer.wicket.ui;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
 public class ComponentFactoryAbstractTest_init {
 
-    @Rule
-    public ExpectedException thrown= ExpectedException.none();
+    @Rule public ExpectedException thrown= ExpectedException.none();
+    
+    private MetaModelContext metaModelContext;
+    private IsisWebAppCommonContext commonContext;
+    
+    @Before
+    public void setUp() throws Exception {
+        
+        metaModelContext = MetaModelContext_forTesting.buildDefault(); 
+        commonContext = IsisWebAppCommonContext.of(metaModelContext);
+    }
 
     @Test
     public void canInstantiateComponentFactoryWithNoComponentClass() {
@@ -37,6 +51,7 @@ public class ComponentFactoryAbstractTest_init {
 
             public ComponentFactoryWithNoComponentClass() {
                 super(null);
+                setCommonContext(commonContext);
             }
 
             @Override
@@ -63,6 +78,7 @@ public class ComponentFactoryAbstractTest_init {
 
             public ComponentFactoryWithComponentClass() {
                 super(null, ComponentClass.class);
+                setCommonContext(commonContext);
             }
 
             @Override
@@ -90,6 +106,7 @@ public class ComponentFactoryAbstractTest_init {
 
             public ComponentFactoryWithIncorrectComponentClass() {
                 super(null, ComponentFactoryWithIncorrectComponentClass.class);
+                setCommonContext(commonContext);
             }
 
             @Override

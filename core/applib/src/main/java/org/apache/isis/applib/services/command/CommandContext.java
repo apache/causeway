@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.command;
 
 import javax.enterprise.context.RequestScoped;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Command}.
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@RequestScoped @Service 
+@Component @RequestScoped  
 public class CommandContext {
 
     private Command command;

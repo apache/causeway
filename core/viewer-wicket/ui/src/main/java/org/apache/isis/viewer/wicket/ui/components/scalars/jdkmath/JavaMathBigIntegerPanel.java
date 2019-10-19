@@ -36,7 +36,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
 public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldNumeric<BigInteger> {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_SCALAR_VALUE = "scalarValue";
 
     public JavaMathBigIntegerPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, BigInteger.class, new BigIntegerConverter());

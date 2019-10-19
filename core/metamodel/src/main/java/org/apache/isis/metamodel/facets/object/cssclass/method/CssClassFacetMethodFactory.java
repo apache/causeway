@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.object.cssclass.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
@@ -48,6 +47,6 @@ public class CssClassFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbs
             return;
         }
         processClassContext.removeMethod(method);
-        FacetUtil.addFacet(new CssClassFacetMethod(method, facetHolder));
+        super.addFacet(new CssClassFacetMethod(method, facetHolder));
     }
 }

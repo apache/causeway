@@ -34,6 +34,7 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
     private static final long serialVersionUID = 1L;
 
     public static final MetaDataKey<AccountConfirmationMap> KEY = new MetaDataKey<AccountConfirmationMap>() {
+        private static final long serialVersionUID = 1L;
     };
 
     /**

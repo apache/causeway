@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.register;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -28,26 +30,28 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
-import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 
 import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.UsernameAvailableValidator;
+import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 
 import lombok.val;
 
 /**
  * A panel with a form for self-registration of a user
  */
-public abstract class RegisterPanel extends GenericPanel<UserDetails> {
+public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
+    private static final long serialVersionUID = 1L;
+    
     protected static final String ID_REGISTER_FORM = "registerForm";
     private static final String ID_USERNAME = "username";
     private static final String ID_USERNAME_FORM_GROUP = "usernameFormGroup";
@@ -60,7 +64,11 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
     private final UserDetails userDetails;
     private final String uuid;
 
-    public RegisterPanel(final String id, final UserDetails userDetails, final String uuid) {
+    public RegisterPanel(
+            String id, 
+            UserDetails userDetails, 
+            String uuid) {
+        
         super(id);
         this.userDetails = userDetails;
         this.uuid = uuid;
@@ -70,7 +78,7 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
     protected void onInitialize() {
         super.onInitialize();
 
-        RegisterForm registerForm = new RegisterForm(ID_REGISTER_FORM, uuid, userDetails);
+        RegisterForm registerForm = new RegisterForm(ID_REGISTER_FORM, uuid, userDetails); //FIXME might need injection
         add(registerForm);
 
         Component username = newUsernameField();
@@ -87,18 +95,25 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
     protected abstract MarkupContainer newExtraFieldsContainer(String id);
 
 
-    private IFormValidator newEqualPasswordInputValidator(MarkupContainer password, MarkupContainer confirmPassword) {
-        FormComponent passwordField = (FormComponent) password.get(ID_PASSWORD);
-        FormComponent confirmPasswordField = (FormComponent) confirmPassword.get(ID_CONFIRM_PASSWORD);
+    private IFormValidator newEqualPasswordInputValidator(
+            MarkupContainer password, 
+            MarkupContainer confirmPassword) {
+        
+        val passwordField = (FormComponent<?>) password.get(ID_PASSWORD);
+        val confirmPasswordField = (FormComponent<?>) confirmPassword.get(ID_CONFIRM_PASSWORD);
         return new EqualPasswordInputValidator(passwordField, confirmPasswordField);
     }
 
     /**
      * Register user form.
      */
-    private class RegisterForm extends StatelessForm<UserDetails>
-    {
+    private class RegisterForm extends StatelessForm<UserDetails> {
+        
         private static final long serialVersionUID = 1L;
+        
+        @Inject private transient UserRegistrationService userRegistrationService;
+        @Inject private transient TransactionService transactionService;
+        @Inject private transient IsisSessionFactory isisSessionFactory;
 
         private final String uuid;
 
@@ -109,8 +124,8 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
          *            id of the form component
          * @param userDetails
          */
-        public RegisterForm(final String id, final String uuid, UserDetails userDetails)
-        {
+        public RegisterForm(final String id, final String uuid, UserDetails userDetails) {
+        
             super(id, new CompoundPropertyModel<>(userDetails));
 
             this.uuid = uuid;
@@ -121,17 +136,14 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
         }
 
         @Override
-        public final void onSubmit()
-        {
+        public final void onSubmit() {
             final UserDetails userDetails = getModelObject();
 
-            getIsisSessionFactory().doInSession(new Runnable() {
+            isisSessionFactory.doInSession(new Runnable() {
                 @Override
                 public void run() {
-                    val userRegistrationService = IsisContext.getServiceRegistry()
-                            .lookupServiceElseFail(UserRegistrationService.class);
 
-                    IsisContext.getTransactionService().executeWithinTransaction(() -> {
+                    transactionService.executeWithinTransaction(() -> {
                         userRegistrationService.registerUser(userDetails);
                         removeAccountConfirmation();
                     });
@@ -142,8 +154,7 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
             setResponsePage(getApplication().getHomePage());
         }
 
-        private boolean signIn(String username, String password)
-        {
+        private boolean signIn(String username, String password) {
             return AuthenticatedWebSession.get().signIn(username, password);
         }
 
@@ -161,6 +172,8 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
     protected TextField<String> newEmailField(final UserDetails userDetails) {
         // use readonly-ish model to prevent changing the email with manual form submits
         TextField<String> emailField = new TextField<>(ID_EMAIL, new Model<String>() {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public String getObject() {
                 return userDetails.getEmailAddress();
@@ -187,14 +200,11 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
 
     protected MarkupContainer newUsernameField() {
         RequiredTextField<String> username = new RequiredTextField<>(ID_USERNAME);
-        username.add(UsernameAvailableValidator.INSTANCE);
+        username.add(UsernameAvailableValidator.instance(super.getCommonContext()));
         FormGroup usernameFormGroup = new FormGroup(ID_USERNAME_FORM_GROUP, username);
         usernameFormGroup.add(username);
         return usernameFormGroup;
     }
 
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
 
 }

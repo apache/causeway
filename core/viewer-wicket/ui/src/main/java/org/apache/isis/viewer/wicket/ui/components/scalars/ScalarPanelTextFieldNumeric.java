@@ -28,9 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
@@ -57,6 +55,9 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
     protected Component createComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
         final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
+
+            private static final long serialVersionUID = 1L;
+
             @Override
             public <C> IConverter<C> getConverter(Class<C> type) {
                 return (IConverter<C>) converter;
@@ -72,6 +73,9 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
     @Override
     protected IModel<String> obtainInlinePromptModel() {
         return new Model<String>(){
+
+            private static final long serialVersionUID = 1L;
+
             @Override public String getObject() {
                 ObjectAdapter object = scalarModel.getObject();
                 final T value = object != null ? (T) object.getPojo() : null;
@@ -83,10 +87,6 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
             }
         };
 
-    }
-
-    private LocaleProvider getLocaleProvider() {
-        return IsisContext.getServiceRegistry().lookupServiceElseFail(LocaleProvider.class);
     }
 
 }

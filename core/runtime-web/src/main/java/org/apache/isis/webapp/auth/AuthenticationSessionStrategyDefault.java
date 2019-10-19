@@ -54,7 +54,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
             final HttpServletRequest httpServletRequest, 
             final HttpServletResponse httpServletResponse) {
 
-        val authenticationManager = authenticationManager();
+        val authenticationManager = super.getAuthenticationManager(httpServletRequest);
         val httpSession = getHttpSession(httpServletRequest);
 
         // use previously authenticated session if available

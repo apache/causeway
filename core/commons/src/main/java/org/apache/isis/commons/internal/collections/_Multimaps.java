@@ -35,6 +35,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -92,6 +93,11 @@ public class _Multimaps {
             return getOrDefault(key, Collections.emptyList());
         }
         
+        default public Stream<V> streamElements() {
+            return values().stream()
+                    .flatMap(Collection::stream);
+        }
+        
     }
 
     /**
@@ -126,6 +132,11 @@ public class _Multimaps {
          */
         default public Set<V> getOrElseEmpty(K key) {
             return getOrDefault(key, Collections.emptySet());
+        }
+        
+        default public Stream<V> streamElements() {
+            return values().stream()
+                    .flatMap(Collection::stream);
         }
     }
 
@@ -172,6 +183,12 @@ public class _Multimaps {
          */
         default public Map<K2, V> getOrElseEmpty(K1 key) {
             return getOrDefault(key, Collections.emptyMap());
+        }
+        
+        default public Stream<V> streamElements() {
+            return values().stream()
+                    .map(Map::values)
+                    .flatMap(Collection::stream);
         }
     }
 

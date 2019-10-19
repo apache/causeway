@@ -21,35 +21,46 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class EntityModel_hintsTest {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    @Rule public JUnitRuleMockery2 context = 
+            JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
+    @Mock MarkupContainer mockParent;
+    @Mock Component mockComponent1;
+    @Mock Component mockComponent2;
+    
     EntityModel target;
-
-    MarkupContainer mockParent;
-    Component mockComponent1;
-    Component mockComponent2;
+    MetaModelContext metaModelContext;
 
     @Before
     public void setUp() throws Exception {
-        target = new EntityModel(EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
+        
+        metaModelContext = MetaModelContext_forTesting.buildDefault();
+        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        
+        target = new EntityModel(commonContext, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
 
-        mockParent = context.mock(MarkupContainer.class, "parent");
-        mockComponent1 = context.mock(Component.class, "component1");
-        mockComponent2 = context.mock(Component.class, "component2");
+//        mockParent = context.mock(MarkupContainer.class, "parent");
+//        mockComponent1 = context.mock(Component.class, "component1");
+//        mockComponent2 = context.mock(Component.class, "component2");
 
         context.checking(new Expectations() {{
             allowing(mockParent).getId();

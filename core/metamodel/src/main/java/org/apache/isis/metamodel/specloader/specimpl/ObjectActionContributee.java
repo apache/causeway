@@ -112,7 +112,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         }
 
         final List<ObjectActionParameter> serviceParameters = serviceAction.getParameters();
-        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
+        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters(); //side effects?
 
         final List<ObjectActionParameter> contributeeParameters = _Lists.newArrayList();
         int contributeeParamNum = 0;

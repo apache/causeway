@@ -96,7 +96,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.Enti
  */
 @Service
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
-
+    
     @Override
     public void addComponentFactories(final ComponentFactoryList componentFactories) {
 
@@ -126,12 +126,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         _Plugin.loadAll(ComponentFactory.class).forEach(componentFactories::add);
 
-        // same as ...
-        //        final ServiceLoader<ComponentFactory> serviceLoader = ServiceLoader.load(ComponentFactory.class);
-        //
-        //        for (final ComponentFactory componentFactory : serviceLoader) {
-        //            componentFactories.add(componentFactory);
-        //        }
     }
 
     private void addBuiltInComponentFactories(final ComponentFactoryList componentFactories) {

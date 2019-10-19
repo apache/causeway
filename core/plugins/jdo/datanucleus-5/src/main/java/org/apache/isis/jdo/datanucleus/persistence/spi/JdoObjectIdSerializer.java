@@ -38,11 +38,10 @@ import org.datanucleus.identity.DatastoreId;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+
+import lombok.val;
 
 public final class JdoObjectIdSerializer {
 
@@ -114,12 +113,12 @@ public final class JdoObjectIdSerializer {
 
     private static List<String> dnPrefixes = Arrays.asList("S", "I", "L", "M", "B");
 
-    public static Object toJdoObjectId(final RootOid oid) {
+    public static Object toJdoObjectId(SpecificationLoader specificationLoader, RootOid oid) {
 
         final String idStr = oid.getIdentifier();
         final int separatorIdx = idStr.indexOf(SEPARATOR);
 
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecIdElseLoad(oid.getObjectSpecId());
+        final ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(oid.getObjectSpecId());
         final JdoPersistenceCapableFacet jdoPcFacet = spec.getFacet(JdoPersistenceCapableFacet.class);
 
 
@@ -136,31 +135,32 @@ public final class JdoObjectIdSerializer {
                 if (isApplicationIdentity) {
                     return keyStr;
                 } else {
-                    return new StringIdentity(objectTypeClassFor(oid), keyStr);
+                    return new StringIdentity(objectTypeClassFor(specificationLoader, oid), keyStr);
                 }
             } else if("i".equals(distinguisher)) {
                 if(isApplicationIdentity) {
                     return Integer.parseInt(keyStr);
                 } else {
-                    return new IntIdentity(objectTypeClassFor(oid), keyStr);
+                    return new IntIdentity(objectTypeClassFor(specificationLoader, oid), keyStr);
                 }
             } else if("l".equals(distinguisher)) {
                 if(isApplicationIdentity) {
                     return Long.parseLong(keyStr);
                 } else {
-                    return new LongIdentity(objectTypeClassFor(oid), keyStr);
+                    return new LongIdentity(objectTypeClassFor(specificationLoader, oid), keyStr);
                 }
             } else if("b".equals(distinguisher)) {
                 if(isApplicationIdentity) {
                     return Byte.parseByte(keyStr);
                 } else {
-                    return new ByteIdentity(objectTypeClassFor(oid), keyStr);
+                    return new ByteIdentity(objectTypeClassFor(specificationLoader, oid), keyStr);
                 }
             } else if("u".equals(distinguisher)) {
                 if(isApplicationIdentity) {
                     return UUID.fromString(keyStr);
                 } else {
-                    return new ObjectIdentity(objectTypeClassFor(oid), UUID.fromString(keyStr));
+                    return new ObjectIdentity(
+                            objectTypeClassFor(specificationLoader, oid), UUID.fromString(keyStr));
                 }
             }
 
@@ -196,15 +196,12 @@ public final class JdoObjectIdSerializer {
         return jdoPcFacet != null && jdoPcFacet.getIdentityType() == IdentityType.APPLICATION;
     }
 
-    private static Class<?> objectTypeClassFor(final RootOid oid) {
-        final ObjectSpecId objectSpecId = oid.getObjectSpecId();
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
-        final Class<?> correspondingClass = spec.getCorrespondingClass();
+    private static Class<?> objectTypeClassFor(SpecificationLoader specificationLoader, RootOid oid) {
+        
+        val objectSpecId = oid.getObjectSpecId();
+        val spec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
+        val correspondingClass = spec.getCorrespondingClass();
         return correspondingClass;
-    }
-
-    private static SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
     }
 
 }

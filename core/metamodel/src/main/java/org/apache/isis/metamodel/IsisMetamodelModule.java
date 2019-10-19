@@ -18,6 +18,11 @@
  */
 package org.apache.isis.metamodel;
 
-public final class IsisMetamodelModule {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class IsisMetamodelModule {
+  
+    
 }

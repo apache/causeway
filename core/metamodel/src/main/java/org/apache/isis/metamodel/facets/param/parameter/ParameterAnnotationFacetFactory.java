@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -43,10 +43,17 @@ import lombok.val;
 public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
+    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = 
+            new MetaModelValidatorForConflictingOptionality();
 
     public ParameterAnnotationFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
+    }
+    
+    @Override
+    public void setMetaModelContext(MetaModelContext metaModelContext) {
+        super.setMetaModelContext(metaModelContext);
+        conflictingOptionalityValidator.setMetaModelContext(metaModelContext);
     }
 
     @Override
@@ -63,7 +70,7 @@ implements MetaModelRefiner {
         val holder = processParameterContext.getFacetHolder();
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        FacetUtil.addFacet(MaxLengthFacetForParameterAnnotation.create(parameterIfAny, holder));
+        super.addFacet(MaxLengthFacetForParameterAnnotation.create(parameterIfAny, holder));
     }
 
     void processParamsMustSatisfy(final ProcessParameterContext processParameterContext) {
@@ -71,7 +78,7 @@ implements MetaModelRefiner {
         val holder = processParameterContext.getFacetHolder();
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        FacetUtil.addFacet(
+        super.addFacet(
                 MustSatisfySpecificationFacetForParameterAnnotation.create(parameterIfAny, holder, getServiceInjector()));
     }
 
@@ -81,11 +88,11 @@ implements MetaModelRefiner {
         val parameterType = processParameterContext.getParameterType();
 
         val patternIfAny = processParameterContext.synthesizeOnParameter(Pattern.class);
-        FacetUtil.addFacet(
+        super.addFacet(
                 RegExFacetForPatternAnnotationOnParameter.create(patternIfAny, parameterType, holder));
 
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
-        FacetUtil.addFacet(
+        super.addFacet(
                 RegExFacetForParameterAnnotation.create(parameterIfAny, parameterType, holder));
     }
 
@@ -97,14 +104,14 @@ implements MetaModelRefiner {
         val nullableIfAny = processParameterContext.synthesizeOnParameter(Nullable.class);
         final MandatoryFacet facet =
                 MandatoryFacetInvertedByNullableAnnotationOnParameter.create(nullableIfAny, parameterType, holder);
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
         conflictingOptionalityValidator.flagIfConflict(
                 facet, "Conflicting @Nullable with other optionality annotation");
 
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
         final MandatoryFacet mandatoryFacet =
                 MandatoryFacetForParameterAnnotation.create(parameterIfAny, parameterType, holder);
-        FacetUtil.addFacet(mandatoryFacet);
+        super.addFacet(mandatoryFacet);
         conflictingOptionalityValidator.flagIfConflict(
                 mandatoryFacet, "Conflicting @Parameter#optionality with other optionality annotation");
 
@@ -115,7 +122,7 @@ implements MetaModelRefiner {
         val holder = processParameterContext.getFacetHolder();
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        FacetUtil.addFacet(FileAcceptFacetForParameterAnnotation.create(parameterIfAny, holder));
+        super.addFacet(FileAcceptFacetForParameterAnnotation.create(parameterIfAny, holder));
     }
 
     @Override

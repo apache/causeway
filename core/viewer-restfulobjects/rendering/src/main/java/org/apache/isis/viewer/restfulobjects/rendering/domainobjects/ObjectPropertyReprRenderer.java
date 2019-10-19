@@ -34,7 +34,6 @@ import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.metamodel.facets.value.biginteger.BigIntegerValueFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -46,19 +45,19 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescr
 
 import lombok.val;
 
-public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
+public class ObjectPropertyReprRenderer 
+extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
-    public ObjectPropertyReprRenderer(
-            final RendererContext resourceContext) {
-        this(resourceContext, null, null, JsonRepresentation.newMap());
+    public ObjectPropertyReprRenderer(RendererContext context) {
+        this(context, null, null, JsonRepresentation.newMap());
     }
 
     public ObjectPropertyReprRenderer(
-            final RendererContext resourceContext,
+            final RendererContext context,
             final LinkFollowSpecs linkFollower,
             final String propertyId,
             final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, propertyId, RepresentationType.OBJECT_PROPERTY, representation,
+        super(context, linkFollower, propertyId, RepresentationType.OBJECT_PROPERTY, representation,
                 Where.OBJECT_FORMS);
     }
 
@@ -116,8 +115,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
                     format = String.format("big-integer");
                 }
             }
-            return JsonValueEncoder.appendValueAndFormat(
-                    spec, ManagedObject.promote(valueAdapter), representation, format, rendererContext.suppressMemberExtensions());
+            return jsonValueEncoder.appendValueAndFormat(ManagedObject.promote(valueAdapter), representation, format, rendererContext.suppressMemberExtensions());
         }
 
         boolean eagerlyRender =
@@ -134,8 +132,8 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
 
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, ManagedObject.promote(valueAdapter)).withTitle(title);
             if(eagerlyRender) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, linkFollower, JsonRepresentation.newMap()
-                        );
+                final DomainObjectReprRenderer renderer = 
+                        new DomainObjectReprRenderer(rendererContext, linkFollower, JsonRepresentation.newMap());
                 renderer.with(ManagedObject.promote(valueAdapter));
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
@@ -228,8 +226,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();
 
             // REVIEW: check that it works for ToDoItem$Category, though...
-            final ObjectSpecification choiceSpec = choiceAdapter.getSpecification();
-            list.add(DomainObjectReprRenderer.valueOrRef(rendererContext, choiceAdapter, choiceSpec));
+            list.add(DomainObjectReprRenderer.valueOrRef(rendererContext, super.getJsonValueEncoder(), choiceAdapter));
         }
         return list;
     }

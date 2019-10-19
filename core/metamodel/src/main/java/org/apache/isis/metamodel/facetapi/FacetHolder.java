@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facetapi;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.metamodel.MetaModelContext;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that
@@ -107,6 +108,10 @@ public interface FacetHolder {
     void removeFacet(Class<? extends Facet> facetType);
 
 
-
+    /**
+     * 
+     * @since 2.0
+     */
+    MetaModelContext getMetaModelContext();
 
 }

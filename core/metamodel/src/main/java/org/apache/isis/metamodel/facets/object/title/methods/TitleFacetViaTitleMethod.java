@@ -26,13 +26,13 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -63,7 +63,6 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
         return Intent.UI_HINT;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public String title(final ManagedObject owningAdapter) {
         try {
@@ -77,7 +76,10 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
             }
             return null;
         } catch (final RuntimeException ex) {
-            if(!IsisSystemEnvironment.get().isUnitTesting()) {
+            
+            val isUnitTesting = super.getMetaModelContext().getSystemEnvironment().isUnitTesting();
+            
+            if(!isUnitTesting) {
                 log.warn("Title failure", ex);    
             }
             return "Failed Title";

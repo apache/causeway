@@ -40,6 +40,7 @@ public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTe
     public void setUp() throws Exception {
         super.setUp();
         facetFactory = new DisabledObjectFacetViaMethodFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     @Override

@@ -20,11 +20,9 @@ package org.apache.isis.runtime.memento;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
- * TODO[2112] possibly not final 
- * 
  * @since 2.0
  * 
  *
@@ -33,19 +31,10 @@ public interface ObjectAdapterMementoSupport {
 
     ObjectAdapterMemento mementoForRootOid(RootOid rootOid);
 
-    ObjectAdapterMemento mementoForAdapter(ObjectAdapter adapter);
+    ObjectAdapterMemento mementoForAdapter(ManagedObject adapter);
 
     ObjectAdapterMemento mementoForPojo(Object pojo);
 
     ObjectAdapter reconstructObjectAdapter(ObjectAdapterMemento memento);
-
-    // -- SPI
-
-    static ObjectAdapterMementoSupport current() {
-        return IsisContext.getServiceRegistry().lookupServiceElseFail(ObjectAdapterMementoSupport.class);
-    }
-
-
-
 
 }

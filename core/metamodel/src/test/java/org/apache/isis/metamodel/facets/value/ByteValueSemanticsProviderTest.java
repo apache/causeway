@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.metamodel.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
@@ -44,6 +45,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         byteObj = Byte.valueOf((byte) 102);
         allowMockAdapterToReturn(byteObj);
         holder = new FacetHolderImpl();
+        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
         _Config.put("isis.value.format.byte", null);
 

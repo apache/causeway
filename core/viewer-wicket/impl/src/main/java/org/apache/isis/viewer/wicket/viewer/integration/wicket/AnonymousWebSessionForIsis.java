@@ -24,7 +24,10 @@ import org.apache.wicket.request.Request;
 
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
 
-public class AnonymousWebSessionForIsis extends AuthenticatedWebSessionForIsis {
+import lombok.Getter;
+
+@Deprecated // not used
+class AnonymousWebSessionForIsis extends AuthenticatedWebSessionForIsis {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,15 +35,13 @@ public class AnonymousWebSessionForIsis extends AuthenticatedWebSessionForIsis {
         return (AnonymousWebSessionForIsis) Session.get();
     }
 
-    private final AuthenticationManager authenticationManager;
+    @Getter(onMethod = @__(@Override))
+    private final transient AuthenticationManager authenticationManager;
 
-    public AnonymousWebSessionForIsis(final Request request, final AuthenticationManager authenticationManager) {
+    public AnonymousWebSessionForIsis(Request request, AuthenticationManager authenticationManager) {
         super(request);
         this.authenticationManager = authenticationManager;
     }
 
-    @Override
-    protected AuthenticationManager getAuthenticationManager() {
-        return authenticationManager;
-    }
+
 }

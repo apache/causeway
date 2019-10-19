@@ -31,6 +31,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -39,7 +41,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
@@ -69,6 +70,7 @@ class AuditerServiceTest {
     @Inject private FixtureScripts fixtureScripts;
     @Inject private WrapperFactory wrapper;
     @Inject private AuditerServiceProbe auditerService;
+    @Inject private PlatformTransactionManager txMan; 
 
     @BeforeEach
     void setUp() {
@@ -91,7 +93,7 @@ class AuditerServiceTest {
         auditerService.clearHistory();
 
         // when - running within its own transactional boundary
-        val transactionTemplate = IsisContext.createTransactionTemplate();
+        val transactionTemplate = new TransactionTemplate(txMan);
         transactionTemplate.execute(status -> {
 
             book.setName("Book #2");

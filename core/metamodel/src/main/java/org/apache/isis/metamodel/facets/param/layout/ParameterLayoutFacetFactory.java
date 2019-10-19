@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.param.layout;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 
@@ -46,13 +45,13 @@ public class ParameterLayoutFacetFactory extends FacetFactoryAbstract {
         
         val facetHolder = processParameterContext.getFacetHolder();
 
-        FacetUtil.addFacet(CssClassFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        FacetUtil.addFacet(DescribedAsFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        FacetUtil.addFacet(LabelAtFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        FacetUtil.addFacet(MultiLineFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        FacetUtil.addFacet(NamedFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        FacetUtil.addFacet(RenderedAdjustedFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        FacetUtil.addFacet(TypicalLengthFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
+        super.addFacet(CssClassFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
+        super.addFacet(DescribedAsFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
+        super.addFacet(LabelAtFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
+        super.addFacet(MultiLineFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
+        super.addFacet(NamedFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
+        super.addFacet(RenderedAdjustedFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
+        super.addFacet(TypicalLengthFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
 
     }
 

@@ -41,6 +41,7 @@ import org.apache.isis.extensions.sse.api.SseChannel;
 import org.apache.isis.extensions.sse.api.SseService;
 import org.apache.isis.extensions.sse.api.SseSource;
 import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 
 import lombok.Getter;
@@ -61,6 +62,7 @@ import lombok.extern.log4j.Log4j2;
 public class SseServiceDefault implements SseService {
 
     @Inject TransactionService transactionService;
+    @Inject IsisSessionFactory isisSessionFactory;
 
     private final EventStreamPool eventStreamPool = new EventStreamPool();
 
@@ -93,7 +95,7 @@ public class SseServiceDefault implements SseService {
             // wait for calling thread to commit its current transaction 
             callingThread_TransactionLatch.await();
 
-            IsisContext.getSessionFactory().doInSession(()->run(task));
+            isisSessionFactory.doInSession(()->run(task));
 
         }, executor);
 

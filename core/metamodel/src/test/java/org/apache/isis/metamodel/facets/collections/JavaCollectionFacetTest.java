@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -47,18 +48,20 @@ public class JavaCollectionFacetTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    private FacetHolder mockFacetHolder;
-    @Mock
-    private ObjectAdapter mockCollection;
-    @Mock
-    private Collection<ObjectAdapter> mockWrappedCollection;
-    @Mock
-    private ObjectAdapterProvider mockOAProvider;
+    @Mock private FacetHolder mockFacetHolder;
+    @Mock private ObjectAdapter mockCollection;
+    @Mock private Collection<ObjectAdapter> mockWrappedCollection;
+    @Mock private ObjectAdapterProvider mockOAProvider;
+
+    private MetaModelContext_forTesting metaModelContext;
 
     @Before
     public void setUp() throws Exception {
         facet = new JavaCollectionFacet(mockFacetHolder);
+        
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .objectAdapterProvider(mockOAProvider)
+                .build();
     }
 
     @After
@@ -75,6 +78,9 @@ public class JavaCollectionFacetTest {
 
                 oneOf(mockWrappedCollection).stream();
                 will(returnValue(Stream.empty()));
+                
+                oneOf(mockFacetHolder).getMetaModelContext();
+                will(returnValue(metaModelContext));
 
             }
         });

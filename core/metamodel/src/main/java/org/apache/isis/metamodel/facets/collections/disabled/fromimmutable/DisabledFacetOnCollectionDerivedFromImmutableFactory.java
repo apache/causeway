@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.collections.disabled.fromimmutable;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
@@ -39,7 +38,7 @@ public class DisabledFacetOnCollectionDerivedFromImmutableFactory extends FacetF
         if (spec.containsDoOpFacet(ImmutableFacet.class)) {
             final ImmutableFacet immutableFacet = spec.getFacet(ImmutableFacet.class);
             final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-            FacetUtil.addFacet(new DisabledFacetOnCollectionDerivedFromImmutable(immutableFacet, facetHolder));
+            super.addFacet(new DisabledFacetOnCollectionDerivedFromImmutable(immutableFacet, facetHolder));
         }
     }
 

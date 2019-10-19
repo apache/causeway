@@ -24,7 +24,9 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class ActionSemanticsFacetAbstract extends SingleValueFacetAbstract<SemanticsOf> implements ActionSemanticsFacet {
+public abstract class ActionSemanticsFacetAbstract 
+extends SingleValueFacetAbstract<SemanticsOf> 
+implements ActionSemanticsFacet {
 
     public static Class<? extends Facet> type() {
         return ActionSemanticsFacet.class;

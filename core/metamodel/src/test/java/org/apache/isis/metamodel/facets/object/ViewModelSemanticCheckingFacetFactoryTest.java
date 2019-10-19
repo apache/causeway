@@ -30,6 +30,8 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContextAware;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
@@ -53,15 +55,18 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     @Mock
     private ServiceInjector mockServicesInjector;
 
+    private MetaModelContext metaModelContext;
     private ViewModelSemanticCheckingFacetFactory facetFactory;
 
     private ValidationFailures processThenValidate(final Class<?> cls) {
         
         val programmingModel = new ProgrammingModelAbstract() {};
         facetFactory.refineProgrammingModel(programmingModel);
-        programmingModel.init(new ProgrammingModelInitFilterDefault());
+        programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
         
-        facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, new FacetHolderImpl()));
+        val holder = new FacetHolderImpl();
+        ((MetaModelContextAware)holder).setMetaModelContext(metaModelContext);
+        facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, holder));
         
         val validationFailures = new ValidationFailures();
         
@@ -80,11 +85,12 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         val configuration = new IsisConfiguration();
         configuration.getReflector().getFacets().getViewModelSemanticCheckingFacetFactory().setEnable(true);
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .configuration(configuration)
-                .build());
+                .build();
 
         facetFactory = new ViewModelSemanticCheckingFacetFactory();
+        facetFactory.setMetaModelContext(metaModelContext);
     }
 
     @Test

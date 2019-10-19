@@ -21,10 +21,12 @@ package org.apache.isis.runtime.services.xmlsnapshot;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.util.snapshot.XmlSchema;
 import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
-import org.apache.isis.runtime.system.context.IsisContext;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Builds an {@link XmlSnapshot} using a fluent use through a builder:
@@ -34,8 +36,10 @@ import org.apache.isis.runtime.system.context.IsisContext;
  * Element customerAsXml = snapshot.toXml();
  * </pre>
  */
+@RequiredArgsConstructor
 public class XmlSnapshotBuilder {
 
+    private final SpecificationLoader specificationLoader;
     private final Object domainObject;
     private XmlSchema schema;
 
@@ -50,10 +54,6 @@ public class XmlSnapshotBuilder {
     }
 
     private final List<XmlSnapshotBuilder.PathAndAnnotation> paths = _Lists.newArrayList();
-
-    public XmlSnapshotBuilder(final Object domainObject) {
-        this.domainObject = domainObject;
-    }
 
     public XmlSnapshotBuilder usingSchema(final XmlSchema schema) {
         this.schema = schema;
@@ -70,7 +70,7 @@ public class XmlSnapshotBuilder {
     }
 
     public XmlSnapshot build() {
-        final ObjectAdapter adapter = IsisContext.pojoToAdapter().apply(domainObject);
+        final ManagedObject adapter = ManagedObject.of(specificationLoader::loadSpecification, domainObject);
         final XmlSnapshot snapshot = (schema != null) ? new XmlSnapshot(adapter, schema) : new XmlSnapshot(adapter);
         for (final XmlSnapshotBuilder.PathAndAnnotation paa : paths) {
             if (paa.annotation != null) {

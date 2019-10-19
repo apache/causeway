@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -41,7 +40,8 @@ import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+
+import lombok.val;
 
 public class OneToManyAssociationContributee 
 extends OneToManyAssociationDefault implements ContributeeMember {
@@ -60,12 +60,12 @@ extends OneToManyAssociationDefault implements ContributeeMember {
 
     private static ObjectSpecification typeOfSpec(final ObjectActionDefault objectAction) {
 
-        final TypeOfFacet actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        final SpecificationLoader specificationLookup = MetaModelContext.current().getSpecificationLoader();
+        val actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
+        val specLoader = objectAction.getMetaModelContext().getSpecificationLoader();
         // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault which ensures that there is always
         // a TypeOfFacet for any contributee associations created from contributed actions.
-        Class<? extends Object> cls = actionTypeOfFacet != null? actionTypeOfFacet.value(): Object.class;
-        return specificationLookup.loadSpecification(cls);
+        val type = actionTypeOfFacet != null? actionTypeOfFacet.value(): Object.class;
+        return specLoader.loadSpecification(type);
     }
 
     public OneToManyAssociationContributee(

@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,9 +52,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -699,8 +696,12 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    public ScalarModel(final EntityModel parentEntityModel, final ActionParameterMemento apm) {
-        super(EntityModel.Mode.EDIT, EntityModel.RenderingHint.REGULAR);
+    public ScalarModel(EntityModel parentEntityModel, ActionParameterMemento apm) {
+        
+        super(parentEntityModel.getCommonContext(),
+                EntityModel.Mode.EDIT, 
+                EntityModel.RenderingHint.REGULAR);
+        
         this.kind = Kind.PARAMETER;
         this.parentEntityModel = parentEntityModel;
         this.parameterMemento = apm;
@@ -714,9 +715,12 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
      * property.
      */
     public ScalarModel(
-            final EntityModel parentEntityModel, final PropertyMemento pm,
-            final EntityModel.Mode mode, final EntityModel.RenderingHint renderingHint) {
-        super(mode, renderingHint);
+            EntityModel parentEntityModel, 
+            PropertyMemento pm,
+            EntityModel.Mode mode, 
+            EntityModel.RenderingHint renderingHint) {
+        
+        super(parentEntityModel.getCommonContext(), mode, renderingHint);
         this.kind = Kind.PROPERTY;
         this.parentEntityModel = parentEntityModel;
         this.propertyMemento = pm;
@@ -732,11 +736,6 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
     @Override
     public void reset() {
         kind.reset(this);
-    }
-
-    @Override
-    public boolean isWithinPrompt() {
-        return FormExecutorContext.Util.isWithinPrompt(this);
     }
 
     @Override
@@ -850,7 +849,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
         }
 
         if(isCollection()) {
-            val memento = ObjectAdapterMemento.ofIterablePojos(pojo, getTypeOfSpecification().getSpecId());
+            val memento = ObjectAdapterMemento
+                    .ofIterablePojos(pojo, getTypeOfSpecification().getSpecId(), super.getMementoSupport());
             super.setObjectMemento(memento); // associated value
         } else {
             super.setObject(adapter); // associated value
@@ -864,8 +864,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             throw new RuntimeException("unable to parse string for " + getTypeOfSpecification().getFullIdentifier());
         }
         final ObjectAdapter adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
-                InteractionInitiatedBy.USER
-                );
+                InteractionInitiatedBy.USER);
 
         setObject(adapter);
     }
@@ -873,10 +872,11 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
     public void setPendingAdapter(final ObjectAdapter objectAdapter) {
         if(isCollection()) {
             val pojo = objectAdapter.getPojo();
-            val memento = ObjectAdapterMemento.ofIterablePojos(pojo, getTypeOfSpecification().getSpecId());
+            val memento = ObjectAdapterMemento
+                    .ofIterablePojos(pojo, getTypeOfSpecification().getSpecId(), super.getMementoSupport());
             setPending(memento);
         } else {
-            setPending(ObjectAdapterMemento.ofAdapter(objectAdapter));
+            setPending(ObjectAdapterMemento.ofAdapter(objectAdapter, super.getMementoSupport()));
         }
     }
 
@@ -892,17 +892,6 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
     public String validate(final ObjectAdapter proposedAdapter) {
         return kind.validate(this, proposedAdapter);
-    }
-
-    /**
-     * Default implementation looks up from singleton, but can be overridden for
-     * testing.
-     */
-    @Override
-    protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getServiceRegistry()
-                .lookupServiceElseFail(AuthenticationSessionProvider.class)
-                .getAuthenticationSession();
     }
 
     public boolean isRequired() {
@@ -1118,8 +1107,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
             if(cloneable) {
                 val newViewModelPojo = recreatableObjectFacet.clone(viewModel);
-                val pojoToAdapter = IsisContext.pojoToAdapter();
-                adapter = pojoToAdapter.apply(newViewModelPojo);
+                adapter = super.getPojoToAdapter().apply(newViewModelPojo);
             }
         }
 

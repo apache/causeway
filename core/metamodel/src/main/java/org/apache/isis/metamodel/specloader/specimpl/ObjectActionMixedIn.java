@@ -92,7 +92,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
         if(_Strings.isNullOrEmpty(name) || name.equalsIgnoreCase(mixinMethodName)) {
             String memberName = determineNameFrom(mixinAction);
-            FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
+            super.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }
 
         // calculate the identifier

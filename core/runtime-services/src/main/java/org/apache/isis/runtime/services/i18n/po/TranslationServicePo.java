@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
@@ -160,20 +161,23 @@ public class TranslationServicePo implements TranslationService {
 
     // -- DEPENDENCIES
 
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private ServiceRegistry serviceRegistry;
+    
     private _Lazy<Bin<TranslationsResolver>> translationsResolvers = _Lazy.threadSafe(()->
-    IsisContext.getServiceRegistry().select(TranslationsResolver.class) );
+    serviceRegistry.select(TranslationsResolver.class) );
 
     Bin<TranslationsResolver> getTranslationsResolver() {
         return translationsResolvers.get();
     }
 
     private _Lazy<Bin<LocaleProvider>> localeProviders = _Lazy.threadSafe(()->
-    IsisContext.getServiceRegistry().select(LocaleProvider.class) );
+    serviceRegistry.select(LocaleProvider.class) );
 
     Bin<LocaleProvider> getLocaleProvider() {
         return localeProviders.get();
     }
 
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    
 
 }

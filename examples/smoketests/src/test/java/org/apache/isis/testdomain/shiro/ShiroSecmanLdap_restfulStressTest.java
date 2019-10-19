@@ -20,13 +20,13 @@ package org.apache.isis.testdomain.shiro;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
@@ -36,13 +36,12 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryp
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
-import org.apache.isis.security.shiro.WebModuleShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
-import org.apache.isis.testdomain.rest.RestService;
+import org.apache.isis.testdomain.rest.RestEndpointTestService;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 
 import static java.time.Duration.ofMillis;
@@ -70,7 +69,7 @@ import lombok.val;
 
     // Restful server
     IsisBootWebRestfulObjects.class,
-    RestService.class,
+    RestEndpointTestService.class,
 
     // Embedded LDAP server for testing
     LdapServerService.class,
@@ -85,39 +84,26 @@ import lombok.val;
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;
-    @Inject RestService restService;
+    @Inject RestEndpointTestService restService;
     @Inject LdapServerService ldapServerService;
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject SecurityModuleConfig securityConfig;
+    @Inject ServiceInjector serviceInjector;
     
-    @BeforeAll
-    static void beforeClass() {
-        //    Build and set the SecurityManager used to build Subject instances used in your tests
-        //    This typically only needs to be done once per class if your shiro.ini doesn't change,
-        //    otherwise, you'll need to do this logic in each test that is different
-        setSecurityManager("classpath:shiro-secman-ldap.ini");
-        //setSecurityManager("classpath:shiro-secman-ldap-cached.ini");
-    }
-
-    @AfterAll
-    static void afterClass() {
-        tearDownShiro();
-    }
-
     @BeforeEach
-    void setupSvenInDb() {
+    void beforeEach() {
+        
+        setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
+        
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
-        
-        WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
     }
     
-//    @AfterEach
-//    void afterEach() {
-//        tearDownShiro();
-//    }
-    
+    @AfterEach
+    void afterEach() {
+        tearDownShiro();
+    }
 
     @Test 
     void stressTheRestEndpoint() {

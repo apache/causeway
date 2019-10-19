@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.metamodel.commons.StringExtensions;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
@@ -81,7 +80,7 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(
+            super.addFacet(
                     new ActionParameterAutoCompleteFacetViaMethod(
                             autoCompleteMethod, paramType, paramAsHolder));
         }

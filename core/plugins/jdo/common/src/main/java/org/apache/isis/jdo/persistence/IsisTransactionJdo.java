@@ -26,6 +26,7 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
@@ -161,13 +162,12 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
     private IsisException abortCause;
 
     public IsisTransactionJdo(
+            final ServiceRegistry serviceRegistry,
             final UUID interactionId,
             final int sequence) {
 
         id = TransactionId.of(interactionId, sequence);
         //        this.authenticationSession = authenticationSession;
-
-        val serviceRegistry = IsisContext.getServiceRegistry();
 
         //        this.messageBroker = authenticationSession.getMessageBroker();
         this.publishingServiceInternal = serviceRegistry.lookupServiceElseFail(PublishingServiceInternal.class);

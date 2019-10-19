@@ -32,10 +32,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.SSESupport;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
@@ -50,7 +50,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAut
  *     <a href="http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs3">Bootsnip</a>
  * </p>
  */
-public class ServiceActionsPanel extends Panel {
+public class ServiceActionsPanel extends PanelBase {
+    
     private static final long serialVersionUID = 1L;
 
     public ServiceActionsPanel(String id, List<CssMenuItem> menuItems) {
@@ -89,7 +90,8 @@ public class ServiceActionsPanel extends Panel {
                         } else {
 
                             final MarkupContainer parent = ServiceActionsPanel.this;
-                            ServiceActionUtil.addLeafItem(subMenuItem, listItem, parent);
+                            ServiceActionUtil.addLeafItem(
+                                    ServiceActionsPanel.super.commonContext, subMenuItem, listItem, parent);
 
                         }
                     }
@@ -127,7 +129,7 @@ public class ServiceActionsPanel extends Panel {
 
     private void addFolderItem(CssMenuItem subMenuItem, ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = ServiceActionsPanel.this;
-        ServiceActionUtil.addFolderItem(subMenuItem, listItem, parent, ServiceActionUtil.SeparatorStrategy.WITH_SEPARATORS);
+        ServiceActionUtil.addFolderItem(super.commonContext, subMenuItem, listItem, parent, ServiceActionUtil.SeparatorStrategy.WITH_SEPARATORS);
     }
 
     @Override

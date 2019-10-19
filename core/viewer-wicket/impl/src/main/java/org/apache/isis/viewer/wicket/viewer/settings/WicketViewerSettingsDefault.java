@@ -19,26 +19,24 @@
 
 package org.apache.isis.viewer.wicket.viewer.settings;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+
+import lombok.Getter;
 
 @Service
 public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     private static final long serialVersionUID = 1L;
 
-    IsisConfigurationLegacy getConfigurationLegacy() {
-        return IsisContext.getConfigurationLegacy();
-    }
-
-    IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
+    @Inject @Getter private transient IsisConfigurationLegacy configurationLegacy;
+    @Inject @Getter private transient IsisConfiguration configuration;
 
     @Override
     public int getMaxTitleLengthInStandaloneTables() {

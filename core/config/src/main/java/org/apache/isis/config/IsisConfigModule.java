@@ -52,14 +52,15 @@ public class IsisConfigModule {
         
         _Config.clear();
         
-        val rawKeyValueMap = _Spring.copySpringEnvironmentToMap(configurableEnvironment);
+        val rawKeyValueMap = isisSystemEnvironment.getIocContainer()
+                .copyEnvironmentToMap(configurableEnvironment);
         _Config.putAll(rawKeyValueMap);
 
         log.info("Spring's context was passed over to Isis");
 
         // dump config to log
         if(log.isInfoEnabled() && !isisSystemEnvironment.isUnitTesting()) {
-            log.info("\n" + _Config.getConfiguration().toStringFormatted());
+            log.info("\n" + _Config.getConfiguration().toStringFormatted(isisSystemEnvironment));
         }    
         
         val isisConfigurationLegacy = _Config.getConfiguration(); // finalize config

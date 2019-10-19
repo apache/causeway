@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.properties.disabled.fromimmutable;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
@@ -46,7 +45,7 @@ public class DisabledFacetOnPropertyDerivedFromImmutableFactory extends FacetFac
                 // @Property(editing=ENABLED)
                 return;
             }
-            FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromImmutable(facetHolder));
+            super.addFacet(new DisabledFacetOnPropertyDerivedFromImmutable(facetHolder));
         }
     }
 

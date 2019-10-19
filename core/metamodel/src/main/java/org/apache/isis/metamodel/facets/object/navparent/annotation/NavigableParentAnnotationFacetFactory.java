@@ -25,7 +25,6 @@ import java.util.List;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
@@ -88,7 +87,7 @@ implements MetaModelRefiner {
         }
 
         try {
-            FacetUtil.addFacet(new NavigableParentFacetMethod(method, facetHolder));
+            super.addFacet(new NavigableParentFacetMethod(method, facetHolder));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

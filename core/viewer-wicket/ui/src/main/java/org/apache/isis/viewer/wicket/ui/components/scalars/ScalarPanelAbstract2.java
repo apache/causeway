@@ -54,7 +54,6 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
@@ -81,9 +80,12 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.val;
 
 
-public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> implements ScalarModelSubscriber2 {
+public abstract class ScalarPanelAbstract2 
+extends PanelAbstract<ScalarModel> 
+implements ScalarModelSubscriber2 {
 
     private static final long serialVersionUID = 1L;
 
@@ -163,14 +165,14 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             onDisabled(usabilityConsent.getReason(), target);
         }
 
-
+        val commonContext = super.getCommonContext();
 
         // even if now invisible or unusable, we recalculate args and ensure compatible
         // (else can hit complicated edge cases with stale data when next re-enable/make visible)
         final ScalarModel model = getModel();
         ObjectAdapter defaultIfAny = model.getKind()
                 .getDefault(scalarModel, pendingArguments, paramNumUpdated,
-                        getAuthenticationSession());
+                        commonContext.getAuthenticationSession());
 
         final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
         final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
@@ -187,7 +189,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             if(pendingArg != null & scalarModel.hasChoices()) {
                 // make sure the object is one of the choices, else blank it out.
                 final List<ObjectAdapter> choices = scalarModel
-                        .getChoices(pendingArguments, getAuthenticationSession());
+                        .getChoices(pendingArguments, commonContext.getAuthenticationSession());
 
                 if(pendingArg.isValue()) {
                     // we have to do this if the ObjectAdapters are value type (eg a string)
@@ -301,6 +303,8 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
     private void buildGuiAndCallHooks() {
 
+        val commonContext = super.getCommonContext();
+        
         try {
             buildGui();
         } catch (ConcurrencyException ex) {
@@ -310,9 +314,9 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             //
             // there is similar code for invoking actions (ActionLink)
             //
-            IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getMessageBroker().addMessage(ex.getMessage());
+            commonContext.getAuthenticationSession().getMessageBroker().addMessage(ex.getMessage());
             final ObjectAdapter parentAdapter = getModel().getParentEntityModel().load();
-            throw new RestartResponseException(new EntityPage(parentAdapter));
+            throw new RestartResponseException(new EntityPage(commonContext, parentAdapter));
         }
 
         final ScalarModel scalarModel = getModel();

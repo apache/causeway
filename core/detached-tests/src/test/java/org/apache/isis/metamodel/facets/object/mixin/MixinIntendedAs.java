@@ -21,9 +21,8 @@ package org.apache.isis.metamodel.facets.object.mixin;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
@@ -34,13 +33,13 @@ import org.apache.isis.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
 import lombok.val;
 
 abstract class MixinIntendedAs {
     
     protected ProgrammingModelFacetsJava8 programmingModel;
+    private MetaModelContext metaModelContext;
 
     protected void setUp() throws Exception {
 
@@ -48,18 +47,14 @@ abstract class MixinIntendedAs {
         
         // PRODUCTION
 
-        MetaModelContext.preset(MetaModelContext.builder()
-                .specificationLoader(SpecificationLoaderDefault.getInstance(
-                        new IsisConfiguration(),
-                        new IsisSystemEnvironment(),
-                        programmingModel))
-//                .serviceInjector(mockServiceInjector)
-//                .serviceRegistry(mockServiceRegistry)
-                .build());
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .programmingModel(programmingModel)
+                .build();
         
-        ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
-        MetaModelContext.current().getSpecificationLoader().createMetaModel();
+        ((ProgrammingModelAbstract)programmingModel)
+        .init(new ProgrammingModelInitFilterDefault(), metaModelContext);
         
+        metaModelContext.getSpecificationLoader().createMetaModel();
     }
 
     protected void tearDown() {
@@ -78,6 +73,7 @@ abstract class MixinIntendedAs {
         
         val facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(
               Identifier.classIdentifier(type));
+        facetHolder.setMetaModelContext(metaModelContext);
         
         val processClassContext = 
                 new FacetFactory.ProcessClassContext(

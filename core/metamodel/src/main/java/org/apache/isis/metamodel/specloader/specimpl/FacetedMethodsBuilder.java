@@ -34,7 +34,6 @@ import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
@@ -152,11 +151,13 @@ public class FacetedMethodsBuilder {
 
     public FacetedMethodsBuilder(
             final ObjectSpecificationAbstract inspectedTypeSpec,
-            final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
+            final FacetProcessor facetProcessor) {
         
         if (log.isDebugEnabled()) {
             log.debug("creating JavaIntrospector for {}", inspectedTypeSpec.getFullIdentifier());
         }
+        
+        val mmContext = inspectedTypeSpec.getMetaModelContext();
 
         this.inspectedTypeSpec = inspectedTypeSpec;
         this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
@@ -164,10 +165,10 @@ public class FacetedMethodsBuilder {
         val methodsRemaining = introspectedClass.getMethods();
         this.methodRemover = new FacetedMethodsMethodRemover(introspectedClass, methodsRemaining);
 
-        this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
-        this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
+        this.facetProcessor = facetProcessor;
+        this.specificationLoader = mmContext.getSpecificationLoader();
 
-        val isisConfiguration = MetaModelContext.current().getConfiguration();
+        val isisConfiguration = mmContext.getConfiguration();
         
         this.explicitAnnotationsForActions = isisConfiguration.getReflector().getExplicitAnnotations().isAction();
 

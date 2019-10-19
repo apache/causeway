@@ -22,8 +22,6 @@ package org.apache.isis.viewer.wicket.ui.pages.mmverror;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -31,7 +29,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -39,17 +36,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.viewer.wicket.ui.pages.WebPageBase;
 
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
 /**
  * A page being shown when the meta model validation has failed
  */
-public class MmvErrorPage extends WebPage {
+public class MmvErrorPage extends WebPageBase {
 
     private static final long serialVersionUID = 1L;
 
@@ -116,18 +110,5 @@ public class MmvErrorPage extends WebPage {
         return true;
     }
 
-    // ///////////////////////////////////////////////////
-    // System components
-    // ///////////////////////////////////////////////////
-
-    protected IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfigurationLegacy();
-    }
-
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
-
-    @Inject private WebAppConfigBean webAppConfigBean;
 
 }

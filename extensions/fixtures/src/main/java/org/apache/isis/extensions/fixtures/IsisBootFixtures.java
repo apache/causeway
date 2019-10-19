@@ -27,7 +27,6 @@ import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResults
 
 @Configuration
 @Import({
-    FixturesEventService.class,
     FixturesLifecyleService.class,
     FixtureScriptsDefault.class,
     ExecutionParametersService.class,

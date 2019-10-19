@@ -36,14 +36,16 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import static org.hamcrest.CoreMatchers.is;
 
 public class ObjectAdapterMementoProviderForValueChoicesTest {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    @Rule public JUnitRuleMockery2 context = 
+            JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private List<ObjectAdapterMemento> mementos;
 
@@ -51,11 +53,11 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
     private ObjectAdapterMemento mockMemento2;
     private ObjectAdapterMementoProviderForValueChoices provider;
 
-
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private ObjectSpecification mockSpec;
+    @Mock private SpecificationLoader mockSpecificationLoader;
+    @Mock private ObjectSpecification mockSpec;
+    @Mock private ScalarModel mockScalarModel;
+    @Mock private IsisWebAppCommonContext mockCommonContext;
+    @Mock private WicketViewerSettings mockWicketViewerSettings;
 
     @Before
     public void setUp() throws Exception {
@@ -64,26 +66,30 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
         mockMemento1 = mock(fakeSpecId, "mockMemento1");
         mockMemento2 = mock(fakeSpecId, "mockMemento2");
 
-        mementos = _Lists.of(
-                mockMemento1, mockMemento2
-                );
-
-        WicketViewerSettings wicketViewerSettings = context.mock(WicketViewerSettings.class);
-        provider = new ObjectAdapterMementoProviderForValueChoices(null, mementos, wicketViewerSettings) {
-            private static final long serialVersionUID = 1L;
-
-            @Override protected SpecificationLoader getSpecificationLoader() {
-                return mockSpecificationLoader;
-            }
-        };
-
-        context.checking(new Expectations() {{
+        mementos = _Lists.of(mockMemento1, mockMemento2);
+        
+        context.checking(new Expectations() {        {
+            
+            allowing(mockScalarModel).getCommonContext();
+            will(returnValue(mockCommonContext));
+            
+            allowing(mockCommonContext).lookupServiceElseFail(WicketViewerSettings.class);
+            will(returnValue(mockWicketViewerSettings));
+            
+            allowing(mockCommonContext).getSpecificationLoader();
+            will(returnValue(mockSpecificationLoader));
+            
             allowing(mockSpecificationLoader).lookupBySpecIdElseLoad(fakeSpecId);
             will(returnValue(mockSpec));
 
             allowing(mockSpec).isEncodeable();
             will(returnValue(true));
         }});
+        
+        provider = new ObjectAdapterMementoProviderForValueChoices(mockScalarModel, mementos) {
+            private static final long serialVersionUID = 1L;
+        };
+
     }
 
     @Test

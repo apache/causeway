@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
@@ -39,7 +40,6 @@ import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -56,20 +56,17 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
+    @Mock protected FacetHolder mockFacetHolder;
+    @Mock protected ObjectAdapterService mockSessionServiceInternal;
+    //@Mock protected SpecificationLoader mockSpecificationLoader;
+    @Mock protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock protected ObjectAdapter mockAdapter;
+    
+    protected MetaModelContext metaModelContext;
+    
     private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
     private EncodableFacetUsingEncoderDecoder encodeableFacet;
     private ParseableFacetUsingParser parseableFacet;
-
-    @Mock
-    protected FacetHolder mockFacetHolder;
-    @Mock
-    protected ObjectAdapterService mockSessionServiceInternal;
-    @Mock
-    protected SpecificationLoader mockSpecificationLoader;
-    @Mock
-    protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Mock
-    protected ObjectAdapter mockAdapter;
 
     @Before
     public void setUp() throws Exception {
@@ -77,20 +74,18 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         _Config.clear();
         Locale.setDefault(Locale.UK);
 
-        MetaModelContext.preset(MetaModelContext.builder()
-                .specificationLoader(mockSpecificationLoader)
-                //                .translationService(mockTranslationService)
-                //                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
-                .build());
+                .build();
 
         context.checking(new Expectations() {
             {
-                //                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-                //                will(returnValue(mockSessionServiceInternal));
 
                 never(mockAuthenticationSessionProvider);
                 never(mockSessionServiceInternal);
+                
+                allowing(mockFacetHolder).getMetaModelContext();
+                will(returnValue(metaModelContext));
             }
         });
     }

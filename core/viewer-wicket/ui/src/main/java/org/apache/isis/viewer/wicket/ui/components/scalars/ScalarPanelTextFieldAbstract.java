@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -44,11 +42,12 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+
+import lombok.val;
 
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
@@ -213,7 +212,8 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
     }
 
     private void addValidatorForIsisValidation() {
-        final ScalarModel scalarModel = getModel();
+        val scalarModel = getModel();
+        val commonContext = scalarModel.getCommonContext();
 
         textField.add(new IValidator<T>() {
             private static final long serialVersionUID = 1L;
@@ -221,7 +221,7 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
             @Override
             public void validate(final IValidatable<T> validatable) {
                 final T proposedValue = validatable.getValue();
-                final ObjectAdapter proposedAdapter = pojoToAdapter().apply(proposedValue);
+                final ObjectAdapter proposedAdapter = commonContext.getPojoToAdapter().apply(proposedValue);
                 final String reasonIfAny = scalarModel.validate(proposedAdapter);
                 if (reasonIfAny != null) {
                     final ValidationError error = new ValidationError();
@@ -372,13 +372,6 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
     private static Integer getValueOf(ScalarModel model, Class<? extends SingleIntValueFacet> facetType) {
         final SingleIntValueFacet facet = model.getFacet(facetType);
         return facet != null ? facet.value() : null;
-    }
-
-    @Inject
-    WicketViewerSettings settings;
-    @Override
-    protected WicketViewerSettings getSettings() {
-        return settings;
     }
 
 }

@@ -46,6 +46,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
     @Before
     public void setUp() throws Exception {
         facetFactory = new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
     //TODO[2142] NatureOfService.VIEW_CONTRIBUTIONS_ONLY was deprecated, remove ?
@@ -109,6 +110,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         expectNoMethodsRemoved();
 
         facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         // when
         facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));

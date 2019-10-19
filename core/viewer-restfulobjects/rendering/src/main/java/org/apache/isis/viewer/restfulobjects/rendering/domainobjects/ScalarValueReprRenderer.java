@@ -59,7 +59,7 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
             throw ReprRendererException.create("Not an (encodable) value", objectAdapter.titleString());
         }
         String format = null; // TODO
-        final Object value = JsonValueEncoder.asObject(objectAdapter, format);
+        final Object value = jsonValueEncoder.asObject(objectAdapter, format);
 
         representation.mapPut("value", value);
         return this;

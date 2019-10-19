@@ -31,31 +31,32 @@ import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
 
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {
         @Override
         public void handleResults(
-                ActionResultResponse resultResponse,
-                final IsisSessionFactory isisSessionFactory) {
+                IsisWebAppCommonContext commonContext,
+                ActionResultResponse resultResponse) {
+            
             final RequestCycle requestCycle = RequestCycle.get();
-            requestCycle.setResponsePage(new VoidReturnPage(new VoidModel()));
+            requestCycle.setResponsePage(new VoidReturnPage(new VoidModel(commonContext)));
         }
     },
     REDIRECT_TO_PAGE {
         @Override
         public void handleResults(
-                final ActionResultResponse resultResponse,
-                final IsisSessionFactory isisSessionFactory) {
+                IsisWebAppCommonContext commonContext,
+                ActionResultResponse resultResponse) {
+            
             // force any changes in state etc to happen now prior to the redirect;
             // in the case of an object being returned, this should cause our page mementos
             // (eg EntityModel) to hold the correct state.  I hope.
 
-            IsisContext.getTransactionService().flushTransaction();
+            commonContext.getTransactionService().flushTransaction();
 
             // "redirect-after-post"
             final RequestCycle requestCycle = RequestCycle.get();
@@ -65,8 +66,9 @@ public enum ActionResultResponseHandlingStrategy {
     SCHEDULE_HANDLER {
         @Override
         public void handleResults(
-                final ActionResultResponse resultResponse,
-                final IsisSessionFactory isisSessionFactory) {
+                IsisWebAppCommonContext commonContext,
+                ActionResultResponse resultResponse) {
+            
             final RequestCycle requestCycle = RequestCycle.get();
             AjaxRequestTarget target = requestCycle.find(AjaxRequestTarget.class).orElse(null);
 
@@ -90,8 +92,9 @@ public enum ActionResultResponseHandlingStrategy {
     OPEN_URL_IN_BROWSER {
         @Override
         public void handleResults(
-                final ActionResultResponse resultResponse,
-                final IsisSessionFactory isisSessionFactory) {
+                IsisWebAppCommonContext commonContext,
+                ActionResultResponse resultResponse) {
+            
             final AjaxRequestTarget target = resultResponse.getTarget();
             final URL url = resultResponse.getUrl();
 
@@ -104,8 +107,8 @@ public enum ActionResultResponseHandlingStrategy {
     };
 
     public abstract void handleResults(
-            ActionResultResponse resultResponse,
-            final IsisSessionFactory isisSessionFactory);
+            IsisWebAppCommonContext commonContext,
+            ActionResultResponse resultResponse);
 
     /**
      * @see #expanded(String)

@@ -81,7 +81,9 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
         final Class<?> returnType = actionMethod.getReturnType();
         final FacetHolder action = processMethodContext.getFacetHolder();
         final ActionChoicesFacetViaMethod facet = new ActionChoicesFacetViaMethod(choicesMethod, returnType, action);
-        FacetUtil.addFacet(facet);
+        
+        super.addFacet(facet);
+        
     }
 
     protected Method findChoicesMethodReturning(final ProcessMethodContext processMethodContext, final Class<?> returnType2) {

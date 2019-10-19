@@ -55,9 +55,12 @@ import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -152,7 +155,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     protected <T> T createProxy(T domainObject, EnumSet<ExecutionMode> mode) {
         
-        return proxyContextHandler.proxy(domainObject, mode);
+        return proxyContextHandler.proxy(metaModelContext, domainObject, mode);
     }
 
     @Override
@@ -177,7 +180,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Override
     public <T> AsyncWrap<T> async(T domainObject, EnumSet<ExecutionMode> mode) {
         val executor = ForkJoinPool.commonPool(); // default, but can be overwritten through withers on the returned AsyncWrap
-        return new AsyncWrapDefault<T>(this, domainObject, mode, executor, log::error);
+        return new AsyncWrapDefault<T>(
+                this, isisSessionFactory, transactionService, domainObject, mode, executor, log::error);
     }
     
     @Override
@@ -238,7 +242,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject AuthenticationSessionProvider authenticationSessionProvider;
     @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     @Inject FactoryService factoryService;
-
-
+    @Inject MetaModelContext metaModelContext;
+    @Inject IsisSessionFactory isisSessionFactory;
+    @Inject TransactionService transactionService;
 
 }

@@ -27,17 +27,15 @@ import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
@@ -47,7 +45,6 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -72,6 +69,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -85,6 +83,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     protected ActionLinkFactoryAbstract(
             final EntityModel targetEntityModel,
             final ScalarModel scalarModelForAssociationIfAny) {
+        
         this.targetEntityModel = targetEntityModel;
         this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
     }
@@ -94,10 +93,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             final ObjectAction action,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        final ActionModel actionModel = ActionModel.create(this.targetEntityModel, action);
+        val actionModel = ActionModel.create(this.targetEntityModel, action);
+        val commonContext = actionModel.getCommonContext();
 
-        final ActionLink link =
-                new ActionLink(linkId, actionModel, action) {
+        final ActionLink link = new ActionLink(commonContext, linkId, actionModel, action) {
+            
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -188,8 +188,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 actionParametersPanel.setShowHeader(false);
 
-                @SuppressWarnings("deprecation") // conveniently reuses the toString method of AbstractReadOnlyModel
-                final Label label = new Label(prompt.getTitleId(), new AbstractReadOnlyModel<String>() {
+                final Label label = new Label(prompt.getTitleId(), new IModel<String>() {
                     private static final long serialVersionUID = 1L;
                     @Override
                     public String getObject() {
@@ -213,8 +212,10 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                         if(mixinSpec.isViewModel()) {
 
+                            val commonContext = getCommonContext();
                             final ManagedObject targetAdapterForMixin = action.realTargetAdapter(actionModel.getTargetAdapter());
-                            final EntityModel entityModelForMixin = new EntityModel(ManagedObject.promote(targetAdapterForMixin));
+                            final EntityModel entityModelForMixin = 
+                                    EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
 
                             final GridFacet facet = mixinSpec.getFacet(GridFacet.class);
                             final Grid gridForMixin = facet.getGrid(targetAdapterForMixin);
@@ -262,9 +263,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     // an error page, but is probably 'good enough').
                     final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
 
-                    final EntityPage entityPage = new EntityPage(targetAdapter, null);
+                    final EntityPage entityPage = new EntityPage(getCommonContext(), targetAdapter, null);
 
-                    IsisContext.getTransactionService().flushTransaction();
+                    getCommonContext().getTransactionService().flushTransaction();
 
                     // "redirect-after-post"
                     final RequestCycle requestCycle = RequestCycle.get();
@@ -290,7 +291,6 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
         return null;
     }
-
 
     protected LinkAndLabel newLinkAndLabel(
             final ObjectAdapter objectAdapter,
@@ -324,12 +324,17 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     }
 
     protected ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
+        return getCommonContext().getServiceRegistry();
     }
 
-    private SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+    protected SpecificationLoader getSpecificationLoader() {
+        return getCommonContext().getSpecificationLoader();
     }
 
+    protected IsisWebAppCommonContext getCommonContext() {
+        return targetEntityModel.getCommonContext();
+    }
+
+    
 
 }

@@ -39,8 +39,8 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -86,6 +86,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
     private final MetaModelValidatorForValidationFailures autoCompleteMethodInvalid = 
             new MetaModelValidatorForValidationFailures();
+    
     private final MetaModelValidatorForMixinTypes mixinTypeValidator = 
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
@@ -93,6 +94,13 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
     public DomainObjectAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
+    }
+    
+    @Override
+    public void setMetaModelContext(MetaModelContext metaModelContext) {
+        super.setMetaModelContext(metaModelContext);
+        autoCompleteMethodInvalid.setMetaModelContext(metaModelContext);
+        mixinTypeValidator.setMetaModelContext(metaModelContext);
     }
 
     @Override
@@ -136,7 +144,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 .create(auditing, getConfiguration(), facetHolder);
 
         // then add
-        FacetUtil.addFacet(auditableFacet);
+        super.addFacet(auditableFacet);
     }
 
 
@@ -159,7 +167,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 .create(publishing, getConfiguration(), facetHolder);
 
         // then add
-        FacetUtil.addFacet(publishedObjectFacet);
+        super.addFacet(publishedObjectFacet);
     }
     
     // -- AUTO COMPLETE
@@ -173,7 +181,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         val facet = createFor(domainObjectIfAny, facetHolder, cls);
 
         // then add
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
     
     private final static class AnnotHelper {
@@ -247,7 +255,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         val facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
 
         // then add
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processEditing(final ProcessClassContext processClassContext) {
@@ -259,7 +267,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 .create(domainObjectIfAny, getConfiguration(), facetHolder);
 
         // then add
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processObjectType(final ProcessObjectSpecIdContext processClassContext) {
@@ -280,7 +288,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         //        }
 
         // then add
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
 
@@ -301,7 +309,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                     postConstructMethodCache);
 
         if(recreatableObjectFacet != null) {
-            FacetUtil.addFacet(recreatableObjectFacet);
+            super.addFacet(recreatableObjectFacet);
         } else {
 
             val mixinDomainObjectIfAny =
@@ -311,7 +319,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
             val mixinFacet = 
                     MixinFacetForDomainObjectAnnotation.create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector());
-            FacetUtil.addFacet(mixinFacet);
+            super.addFacet(mixinFacet);
         }
 
     }
@@ -360,7 +368,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 )
         .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventLoaded(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
@@ -376,7 +384,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 )
         .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventPersisting(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
@@ -392,7 +400,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 )
         .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventPersisted(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
@@ -408,7 +416,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 )
         .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventRemoving(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
@@ -424,7 +432,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 )
         .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventUpdated(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
@@ -440,7 +448,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 )
         .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventUpdating(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
@@ -456,7 +464,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 )
         .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
     }
 
     private void processDomainEventAction(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
@@ -466,7 +474,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
         .map(domainEvent -> new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
 
     }
 
@@ -477,7 +485,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
         .map(domainEvent -> new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
     }
 
     private void processDomainEventCollection(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
@@ -487,7 +495,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
         .map(domainEvent -> new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
-        .ifPresent(FacetUtil::addFacet);
+        .ifPresent(super::addFacet);
     }
 
     @Override

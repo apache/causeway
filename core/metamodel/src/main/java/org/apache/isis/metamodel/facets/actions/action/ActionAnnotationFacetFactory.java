@@ -26,8 +26,6 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -120,7 +118,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                     ActionDomainEvent.Noop.class,
                     ActionDomainEvent.Default.class,
                     getConfiguration().getReflector().getFacet().getActionAnnotation().getDomainEvent().isPostForDefault())) {
-                FacetUtil.addFacet(actionDomainEventFacet);
+                super.addFacet(actionDomainEventFacet);
             }
 
             // replace the current actionInvocationFacet with one that will
@@ -136,7 +134,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder);
             }
-            FacetUtil.addFacet(actionInvocationFacet);
+            super.addFacet(actionInvocationFacet);
 
         } finally {
             processMethodContext.removeMethod(actionMethod);
@@ -162,18 +160,17 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         // search for @Action(hidden=...)
         val facet = HiddenFacetForActionAnnotation.create(actionIfAny, holder);
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processRestrictTo(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Action(restrictTo=...)
-        @SuppressWarnings("deprecation")
         val facet = PrototypeFacetForActionAnnotation.create(actionIfAny, holder,
-                ()->IsisSystemEnvironment.get().getDeploymentType());
-
-        FacetUtil.addFacet(facet);
+                ()->super.getSystemEnvironment().getDeploymentType());
+        
+        super.addFacet(facet);
     }
 
     void processSemantics(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -182,7 +179,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // check for @Action(semantics=...)
         val facet = ActionSemanticsFacetForActionAnnotation.create(actionIfAny, holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processCommand(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -201,7 +198,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // check for @Action(command=...)
         val commandFacet = CommandFacetForActionAnnotation.create(actionIfAny, getConfiguration(), getServiceInjector(), facetHolder);
 
-        FacetUtil.addFacet(commandFacet);
+        super.addFacet(commandFacet);
     }
 
     void processPublishing(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -221,7 +218,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // check for @Action(publishing=...)
         val facet = PublishedActionFacetForActionAnnotation.create(actionIfAny, getConfiguration(), holder);
 
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -253,7 +250,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             typeOfFacet = TypeOfFacet.Util.inferFromGenericReturnType(cls, method, holder);
         }
 
-        FacetUtil.addFacet(typeOfFacet);
+        super.addFacet(typeOfFacet);
     }
 
     void processAssociateWith(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -266,9 +263,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             val associateWith = action.associateWith();
             if(!_Strings.isNullOrEmpty(associateWith)) {
                 val associateWithSequence = action.associateWithSequence();
-                FacetUtil.addFacet(
+                super.addFacet(
                         new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, holder));
-                FacetUtil.addFacet(
+                super.addFacet(
                         new AssociatedWithFacetForActionAnnotation(associateWith, holder));
             }
         });
@@ -282,7 +279,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         // check for @Action(fileAccept=...)
         val facet = FileAcceptFacetForActionAnnotation.create(actionIfAny, holder);
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
 
     }
 

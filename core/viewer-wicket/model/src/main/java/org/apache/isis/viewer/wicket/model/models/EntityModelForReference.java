@@ -20,11 +20,14 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 
 import static org.apache.isis.viewer.wicket.model.models.EntityModel.createPageParameters;
+
+import lombok.val;
 
 public class EntityModelForReference implements ObjectAdapterModel {
 
@@ -92,9 +95,13 @@ public class EntityModelForReference implements ObjectAdapterModel {
 
     @Override
     public PageParameters getPageParameters() {
-        PageParameters pageParameters = createPageParameters(getObject());
-        ObjectAdapterMemento oam = ObjectAdapterMemento.ofAdapter(getObject());
-        HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, oam);
+        val mementoSupport = scalarModel.getMementoSupport();
+        val hintStore = scalarModel.getCommonContext().lookupServiceElseFail(HintStore.class); 
+        
+        val pageParameters = createPageParameters(getObject());
+        val objectAdapterMemento = ObjectAdapterMemento.ofAdapter(getObject(), mementoSupport);
+        
+        HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, objectAdapterMemento, hintStore);
         return pageParameters;
     }
 

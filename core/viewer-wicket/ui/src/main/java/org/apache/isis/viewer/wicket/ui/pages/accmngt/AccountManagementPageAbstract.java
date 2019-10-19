@@ -19,9 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
-import javax.inject.Inject;
-
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -32,15 +29,10 @@ import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
@@ -48,7 +40,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.Placement;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.WebPageBase;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
@@ -56,7 +48,7 @@ import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptRefe
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
-public class AccountManagementPageAbstract extends WebPage {
+public class AccountManagementPageAbstract extends WebPageBase {
 
     private static final long serialVersionUID = 1L;
 
@@ -71,8 +63,6 @@ public class AccountManagementPageAbstract extends WebPage {
      */
     public static final String FEEDBACK_COOKIE_NAME = "isis.feedback.success";
 
-    @Inject private WebAppConfigBean webAppConfigBean;
-
     /**
      * If set by {@link org.apache.isis.viewer.wicket.ui.pages.PageAbstract}.
      */
@@ -82,7 +72,10 @@ public class AccountManagementPageAbstract extends WebPage {
         return exceptionModel;
     }
 
-    protected AccountManagementPageAbstract(final PageParameters parameters, final ExceptionModel exceptionModel) {
+    protected AccountManagementPageAbstract(
+            PageParameters parameters, 
+            ExceptionModel exceptionModel) {
+        
         super(parameters);
 
         Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.SIGN_IN);
@@ -134,23 +127,5 @@ public class AccountManagementPageAbstract extends WebPage {
     }
 
 
-
-    // ///////////////////////////////////////////////////
-    // System components
-    // ///////////////////////////////////////////////////
-
-
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
-
-    protected IsisConfigurationLegacy getConfigurationLegacy() {
-        return IsisContext.getConfigurationLegacy();
-    }
-
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
-
-    @Inject private PageClassRegistry pageClassRegistry;
+    
 }

@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.facets.properties.validating.dflt;
 
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -44,12 +43,12 @@ public class PropertyValidateFacetDefaultFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        FacetUtil.addFacet(create(processMethodContext.getFacetHolder()));
+        super.addFacet(create(processMethodContext.getFacetHolder()));
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        FacetUtil.addFacet(create(processParameterContext.getFacetHolder()));
+        super.addFacet(create(processParameterContext.getFacetHolder()));
     }
 
     private PropertyValidateFacet create(final FacetHolder holder) {

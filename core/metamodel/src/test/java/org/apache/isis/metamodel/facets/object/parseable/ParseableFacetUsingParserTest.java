@@ -23,7 +23,6 @@ import java.util.IllegalFormatWidthException;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -32,6 +31,7 @@ import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
@@ -46,27 +46,22 @@ public class ParseableFacetUsingParserTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    private FacetHolder mockFacetHolder;
-    @Mock
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Mock
-    private ServiceInjector mockServicesInjector;
-    @Mock
-    private ServiceRegistry mockServiceRegistry;
+    @Mock private FacetHolder mockFacetHolder;
+    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private ServiceInjector mockServicesInjector;
+    @Mock private ServiceRegistry mockServiceRegistry;
+    @Mock private ObjectAdapterService mockAdapterManager;
 
-    @Mock
-    private ObjectAdapterService mockAdapterManager;
-
+    protected MetaModelContext metaModelContext;
     private ParseableFacetUsingParser parseableFacetUsingParser;
 
     @Before
     public void setUp() throws Exception {
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .objectAdapterProvider(mockAdapterManager)
-                .build());
+                .build();
 
 
         context.checking(new Expectations() {
@@ -74,6 +69,9 @@ public class ParseableFacetUsingParserTest {
                 never(mockAuthenticationSessionProvider);
                 never(mockAdapterManager);
 
+                allowing(mockFacetHolder).getMetaModelContext();
+                will(returnValue(metaModelContext));
+                
                 allowing(mockFacetHolder).containsFacet(ValueFacet.class);
                 will(returnValue(Boolean.FALSE));
 
@@ -116,32 +114,6 @@ public class ParseableFacetUsingParserTest {
             }
         };
         parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder);
-    }
-
-    @Ignore
-    @Test
-    public void testParseNormalEntry() throws Exception {
-        // TODO why is this so complicated to check ?!
-        /*
-         * final AuthenticationSession session =
-         * mockery.mock(AuthenticationSession.class);
-         * 
-         * mockery.checking(new Expectations(){{
-         * oneOf(mockAdapterManager).adapterFor("XXX");
-         * will(returnValue(mockAdapter));
-         * 
-         * oneOf(mockAdapter).getSpecification();
-         * will(returnValue(mockSpecification));
-         * 
-         * oneOf(mockAuthenticationSessionProvider).getAuthenticationSession();
-         * will(returnValue(session));
-         * 
-         * allowing(mockSpecification).createValidityInteractionContext(session,
-         * InteractionInvocationMethod.USER, mockAdapter); }}); ObjectAdapter
-         * adapter = parseableFacetUsingParser.parseTextEntry(null, "xxx");
-         * 
-         * adapter.getObject();
-         */
     }
 
     @Test(expected = TextEntryParseException.class)

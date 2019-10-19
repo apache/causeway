@@ -25,13 +25,14 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
@@ -41,6 +42,7 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryp
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.shiro.WebModuleShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -87,27 +89,21 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject SecurityModuleConfig securityConfig;
-
-    @BeforeAll
-    static void beforeClass() {
-        //    Build and set the SecurityManager used to build Subject instances used in your tests
-        //    This typically only needs to be done once per class if your shiro.ini doesn't change,
-        //    otherwise, you'll need to do this logic in each test that is different
-        setSecurityManager("classpath:shiro-secman-ldap.ini");
-        WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
-    }
-
-    @AfterAll
-    static void afterClass() {
-        tearDownShiro();
-    }
+    @Inject ServiceInjector serviceInjector;
 
     @BeforeEach
     void setupSvenInDb() {
+        
+        setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
+        
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
     }
-
+    
+    @AfterEach
+    void afterEach() {
+        tearDownShiro();
+    }
 
     @Test
     void loginLogoutRoundtrip() {
@@ -162,7 +158,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
-
+        
         val subject = SecurityUtils.getSubject(); 
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());

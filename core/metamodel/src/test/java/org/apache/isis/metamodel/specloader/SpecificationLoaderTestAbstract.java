@@ -28,11 +28,12 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationService.Mode;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Timing;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -57,64 +58,48 @@ abstract class SpecificationLoaderTestAbstract {
 
     static class Producers {
 
-        //@Produces
         ConfigurableEnvironment newConfigurableEnvironment() {
             val mock = Mockito.mock(ConfigurableEnvironment.class);
             when(mock.getProperty("")).thenReturn("nop");
             return mock;
         }
 
-        
-        //@Produces
         IsisConfiguration newConfiguration() {
             val config = new IsisConfiguration(); // uses defaults!
             config.setEnvironment(newConfigurableEnvironment());
             return config;
         }
 
-        //@Produces
         AuthenticationSessionProvider mockAuthenticationSessionProvider() {
             return Mockito.mock(AuthenticationSessionProvider.class);
         }
 
-        //@Produces
         GridService mockGridService() {
             return Mockito.mock(GridService.class);
         }
 
-        //@Produces
         ObjectAdapterService mockPersistenceSessionServiceInternal() {
             return Mockito.mock(ObjectAdapterService.class);
         }
 
-        //@Produces
         MessageService mockMessageService() {
             return Mockito.mock(MessageService.class);
         }
 
-        //@Produces
         TranslationService mockTranslationService() {
             val mock = Mockito.mock(TranslationService.class);
             when(mock.getMode()).thenReturn(Mode.DISABLED);
             return mock;
         }
 
+        ServiceInjector getServiceInjector() {
+            return Mockito.mock(ServiceInjector.class);
+        }
         
         ProgrammingModel getProgrammingModel() {
-            return  new ProgrammingModelFacetsJava8();
+            return new ProgrammingModelFacetsJava8();
         }
         
-        //@Produces
-        SpecificationLoader getSpecificationLoader(
-                IsisConfiguration configuration,
-                ProgrammingModel programmingModel) {
-            
-            return SpecificationLoaderDefault.getInstance(
-                    configuration,
-                    new IsisSystemEnvironment(),
-                    programmingModel);
-        }
-
     }
 
     protected IsisConfiguration isisConfiguration;
@@ -123,12 +108,11 @@ abstract class SpecificationLoaderTestAbstract {
     protected GridService mockGridService;
     protected ObjectAdapterService mockPersistenceSessionServiceInternal;
     protected MessageService mockMessageService;
-
+    protected MetaModelContext metaModelContext;
 
 
     // is loaded by subclasses
     protected ObjectSpecification specification;
-
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -139,22 +123,19 @@ abstract class SpecificationLoaderTestAbstract {
         
         val programmingModel = producers.getProgrammingModel();
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .configuration(isisConfiguration = producers.newConfiguration())
-                .specificationLoader(specificationLoader = producers
-                    .getSpecificationLoader(
-                            isisConfiguration,
-                            programmingModel
-                            )
-                    )
+                .programmingModel(programmingModel)
                 .translationService(producers.mockTranslationService())
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
                 .authenticationSessionProvider(mockAuthenticationSessionProvider = producers.mockAuthenticationSessionProvider())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())
-                .build());
-
-        ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
+                .build();
+        
+        specificationLoader = metaModelContext.getSpecificationLoader();
+        
+        ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault(), metaModelContext);
 
         _Timing.runVerbose("specificationLoader.createMetaModel()", specificationLoader::createMetaModel);
 

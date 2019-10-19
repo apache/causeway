@@ -28,6 +28,7 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.health.Health;
 import org.apache.isis.applib.services.health.HealthCheckService;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.security.authentication.health.HealthAuthSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -80,12 +81,17 @@ public class HealthResourceServerside extends ResourceAbstract implements Health
 
     private class HealthServiceSession extends AbstractIsisSessionTemplate {
 
+        @Inject private HealthCheckService healthService;
+        @Inject private IsisSystemEnvironment systemEnvironment;
+        
         @Override
         protected void doExecuteWithTransaction(final Object context) {
             super.doExecuteWithTransaction(context);
             init(RepresentationType.HEALTH, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-            final HealthReprRenderer renderer = new HealthReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+            final HealthReprRenderer renderer = 
+                    new HealthReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+            
             final Health health;
             if(healthService != null) {
                 health = healthService.check();
@@ -98,15 +104,12 @@ public class HealthResourceServerside extends ResourceAbstract implements Health
             final Response.ResponseBuilder responseBuilder = health.getResult()
                     ? Responses.ofOk(renderer, Caching.NONE)
                             : Response.serverError()
-                            .entity(JsonWriterUtil.jsonFor(renderer.render()))
+                            .entity(JsonWriterUtil.jsonFor(renderer.render(), systemEnvironment))
                             .cacheControl(Caching.NONE.getCacheControl());
 
                     final Response[] responseHolder = (Response[]) context;
                     responseHolder[0] = responseBuilder.build();
         }
-
-        @Inject
-        HealthCheckService healthService;
 
     }
 }

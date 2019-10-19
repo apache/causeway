@@ -25,7 +25,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.FacetFactory;
@@ -74,8 +73,8 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
 
         // add facets
         final FacetHolder collection = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(createAddToFacet(addToMethod, accessorMethod, collection));
-        FacetUtil.addFacet(createRemoveFromFacet(removeFromMethod, accessorMethod, collection));
+        super.addFacet(createAddToFacet(addToMethod, accessorMethod, collection));
+        super.addFacet(createRemoveFromFacet(removeFromMethod, accessorMethod, collection));
 
         // infer typ
         final Class<?> addToType = ((addToMethod == null || addToMethod.getParameterTypes().length != 1) ? null : addToMethod.getParameterTypes()[0]);
@@ -116,7 +115,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
 
         final Class<?> type = addType != null ? addType : removeType;
         if (type != null) {
-            FacetUtil.addFacet(new TypeOfFacetInferredFromSupportingMethods(type, collection));
+            super.addFacet(new TypeOfFacetInferredFromSupportingMethods(type, collection));
         }
         return type;
     }
@@ -148,7 +147,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
 
         final CollectionValidateAddToFacetViaMethod facet = new CollectionValidateAddToFacetViaMethod(validateAddToMethod, translationService, translationContext, facetHolder);
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
     private void attachValidateRemoveFacetIfValidateRemoveFromMethodIsFound(final ProcessMethodContext processMethodContext, final Class<?> collectionType) {
@@ -173,7 +172,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
 
         final CollectionValidateRemoveFromFacetViaMethod facet = new CollectionValidateRemoveFromFacetViaMethod(validateRemoveFromMethod, translationService, translationContext, facetHolder);
-        FacetUtil.addFacet(facet);
+        super.addFacet(facet);
     }
 
 }

@@ -28,6 +28,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Timing;
@@ -35,6 +37,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
@@ -45,8 +48,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
-import org.apache.isis.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
@@ -76,31 +79,43 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
+
+    @Inject private ProgrammingModelService programmingModelService;
+    @Inject private IsisConfiguration isisConfiguration;
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private ServiceRegistry serviceRegistry;
     
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private ProgrammingModel programmingModel;
     private FacetProcessor facetProcessor;
     private PostProcessor postProcessor;
+    private MetaModelContext metaModelContext; // cannot inject, would cause circular dependency
     
     private final SpecificationCacheDefault<ObjectSpecification> cache = 
             new SpecificationCacheDefault<>();
 
     /** JUnit Test Support */
     public static SpecificationLoaderDefault getInstance (
-            IsisConfiguration configuration,
+            IsisConfiguration isisConfiguration,
             IsisSystemEnvironment isisSystemEnvironment,
+            ServiceRegistry serviceRegistry,
+            ServiceInjector serviceInjector,
             ProgrammingModel programmingModel) {
 
         val instance = new SpecificationLoaderDefault(); 
 
-        instance.isisConfiguration = configuration;
+        instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
+        
+        instance.isisConfiguration = isisConfiguration;
         instance.isisSystemEnvironment = isisSystemEnvironment;
+        instance.serviceRegistry = serviceRegistry;
         instance.programmingModel = programmingModel;
 
-        instance.facetProcessor = new FacetProcessor(programmingModel);
+        instance.facetProcessor = new FacetProcessor(programmingModel, instance.metaModelContext);
         instance.postProcessor = new PostProcessor(programmingModel);
-
+        
+        
         return instance;
     }
 
@@ -111,8 +126,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if (log.isDebugEnabled()) {
             log.debug("initialising {}", this);
         }
+        this.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         this.programmingModel = programmingModelService.getProgrammingModel();
-        this.facetProcessor = new FacetProcessor(programmingModel);
+        this.facetProcessor = new FacetProcessor(programmingModel, metaModelContext);
         this.postProcessor = new PostProcessor(programmingModel);
     }
     
@@ -321,22 +337,19 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private ObjectSpecification createSpecification(final Class<?> cls) {
         
          // ... and create the specs
-        final ObjectSpecification objectSpec;
+        final ObjectSpecificationAbstract objectSpec;
         if (FreeStandingList.class.isAssignableFrom(cls)) {
 
             objectSpec = new ObjectSpecificationOnStandaloneList(facetProcessor, postProcessor);
+            objectSpec.setMetaModelContext(metaModelContext);
 
         } else {
-
-            val facetedMethodsBuilderContext =
-                    new FacetedMethodsBuilderContext(
-                            this, facetProcessor);
 
             val managedBeanNameIfAny = IsisBeanTypeRegistry.current().getManagedBeanNameForType(cls);
 
             objectSpec = new ObjectSpecificationDefault(
                     cls,
-                    facetedMethodsBuilderContext,
+                    metaModelContext,
                     facetProcessor, 
                     managedBeanNameIfAny, 
                     postProcessor);
@@ -381,10 +394,5 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
     }
 
-    // -- DEPS
-
-    @Inject private ProgrammingModelService programmingModelService;
-    @Inject private IsisConfiguration isisConfiguration;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
 
 }

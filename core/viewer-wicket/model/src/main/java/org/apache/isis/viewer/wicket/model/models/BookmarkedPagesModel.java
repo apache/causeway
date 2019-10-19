@@ -24,23 +24,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 
 public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {
-
 
     private static final long serialVersionUID = 1L;
 
     private final List<BookmarkTreeNode> rootNodes = _Lists.newArrayList();
 
     private transient PageParameters current;
+    
+    public BookmarkedPagesModel(IsisWebAppCommonContext commonContext) {
+        super(commonContext);
+    }
 
     public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
 
@@ -136,16 +137,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         if(rootNode != null) {
             rootNodes.remove(rootNode);
         }
-    }
-
-    // //////////////////////////////////////
-
-
-    protected IsisConfigurationLegacy getConfigurationLegacy() {
-        return IsisContext.getConfigurationLegacy();
-    }
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
     }
 
 

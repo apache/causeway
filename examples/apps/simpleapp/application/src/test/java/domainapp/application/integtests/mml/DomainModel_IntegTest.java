@@ -18,18 +18,23 @@
  */
 package domainapp.application.integtests.mml;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import domainapp.application.integtests.SpringIntegrationTest;
 
 class DomainModel_IntegTest extends SpringIntegrationTest {
+    
+    @Inject protected SpecificationLoader specificationLoader;
 
     @Test @Disabled("with full introspection in place this test actually throws")
     void validateDomainModel() {
-        new ValidateDomainModel().run();
+        new ValidateDomainModel(specificationLoader).run();
     }
 
 

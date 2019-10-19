@@ -23,7 +23,6 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -108,7 +107,7 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
             ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val context = MetaModelContext.current();
+        val context = getMetaModelContext();
         val repository = context.getRepositoryService();
 
         final Predicate<ManagedObject> visibilityFilter = 

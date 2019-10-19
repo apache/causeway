@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.enterprise.inject.Vetoed;
-import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.PropertyNames;
@@ -37,10 +36,10 @@ import org.apache.isis.jdo.datanucleus.DataNucleusSettings;
 import org.apache.isis.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.jdo.entities.JdoEntityTypeRegistry;
 import org.apache.isis.jdo.lifecycles.JdoStoreLifecycleListenerForIsis;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -63,6 +62,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
     
     private StoreLifecycleListener storeLifecycleListener;
+    private MetaModelContext metaModelContext;
     private IsisConfiguration configuration;
 
     @Getter(onMethod=@__({@Override})) 
@@ -70,14 +70,16 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     FixturesInstalledState fixturesInstalledState;
 
     @Override
-    public void init() {
-        this.configuration = IsisContext.getConfiguration();
+    public void init(MetaModelContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
+        this.configuration = metaModelContext.getConfiguration();
         // need to eagerly build, ... must be completed before catalogNamedQueries().
         // Why? because that method causes entity classes to be loaded which register with DN's EnhancementHelper,
         // which are then cached in DN.  It results in our CreateSchema listener not firing.
         _Blackhole.consume(applicationComponents.get());
         
         this.storeLifecycleListener = new JdoStoreLifecycleListenerForIsis();
+        metaModelContext.getServiceInjector().injectServicesInto(storeLifecycleListener);
     }
 
 
@@ -88,14 +90,12 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
 
-        this.configuration = IsisContext.getConfiguration();
-        
-        val dnSettings = IsisContext.getServiceRegistry().lookupServiceElseFail(DataNucleusSettings.class);
+        val dnSettings = metaModelContext.getServiceRegistry().lookupServiceElseFail(DataNucleusSettings.class);
         val datanucleusProps = dnSettings.getAsMap(); 
         
-        System.out.println("############## " + datanucleusProps);
-
         addDataNucleusPropertiesIfRequired(datanucleusProps);
+        
+        System.out.println("############## " + datanucleusProps);
 
         val classesToBePersisted = JdoEntityTypeRegistry.current().getEntityTypes();
 
@@ -111,14 +111,6 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, specificationLoader);
     }
 
-//    private static HashMap<String, String> toMap(Properties props) {
-//        val map = _Maps.<String, String>newHashMap();
-//        for (val name: props.stringPropertyNames()) {
-//            map.put(name, props.getProperty(name));
-//        }
-//        return map;
-//    }
-    
     private static void addDataNucleusPropertiesIfRequired(Map<String, String> props) {
 
         // new feature in DN 3.2.3; enables dependency injection into entities
@@ -206,32 +198,15 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         Objects.requireNonNull(applicationComponents.get(),
                 () -> "PersistenceSession5 requires initialization. "+this.hashCode());
 
-        //[ahuber] if stale force recreate
-        guardAgainstStaleState();
-
-        final PersistenceManagerFactory persistenceManagerFactory =
+        val persistenceManagerFactory =
                 applicationComponents.get().getPersistenceManagerFactory();
 
         return new PersistenceSession5(
+                metaModelContext, 
                 authenticationSession, 
                 persistenceManagerFactory,
                 storeLifecycleListener,
                 this);
-    }
-    
-    // [ahuber] JRebel support, not tested at all
-    private void guardAgainstStaleState() {
-        if(!applicationComponents.isMemoized()) {
-            return;
-        }
-        if(applicationComponents.get().isStale()) {
-            try {
-                applicationComponents.get().shutdown();
-            } catch (Exception e) {
-                // ignore
-            }
-            applicationComponents.clear();
-        }
     }
 
 

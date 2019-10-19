@@ -30,17 +30,20 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
+import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
+import lombok.val;
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
-public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
+public class TabGroupPanel 
+extends AjaxBootstrapTabbedPanel<ITab>
+implements HasDynamicallyVisibleContent {
+    
     private static final long serialVersionUID = 1L;
 
     public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
@@ -56,12 +59,13 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
                 .filter(BS3Tab.Predicates.notEmpty())
                 .collect(Collectors.toList());
 
+        val translationService = entityModel.getCommonContext().getTranslationService();
 
-        for (final BS3Tab bs3Tab : tablist) {
+        for (val bs3Tab : tablist) {
             final RepeatingViewWithDynamicallyVisibleContent rv = TabPanel.newRows(entityModel, bs3Tab);
             String translateContext = entityModel.getTypeOfSpecification().getFullIdentifier();
             String bs3TabName = bs3Tab.getName();
-            String tabName = getTranslationService().translate(translateContext, bs3TabName);
+            String tabName = translationService.translate(translateContext, bs3TabName);
             tabs.add(new AbstractTab(Model.of(tabName)) {
                 private static final long serialVersionUID = 1L;
 
@@ -77,10 +81,6 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
             });
         }
         return tabs;
-    }
-
-    static TranslationService getTranslationService() {
-        return IsisContext.getServiceRegistry().lookupServiceElseFail(TranslationService.class);
     }
 
     public TabGroupPanel(String id, final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {

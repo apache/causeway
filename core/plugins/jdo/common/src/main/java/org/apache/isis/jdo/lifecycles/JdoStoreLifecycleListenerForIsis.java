@@ -18,11 +18,10 @@
  */
 package org.apache.isis.jdo.lifecycles;
 
+import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
-import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.JdoMetamodelUtil;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.events.PersistenceEventService;
 import org.apache.isis.runtime.system.persistence.events.PostStoreEvent;
 import org.apache.isis.runtime.system.persistence.events.PreStoreEvent;
@@ -38,6 +37,8 @@ import lombok.val;
  */
 public class JdoStoreLifecycleListenerForIsis implements
 javax.jdo.listener.StoreLifecycleListener {
+    
+    @Inject private PersistenceEventService persistenceEventService;
 
     @Override
     public void preStore(InstanceLifecycleEvent instanceEvent) {
@@ -48,7 +49,7 @@ javax.jdo.listener.StoreLifecycleListener {
                 JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
 
             val event = PreStoreEvent.of(persistableObject);
-            persistenceEventService.get().firePreStoreEvent(event);
+            persistenceEventService.firePreStoreEvent(event);
         }
         
     }
@@ -62,18 +63,10 @@ javax.jdo.listener.StoreLifecycleListener {
                 JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
 
             val event = PostStoreEvent.of(persistableObject);
-            persistenceEventService.get().firePostStoreEvent(event);
+            persistenceEventService.firePostStoreEvent(event);
         }
         
     }
     
-    // -- HELPER
-    
-    private final _Lazy<PersistenceEventService> persistenceEventService = 
-            _Lazy.threadSafe(this::lookupPersistenceEventService);
-    
-    private PersistenceEventService lookupPersistenceEventService() {
-        return IsisContext.getServiceRegistry().lookupServiceElseFail(PersistenceEventService.class);
-    }
 
 }

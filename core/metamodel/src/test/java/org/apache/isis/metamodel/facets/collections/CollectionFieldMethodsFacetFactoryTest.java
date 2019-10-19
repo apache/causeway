@@ -60,6 +60,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
+import lombok.val;
+
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Rule
@@ -76,7 +78,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
-        final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -99,8 +102,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
-        final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
+        
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public List getOrders() {
@@ -122,7 +126,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
-        final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -144,7 +149,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testPropertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
-        final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -166,7 +172,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
-        final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -191,7 +198,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testAddToFacetIsInstalledViaAccessorIfNoExplicitAddToMethodExists() {
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -214,7 +222,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testCannotInferTypeOfFacetIfNoExplicitAddToOrRemoveFromMethods() {
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -233,7 +242,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testRemoveFromFacetIsInstalledViaAccessorIfNoExplicitRemoveFromMethodExists() {
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -256,7 +266,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testAddToFacetIsInstalledAndMethodRemoved() {
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -286,7 +297,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testCanInferTypeOfFacetFromExplicitAddToMethod() {
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -313,7 +325,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testRemoveFromFacetIsInstalledAndMethodRemoved() {
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -343,7 +356,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testCanInferTypeOfFacetFromExplicitRemoveFromMethod() {
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -370,7 +384,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testClearFacetIsInstalledAndMethodRemoved() {
-        final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
+        val facetFactory = new CollectionClearFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings({ "hiding", "unused" })
         class Order {
@@ -400,7 +415,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testClearFacetIsInstalledViaAccessorIfNoExplicitClearMethod() {
-        final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
+        val facetFactory = new CollectionClearFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings({ "hiding", "unused" })
         class Order {
@@ -423,8 +439,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testValidateAddToFacetIsInstalledAndMethodRemoved() {
-
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -459,7 +475,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testValidateRemoveFromFacetIsInstalledAndMethodRemoved() {
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -494,7 +511,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testMethodFoundInSuperclass() {
-        final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -521,9 +539,10 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testMethodFoundInSuperclassButHelpeMethodsFoundInSubclasses() {
-        final CollectionAccessorFacetViaAccessorFactory facetFactoryForAccessor = new CollectionAccessorFacetViaAccessorFactory();
-
-        final CollectionAddToRemoveFromAndValidateFacetFactory facetFactoryForHelpers = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        val facetFactoryForAccessor = new CollectionAccessorFacetViaAccessorFactory();
+        val facetFactoryForHelpers = new CollectionAddToRemoveFromAndValidateFacetFactory();
+        facetFactoryForAccessor.setMetaModelContext(super.metaModelContext);
+        facetFactoryForHelpers.setMetaModelContext(super.metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -615,7 +634,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
-        final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
+        val facetFactory = new HideForSessionFacetViaMethodFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method hideMethod = findMethod(CustomerStatic.class, "hideOrders", new Class[] { UserMemento.class });
@@ -632,7 +652,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
-        final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
+        val facetFactory = new DisableForSessionFacetViaMethodFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method disableMethod = findMethod(CustomerStatic.class, "disableOrders", new Class[] { UserMemento.class });

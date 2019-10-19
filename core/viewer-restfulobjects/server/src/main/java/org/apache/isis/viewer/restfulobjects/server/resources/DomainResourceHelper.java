@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -226,6 +227,11 @@ class DomainResourceHelper {
         @Override
         public FixturesInstalledState getFixturesInstalledState() {
             return rendererContext.getFixturesInstalledState();
+        }
+
+        @Override
+        public MetaModelContext getMetaModelContext() {
+            return rendererContext.getMetaModelContext();
         }
 
 

@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.FacetedMethod;
@@ -35,7 +35,6 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -63,37 +62,28 @@ public class OneToManyAssociationDefaultTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    private ObjectAdapter mockOwnerAdapter;
-    @Mock
-    private ObjectAdapter mockAssociatedAdapter;
-    @Mock
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private MessageService mockMessageService;
-    @Mock
-    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
-    @Mock
-    private FacetedMethod mockPeer;
-    @Mock
-    private NamedFacet mockNamedFacet;
-
-    @Mock
-    private CollectionAddToFacet mockCollectionAddToFacet;
+    @Mock private ObjectAdapter mockOwnerAdapter;
+    @Mock private ObjectAdapter mockAssociatedAdapter;
+    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private SpecificationLoader mockSpecificationLoader;
+    @Mock private MessageService mockMessageService;
+    @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    @Mock private FacetedMethod mockPeer;
+    @Mock private NamedFacet mockNamedFacet;
+    @Mock private CollectionAddToFacet mockCollectionAddToFacet;
 
     private OneToManyAssociation association;
+    private MetaModelContext_forTesting metaModelContext;
 
     @Before
     public void setUp() {
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .singleton(mockMessageService)
-                .build());
+                .build();
 
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
@@ -105,6 +95,10 @@ public class OneToManyAssociationDefaultTest {
         context.checking(new Expectations() {
             {
                 allowing(mockSpecificationLoader).loadSpecification(Order.class);
+                
+                allowing(mockPeer).getMetaModelContext();
+                will(returnValue(metaModelContext));
+                
             }
         });
     }
@@ -138,9 +132,6 @@ public class OneToManyAssociationDefaultTest {
                 oneOf(mockOwnerAdapter).isRepresentingPersistent();
                 will(returnValue(true));
 
-//                oneOf(mockAssociatedAdapter).promote();
-//                will(returnValue(mockAssociatedAdapter));
-                
                 oneOf(mockAssociatedAdapter).isTransient();
                 will(returnValue(false));
 

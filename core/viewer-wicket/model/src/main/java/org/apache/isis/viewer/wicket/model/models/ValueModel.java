@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 /**
  * Represents a standalone value.
@@ -32,8 +33,9 @@ public class ValueModel extends ModelAbstract<ObjectAdapter> {
 
     private final ObjectAdapterMemento adapterMemento;
 
-    public ValueModel(final ObjectAdapter adapter) {
-        adapterMemento = ObjectAdapterMemento.ofAdapter(adapter);
+    public ValueModel(IsisWebAppCommonContext commonContext, ObjectAdapter adapter) {
+        super(commonContext);
+        adapterMemento = ObjectAdapterMemento.ofAdapter(adapter, super.getMementoSupport());
     }
 
     @Override

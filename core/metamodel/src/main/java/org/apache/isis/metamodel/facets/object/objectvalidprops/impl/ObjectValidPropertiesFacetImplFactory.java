@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.object.objectvalidprops.impl;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 
@@ -31,6 +30,6 @@ public class ObjectValidPropertiesFacetImplFactory extends FacetFactoryAbstract 
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        FacetUtil.addFacet(new ObjectValidPropertiesFacetImpl(processClassContaxt.getFacetHolder()));
+        super.addFacet(new ObjectValidPropertiesFacetImpl(processClassContaxt.getFacetHolder()));
     }
 }

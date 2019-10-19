@@ -42,6 +42,8 @@ import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault implements MixedInMember {
 
     /**
@@ -71,11 +73,15 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     private static ObjectSpecification typeOfSpec(
             final ObjectActionDefault objectAction) {
 
-        final TypeOfFacet actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault which ensures that there is always
-        // a TypeOfFacet for any mixedIn associations created from mixin actions.
-        Class<? extends Object> cls = actionTypeOfFacet != null? actionTypeOfFacet.value(): Object.class;
-        return specificationOf(cls);
+        val actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
+        // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault, 
+        // which ensures that there is always a TypeOfFacet for any mixedIn associations 
+        // created from mixin actions.
+        val type = actionTypeOfFacet != null
+                ? actionTypeOfFacet.value()
+                        : Object.class;
+                
+        return objectAction.getSpecificationLoader().loadSpecification(type);
     }
 
     public OneToManyAssociationMixedIn(

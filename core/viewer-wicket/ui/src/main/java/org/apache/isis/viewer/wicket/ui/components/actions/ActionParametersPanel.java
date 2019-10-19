@@ -34,6 +34,9 @@ import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
+import lombok.Setter;
+import lombok.val;
+
 /**
  * {@link PanelAbstract Panel} representing an action invocation, backed by an
  * {@link ActionModel}.
@@ -115,9 +118,10 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
             // forward onto the target page with the concurrency exception
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-            resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
+            resultResponse.getHandlingStrategy()
+            .handleResults(super.getCommonContext(), resultResponse);
 
-            final MessageService messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
+            val messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
             messageService.warnUser(ex.getMessage());
         }
     }
@@ -127,10 +131,8 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
      * Gives a chance to hide the header part of this action panel,
      * e.g. when shown in an action prompt
      */
-    private boolean showHeader = true;
+    @Setter private boolean showHeader = true;
 
-    public void setShowHeader(boolean showHeader) {
-        this.showHeader = showHeader;
-    }
+    
 
 }

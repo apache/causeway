@@ -31,7 +31,6 @@ import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
@@ -39,27 +38,22 @@ import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.val;
 
-/**
- * 
- *  TODO[2112] LAST KNOWN GOOD, remove once replaced
- *
- */
-public class ObjectAdapterMemento_LastKnownGood implements Serializable {
+public class ObjectAdapterMementoDefault implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Factory method
      */
-    public static ObjectAdapterMemento_LastKnownGood createOrNull(final ObjectAdapter adapter) {
+    public static ObjectAdapterMementoDefault createOrNull(final ManagedObject adapter) {
         if (adapter == null) {
             return null;
         }
@@ -67,43 +61,43 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         if(object == null) {
             return null;
         }
-        return new ObjectAdapterMemento_LastKnownGood(adapter);
+        return new ObjectAdapterMementoDefault(adapter);
     }
 
     /**
      * Factory method
      */
-    public static ObjectAdapterMemento_LastKnownGood createPersistent(final RootOid rootOid) {
-        return new ObjectAdapterMemento_LastKnownGood(rootOid);
+    public static ObjectAdapterMementoDefault createPersistent(RootOid rootOid, SpecificationLoader specificationLoader) {
+        return new ObjectAdapterMementoDefault(rootOid, specificationLoader);
     }
 
-    public static ObjectAdapterMemento_LastKnownGood createForList(
-            final ArrayList<ObjectAdapterMemento_LastKnownGood> list,
+    public static ObjectAdapterMementoDefault createForList(
+            final ArrayList<ObjectAdapterMementoDefault> list,
             final ObjectSpecId objectSpecId) {
-        return new ObjectAdapterMemento_LastKnownGood(list, objectSpecId);
+        return new ObjectAdapterMementoDefault(list, objectSpecId);
     }
 
-    public static ObjectAdapterMemento_LastKnownGood createForList(
-            final Collection<ObjectAdapterMemento_LastKnownGood> list,
+    public static ObjectAdapterMementoDefault createForList(
+            final Collection<ObjectAdapterMementoDefault> list,
             final ObjectSpecId objectSpecId) {
         return list != null ? createForList(_Lists.newArrayList(list), objectSpecId) :  null;
     }
 
-    public static ObjectAdapterMemento_LastKnownGood createForIterable(
+    public static ObjectAdapterMementoDefault createForIterable(
             final Iterable<?> iterable,
             final ObjectSpecId specId,
             final PersistenceSession persistenceSession) {
-        final List<ObjectAdapterMemento_LastKnownGood> listOfMementos =
+        final List<ObjectAdapterMementoDefault> listOfMementos =
                 _NullSafe.stream(iterable)
                 .map(Functions.fromPojo(persistenceSession))
                 .collect(Collectors.toList());
         return createForList(listOfMementos, specId);
     }
 
-    public static ObjectAdapterMemento_LastKnownGood createForEncodeable(
+    public static ObjectAdapterMementoDefault createForEncodeable(
             final ObjectSpecId specId,
             final String encodableValue) {
-        return new ObjectAdapterMemento_LastKnownGood(specId, encodableValue);
+        return new ObjectAdapterMementoDefault(specId, encodableValue);
     }
 
     public enum Cardinality {
@@ -114,31 +108,31 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
             @Override
             public ObjectAdapter asAdapter(
-                    final ObjectAdapterMemento_LastKnownGood oam,
+                    final ObjectAdapterMementoDefault oam,
                     final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 return oam.recreateStrategy.getAdapter(oam, persistenceSession, specificationLoader);
             }
 
             @Override
-            public int hashCode(final ObjectAdapterMemento_LastKnownGood oam) {
+            public int hashCode(final ObjectAdapterMementoDefault oam) {
                 return oam.recreateStrategy.hashCode(oam);
             }
 
             @Override
-            public boolean equals(final ObjectAdapterMemento_LastKnownGood oam, final Object other) {
-                if (!(other instanceof ObjectAdapterMemento_LastKnownGood)) {
+            public boolean equals(final ObjectAdapterMementoDefault oam, final Object other) {
+                if (!(other instanceof ObjectAdapterMementoDefault)) {
                     return false;
                 }
-                final ObjectAdapterMemento_LastKnownGood otherOam = (ObjectAdapterMemento_LastKnownGood) other;
+                final ObjectAdapterMementoDefault otherOam = (ObjectAdapterMementoDefault) other;
                 if(otherOam.cardinality != SCALAR) {
                     return false;
                 }
-                return oam.recreateStrategy.equals(oam, (ObjectAdapterMemento_LastKnownGood) other);
+                return oam.recreateStrategy.equals(oam, (ObjectAdapterMementoDefault) other);
             }
 
             @Override
-            public String asString(final ObjectAdapterMemento_LastKnownGood oam) {
+            public String asString(final ObjectAdapterMementoDefault oam) {
                 return oam.recreateStrategy.toString(oam);
             }
         },
@@ -149,7 +143,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
             @Override
             public ObjectAdapter asAdapter(
-                    final ObjectAdapterMemento_LastKnownGood oam,
+                    final ObjectAdapterMementoDefault oam,
                     final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 final List<Object> listOfPojos =
@@ -159,16 +153,16 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             }
 
             @Override
-            public int hashCode(final ObjectAdapterMemento_LastKnownGood oam) {
+            public int hashCode(final ObjectAdapterMementoDefault oam) {
                 return oam.list.hashCode();
             }
 
             @Override
-            public boolean equals(final ObjectAdapterMemento_LastKnownGood oam, final Object other) {
-                if (!(other instanceof ObjectAdapterMemento_LastKnownGood)) {
+            public boolean equals(final ObjectAdapterMementoDefault oam, final Object other) {
+                if (!(other instanceof ObjectAdapterMementoDefault)) {
                     return false;
                 }
-                final ObjectAdapterMemento_LastKnownGood otherOam = (ObjectAdapterMemento_LastKnownGood) other;
+                final ObjectAdapterMementoDefault otherOam = (ObjectAdapterMementoDefault) other;
                 if(otherOam.cardinality != VECTOR) {
                     return false;
                 }
@@ -176,7 +170,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             }
 
             @Override
-            public String asString(final ObjectAdapterMemento_LastKnownGood oam) {
+            public String asString(final ObjectAdapterMementoDefault oam) {
                 return oam.list.toString();
             }
         };
@@ -189,15 +183,15 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         }
 
         public abstract ObjectAdapter asAdapter(
-                final ObjectAdapterMemento_LastKnownGood oam,
+                final ObjectAdapterMementoDefault oam,
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader);
 
-        public abstract int hashCode(final ObjectAdapterMemento_LastKnownGood oam);
+        public abstract int hashCode(final ObjectAdapterMementoDefault oam);
 
-        public abstract boolean equals(final ObjectAdapterMemento_LastKnownGood oam, final Object other);
+        public abstract boolean equals(final ObjectAdapterMementoDefault oam, final Object other);
 
-        public abstract String asString(final ObjectAdapterMemento_LastKnownGood oam);
+        public abstract String asString(final ObjectAdapterMementoDefault oam);
     }
 
     enum RecreateStrategy {
@@ -209,7 +203,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         ENCODEABLE {
             @Override
             ObjectAdapter recreateAdapter(
-                    final ObjectAdapterMemento_LastKnownGood oam,
+                    final ObjectAdapterMementoDefault oam,
                     final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 ObjectSpecId objectSpecId = oam.objectSpecId;
@@ -219,23 +213,23 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             }
 
             @Override
-            public boolean equals(ObjectAdapterMemento_LastKnownGood oam, ObjectAdapterMemento_LastKnownGood other) {
+            public boolean equals(ObjectAdapterMementoDefault oam, ObjectAdapterMementoDefault other) {
                 return other.recreateStrategy == ENCODEABLE && oam.encodableValue.equals(other.encodableValue);
             }
 
             @Override
-            public int hashCode(ObjectAdapterMemento_LastKnownGood oam) {
+            public int hashCode(ObjectAdapterMementoDefault oam) {
                 return oam.encodableValue.hashCode();
             }
 
             @Override
-            public String toString(final ObjectAdapterMemento_LastKnownGood oam) {
+            public String toString(final ObjectAdapterMementoDefault oam) {
                 return oam.encodableValue;
             }
 
             @Override
             public void resetVersion(
-                    ObjectAdapterMemento_LastKnownGood ObjectAdapterMemento_LastKnownGood,
+                    ObjectAdapterMementoDefault ObjectAdapterMemento_LastKnownGood,
                     final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
             }
         },
@@ -246,7 +240,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         LOOKUP {
             @Override
             ObjectAdapter recreateAdapter(
-                    final ObjectAdapterMemento_LastKnownGood oam,
+                    final ObjectAdapterMementoDefault oam,
                     final PersistenceSession persistenceSession, 
                     final SpecificationLoader specificationLoader) {
                 RootOid oid = Oid.unmarshaller().unmarshal(oam.persistentOidStr, RootOid.class);
@@ -266,7 +260,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
             @Override
             public void resetVersion(
-                    final ObjectAdapterMemento_LastKnownGood oam,
+                    final ObjectAdapterMementoDefault oam,
                     final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 // REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
@@ -277,17 +271,17 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             }
 
             @Override
-            public boolean equals(ObjectAdapterMemento_LastKnownGood oam, ObjectAdapterMemento_LastKnownGood other) {
+            public boolean equals(ObjectAdapterMementoDefault oam, ObjectAdapterMementoDefault other) {
                 return other.recreateStrategy == LOOKUP && oam.persistentOidStr.equals(other.persistentOidStr);
             }
 
             @Override
-            public int hashCode(ObjectAdapterMemento_LastKnownGood oam) {
+            public int hashCode(ObjectAdapterMementoDefault oam) {
                 return oam.persistentOidStr.hashCode();
             }
 
             @Override
-            public String toString(final ObjectAdapterMemento_LastKnownGood oam) {
+            public String toString(final ObjectAdapterMementoDefault oam) {
                 return oam.persistentOidStr;
             }
 
@@ -302,53 +296,53 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
              */
             @Override
             ObjectAdapter recreateAdapter(
-                    final ObjectAdapterMemento_LastKnownGood oam,
+                    final ObjectAdapterMementoDefault oam,
                     final PersistenceSession persistenceSession, 
                     final SpecificationLoader specificationLoader) {
-                return oam.transientMemento.recreateObject();
+                return oam.transientMemento.recreateObject(specificationLoader, persistenceSession);
             }
 
             @Override
-            public boolean equals(ObjectAdapterMemento_LastKnownGood oam, ObjectAdapterMemento_LastKnownGood other) {
+            public boolean equals(ObjectAdapterMementoDefault oam, ObjectAdapterMementoDefault other) {
                 return other.recreateStrategy == TRANSIENT && oam.transientMemento.equals(other.transientMemento);
             }
 
             @Override
-            public int hashCode(ObjectAdapterMemento_LastKnownGood oam) {
+            public int hashCode(ObjectAdapterMementoDefault oam) {
                 return oam.transientMemento.hashCode();
             }
 
             @Override
-            public String toString(final ObjectAdapterMemento_LastKnownGood oam) {
+            public String toString(final ObjectAdapterMementoDefault oam) {
                 return oam.transientMemento.toString();
             }
 
             @Override
             public void resetVersion(
-                    final ObjectAdapterMemento_LastKnownGood ObjectAdapterMemento_LastKnownGood,
+                    final ObjectAdapterMementoDefault ObjectAdapterMemento_LastKnownGood,
                     final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
             }
         };
 
         public ObjectAdapter getAdapter(
-                final ObjectAdapterMemento_LastKnownGood nom,
+                final ObjectAdapterMementoDefault nom,
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
             return recreateAdapter(nom, persistenceSession, specificationLoader);
         }
 
         abstract ObjectAdapter recreateAdapter(
-                final ObjectAdapterMemento_LastKnownGood nom,
+                final ObjectAdapterMementoDefault nom,
                 final PersistenceSession persistenceSession, 
                 final SpecificationLoader specificationLoader);
 
-        public abstract boolean equals(ObjectAdapterMemento_LastKnownGood oam, ObjectAdapterMemento_LastKnownGood other);
-        public abstract int hashCode(ObjectAdapterMemento_LastKnownGood ObjectAdapterMemento_LastKnownGood);
+        public abstract boolean equals(ObjectAdapterMementoDefault oam, ObjectAdapterMementoDefault other);
+        public abstract int hashCode(ObjectAdapterMementoDefault ObjectAdapterMemento_LastKnownGood);
 
-        public abstract String toString(ObjectAdapterMemento_LastKnownGood adapterMemento);
+        public abstract String toString(ObjectAdapterMementoDefault adapterMemento);
 
         public abstract void resetVersion(
-                ObjectAdapterMemento_LastKnownGood ObjectAdapterMemento_LastKnownGood,
+                ObjectAdapterMementoDefault ObjectAdapterMemento_LastKnownGood,
                 final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader);
     }
 
@@ -408,19 +402,21 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
     /**
      * populated only if {@link #getCardinality() sort} is {@link Cardinality#VECTOR vector}
      */
-    private ArrayList<ObjectAdapterMemento_LastKnownGood> list;
+    private ArrayList<ObjectAdapterMementoDefault> list;
 
-    public ObjectAdapterMemento_LastKnownGood(final ArrayList<ObjectAdapterMemento_LastKnownGood> list, final ObjectSpecId objectSpecId) {
+    public ObjectAdapterMementoDefault(
+            final ArrayList<ObjectAdapterMementoDefault> list, 
+            final ObjectSpecId objectSpecId) {
+        
         this.cardinality = Cardinality.VECTOR;
         this.list = list;
         this.objectSpecId = objectSpecId;
     }
 
-    private ObjectAdapterMemento_LastKnownGood(final RootOid rootOid) {
+    private ObjectAdapterMementoDefault(RootOid rootOid, SpecificationLoader specificationLoader) {
 
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
         val specId = rootOid.getObjectSpecId(); 
-        val specificationLoader = IsisContext.getSpecificationLoader();
         val spec = specificationLoader.lookupBySpecIdElseLoad(specId);
         if(spec!=null && spec.isEncodeable()) {
             this.cardinality = Cardinality.SCALAR;
@@ -441,7 +437,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
-    private ObjectAdapterMemento_LastKnownGood(final ObjectAdapter adapter) {
+    private ObjectAdapterMementoDefault(final ManagedObject adapter) {
         if (adapter == null) {
             throw new IllegalArgumentException("adapter cannot be null");
         }
@@ -451,7 +447,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         init(adapter);
     }
 
-    private ObjectAdapterMemento_LastKnownGood(final ObjectSpecId specId, final String encodableValue) {
+    private ObjectAdapterMementoDefault(final ObjectSpecId specId, final String encodableValue) {
         this.cardinality = Cardinality.SCALAR;
         this.objectSpecId = specId;
         this.encodableValue = encodableValue;
@@ -459,7 +455,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
     }
 
 
-    private void init(final ObjectAdapter adapter) {
+    private void init(final ManagedObject adapter) {
 
         final ObjectSpecification specification = adapter.getSpecification();
 
@@ -471,7 +467,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             return;
         }
 
-        final RootOid oid = (RootOid) adapter.getOid();
+        final RootOid oid = (RootOid) ManagedObject._oid(adapter);
         if (oid.isTransient()) {
             transientMemento = new Memento(adapter);
             recreateStrategy = RecreateStrategy.TRANSIENT;
@@ -491,7 +487,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         return cardinality;
     }
 
-    public ArrayList<ObjectAdapterMemento_LastKnownGood> getList() {
+    public ArrayList<ObjectAdapterMementoDefault> getList() {
         ensureVector();
         return list;
     }
@@ -535,7 +531,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         
         // intercept when trivial
         if(spec.getBeanSort().isManagedBean()) {
-            return MetaModelContext.current().lookupServiceAdapterById(objectSpecId.asString());
+            return spec.getMetaModelContext().lookupServiceAdapterById(objectSpecId.asString());
         }
         
         return cardinality.asAdapter(this, persistenceSession, specificationLoader);
@@ -560,7 +556,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
      * {@link ConcurrencyChecking concurrency checking} of the OID.
      */
     public boolean containedIn(
-            List<ObjectAdapterMemento_LastKnownGood> list,
+            List<ObjectAdapterMementoDefault> list,
             final PersistenceSession persistenceSession,
             final SpecificationLoader specificationLoader) {
 
@@ -570,7 +566,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         // ignoring the concurrency checking
         final ObjectAdapter currAdapter = getObjectAdapter(persistenceSession,
                 specificationLoader);
-        for (ObjectAdapterMemento_LastKnownGood each : list) {
+        for (ObjectAdapterMementoDefault each : list) {
             if(each == null) {
                 continue;
             }
@@ -613,23 +609,15 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         private Functions() {
         }
 
-        //        public static Function<ObjectAction, ActionMemento> fromAction() {
-        //            return ActionMemento::new;
-        //        }
-        //
-        //        public static Function<ObjectActionParameter, ActionParameterMemento> fromActionParameter() {
-        //            return ActionParameterMemento::new;
-        //        }
-
-        public static Function<Object, ObjectAdapterMemento_LastKnownGood> fromPojo(final ObjectAdapterProvider adapterProvider) {
-            return pojo->ObjectAdapterMemento_LastKnownGood.createOrNull( adapterProvider.adapterFor(pojo) );
+        public static Function<Object, ObjectAdapterMementoDefault> fromPojo(final ObjectAdapterProvider adapterProvider) {
+            return pojo->ObjectAdapterMementoDefault.createOrNull( adapterProvider.adapterFor(pojo) );
         }
 
-        public static Function<ObjectAdapter, ObjectAdapterMemento_LastKnownGood> fromAdapter() {
-            return ObjectAdapterMemento_LastKnownGood::createOrNull;
+        public static Function<ObjectAdapter, ObjectAdapterMementoDefault> fromAdapter() {
+            return ObjectAdapterMementoDefault::createOrNull;
         }
 
-        public static Function<ObjectAdapterMemento_LastKnownGood, ObjectAdapter> fromMemento(
+        public static Function<ObjectAdapterMementoDefault, ObjectAdapter> fromMemento(
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
 
@@ -643,12 +631,12 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             };
         }
 
-        public static Function<ObjectAdapter, ObjectAdapterMemento_LastKnownGood> toMemento() {
-            return ObjectAdapterMemento_LastKnownGood::createOrNull;
+        public static Function<ObjectAdapter, ObjectAdapterMementoDefault> toMemento() {
+            return ObjectAdapterMementoDefault::createOrNull;
         }
 
 
-        public static Function<ObjectAdapterMemento_LastKnownGood, Object> toPojo(
+        public static Function<ObjectAdapterMementoDefault, Object> toPojo(
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
             return input->{
@@ -664,7 +652,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             };
         }
 
-        public static Function<ObjectAdapterMemento_LastKnownGood, RootOid> toOid() {
+        public static Function<ObjectAdapterMementoDefault, RootOid> toOid() {
             return ObjectAdapterMemento_LastKnownGood->Factory.ofBookmark(ObjectAdapterMemento_LastKnownGood.asBookmark());
         }
 

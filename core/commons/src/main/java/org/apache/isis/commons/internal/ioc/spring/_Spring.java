@@ -22,36 +22,24 @@ import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 import javax.enterprise.event.Event;
 import javax.inject.Qualifier;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
 
-import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -69,101 +57,74 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class _Spring {
 
-    public static boolean isContextAvailable() {
-        return _Context.getIfAny(ApplicationContext.class)!=null;
-    }
+//    public static boolean isContextAvailable() {
+//        return _Context.getIfAny(ApplicationContext.class)!=null;
+//    }
+//
+//    public static void init(ApplicationContext context) {
+//        _Context.putSingleton(ApplicationContext.class, context);
+//    }
+//    
+//    /** JUnit support */
+//    public static void reinit(ApplicationContext applicationContext) {
+//        _Context.remove(ApplicationContext.class);
+//        _Spring.init(applicationContext);
+//    }
 
-    public static void init(ApplicationContext context) {
-        _Context.putSingleton(ApplicationContext.class, context);
-    }
-    
-    /** JUnit support */
-    public static void reinit(ApplicationContext applicationContext) {
-        _Context.remove(ApplicationContext.class);
-        _Spring.init(applicationContext);
-    }
+//    public static ApplicationContext context() {
+//        return _Context.getElseFail(ApplicationContext.class);
+//    }
 
-    public static ApplicationContext context() {
-        return _Context.getElseFail(ApplicationContext.class);
-    }
-
-    public static <T> Bin<T> select(final Class<T> requiredType) {
-        requires(requiredType, "requiredType");
-
-        val allMatchingBeans = context().getBeanProvider(requiredType).orderedStream();
-        return Bin.ofStream(allMatchingBeans);
-    }
-
-    public static <T> Bin<T> select(
-            final Class<T> requiredType, 
-            @Nullable Set<Annotation> qualifiersRequired) {
-
-        requires(requiredType, "requiredType");
-
-        val allMatchingBeans = context().getBeanProvider(requiredType)
-                .orderedStream();
-
-        if(_NullSafe.isEmpty(qualifiersRequired)) {
-            return Bin.ofStream(allMatchingBeans);
-        }
-
-        final Predicate<T> hasAllQualifiers = t -> {
-            val qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
-            return qualifiersPresent.containsAll(qualifiersRequired);
-        };
-
-        return Bin.ofStream(allMatchingBeans
-                .filter(hasAllQualifiers));
-    }
-
-    /**
-     * 
-     * @param classifier
-     * @return
-     */
-    public static Stream<ManagedBeanAdapter> streamAllBeans() {
-
-        val context = context();
-        //val beanFactory = ((ConfigurableApplicationContext)context).getBeanFactory();
-
-        return Stream.of(context.getBeanDefinitionNames())
-                .map(name->{
-
-                    val type = context.getType(name);
-                    val id = name; // just reuse the bean's name
-
-                    //val scope = beanFactory.getBeanDefinition(name).getScope();
-
-                    val resolvableType = ResolvableType.forClass(type);
-                    val bean = context.getBeanProvider(resolvableType);
-
-                    val beanAdapter = BeanAdapterSpring.of(id, type, bean);
-
-                    return beanAdapter;
-                });
+//    public static <T> Bin<T> select(final Class<T> requiredType) {
+//        requires(requiredType, "requiredType");
+//
+//        val allMatchingBeans = context().getBeanProvider(requiredType).orderedStream();
+//        return Bin.ofStream(allMatchingBeans);
+//    }
+//
+//    public static <T> Bin<T> select(
+//            final Class<T> requiredType, 
+//            @Nullable Set<Annotation> qualifiersRequired) {
+//
+//        requires(requiredType, "requiredType");
+//
+//        val allMatchingBeans = context().getBeanProvider(requiredType)
+//                .orderedStream();
+//
+//        if(_NullSafe.isEmpty(qualifiersRequired)) {
+//            return Bin.ofStream(allMatchingBeans);
+//        }
+//
+//        final Predicate<T> hasAllQualifiers = t -> {
+//            val qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
+//            return qualifiersPresent.containsAll(qualifiersRequired);
+//        };
+//
+//        return Bin.ofStream(allMatchingBeans
+//                .filter(hasAllQualifiers));
+//    }
 
 
-    }
 
-    /**
-     * @return Spring managed singleton wrapped in an Optional
-     */
-    public static <T> Optional<T> getSingleton(@Nullable Class<T> type) {
-        if(type==null) {
-            return Optional.empty();
-        }
-        return select(type).getSingleton();
-    }
-
-    /**
-     * @return Spring managed singleton
-     * @throws NoSuchElementException - if the singleton is not resolvable
-     */
-    public static <T> T getSingletonElseFail(@Nullable Class<T> type) {
-        return getSingleton(type)
-                .orElseThrow(()->_Exceptions.noSuchElement("Cannot resolve singleton '%s'", type));
-
-    }
+//    /**
+//     * @return Spring managed singleton wrapped in an Optional
+//     */
+//    public static <T> Optional<T> getSingleton(@Nullable Class<T> type) {
+//        if(type==null) {
+//            return Optional.empty();
+//        }
+//        return select(type).getSingleton();
+//    }
+//
+//    /**
+//     * @return Spring managed singleton
+//     * @throws NoSuchElementException - if the singleton is not resolvable
+//     */
+//    public static <T> T getSingletonElseFail(@Nullable Class<T> type) {
+//        return getSingleton(type)
+//                .orElseThrow(()->_Exceptions.noSuchElement("Cannot resolve singleton '%s'", type));
+//
+//    }
 
     public static <T> Event<T> event(ApplicationEventPublisher publisher) {
         return new EventSpring<T>(publisher);

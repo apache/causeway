@@ -24,15 +24,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
@@ -44,10 +43,12 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @since 2.0
  */
-@Log4j2
+@Service @Log4j2 
 public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     private final _Lazy<ThemeProvider> themeProvider = _Lazy.of(this::createThemeProvider);
+    
+    @Inject private IsisConfiguration configuration;
 
     @Override
     public ThemeProvider getThemeProvider() {
@@ -81,7 +82,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     private ThemeProvider createThemeProvider() {
 
-        final String themeName = getConfiguration().getViewer().getWicket().getThemes().getInitial();
+        final String themeName = configuration.getViewer().getWicket().getThemes().getInitial();
         BootswatchTheme bootswatchTheme;
         try {
             bootswatchTheme = BootswatchTheme.valueOf(themeName);
@@ -131,7 +132,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
     private List<String> filterThemes(List<String> allThemes) {
         List<String> enabledThemes;
 
-        final String[] enabledThemesArray = getConfiguration().getViewer().getWicket().getThemes().getEnabled().toArray(new String[]{});
+        final String[] enabledThemesArray = configuration.getViewer().getWicket().getThemes().getEnabled().toArray(new String[]{});
         if (enabledThemesArray.length > 0) {
             final Set<String> enabledThemesSet = _NullSafe.stream(enabledThemesArray)
                     .collect(Collectors.toSet());
@@ -144,10 +145,6 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
         }
 
         return enabledThemes;
-    }
-
-    private IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
     }
 
 }

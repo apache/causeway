@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -45,9 +46,12 @@ import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.runtime.system.SystemConstants;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.webapp.IsisWebAppUtils;
 import org.apache.isis.webapp.auth.AuthenticationSessionStrategy;
 import org.apache.isis.webapp.auth.AuthenticationSessionStrategyDefault;
 import org.apache.isis.webapp.modules.resources.ResourceCachingFilter;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -146,6 +150,8 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         return Pattern.compile(".*\\." + input);
     };
 
+    @Inject private IsisSessionFactory isisSessionFactory;
+    
     private List<String> passThruList = Collections.emptyList();
 
     static void redirect(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final String redirectTo) throws IOException {
@@ -228,6 +234,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     private WhenNoSession whenNotAuthenticated;
     private String redirectToOnException;
     private Collection<Pattern> ignoreExtensions;
+    
 
     // /////////////////////////////////////////////////////////////////
     // init, destroy
@@ -240,6 +247,9 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         lookupPassThru(config);
         lookupRedirectToOnException(config);
         lookupIgnoreExtensions(config);
+        
+        val servletContext  = config.getServletContext();
+        isisSessionFactory = IsisWebAppUtils.getManagedBean(IsisSessionFactory.class, servletContext);
     }
 
     /**
@@ -326,12 +336,13 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 
+        requires(isisSessionFactory, "isisSessionFactory");
+        
         ensureMetamodelIsValid();
 
         val httpServletRequest = (HttpServletRequest) request;
         val httpServletResponse = (HttpServletResponse) response;
 
-        val isisSessionFactory = isisSessionFactory();
         try {
             val queryString = httpServletRequest.getQueryString();
             if (queryString != null && queryString
@@ -419,10 +430,6 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
             }
         }
         return false;
-    }
-
-    private IsisSessionFactory isisSessionFactory() {
-        return IsisContext.getSessionFactory();
     }
 
 }

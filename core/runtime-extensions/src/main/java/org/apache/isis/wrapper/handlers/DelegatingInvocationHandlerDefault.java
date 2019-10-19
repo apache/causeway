@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
@@ -44,6 +45,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     private boolean resolveObjectChangedEnabled;
 
     public DelegatingInvocationHandlerDefault(
+            final ServiceRegistry serviceRegistry,
             final T delegate,
             final EnumSet<ExecutionMode> executionMode) {
 
@@ -51,7 +53,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             throw new IllegalArgumentException("delegate must not be null");
         }
         this.delegate = delegate;
-        this.wrapperFactory = IsisContext.getServiceRegistry().lookupServiceElseFail(WrapperFactory.class);
+        this.wrapperFactory = serviceRegistry.lookupServiceElseFail(WrapperFactory.class);
         this.executionMode = executionMode;
 
         try {

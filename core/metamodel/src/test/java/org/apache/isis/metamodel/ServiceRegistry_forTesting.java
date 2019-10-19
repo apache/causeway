@@ -30,28 +30,39 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.Value;
 import lombok.val;
 
+@RequiredArgsConstructor
 class ServiceRegistry_forTesting implements ServiceRegistry {
 
+    @NonNull private final MetaModelContext metaModelContext; 
+    
+    @Getter @Setter private IocContainer iocContainer;
     private final Set<ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();
 
     @Override
     public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers) {
 
-        if(_Spring.isContextAvailable()) {
-            return ServiceRegistry.super.select(type, qualifiers);
+        if(iocContainer!=null) {
+            return iocContainer
+                    .select(type, _Spring.filterQualifiers(qualifiers));
         }
 
-        if(qualifiers!=null && qualifiers.length>0) {
-            throw _Exceptions.notImplemented();
-        }
+// ignore        
+//        if(qualifiers!=null && qualifiers.length>0) {
+//            throw _Exceptions.notImplemented();
+//        }
 
         Optional<T> match = streamSingletons()
                 .filter(singleton->type.isAssignableFrom(singleton.getClass()))
@@ -102,7 +113,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     private Stream<Object> streamSingletons() {
         // lookup the MetaModelContextBean's list of singletons
-        val mmc = MetaModelContext.current();
+        val mmc = metaModelContext;
         if(mmc instanceof MetaModelContext_forTesting) {
             val mmcb = (MetaModelContext_forTesting) mmc;
             return mmcb.streamSingletons();

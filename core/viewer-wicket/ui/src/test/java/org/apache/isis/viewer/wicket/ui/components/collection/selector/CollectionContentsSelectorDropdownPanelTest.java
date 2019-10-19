@@ -26,30 +26,40 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class CollectionContentsSelectorDropdownPanelTest {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    @Rule public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    private ComponentFactory one;
-
-    @Mock
-    private ComponentFactory two;
+    @Mock private ComponentFactory one;
+    @Mock private ComponentFactory two;
 
     private ComponentFactory ajaxTableComponentFactory;
+    private MetaModelContext metaModelContext;
 
     @Before
     public void setUp() throws Exception {
-        ajaxTableComponentFactory = new CollectionContentsAsAjaxTablePanelFactory();
+        
+        metaModelContext = MetaModelContext_forTesting.buildDefault(); 
+        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        
+        ajaxTableComponentFactory = new CollectionContentsAsAjaxTablePanelFactory() {
+            private static final long serialVersionUID = 1L; {
+            setCommonContext(commonContext);
+        }};
+        
     }
 
     @Test

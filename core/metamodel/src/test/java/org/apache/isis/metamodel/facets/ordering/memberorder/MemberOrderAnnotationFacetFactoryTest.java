@@ -65,6 +65,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
 
         facetFactory = new MemberOrderFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
     }
 

@@ -21,7 +21,6 @@ package org.apache.isis.metamodel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 
@@ -32,9 +31,12 @@ import lombok.val;
 
 class MetaModelContext_configTest {
 
+    private MetaModelContext mmc;
+    
     @BeforeEach
     void setUp() {
-        _Context.clear();
+        _Config.clear();
+        mmc = MetaModelContext_forTesting.buildDefault();
     }
 
     @Test
@@ -68,7 +70,7 @@ class MetaModelContext_configTest {
     // -- HELPER
 
     private IsisConfigurationLegacy config() {
-        return MetaModelContext.current().getConfigurationLegacy();
+        return mmc.getConfigurationLegacy();
     }
 
 }

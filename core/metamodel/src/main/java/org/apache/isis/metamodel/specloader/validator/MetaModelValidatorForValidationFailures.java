@@ -18,17 +18,7 @@
  */
 package org.apache.isis.metamodel.specloader.validator;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
-import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
-
-import lombok.val;
-
 public class MetaModelValidatorForValidationFailures extends MetaModelValidatorAbstract {
-
-    public MetaModelValidatorForValidationFailures() {
-    }
 
 //    public void addFailure(Identifier identifier, String pattern, Object... arguments) {
 //        failures.add(identifier, pattern, arguments);

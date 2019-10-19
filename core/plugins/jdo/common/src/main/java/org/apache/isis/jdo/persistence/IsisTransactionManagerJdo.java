@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.runtime.system.transaction.IsisTransactionManagerException;
@@ -46,16 +45,15 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
 
     @Getter
     private final PersistenceSession persistenceSession;
-    private final ServiceRegistry serviceRegistry;
 
+    private final ServiceRegistry serviceRegistry;
     private final CommandContext commandContext;
     private final InteractionContext interactionContext;
 
-    IsisTransactionManagerJdo(PersistenceSession persistenceSession) {
+    IsisTransactionManagerJdo(ServiceRegistry serviceRegistry, PersistenceSession persistenceSession) {
 
+        this.serviceRegistry = serviceRegistry;
         this.persistenceSession = persistenceSession;
-        this.serviceRegistry = IsisContext.getServiceRegistry();
-
         this.commandContext = serviceRegistry.lookupServiceElseFail(CommandContext.class);
         this.interactionContext = serviceRegistry.lookupServiceElseFail(InteractionContext.class);
     }
@@ -101,7 +99,7 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
             val command = commandContext.getCommand();
             val transactionId = command.getUniqueId();
 
-            val currentTransaction = new IsisTransactionJdo(transactionId,
+            val currentTransaction = new IsisTransactionJdo(serviceRegistry, transactionId,
                     interaction.next(Interaction.Sequence.TRANSACTION.id()));
 
             persistenceSession.startTransaction();

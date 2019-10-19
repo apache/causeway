@@ -43,6 +43,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         super.setUp();
 
         facetFactory = new TitleFacetViaMethodsFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
     }
 
 

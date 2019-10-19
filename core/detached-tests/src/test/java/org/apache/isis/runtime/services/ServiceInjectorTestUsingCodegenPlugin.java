@@ -36,8 +36,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -52,19 +51,21 @@ public class ServiceInjectorTestUsingCodegenPlugin {
     private ServiceRegistry serviceRegistry;
     private ServiceInjector serviceInjector;
 
+    private MetaModelContext_forTesting metaModelContext;
+
 
     @Before
     public void setUp() throws Exception {
 
         serviceInstantiator = new ServiceInstantiator();
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .singleton(serviceInstantiator.createInstance(SingletonCalculator.class))
                 .singleton(serviceInstantiator.createInstance(AccumulatingCalculator.class))
-                .build());
+                .build();
 
-        serviceRegistry = IsisContext.getServiceRegistry();
-        serviceInjector = IsisContext.getServiceInjector();
+        serviceRegistry = metaModelContext.getServiceRegistry();
+        serviceInjector = metaModelContext.getServiceInjector();
     }
 
     @Test

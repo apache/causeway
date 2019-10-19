@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.pages.home;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -62,7 +61,8 @@ public class HomePage extends PageAbstract {
 
             Components.permanentlyHide(themeDiv, ComponentType.WELCOME);
             val actionModel = 
-                    ActionModel.create(new EntityModel(ManagedObject.promote(objectAdapter)), action);
+                    ActionModel.create(
+                            EntityModel.ofAdapter(super.getCommonContext(), objectAdapter), action);
             val formExecutor =
                     new FormExecutorDefault<>( new ActionFormExecutorStrategy(actionModel));
 

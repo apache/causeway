@@ -37,10 +37,13 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testCollectionLayoutAnnotationNamed() {
-        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory();
+        val facetFactory = new CollectionLayoutFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         class Customer {
             @CollectionLayout(named = "1st names")
@@ -60,7 +63,8 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
     }
 
     public void testCollectionLayoutAnnotationNamedEscapedFalse() {
-        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory();
+        val facetFactory = new CollectionLayoutFacetFactory();
+        facetFactory.setMetaModelContext(super.metaModelContext);
 
         class Customer {
             @CollectionLayout(named = "1st names", namedEscaped = false)

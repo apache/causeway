@@ -205,15 +205,11 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     // //////////////////////////////////////
 
     @Inject IsisSessionFactory isisSessionFactory;
+    @Inject ServiceInjector serviceInjector;
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession().orElse(null);
     }
-
-    protected ServiceInjector getServiceInjector() {
-        return IsisContext.getServiceInjector();
-    }
-
 
     @Override
     public PersistenceManager getJdoPersistenceManager() {

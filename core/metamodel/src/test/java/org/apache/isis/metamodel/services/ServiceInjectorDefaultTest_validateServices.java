@@ -25,7 +25,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,7 +32,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,12 +63,10 @@ class ServiceInjectorDefaultTest_validateServices {
     // -- TESTS
 
     @Inject private ServiceRegistry serviceRegistry;
-    @Inject private ApplicationContext applicationContext;
 
     @BeforeEach
     void setup() {
         _Context.clear();
-        _Spring.init(applicationContext);    
     }
 
     @Test 

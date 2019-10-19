@@ -38,13 +38,10 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.Collection;
 import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+import java.util.function.Predicate;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 public class ObjectAdapterMementoProviderForValueChoices
@@ -54,10 +51,10 @@ extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProv
     private final List<ObjectAdapterMemento> choicesMementos;
 
     public ObjectAdapterMementoProviderForValueChoices(
-            final ScalarModel scalarModel,
-            final List<ObjectAdapterMemento> choicesMementos,
-            final WicketViewerSettings wicketViewerSettings) {
-        super(scalarModel, wicketViewerSettings);
+            ScalarModel scalarModel,
+            List<ObjectAdapterMemento> choicesMementos) {
+        
+        super(scalarModel);
         this.choicesMementos = choicesMementos;
     }
 
@@ -77,12 +74,12 @@ extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProv
 
         final Predicate<ObjectAdapterMemento> lookupOam = new Predicate<ObjectAdapterMemento>() {
             @Override
-            public boolean apply(ObjectAdapterMemento input) {
+            public boolean test(ObjectAdapterMemento input) {
                 final String id = getIdValue(input);
                 return ids.contains(id);
             }
         };
-        return _Lists.newArrayList(FluentIterable.from(mementos).filter(lookupOam).toList());
+        return _Lists.filter(mementos, lookupOam);
     }
 
 }

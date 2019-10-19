@@ -24,7 +24,8 @@ import org.apache.isis.metamodel.facets.FacetFactory;
 
 import lombok.val;
 
-public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidatorAbstract {
+@Deprecated //not used any more?
+abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidatorAbstract {
 
     /**
      * @param facet

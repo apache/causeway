@@ -32,13 +32,16 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.consent.Allow;
@@ -74,37 +77,25 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    private ObjectAdapterProvider mockAdapterManager;
-    @Mock
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-
-    @Mock
-    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private IsisSessionFactory mockIsisSessionFactory;
+    @Mock private ObjectAdapterProvider mockAdapterManager;
+    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    @Mock private SpecificationLoader mockSpecificationLoader;
+    @Mock private IsisSessionFactory mockIsisSessionFactory;
+    @Mock private FactoryService mockFactoryService;
+    @Mock private TransactionService mockTransactionService;
+    
+    
+    @Mock private ObjectAdapter mockEmployeeAdapter;
+    @Mock private ObjectSpecificationDefault mockOnType;
+    @Mock private ObjectSpecificationDefault mockEmployeeSpec;
+    @Mock private OneToOneAssociation mockPasswordMember;
+    @Mock private Identifier mockPasswordIdentifier;
+    @Mock private ServiceInjector mockServiceInjector;
+    @Mock private ServiceRegistry mockServiceRegistry;
+    @Mock protected ObjectAdapter mockPasswordAdapter;
 
     private Employee employeeDO;
-    @Mock
-    private ObjectAdapter mockEmployeeAdapter;
-    @Mock
-    private ObjectSpecificationDefault mockOnType;
-    @Mock
-    private ObjectSpecificationDefault mockEmployeeSpec;
-    @Mock
-    private OneToOneAssociation mockPasswordMember;
-    @Mock
-    private Identifier mockPasswordIdentifier;
-
-    @Mock
-    private ServiceInjector mockServiceInjector;
-    @Mock
-    private ServiceRegistry mockServiceRegistry;
-
-    @Mock
-    protected ObjectAdapter mockPasswordAdapter;
 
     private final String passwordValue = "12345678";
 
@@ -116,18 +107,25 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     private WrapperFactoryDefault wrapperFactory;
     private Employee employeeWO;
     private List<Facet> facets;
+    
+    protected MetaModelContext metaModelContext;
 
     @Before
     public void setUp() throws Exception {
 
         // PRODUCTION
 
-        MetaModelContext.preset(MetaModelContext.builder()
+        metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .singleton(wrapperFactory = createWrapperFactory())
-                .build());
+                .singleton(mockFactoryService)
+                .singleton(mockIsisSessionFactory)
+                .singleton(mockTransactionService)
+                .build();
+        
+        metaModelContext.getServiceInjector().injectServicesInto(wrapperFactory);
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");

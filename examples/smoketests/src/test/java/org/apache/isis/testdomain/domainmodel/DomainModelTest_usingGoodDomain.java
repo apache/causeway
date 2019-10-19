@@ -61,7 +61,7 @@ class DomainModelTest_usingGoodDomain {
 //    @Inject private MetaModelService metaModelService;
 //    @Inject private JaxbService jaxbService;
 //    @Inject private FactoryService factoryService;
-    @Inject private SpecificationLoader specLoader;
+    @Inject private SpecificationLoader specificationLoader;
 
     void debug() {
            
@@ -87,16 +87,16 @@ class DomainModelTest_usingGoodDomain {
     
     @Test
     void goodDomain_shouldPassValidation() {
-        assertFalse(specLoader.snapshotSpecifications().isEmpty());
+        assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
         
-        val validateDomainModel = new ValidateDomainModel();
+        val validateDomainModel = new ValidateDomainModel(specificationLoader);
         validateDomainModel.run(); // should not throw
     }
     
     @Test
     void typeLevelAnnotations_shouldBeHonored_onMixins() {
         
-        val holderSpec = specLoader.loadSpecification(ProperActionSupport.class);
+        val holderSpec = specificationLoader.loadSpecification(ProperActionSupport.class);
         
         val mx_mixin = holderSpec.getObjectAction("mixin"); // proper mix-in support
         assertNotNull(mx_mixin);
@@ -136,7 +136,7 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void memberLevelAnnotations_shouldResolveUnambiguous_onMixins() {
         
-        val holderSpec = specLoader.loadSpecification(ProperActionSupport.class);
+        val holderSpec = specificationLoader.loadSpecification(ProperActionSupport.class);
         
         val mx_openRestApi = holderSpec.getObjectAction("openRestApi"); // built-in mixin support
         assertNotNull(mx_openRestApi);
@@ -148,7 +148,7 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void pluginProvidedMixins_shouldBePickedUp() {
         
-        val holderSpec = specLoader.loadSpecification(Product.class);
+        val holderSpec = specificationLoader.loadSpecification(Product.class);
         
         val mx_datanucleusIdLong = holderSpec.getAssociation("datanucleusIdLong"); // plugged in mixin
         assertNotNull(mx_datanucleusIdLong);

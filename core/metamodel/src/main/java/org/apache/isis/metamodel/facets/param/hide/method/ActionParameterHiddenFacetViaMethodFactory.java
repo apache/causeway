@@ -25,12 +25,11 @@ import java.util.List;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.param.hide.ActionParameterHiddenFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -76,7 +75,7 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
                 processParameterContext.removeMethod(hideMethod);
 
                 final Facet facet = new ActionParameterHiddenFacetViaMethod(hideMethod, facetHolder);
-                FacetUtil.addFacet(facet);
+                super.addFacet(facet);
                 return;
             }
 

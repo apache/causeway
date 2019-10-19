@@ -103,8 +103,8 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     private ObjectAdapter recreateReference(Data data) {
         // handle values
         if (data instanceof StandaloneData) {
-            final StandaloneData standaloneData = (StandaloneData) data;
-            return standaloneData.getAdapter();
+            val standaloneData = (StandaloneData) data;
+            return standaloneData.getAdapter(persistenceSession, objectAdapterContext.getSpecificationLoader());
         }
 
         // reference to entity
@@ -112,8 +112,8 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         Oid oid = data.getOid();
         _Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
 
-        final RootOid rootOid = (RootOid) oid;
-        final ObjectAdapter referencedAdapter = persistenceSession.adapterFor(rootOid);
+        val rootOid = (RootOid) oid;
+        val referencedAdapter = persistenceSession.adapterFor(rootOid);
 
         if (data instanceof ObjectData) {
             if (rootOid.isTransient()) {

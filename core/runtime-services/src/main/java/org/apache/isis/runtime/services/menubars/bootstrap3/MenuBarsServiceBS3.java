@@ -185,8 +185,6 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     private BS3MenuBars deriveMenuBarsFromMetaModelFacets() {
         final BS3MenuBars menuBars = new BS3MenuBars();
 
-        val metaModelContext = MetaModelContext.current();
-
         final List<ManagedObject> visibleServiceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(objectAdapter -> {
                     val spec = objectAdapter.getSpecification();
@@ -394,6 +392,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     @Inject MessageService messageService;
     @Inject JaxbService jaxbService;
     @Inject IsisSystemEnvironment isisSystemEnvironment;
+    @Inject MetaModelContext metaModelContext;
 
 }
 

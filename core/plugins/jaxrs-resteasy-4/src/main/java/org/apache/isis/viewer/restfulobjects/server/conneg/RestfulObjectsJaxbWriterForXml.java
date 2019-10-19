@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.server.conneg;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import javax.inject.Inject;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
@@ -28,23 +29,26 @@ import javax.xml.bind.Marshaller;
 
 import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
 
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
+
+import lombok.val;
 
 @Provider
 @Produces({"application/xml", "application/*+xml", "text/*+xml"})
 public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
+    
+    @Inject private ServiceInjector serviceInjector;
 
-    public RestfulObjectsJaxbWriterForXml(){
-        ;
-    }
-
-    @Override protected boolean isReadWritable(
-            final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
-        return super.isReadWritable(type, genericType, annotations, mediaType) && hasXRoDomainTypeParameter(mediaType);
+    @Override 
+    protected boolean isReadWritable(
+            final Class<?> type, 
+            final Type genericType, 
+            final Annotation[] annotations, 
+            final MediaType mediaType) {
+        
+        return super.isReadWritable(type, genericType, annotations, mediaType) && 
+                hasXRoDomainTypeParameter(mediaType);
     }
 
     protected boolean hasXRoDomainTypeParameter(final MediaType mediaType) {
@@ -53,22 +57,16 @@ public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
 
     @Override
     protected Marshaller getMarshaller(
-            final Class<?> type, final Annotation[] annotations, final MediaType mediaType) {
-        final Marshaller marshaller = super.getMarshaller(type, annotations, mediaType);
-        marshaller.setAdapter(PersistentEntityAdapter.class, new PersistentEntityAdapter() {
-            @Override
-            protected BookmarkService getBookmarkService() {
-                return getServiceRegistry().lookupServiceElseFail(BookmarkService.class);
-            }
-        });
+            final Class<?> type, 
+            final Annotation[] annotations, 
+            final MediaType mediaType) {
+        
+        val adapter = serviceInjector.injectServicesInto(new PersistentEntityAdapter());
+        
+        val marshaller = super.getMarshaller(type, annotations, mediaType);
+        marshaller.setAdapter(PersistentEntityAdapter.class, adapter);
         return marshaller;
     }
 
-    ServiceRegistry getServiceRegistry() {
-        return IsisContext.getServiceRegistry();
-    }
 
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
 }

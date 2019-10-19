@@ -27,13 +27,11 @@ import javax.inject.Inject;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
-import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.config.beans.WebAppConfigBean;
@@ -43,18 +41,18 @@ import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
+import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * A panel with a form for creation of new users
  */
-public class RegistrationFormPanel extends Panel {
+public class RegistrationFormPanel extends PanelBase<Void> {
 
     private static final long serialVersionUID = 1L;
 
     @Inject private transient EmailNotificationService emailNotificationService;
-    @Inject private transient EmailService emailService;
     @Inject private transient EmailVerificationUrlService emailVerificationUrlService;
     @Inject private transient PageNavigationService pageNavigationService;
     @Inject private transient WebAppConfigBean webAppConfigBean;
@@ -76,7 +74,7 @@ public class RegistrationFormPanel extends Panel {
         final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
-        emailField.add(EmailAvailableValidator.DOESNT_EXIST);
+        emailField.add(EmailAvailableValidator.doesntExist(commonContext));
 
         FormGroup formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);
