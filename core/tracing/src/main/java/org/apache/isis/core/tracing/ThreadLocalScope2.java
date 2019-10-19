@@ -1,14 +1,12 @@
 package org.apache.isis.core.tracing;
 
-import io.opentracing.Scope;
-import io.opentracing.Span;
+class ThreadLocalScope2 implements Scope2 {
 
-public class ThreadLocalScope2 implements Scope {
-    private final ThreadLocalScopeManager2 scopeManager;
-    private final Span wrapped;
-    private final ThreadLocalScope2 toRestore;
+    private final TraceScopeManager scopeManager;
+    private final Span2 wrapped;
+    final ThreadLocalScope2 toRestore;
 
-    ThreadLocalScope2(ThreadLocalScopeManager2 scopeManager, Span wrapped) {
+    ThreadLocalScope2(TraceScopeManager scopeManager, Span2 wrapped) {
         this.scopeManager = scopeManager;
         this.wrapped = wrapped;
         this.toRestore = scopeManager.tlsScope.get();
@@ -18,7 +16,7 @@ public class ThreadLocalScope2 implements Scope {
 
     @Override
     public void close() {
-        if (scopeManager.tlsScope.get() != this) {
+        if (!isActive()) {
             // This shouldn't happen if users call methods in the expected order. Bail out.
             return;
         }
@@ -26,12 +24,20 @@ public class ThreadLocalScope2 implements Scope {
         scopeManager.tlsScope.set(toRestore);
     }
 
-    public Span span() {
+    public Span2 span() {
         return wrapped;
     }
 
     public void closeAndFinish() {
         close();
         wrapped.finish();
+    }
+
+    @Override public boolean isClosed() {
+        return !isActive();
+    }
+
+    private boolean isActive() {
+        return scopeManager.tlsScope.get() == this;
     }
 }

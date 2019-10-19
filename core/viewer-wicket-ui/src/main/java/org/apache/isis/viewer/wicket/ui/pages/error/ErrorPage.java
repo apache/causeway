@@ -31,6 +31,10 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.isis.applib.services.error.ErrorDetails;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.tracing.Scope2;
+import org.apache.isis.core.tracing.ScopeManager2;
+import org.apache.isis.core.tracing.TraceScopeManager;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
@@ -48,40 +52,50 @@ public class ErrorPage extends PageAbstract {
     private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
 
 
-    public ErrorPage(ExceptionModel exceptionModel) {
+    public ErrorPage(final ExceptionModel exceptionModel) {
         super(PageParametersUtils.newPageParameters(), null);
 
-        addBookmarkedPages(themeDiv);
+        TraceScopeManager.get()
+                .execInScope("ErrorPage#<init>", new ScopeManager2.Executable() {
+                    @Override
+                    public void exec(Scope2 scope2) {
+                        scope2.span().setTag("user", IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getUserName());
 
-        final ErrorReportingService errorReportingService = getServicesInjector()
-                .lookupService(ErrorReportingService.class);
-        if(errorReportingService != null) {
+                        addBookmarkedPages(themeDiv);
 
-            final String mainMessage = exceptionModel.getMainMessage();
-            final boolean recognized = exceptionModel.isRecognized();
-            final boolean authorizationException = exceptionModel.isAuthorizationException();
+                        final ErrorReportingService errorReportingService = getServicesInjector()
+                                .lookupService(ErrorReportingService.class);
+                        if(errorReportingService != null) {
 
-            final List<StackTraceDetail> stackTrace = exceptionModel.getStackTrace();
-            final List<String> stackDetailList = transform(stackTrace);
+                            final String mainMessage = exceptionModel.getMainMessage();
+                            final boolean recognized = exceptionModel.isRecognized();
+                            final boolean authorizationException = exceptionModel.isAuthorizationException();
 
-            final List<List<StackTraceDetail>> stackTraces = exceptionModel.getStackTraces();
-            final List<List<String>> stackDetailLists = Lists.newArrayList();
-            for (List<StackTraceDetail> trace : stackTraces) {
-                stackDetailLists.add(transform(trace));
-            }
+                            final List<StackTraceDetail> stackTrace = exceptionModel.getStackTrace();
+                            final List<String> stackDetailList = transform(stackTrace);
 
-            final ErrorDetails errorDetails =
-                    new ErrorDetails(mainMessage, recognized, authorizationException, stackDetailList, stackDetailLists);
+                            final List<List<StackTraceDetail>> stackTraces = exceptionModel.getStackTraces();
+                            final List<List<String>> stackDetailLists = Lists.newArrayList();
+                            for (List<StackTraceDetail> trace : stackTraces) {
+                                stackDetailLists.add(transform(trace));
+                            }
 
-            final Ticket ticket = errorReportingService.reportError(errorDetails);
+                            final ErrorDetails errorDetails =
+                                    new ErrorDetails(mainMessage, recognized, authorizationException, stackDetailList, stackDetailLists);
 
-            if (ticket != null) {
-                exceptionModel.setTicket(ticket);
-            }
+                            final Ticket ticket = errorReportingService.reportError(errorDetails);
 
-        }
+                            if (ticket != null) {
+                                exceptionModel.setTicket(ticket);
+                            }
 
-        themeDiv.add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
+                        }
+
+                        themeDiv.add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
+
+                    }
+                });
+
 
     }
 

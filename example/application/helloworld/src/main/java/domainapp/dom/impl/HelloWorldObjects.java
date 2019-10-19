@@ -33,7 +33,6 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.tracing.ThreadLocalScopeManager2;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -67,8 +66,7 @@ public class HelloWorldObjects {
 
     @Action(semantics = SemanticsOf.SAFE, restrictTo = RestrictTo.PROTOTYPING)
     public List<HelloWorldObject> listAll() {
-        return ThreadLocalScopeManager2.get().callInSpanEx(
-                "listAll", () -> repositoryService.allInstances(HelloWorldObject.class));
+        return repositoryService.allInstances(HelloWorldObject.class);
     }
 
     @javax.inject.Inject

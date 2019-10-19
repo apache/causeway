@@ -65,7 +65,9 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.tracing.ThreadLocalScopeManager2;
+import org.apache.isis.core.tracing.Scope2;
+import org.apache.isis.core.tracing.Span2;
+import org.apache.isis.core.tracing.TraceScopeManager;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -87,12 +89,11 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     private PageClassRegistry pageClassRegistry;
 
     @Override
-    public synchronized void onBeginRequest(RequestCycle requestCycle) {
+    public synchronized void onBeginRequest(final RequestCycle requestCycle) {
 
         if (!Session.exists()) {
             return;
         }
-        LOG.debug("onBeginRequest");
 
 
         final AuthenticatedWebSessionForIsis wicketSession = AuthenticatedWebSessionForIsis.get();
@@ -101,9 +102,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             return;
         }
 
-        ThreadLocalScopeManager2.get().startAndActivateChildSpan("wicket-request-cycle")
-                .span()
-                .setOperationName("onBeginRequest")
+        final Scope2 currScope = TraceScopeManager.get().activeScope();
+        final Scope2 newScope = TraceScopeManager.get()
+                .startActive("web-request-cycle-for-isis");
+        newScope.span()
+                .setTag(Span2.START_TAG, "onBeginRequest")
+                .log("onBeginRequest")
                 .setTag("requestCycle.request.url", requestCycle.getRequest().getUrl().toString());
 
         getIsisSessionFactory().openSession(authenticationSession);
@@ -112,9 +116,13 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     }
 
     @Override
-    public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler) {
+    public void onRequestHandlerResolved(
+            final RequestCycle requestCycle,
+            final IRequestHandler handler) {
 
-        LOG.debug("onRequestHandlerResolved");
+        TraceScopeManager.get().activeSpan()
+                .log("onRequestHandlerResolved")
+        ;
 
         if(handler instanceof RenderPageRequestHandler) {
             AdapterManager.ConcurrencyChecking.disable();
@@ -131,7 +139,6 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 throw mmie;
             }
         }
-
     }
 
 
@@ -140,8 +147,23 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      * throw an exception.
      */
     @Override
-    public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
-        LOG.debug("onRequestHandlerExecuted: handler: {}", handler);
+    public void onRequestHandlerExecuted(
+            final RequestCycle requestCycle,
+            final IRequestHandler handler) {
+
+        TraceScopeManager.get()
+                .activeSpan()
+                .log("onRequestHandlerExecuted")
+                .setTag(Span2.FINISH_TAG, "onRequestHandlerExecuted")
+                .finish();
+
+        TraceScopeManager.get()
+                .startActive("continue")
+                .span()
+                .setTag(Span2.START_TAG, "onRequestHandlerExecuted")
+                .log("onRequestHandlerExecuted")
+                .setTag("requestCycle.request.url", requestCycle.getRequest().getUrl().toString())
+                .setTag("handler.class.simpleName", handler.getClass().getSimpleName());
 
         if(handler instanceof RenderPageRequestHandler) {
             AdapterManager.ConcurrencyChecking.reset(AdapterManager.ConcurrencyChecking.CHECK);
@@ -153,24 +175,24 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 // an abort will cause the exception to be thrown.
                 getTransactionManager().endTransaction();
 
-                ThreadLocalScopeManager2.get()
-                        .activeSpan().setTag("finished-by", "onRequestHandlerExecuted");
-                ThreadLocalScopeManager2.get()
-                        .activeScope().closeAndFinish();
+                TraceScopeManager.get()
+                        .activeSpan()
+                        .log("onRequestHandlerExecuted: endTransaction OK");
             } catch(Exception ex) {
 
-                ThreadLocalScopeManager2.get()
+                TraceScopeManager.get()
                         .activeSpan()
-                        .setTag("errored-by", "onRequestHandlerExecuted")
-                        .setTag("exception", Throwables.getStackTraceAsString(ex));
-                ThreadLocalScopeManager2.get()
-                        .activeScope().closeAndFinish();
+                        .log("onRequestHandlerExecuted: endTransaction exception")
+                        .setTag("exception-location", "onRequestHandlerExecuted")
+                        .setTag("exception", Throwables.getStackTraceAsString(ex))
+                        .setTag(Span2.FINISH_TAG, "onRequestHandlerExecuted")
+                        .finish();
 
-                ThreadLocalScopeManager2.get()
-                        .startAndActivateChildSpan("error-response")
+                TraceScopeManager.get()
+                        .startActive("error-response")
                         .span()
-                        .setOperationName("onRequestHandlerExecuted")
-                        .setTag("purpose", "restart response after fail to commit xactn");
+                        .setTag(Span2.START_TAG, "onRequestHandlerExecuted")
+                        .log("restart response after fail to commit xactn");
 
                 // will redirect to error page after this,
                 // so make sure there is a new transaction ready to go.
@@ -184,7 +206,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                         return;
                     }
                 }
-                
+
                 // shouldn't return null given that we're in a session ...
                 PageProvider errorPageProvider = errorPageProviderFor(ex);
                 throw new RestartResponseException(errorPageProvider, RedirectPolicy.ALWAYS_REDIRECT);
@@ -196,25 +218,33 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      * It is not possible to throw exceptions here, hence use of {@link #onRequestHandlerExecuted(RequestCycle, IRequestHandler)}.
      */
     @Override
-    public synchronized void onEndRequest(RequestCycle cycle) {
+    public synchronized void onEndRequest(final RequestCycle requestCycle) {
 
-        LOG.debug("onEndRequest");
+        TraceScopeManager.get()
+                .activeSpan()
+                .log("onEndRequest")
+        ;
 
-        if (getIsisSessionFactory().inSession()) {
-            try {
-                // belt and braces
-                getTransactionManager().endTransaction();
-            } finally {
-                getIsisSessionFactory().closeSession();
+        try {
+            if (getIsisSessionFactory().inSession()) {
+                try {
+                    // belt and braces
+                    getTransactionManager().endTransaction();
+                } finally {
+                    getIsisSessionFactory().closeSession();
+                }
             }
+
+        } finally {
+            TraceScopeManager.get()
+                    .activeSpan()
+                    .setTag(Span2.FINISH_TAG, "onEndRequest")
+                    .finish();
+            TraceScopeManager.get()
+                    .activeScope()
+                    .close();
         }
 
-        ThreadLocalScopeManager2.get()
-                .activeSpan()
-                .setTag("finished-by", "onEndRequest");
-        ThreadLocalScopeManager2.get()
-                .activeScope()
-                .closeAndFinish();
 
     }
 
@@ -222,13 +252,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
 
-        LOG.debug("onException");
-
-        ThreadLocalScopeManager2.get()
+        TraceScopeManager.get()
                 .activeSpan()
-                .setTag("errored-by", "onException")
+                .log("onException")
+                .setTag("exception-location", "onException")
                 .setTag("exception", Throwables.getStackTraceAsString(ex));
-        ThreadLocalScopeManager2.get()
+        TraceScopeManager.get()
                 .activeScope()
                 .closeAndFinish();
 
@@ -238,8 +267,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             final Set<String> validationErrors = mmie.getValidationErrors();
             final MmvErrorPage mmvErrorPage = new MmvErrorPage(validationErrors);
 
-            ThreadLocalScopeManager2.get()
-                    .startAndActivateChildSpan("error-response")
+            TraceScopeManager.get()
+                    .startActive("error-response")
                     .span()
                     .setOperationName("onException")
                     .setTag("purpose", "redirect to error page on MetaModelInvalidException");
@@ -260,8 +289,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
                 }
 
-                ThreadLocalScopeManager2.get()
-                        .startAndActivateChildSpan("error-response")
+                TraceScopeManager.get()
+                        .startActive("error-response")
                         .span()
                         .setOperationName("onException")
                         .setTag("purpose", "respond gracefully after ListenerInvocationNotAllowedException");
@@ -276,8 +305,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             if(recognizedMessageIfAny != null) {
 
-                ThreadLocalScopeManager2.get()
-                        .startAndActivateChildSpan("error-response")
+                TraceScopeManager.get()
+                        .startActive("error-response")
                         .span()
                         .setOperationName("onException")
                         .setTag("purpose", "respond gracefully after recognised exception");
@@ -291,8 +320,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             if(hiddenIfAny.isPresent()) {
                 addMessage("hidden");
 
-                ThreadLocalScopeManager2.get()
-                        .startAndActivateChildSpan("error-response")
+                TraceScopeManager.get()
+                        .startActive("error-response")
                         .span()
                         .setOperationName("onException")
                         .setTag("purpose", "respond gracefully if hidden");
@@ -304,8 +333,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             if(disabledIfAny.isPresent()) {
                 addTranslatedMessage(disabledIfAny.get().getMessage());
 
-                ThreadLocalScopeManager2.get()
-                        .startAndActivateChildSpan("error-response")
+                TraceScopeManager.get()
+                        .startActive("error-response")
                         .span()
                         .setOperationName("onException")
                         .setTag("purpose", "respond gracefully if disabled");
@@ -323,8 +352,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 ? RedirectPolicy.NEVER_REDIRECT
                 : RedirectPolicy.ALWAYS_REDIRECT;
 
-        ThreadLocalScopeManager2.get()
-                .startAndActivateChildSpan("error-response")
+        TraceScopeManager.get()
+                .startActive("error-response")
                 .span()
                 .setOperationName("onException")
                 .setTag("purpose", "redirect to error page on " + ex.getClass().getSimpleName());

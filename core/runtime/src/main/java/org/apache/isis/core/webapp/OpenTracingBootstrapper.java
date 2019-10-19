@@ -24,7 +24,8 @@ import java.util.concurrent.Callable;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.apache.isis.core.tracing.ThreadLocalScopeManager2;
+import org.apache.isis.core.tracing.Configuration2;
+import org.apache.isis.core.tracing.TraceScopeManager;
 
 import io.jaegertracing.Configuration;
 import io.jaegertracing.internal.samplers.ConstSampler;
@@ -41,7 +42,7 @@ import lombok.val;
  * accessible using {@link GlobalTracer#get()}. This is then picked up by the filter.
  *
  * It also installs a custom variant of {@link io.opentracing.util.ThreadLocalScopeManager}, namely
- * {@link ThreadLocalScopeManager2}.  Together with {@link org.apache.isis.core.tracing.ThreadLocalScope2}, this provides some convenience APIs and makes it possible to close a scope
+ * {@link TraceScopeManager}.  Together with {@link org.apache.isis.core.tracing.ThreadLocalScope2}, this provides some convenience APIs and makes it possible to close a scope
  * in a different method (though must be in the same thread) as the method that opened the scope.
  *
  * See the <code>TracingDemoMain</code> class (in <code>isis-core-tracing</code> module) for
@@ -79,7 +80,7 @@ public class OpenTracingBootstrapper implements ServletContextListener {
                         .withSender(Configuration.SenderConfiguration.fromEnv());
 
 
-                val config = new Configuration(openTracingServiceName)
+                val config = new Configuration2(openTracingServiceName)
                         .withSampler(samplerConfig)
                         .withReporter(reporterConfig)
                         ;
@@ -89,7 +90,7 @@ public class OpenTracingBootstrapper implements ServletContextListener {
 
                 return config
                         .getTracerBuilder()
-                        .withScopeManager(new ThreadLocalScopeManager2())
+                        .withScopeManager(new TraceScopeManager())
 
                         .withMetricsFactory(metricsReporter)
                         .build();

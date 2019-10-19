@@ -22,6 +22,10 @@ package org.apache.isis.viewer.wicket.ui.pages.standalonecollection;
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.tracing.Scope2;
+import org.apache.isis.core.tracing.ScopeManager2;
+import org.apache.isis.core.tracing.TraceScopeManager;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -41,9 +45,16 @@ public class StandaloneCollectionPage extends PageAbstract {
      */
     public StandaloneCollectionPage(final EntityCollectionModel model) {
         super(PageParametersUtils.newPageParameters(), actionNameFrom(model), ComponentType.STANDALONE_COLLECTION);
-        addChildComponents(themeDiv, model);
+        TraceScopeManager.get()
+                .execInScope("StandaloneCollectionPage#<init>", new ScopeManager2.Executable() {
+                    @Override
+                    public void exec(Scope2 scope2) {
+                        scope2.span().setTag("user", IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getUserName());
+                        addChildComponents(themeDiv, model);
+                        addBookmarkedPages(themeDiv);
+                    }
+                });
 
-        addBookmarkedPages(themeDiv);
     }
 
     private static String actionNameFrom(final EntityCollectionModel model) {

@@ -37,6 +37,16 @@
     </listener>
 
     <filter>
+        <filter-name>OpenTracingFilterForceClose</filter-name>
+        <filter-class>org.apache.isis.core.webapp.OpenTracingFilterForceClose</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>OpenTracingFilterForceClose</filter-name>
+        <url-pattern>/wicket/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>OpenTracingFilter</filter-name>
         <filter-class>io.opentracing.contrib.web.servlet.filter.TracingFilter</filter-class>
     </filter>

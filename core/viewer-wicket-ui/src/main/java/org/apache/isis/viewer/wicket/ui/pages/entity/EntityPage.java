@@ -36,6 +36,10 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.tracing.Scope2;
+import org.apache.isis.core.tracing.ScopeManager2;
+import org.apache.isis.core.tracing.TraceScopeManager;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -112,7 +116,16 @@ public class EntityPage extends PageAbstract {
         this.model = entityModel;
         this.titleString = titleString;
 
-        buildPage();
+        TraceScopeManager.get()
+                .execInScope("EntityPage#<init>", new ScopeManager2.Executable() {
+                    @Override
+                    public void exec(Scope2 scope2) {
+                        scope2.span().setTag("user", IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getUserName());
+                        buildPage();
+                        TraceScopeManager.get().rootOperation(entityModel.getObjectAdapterMemento().asBookmark().toString());
+
+                    }
+                });
     }
 
     private void addBreadcrumbIfShown(final EntityModel entityModel) {

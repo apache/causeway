@@ -59,7 +59,7 @@ public class TracingDemoMain {
 
                 return config
                         .getTracerBuilder()
-                        .withScopeManager(new ThreadLocalScopeManager2())
+                        .withScopeManager(new TraceScopeManager())
                         .withMetricsFactory(metricsReporter)
                         .build();
             }
@@ -70,20 +70,20 @@ public class TracingDemoMain {
 
         // creates a child (but top-level if no existing parent)
         // we don't need to hold onto the scope created; we can look it up later (see end of this method)
-        final ThreadLocalScope2 unused =
-                ThreadLocalScopeManager2.get().startAndActivateChildSpan("outer-Z");
+        final Scope2 unused =
+                TraceScopeManager.get().startActive("outer-Z");
 
         Thread.sleep(300);
 
 
         // for nested scope, option (1) is handle scope and close
-        ThreadLocalScope2 tracingScope = ThreadLocalScopeManager2.get().startAndActivateChildSpan("inner-1");
+        Scope2 tracingScope = TraceScopeManager.get().startActive("inner-1");
         try {
             Thread.sleep(500);
 
 
             // for nested scope, option (2) is to use a callable or runnable
-            ThreadLocalScopeManager2.get().callInSpanEx("inner-2", new Callable<Object>() {
+            TraceScopeManager.get().callInScopeX("inner-2", new Callable<Object>() {
                 @Override public Object call() throws Exception {
                     Thread.sleep(500);
                     return null;
@@ -98,7 +98,7 @@ public class TracingDemoMain {
         Thread.sleep(200);
 
         // can look up the existing scope, don't need to pass through
-        final ThreadLocalScope2 scope = ThreadLocalScopeManager2.get().activeScope();
+        final Scope2 scope = TraceScopeManager.get().activeScope();
         if(scope != null) {
             scope.closeAndFinish();
         }

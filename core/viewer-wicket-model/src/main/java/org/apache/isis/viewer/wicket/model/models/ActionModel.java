@@ -67,11 +67,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.tracing.Scope2;
+import org.apache.isis.core.tracing.Span2;
+import org.apache.isis.core.tracing.TraceScopeManager;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+
+import io.opentracing.Span;
 
 public class ActionModel extends BookmarkableModel<ObjectAdapter> implements FormExecutorContext {
 
@@ -456,11 +462,34 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
         // if this action is a mixin, then it will fill in the details automatically.
         final ObjectAdapter mixedInAdapter = null;
-        final ObjectAdapter resultAdapter =
-                action.executeWithRuleChecking(
-                        targetAdapter, mixedInAdapter, arguments,
-                        InteractionInitiatedBy.USER,
-                        WHERE_FOR_ACTION_INVOCATION);
+
+        final Scope2 newScope = TraceScopeManager.get().startActive("executeAction");
+        final Span span = newScope.span()
+                .setTag(Span2.START_TAG, "executeAction")
+                .setTag("user", IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getUserName())
+                .setTag("actionId", action.getIdentifier().toClassAndNameIdentityString())
+                .setTag("target", targetAdapter.titleString(null));
+        TraceScopeManager.get().rootOperation(action.getIdentifier().toClassAndNameIdentityString());
+
+
+        final List<ObjectActionParameter> parameters = action.getParameters();
+        for (int i = 0; i < parameters.size(); i++) {
+            final ObjectActionParameter parameter = parameters.get(i);
+            final ObjectAdapter argument = arguments[i];
+            span.setTag("action param: " + parameter.getId(), argument.titleString(targetAdapter));
+        }
+
+        final ObjectAdapter resultAdapter;
+        try {
+            resultAdapter = action.executeWithRuleChecking(
+                    targetAdapter, mixedInAdapter, arguments,
+                    InteractionInitiatedBy.USER,
+                    WHERE_FOR_ACTION_INVOCATION);
+        } finally {
+            span.setTag(Span2.FINISH_TAG, "executeAction")
+                .finish();
+            newScope.close();
+        }
 
         final List<RoutingService> routingServices = getServicesInjector().lookupServices(RoutingService.class);
         final Object result = resultAdapter != null ? resultAdapter.getObject() : null;

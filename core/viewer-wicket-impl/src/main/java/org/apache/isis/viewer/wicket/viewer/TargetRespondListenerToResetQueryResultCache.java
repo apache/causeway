@@ -24,6 +24,7 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.tracing.TraceScopeManager;
 
 class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.ITargetRespondListener {
 
@@ -31,6 +32,11 @@ class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.
 
     @Override
     public void onTargetRespond(final AjaxRequestTarget target) {
+
+        TraceScopeManager.get()
+                .activeSpan()
+                .log("onTargetResponse : RESPOND PHASE STARTED, resetting cache")
+                ;
 
         if(LOG.isDebugEnabled()) {
             LOG.debug("RESPOND PHASE STARTED: resetting cache");

@@ -24,6 +24,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.tracing.Scope2;
+import org.apache.isis.core.tracing.ScopeManager2;
+import org.apache.isis.core.tracing.TraceScopeManager;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -38,12 +41,23 @@ public class ActionPromptPage extends PageAbstract {
 
     public ActionPromptPage(final ActionModel model) {
         super(new PageParameters(), model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
-        addChildComponents(themeDiv, model);
 
-        if(model.isBookmarkable()) {
-            bookmarkPageIfShown(model);
-        }
-        addBookmarkedPages(themeDiv);
+        TraceScopeManager.get()
+                .execInScope("ActionPromptPage#<init>", new ScopeManager2.Executable() {
+                    @Override
+                    public void exec(Scope2 scope2) {
+                        scope2.span().setTag("user", IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getUserName());
+
+                        addChildComponents(themeDiv, model);
+
+                        if(model.isBookmarkable()) {
+                            bookmarkPageIfShown(model);
+                        }
+                        addBookmarkedPages(themeDiv);
+
+                    }
+                });
+
     }
 
     /**
