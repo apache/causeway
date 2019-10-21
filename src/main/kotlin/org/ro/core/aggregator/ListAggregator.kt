@@ -1,10 +1,9 @@
 package org.ro.core.aggregator
 
-import org.ro.core.UiManager
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.layout.Layout
-import org.ro.to.Link
+import org.ro.org.ro.ui.kv.UiManager
 import org.ro.to.Property
 import org.ro.to.ResultList
 import org.ro.to.TObject
@@ -16,10 +15,7 @@ import org.ro.to.TObject
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
-//@Serializable
 class ListAggregator(val actionTitle: String) : BaseAggregator() {
-    var dsp: DisplayList
-
     init {
         dsp = DisplayList(actionTitle)
     }
@@ -35,8 +31,8 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
             else -> log(logEntry)
         }
 
-        if (dsp.canBeDisplayed()) {
-            UiManager.openListView(dsp, this)
+        if (dsp!!.canBeDisplayed()) {
+            UiManager.openListView(this)
         }
     }
 
@@ -44,14 +40,14 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
         val result = resultList.result
         if (result != null) {
             val links = result.value
-            for (l: Link in links) {
-                invoke(l)
+            links.forEach {
+                invoke(it)
             }
         }
     }
 
     private fun handleObject(obj: TObject) {
-        dsp.addData(obj)
+        dsp!!.addData(obj)
         val l = obj.getLayoutLink()
         if (l != null) {
             invoke(l)
@@ -59,26 +55,26 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleLayout(layout: Layout) {
-        dsp.layout = layout
-        val pls = layout.properties
-        for (pl in pls) {
-            val l = pl.link!!
+        dsp!!.layout = layout
+        layout.properties.forEach {
+            val l = it.link!!
             invoke(l)
         }
     }
 
     private fun handleProperty(p: Property) {
         if (p.isPropertyDescription()) {
-            dsp.addPropertyLabel(p)
+            (dsp!! as DisplayList).addPropertyLabel(p)
         } else {
-            dsp.addProperty(p)
+            (dsp!! as DisplayList).addProperty(p)
             val l = p.descriptionLink()!!
             invoke(l)
         }
     }
 
-    override fun reset() {
-        dsp.reset()
+    override fun reset() : ListAggregator {
+        dsp!!.reset()
+        return this
     }
 
 }

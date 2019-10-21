@@ -19,7 +19,6 @@ interface IAggregator {
 
     fun update(logEntry: LogEntry)
 
-    fun reset()
+    fun reset() : IAggregator
 
 }
-

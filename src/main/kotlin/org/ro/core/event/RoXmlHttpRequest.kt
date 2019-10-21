@@ -1,9 +1,9 @@
 package org.ro.core.event
 
 import org.ro.core.Session
+import org.ro.core.Utils
 import org.ro.core.aggregator.IAggregator
 import org.ro.handler.ResponseHandler
-import org.ro.to.Argument
 import org.ro.to.Link
 import org.ro.to.Method
 import org.w3c.xhr.XMLHttpRequest
@@ -15,15 +15,28 @@ class RoXmlHttpRequest {
 
     fun invoke(link: Link, aggregator: IAggregator?) {
         //@kotlinx.coroutines.InternalCoroutinesApi cancel()
-        var url = link.href
+        val url = link.href
         if (EventStore.isCached(url)) {
-            EventStore.update(url)
+            processCached(url)
+        } else {
+            process(link, aggregator)
         }
+    }
+
+    private fun processCached(url: String) {
+        val le = EventStore.find(url)!!
+        le.retrieveResponse()
+        ResponseHandler.handle(le)
+        EventStore.cached(url)
+    }
+
+    private fun process(link: Link, aggregator: IAggregator?) {
         val method = link.method
-        val credentials: String = Session.getCredentials()
+        var url = link.href
         if (method != Method.POST.operation) {
-            url = url + argumentsAsUrlParameter(link)
+            url += Utils.argumentsAsUrlParameter(link)
         }
+        val credentials: String = Session.getCredentials()
 
         val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
@@ -37,7 +50,7 @@ class RoXmlHttpRequest {
 
         var body = ""
         if (link.hasArguments()) {
-            body = argumentsAsBody(link)
+            body = Utils.argumentsAsBody(link)
             xhr.send(body)
         } else {
             xhr.send()
@@ -55,42 +68,6 @@ class RoXmlHttpRequest {
 
     private fun errorHandler(url: String, responseText: String) {
         EventStore.fault(url, responseText)
-    }
-
-    private fun argumentsAsBody(link: Link): String {
-        val args = link.argMap()!!
-        var body = "{"
-        for (kv in args) {
-            val arg = kv.value!!
-            body = body + arg.asBody() + ","
-        }
-        val len = body.length
-        body = body.replaceRange(len - 1, len, "}")
-        return body
-    }
-
-    private fun argumentsAsUrlParameter(link: Link): String {
-        val args = link.argMap()
-        return argumentsAsString(args, "?", "&", "")
-    }
-
-    private fun argumentsAsString(
-            args: Map<String, Argument?>?,
-            start: String,
-            sep: String,
-            end: String): String {
-        if (args.isNullOrEmpty()) {
-            return ""
-        } else {
-            var answer = start
-            args.forEach { kv ->
-                val arg = kv.value!!
-                answer = answer + arg.key + "=" + arg.value + sep  //IMPROVE define a function
-            }
-            val len = answer.length
-            answer = answer.replaceRange(len - 1, len, end)
-            return answer
-        }
     }
 
 }

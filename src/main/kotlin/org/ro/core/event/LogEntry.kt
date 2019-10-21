@@ -3,8 +3,8 @@ package org.ro.core.event
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
 import org.ro.core.Session
+import org.ro.core.Utils.removeHexCode
 import org.ro.core.aggregator.IAggregator
-import org.ro.core.aggregator.BaseAggregator
 import org.ro.to.TransferObject
 import pl.treksoft.kvision.core.Col
 import kotlin.js.Date
@@ -31,6 +31,7 @@ data class LogEntry(
     var requestLength: Int = 0
     var response = ""
     var responseLength: Int = 0
+    var isRoot: Boolean = false
 
     init {
         state = EventState.RUNNING
@@ -127,27 +128,12 @@ data class LogEntry(
         return result
     }
 
-    private fun removeHexCode(input: String): String {
-        var output = ""
-        val list: List<String> = input.split("/")
-        //split string by "/" and remove parts longer than 40chars
-        for (s in list) {
-            output += "/"
-            output += if (s.length < 40) {
-                s
-            } else {
-                "..."
-            }
-        }
-        return output
-    }
-
     fun isView(): Boolean {
-        return !isUrl()
+        return isOpenView() || isClosedView()
     }
 
-    fun isUrl(): Boolean {
-        return url.startsWith("http")
+    private fun isOpenView(): Boolean {
+        return state == EventState.VIEW
     }
 
     fun isClosedView(): Boolean {

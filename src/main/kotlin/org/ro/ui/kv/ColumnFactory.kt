@@ -1,4 +1,4 @@
-package org.ro.ui.table
+package org.ro.ui.kv
 
 import org.ro.core.model.DisplayList
 import org.ro.core.model.Exposer
@@ -152,8 +152,7 @@ class ColumnFactory {
         val exposer = getData(cell)
         val oldValue = exposer.selected
         exposer.selected = !oldValue
-        console.log(exposer)
-    }
+   }
 
     private fun isSelected(cell: Tabulator.CellComponent): Boolean {
         return getData(cell).selected

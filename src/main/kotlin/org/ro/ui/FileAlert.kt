@@ -2,8 +2,7 @@ package org.ro.ui
 
 import org.ro.core.event.LogEntry
 import org.ro.to.ResultValue
-import org.ro.ui.Command
-import org.ro.ui.RoDialog
+import org.ro.ui.kv.RoDialog
 import org.ro.ui.uicomp.FormItem
 
 class FileAlert(val logEntry: LogEntry) : Command {

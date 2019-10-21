@@ -1,18 +1,17 @@
-package org.ro.core
+package org.ro.org.ro.ui.kv
 
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.core.aggregator.IAggregator
 import org.ro.core.aggregator.UndefinedAggregator
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
-import org.ro.core.model.BaseDisplayable
 import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
-import org.ro.ui.RoMenuBar
 import org.ro.ui.RoStatusBar
-import org.ro.ui.RoView
 import org.ro.ui.kv.RoDisplay
-import org.ro.ui.table.RoTable
+import org.ro.ui.kv.RoMenuBar
+import org.ro.ui.kv.RoTable
+import org.ro.ui.kv.RoView
 import pl.treksoft.kvision.panel.VPanel
 
 /**
@@ -29,7 +28,6 @@ object UiManager {
     }
 
     fun closeView(tab: VPanel) {
-//        RoView.removeTab(tab)
         EventStore.closeView(tab.title!!)
     }
 
@@ -57,30 +55,26 @@ object UiManager {
     fun updatePower(by: String) {
         RoView.updatePowered(by)
         RoStatusBar.brand("#FF00FF")
-       // https://www.w3schools.com/css/css3_gradients.asp
-      //  #grad {
+        // https://www.w3schools.com/css/css3_gradients.asp
+        //  #grad {
         //    background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
-       // }
+        // }
     }
 
-    fun openListView(displayList: DisplayList, aggregator: BaseAggregator) {
-        val title: String = extractTitle(displayList)
-        val panel = RoTable(displayList)
+    fun openListView(aggregator: BaseAggregator) {
+        val displayable = aggregator.dsp
+        val title: String = displayable!!.extractTitle()
+        val panel = RoTable(displayable as DisplayList)
         add(title, panel, aggregator)
-        displayList.isRendered = true
+        displayable.isRendered = true
     }
 
-    fun openObjectView(displayObject: DisplayObject, aggregator: BaseAggregator) {
-        val title: String = extractTitle(displayObject)
-        val panel = RoDisplay(displayObject)
+    fun openObjectView(aggregator: BaseAggregator) {
+        val displayable = aggregator.dsp
+        val title: String = displayable!!.extractTitle()
+        val panel = RoDisplay(displayable as DisplayObject)
         add(title, panel, aggregator)
-        displayObject.isRendered = true
-    }
-
-    fun extractTitle(displayable: BaseDisplayable): String {
-        val strList = displayable.title.split("/")
-        val len = strList.size
-        return strList.get(len - 2)
+        displayable.isRendered = true
     }
 
 }

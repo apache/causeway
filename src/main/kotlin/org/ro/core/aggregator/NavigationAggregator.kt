@@ -2,15 +2,18 @@ package org.ro.core.aggregator
 
 import kotlinx.serialization.Serializable
 import org.ro.core.Menu
-import org.ro.core.UiManager
+import org.ro.org.ro.ui.kv.UiManager
 import org.ro.core.event.LogEntry
+import org.ro.core.model.BaseDisplayable
 import org.ro.to.ResultListResult
 import org.ro.to.Service
 import org.ro.to.TransferObject
 
 @Serializable
 class NavigationAggregator : BaseAggregator() {
-    private var isRendered = false
+    override var dsp: BaseDisplayable?
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
     private var serviceTotal = 0
     private var serviceCount = 0
 

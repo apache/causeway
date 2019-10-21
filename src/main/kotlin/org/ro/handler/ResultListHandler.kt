@@ -6,10 +6,11 @@ import org.ro.core.aggregator.ListAggregator
 import org.ro.to.ResultList
 import org.ro.to.TransferObject
 
-class ResultListHandler : BaseHandler(), IResponseHandler {
+class ResultListHandler : BaseHandler() {
 
     override fun doHandle() {
         logEntry.aggregator = ListAggregator(logEntry.title)
+        logEntry.isRoot = true
         update()
     }
 

@@ -4,14 +4,15 @@ import org.ro.layout.Layout
 import org.ro.to.Extensions
 import org.ro.to.Property
 import org.ro.to.TObject
+import pl.treksoft.kvision.utils.observableListOf
 
 class DisplayList(override val title: String) : BaseDisplayable() {
-    var data = mutableListOf<Exposer>()
-    var layout: Layout? = null
-    val propertyLabels = mutableMapOf<String, String>()
+    var data = observableListOf<Exposer>()
+    override var layout: Layout? = null
+    var propertyLabels = mutableMapOf<String, String>()
     var properties = mutableListOf<Property>()
 
-    fun canBeDisplayed(): Boolean {
+    override fun canBeDisplayed(): Boolean {
         if (layout == null) {
             return false
         } else {
@@ -22,7 +23,7 @@ class DisplayList(override val title: String) : BaseDisplayable() {
         }
     }
 
-    fun addData(obj: TObject) {
+    override fun addData(obj: TObject) {
         val exo = Exposer(obj)
         data.add(exo.dynamise())  //if exposer is not dynamised, data access in tables won't work
     }
@@ -40,9 +41,9 @@ class DisplayList(override val title: String) : BaseDisplayable() {
         properties.add(property)
     }
 
-    fun reset() {
+    override fun reset() {
         isRendered = false
-        data = mutableListOf<Exposer>()
+        data = observableListOf<Exposer>()
     }
 
 }

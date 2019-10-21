@@ -1,15 +1,16 @@
 package org.ro.core.aggregator
 
-import org.ro.core.UiManager
 import org.ro.core.event.LogEntry
+import org.ro.core.model.BaseDisplayable
 import org.ro.core.model.DisplayObject
 import org.ro.layout.Layout
+import org.ro.org.ro.ui.kv.UiManager
 import org.ro.to.HttpError
 import org.ro.to.TObject
 import org.ro.ui.ErrorAlert
 
 class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
-    var dsp: DisplayObject
+    override var dsp: BaseDisplayable? = null
 
     init {
         dsp = DisplayObject(actionTitle)
@@ -25,15 +26,13 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
             else -> log(logEntry)
         }
 
-        if (dsp.canBeDisplayed()) {
-            UiManager.openObjectView(dsp, this)
+        if (dsp!!.canBeDisplayed()) {
+            UiManager.openObjectView(this)
         }
     }
 
     private fun handleObject(obj: TObject) {
-        console.log("[OA.handleObject]")
-        console.log(obj)
-        dsp.addData(obj)
+        dsp!!.addData(obj)
         val l = obj.getLayoutLink()
         if (l != null) {
             invoke(l)
@@ -41,18 +40,15 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleLayout(layout: Layout) {
-        console.log("[OA.handleLayout]")
-        console.log(layout)
-        dsp.layout = layout
-        val pls = layout.properties
-        for (pl in pls) {
-            val l = pl.link!!
+        layout.properties.forEach {
+            val l = it.link!!
             invoke(l)
         }
     }
 
-    override fun reset() {
-        dsp.isRendered = false
+    override fun reset() : ObjectAggregator{
+        dsp!!.isRendered = false
+        return this
     }
 
 }

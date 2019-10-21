@@ -1,4 +1,4 @@
-package org.ro.ui.table
+package org.ro.ui.kv
 
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.to.TObject

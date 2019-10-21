@@ -40,7 +40,6 @@ class Exposer(val delegate: TObject) {
 
     // eg. for dataNucleusId
     fun get(propertyName: String): Any? {
-        console.log("[Exposer.get] delegate.getProperty invoked")
         val delegatedProperty = delegate.getProperty(propertyName)
         if (delegatedProperty != null) {
             return delegatedProperty.value

@@ -1,8 +1,9 @@
-package org.ro.ui.table.el
+package org.ro.ui.kv
 
 import com.github.snabbdom._get
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
+import org.ro.ui.table.el.EventLogDetail
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.FlexAlignItems
@@ -28,7 +29,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     headerFilter = Editor.INPUT,
                     formatterComponentFunction = { _, _, data ->
                         Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
-                            console.log(data.title)
+                            console.log(data)
                         }
                     }),
             ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT),
@@ -79,14 +80,11 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 persistenceMode = false
         )
 
-        tabulator(
-                model, options = options
-        ) {
+        tabulator(model, options = options) {
             marginTop = 0.px
             marginBottom = 0.px
             setEventListener<Tabulator<LogEntry>> {
-                tabulatorRowClick = { _ ->
-                    //                    EditPanel.edit((e.detail as pl.treksoft.kvision.tabulator.js.Tabulator.RowComponent).getIndex() as Int)
+                tabulatorRowClick = {
                 }
             }
         }

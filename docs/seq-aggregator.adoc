@@ -1,0 +1,18 @@
+.Aggregator Sequence Diagram
+[plantuml,file="seq-aggregator.png"]
+--
+@startuml
+
+RoXHR -> RH as "Response\nHandler" : handle()
+RH -> Aggregator : create
+RH -> LogEntry : setAggegator()
+
+Aggregator -> Displayable : handleList()
+Aggregator -> Displayable : handleObject()
+Aggregator -> Displayable : handleLayout()
+Aggregator -> Displayable : canBeDisplayed()
+
+Aggregator -> UiManager : openView()
+
+@enduml
+--

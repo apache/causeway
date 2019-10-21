@@ -32,10 +32,7 @@ class PropertyTest {
         assertEquals("PUT", modifyLink.method)
 
         val arguments = modifyLink.arguments
-        console.log("[PT.testSimpleObject]")
-        console.log(arguments)
         assertEquals(1, arguments.size)
-        console.log(arguments.values)
         assertTrue(arguments.containsKey("value"))
     }
 

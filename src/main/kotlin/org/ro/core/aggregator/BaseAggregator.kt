@@ -2,13 +2,18 @@ package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
 import org.ro.core.event.RoXmlHttpRequest
+import org.ro.core.model.BaseDisplayable
 import org.ro.to.Link
 import org.ro.to.TObject
 
 abstract class BaseAggregator : IAggregator {
 
-    override fun reset() {
-        // default is doing nothing
+    open var isRendered = false
+    open var dsp:BaseDisplayable? = null
+
+    override fun reset() : BaseAggregator{
+        //do nothing and
+        return this
     }
 
     protected fun log(logEntry: LogEntry) {

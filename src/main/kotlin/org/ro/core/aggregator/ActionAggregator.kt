@@ -4,7 +4,7 @@ import org.ro.core.event.LogEntry
 import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Method
-import org.ro.ui.ActionPrompt
+import org.ro.ui.kv.ActionPrompt
 
 class ActionAggregator : BaseAggregator() {
 
@@ -26,8 +26,10 @@ class ActionAggregator : BaseAggregator() {
                         ActionPrompt(action).open()
                     }
                     Method.PUT.name -> {
+                        // TODO
                     }
-                    Method.PUT.name -> {
+                    Method.DELETE.name -> {
+                        // TODO
                     }
                 }
             }

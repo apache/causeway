@@ -1,8 +1,8 @@
 package org.ro
 
-import org.ro.ui.RoMenuBar
 import org.ro.ui.RoStatusBar
-import org.ro.ui.RoView
+import org.ro.ui.kv.RoMenuBar
+import org.ro.ui.kv.RoView
 import pl.treksoft.kvision.hmr.ApplicationBase
 import pl.treksoft.kvision.panel.Root
 import pl.treksoft.kvision.panel.VPanel.Companion.vPanel

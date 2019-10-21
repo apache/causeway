@@ -1,8 +1,8 @@
 package org.ro.core.event
 
-import org.ro.core.UiManager
+import org.ro.core.Utils
 import org.ro.core.aggregator.IAggregator
-import org.ro.handler.ResponseHandler
+import org.ro.org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.utils.observableListOf
 
 /**
@@ -44,30 +44,13 @@ object EventStore {
         updateStatus(entry)
     }
 
-    fun update(description: String): LogEntry? {
-        val entry = find(description)
-        entry!!.setSuccess()
-        return entry
-    }
-
-    fun closeView(url: String) {
-        console.log("[ES.closeView]")
-        val logEntry = findView(url)
-        console.log(logEntry)
+    fun closeView(title: String) {
+        val logEntry = findView(title)
         if (null != logEntry) {
             logEntry.setClose()
-            //resetAggregator(logEntry)
             logEntry.aggregator?.reset()
             updateStatus(logEntry)
         }
-    }
-
-    private fun resetAggregator(logEntry: LogEntry) {
-        console.log("[ES.resetAggregator]")
-        console.log(logEntry)
-        val agg = logEntry.aggregator!!
-        val list = log.filter { it.aggregator == agg }
-        list.forEach { it.aggregator = null }
     }
 
     fun end(url: String, response: String): LogEntry? {
@@ -86,10 +69,10 @@ object EventStore {
         updateStatus(entry)
     }
 
-    private fun cached(url: String) {
+    fun cached(url: String): LogEntry {
         val entry: LogEntry? = find(url)
         entry!!.setCached()
-        updateStatus(entry)
+        return entry
     }
 
     private fun updateStatus(entry: LogEntry) {
@@ -118,35 +101,20 @@ object EventStore {
     }
 
     internal fun findExact(url: String): LogEntry? {
-        for (le in log) {
-            if (le.url == url) {
-                return le
-            }
-        }
-        return null
+        return log.firstOrNull { it.url == url }
     }
 
     internal fun findView(title: String): LogEntry? {
-        for (le in log) {
-            if ((le.title == title) && (le.isView())) {
-                return le
-            }
-        }
-        return null
+        return log.firstOrNull { it.title == title && it.isView() }
     }
 
     internal fun findEquivalent(url: String): LogEntry? {
-        for (le in log) {
-            if (areEquivalent(url, le.url)) {
-                return le
-            }
-        }
-        return null
+        return log.firstOrNull { areEquivalent(it.url, url) }
     }
 
     private fun areEquivalent(searchUrl: String, compareUrl: String, allowedDiff: Int = 1): Boolean {
-        val sl = removeHexCode(searchUrl)
-        val cl = removeHexCode(compareUrl)
+        val sl = Utils.removeHexCode(searchUrl)
+        val cl = Utils.removeHexCode(compareUrl)
         val searchList: List<String> = sl.split("/")
         val compareList: List<String> = cl.split("/")
         if (searchList.size != compareList.size) {
@@ -168,31 +136,16 @@ object EventStore {
         return diffCnt <= allowedDiff
     }
 
-    //TODO C&P from LogEntry.removeHexCode -> apply extract refactoring
-    private fun removeHexCode(input: String): String {
-        var output = ""
-        val list: List<String> = input.split("/")
-        //split string by "/" and remove parts longer than 40chars
-        for (s in list) {
-            output += "/"
-            output += if (s.length < 40) {
-                s
-            } else {
-                "..."
-            }
-        }
-        return output
-    }
-
-    //TODO function has a side effect - refactor
     fun isCached(url: String): Boolean {
+        var answer = false
         val le = this.find(url)
-        if ((le != null) && (le.hasResponse() || le.isView())) {
-            le.retrieveResponse()
-            ResponseHandler.handle(le)
-            return true
+        when {
+            le == null -> answer = false
+            le.hasResponse() -> answer = true
+            le.isView() -> answer = true
+            le.isRoot -> answer = false
         }
-        return false
+        return answer
     }
 
     fun reset() {

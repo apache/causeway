@@ -1,5 +1,7 @@
 package org.ro.core
 
+import org.ro.org.ro.ui.kv.UiManager
+
 /**
  * Keep track of connected server.
  */

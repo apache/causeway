@@ -10,6 +10,7 @@ class ResultHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
         logEntry.aggregator = NavigationAggregator()
+        logEntry.isRoot = true
         update()
     }
 

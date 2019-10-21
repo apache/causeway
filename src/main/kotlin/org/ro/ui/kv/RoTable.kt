@@ -1,6 +1,5 @@
-package org.ro.ui.table
+package org.ro.ui.kv
 
-import org.ro.core.UiManager
 import org.ro.core.model.DisplayList
 import org.ro.core.model.Exposer
 import pl.treksoft.kvision.panel.FlexAlignItems
@@ -22,7 +21,7 @@ import pl.treksoft.kvision.utils.px
 class RoTable(displayList: DisplayList) : VPanel() {
 
     init {
-        title = UiManager.extractTitle(displayList)
+        title = displayList.extractTitle()
         val model = displayList.data
         val columns = ColumnFactory().buildColumns(displayList, true)
 
@@ -50,12 +49,5 @@ class RoTable(displayList: DisplayList) : VPanel() {
             }
         }
     }
-/*
-    override fun remove(child: Component): FlexPanel {
-        console.log("[RoTable.remove]")
-        console.log(this)
-        return super.remove(child)
-    }
-     */
 
 }

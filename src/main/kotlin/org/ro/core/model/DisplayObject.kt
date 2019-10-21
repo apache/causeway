@@ -5,9 +5,9 @@ import org.ro.to.TObject
 
 class DisplayObject(override val title: String) : BaseDisplayable() {
     var data: Exposer? = null
-    var layout: Layout? = null
+    override var layout: Layout? = null
 
-    fun canBeDisplayed(): Boolean {
+    override fun canBeDisplayed(): Boolean {
         if (layout == null) {
             return false
         } else {
@@ -15,9 +15,13 @@ class DisplayObject(override val title: String) : BaseDisplayable() {
         }
     }
 
-    fun addData(obj: TObject) {
+    override fun addData(obj: TObject) {
         val exo = Exposer(obj)
         data = exo.dynamise()
+    }
+
+    override fun reset() {
+        TODO("not implemented")
     }
 
 }

@@ -1,7 +1,8 @@
-package org.ro.ui
+package org.ro.ui.kv
 
 import org.ro.core.Session
 import org.ro.to.Link
+import org.ro.ui.Command
 import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.form.text.Password
 import pl.treksoft.kvision.form.text.Text
