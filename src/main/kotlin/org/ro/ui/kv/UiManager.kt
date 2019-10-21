@@ -1,4 +1,4 @@
-package org.ro.org.ro.ui.kv
+package org.ro.ui.kv
 
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.core.aggregator.IAggregator
@@ -8,10 +8,6 @@ import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
 import org.ro.ui.RoStatusBar
-import org.ro.ui.kv.RoDisplay
-import org.ro.ui.kv.RoMenuBar
-import org.ro.ui.kv.RoTable
-import org.ro.ui.kv.RoView
 import pl.treksoft.kvision.panel.VPanel
 
 /**

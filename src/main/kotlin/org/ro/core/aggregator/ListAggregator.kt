@@ -3,7 +3,7 @@ package org.ro.core.aggregator
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.layout.Layout
-import org.ro.org.ro.ui.kv.UiManager
+import org.ro.ui.kv.UiManager
 import org.ro.to.Property
 import org.ro.to.ResultList
 import org.ro.to.TObject

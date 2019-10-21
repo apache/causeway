@@ -2,7 +2,7 @@ package org.ro.core.aggregator
 
 import kotlinx.serialization.Serializable
 import org.ro.core.Menu
-import org.ro.org.ro.ui.kv.UiManager
+import org.ro.ui.kv.UiManager
 import org.ro.core.event.LogEntry
 import org.ro.core.model.BaseDisplayable
 import org.ro.to.ResultListResult

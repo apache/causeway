@@ -2,7 +2,7 @@ package org.ro.ui.kv
 
 import org.ro.core.Menu
 import org.ro.core.MenuEntry
-import org.ro.org.ro.ui.kv.UiManager
+import org.ro.ui.kv.UiManager
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
 import org.ro.ui.IconManager

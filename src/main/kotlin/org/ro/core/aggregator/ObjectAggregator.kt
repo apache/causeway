@@ -4,7 +4,7 @@ import org.ro.core.event.LogEntry
 import org.ro.core.model.BaseDisplayable
 import org.ro.core.model.DisplayObject
 import org.ro.layout.Layout
-import org.ro.org.ro.ui.kv.UiManager
+import org.ro.ui.kv.UiManager
 import org.ro.to.HttpError
 import org.ro.to.TObject
 import org.ro.ui.ErrorAlert

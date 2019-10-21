@@ -2,7 +2,7 @@ package org.ro.core.event
 
 import org.ro.core.Utils
 import org.ro.core.aggregator.IAggregator
-import org.ro.org.ro.ui.kv.UiManager
+import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.utils.observableListOf
 
 /**
