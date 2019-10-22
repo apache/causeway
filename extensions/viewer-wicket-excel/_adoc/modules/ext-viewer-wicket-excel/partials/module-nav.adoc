@@ -1,2 +1,2 @@
-* xref:uvw:ext-viewer-wicket-excel:about.adoc[About]
+* xref:vw:ext-viewer-wicket-excel:about.adoc[About]
 

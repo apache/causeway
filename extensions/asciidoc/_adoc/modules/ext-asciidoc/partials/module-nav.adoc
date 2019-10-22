@@ -1,2 +1,2 @@
-* xref:uvw:ext-asciidoc:about.adoc[About]
+* xref:vw:ext-asciidoc:about.adoc[About]
 
