@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 The `HasTransactionId` interface is a mix-in for any domain objects that reference a transaction id, such as
-auditing entries or commands, or for xref:applib:svc:application-layer-api/InteractionContext.adoc[``Interaction``]s persisted as published events.
+auditing entries or commands, or for xref:rg:svc:application-layer-api/InteractionContext.adoc[``Interaction``]s persisted as published events.
 
 [NOTE]
 ====
@@ -43,11 +43,11 @@ public interface RepresentsInteractionMemberExecution extends HasTransactionId {
 }
 ----
 
-Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:schema:ROOT:ixn[`InteractionDto`]) that has at least one member execution (cf xref:schema:ROOT:about.adoc#ixn/memberExecutionDto.adoc[`memberExecutionDto`]).
+Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:rg:schema:ixn[`InteractionDto`]) that has at least one member execution (cf xref:rg:schema:about.adoc#ixn/memberExecutionDto.adoc[`memberExecutionDto`]).
 
-If the interaction (almost certainly an action) calls other actions by way of xref:applib:svc:WrapperFactory.adoc[`WrapperFactory`]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
+If the interaction (almost certainly an action) calls other actions by way of xref:rg:svc:WrapperFactory.adoc[`WrapperFactory`]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
 
 The purpose of this interface is to allow mixins to be defined, though the framework itself defines none.
 
-Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 

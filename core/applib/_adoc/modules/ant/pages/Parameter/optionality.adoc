@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 
 
-By default, Apache Isis assumes that all parameters of an action are required (mandatory).  The `optionality()` attribute allows this to be relaxed.  The attribute is also supported for xref:applib:ant:Property.adoc#optionality[properties].
+By default, Apache Isis assumes that all parameters of an action are required (mandatory).  The `optionality()` attribute allows this to be relaxed.  The attribute is also supported for xref:rg:ant:Property.adoc#optionality[properties].
 
 
 [TIP]
@@ -38,5 +38,5 @@ public class Customer {
 
 [NOTE]
 ====
-It is also possible to specify optionality using xref:applib:ant:Nullable.adoc[`@Nullable`] annotation.
+It is also possible to specify optionality using xref:rg:ant:Nullable.adoc[`@Nullable`] annotation.
 ====

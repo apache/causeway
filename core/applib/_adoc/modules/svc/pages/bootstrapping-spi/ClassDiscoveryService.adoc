@@ -9,7 +9,7 @@ include::_attributes.adoc[]
 The `ClassDiscoveryService` service (and its various supertypes) is used to automatically discover subclasses of any given type on the classpath.
 The primary use case is to support "convention-over-configuration" designs that work with a minimum of configuration.
 
-This service is used by the xref:applib:cms:classes/super.adoc#FixtureScripts[`FixtureScripts`] service to automatically locate any xref:applib:cms:classes/super.adoc#FixtureScript[`FixtureScript`] implementations.
+This service is used by the xref:rg:cms:classes/super.adoc#FixtureScripts[`FixtureScripts`] service to automatically locate any xref:rg:cms:classes/super.adoc#FixtureScript[`FixtureScript`] implementations.
 
 
 
@@ -37,11 +37,11 @@ Apache Isis provides an implementation of this service, namely `o.a.i.applib.ser
 
 [NOTE]
 ====
-This implementation is also used to discover domain services annotated with xref:applib:ant:DomainService.adoc[`@DomainService`].
+This implementation is also used to discover domain services annotated with xref:rg:ant:DomainService.adoc[`@DomainService`].
 Currently this logic uses the implementation directly, so is not pluggable.
 ====
 
-To use an alternative implementation, implement the `ClassDiscoveryService` interface and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `ClassDiscoveryService` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 
@@ -49,6 +49,6 @@ To use an alternative implementation, implement the `ClassDiscoveryService` inte
 
 == Related Services
 
-The xref:applib:svc:testing/FixtureScripts.adoc[`FixtureScripts`] domain service uses `ClassDiscoveryService` to discover ``FixtureScript``s implementations to present in the UI.
+The xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`] domain service uses `ClassDiscoveryService` to discover ``FixtureScript``s implementations to present in the UI.
 
 Note that the bootstrapping of the framework itself does _not_ use this service (though it does use the same underlying library as the default implementation of this service, namely `org.reflections.Reflections`).

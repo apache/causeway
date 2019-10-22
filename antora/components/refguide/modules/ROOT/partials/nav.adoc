@@ -1,6 +1,0 @@
-* xref:rg:ROOT:about.adoc[Table of Contents]
-include::applib:ant:partial$nav.adoc[]
-include::applib:svc:partial$nav.adoc[]
-include::applib:cms:partial$nav.adoc[]
-include::cfg:ROOT:partial$nav.adoc[]
-include::schema:ROOT:partial$nav.adoc[]

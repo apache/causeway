@@ -1,0 +1,7 @@
+* xref:rg:cfg:about.adoc[Configuration]
+
+** xref:rg:cfg:deployment-types.adoc[Deployment Types]
+** xref:rg:cfg:configuration-files.adoc[Configuration Files]
+** xref:rg:cfg:specifying-components.adoc[Specifying Components]
+** xref:rg:cfg:configuring-core.adoc[Configuring Core]
+

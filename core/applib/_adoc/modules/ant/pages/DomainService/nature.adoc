@@ -23,7 +23,7 @@ The service's actions appear on menus and in the REST API, but are not contribut
 +
 The service's actions are intended only to be used as contributed actions/associations to domain objects and view model
 +
-The related xref:applib:ant:ActionLayout.adoc#contributedAs[`@ActionLayout#contributedAs()`] determines whether any given (1-arg) action is contributed as an association rather than an action.
+The related xref:rg:ant:ActionLayout.adoc#contributedAs[`@ActionLayout#contributedAs()`] determines whether any given (1-arg) action is contributed as an association rather than an action.
 
 * `VIEW_REST_ONLY` +
 +
@@ -70,7 +70,7 @@ public class LoanRepository {                                  // <1>
 }
 ----
 <1> `Repository` as a suffix for a domain-layer service
-<2> methods on `DOMAIN` services are often xref:applib:ant:Programmatic.adoc[`@Programmatic`]; they will never be exposed in the UI, so there's little point in including them in Apache Isis' metamodel
+<2> methods on `DOMAIN` services are often xref:rg:ant:Programmatic.adoc[`@Programmatic`]; they will never be exposed in the UI, so there's little point in including them in Apache Isis' metamodel
 
 
 

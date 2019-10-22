@@ -7,6 +7,6 @@ include::_attributes.adoc[]
 
 Whenever a view model is to be rendered, the framework fires off an CSS class UI event to obtain a CSS class to use in any wrapping ``<div>``s and ``<span>``s that render the domain object.
 
-This attribute is the same as xref:applib:ant:DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`], but for view models instead of entities.
+This attribute is the same as xref:rg:ant:DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`], but for view models instead of entities.
 
 A default event that is emitted if none specified, unless the `isis.reflector.facet.viewModelLayoutAnnotation.cssClassUiEvent.postForDefault` configuration property is set to "false".

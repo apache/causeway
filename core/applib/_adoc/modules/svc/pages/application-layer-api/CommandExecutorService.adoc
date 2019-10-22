@@ -9,7 +9,7 @@ include::_attributes.adoc[]
 The `CommandExecutorService` domain service is provides the ability to execute a specified `Command`, optionally running the command with the identity of the user captured in that `Command`.
 
 In fact, the service requires that the implementation of the `Command` being executed implements the `CommandWithDto` sub-interface.
-This allows the xref:schema:ROOT:cmd.adoc[`CommandDto`] memento to be extracted, from which the action can be invoked/property edited.
+This allows the xref:rg:schema:cmd.adoc[`CommandDto`] memento to be extracted, from which the action can be invoked/property edited.
 
 The primary use case for this service is to allow the replay of commands, eg for regression testing.
 This is implemented by the (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-command-replay.html[command replay module].
@@ -33,10 +33,10 @@ public interface CommandExecutorService {
 }
 ----
 <1> whether to switch the effective user for the duration of executing the `Command`.
-Behind the scenes this uses the xref:applib:svc:testing/SudoService.adoc[`SudoService`].
+Behind the scenes this uses the xref:rg:svc:testing/SudoService.adoc[`SudoService`].
 <2> provided `Command` must implement `CommandDto`.
 
-When the `Command` is executed, it will also be returned by xref:applib:svc:application-layer-api/CommandContext.adoc[`CommandContext`].
+When the `Command` is executed, it will also be returned by xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`].
 Any associated objects that implement `HasTransactionId` (audit entries and the like) will therefore have the correct transactionId and will correctly be associated with the `Command` being executed.
 
 The framework provides a default implementation of this service,

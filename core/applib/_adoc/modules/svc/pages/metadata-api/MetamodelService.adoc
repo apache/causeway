@@ -69,9 +69,9 @@ public interface MetaModelService {
 <7> returns the `AppManifest` used to bootstrap the application.
 If an `AppManifest2` was used (from a `Module`), then this is also returned (else just `null`).
 
-<8> obtain an implementation of `CommandDtoProcessor` (if any) as per an xref:applib:ant:Action.adoc#command[`@Action#commandDtoProcessor()`] or xref:applib:ant:Property.adoc#command[`@Property#commandDtoProcessor()`].
+<8> obtain an implementation of `CommandDtoProcessor` (if any) as per an xref:rg:ant:Action.adoc#command[`@Action#commandDtoProcessor()`] or xref:rg:ant:Property.adoc#command[`@Property#commandDtoProcessor()`].
 +
-This is used by the xref:applib:svc:presentation-layer-spi/ContentMappingService.adoc#implementations[framework-provided implementations] of `ContentMappingService`.
+This is used by the xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc#implementations[framework-provided implementations] of `ContentMappingService`.
 
 <9> Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 +

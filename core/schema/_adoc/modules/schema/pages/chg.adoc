@@ -8,8 +8,8 @@ include::_attributes.adoc[]
 The changes ("chg") schema defines the serialized form identifying which objects have been created, updated or deleted as the result of invoking an action or editing a property.
 It also captures a number of other metrics counts (number of objects loaded, number of object properties modified), useful for profiling.
 
-An instance of the DTO (corresponding to this schema) is used within the xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] SPI, identifying changed objects that are to be
-published (as per xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] or equivalent).
+An instance of the DTO (corresponding to this schema) is used within the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] SPI, identifying changed objects that are to be
+published (as per xref:rg:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] or equivalent).
 
 
 == `changesDto`
@@ -48,12 +48,12 @@ The `changesDto` root element is defined as:
 ----
 <1> the changes schema has a namespace URI of "http://isis.apache.org/schema/chg".
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
-<2> uses complex types defined in the xref:schema:ROOT:common.adoc["common" schema].
+<2> uses complex types defined in the xref:rg:schema:common.adoc["common" schema].
 <3> definition of the `changesDto` root element.
 The corresponding XML will use this as its top-level element.
 <4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
 <5> unique identifier for the transaction in which this interaction is being executed.
-The transaction Id is used to correlate back to the xref:schema:ROOT:command[command] that represented the intention to perform this execution, as well as to the xref:schema:ROOT:about.adoc#interaction.adoc[interaction] that executes said command.
+The transaction Id is used to correlate back to the xref:rg:schema:command[command] that represented the intention to perform this execution, as well as to the xref:rg:schema:about.adoc#interaction.adoc[interaction] that executes said command.
 <6> uniquely identifies this set of changes within the interaction.
 Can be combined with `transactionId` to create a unique identifier (across all other changed object events and also any interaction executions) of this particular set of changed objects.
 <7> the date/time that the transaction that dirtied this objects completed
@@ -88,4 +88,4 @@ It also captures additional metrics counters:
 <2> the identities of the objects that were, respectively, created, updated or deleted within the transaction.
 <3> the number of objects' properties changed, in total, by the interaction.
 
-The xref:schema:ROOT:ixn.adoc[interaction] schema also provides metrics on the number of objects loaded/changed, but is more granular, each figure relating to a single (sub-)execution within an interaction.
+The xref:rg:schema:ixn.adoc[interaction] schema also provides metrics on the number of objects loaded/changed, but is more granular, each figure relating to a single (sub-)execution within an interaction.

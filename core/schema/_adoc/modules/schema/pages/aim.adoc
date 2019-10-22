@@ -9,12 +9,12 @@ The "aim" schema previously defined the serialized form (or memento) of an actio
 
 The schema was removed in `1.13.0`, and was replaced by:
 
-* xref:schema:ROOT:ixn.adoc[ixn.xsd]
+* xref:rg:schema:ixn.adoc[ixn.xsd]
 
 +
 for action invocations/property edits, and
 
-* xref:schema:ROOT:cmd.adoc[cmd.xsd]
+* xref:rg:schema:cmd.adoc[cmd.xsd]
 
 +
 for commands, ie the __intention__ to invoke an action/edit a property.

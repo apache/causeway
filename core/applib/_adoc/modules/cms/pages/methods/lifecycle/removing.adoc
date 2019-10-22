@@ -7,9 +7,9 @@ include::_attributes.adoc[]
 
 The `removing()` lifecycle callback method is called when a (persistent) object is just about to be deleted from the object store
 
-See also xref:applib:cms:methods.adoc#removed[`removed()`].
+See also xref:rg:cms:methods.adoc#removed[`removed()`].
 
 [TIP]
 ====
-Alternatively, consider using a xref:applib:svc:core-domain-api/EventBusService.adoc[event bus] xref:applib:cms:classes.adoc#AbstractSubscriber[subscriber] on the xref:applib:cms:classes.adoc#ObjectRemovingEvent[`ObjectRemovingEvent`].
+Alternatively, consider using a xref:rg:svc:core-domain-api/EventBusService.adoc[event bus] xref:rg:cms:classes.adoc#AbstractSubscriber[subscriber] on the xref:rg:cms:classes.adoc#ObjectRemovingEvent[`ObjectRemovingEvent`].
 ====

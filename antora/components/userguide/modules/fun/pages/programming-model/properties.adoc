@@ -119,7 +119,7 @@ For example:
 private String notes;
 ----
 
-If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:cfg:ROOT:configuring-core.adoc#isis-objects-editing[reference configuration guide] for further details.
+If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:rg:cfg:configuring-core.adoc#isis-objects-editing[reference configuration guide] for further details.
 
 
 == Ignoring Properties

@@ -49,11 +49,11 @@ public class CustomerMenu {
     protected CustomerRepository customerRepository;            // <6>
 }
 ----
-<1> The (Apache Isis) xref:applib:ant:DomainService.adoc[`@DomainService`] annotation is used to identify the class as a domain service.
+<1> The (Apache Isis) xref:rg:ant:DomainService.adoc[`@DomainService`] annotation is used to identify the class as a domain service.
 Apache Isis scans the classpath looking for classes with this annotation, so there very little configuration other than to tell the framework which packages to scan underneath.
 The `VIEW` nature indicates that this service's actions should be exposed as menu items.
-<2> The `findByName` method is annotated with various Apache Isis annotations (xref:applib:ant:Action.adoc[`@Action`], xref:applib:ant:ActionLayout.adoc[`@ActionLayout`] and xref:applib:ant:MemberOrder.adoc[`@MemberOrder`] and is itself rendered in the UI as a "Find By Name" menu item underneath the "Simple Objects" menu.
-<3> The xref:applib:ant:ParameterLayout.adoc[`@ParameterLayout`] provides metadata for the parameter itself, in this case its name.
+<2> The `findByName` method is annotated with various Apache Isis annotations (xref:rg:ant:Action.adoc[`@Action`], xref:rg:ant:ActionLayout.adoc[`@ActionLayout`] and xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] and is itself rendered in the UI as a "Find By Name" menu item underneath the "Simple Objects" menu.
+<3> The xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`] provides metadata for the parameter itself, in this case its name.
 +
 [TIP]
 ====
@@ -63,7 +63,7 @@ There's no need to name the action parameters if the code is compiled using the 
 <4> the action implementation delegates to an injected repository.
 The framework can inject into not just other domain services but will also automatically into domain entities and view models.
 There is further discussion of service injection xref:ug:fun:programming-model.adoc#inject-services[below].
-<5> xref:applib:ant:Action.adoc#restrictTo[Prototype] actions are rendered only in prototyping mode.
+<5> xref:rg:ant:Action.adoc#restrictTo[Prototype] actions are rendered only in prototyping mode.
 A "list all" action such as this can be useful when exploring the domain with a small dataset.
 <6> Menu services typically delegate to an underlying repository/ies specific to the domain (rather than use `RepositoryService` directly, for example).
 

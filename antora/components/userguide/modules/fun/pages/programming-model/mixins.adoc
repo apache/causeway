@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 A xref:ug:fun:building-blocks.adoc#mixins[mixin] acts like a trait or extension method, allowing one module to contribute behaviour or derived state to another object.
 
-Syntactically, a mixin is defined using either the xref:applib:ant:Mixin.adoc[`@Mixin`] annotation or using xref:applib:ant:DomainObject.adoc#nature[`@DomainObject#nature()`] attribute (specifying a nature of `Nature.MIXIN`).
+Syntactically, a mixin is defined using either the xref:rg:ant:Mixin.adoc[`@Mixin`] annotation or using xref:rg:ant:DomainObject.adoc#nature[`@DomainObject#nature()`] attribute (specifying a nature of `Nature.MIXIN`).
 
 // TODO: v2: perhaps we should get rid of @DomainObject#nature=MIXIN ?
 

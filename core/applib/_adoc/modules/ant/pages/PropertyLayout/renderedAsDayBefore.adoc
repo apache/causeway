@@ -42,5 +42,5 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-
 
 == See also
 
-This attribute is also supported for xref:applib:ant:ParameterLayout.adoc#renderedAsDayBefore[parameters].
+This attribute is also supported for xref:rg:ant:ParameterLayout.adoc#renderedAsDayBefore[parameters].
 

@@ -12,7 +12,7 @@ As an alternative to relying on Apache Isis to call lifecycle callback methods, 
 We may decide to deprecate the Apache Isis callbacks in the future because they merely duplicate this functionality already available in JDO.
 ====
 
-You can gain access to the relevant JDO API using the xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] domain service.
+You can gain access to the relevant JDO API using the xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] domain service.
 
 For example:
 
@@ -45,7 +45,7 @@ public class ObjectChangedListenerService
 ----
 <1> must be `@RequestScoped` because we register on the `PersistenceManager`, which is different for each request.
 <2> implement whichever callback lifecycle listeners are of interest
-<3> use the injected xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] service to obtain the `PersistenceManager`.
+<3> use the injected xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] service to obtain the `PersistenceManager`.
 
 Note that it isn't possible to register on the `PersistenceManagerFactory` because listeners cannot be attached once a persistence session has been created (which it will have been when the service's `@PostConstruct` method is called).
 

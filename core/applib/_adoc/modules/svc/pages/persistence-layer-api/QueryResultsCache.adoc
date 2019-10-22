@@ -57,7 +57,7 @@ public class QueryResultsCache {
 
 This class (`o.a.i.applib.services.queryresultscache.QueryResultsCache`) is also the implementation.
 
-To use an alternative implementation, subclass `QueryResultsCache` and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, subclass `QueryResultsCache` and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 
@@ -112,4 +112,4 @@ This refactoring will be worthwhile provided that enough of the orders being pro
 
 == Related Services
 
-The xref:applib:svc:core-domain-api/Scratchpad.adoc[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:applib:ant:Action.adoc#invokeOn[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.
+The xref:rg:svc:core-domain-api/Scratchpad.adoc[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:rg:ant:Action.adoc#invokeOn[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.

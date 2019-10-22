@@ -5,9 +5,9 @@ include::_attributes.adoc[]
 
 The `@javax.annotation.PostConstruct` annotation, as defined in link:https://jcp.org/en/jsr/detail?id=250[JSR-250],  is recognized by Apache Isis as a callback method on domain services to be called just after they have been constructed, in order that they initialize themselves.
 
-It is also recognized for xref:ug:fun:building-blocks.adoc#view-models[view models] (eg annotated with xref:applib:ant:ViewModel.adoc[`@ViewModel`]).
+It is also recognized for xref:ug:fun:building-blocks.adoc#view-models[view models] (eg annotated with xref:rg:ant:ViewModel.adoc[`@ViewModel`]).
 
-For the default application-scoped (singleton) domain services, this means that the method, if present, is called during the bootstrapping of the application.  For xref:applib:ant:RequestScoped.adoc[`@RequestScoped`] domain services, the method is called at the beginning of the request.
+For the default application-scoped (singleton) domain services, this means that the method, if present, is called during the bootstrapping of the application.  For xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] domain services, the method is called at the beginning of the request.
 
 The signature of the method is:
 
@@ -16,7 +16,7 @@ The signature of the method is:
 @PostConstruct                 <1>
 public void init() { /* ... */ }     <2>
 ----
-<1> It is not necessary to annotate the method with xref:applib:ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
+<1> It is not necessary to annotate the method with xref:rg:ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility.
 
 In the form shown above the method accepts no arguments.
@@ -28,11 +28,11 @@ Alternatively - for domain services only, not view models - the method can accep
 @Programmatic
 public void init(Map<String,String> properties) { /* ... */ }
 ----
-Apache Isis uses argument to pass in the configuration properties read from all xref:cfg:ROOT:configuration-files.adoc[configuration files]:
+Apache Isis uses argument to pass in the configuration properties read from all xref:rg:cfg:configuration-files.adoc[configuration files]:
 
 [TIP]
 ====
-Alternatively, you could inject xref:applib:svc:core-domain-api/ConfigurationService.adoc[`ConfigurationService`] into the service and read configuration properties using `ConfigurationService#getProperty(...)` and related methods.
+Alternatively, you could inject xref:rg:svc:core-domain-api/ConfigurationService.adoc[`ConfigurationService`] into the service and read configuration properties using `ConfigurationService#getProperty(...)` and related methods.
 However, be aware when using this latter API that only those configuration properties keys with an `application.` prefix are provided.
 ====
 
@@ -42,4 +42,4 @@ Use cases include obtaining connections to external datasources, eg subscribing 
 
 
 
-See also xref:applib:ant:PreDestroy.adoc[`@PreDestroy`]
+See also xref:rg:ant:PreDestroy.adoc[`@PreDestroy`]

@@ -5,12 +5,12 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-The `AcceptHeaderService` domain service is a xref:applib:ant:RequestScoped.adoc[`@RequestScoped`] service that simply exposes the HTTP `Accept` header to the domain.
+The `AcceptHeaderService` domain service is a xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] service that simply exposes the HTTP `Accept` header to the domain.
 Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by logic in the domain objects themselves.
 
 [NOTE]
 ====
-As an alternative to performing content negotiation within the domain classes, the xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:applib:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
+As an alternative to performing content negotiation within the domain classes, the xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
 ====
 
 == API & Implementation
@@ -26,7 +26,7 @@ public interface AcceptHeaderService {
     List<MediaType> getAcceptableMediaTypes();      // <2>
 }
 ----
-<1> is xref:applib:ant:RequestScoped.adoc[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
+<1> is xref:rg:ant:RequestScoped.adoc[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
 <2> returns the list of media types found in the HTTP Accept header.
 
 
@@ -37,7 +37,7 @@ The default implementation is provided by `o.a.i.v.ro.rendering.service.accepthe
 Note that the service will only return a list when the request is initiated through the xref:vro:ROOT:about.adoc[Restful Objects viewer].  Otherwise the service will return `null`.
 ====
 
-To use an alternative implementation, use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == Usage
@@ -49,7 +49,7 @@ The diagram below illustrated this:
 
 image::reference-services-api/acceptheaderservice.png[width="700px",link="{imagesdir}/reference-services-api/acceptheaderservice.png"]
 
-The REST request is submitted to a domain service with a xref:applib:ant:DomainService.adoc#nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).
+The REST request is submitted to a domain service with a xref:rg:ant:DomainService.adoc#nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).
 This uses the `AcceptHeaderService` to obtain the values of the HTTP `Accept` header.
 Based on this it delegates to the appropriate underlying domain service (with a nature of `DOMAIN` so that they are not exposed in the REST API at all).
 
@@ -58,7 +58,7 @@ Based on this it delegates to the appropriate underlying domain service (with a 
 The service does not define any conventions as to the format of the media types.
 The option is to use the media type's type/subtype, eg `application/vnd.myrestapi-v1+json`; an alternative is to use a media type parameter as a hint, eg `application/json;x-my-rest-api-version=1` (where `x-my-rest-api-version` is the media type parameter).
 
-The Restful Objects specification does this something similar with its own `x-ro-domain-type` media type parameter; this is used by the xref:applib:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.
+The Restful Objects specification does this something similar with its own `x-ro-domain-type` media type parameter; this is used by the xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.
 ====
 
 

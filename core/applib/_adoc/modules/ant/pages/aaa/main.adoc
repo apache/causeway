@@ -26,72 +26,72 @@ The table below summarizes these most commonly used annotations in Apache Isis.
 |Layer
 |xref:vw:ROOT:layout/file-based.adoc[File-based layout]?
 
-|xref:applib:ant:Action.adoc[`@Action`]
+|xref:rg:ant:Action.adoc[`@Action`]
 |Domain semantics for actions
 |Domain
 |
 
-|xref:applib:ant:ActionLayout.adoc[`@ActionLayout`]
+|xref:rg:ant:ActionLayout.adoc[`@ActionLayout`]
 |User interface hints for actions
 |UI
 |Yes
 
-|xref:applib:ant:Collection.adoc[`@Collection`]
+|xref:rg:ant:Collection.adoc[`@Collection`]
 |Domain semantics for collections
 |Domain
 |
 
-|xref:applib:ant:CollectionLayout.adoc[`@CollectionLayout`]
+|xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`]
 |User interface hints for collections
 |UI
 |Yes
 
-|xref:applib:ant:DomainObject.adoc[`@DomainObject`]
+|xref:rg:ant:DomainObject.adoc[`@DomainObject`]
 |Domain semantics for domain object (entities and optionally view models, see also `@ViewModel)`
 |Domain
 |
 
-|xref:applib:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`]
+|xref:rg:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`]
 |User interface hints for domain object (entities and optionally view models, see also `@ViewModelLayout)`
 |UI
 |Yes
 
-|xref:applib:ant:DomainService.adoc[`@DomainService`]
+|xref:rg:ant:DomainService.adoc[`@DomainService`]
 |Class is a domain service (rather than an entity or view model)
 |Domain
 |
 
-|xref:applib:ant:DomainServiceLayout.adoc[`@DomainServiceLayout`]
+|xref:rg:ant:DomainServiceLayout.adoc[`@DomainServiceLayout`]
 |User interface hints for domain services
 |UI
 |
 
-|xref:applib:ant:Parameter.adoc[`@Parameter`]
+|xref:rg:ant:Parameter.adoc[`@Parameter`]
 |Domain semantics for action parameters
 |Domain
 |
 
-|xref:applib:ant:ParameterLayout.adoc[`@ParameterLayout`]
+|xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`]
 |Layout hints for an action parameter (currently: its label position either to top or the left).
 |UI
 |Yes
 
-|xref:applib:ant:Property.adoc[`@Property`]
+|xref:rg:ant:Property.adoc[`@Property`]
 |Domain semantics for properties
 |Domain
 |
 
-|xref:applib:ant:PropertyLayout.adoc[`@PropertyLayout`]
+|xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`]
 |Layout hints for a property
 |UI
 |Yes
 
-|xref:applib:ant:ViewModel.adoc[`@ViewModel`]
+|xref:rg:ant:ViewModel.adoc[`@ViewModel`]
 |Specify that a class is a view model (as opposed to an entity or domain service); equivalent to `@DomainObject(nature`=VIEW_MODEL).
 |Domain, Persistence
 |
 
-|xref:applib:ant:ViewModelLayout.adoc[`@ViewModelLayout`]
+|xref:rg:ant:ViewModelLayout.adoc[`@ViewModelLayout`]
 |User interface hints for view models.
 For use with `@ViewModel`. If specifying view models using `@DomainObject(nature=VIEW_MODEL)` then use `@DomainObjectLayout`)
 |UI

@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The (internal) `PublishingServiceInternal` domain service acts as an internal facade to any configured xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] domain service(s).
+The (internal) `PublishingServiceInternal` domain service acts as an internal facade to any configured xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] domain service(s).
 
 For published action invocations/ property edits, it provides an API for those member executions to call.
 
@@ -24,11 +24,11 @@ public class PublishingServiceInternal {
     void publishObjects();                          // <3>
 }
 ----
-<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:applib:ant:Action.adoc#publishing[`@Action#publishing()`] annotation attribute or equivalent, to any configured xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
-The `Execution` object will be an instance of `ActionInvocation` (see xref:applib:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] for details).
-<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:applib:ant:Property.adoc#publishing[`@Property#publishing()`] annotation attribute or equivalent, to any configured xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
-The `Execution` object will be an instance of `PropertyEdit` (see xref:applib:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] for details).
-<3> to publish all changed objects that are to be published (with the xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] annotation attribute or equivalent).
+<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:rg:ant:Action.adoc#publishing[`@Action#publishing()`] annotation attribute or equivalent, to any configured xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+The `Execution` object will be an instance of `ActionInvocation` (see xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] for details).
+<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:rg:ant:Property.adoc#publishing[`@Property#publishing()`] annotation attribute or equivalent, to any configured xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+The `Execution` object will be an instance of `PropertyEdit` (see xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] for details).
+<3> to publish all changed objects that are to be published (with the xref:rg:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] annotation attribute or equivalent).
 
 
 The service implementation is `o.a.i.c.m.s.publishing.PublishingServiceInternal`.
@@ -39,11 +39,11 @@ The service implementation is `o.a.i.c.m.s.publishing.PublishingServiceInternal`
 
 Apache Isis' default implementation of `PublishingServiceInternal` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
 
-To use an alternative implementation, use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == Related Classes
 
-The service delegates between the (internal) xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service to the configured xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+The service delegates between the (internal) xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service to the configured xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 
-The (internal) xref:runtime-services:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] performs a similar function for the xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.
+The (internal) xref:runtime-services:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] performs a similar function for the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.

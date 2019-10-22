@@ -5,8 +5,8 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-Subclass of xref:applib:cms:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be saved (inserted) into the database using the xref:applib:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#persist(...)` method.
+Subclass of xref:rg:cms:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be saved (inserted) into the database using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#persist(...)` method.
 
 
-`ObjectPersistingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:applib:ant:DomainObject.adoc#persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`].
+`ObjectPersistingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:rg:ant:DomainObject.adoc#persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`].
 

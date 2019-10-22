@@ -23,5 +23,5 @@ public class Child {
 
 == See also
 
-This attribute is also supported for xref:applib:ant:ViewModelLayout.adoc#plural[view models].
+This attribute is also supported for xref:rg:ant:ViewModelLayout.adoc#plural[view models].
 

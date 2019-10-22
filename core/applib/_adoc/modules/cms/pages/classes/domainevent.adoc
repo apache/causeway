@@ -6,8 +6,8 @@ include::_attributes.adoc[]
 
 This section catalogues the various domain event classes defined by Apache Isis.
 
-These events are broadcast on the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
-The domain events are broadcast as a result of being specified in the xref:applib:ant:Action.adoc#domainEvent[`@Action#domainEvent()`],  xref:applib:ant:Property.adoc#domainEvent[`@Property#domainEvent()`] or xref:applib:ant:Collection.adoc#domainEvent[`@Collection#domainEvent()`] attributes.
+These events are broadcast on the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
+The domain events are broadcast as a result of being specified in the xref:rg:ant:Action.adoc#domainEvent[`@Action#domainEvent()`],  xref:rg:ant:Property.adoc#domainEvent[`@Property#domainEvent()`] or xref:rg:ant:Collection.adoc#domainEvent[`@Collection#domainEvent()`] attributes.
 
 They are listed in the table below.
 
@@ -22,7 +22,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:applib:cms:classes.adoc#AbstractDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#AbstractDomainEvent[`o.a.i.applib.` +
 `AbstractDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
@@ -31,7 +31,7 @@ Impl'n (g: a:)
 |Superclass of the other domain events, listed below in this table.
 
 
-|xref:applib:cms:classes.adoc#ActionDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ActionDomainEvent[`o.a.i.applib.` +
 `ActionDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
@@ -41,7 +41,7 @@ Impl'n (g: a:)
 |Broadcast whenever there is an interaction (hide/disable/validate/pre-execute/post-execute) with an object's action.
 
 
-|xref:applib:cms:classes.adoc#CollectionDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#CollectionDomainEvent[`o.a.i.applib.` +
 `CollectionDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
@@ -52,7 +52,7 @@ is specified.
 |Broadcast whenever there is an interaction (hide/disable/validate/access) with an object's collection.
 
 
-|xref:applib:cms:classes.adoc#PropertyDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#PropertyDomainEvent[`o.a.i.applib.` +
 `PropertyDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +

@@ -32,7 +32,7 @@ They are:
 @DomainObject(nature=Nature.EXTERNAL_ENTITY)
 public class CustomerRecordOnSAP { /* ... */ }
 ----
-|Annotated with xref:applib:ant:DomainObject.adoc#nature[`@DomainObject#nature()`] and a nature of `EXTERNAL_ENTITY`, with memento derived automatically from the properties of the domain object.  Collections are ignored, as are any properties annotated as xref:applib:ant:Property.adoc#notPersisted[not persisted].
+|Annotated with xref:rg:ant:DomainObject.adoc#nature[`@DomainObject#nature()`] and a nature of `EXTERNAL_ENTITY`, with memento derived automatically from the properties of the domain object.  Collections are ignored, as are any properties annotated as xref:rg:ant:Property.adoc#notPersisted[not persisted].
 
 | In-memory entity
 |[source,java]
@@ -58,7 +58,7 @@ public class Dashboard { /* ... */ }
 public class Dashboard { /* ... */ }
 ----
 
-|Annotated with xref:applib:ant:ViewModel.adoc[`@ViewModel`] annotation (effectively just an alias)' memento is as preceding: from "persisted" properties, collections ignored
+|Annotated with xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation (effectively just an alias)' memento is as preceding: from "persisted" properties, collections ignored
 
 |Application view model
 |
@@ -69,7 +69,7 @@ public class ExcelUploadManager implements ViewModel {
   public void viewModelInit(String memento) { /* ... */ }
 }
 ----
-|Implement xref:applib:cms:classes/super.adoc#ViewModel[`ViewModel`] interface.  The memento is as defined by the
+|Implement xref:rg:cms:classes/super.adoc#ViewModel[`ViewModel`] interface.  The memento is as defined by the
 interface's methods: the programmer has full control (but also full responsibility) for the string memento.
 
 |===

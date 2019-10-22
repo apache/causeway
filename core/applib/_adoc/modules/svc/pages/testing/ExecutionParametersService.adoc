@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 
 The `ExecutionParametersService` is used by the framework simply to instantiate the `ExecutionParameters` object.
-The `ExecutionParameters` object in turn is responsible for parsing the string parameter passed when executing fixtures through the UI to the xref:applib:svc:testing/FixtureScripts.adoc[`FixtureScripts`] domain service.
+The `ExecutionParameters` object in turn is responsible for parsing the string parameter passed when executing fixtures through the UI to the xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`] domain service.
 
 
 

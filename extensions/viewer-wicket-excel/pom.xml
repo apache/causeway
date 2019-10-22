@@ -57,6 +57,25 @@
     </dependencies>
 
     <profiles>
+
+        <profile>
+            <id>resolve-dependency-convergence</id>
+            <activation>
+                <property>
+                    <name>!skip.resolve-dependency-convergence</name>
+                </property>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-collections4</artifactId>
+                        <version>4.4</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        </profile>
+
         <profile>
             <id>flatten</id>
             <activation>

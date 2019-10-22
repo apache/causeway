@@ -3,8 +3,8 @@
 include::_attributes.adoc[]
 
 
-The `@ViewModelLayout` annotation is identical to the xref:applib:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`], but is provided
-for symmetry with domain objects that have been annotated using xref:applib:ant:ViewModel.adoc[`@ViewModel`] (rather than xref:applib:ant:DomainObject.adoc#nature[`@DomainObject(nature=VIEW_MODEL)`]).
+The `@ViewModelLayout` annotation is identical to the xref:rg:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`], but is provided
+for symmetry with domain objects that have been annotated using xref:rg:ant:ViewModel.adoc[`@ViewModel`] (rather than xref:rg:ant:DomainObject.adoc#nature[`@DomainObject(nature=VIEW_MODEL)`]).
 
 
 The table below summarizes the annotation's attributes.
@@ -18,12 +18,12 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:applib:ant:ViewModelLayout.adoc#cssclass[`cssClass()`]
+|xref:rg:ant:ViewModelLayout.adoc#cssclass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a domain class (type) should have, to allow more targetted styling in xref:cfg:ROOT:application-specific/application-css.adoc[`application.css`]
+|the css class that a domain class (type) should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
 
 
-|xref:applib:ant:ViewModelLayout.adoc#cssClassFa[`cssClassFa()`]
+|xref:rg:ant:ViewModelLayout.adoc#cssClassFa[`cssClassFa()`]
 |Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
 |specify a font awesome icon for the action's menu link or icon. +
 
@@ -34,47 +34,47 @@ The table below summarizes the annotation's attributes.
 |Currently unused.
 
 
-|xref:applib:ant:ViewModelLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`]
+|xref:rg:ant:ViewModelLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`]
 |subtype of `CssClassUiEvent` +
 (`CssClassUiEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
 
 
-|xref:applib:ant:ViewModelLayout.adoc#describedAs[`describedAs()`]
+|xref:rg:ant:ViewModelLayout.adoc#describedAs[`describedAs()`]
 |String.
 |description of this class, eg to be rendered in a tooltip.
 
-|xref:applib:ant:ViewModelLayout.adoc#iconUiEvent[`iconUiEvent()`]
+|xref:rg:ant:ViewModelLayout.adoc#iconUiEvent[`iconUiEvent()`]
 |subtype of `IconUiEvent` +
 (`IconUiEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the icon (name) for the domain object.
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the icon (name) for the domain object.
 
-|xref:applib:ant:ViewModelLayout.adoc#layoutUiEvent[`layoutUiEvent()`]
+|xref:rg:ant:ViewModelLayout.adoc#layoutUiEvent[`layoutUiEvent()`]
 |subtype of `LayoutUiEvent` +
 (`LayoutUiEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the layout (name) for the domain object.
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the layout (name) for the domain object.
 
-|xref:applib:ant:ViewModelLayout.adoc#named[`named()`]
+|xref:rg:ant:ViewModelLayout.adoc#named[`named()`]
 |String.
 |to override the name inferred from the action's name in code. +
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
-|xref:applib:ant:ViewModelLayout.adoc#paged[`paged()`]
+|xref:rg:ant:ViewModelLayout.adoc#paged[`paged()`]
 |Positive integer
 |the page size for instances of this class when rendered within a table (as returned from an action invocation)
 
 
-|xref:applib:ant:ViewModelLayout.adoc#plural[`plural()`]
+|xref:rg:ant:ViewModelLayout.adoc#plural[`plural()`]
 |String.
 |the plural name of the class
 
 
-|xref:applib:ant:ViewModelLayout.adoc#titleUiEvent[`titleUiEvent()`]
+|xref:rg:ant:ViewModelLayout.adoc#titleUiEvent[`titleUiEvent()`]
 |subtype of `TitleUiEvent` +
 (`TitleUiEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the title for the domain object.
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the title for the domain object.
 
 |===
 
@@ -95,7 +95,7 @@ For example:
 public class CategoryPieChart { /* ... */ }
 ----
 <1> this annotation is intended for use with `@ViewModel`.
-If a view model has been specified using the equivalent xref:applib:ant:DomainObject.adoc#nature[`@DomainObject(nature=Nature.VIEW_MODEL)`], then we recommend you use xref:applib:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] instead.
+If a view model has been specified using the equivalent xref:rg:ant:DomainObject.adoc#nature[`@DomainObject(nature=Nature.VIEW_MODEL)`], then we recommend you use xref:rg:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] instead.
 
 
 [NOTE]

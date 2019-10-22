@@ -17,40 +17,40 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:applib:ant:PropertyLayout.adoc#cssClass[`cssClass()`]
+|xref:rg:ant:PropertyLayout.adoc#cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a property should have, to allow more targetted styling in xref:cfg:ROOT:application-specific/application-css.adoc[`application.css`]
+|the css class that a property should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
 
 
-|xref:applib:ant:PropertyLayout.adoc#describedAs[`describedAs()`]
+|xref:rg:ant:PropertyLayout.adoc#describedAs[`describedAs()`]
 |String
 |description of this property, eg to be rendered in a tooltip.
 
 
-|xref:applib:ant:PropertyLayout.adoc#hidden[`hidden()`]
+|xref:rg:ant:PropertyLayout.adoc#hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the property should be hidden from the user.
 
 
-|xref:applib:ant:PropertyLayout.adoc#labelPosition[`labelPosition()`]
+|xref:rg:ant:PropertyLayout.adoc#labelPosition[`labelPosition()`]
 |`LEFT`, `TOP`, `RIGHT`, `NONE` +
 (`LEFT`)
 |in forms, the positioning of the label relative to the property value. +
 
-Defaults is `LEFT`, unless xref:applib:ant:PropertyLayout.adoc#multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
+Defaults is `LEFT`, unless xref:rg:ant:PropertyLayout.adoc#multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
 
-It is also possible to change the default through a xref:cfg:ROOT:configuring-core.adoc#isis-viewers-propertyLayout-labelPosition[configuration property]
+It is also possible to change the default through a xref:rg:cfg:configuring-core.adoc#isis-viewers-propertyLayout-labelPosition[configuration property]
 
 
-|xref:applib:ant:PropertyLayout.adoc#multiLine[`multiLine()`]
+|xref:rg:ant:PropertyLayout.adoc#multiLine[`multiLine()`]
 |Positive integer
 |for string properties, render as a text area over multiple lines.  +
 
-If set > 1, then xref:applib:ant:PropertyLayout.adoc#labelPosition[`labelPosition`] defaults to TOP.
+If set > 1, then xref:rg:ant:PropertyLayout.adoc#labelPosition[`labelPosition`] defaults to TOP.
 
 
-|xref:applib:ant:PropertyLayout.adoc#named[`named()`]
+|xref:rg:ant:PropertyLayout.adoc#named[`named()`]
 |String
 |to override the name inferred from the collection's name in code. +
 
@@ -63,29 +63,29 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |whether to HTML escape the name of this property.
 
 
-|xref:applib:ant:PropertyLayout.adoc#navigable[`navigable()`]
+|xref:rg:ant:PropertyLayout.adoc#navigable[`navigable()`]
 |`PARENT`, `IGNORE`, `NOT_CONFIGURED` +
 (`NOT_CONFIGURED`)
 |whether a property should be used as the navigable parent (parent breadcrumb) of this object
 
 
-|xref:applib:ant:PropertyLayout.adoc#promptStyle[`promptStyle()`]
+|xref:rg:ant:PropertyLayout.adoc#promptStyle[`promptStyle()`]
 |`DIALOG`, `INLINE`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |how a property prompt should be displayed within the UI
 
 
-|xref:applib:ant:PropertyLayout.adoc#renderedAsDayBefore[`renderedAsDayBefore()`]
+|xref:rg:ant:PropertyLayout.adoc#renderedAsDayBefore[`renderedAsDayBefore()`]
 |`true`, `false` +
 (`false`)
 |for date properties only, render the date as one day prior to the actually stored date.
 
 
-|xref:applib:ant:PropertyLayout.adoc#typicalLength[`typicalLength()`]
+|xref:rg:ant:PropertyLayout.adoc#typicalLength[`typicalLength()`]
 |Positive integer.
 |the typical entry length of a field, use to determine the optimum width for display
 
-|xref:applib:ant:PropertyLayout.adoc#unchanging[`unchanging()`]
+|xref:rg:ant:PropertyLayout.adoc#unchanging[`unchanging()`]
 |`false`, `true` +
 (`false`)
 |indicates that the value held by the property never changes over time (even if other properties of the object do change).
@@ -129,7 +129,7 @@ As an alternative to using the `@PropertyLayout` annotation, a xref:vw:ROOT:layo
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:applib:ant:Collection.adoc[`@Collection`], xref:applib:ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:applib:ant:Property.adoc[`@Property`]) that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:rg:ant:Collection.adoc[`@Collection`], xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:rg:ant:Property.adoc[`@Property`]) that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

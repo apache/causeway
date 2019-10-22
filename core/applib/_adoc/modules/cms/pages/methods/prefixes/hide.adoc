@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 The `hide...()` supporting method is called for properties, collections, actions and action parameters.
 It allows the property/collection to be completely hidden from view.
 
-It's comparatively rare for properties or collections to be imperatively hidden from view, but actions are sometimes hidden or shown visible (as opposed to being just xref:applib:cms:methods.adoc#disable[disabled], ie greyed out).
+It's comparatively rare for properties or collections to be imperatively hidden from view, but actions are sometimes hidden or shown visible (as opposed to being just xref:rg:cms:methods.adoc#disable[disabled], ie greyed out).
 
 
 The signature of the supporting method is simply:

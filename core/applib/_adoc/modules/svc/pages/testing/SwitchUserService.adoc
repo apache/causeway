@@ -14,7 +14,7 @@ different users of the system.
 [NOTE]
 ====
 This service is deprecated; use xref:ext-fixtures:ROOT:about.adoc[fixture scripts] and the
-xref:applib:svc:testing/SudoService.adoc[`SudoService`] instead.
+xref:rg:svc:testing/SudoService.adoc[`SudoService`] instead.
 ====
 
 

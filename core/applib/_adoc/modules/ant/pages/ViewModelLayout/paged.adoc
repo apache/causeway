@@ -7,4 +7,4 @@ include::_attributes.adoc[]
 
 The `paged()` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation.
 
-This attribute is the same as xref:applib:ant:DomainObjectLayout.adoc#paged[`@DomainObjectLayout#paged()`], but for view models instead of entities.
+This attribute is the same as xref:rg:ant:DomainObjectLayout.adoc#paged[`@DomainObjectLayout#paged()`], but for view models instead of entities.

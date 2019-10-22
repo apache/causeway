@@ -10,7 +10,7 @@ It acts as an abstraction over the JDO/DataNucleus objectstore.
 
 You can use it during prototyping to write naive queries (find all rows, then filter using the Guava `Predicate` API, or you can use it to call JDO link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/query.html#named[named queries] using JDOQL.
 
-As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] service.
+As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] service.
 
 
 
@@ -46,7 +46,7 @@ public interface RepositoryService {
 ----
 <1> create a new non-persisted domain entity.
 This is identical to
-xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`]'s `instantiate(...)` method, but is provided in the
+xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`]'s `instantiate(...)` method, but is provided in the
 ``RepositoryService``'s API too because instantiating and persisting objects are often done together.
 <2> test whether a particular domain object is persistent or not
 <3> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
@@ -96,7 +96,7 @@ These are then executed either when the request completes (and the transaction c
 This can be done either implicitly by the framework, or as the result of a direct call to `#flush()`.
 
 By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`.
-However, this behaviour can be disabled using the  xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.services.container.disableAutoFlush`.
+However, this behaviour can be disabled using the  xref:rg:cfg:configuring-core.adoc[configuration property] `isis.services.container.disableAutoFlush`.
 
 
 
@@ -234,7 +234,7 @@ The first parameter is the `start` (0-based, the second is the `count`.
 [TIP]
 ====
 It is also possible to query using DataNucleus' type-safe query API.
-For more details, see xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`].
+For more details, see xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`].
 ====
 
 
@@ -267,5 +267,5 @@ The default implementation of this domain service supports the following configu
 
 == Usage Notes
 
-The xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`] is often used in conjunction with the `RepositoryService`, to instantiate domain objects before persisting.
+The xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`] is often used in conjunction with the `RepositoryService`, to instantiate domain objects before persisting.
 

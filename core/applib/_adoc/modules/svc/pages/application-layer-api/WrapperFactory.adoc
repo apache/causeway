@@ -90,7 +90,7 @@ If the object is not wrapped, returns back unchanged.
 
 <8> whether the supplied object has been wrapped.
 
-If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped -  a xref:applib:ant:Action.adoc#command[command]s will be created and pre- and post-execute xref:applib:ant:Action.adoc#domainEvent[domain event]s) will be fired
+If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped -  a xref:rg:ant:Action.adoc#command[command]s will be created and pre- and post-execute xref:rg:ant:Action.adoc#domainEvent[domain event]s) will be fired
 
 
 The service works by returning a "wrapper" around a supplied domain object (using a byte manipulation library such as link:http://www.javassist.org[javassist] or link:https://bytebuddy.net/[byte buddy]), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced.
@@ -107,8 +107,8 @@ Similarly if an action has a `validateXxx()` method and the supplied arguments a
 
 In addition, the following methods may also be called:
 
-* the xref:applib:cms:methods.adoc#title[`title()`] and `toString()` methods
-* any xref:applib:cms:methods.adoc#default[`default...()`], xref:applib:cms:methods.adoc#choices[`choices...()`] or xref:applib:cms:methods.adoc#autoComplete[`autoComplete...()`] methods
+* the xref:rg:cms:methods.adoc#title[`title()`] and `toString()` methods
+* any xref:rg:cms:methods.adoc#default[`default...()`], xref:rg:cms:methods.adoc#choices[`choices...()`] or xref:rg:cms:methods.adoc#autoComplete[`autoComplete...()`] methods
 
 An exception will be thrown if any other methods are thrown.
 
@@ -147,7 +147,7 @@ public class CustomerAgent {
 
 [NOTE]
 ====
-It ought to be possible to implement an xref:applib:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.
+It ought to be possible to implement an xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.
 This recognizer service would recognize the `InteractionException` and convert to a suitable message.
 
 At the time of writing Apache Isis does not provide an out-of-the-box implementation of such an `ExceptionRecognizer`; but it should be simple enough to write one…

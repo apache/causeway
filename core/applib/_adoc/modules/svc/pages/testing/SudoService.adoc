@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-The `SudoService` allows the current user reported by the xref:applib:svc:core-domain-api/UserService.adoc[`UserService`]  to be temporarily changed to some other user.
+The `SudoService` allows the current user reported by the xref:rg:svc:core-domain-api/UserService.adoc[`UserService`]  to be temporarily changed to some other user.
 This is useful both for xref:testing:integ-test-support:about.adoc[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:ext-fixtures:ROOT:about.adoc[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
 
 
@@ -37,7 +37,7 @@ The current user/role reported by the internal xref:runtime-services:ROOT:applic
 [IMPORTANT]
 ====
 Note however that this the "effective user" does not propagate through to the xref:security:ROOT:about.adoc[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
-See the xref:applib:svc:testing/SudoService.adoc#ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
+See the xref:rg:svc:testing/SudoService.adoc#ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
 ====
 
 
@@ -69,11 +69,11 @@ protected void execute(final ExecutionContext ec) {
 
 === ACCESS_ALL_ROLE
 
-When `sudo(...)` is called the "effective user" is reported by both xref:applib:svc:core-domain-api/UserService.adoc[`UserService`] and by xref:runtime-services:ROOT:application-layer/AuthenticationSessionProvider.adoc[`AuthenticationSessionProvider`], but does not propagate through to the xref:security:ROOT:about.adoc[Shiro security mechanism].
+When `sudo(...)` is called the "effective user" is reported by both xref:rg:svc:core-domain-api/UserService.adoc[`UserService`] and by xref:runtime-services:ROOT:application-layer/AuthenticationSessionProvider.adoc[`AuthenticationSessionProvider`], but does not propagate through to the xref:security:ROOT:about.adoc[Shiro security mechanism].
 These continue to be evaluated according to the permissions of the current user.
 
 This can be a problem in certain use cases.
-For example if running a fixture script (which uses the xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`]) from within an implementation of xref:applib:svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`], this is likely to result in ``HiddenException``s being thrown because there is no effective user.
+For example if running a fixture script (which uses the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`]) from within an implementation of xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`], this is likely to result in ``HiddenException``s being thrown because there is no effective user.
 
 In such cases, permission checking can simply be disabled by specifying `SudoService.ACCESS_ALL_ROLE` as one of the roles.
 For example:
@@ -104,7 +104,7 @@ In the future this service may be used more deeply, eg to propagate permissions 
 == SPI
 
 The `SudoService.Spi` service allows implementations of `SudoService` to notify other services/components that the effective user and roles are different.
-The default implementation of xref:applib:svc:core-domain-api/UserService.adoc[`UserService`] has been refactored to leverage this SPI.
+The default implementation of xref:rg:svc:core-domain-api/UserService.adoc[`UserService`] has been refactored to leverage this SPI.
 
 [source,java]
 ----

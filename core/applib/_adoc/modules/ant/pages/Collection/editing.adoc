@@ -14,19 +14,19 @@ The related `editingDisabledReason()` attribute specifies the a hard-coded reaso
 ====
 The xref:vw:ROOT:about.adoc[Wicket viewer] does *not* currently support the modification of collections; they are rendered read-only.
 
-The workaround is to create add/remove actions and use xref:applib:ant:MemberOrder.adoc[UI hints] to render them close to the collection.
+The workaround is to create add/remove actions and use xref:rg:ant:MemberOrder.adoc[UI hints] to render them close to the collection.
 ====
 
 Whether a collection is enabled or disabled depends upon these factors:
 
-* whether the domain object has been configured as immutable through the xref:applib:ant:DomainObject.adoc#editing[`@DomainObject#editing()`] attribute
+* whether the domain object has been configured as immutable through the xref:rg:ant:DomainObject.adoc#editing[`@DomainObject#editing()`] attribute
 
-* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.objects.editing`.
+* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.objects.editing`.
 If set to `false`, then the object's collections (and properties) are *not* editable
 
 * else, then the value of the `@Collection(editing=...)` attribute itself.
 
-* else, the result of invoking any supporting xref:applib:cms:rgcms.adoc#\_rgcms_methods_prefixes_disable[`disable...()`] supporting methods
+* else, the result of invoking any supporting xref:rg:cms:rgcms.adoc#\_rgcms_methods_prefixes_disable[`disable...()`] supporting methods
 
 
 Thus, to make a collection read-only even if the object would otherwise be editable, use:
@@ -53,6 +53,6 @@ To reiterate, it is _not_ possible to enable editing for a collection if editing
 
 This attribute can also be specified for:
 
-* xref:applib:ant:Property.adoc#editing[properties]
-* xref:applib:ant:DomainObject.adoc#editing[domain object]
+* xref:rg:ant:Property.adoc#editing[properties]
+* xref:rg:ant:DomainObject.adoc#editing[domain object]
 

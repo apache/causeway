@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 Whenever a property of a domain object is interacted with then a domain event will be fired, for each of the various phases (hidden, disabled, validated, executing, executed).
-Using xref:applib:ant:Property.adoc#domainEvent[`@Property#domainEvent()`], the actual domain event class fired can be customised.
+Using xref:rg:ant:Property.adoc#domainEvent[`@Property#domainEvent()`], the actual domain event class fired can be customised.
 the `@DomainObject#propertyDomainEvent()` attribute allows a common event domain class to be fired for all of the properties of the domain object.
 
 For example:

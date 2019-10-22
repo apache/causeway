@@ -21,7 +21,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:applib:cms:classes.adoc#AbstractLifecycleEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#AbstractLifecycleEvent[`o.a.i.applib.` +
 `AbstractLifecycleEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -30,18 +30,18 @@ Impl'n (g: a:)
 |Superclass of the other lifecycle events, listed below in this table.
 
 
-|xref:applib:cms:classes.adoc#ObjectCreatedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectCreatedDomainEvent[`o.a.i.applib.` +
 `ObjectCreatedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectCreatedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is first instantiated using the xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`]'s
+|Broadcast when an object is first instantiated using the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`]'s
 `#instantiate(...)` method.
 
 
-|xref:applib:cms:classes.adoc#ObjectLoadedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectLoadedDomainEvent[`o.a.i.applib.` +
 `ObjectLoadedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -51,40 +51,40 @@ Impl'n (g: a:)
 |Broadcast when an object is retrieved from the database.
 
 
-|xref:applib:cms:classes.adoc#ObjectPersistedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectPersistedDomainEvent[`o.a.i.applib.` +
 `ObjectPersistedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectPersistedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is first saved (inserted) into the database using the xref:applib:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s
+|Broadcast when an object is first saved (inserted) into the database using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s
 `#persist(...)` method.
 
 
-|xref:applib:cms:classes.adoc#ObjectPersistingDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectPersistingDomainEvent[`o.a.i.applib.` +
 `ObjectPersistingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectPersistingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be saved (inserted) into the database using the xref:applib:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s
+|Broadcast when an object is about to be saved (inserted) into the database using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s
 `#persist(...)` method.
 
 
-|xref:applib:cms:classes.adoc#ObjectRemovingDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectRemovingDomainEvent[`o.a.i.applib.` +
 `ObjectRemovingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
 ``isis-core-applib``
 |(abstract class). +
 `ObjectRemovingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be deleted from the database using the xref:applib:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s
+|Broadcast when an object is about to be deleted from the database using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s
 `#remove(...)` method.
 
 
-|xref:applib:cms:classes.adoc#ObjectUpdatedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectUpdatedDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -92,10 +92,10 @@ Impl'n (g: a:)
 |(abstract class). +
 `ObjectUpdatedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object has just been updated in the database.
-This is done either explicitly when the current transaction is flushed using the xref:applib:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
+This is done either explicitly when the current transaction is flushed using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
-|xref:applib:cms:classes.adoc#ObjectUpdatingDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectUpdatingDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -103,7 +103,7 @@ This is done either explicitly when the current transaction is flushed using the
 |(abstract class). +
 `ObjectUpdatingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be updated in the database.
-This is done either explicitly when the current transaction is flushed using the xref:applib:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
+This is done either explicitly when the current transaction is flushed using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
 |===

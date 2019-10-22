@@ -45,10 +45,10 @@ The framework also provides a separate, powerful mechanism for xref:ug:btb:i18n.
 
 This attribute can also be specified for:
 
-* xref:applib:ant:ActionLayout.adoc#named[actions]
-* xref:applib:ant:CollectionLayout.adoc#named[collections]
-* xref:applib:ant:ParameterLayout.adoc#named[parameters]
-* xref:applib:ant:DomainObjectLayout.adoc#named[domain objects]
-* xref:applib:ant:ViewModelLayout.adoc#named[view models]
-* xref:applib:ant:DomainServiceLayout.adoc#named[domain services].
+* xref:rg:ant:ActionLayout.adoc#named[actions]
+* xref:rg:ant:CollectionLayout.adoc#named[collections]
+* xref:rg:ant:ParameterLayout.adoc#named[parameters]
+* xref:rg:ant:DomainObjectLayout.adoc#named[domain objects]
+* xref:rg:ant:ViewModelLayout.adoc#named[view models]
+* xref:rg:ant:DomainServiceLayout.adoc#named[domain services].
 

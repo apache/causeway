@@ -18,64 +18,64 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Layer
 |xref:vw:ROOT:layout/file-based.adoc[File-based layout]?
 
-|xref:applib:ant:Digits.adoc[`@javax.validation.` +
+|xref:rg:ant:Digits.adoc[`@javax.validation.` +
 `constraints.` +
 `Digits`]
 |Precision/scale for BigDecimal values.
 |Domain
 |
 
-|xref:applib:ant:Pattern.adoc[`@javax.validation.` +
+|xref:rg:ant:Pattern.adoc[`@javax.validation.` +
 `constraints.` +
 `Pattern`]
 |Regular expressions for strings
 |Domain
 |
 
-|xref:applib:ant:Inject.adoc[`@javax.inject.` +
+|xref:rg:ant:Inject.adoc[`@javax.inject.` +
 `Inject`]
 |Inject domain service into a domain object (entity or view model) or another domain service.
 |Domain
 |
 
-|xref:applib:ant:Digits.adoc[`@javax.annotation.` +
+|xref:rg:ant:Digits.adoc[`@javax.annotation.` +
 `Nullable`]
 |Specify that a property/parameter is optional.
 |Domain
 |
 
-|xref:applib:ant:PostConstruct.adoc[`@javax.annotation.` +
+|xref:rg:ant:PostConstruct.adoc[`@javax.annotation.` +
 `PostConstruct`]
-|Callback for domain services (either singleton or xref:applib:ant:RequestScoped.adoc[request-scoped]) to initialize themselves once instantiated.
+|Callback for domain services (either singleton or xref:rg:ant:RequestScoped.adoc[request-scoped]) to initialize themselves once instantiated.
 
 |Domain
 |
 
-|xref:applib:ant:PreDestroy.adoc[`@javax.annotation.` +
+|xref:rg:ant:PreDestroy.adoc[`@javax.annotation.` +
 `PreDestroy`]
-|Callback for domain services (either singleton or xref:applib:ant:RequestScoped.adoc[request-scoped]) to clean up resources prior to destruction.
+|Callback for domain services (either singleton or xref:rg:ant:RequestScoped.adoc[request-scoped]) to clean up resources prior to destruction.
 
 |Domain
 |
 
-|xref:applib:ant:RequestScoped.adoc[`@javax.enterprise.` +
+|xref:rg:ant:RequestScoped.adoc[`@javax.enterprise.` +
 `context.` +
 `RequestScoped`]
 |Specify that a domain service has request-scope (rather than a singleton).
 |Domain
 |
 
-|xref:applib:ant:XmlRootElement.adoc[`javax.xml.bind` +
+|xref:rg:ant:XmlRootElement.adoc[`javax.xml.bind` +
 `.annotation` +
 `XmlRootElement`]
 |JAXB annotation indicating the XML root element when serialized to XML; also used by the framework for view models (whose memento is the XML), often also acting as a DTO.
 |Application
 |
 
-|xref:applib:ant:XmlJavaTypeAdapter.adoc[`javax.xml.bind` +
+|xref:rg:ant:XmlJavaTypeAdapter.adoc[`javax.xml.bind` +
 `.annotation` +
 `XmlJavaTypeAdapter`]
-|JAXB annotation defining how to serialize an entity.  Used in conjunction with the (framework provided) `PersistentEntityAdapter` class to serialize persistent entities into a canonical OID (equivalent to the `Bookmark` provided by the xref:applib:svc:integration-api/BookmarkService.adoc[`BookmarkService`]).
+|JAXB annotation defining how to serialize an entity.  Used in conjunction with the (framework provided) `PersistentEntityAdapter` class to serialize persistent entities into a canonical OID (equivalent to the `Bookmark` provided by the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`]).
 |Domain
 |
 

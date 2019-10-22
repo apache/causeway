@@ -676,7 +676,7 @@ If you are running the app from an IDE, then you can specify the fixture script 
 
 image::simpleapp-webapp-with-fixtures.png[width="600px",link="{imagesdir}/simpleapp-webapp-with-fixtures.png"]
 
-Alternatively, you can run with a different xref:applib:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] using the `--appManifest` (or `-m`) flag.
+Alternatively, you can run with a different xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] using the `--appManifest` (or `-m`) flag.
 The archetype provides
 `domainapp.app.DomainAppAppManifestWithFixtures` which specifies the aforementioned `RecreateSimpleObjects` fixture.
 

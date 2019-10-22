@@ -31,11 +31,11 @@ public class Customer {
     public void setMiddleInitial(String middleInitial) { /* ... */ }
 ----
 
-Isis also provides xref:applib:ant:Property.adoc#optionality[`@Property#optionality()`] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
+Isis also provides xref:rg:ant:Property.adoc#optionality[`@Property#optionality()`] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
 You should also be aware that in the lack of either the `@Column#allowsNull()` or the `@Property#optionality()` attributes, that the JDO and Apache Isis defaults differ.  Apache Isis rule is straight-forward: properties are assumed to be required.  JDO on the other hand specifies that only primitive types are mandatory; everything else is assumed to be optional.  Therefore a lack of either annotation can also trigger the fail-fast validation check.
 
-In the vast majority of cases you should be fine just to add the `@Column#allowsNull()` attribute to the getter.  But see the documentation for xref:applib:ant:Property.adoc#optionality[`@Property#optionality()`] attribute for discussion on one or two minor edge cases.
+In the vast majority of cases you should be fine just to add the `@Column#allowsNull()` attribute to the getter.  But see the documentation for xref:rg:ant:Property.adoc#optionality[`@Property#optionality()`] attribute for discussion on one or two minor edge cases.
 
 
 == Length for ``String``s
@@ -58,7 +58,7 @@ public class Customer {
     public void setLastName(String lastName) { /* ... */ }
 ----
 
-Isis also provides xref:applib:ant:Property.adoc#maxLength[`@Property#maxLength()`] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
+Isis also provides xref:rg:ant:Property.adoc#maxLength[`@Property#maxLength()`] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
 
 
@@ -77,7 +77,7 @@ public class Customer {
     public void setTotalOrdersToDate(BigDecimal totalOrdersToDate) { /* ... */ }
 ----
 
-For ``BigDecimal``s it is also possible to specify the xref:applib:ant:Digits.adoc[`@Digits`] annotation, whose form is `@Digits(integer, fraction)`.
+For ``BigDecimal``s it is also possible to specify the xref:rg:ant:Digits.adoc[`@Digits`] annotation, whose form is `@Digits(integer, fraction)`.
 There is a subtle difference here: while `@Column#scale()` corresponds to `@Digits#fraction()`, the value of `@Column#length()` (ie the precision) is actually the __sum__ of the `@Digits`' `integer()` and `fraction()` parts.
 
 If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
@@ -113,7 +113,7 @@ public class PartyRelationship {
 
 === Mapping ``Blob``s and ``Clob``s
 
-Isis provides custom value types for xref:applib:cms:classes/value-types.adoc#Blob[`Blob`]s and xref:applib:cms:classes/value-types.adoc#Clob[`Clob`]s.  These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.  Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
+Isis provides custom value types for xref:rg:cms:classes/value-types.adoc#Blob[`Blob`]s and xref:rg:cms:classes/value-types.adoc#Clob[`Clob`]s.  These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.  Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
 
 For example, here's how to map a `Blob` (taken from (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]):
 

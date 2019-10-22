@@ -33,7 +33,7 @@ The class also supports a number of command line arguments:
 |`-m`
 |`--manifest`
 |FQCN
-|Fully qualified class name of the xref:applib:cms:classes/super.adoc#AppManifest[`AppManifest`] to use to bootstrap the system. +
+|Fully qualified class name of the xref:rg:cms:classes/super.adoc#AppManifest[`AppManifest`] to use to bootstrap the system. +
 
 This flag sets/overrides the `isis.appManifest` configuration property to the specified class name.
 
@@ -41,7 +41,7 @@ This flag sets/overrides the `isis.appManifest` configuration property to the sp
 |`-f`
 |`--fixture`
 |FQCN
-|Fully qualified class name of the fixture (extending xref:applib:cms:classes/super.adoc#FixtureScript[`FixtureScript`]) to be run to setup data. +
+|Fully qualified class name of the fixture (extending xref:rg:cms:classes/super.adoc#FixtureScript[`FixtureScript`]) to be run to setup data. +
 
 This flag sets/overrides the `isis.fixtures` configuration property to the specified class name, and also sets the `isis.persistor.datanucleus.install-fixtures` configuration property to `true` to instruct the JDO/DataNucleus objectstore to actually load in the fixtures. +
 

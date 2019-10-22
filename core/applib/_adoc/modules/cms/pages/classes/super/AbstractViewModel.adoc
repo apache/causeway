@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-This class simply implements the xref:applib:cms:classes.adoc#ViewModel[`ViewModel`] interface, however the methods are still abstract.
+This class simply implements the xref:rg:cms:classes.adoc#ViewModel[`ViewModel`] interface, however the methods are still abstract.
 In and of itself it provides no new behaviour.
 
 [TIP]

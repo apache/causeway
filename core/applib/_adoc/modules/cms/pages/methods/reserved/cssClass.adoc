@@ -10,7 +10,7 @@ The `cssClass()` returns a CSS class for a particular object instance.
 The xref:vw:ROOT:about.adoc[Wicket viewer] wraps the object's representation in a containing `<div>` with the class added.
 This is done both for rendering the object either in a table or when rendering the object on its own page.
 
-In conjunction with xref:cfg:ROOT:application-specific/application-css.adoc[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
+In conjunction with xref:rg:cfg:application-specific/application-css.adoc[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
 
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add a strikethrough for completed todo items.
@@ -31,7 +31,7 @@ public class ToDoItem ... {
 }
 ----
 
-In the xref:cfg:ROOT:application-specific/application-css.adoc[application.css], the following styles were then added:
+In the xref:rg:cfg:application-specific/application-css.adoc[application.css], the following styles were then added:
 
 [source,css]
 ----
@@ -48,6 +48,6 @@ tr.done {
 
 See also:
 
-* xref:applib:cms:methods.adoc#title[`title()`]
-* xref:applib:cms:methods.adoc#iconName[`iconName()`]
-* xref:applib:cms:methods.adoc#layout[`layout()`]
+* xref:rg:cms:methods.adoc#title[`title()`]
+* xref:rg:cms:methods.adoc#iconName[`iconName()`]
+* xref:rg:cms:methods.adoc#layout[`layout()`]

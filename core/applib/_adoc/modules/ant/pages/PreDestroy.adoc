@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 The `@javax.annotation.PreDestroy` annotation, as defined in link:https://jcp.org/en/jsr/detail?id=250[JSR-250], recognized by Apache Isis as a callback method on domain services to be called just as they go out of scope.
 
 
-For the default application-scoped (singleton) domain services, this means that the method, if present, is called just prior to the termination of the application.  For xref:applib:ant:RequestScoped.adoc[`@RequestScoped`] domain services, the method is called at the end of the request.
+For the default application-scoped (singleton) domain services, this means that the method, if present, is called just prior to the termination of the application.  For xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] domain services, the method is called at the end of the request.
 
 The signature of the method is:
 
@@ -16,10 +16,10 @@ The signature of the method is:
 @PreDestroy                         <1>
 public void deinit() { /* ... */ }    <2>
 ----
-<1> It is not necessary to annotate the method with xref:applib:ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
+<1> It is not necessary to annotate the method with xref:rg:ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility, and accept no arguments.
 
-A common use case is for domain services that interact with the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`].  For example:
+A common use case is for domain services that interact with the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].  For example:
 
 [source,java]
 ----
@@ -41,11 +41,11 @@ public class MySubscribingService {
 
 [TIP]
 ====
-In this particular use case, it is generally simpler to just subclass from xref:applib:cms:classes/super.adoc#AbstractSubscriber[`AbstractSubscriber`].
+In this particular use case, it is generally simpler to just subclass from xref:rg:cms:classes/super.adoc#AbstractSubscriber[`AbstractSubscriber`].
 ====
 
 Other use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.
 
 
 
-See also xref:applib:ant:PostConstruct.adoc[`@PostConstruct`]
+See also xref:rg:ant:PostConstruct.adoc[`@PostConstruct`]

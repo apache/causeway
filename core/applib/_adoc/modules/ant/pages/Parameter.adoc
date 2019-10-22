@@ -16,32 +16,32 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:applib:ant:Parameter.adoc#fileAccept[`fileAccept()`]
+|xref:rg:ant:Parameter.adoc#fileAccept[`fileAccept()`]
 |Media type or file extension
-|Hints the file type to be uploaded for xref:applib:cms:classes/value-types.adoc#Blob[`Blob`]
- or xref:applib:cms:classes/value-types.adoc#Clob[`Clob`]. +
+|Hints the file type to be uploaded for xref:rg:cms:classes/value-types.adoc#Blob[`Blob`]
+ or xref:rg:cms:classes/value-types.adoc#Clob[`Clob`]. +
  +
  Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
 
 
 
-|xref:applib:ant:Parameter.adoc#maxLength[`maxLength()`]
+|xref:rg:ant:Parameter.adoc#maxLength[`maxLength()`]
 |Positive integer
 |maximum number of characters for string parameters; ignored otherwise
 
 
 
-|xref:applib:ant:Parameter.adoc#mustSatisfy[`mustSatisfy()`]
+|xref:rg:ant:Parameter.adoc#mustSatisfy[`mustSatisfy()`]
 |implementation of `o.a.i.applib.spec.Specification`
 |allows arbitrary validation to be applied
 
 
-|xref:applib:ant:Parameter.adoc#optionality[`optionality()`]
+|xref:rg:ant:Parameter.adoc#optionality[`optionality()`]
 |`MANDATORY`, `OPTIONAL` (`MANDATORY`)
 |specifies a parameter is optional rather than mandatory
 
 
-|xref:applib:ant:Parameter.adoc#regexPattern[regexPattern()]
+|xref:rg:ant:Parameter.adoc#regexPattern[regexPattern()]
 |regular expression
 |validates the contents of a string parameter against the regular expression pattern
 

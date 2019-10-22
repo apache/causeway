@@ -48,7 +48,7 @@ The framework will automatically recreate the domain object each time it is inte
 +
 indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
 +
-Equivalent to annotating with xref:applib:ant:Mixin.adoc[`@Mixin`].
+Equivalent to annotating with xref:rg:ant:Mixin.adoc[`@Mixin`].
 For further discussion on using mixins, see xref:ug:fun:building-blocks.adoc#mixins[mixins] in the user guide.
 
 
@@ -57,7 +57,7 @@ For further discussion on using mixins, see xref:ug:fun:building-blocks.adoc#mix
 indicates that the domain object is conceptually part of the application layer, and exists to surfaces behaviour and/or state that is aggregate of one or more domain entities.
 
 Those natures that indicate the domain object is an entity (of some sort or another) mean then that the domain object is considered to be part of the domain model layer.
-As such the domain object's class cannot be annotated with xref:applib:ant:ViewModel.adoc[`@ViewModel`] or implement the xref:applib:cms:classes/super.adoc#ViewModel[`ViewModel`] interface.
+As such the domain object's class cannot be annotated with xref:rg:ant:ViewModel.adoc[`@ViewModel`] or implement the xref:rg:cms:classes/super.adoc#ViewModel[`ViewModel`] interface.
 
 
 [NOTE]
@@ -71,7 +71,7 @@ The benefit of `nature()` is that it allows the developer to properly characteri
 
 [NOTE]
 ====
-On the other hand, view models defined in this way do have some limitations; see xref:applib:ant:ViewModel.adoc[`@ViewModel`] for further discussion.
+On the other hand, view models defined in this way do have some limitations; see xref:rg:ant:ViewModel.adoc[`@ViewModel`] for further discussion.
 
 These limitations do _not_ apply to xref:ug:fun:programming-model.adoc#jaxb[JAXB] view models.
 If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.

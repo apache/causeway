@@ -1,7 +1,0 @@
-* xref:cfg:ROOT:about.adoc[Configuration]
-
-** xref:cfg:ROOT:deployment-types.adoc[Deployment Types]
-** xref:cfg:ROOT:configuration-files.adoc[Configuration Files]
-** xref:cfg:ROOT:specifying-components.adoc[Specifying Components]
-** xref:cfg:ROOT:configuring-core.adoc[Configuring Core]
-

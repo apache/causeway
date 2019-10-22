@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 
 The `typicalLength()` attribute indicates the typical length of a string property.
 It is ignored for properties of other types.
-The attribute is also supported for xref:applib:ant:ParameterLayout.adoc#typicalLength[parameters].
+The attribute is also supported for xref:rg:ant:ParameterLayout.adoc#typicalLength[parameters].
 
 The information is intended as a hint to the UI to determine the space that should be given to render a particular string property.
 That said, note that the xref:vw:ROOT:about.adoc[Wicket viewer] uses the maximum space available for all fields, so in effect ignores this attribute.

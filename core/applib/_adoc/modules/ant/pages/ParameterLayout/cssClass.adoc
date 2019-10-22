@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 
 
-The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the action parameter.   xref:cfg:ROOT:application-specific/application-css.adoc[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
+The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the action parameter.   xref:rg:cfg:application-specific/application-css.adoc[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
 
 For example:
@@ -32,9 +32,9 @@ public class ToDoItem {
 
 This attribute can also be applied to:
 
-* xref:applib:ant:DomainObjectLayout.adoc#cssClass[domain objects]
-* xref:applib:ant:ViewModelLayout.adoc#cssClass[view models]
-* xref:applib:ant:ActionLayout.adoc#cssClass[actions]
-* xref:applib:ant:PropertyLayout.adoc#cssClass[properties],
-* xref:applib:ant:CollectionLayout.adoc#cssClass[collections]
-* xref:applib:ant:ParameterLayout.adoc#cssClass[parameters].
+* xref:rg:ant:DomainObjectLayout.adoc#cssClass[domain objects]
+* xref:rg:ant:ViewModelLayout.adoc#cssClass[view models]
+* xref:rg:ant:ActionLayout.adoc#cssClass[actions]
+* xref:rg:ant:PropertyLayout.adoc#cssClass[properties],
+* xref:rg:ant:CollectionLayout.adoc#cssClass[collections]
+* xref:rg:ant:ParameterLayout.adoc#cssClass[parameters].

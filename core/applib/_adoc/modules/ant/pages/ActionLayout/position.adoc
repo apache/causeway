@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 
 
 
-The `position()` attribute pertains only to actions that have been associated with properties using xref:applib:ant:MemberOrder.adoc[`@MemberOrder#named()`].  For these actions, it specifies the positioning of the action's button with respect to the field representing the object property.
+The `position()` attribute pertains only to actions that have been associated with properties using xref:rg:ant:MemberOrder.adoc[`@MemberOrder#named()`].  For these actions, it specifies the positioning of the action's button with respect to the field representing the object property.
 
 The attribute can take one of four values: `BELOW`, `RIGHT`, `PANEL` or `PANEL_DROPDOWN`.
 

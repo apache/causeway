@@ -10,7 +10,7 @@ include::_attributes.adoc[]
 The `labelPosition()` attribute determines the positioning of labels for properties.
 
 The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.
-The one exception is xref:applib:ant:ParameterLayout.adoc#multiLine[`multiLine()`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
+The one exception is xref:rg:ant:ParameterLayout.adoc#multiLine[`multiLine()`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
 
 For boolean properties a positioning of `RIGHT` is also allowed; this is ignored for all other types.
 
@@ -64,7 +64,7 @@ image::reference-annotations/PropertyLayout/labelPosition-boolean-RIGHT.png[widt
 ====
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
 
-Instead, a default can be specified using a xref:cfg:ROOT:configuring-core.adoc[configuration property] in `isis.properties`:
+Instead, a default can be specified using a xref:rg:cfg:configuring-core.adoc[configuration property] in `isis.properties`:
 
 [source,ini]
 ----
@@ -90,5 +90,5 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-
 
 == See also
 
-This attribute can also be specified for xref:applib:ant:ParameterLayout.adoc#labelPosition[parameters].
+This attribute can also be specified for xref:rg:ant:ParameterLayout.adoc#labelPosition[parameters].
 

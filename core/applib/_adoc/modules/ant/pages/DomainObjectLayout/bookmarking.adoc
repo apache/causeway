@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 
 The `bookmarking()` attribute indicates that an entity is automatically bookmarked.
-This attribute is also supported for  xref:applib:ant:Action.adoc#bookmarking[domain objects].
+This attribute is also supported for  xref:rg:ant:Action.adoc#bookmarking[domain objects].
 
 (In the Wicket viewer), a link to a bookmarked object is shown in the bookmarks panel:
 
@@ -67,5 +67,5 @@ The nesting can be done to any level; the Estatio screenshot also shows a bookma
 
 == See also
 
-This attribute can also be applied to xref:applib:ant:ViewModelLayout.adoc#bookmarking[view models].
+This attribute can also be applied to xref:rg:ant:ViewModelLayout.adoc#bookmarking[view models].
 

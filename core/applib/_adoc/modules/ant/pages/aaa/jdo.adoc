@@ -26,7 +26,7 @@ The table below lists the JDO annotations currently recognized by Apache Isis.
 |Applies to
 
 
-|xref:applib:ant:Column.adoc[`@javax.jdo.annotations.` +
+|xref:rg:ant:Column.adoc[`@javax.jdo.annotations.` +
 `Column`]
 |Used to determine whether a property is mandatory or optional.  For `String` and `BigDecimal` properties, used to determine length/precision/scale.
 
@@ -34,16 +34,16 @@ The table below lists the JDO annotations currently recognized by Apache Isis.
 |Property
 
 
-|xref:applib:ant:Discriminator.adoc[`@javax.jdo.annotations.` +
+|xref:rg:ant:Discriminator.adoc[`@javax.jdo.annotations.` +
 `Discriminator`]
 |Override for the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere. +
 
-Note that the discriminator overrides the object type that may otherwise be inferred from the xref:applib:ant:PersistenceCapable.adoc[`@PersistenceCapable`] annotation.
+Note that the discriminator overrides the object type that may otherwise be inferred from the xref:rg:ant:PersistenceCapable.adoc[`@PersistenceCapable`] annotation.
 |Domain / persistence
 |Class
 
 
-|xref:applib:ant:NotPersistent.adoc[`@javax.jdo.annotations.` +
+|xref:rg:ant:NotPersistent.adoc[`@javax.jdo.annotations.` +
 `NotPersistent`]
 |Used to determine whether to enforce or skip some xref:ug:btb:about.adoc#custom-validator[metamodel validation] for `@Column` versus equivalent Isis annotations.
 
@@ -52,17 +52,17 @@ Note that the discriminator overrides the object type that may otherwise be infe
 
 
 
-|xref:applib:ant:PersistenceCapable.adoc[`@javax.jdo.annotations.` +
+|xref:rg:ant:PersistenceCapable.adoc[`@javax.jdo.annotations.` +
 `PersistenceCapable`]
 |Used to build Apache Isis' own internal identifier for objects. +
 
-If the `schema()` attribute is specified (and if xref:applib:ant:Discriminator.adoc[`@Discriminator`] __hasn't__ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere.
+If the `schema()` attribute is specified (and if xref:rg:ant:Discriminator.adoc[`@Discriminator`] __hasn't__ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere.
 
 |Domain / persistence
 |Class
 
 
-|xref:applib:ant:PrimaryKey.adoc[`@javax.jdo.annotations.` +
+|xref:rg:ant:PrimaryKey.adoc[`@javax.jdo.annotations.` +
 `PrimaryKey`]
 |Used to ensure Apache Isis does not overwrite application-defined primary keys, and to ensure is read-only in the UI.
 

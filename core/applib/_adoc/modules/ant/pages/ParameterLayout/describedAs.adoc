@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-The `describedAs()` attribute is used to provide a short description of the action parameter to the user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.  The `describedAs()` attribute can also be specified for xref:applib:ant:CollectionLayout.adoc#describedAs[collections],  xref:applib:ant:PropertyLayout.adoc#describedAs[properties], xref:applib:ant:ActionLayout.adoc#describedAs[actions], xref:applib:ant:DomainObjectLayout.adoc#describedAs[domain objects] and xref:applib:ant:ViewModelLayout.adoc#describedAs[view models].
+The `describedAs()` attribute is used to provide a short description of the action parameter to the user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.  The `describedAs()` attribute can also be specified for xref:rg:ant:CollectionLayout.adoc#describedAs[collections],  xref:rg:ant:PropertyLayout.adoc#describedAs[properties], xref:rg:ant:ActionLayout.adoc#describedAs[actions], xref:rg:ant:DomainObjectLayout.adoc#describedAs[domain objects] and xref:rg:ant:ViewModelLayout.adoc#describedAs[view models].
 
 Descriptions may be provided for objects, members (properties, collections and actions), and for individual parameters within an action method.
 

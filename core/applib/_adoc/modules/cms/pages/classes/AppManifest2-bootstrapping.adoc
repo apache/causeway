@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-The bootstrapping of an Apache Isis application has been modularized using the `Module` interface, with `AppManifest2` (an extension of the original xref:applib:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] interface) defined in terms of ``Module``s also.
+The bootstrapping of an Apache Isis application has been modularized using the `Module` interface, with `AppManifest2` (an extension of the original xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] interface) defined in terms of ``Module``s also.
 
 A `Module` represents a collection of entities and domain services that provide a set of coherent functionality under a single package (and subpackages underneath), with the module class itself residing at the top-level package.
 
@@ -12,7 +12,7 @@ Each `Module` can express its immediate dependencies (using `Module#getDependenc
 
 Each `Module` can also optionally define additional dependencies on "legacy" modules (that is, those that do not implement `Module`) using `Module#getAdditionalModules()` method.
 These legacy modules simply define a package to search for entities and domain services.
-Legacy domain services can also be explicitly identified using `Module#getAdditionalServices()` method; such services do _not_ need to be annotated with xref:applib:ant:DomainService.adoc[`@DomainService`].
+Legacy domain services can also be explicitly identified using `Module#getAdditionalServices()` method; such services do _not_ need to be annotated with xref:rg:ant:DomainService.adoc[`@DomainService`].
 
 A `Module` can also declare additional configuration properties (using either `Module#getIndividualConfigProps()` or `Module#getPropertyResources()`) that should be      contributed to the overall set of configuration properties used to bootstrap the application.
 
@@ -41,7 +41,7 @@ Specifically, only the `Builder` can specify the authentication mechanism, and o
 
 == API
 
-The `AppManifest2` interface extends xref:applib:cms:classes.adoc#api[`AppManifest`], additionally declaring the top-level `Module` that was used to create the app manifest, and fixtures for reference data setup and for teardown:
+The `AppManifest2` interface extends xref:rg:cms:classes.adoc#api[`AppManifest`], additionally declaring the top-level `Module` that was used to create the app manifest, and fixtures for reference data setup and for teardown:
 
 [source,java]
 ----
@@ -75,7 +75,7 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
 }
 ----
 
-Additional `withXxx(...)` builder methods are inherited from xref:applib:cms:classes.adoc#bootstrapping[`AppManifestAbstract.Builder`].
+Additional `withXxx(...)` builder methods are inherited from xref:rg:cms:classes.adoc#bootstrapping[`AppManifestAbstract.Builder`].
 
 
 For example:
@@ -118,10 +118,10 @@ public interface Module {
 The framework calculates a full set of transitive dependencies from this.
 <2> Support for "legacy" modules that do not implement `Module`.
 These are added to the set of packages to scan for entities and domain services.
-<3> Each `Module` can define additional "legacy" domain services that have not been defined within modules,or that have not been annotated with xref:applib:ant:DomainService.adoc[`@DomainService`].
-<4> Optionally each `Module` can define a xref:applib:cms:classes.adoc#FixtureScript[`FixtureScript`] which holds immutable "reference data".
+<3> Each `Module` can define additional "legacy" domain services that have not been defined within modules,or that have not been annotated with xref:rg:ant:DomainService.adoc[`@DomainService`].
+<4> Optionally each `Module` can define a xref:rg:cms:classes.adoc#FixtureScript[`FixtureScript`] which holds immutable "reference data".
 These are automatically executed whenever running integration tests (but are ignored when bootstrapping the runtime as a webapp.
-<5> Similarly, optionally each `Module` can define a tear-down xref:applib:cms:classes.adoc#FixtureScript[`FixtureScript`], used to remove the contents of _all_ entities (both reference data and operational/transactional data).
+<5> Similarly, optionally each `Module` can define a tear-down xref:rg:cms:classes.adoc#FixtureScript[`FixtureScript`], used to remove the contents of _all_ entities (both reference data and operational/transactional data).
 <6> Optionally each module can define additional configuration properties.
 These can either be specified as key-value pair, or by way of the `PropertyResource` class.
 The `PropertyResource` class identifies a property configuration file to load from the classpath, with respect to some other context class.
@@ -177,7 +177,7 @@ Alternatively, could override `getAdditonalServices()`.
 == Bootstrapping
 
 One of the overarching goals is to ensure that integration tests and the webapp are bootstrapped in as similar a way as possible.
-xref:applib:cms:classes.adoc#bootstrapping[Previously] this was done by using a single `AppManifest` for both the tests and the webapp.
+xref:rg:cms:classes.adoc#bootstrapping[Previously] this was done by using a single `AppManifest` for both the tests and the webapp.
 
 However, this approach does have a significant drawback.
 The `AppManifest` implementation must (necessarily) reference all the modules wthin the application, and this therefore means that the integration tests are also scoped (or at least, have access to) the entire application.

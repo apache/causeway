@@ -11,10 +11,10 @@ Events that can be published are action invocations/property edits, and changed 
 A typical use case is to publish onto a pub/sub bus such as link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Camel] to keep other systems up to date.
 
 An alternative use is for profiling: for each execution (action invocation/property edit) the framework captures metrics of the number of objects loaded or dirtied as the result of that execution.
-If the xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] is used to call other objects then the metrics are captured for each sub-execution.
-The framework provides a default implementation, `PublisherServiceLogging`, that will log these execution graphs (in XML form, per the xref:schema:ROOT:ixn.adoc["ixn" schema]) to an SLF4J logger.
+If the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] is used to call other objects then the metrics are captured for each sub-execution.
+The framework provides a default implementation, `PublisherServiceLogging`, that will log these execution graphs (in XML form, per the xref:rg:schema:ixn.adoc["ixn" schema]) to an SLF4J logger.
 
-Only actions/properties/domain objects annotated for publishing (using xref:applib:ant:Action.adoc#publishing[`@Action#publishing()`], xref:applib:ant:Property.adoc#publishing[`@Property#publishing()`] or xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) are published.
+Only actions/properties/domain objects annotated for publishing (using xref:rg:ant:Action.adoc#publishing[`@Action#publishing()`], xref:rg:ant:Property.adoc#publishing[`@Property#publishing()`] or xref:rg:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) are published.
 
 
 == SPI
@@ -31,8 +31,8 @@ public interface PublisherService {
 <1> to publish an individual action invocation or property edit, as captured within an `Interaction.Execution`.
 <2> to publish a set of changed objects.
 
-Each `Interaction.Execution` has an owning `Interaction`; this is the same object obtainable from xref:applib:svc:spi/InteractionContext.adoc[`InteractionContext`].
-Implementations that publish member executions can use `Interaction.Execution#getDto()` method to return a DTO (as per the xref:schema:ROOT:ixn.adoc["ixn" schema]) which can be converted into a serializable XML representation using the `InteractionDtoUtils` utility class.
+Each `Interaction.Execution` has an owning `Interaction`; this is the same object obtainable from xref:rg:svc:spi/InteractionContext.adoc[`InteractionContext`].
+Implementations that publish member executions can use `Interaction.Execution#getDto()` method to return a DTO (as per the xref:rg:schema:ixn.adoc["ixn" schema]) which can be converted into a serializable XML representation using the `InteractionDtoUtils` utility class.
 The XML can either serialize a single execution, or can be a "deep" serialization of an execution and all sub-executions.
 
 The full API of `PublishedObjects` itself is:
@@ -55,7 +55,7 @@ public interface PublishedObjects extends HasTransactionId, HasUsername {
 <1> inherited from `HasTransactionId`, correlates back to the unique identifier of the transaction in which these objects were changed.
 <2> inherited from `HasUsername`, is the user that initiated the transaction causing these objects to change
 <3> the time that this set of objects was collated (just before the completion of the transaction completes)..
-<4> returns a DTO (as per the xref:schema:ROOT:chg.adoc["chg" schema]) which can be converted into a serializable XML representation can be obtained using the `ChangesDtoUtils` utility class.
+<4> returns a DTO (as per the xref:rg:schema:chg.adoc["chg" schema]) which can be converted into a serializable XML representation can be obtained using the `ChangesDtoUtils` utility class.
 <5> metrics as to the number of objects loaded, created, updated or deleted and the number of object properties modified (in other words the "size" or "weight" of the transaction).
 
 
@@ -85,9 +85,9 @@ log4j.additivity.org.apache.isis.applib.services.publish.PublisherServiceLogging
 
 To indicate that:
 
-* an action invocation should be published, annotate it with the xref:applib:ant:Action.adoc#publishing[`@Action#publishing()`] annotation.
-* an property edit should be published, annotate it with the xref:applib:ant:Property.adoc#publishing[`@Property#publishing()`] annotation.
-* a changed object should be published is to annotate it with the xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] annotation.
+* an action invocation should be published, annotate it with the xref:rg:ant:Action.adoc#publishing[`@Action#publishing()`] annotation.
+* an property edit should be published, annotate it with the xref:rg:ant:Property.adoc#publishing[`@Property#publishing()`] annotation.
+* a changed object should be published is to annotate it with the xref:rg:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] annotation.
 
 
 
@@ -120,15 +120,15 @@ This service supports two main use cases:
 
 To support these use cases several other services are involved:
 
-* the xref:applib:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
+* the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
 
 * the (internal) xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service is used to obtain the set of objects modified throughout the transaction
 
-* the (internal) xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
+* the (internal) xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:rg:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
 
-* the xref:applib:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
+* the xref:rg:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
 
-The xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] differs from the `PublisherService` in that it is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model.
+The xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] differs from the `PublisherService` in that it is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model.
 The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event; it need not be serializable, for example.
-That said, it is possible to obtain a serialization of the action invocation/property edit causing the current event to be raised using xref:applib:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] domain service.
+That said, it is possible to obtain a serialization of the action invocation/property edit causing the current event to be raised using xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] domain service.
 

@@ -7,15 +7,15 @@ Most applications need to integrate with other apps in the enterprise.
 To facilitate such integration scenarios, Apache Isis defines a number of standard XSD schemas:
 
 
-* the xref:schema:ROOT:mml.adoc[metamodel] schema, which allows the internal metamodel to be exported in a canonical fashion
+* the xref:rg:schema:mml.adoc[metamodel] schema, which allows the internal metamodel to be exported in a canonical fashion
 
-* the xref:schema:ROOT:cmd.adoc[command] schema, which captures the __intention__ of a user to invoke an action or edit a property
+* the xref:rg:schema:cmd.adoc[command] schema, which captures the __intention__ of a user to invoke an action or edit a property
 
-* the xref:schema:ROOT:ixn.adoc[interaction execution] schema, which captures the actual execution of an action invocation/property edit
+* the xref:rg:schema:ixn.adoc[interaction execution] schema, which captures the actual execution of an action invocation/property edit
 
-* the xref:schema:ROOT:chg.adoc[changes] schema, which captures which objects have been created, updated or deleted as the result of an execution of an action invocation/property edit
+* the xref:rg:schema:chg.adoc[changes] schema, which captures which objects have been created, updated or deleted as the result of an execution of an action invocation/property edit
 
-These each use XSD types defined by the xref:schema:ROOT:common.adoc[common schema] (most notably the `oidDto` complex type which identifies a domain object).
+These each use XSD types defined by the xref:rg:schema:common.adoc[common schema] (most notably the `oidDto` complex type which identifies a domain object).
 
 The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and publishmq modules use these schemas to reify corresponding applib objects (`Command`, `Interaction.Execution` and `PublishedObjects`), either to persist or publishing using an link:http://activemq.apache.org[Apache ActiveMQ] message queue.
 

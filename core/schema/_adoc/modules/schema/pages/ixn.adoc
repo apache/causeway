@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 The interaction ("ixn") schema defines the serialized form of an action invocation or a property edit.
-In fact, it actually defines a call-graph of such executions for those cases where the xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] is used to execute sub-actions/property edits.
+In fact, it actually defines a call-graph of such executions for those cases where the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] is used to execute sub-actions/property edits.
 
 Each execution identifies the target object, the member to invoke, and the arguments.
 It also captures metrics about the execution, and the result of the execution (eg return value of an action invocation).
@@ -54,12 +54,12 @@ The `interactionDto` root element is defined as:
 ----
 <1> the interaction schema has a namespace URI of "http://isis.apache.org/schema/ixn".
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
-<2> uses complex types defined in the xref:schema:ROOT:common["common" schema] and also the xref:schema:ROOT:about.adoc#cmd.adoc["cmd" schema]
+<2> uses complex types defined in the xref:rg:schema:common["common" schema] and also the xref:rg:schema:about.adoc#cmd.adoc["cmd" schema]
 <3> definition of the `interactionDto` root element.
 The corresponding XML will use this as its top-level element.
 <4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
 <5> unique identifier for the transaction in which this interaction is being executed.
-The transaction Id is used to correlate back to the xref:schema:ROOT:command[command] that represented the intention to perform this execution, as well as to any xref:schema:ROOT:about.adoc#changes.adoc[changes] to domain objects that occur as a side-effect of the interaction.
+The transaction Id is used to correlate back to the xref:rg:schema:command[command] that represented the intention to perform this execution, as well as to any xref:rg:schema:about.adoc#changes.adoc[changes] to domain objects that occur as a side-effect of the interaction.
 <6> the top-level `memberExecutionDto`, defined below, either an action invocation or edit of a property.
 
 The `InteractionDto` DTO corresponding to the `interactionDto` root element can be marshalled to/from XML using the `InteractionDtoUtils` class.
@@ -69,7 +69,7 @@ The `InteractionDto` DTO corresponding to the `interactionDto` root element can 
 == `memberExecutionDto`
 
 The `memberExecutionDto` complex type is an abstract type representing either the invocation an action or the editing of a property.
-It corresponds to the xref:schema:ROOT:cmd/memberDto.adoc[`memberDto`] of the "cmd" schema; some elements are copied directly:
+It corresponds to the xref:rg:schema:cmd/memberDto.adoc[`memberDto`] of the "cmd" schema; some elements are copied directly:
 
 [source,xml]
 ----
@@ -103,14 +103,14 @@ It corresponds to the xref:schema:ROOT:cmd/memberDto.adoc[`memberDto`] of the "c
 <1> the `memberExecutionDto` is an abstract type
 <2> uniquely identifies this execution within the transaction.
 Can be combined with `transactionId` to create a unique identifier (across all other interaction executions and also changed objects events) of this particular interaction execution.
-<3> the target object, corresponding to one of the elements of the `targets` element of the xref:schema:ROOT:cmd/memberDto.adoc[`memberDto`]
-<4> the member identifier; corresponds to `memberIdentifier` of the `member` element of the xref:schema:ROOT:cmd/memberDto.adoc[`memberDto`]
-<5> the _logical_ member identifier; corresponds to `logicalMemberIdentifier` of the `member` element of the xref:schema:ROOT:cmd/memberDto.adoc[`memberDto`]
-<6> the user executing the action invocation/property edit; corresponds to the `user` element of the xref:schema:ROOT:cmd/memberDto.adoc[`memberDto`]
+<3> the target object, corresponding to one of the elements of the `targets` element of the xref:rg:schema:cmd/memberDto.adoc[`memberDto`]
+<4> the member identifier; corresponds to `memberIdentifier` of the `member` element of the xref:rg:schema:cmd/memberDto.adoc[`memberDto`]
+<5> the _logical_ member identifier; corresponds to `logicalMemberIdentifier` of the `member` element of the xref:rg:schema:cmd/memberDto.adoc[`memberDto`]
+<6> the user executing the action invocation/property edit; corresponds to the `user` element of the xref:rg:schema:cmd/memberDto.adoc[`memberDto`]
 <7> the current "human-friendly" title of the target object
-<8> the set of metrics captured for this execution, of type `metricsDto` defined xref:schema:ROOT:ixn/ancillary.adoc[below].
+<8> the set of metrics captured for this execution, of type `metricsDto` defined xref:rg:schema:ixn/ancillary.adoc[below].
 <9> if the action invocation/property edit threw an exception, then this is captured here.
-<10> if any sub-actions or sub-edits were performed via the xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`], then these are captured in the `childExecutions` element.
+<10> if any sub-actions or sub-edits were performed via the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`], then these are captured in the `childExecutions` element.
 <11> the `interactionType` attribute indicates whether the member is an action or a property (similar attribute exists for the "cmd" schema).
 
 In general the `logicalMemberIdentifier` should be used in preference to the `memberIdentifier` because will not (necessarily) have to change if the class is moved during a refactoring.
@@ -149,12 +149,12 @@ The `actionInvocationDto` and `propertyEditDto` are the concrete subtypes:
 ----
 <1> the `actionInvocationDto` inherits from `memberExecutionDto`.
 It corresponds to the similar
-xref:schema:ROOT:cmd/memberDto.adoc[`actionDto`] complex type of the "cmd" schema
+xref:rg:schema:cmd/memberDto.adoc[`actionDto`] complex type of the "cmd" schema
 <2> the `parameters` element captures the parameter and argument values; for the top-level execution it is a direct copy of the corresponding `parameters` element of the `actionDto` complex type of the "cmd" schema.
 <3> the `returned` element captures the returned value (if not void).
 It is not valid for both this element and the inherited `threw` element to both be populated.
 <4> the `propertyEditDto` inherits from `memberExecutionDto`.
-It corresponds to the similar xref:schema:ROOT:cmd/memberDto.adoc[`propertyDto`] complex type of the "cmd" schema
+It corresponds to the similar xref:rg:schema:cmd/memberDto.adoc[`propertyDto`] complex type of the "cmd" schema
 <5> the `newValue` element captures the new value; for the top-level execution it is a direct
 copy of the corresponding `newValue` element of the `propertyDto` complex type of the "cmd" schema.
 
@@ -195,4 +195,4 @@ The schema also defines a small number of supporting types:
 Together these metrics give an idea of the "size" of this  particular execution.
 <3> the `exceptionDto` complex type defines a structure for capturing the stack trace of any exception that might occur in the course of invoking an action or editing a property.
 
-The xref:schema:ROOT:changes.adoc[changes] schema also provides metrics on the number of objects loaded/changed, but relates to the entire interaction rather than just one (sub)execution of an interaction.
+The xref:rg:schema:changes.adoc[changes] schema also provides metrics on the number of objects loaded/changed, but relates to the entire interaction rather than just one (sub)execution of an interaction.

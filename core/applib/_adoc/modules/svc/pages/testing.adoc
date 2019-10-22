@@ -24,7 +24,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:applib:svc:testing/ExecutionParametersService.adoc[`o.a.i.applib.` +
+|xref:rg:svc:testing/ExecutionParametersService.adoc[`o.a.i.applib.` +
 `fixturescripts.` +
 `ExecutionParametersService`]
 |...
@@ -34,38 +34,38 @@ It also lists their corresponding implementation, either a default implementatio
 |API is also a concrete class
 
 
-|xref:applib:svc:testing/FixtureScripts.adoc[`o.a.i.applib.` +
+|xref:rg:svc:testing/FixtureScripts.adoc[`o.a.i.applib.` +
 `fixturescripts` +
 `FixtureScripts`]
 |Provides the ability to execute fixture scripts.
 |`FixtureScriptsDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|Default implementation uses xref:applib:svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScripts-
+|Default implementation uses xref:rg:svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScripts-
 SpecificationProvider`].
 
 
 
-|xref:applib:svc:testing/FixtureScriptsSpecificationProvider.adoc[`o.a.i.applib.` +
+|xref:rg:svc:testing/FixtureScriptsSpecificationProvider.adoc[`o.a.i.applib.` +
 `services.fixturespec` +
 `FixtureScripts-` +
 `SpecificationProvider`]
-|Provides settings for xref:applib:svc:testing/FixtureScripts.adoc[`FixtureScripts`] default domain service (`FixtureScriptsDefault`) for executing fixture scripts.
+|Provides settings for xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`] default domain service (`FixtureScriptsDefault`) for executing fixture scripts.
 |
 |
 
 
-|xref:applib:svc:testing/SudoService.adoc[`o.a.i.applib.` +
+|xref:rg:svc:testing/SudoService.adoc[`o.a.i.applib.` +
 `services.sudo` +
 `SudoService`]
-|For use in testing while running xref:applib:cms:classes/super.adoc#FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.
+|For use in testing while running xref:rg:cms:classes/super.adoc#FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.
 |`SudoServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |API is also a concrete class
 
 
-|xref:applib:svc:testing/SwitchUserService.adoc[`o.a.i.applib.` +
+|xref:rg:svc:testing/SwitchUserService.adoc[`o.a.i.applib.` +
 `fixtures.switchuser` +
 `SwitchUserServiceService`]
 |(deprecated)

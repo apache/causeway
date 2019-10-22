@@ -29,7 +29,7 @@ public class Order {
 ----
 
 
-It is also possible to specify a global default for the page size of standalone collections, using the xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.viewer.paged.parented`.
+It is also possible to specify a global default for the page size of standalone collections, using the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.viewer.paged.parented`.
 
 
 
@@ -42,5 +42,5 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-
 
 This attribute can also be applied to:
 
-* xref:applib:ant:DomainObjectLayout.adoc#paged[domain objects]
-* xref:applib:ant:ViewModelLayout.adoc#paged[view models].
+* xref:rg:ant:DomainObjectLayout.adoc#paged[domain objects]
+* xref:rg:ant:ViewModelLayout.adoc#paged[view models].
