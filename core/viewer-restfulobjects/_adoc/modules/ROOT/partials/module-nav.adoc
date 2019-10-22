@@ -12,6 +12,8 @@
 
 ** xref:vro:ROOT:configuration-properties.adoc[Configuration Properties]
 
+** xref:vro:ROOT:security.adoc[Hints-n-Tips]
+
 ** xref:vro:ROOT:hints-and-tips.adoc[Hints-n-Tips]
 
 *** xref:vro:ROOT:hints-and-tips/using-chrome-devtools.adoc[Using Chrome DevTools]

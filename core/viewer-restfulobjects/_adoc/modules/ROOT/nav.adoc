@@ -1,1 +1,1 @@
-include::vro:ROOT:partial$nav.adoc[]
+include::vro:ROOT:partial$component-nav.adoc[]

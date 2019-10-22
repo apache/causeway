@@ -28,6 +28,8 @@
 *** xref:vw:ROOT:features/user-registration.adoc[User Registration]
 
 
+** xref:vw:ROOT:security.adoc[Security]
+
 
 ** xref:vw:ROOT:customisation.adoc[Customisation]
 *** xref:vw:ROOT:customisation/top-level-index-page.adoc[Top-level Index Page]

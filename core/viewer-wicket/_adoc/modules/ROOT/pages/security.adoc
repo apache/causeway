@@ -3,8 +3,12 @@
 include::_attributes.adoc[]
 
 
-include::vw:security:partial$pages.adoc[]
+//
+// These pages are include:d in both this viewer and in the security guide
+//
+
+include::vw:ROOT:partial$security/pages.adoc[]
 
 == User-registration
 
-include::vw:security:partial$user-registration.adoc[]
+include::vw:ROOT:partial$security/user-registration.adoc[]
