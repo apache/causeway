@@ -5,7 +5,8 @@ include::_attributes.adoc[]
 
 
 
-.Shiro Authentication
+== Shiro Authentication
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -14,12 +15,13 @@ include::_attributes.adoc[]
 |Description
 
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.authentication.shiro.adoc
+include::rg:cfg:example$generated/isis.authentication.shiro.adoc[]
 
 |===
 
 
-.Persistors (in general)
+== Persistors (in general)
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -27,12 +29,13 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.authenticat
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.persistor.adoc
+include::rg:cfg:example$generated/isis.persistor.adoc[]
 
 |===
 
 
-.DataNucleus Persistor
+== DataNucleus Persistor
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -40,15 +43,15 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.persistor.a
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.persistor.datanucleus.adoc
+include::rg:cfg:example$generated/isis.persistor.datanucleus.adoc[]
 
 
 |===
 
 
 
+== DataNucleus Persistor Pass-thru Settings
 
-.DataNucleus Persistor Pass-thru Settings
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -56,13 +59,14 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.persistor.d
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.persistor.datanucleus.impl.adoc
+include::rg:cfg:example$generated/isis.persistor.datanucleus.impl.adoc[]
 
 |===
 
 
 
-.Metamodel Reflector
+== Metamodel Reflector
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -70,14 +74,15 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.persistor.d
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.reflector.adoc
+include::rg:cfg:example$generated/isis.reflector.adoc[]
 
 |===
 
 
 
 
-.MetaModel Facets
+== MetaModel Facets
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -85,14 +90,15 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.reflector.a
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.reflector.facet.adoc
+include::rg:cfg:example$generated/isis.reflector.facet.adoc[]
 
 |===
 
 
 
 
-.Metamodel Validation
+== Metamodel Validation
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -100,13 +106,14 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.reflector.f
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.reflector.validator.adoc
+include::rg:cfg:example$generated/isis.reflector.validator.adoc[]
 
 |===
 
 
 
-.Individual Domain Services
+== Individual Domain Services
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -114,13 +121,14 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.reflector.v
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.service.email.adoc
+include::rg:cfg:example$generated/isis.service.email.adoc[]
 
 |===
 
 
 
-.Domain Services (in general)
+== Domain Services (in general)
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -128,13 +136,14 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.service.ema
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.services.adoc
+include::rg:cfg:example$generated/isis.services.adoc[]
 
 |===
 
 
 
-.Restful Objects Viewer
+== Restful Objects Viewer
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -142,13 +151,14 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.services.ad
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.viewer.restfulobjects.adoc
+include::rg:cfg:example$generated/isis.viewer.restfulobjects.adoc[]
 
 |===
 
 
 
-.Wicket Viewer
+== Wicket Viewer
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -156,13 +166,14 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.viewer.rest
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.viewer.wicket.adoc
+include::rg:cfg:example$generated/isis.viewer.wicket.adoc[]
 
 |===
 
 
 
-.Viewers (in general)
+== Viewers (in general)
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -170,12 +181,13 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.viewer.wick
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/isis.viewers.adoc
+include::rg:cfg:example$generated/isis.viewers.adoc[]
 
 |===
 
 
-.Other
+== Other
+
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -183,11 +195,12 @@ include::rg:cfg:example$generated/spring-configuration-metadata/isis.viewers.ado
 (default value)
 |Description
 
-include::rg:cfg:example$generated/spring-configuration-metadata/Other.adoc
+include::rg:cfg:example$generated/Other.adoc[]
 
 |===
 
 
+include::rg:cfg:example$generated/Other.adoc[]
 
 
 
