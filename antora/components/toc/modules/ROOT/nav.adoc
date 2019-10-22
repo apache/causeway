@@ -34,9 +34,9 @@
 * Wicket Viewer
 
 ** xref:vw:ROOT:about.adoc[User Guide]
-** xref:ext-viewer-wicket-excel:ROOT:about.adoc[Excel Download (extension)]
-** xref:ext-asciidoc:ROOT:about.adoc[Asciidoc value type (extension)]
-** xref:ext-markdown:ROOT:about.adoc[Markdown value type (extension)]
+** xref:uvw:ext-viewer-wicket-excel:about.adoc[Excel Download (extension)]
+** xref:uvw:ext-asciidoc:about.adoc[Asciidoc value type (extension)]
+** xref:uvw:ext-markdown:about.adoc[Markdown value type (extension)]
 ** xref:ext-sse:ROOT:about.adoc[Server Sent Events (extension)]
 
 * Restful Objects Viewer

@@ -1,6 +1,2 @@
-name: ext-markdown
-title: "Extensions - Markdown"
+name: uvw
 version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc
