@@ -5,3 +5,5 @@
 ** xref:rg:cfg:specifying-components.adoc[Specifying Components]
 ** xref:rg:cfg:configuring-core.adoc[Configuring Core]
 
+** xref:rg:cfg:spring-configuration.adoc[Spring Configuration]
+

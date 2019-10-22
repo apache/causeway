@@ -3,8 +3,8 @@
 include::_attributes.adoc[]
 
 
-include::vro:security:partial$web-xml.adoc[]
+include::vro:ROOT:partial$security/web-xml.adoc[]
 
 == User-registration
 
-include::vro:security:partial$user-registration.adoc[]
+include::vro:ROOT:partial$security/user-registration.adoc[]
