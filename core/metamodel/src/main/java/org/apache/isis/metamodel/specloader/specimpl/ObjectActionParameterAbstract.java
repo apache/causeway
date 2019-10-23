@@ -265,10 +265,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public void addFacet(final MultiTypedFacet facet) {
+    public void addMultiTypedFacet(final MultiTypedFacet facet) {
         final FacetHolder facetHolder = getFacetHolder();
         if (facetHolder != null) {
-            facetHolder.addFacet(facet);
+            facetHolder.addMultiTypedFacet(facet);
         }
     }
 

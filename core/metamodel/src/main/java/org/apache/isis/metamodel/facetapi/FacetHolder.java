@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facetapi;
 
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.MetaModelContext;
 
 /**
@@ -42,18 +41,6 @@ public interface FacetHolder {
      * Whether there is a facet registered of the specified type.
      */
     boolean containsFacet(Class<? extends Facet> facetType);
-
-    /**
-     * @param facetType
-     * @return whether there is a facet registered that implements the specified facet interface.
-     * @since 2.0
-     */
-    default boolean containsFacetWithInterface(Class<? extends Facet> facetType) {
-        return streamFacets()
-                .flatMap(type->_NullSafe.stream(type.facetType().getInterfaces()))
-                .anyMatch(intfc-> intfc == facetType)
-                ;
-    }
 
     /**
      * Whether there is a facet registered of the specified type that is not a
@@ -94,7 +81,7 @@ public interface FacetHolder {
      * {@link Facet#alwaysReplace() always replace} or if the existing
      * {@link Facet} is a {@link Facet#isNoop() no-op}.
      */
-    void addFacet(MultiTypedFacet facet);
+    void addMultiTypedFacet(MultiTypedFacet facet);
 
     /**
      * Remove the facet whose type is that reported by {@link Facet#facetType()}

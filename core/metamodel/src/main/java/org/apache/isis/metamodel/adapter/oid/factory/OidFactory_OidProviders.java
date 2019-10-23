@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.adapter.oid.factory;
 
 import java.util.UUID;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.SystemConstants;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -77,6 +78,10 @@ class OidFactory_OidProviders {
             val spec = managedObject.getSpecification();
             val pojo = managedObject.getPojo();
             val entityFacet = spec.getFacet(EntityFacet.class);
+            if(entityFacet==null) {
+                val msg = String.format("entity '%s' has not EntityFacet associated", managedObject);
+                throw _Exceptions.unrecoverable(msg);
+            }
             val identifier = entityFacet.identifierFor(pojo);
             return Oid.Factory.persistentOf(spec.getSpecId(), identifier);
         }

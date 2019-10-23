@@ -155,8 +155,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelCon
     }
 
     @Override
-    public void addFacet(final MultiTypedFacet facet) {
-        getFacetHolder().addFacet(facet);
+    public void addMultiTypedFacet(final MultiTypedFacet facet) {
+        getFacetHolder().addMultiTypedFacet(facet);
     }
 
     @Override

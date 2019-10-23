@@ -35,11 +35,14 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 
 import lombok.val;
 
@@ -111,8 +114,6 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         };
         final Select2Choice<EntityModel> breadcrumbChoice = new Select2Choice<>(ID_BREADCRUMBS, entityModel, choiceProvider);
 
-        val commonContext = super.getCommonContext();
-        
         breadcrumbChoice.add(
                 new AjaxFormComponentUpdatingBehavior("change"){
 
@@ -123,7 +124,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                         final String oidStr = breadcrumbChoice.getInput();
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
-                            val messageBroker = commonContext.getAuthenticationSession().getMessageBroker();
+                            val messageBroker = getAuthenticationSession().getMessageBroker();
                             messageBroker.addWarning("Cannot find object");
                             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
                             target.appendJavaScript(feedbackMsg);
@@ -131,6 +132,10 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                             return;
                         }
                         setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
+                    }
+
+                    private AuthenticationSession getAuthenticationSession() {
+                        return IsisSession.current().get().getAuthenticationSession();
                     }
                 });
 

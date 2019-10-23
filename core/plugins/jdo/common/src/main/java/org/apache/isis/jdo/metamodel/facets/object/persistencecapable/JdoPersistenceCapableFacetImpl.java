@@ -19,11 +19,13 @@
 package org.apache.isis.jdo.metamodel.facets.object.persistencecapable;
 
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.runtime.system.context.IsisContext;
 
@@ -72,35 +74,6 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     private static boolean isPersistableType(Class<?> type) {
         return persistable_type.get().isAssignableFrom(type);
     }
-    
-//  static class OidForPersistent implements OidProvider {
-//
-//      private final IsisJdoMetamodelPlugin isisJdoMetamodelPlugin = IsisJdoMetamodelPlugin.get();
-//
-//      @Override
-//      public boolean isHandling(ManagedObject managedObject) {
-//          // equivalent to 'isInstanceOfPersistable = pojo instanceof Persistable'
-//          final boolean isInstanceOfPersistable = isisJdoMetamodelPlugin
-//                  .isPersistenceEnhanced(managedObject.getPojo().getClass());
-//          return isInstanceOfPersistable;
-//      }
-//
-//      @Override
-//      public RootOid oidFor(ManagedObject managedObject) {
-//          val spec = managedObject.getSpecification();
-//          val pojo = managedObject.getPojo();
-//          
-//          val persistenceSession = IsisContext.getPersistenceSession().get();
-//          final boolean isRecognized = persistenceSession.isRecognized(pojo);
-//          if(isRecognized) {
-//              final String identifier = persistenceSession.identifierFor(pojo);
-//              return Oid.Factory.persistentOf(spec.getSpecId(), identifier);
-//          } else {
-//              final String identifier = UUID.randomUUID().toString();
-//              return Oid.Factory.transientOf(spec.getSpecId(), identifier);    
-//          }
-//      }
-//
-//  }
+
 
 }

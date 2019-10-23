@@ -25,17 +25,16 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.Value;
 import lombok.val;
 
@@ -60,11 +59,32 @@ public interface ManagedObject {
     // -- SIMPLE
 
     @Value @RequiredArgsConstructor(staticName="of") 
-    public final static class SimpleManagedObject implements ManagedObject {
-        @Getter private final ObjectSpecification specification;
-        @Getter private final Object pojo;
+    final static class SimpleManagedObject implements ManagedObject {
+        @NonNull private final ObjectSpecification specification;
+        @NonNull private final Object pojo;
     }
 
+    // -- LAZY
+    
+    @ToString(of = {"specification", "pojo"}) 
+    final static class LazyManagedObject implements ManagedObject {
+
+        @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;  
+        
+        @Getter @NonNull private final Object pojo;
+        
+        @Getter(lazy=true) 
+        private final ObjectSpecification specification = specLoader.apply(pojo.getClass());
+
+        public LazyManagedObject(@NonNull Function<Class<?>, ObjectSpecification> specLoader, @NonNull Object pojo) {
+            this.specLoader = specLoader;
+            this.pojo = pojo;
+        }
+
+    }
+    
+    //Function<Class<?>, ObjectSpecification> specLoader
+    
     // -- TITLE
 
     public default String titleString() {
@@ -168,20 +188,8 @@ public interface ManagedObject {
      * @param pojo
      * @return
      */
-    public static ManagedObject of(
-            final ObjectSpecification specification, 
-            final Object pojo) {
-
-        return new ManagedObject() {
-            @Override
-            public ObjectSpecification getSpecification() {
-                return specification;
-            }
-            @Override
-            public Object getPojo() {
-                return pojo;
-            }
-        };
+    public static ManagedObject of(ObjectSpecification specification, Object pojo) {
+        return new SimpleManagedObject(specification, pojo);
     }
 
     /**
@@ -191,27 +199,10 @@ public interface ManagedObject {
      * @return
      */
     public static ManagedObject of(
-            final Function<Class<?>, ObjectSpecification> specLoader, 
-            final Object pojo) {
-
-        requires(specLoader, "specLoader");
-        requires(pojo, "pojo");
+            Function<Class<?>, ObjectSpecification> specLoader, 
+            Object pojo) {
         
-        val type = pojo.getClass();
-        
-        return new ManagedObject() {
-            private final _Lazy<ObjectSpecification> specification = 
-                    _Lazy.threadSafe(()->specLoader.apply(type));
-
-            @Override
-            public ObjectSpecification getSpecification() {
-                return specification.get();
-            }
-            @Override
-            public Object getPojo() {
-                return pojo;
-            }
-        };
+        return new LazyManagedObject(specLoader, pojo);
     }
     
     // -- SHORTCUTS
@@ -307,16 +298,17 @@ public interface ManagedObject {
         }
         return true;
     }
+    
+    static final class Oids {
+        static final OidFactory oidFactory = OidFactory.buildDefault();
+    }
 
     static Oid _oid(ManagedObject adapter) {
         if(adapter instanceof ObjectAdapter) {
             return promote(adapter).getOid();
         }
         
-        val oidFactory = OidFactory.buildDefault();
-        
-        return oidFactory.oidFor(adapter);
-         
+        return Oids.oidFactory.oidFor(adapter);
     }
 
 

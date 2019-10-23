@@ -55,7 +55,8 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
  * the provided {@link EntityModel}.
  */
-public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
+public class EntityCollectionPanel extends PanelAbstract<EntityModel> 
+implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 
@@ -75,7 +76,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
     public EntityCollectionPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        selectedItemHintKey = ComponentHintKey.create(getSelectorDropdownPanel(), EntityCollectionModel.HINT_KEY_SELECTED_ITEM);
+        selectedItemHintKey = ComponentHintKey.create(super.getCommonContext(), getSelectorDropdownPanel(), EntityCollectionModel.HINT_KEY_SELECTED_ITEM);
         div = buildGui();
     }
 

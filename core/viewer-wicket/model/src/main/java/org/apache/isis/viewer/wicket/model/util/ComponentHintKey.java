@@ -28,11 +28,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 /**
  * Scoped by the {@link Component component's path}.
@@ -42,24 +42,24 @@ public class ComponentHintKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static ComponentHintKey create(Provider<Component> pathProvider, String key) {
-        return new ComponentHintKey(pathProvider, null, key, null);
+    public static ComponentHintKey create(IsisWebAppCommonContext commonContext, Provider<Component> pathProvider, String key) {
+        return new ComponentHintKey(commonContext.lookupServiceElseFail(HintStore.class), pathProvider, null, key, null);
     }
 
-    public static ComponentHintKey create(Component path, String key) {
-        return new ComponentHintKey(null, path, key, null);
+    public static ComponentHintKey create(IsisWebAppCommonContext commonContext, Component path, String key) {
+        return new ComponentHintKey(commonContext.lookupServiceElseFail(HintStore.class), null, path, key, null);
     }
 
-    public static ComponentHintKey create(String fullKey) {
-        return new ComponentHintKey(null, null, null, fullKey);
+    public static ComponentHintKey create(HintStore hintStore, String fullKey) {
+        return new ComponentHintKey(hintStore, null, null, null, fullKey);
     }
 
+    @Getter private final transient HintStore hintStore;
     private final Provider<Component> componentProvider;
     private final Component component;
     private final String keyName;
     private final String fullKey;
     
-    @Getter @Setter private transient HintStore hintStore;
 
     public String getKey() {
         return fullKey != null
@@ -118,7 +118,7 @@ public class ComponentHintKey implements Serializable {
 
 
     public static ComponentHintKey noop() {
-        return new ComponentHintKey(null, null, null, null) {
+        return new ComponentHintKey(null, null, null, null, null) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -140,6 +140,8 @@ public class ComponentHintKey implements Serializable {
             }
         };
     }
+
+ 
 
 
 }

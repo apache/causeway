@@ -39,9 +39,11 @@ import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -213,7 +215,6 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
 
     private void addValidatorForIsisValidation() {
         val scalarModel = getModel();
-        val commonContext = scalarModel.getCommonContext();
 
         textField.add(new IValidator<T>() {
             private static final long serialVersionUID = 1L;
@@ -221,7 +222,7 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
             @Override
             public void validate(final IValidatable<T> validatable) {
                 final T proposedValue = validatable.getValue();
-                final ObjectAdapter proposedAdapter = commonContext.getPojoToAdapter().apply(proposedValue);
+                final ObjectAdapter proposedAdapter = adapterProvider().adapterFor(proposedValue);
                 final String reasonIfAny = scalarModel.validate(proposedAdapter);
                 if (reasonIfAny != null) {
                     final ValidationError error = new ValidationError();
@@ -229,6 +230,11 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
                     validatable.error(error);
                 }
             }
+            
+            private ObjectAdapterProvider adapterProvider() {
+                return IsisSession.current().get().getObjectAdapterProvider();
+            }
+            
         });
     }
 

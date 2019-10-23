@@ -57,7 +57,7 @@ class HintPageParameterSerializer implements Serializable {
         final Bookmark bookmark = objectAdapterMemento.asHintingBookmarkIfSupported();
         Set<String> hintKeys = hintStore.findHintKeys(bookmark);
         for (String hintKey : hintKeys) {
-            ComponentHintKey.create(hintKey).hintTo(bookmark, pageParameters, PREFIX);
+            ComponentHintKey.create(hintStore, hintKey).hintTo(bookmark, pageParameters, PREFIX);
         }
     }
 

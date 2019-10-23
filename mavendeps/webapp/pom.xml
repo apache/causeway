@@ -95,6 +95,11 @@
 					<groupId>org.apache.isis.core</groupId>
 					<artifactId>isis-security-shiro</artifactId>
 				</dependency>
+				
+				<dependency>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</dependency>
 
 			</dependencies>
 		</profile>

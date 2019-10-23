@@ -19,14 +19,10 @@
 
 package org.apache.isis.metamodel.facetapi;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContextAware;
 
@@ -44,18 +40,10 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     private MetaModelContext metaModelContext;
     
     private final Map<Class<? extends Facet>, Facet> facetsByClass = new ConcurrentHashMap<>();
-    private final Set<Class<? extends Facet>> implementedFacetInterfaces = new HashSet<>();
 
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         return facetsByClass.containsKey(facetType);
-    }
-
-    @Override
-    public boolean containsFacetWithInterface(final Class<? extends Facet> facetType) {
-        synchronized(implementedFacetInterfaces) {
-            return implementedFacetInterfaces.contains(facetType);
-        }
     }
 
     @Override
@@ -76,7 +64,7 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     }
 
     @Override
-    public void addFacet(final MultiTypedFacet mtFacet) {
+    public void addMultiTypedFacet(final MultiTypedFacet mtFacet) {
         mtFacet.facetTypes()
         .forEach(facetType->addFacet(facetType, mtFacet.getFacet(facetType)));
     }
@@ -128,14 +116,6 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
 
     private void put(final Class<? extends Facet> facetType, final Facet facet) {
         facetsByClass.put(facetType, facet);
-
-        synchronized(implementedFacetInterfaces) {
-            _NullSafe.stream(facetType.getInterfaces())
-            .filter(intfc->Facet.class.isAssignableFrom(intfc))
-            .map(intfc-> _Casts.<Class<? extends Facet>>uncheckedCast(intfc))
-            .forEach(implementedFacetInterfaces::add);
-        }
-
     }
 
 }

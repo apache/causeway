@@ -87,7 +87,7 @@ implements HasDynamicallyVisibleContent {
         super(id, tabsFor(entityModel, bs3TabGroup));
         this.entityModel = entityModel;
 
-        this.selectedTabHintKey = ComponentHintKey.create(this, SESSION_ATTR_SELECTED_TAB);
+        this.selectedTabHintKey = ComponentHintKey.create(entityModel.getCommonContext(), this, SESSION_ATTR_SELECTED_TAB);
     }
 
     @Override

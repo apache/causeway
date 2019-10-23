@@ -72,7 +72,7 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
 
         final ComponentHintKey selectedItemSessionAttribute =
                 entityModel != null
-                ? ComponentHintKey.create(this, EntityCollectionModel.HINT_KEY_SELECTED_ITEM)
+                ? ComponentHintKey.create(super.getCommonContext(), this, EntityCollectionModel.HINT_KEY_SELECTED_ITEM)
                         : null;
 
                 selectorHelper = new CollectionSelectorHelper(

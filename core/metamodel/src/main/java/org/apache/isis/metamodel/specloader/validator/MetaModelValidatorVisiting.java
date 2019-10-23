@@ -21,9 +21,7 @@ package org.apache.isis.metamodel.specloader.validator;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
 import lombok.NonNull;

@@ -19,13 +19,13 @@
 
 package org.apache.isis.metamodel.facets.object.entity;
 
-import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.MultiTypedFacet;
 
 /**
  * Indicates that this class is managed by a persistence context.
  * @since 2.0
  */
-public interface EntityFacet extends Facet {
+public interface EntityFacet extends MultiTypedFacet {
 
     String identifierFor(Object pojo);
 

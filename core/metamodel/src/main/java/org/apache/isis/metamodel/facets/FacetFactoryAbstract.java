@@ -68,7 +68,7 @@ implements FacetFactory, MetaModelContextAware, MetaModelContext.Delegating {
     }
     
     public void addFacet(final MultiTypedFacet facet) {
-        FacetUtil.addFacet(facet);
+        FacetUtil.addMultiTypedFacet(facet);
     }
     
     

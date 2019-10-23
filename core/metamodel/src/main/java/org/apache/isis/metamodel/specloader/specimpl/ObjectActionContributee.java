@@ -257,8 +257,8 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     }
 
     @Override
-    public void addFacet(MultiTypedFacet facet) {
-        facetHolder.addFacet(facet);
+    public void addMultiTypedFacet(MultiTypedFacet facet) {
+        facetHolder.addMultiTypedFacet(facet);
     }
 
     @Override

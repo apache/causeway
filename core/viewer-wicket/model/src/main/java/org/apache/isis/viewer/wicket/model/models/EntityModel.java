@@ -266,7 +266,7 @@ implements ObjectAdapterModel, UiHintContainer {
 
     @Override
     public String getHint(final Component component, final String keyName) {
-        final ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
+        final ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
         if(componentHintKey != null) {
             return componentHintKey.get(getObjectAdapterMemento().asHintingBookmarkIfSupported());
         }
@@ -275,7 +275,7 @@ implements ObjectAdapterModel, UiHintContainer {
 
     @Override
     public void setHint(Component component, String keyName, String hintValue) {
-        ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
+        ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
         componentHintKey.set(this.getObjectAdapterMemento().asHintingBookmarkIfSupported(), hintValue);
     }
 

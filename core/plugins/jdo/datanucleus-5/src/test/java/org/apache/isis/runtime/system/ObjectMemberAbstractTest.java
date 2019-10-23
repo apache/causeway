@@ -158,7 +158,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenHiddenFacetSetToAlways() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetAbstract(Where.ANYWHERE, testMember) {
+        testMember.addMultiTypedFacet(new HiddenFacetAbstract(Where.ANYWHERE, testMember) {
             @Override
             public String hiddenReason(final ManagedObject target, final Where whereContext) {
                 return null;
@@ -171,7 +171,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenHiddenFacetSet() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
+        testMember.addMultiTypedFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
 
         final Consent visible = testMember.isVisible(transientAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertFalse(visible.isAllowed());
@@ -179,7 +179,7 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testVisibleDeclaratively() {
-        testMember.addFacet(new HiddenFacetAbstractAlwaysEverywhere(testMember) {});
+        testMember.addMultiTypedFacet(new HiddenFacetAbstractAlwaysEverywhere(testMember) {});
         assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
     }
 

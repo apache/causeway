@@ -75,7 +75,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
     @Override
     public void process(final ProcessClassContext processClassContext) {
         
-        FacetUtil.addFacet(create(processClassContext.getCls(), processClassContext.getFacetHolder()));
+        FacetUtil.addMultiTypedFacet(create(processClassContext.getCls(), processClassContext.getFacetHolder()));
     }
 
     /**

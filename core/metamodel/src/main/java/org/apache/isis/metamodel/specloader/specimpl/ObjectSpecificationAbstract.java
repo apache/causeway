@@ -1091,7 +1091,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(containsFacet(CollectionFacet.class)) {
             return BeanSort.COLLECTION;
         }
-        if(containsFacetWithInterface(EntityFacet.class)) {
+        if(containsFacet(EntityFacet.class)) {
             return BeanSort.ENTITY;
         }
         val correspondingClass = getCorrespondingClass();

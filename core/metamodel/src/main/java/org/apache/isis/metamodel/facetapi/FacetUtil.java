@@ -65,11 +65,11 @@ public final class FacetUtil {
         return true;
     }
 
-    public static boolean addFacet(final MultiTypedFacet facet) {
+    public static boolean addMultiTypedFacet(final MultiTypedFacet facet) {
         if (facet == null) {
             return false;
         }
-        facet.getFacetHolder().addFacet(facet);
+        facet.getFacetHolder().addMultiTypedFacet(facet);
         return true;
     }
 

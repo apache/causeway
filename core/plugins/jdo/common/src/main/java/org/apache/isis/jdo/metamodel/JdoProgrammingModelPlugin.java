@@ -173,7 +173,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
     private void addValidatorToEnsureUniqueObjectIds() {
 
         final ListMultimap<ObjectSpecId, ObjectSpecification> collidingSpecsById = 
-                _Multimaps.newListMultimap();
+                _Multimaps.newConcurrentListMultimap();
 
         final MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds = 
                 new MetaModelValidatorVisiting.SummarizingVisitor(){
