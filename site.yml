@@ -98,6 +98,9 @@ content:
       start_path: antora/components/security
       branches: HEAD
     - url: .
+      start_path: core/security/api/_adoc
+      branches: HEAD
+    - url: .
       start_path: core/security/bypass/_adoc
       branches: HEAD
     - url: .

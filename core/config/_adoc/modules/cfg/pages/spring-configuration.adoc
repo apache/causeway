@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 == Shiro Authentication
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -22,7 +22,7 @@ include::rg:cfg:example$generated/isis.authentication.shiro.adoc[]
 
 == Persistors (in general)
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -36,7 +36,7 @@ include::rg:cfg:example$generated/isis.persistor.adoc[]
 
 == DataNucleus Persistor
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -52,7 +52,7 @@ include::rg:cfg:example$generated/isis.persistor.datanucleus.adoc[]
 
 == DataNucleus Persistor Pass-thru Settings
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -67,7 +67,7 @@ include::rg:cfg:example$generated/isis.persistor.datanucleus.impl.adoc[]
 
 == Metamodel Reflector
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -83,7 +83,7 @@ include::rg:cfg:example$generated/isis.reflector.adoc[]
 
 == MetaModel Facets
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -99,7 +99,7 @@ include::rg:cfg:example$generated/isis.reflector.facet.adoc[]
 
 == Metamodel Validation
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -114,7 +114,7 @@ include::rg:cfg:example$generated/isis.reflector.validator.adoc[]
 
 == Individual Domain Services
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -129,7 +129,7 @@ include::rg:cfg:example$generated/isis.service.email.adoc[]
 
 == Domain Services (in general)
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -144,7 +144,7 @@ include::rg:cfg:example$generated/isis.services.adoc[]
 
 == Restful Objects Viewer
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -159,7 +159,7 @@ include::rg:cfg:example$generated/isis.viewer.restfulobjects.adoc[]
 
 == Wicket Viewer
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -174,7 +174,7 @@ include::rg:cfg:example$generated/isis.viewer.wicket.adoc[]
 
 == Viewers (in general)
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
@@ -188,7 +188,7 @@ include::rg:cfg:example$generated/isis.viewers.adoc[]
 
 == Other
 
-[cols="2a,1,3a", options="header"]
+[cols="2a,2a,3a", options="header"]
 |===
 |Property
 |Value +
