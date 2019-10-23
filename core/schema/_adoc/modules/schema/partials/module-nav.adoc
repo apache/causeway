@@ -1,4 +1,4 @@
-* xref:rg:schema:aabout.adoc[Schema]
+* xref:rg:schema:about.adoc[Schema]
 
 ** xref:rg:schema:mml.adoc[MetaModel]
 ** xref:rg:schema:cmd.adoc[Command]

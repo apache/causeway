@@ -132,7 +132,8 @@ content:
 
 ui:
   bundle:
-    url: antora/theme/ui-bundle.zip
+    url: ../isis-antora/build/ui-bundle.zip
+    #url: antora/theme/ui-bundle.zip
     snapshot: true
   supplemental_files: antora/supplemental-ui
 

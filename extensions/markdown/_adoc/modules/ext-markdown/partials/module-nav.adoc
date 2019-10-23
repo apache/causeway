@@ -1,2 +1,2 @@
-* xref:vw:ext-markdown:about.adoc[About]
+* xref:vw:ext-markdown:about.adoc[Markdown value type (extension)]
 

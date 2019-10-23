@@ -1,105 +1,73 @@
 * What is Apache Isis?
 ** *xref:what-is-apache-isis/isis-in-pictures.adoc[Apache Isis in pictures]*
 ** xref:what-is-apache-isis/common-use-cases.adoc[Common Use Cases]
-
-//* Examples
-//** xref:what-is-apache-isis/screencasts.adoc[Screencasts]
-//** xref:what-is-apache-isis/powered-by.adoc[Powered By]
+** xref:what-is-apache-isis/screencasts.adoc[Screencasts]
+** xref:what-is-apache-isis/powered-by.adoc[Powered By]
 
 
-* Starter Apps
+* Quick Start
 
-** xref:helloworld:ROOT:about.adoc[HelloWorld archetype]
-** xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]
+** Starter Apps
+
+*** xref:helloworld:ROOT:about.adoc[HelloWorld archetype]
+*** xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]
+
+** Demos & Tutorials
+
+*** xref:demoapp:ROOT:about.adoc[Demo App]
+*** link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (tutorial)]
 
 
-* User Guides
+* Guides
 
-** *xref:ug:ROOT:about.adoc[Fundamentals & Beyond]*
-** *xref:demoapp:ROOT:about.adoc[Demo App]*
-** link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (tutorial)]
-
-* xref:rg:ROOT:about.adoc[Reference Guide]
-
-** *xref:rg:ant:about.adoc[Annotations]*
-** *xref:rg:svc:about.adoc[Domain Services]*
-** xref:rg:cms:about.adoc[Classes & Methods]
-** xref:rg:schema:about.adoc[Schemas]
-** xref:rg:cfg:about.adoc[Configuration]
-
-* Testing & Prototyping
-
+** *xref:ug:ROOT:about.adoc[User Guide]*
+** xref:rg:ROOT:about.adoc[Reference Guide]
 ** *xref:testing:ROOT:about.adoc[Testing]*
 
-* Wicket Viewer
+* Components
 
-** xref:vw:ROOT:about.adoc[User Guide]
-** xref:vw:ext-viewer-wicket-excel:about.adoc[Excel Download (extension)]
-** xref:vw:ext-asciidoc:about.adoc[Asciidoc value type (extension)]
-** xref:vw:ext-markdown:about.adoc[Markdown value type (extension)]
-** xref:ext-sse:ROOT:about.adoc[Server Sent Events (extension)]
-
-* Restful Objects Viewer
-
-** xref:vro:ROOT:about.adoc[User Guide]
-** link:https://github/TODO/TODO[Seb's viewer (3rd party)]
-** link:https://github/TODO/TODO[Joerg's viewer (3rd party)]
-
-* Incubator
-
-** xref:ext-incubator:ROOT:about.adoc[Experimental framework extensions]
-
-* DataNucleus Object Store
-
-**  xref:odn:ROOT:about.adoc[User Guide]
+** xref:vw:ROOT:about.adoc[Wicket Viewer]
+** xref:vro:ROOT:about.adoc[Restful Objects]
+**  xref:odn:ROOT:about.adoc[DataNucleus Object Store]
+**  xref:security:ROOT:about.adoc[Security Guide]
+*** xref:ext-secman:ROOT:about.adoc[SecMan (extension)]
 
 
-* Security
+* Support
 
-**  xref:security:ROOT:about.adoc[User Guide]
-** xref:ext-secman:ROOT:about.adoc[Security Manager (extension)]
+** Resources
 
+*** xref:toc:devguide:about.adoc[Developers' Guide]
+*** xref:mavendeps:ROOT:about.adoc[Maven mixins]
 
-* Support Resources
+** Mailing Lists
+*** xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[How to subscribe]
 
-** xref:toc:devguide:about.adoc[Developers' Guide]
-*** xref:toc:devguide:about.adoc#intellij[IntelliJ]
-*** xref:toc:devguide:about.adoc#eclipse[EclipseJ]
-*** xref:toc:devguide:about.adoc#contributing[Pull requests]p
-** xref:mavendeps:ROOT:about.adoc[Maven mixins]
+** Releases
 
-* Help
+*** xref:toc:ROOT:downloads/how-to.adoc[Downloads]
+*** xref:relnotes:ROOT:about.adoc[Release Notes]
+*** xref:mignotes:ROOT:about.adoc[Migration Notes]
 
-** xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[How to subscribe]
-** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
+** Other Resources
+*** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
 _for bug reports & feature requests_
 
 
-* Releases
+* Internal
 
-** xref:toc:ROOT:downloads/how-to.adoc[Downloads]
-[external]
-** xref:relnotes:ROOT:about.adoc[Release Notes]
-[external]
-** xref:mignotes:ROOT:about.adoc[Migration Notes]
+** Committers
 
-
-
-* Committers
-
-**  xref:toc:comguide:about.adoc[Committers' Guide]
-*** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
-*** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
+***  xref:toc:comguide:about.adoc[Committers' Guide]
+**** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
+**** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
 
 
-* Implementation
+** Implementation
 
-[external]
-**  xref:archdesign:ROOT:about.adoc[Architecture & Design]
-[external]
-**  xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
-[external]
-**  xref:smoketests:ROOT:about.adoc[SmokeTest App]
+***  xref:archdesign:ROOT:about.adoc[Architecture & Design]
+***  xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
+***  xref:smoketests:ROOT:about.adoc[SmokeTest App]
 
 
 
