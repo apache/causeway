@@ -33,48 +33,33 @@ data class Value(
 
         @UnstableDefault
         override fun deserialize(decoder: Decoder): Value {
+            var result: Value
             var jse: JsonElement? = null
             try {
                 val nss = JsonElement.serializer().nullable
                 jse = decoder.decode(nss)!!
                 val jsct = jse.content
                 when {
-                    jse.isNull -> {
-                        return Value(null)
-                    }
-                    isInt(jsct) -> {
-                        return Value(jsct.toInt())
-                    }
-                    isLong(jsct) -> {
-                        return Value(jsct.toLong())
-                    }
-                    else -> {
-                        return Value(jsct)
-                    }
+                    jse.isNull -> result = Value(null)
+                    isLong(jsct) -> result = Value(jsct.toLong())
+                    else -> result = Value(jsct)
                 }
             } catch (je: JsonException) {
                 val linkStr = jse.toString()
                 val link = Json.parse(Link.serializer(), linkStr)
-                return Value(link)
+                result = Value(link)
             }
-        }
-
-        private fun isInt(raw: String): Boolean {
-            try {
-                raw.toInt()
-                return true
-            } catch (nfe: NumberFormatException) {
-                return false
-            }
+            return result
         }
 
         private fun isLong(raw: String): Boolean {
+            var answer = true
             try {
                 raw.toLong()
-                return true
             } catch (nfe: NumberFormatException) {
-                return false
+                answer = false
             }
+            return answer
         }
 
     }

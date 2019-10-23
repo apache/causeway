@@ -45,7 +45,7 @@ new.*:fa-plus,add.*:fa-plus-square,create.*:fa-plus,update.*:fa-edit,delete.*:fa
 
         //TODO datanucleus will likely be gone with Apache Isis 2.0.x
         val actualDnId = exposer.get("datanucleusIdLong") as Value
-        assertEquals(0, actualDnId.content as Int)
+        assertEquals(0, actualDnId.content as Long)
 
         val actualDnvers = exposer.get("datanucleusVersionTimestamp") as Value
         assertEquals(1514897074953L, actualDnvers.content as Long)

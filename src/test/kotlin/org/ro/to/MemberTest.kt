@@ -15,14 +15,14 @@ class MemberTest() {
     fun testParseLong() {
         val jsonStr = buildJsonWith(1234567890)
         val actual = parse(jsonStr)
-        assertEquals(1234567890, actual.value!!.content as Number)
+        assertEquals(1234567890L, actual.value!!.content as Number)
     }
 
     @Test
     fun testParseInt() {
         val jsonStr = buildJsonWith(0)
         val actual = parse(jsonStr)
-        assertEquals(0, actual.value!!.content as Int)
+        assertEquals(0L, actual.value!!.content as Long)
     }
 
     @Test
