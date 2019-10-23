@@ -18,6 +18,7 @@
  */
 package org.apache.isis.security.shiro;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,14 +28,20 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.shiro.config.Ini;
+import org.apache.shiro.realm.Realm;
+import org.apache.shiro.web.env.EnvironmentLoaderListener;
 import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.env.WebEnvironment;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.webapp.IsisWebAppUtils;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
@@ -42,6 +49,7 @@ import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -52,9 +60,10 @@ import lombok.val;
  */
 @Service @Order(Ordered.HIGHEST_PRECEDENCE)
 public final class WebModuleShiro implements WebModule  {
-
+    
     private final static String SHIRO_LISTENER_CLASS_NAME = 
-            "org.apache.shiro.web.env.EnvironmentLoaderListener";
+            //"org.apache.shiro.web.env.EnvironmentLoaderListener";
+            EnvironmentLoaderListenerForIsis.class.getName();
 
     private final static String SHIRO_FILTER_CLASS_NAME = 
             "org.apache.shiro.web.servlet.ShiroFilter";
@@ -99,6 +108,39 @@ public final class WebModuleShiro implements WebModule  {
         }
         System.setProperty("shiroIniResource", resourcePath);
         setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
+    }
+    
+    /**
+     * Adds support for dependency injection into security realms
+     * @since 2.0
+     */
+    public static class EnvironmentLoaderListenerForIsis extends EnvironmentLoaderListener {
+        
+        @Override 
+        protected WebEnvironment createEnvironment(ServletContext servletContext) {
+            val shiroEnvironment = super.createEnvironment(servletContext);
+            val securityManager = shiroEnvironment.getSecurityManager();
+            val serviceInjector = IsisWebAppUtils.getManagedBean(ServiceInjector.class, servletContext);
+            
+            injectServicesIntoReamls(serviceInjector, securityManager);
+            
+            return shiroEnvironment;
+        }
+        
+        @SuppressWarnings("unchecked")
+        @SneakyThrows
+        public static void injectServicesIntoReamls(
+                ServiceInjector serviceInjector, 
+                org.apache.shiro.mgt.SecurityManager securityManager) {
+
+            // reflective access to SecurityManager.getRealms()
+            val realms = (Collection<Realm>) ReflectionUtils
+                    .findMethod(securityManager.getClass(), "getRealms")
+                    .invoke(securityManager, _Constants.emptyObjects);
+
+            realms.stream().forEach(serviceInjector::injectServicesInto);
+        }
+        
     }
 
     // -- 

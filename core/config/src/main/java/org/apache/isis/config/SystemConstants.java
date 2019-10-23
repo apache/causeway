@@ -17,11 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.system;
+package org.apache.isis.config;
 
-import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SystemConstants {
 
     public static final String MSG_ARE_YOU_SURE = "Are you sure?";
@@ -51,31 +52,9 @@ public final class SystemConstants {
      */
     public static final String ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT = "__isis_force_logout";
 
-    // -- SERVICE SUPPORT
-
-    public static final String SERVICE_IDENTIFIER = "1";
-
-    /**
-     * Key by which requested user (eg via command line) is made available in
-     * {@link IsisConfigurationLegacy} .
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public final static String USER_KEY = ConfigurationConstants.ROOT + "user";
-
-    /**
-     * Key by which requested password (eg via command line) is made available
-     * in {@link IsisConfigurationLegacy}.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public final static String PASSWORD_KEY = ConfigurationConstants.ROOT + "password";
-
     public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
 
-    private SystemConstants() {
-    }
-
+    // -- SERVICE SUPPORT
+    public static final String SERVICE_IDENTIFIER = "1";
+    
 }

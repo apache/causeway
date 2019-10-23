@@ -29,7 +29,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.config.SystemConstants;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;

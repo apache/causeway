@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.services.ServiceUtil;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -37,9 +38,10 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.ObjectAdapterForBean;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.persistence.adaptermanager.factories.OidFactory;
 
 import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.val;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -63,15 +65,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         this.objectAdapterContext = objectAdapterContext;
         this.runtimeContext = runtimeContext;
         this.specificationLoader = runtimeContext.getSpecificationLoader();
-
-        this.oidFactory = OidFactory.builder(pojo->specificationLoader.loadSpecification(pojo.getClass()))
-                .add(new ObjectAdapterContext_OidProviders.GuardAgainstRootOid())
-                .add(new ObjectAdapterContext_OidProviders.OidForServices())
-                .add(new ObjectAdapterContext_OidProviders.OidForValues())
-                .add(new ObjectAdapterContext_OidProviders.OidForViewModels())
-                .add(new ObjectAdapterContext_OidProviders.OidForPersistent())
-                .add(new ObjectAdapterContext_OidProviders.OidForOthers())
-                .build();
+        this.oidFactory = OidFactory.buildDefault();
     }
 
     @Override
@@ -81,8 +75,8 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             return null;
         }
 
-        final RootOid rootOid = oidFactory.oidFor(pojo);
-        final ObjectAdapter newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
+        val rootOid = oidFactory.oidFor(ManagedObject.of(specificationLoader::loadSpecification, pojo));
+        val newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
         return objectAdapterContext.injectServices(newAdapter);
     }
 

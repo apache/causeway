@@ -44,7 +44,6 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.collections._Lists.lastElementIfAny;
 
@@ -420,7 +419,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public String getProperty(String name) {
-    	return IsisContext.getConfigurationLegacy().getString(name);
+    	return serviceRegistry.lookupServiceElseFail(IsisConfigurationLegacy.class).getString(name);
     }
 
     /**
@@ -429,7 +428,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public String getProperty(String name, String defaultValue) {
-    	return IsisContext.getConfigurationLegacy().getString(name, defaultValue);
+    	return serviceRegistry.lookupServiceElseFail(IsisConfigurationLegacy.class).getString(name, defaultValue);
     }
 
     /**
@@ -438,7 +437,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public List<String> getPropertyNames() {
-        return new ArrayList<>(IsisContext.getConfigurationLegacy().copyToMap().keySet());
+        return new ArrayList<>(serviceRegistry.lookupServiceElseFail(IsisConfigurationLegacy.class).copyToMap().keySet());
     }
 
     /**

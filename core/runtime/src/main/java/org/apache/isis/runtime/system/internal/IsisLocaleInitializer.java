@@ -22,7 +22,7 @@ package org.apache.isis.runtime.system.internal;
 import java.util.Locale;
 
 import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.config.SystemConstants;
 
 import lombok.extern.log4j.Log4j2;
 

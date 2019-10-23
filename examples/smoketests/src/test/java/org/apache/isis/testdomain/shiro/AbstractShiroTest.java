@@ -18,24 +18,20 @@
  */
 package org.apache.isis.testdomain.shiro;
 
-import java.util.Collection;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
 import org.apache.shiro.util.LifecycleUtils;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.util.ThreadState;
-import org.springframework.util.ReflectionUtils;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.security.shiro.WebModuleShiro.EnvironmentLoaderListenerForIsis;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -103,18 +99,15 @@ class AbstractShiroTest {
         val factory = new IniSecurityManagerFactory(ini);
         val securityManager = factory.getInstance();
         
-        // reflective access to SecurityManager.getRealms()
-        Collection<Realm> realms = (Collection<Realm>) ReflectionUtils
-                .findMethod(securityManager.getClass(), "getRealms")
-                .invoke(securityManager, _Constants.emptyClasses);
+        EnvironmentLoaderListenerForIsis.injectServicesIntoReamls(serviceInjector, securityManager);
         
-        ini.getSections().forEach(section->{
-            section.entrySet().forEach(es->{
-                System.out.println("" + es.getKey() + "=" +es.getValue());
-            });
-        });
-        
-        realms.stream().forEach(serviceInjector::injectServicesInto);
+//debug        
+//        ini.getSections().forEach(section->{
+//            section.entrySet().forEach(es->{
+//                System.out.println("" + es.getKey() + "=" +es.getValue());
+//            });
+//        });
+       
         setSecurityManager(securityManager);
     }
     

@@ -83,7 +83,7 @@ implements ObjectAdapterMementoSupport {
         private static final long serialVersionUID = 1L;
 
         private final ObjectAdapterMementoDefault delegate;
-        private final SpecificationLoader specificationLoader;
+        private final transient SpecificationLoader specificationLoader;
 
         @Override
         public UUID getStoreKey() {

@@ -17,23 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.system.persistence.adaptermanager.factories;
-
-import java.util.function.Function;
+package org.apache.isis.metamodel.adapter.oid.factory;
 
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 /**
  * @since 2.0
  */
 public interface OidFactory {
 
-    RootOid oidFor(Object pojo);
+    RootOid oidFor(ManagedObject managedObject);
 
     public interface OidProvider {
-        boolean isHandling(Object pojo, ObjectSpecification spec);
-        RootOid oidFor(Object pojo, ObjectSpecification spec);
+        boolean isHandling(ManagedObject managedObject);
+        RootOid oidFor(ManagedObject managedObject);
     }
 
     public interface OidFactoryBuilder {
@@ -41,8 +41,20 @@ public interface OidFactory {
         OidFactory build();
     }
 
-    public static OidFactoryBuilder builder(Function<Object, ObjectSpecification> specProvider) {
-        return new OidFactory_Builder(specProvider);
+    public static OidFactoryBuilder builder() {
+        return new OidFactory_Builder();
     }
 
+    public static OidFactory buildDefault() {
+        val oidFactory = OidFactory.builder()
+                .add(new OidFactory_OidProviders.GuardAgainstRootOid())
+                .add(new OidFactory_OidProviders.OidForServices())
+                .add(new OidFactory_OidProviders.OidForValues())
+                .add(new OidFactory_OidProviders.OidForViewModels())
+                .add(new OidFactory_OidProviders.OidForEntities())
+                .add(new OidFactory_OidProviders.OidForOthers())
+                .build();
+        return oidFactory;
+    }
+    
 }

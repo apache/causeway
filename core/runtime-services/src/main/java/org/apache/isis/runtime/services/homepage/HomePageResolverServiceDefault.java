@@ -83,19 +83,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         homePageAction = 
                 serviceRegistry.streamRegisteredBeans()
                 .map(bean->bean.getBeanClass())
-                .map(managedBeanType->specLoader.loadSpecification(managedBeanType))
-                .filter(_NullSafe::isPresent)
-                .peek(spec->specRef[0]=spec)
-                .flatMap(spec->spec.streamObjectActions(Contributed.EXCLUDED))
-                .map(objectAction->homePageActionIfUsable(objectAction, specRef[0]))
-                .filter(_NullSafe::isPresent)
-                .findAny()
-                .orElse(null);
-
-        // -- 3) lookup view-models that have actions annotated with @HomePage
-
-        homePageAction = viewModelTypes.stream()
-                .map(viewModelType->specLoader.loadSpecification(viewModelType))
+                .map(specLoader::loadSpecification)
                 .filter(_NullSafe::isPresent)
                 .peek(spec->specRef[0]=spec)
                 .flatMap(spec->spec.streamObjectActions(Contributed.EXCLUDED))
@@ -107,6 +95,18 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         if(homePageAction!=null) {
             return homePageAction;
         }
+        
+        // -- 3) lookup view-models that have actions annotated with @HomePage
+
+        homePageAction = viewModelTypes.stream()
+                .map(specLoader::loadSpecification)
+                .filter(_NullSafe::isPresent)
+                .peek(spec->specRef[0]=spec)
+                .flatMap(spec->spec.streamObjectActions(Contributed.EXCLUDED))
+                .map(objectAction->homePageActionIfUsable(objectAction, specRef[0]))
+                .filter(_NullSafe::isPresent)
+                .findAny()
+                .orElse(null);
 
         return homePageAction;
     }

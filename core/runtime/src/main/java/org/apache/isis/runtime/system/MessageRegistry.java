@@ -22,6 +22,8 @@ package org.apache.isis.runtime.system;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.config.SystemConstants;
+
 public class MessageRegistry {
 
     public MessageRegistry(){}

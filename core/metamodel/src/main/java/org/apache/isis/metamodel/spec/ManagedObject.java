@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -307,9 +308,15 @@ public interface ManagedObject {
         return true;
     }
 
-    @Deprecated
     static Oid _oid(ManagedObject adapter) {
-        return promote(adapter).getOid();
+        if(adapter instanceof ObjectAdapter) {
+            return promote(adapter).getOid();
+        }
+        
+        val oidFactory = OidFactory.buildDefault();
+        
+        return oidFactory.oidFor(adapter);
+         
     }
 
 

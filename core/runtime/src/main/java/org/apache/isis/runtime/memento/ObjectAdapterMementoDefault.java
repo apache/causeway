@@ -467,15 +467,15 @@ public class ObjectAdapterMementoDefault implements Serializable {
             return;
         }
 
-        final RootOid oid = (RootOid) ManagedObject._oid(adapter);
-        if (oid.isTransient()) {
+        val rootOid = (RootOid) ManagedObject._oid(adapter);
+        if (rootOid.isTransient()) {
             transientMemento = new Memento(adapter);
             recreateStrategy = RecreateStrategy.TRANSIENT;
             return;
         }
 
-        persistentOidStr = oid.enString();
-        bookmark = oid.asBookmark();
+        persistentOidStr = rootOid.enString();
+        bookmark = rootOid.asBookmark();
         if(adapter.getPojo() instanceof HintStore.HintIdProvider) {
             HintStore.HintIdProvider provider = (HintStore.HintIdProvider) adapter.getPojo();
             this.hintId = provider.hintId();

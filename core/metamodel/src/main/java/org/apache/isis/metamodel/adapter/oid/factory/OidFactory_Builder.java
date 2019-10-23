@@ -17,26 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.system.persistence.adaptermanager.factories;
+package org.apache.isis.metamodel.adapter.oid.factory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.system.persistence.adaptermanager.factories.OidFactory.OidFactoryBuilder;
-import org.apache.isis.runtime.system.persistence.adaptermanager.factories.OidFactory.OidProvider;
+import org.apache.isis.metamodel.adapter.oid.factory.OidFactory.OidFactoryBuilder;
+import org.apache.isis.metamodel.adapter.oid.factory.OidFactory.OidProvider;
+
+import lombok.val;
 
 class OidFactory_Builder implements OidFactoryBuilder {
 
     private final List<OidProvider> handler = new ArrayList<>();
-    private final Function<Object, ObjectSpecification> specProvider;
-
-    public OidFactory_Builder(Function<Object, ObjectSpecification> specProvider) {
-        this.specProvider = specProvider;
-    }
 
     @Override
     public OidFactoryBuilder add(OidProvider oidProvider) {
@@ -46,17 +40,16 @@ class OidFactory_Builder implements OidFactoryBuilder {
 
     @Override
     public OidFactory build() {
-        return pojo -> {
+        return managedObject -> {
 
-            final ObjectSpecification spec = specProvider.apply(pojo);
-
-            final RootOid rootOid = handler.stream()
-                    .filter(h->h.isHandling(pojo, spec))
+            val rootOid = handler.stream()
+                    .filter(h->h.isHandling(managedObject))
                     .findFirst()
-                    .map(h->h.oidFor(pojo, spec))
+                    .map(h->h.oidFor(managedObject))
                     .orElse(null);
 
-            Objects.requireNonNull(rootOid, () -> "Could not create an Oid for pojo: "+pojo);
+            Objects.requireNonNull(rootOid, 
+                    () -> "Could not create an Oid for managedObject: " + managedObject);
 
             return rootOid;
         };

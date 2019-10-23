@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.facets.object.entity;
 
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 /**
  * Indicates that this class is managed by a persistence context.
@@ -28,8 +27,6 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
  */
 public interface EntityFacet extends Facet {
 
-    static EntityFacet create(FacetHolder facetHolder) {
-        return new EntityFacetSimple(facetHolder);
-    }
+    String identifierFor(Object pojo);
 
 }
