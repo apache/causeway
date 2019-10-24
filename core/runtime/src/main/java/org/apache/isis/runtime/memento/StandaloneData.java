@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
@@ -39,7 +40,10 @@ public class StandaloneData extends Data {
     private static final long serialVersionUID = 1L;
 
     private static enum As {
-        ENCODED_STRING(0), SERIALIZABLE(1);
+        
+        ENCODED_STRING(0), 
+        SERIALIZABLE(1);
+        
         static Map<Integer, As> cache = new HashMap<Integer, As>();
         static {
             for (final As as : values()) {
@@ -48,19 +52,19 @@ public class StandaloneData extends Data {
         }
         private final int idx;
 
-        private As(final int idx) {
+        private As(int idx) {
             this.idx = idx;
         }
 
-        static As get(final int idx) {
+        static As get(int idx) {
             return cache.get(idx);
         }
 
-        public static As readFrom(final DataInputExtended input) throws IOException {
+        public static As readFrom(DataInputExtended input) throws IOException {
             return get(input.readByte());
         }
 
-        public void writeTo(final DataOutputExtended output) throws IOException {
+        public void writeTo(DataOutputExtended output) throws IOException {
             output.writeByte(idx);
         }
     }
@@ -68,7 +72,7 @@ public class StandaloneData extends Data {
     private String objectAsEncodedString;
     private Serializable objectAsSerializable;
 
-    public StandaloneData(final ObjectAdapter adapter) {
+    public StandaloneData(ManagedObject adapter) {
         super(null, adapter.getSpecification().getFullIdentifier());
 
         final Object object = adapter.getPojo();
@@ -78,7 +82,7 @@ public class StandaloneData extends Data {
             return;
         }
 
-        final EncodableFacet encodeableFacet = adapter.getSpecification().getFacet(EncodableFacet.class);
+        val encodeableFacet = adapter.getSpecification().getFacet(EncodableFacet.class);
         if (encodeableFacet != null) {
             this.objectAsEncodedString = encodeableFacet.toEncodedString(adapter);
             initialized();

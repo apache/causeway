@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -299,19 +300,26 @@ public interface ManagedObject {
         return true;
     }
     
+    // -- OID UTILITIES
+    
     static final class Oids {
         static final OidFactory oidFactory = OidFactory.buildDefault();
+        
+        static final <T extends Oid> T copy(T oid) {
+            if(oid == null) { return null; }
+            return _Casts.uncheckedCast(oid.copy()); 
+        }
     }
 
     static Oid _oid(ManagedObject adapter) {
         if(adapter instanceof ObjectAdapter) {
-            return promote(adapter).getOid();
+            return Oids.copy(promote(adapter).getOid());
         }
         
         return Oids.oidFactory.oidFor(adapter);
     }
 
-
+    
 
 
 

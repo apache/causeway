@@ -21,10 +21,8 @@ package org.apache.isis.runtime.memento;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.apache.isis.commons.exceptions.UnknownTypeException;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -36,12 +34,12 @@ import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAc
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -58,53 +56,60 @@ public class Memento implements Serializable {
 
     private final static long serialVersionUID = 1L;
 
-    private final List<Oid> transientObjects = _Lists.newArrayList();
+    private final List<Oid> oids = _Lists.newArrayList();
 
+    @Getter private Data data;
 
-    private Data data;
-
-
-    ////////////////////////////////////////////////
-    // constructor, Encodeable
-    ////////////////////////////////////////////////
-
-    public Memento(final ManagedObject adapter) {
-        data = (adapter == null) ? null : createData( ManagedObject.promote(adapter) );
+    public Memento(ManagedObject adapter) {
+        data = (adapter == null) ? null : createData(adapter);
         log.debug("created memento for {}", this);
     }
+    
+    public ObjectAdapter recreateObject(
+            SpecificationLoader specLoader, 
+            PersistenceSession persistenceSession) {
+        
+        if (data == null) {
+            return null;
+        }
+        val spec = specLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(data.getClassName()));
+        val oid = data.getOid();
+        return persistenceSession.adapterOfMemento(spec, oid, data);
+    }
 
+    @Override
+    public String toString() {
+        return "[" + (data == null ? null : data.getClassName() + "/" + data.getOid() + data) + "]";
+    }
+    
+    // -- HELPER
 
-    ////////////////////////////////////////////////
-    // createData
-    ////////////////////////////////////////////////
-
-    private Data createData(final ObjectAdapter adapter) {
-        if (adapter.getSpecification().isParentedOrFreeCollection() && !adapter.getSpecification().isEncodeable()) {
+    private Data createData(ManagedObject adapter) {
+        if (adapter.getSpecification().isParentedOrFreeCollection() && 
+                !adapter.getSpecification().isEncodeable()) {
             return createCollectionData(adapter);
         } else {
             return createObjectData(adapter);
         }
     }
 
-    private Data createCollectionData(final ObjectAdapter adapter) {
+    private Data createCollectionData(ManagedObject adapter) {
 
         final Data[] collData = CollectionFacet.Utils.streamAdapters(adapter)
-                .map(this::createReferenceData)
+                .map(this::createReferencedData)
                 .collect(_Arrays.toArray(Data.class, CollectionFacet.Utils.size(adapter)));
 
-        final String elementTypeSpecName = adapter.getSpecification().getFullIdentifier();
-        return new CollectionData(clone(adapter.getOid()), elementTypeSpecName, collData);
+        final String elementTypeId = adapter.getSpecification().getFullIdentifier();
+        return new CollectionData(ManagedObject._oid(adapter), elementTypeId, collData);
     }
 
-    private ObjectData createObjectData(final ObjectAdapter adapter) {
-        final Oid adapterOid = clone(adapter.getOid());
-        transientObjects.add(adapterOid);
-        final ObjectSpecification cls = adapter.getSpecification();
-        final ObjectData data = new ObjectData(adapterOid, cls.getFullIdentifier());
+    private ObjectData createObjectData(ManagedObject adapter) {
+        val oid = ManagedObject._oid(adapter);
+        oids.add(oid);
+        val spec = adapter.getSpecification();
+        val data = new ObjectData(oid, spec.getFullIdentifier());
 
-        final Stream<ObjectAssociation> associations = cls.streamAssociations(Contributed.EXCLUDED);
-
-        associations
+        spec.streamAssociations(Contributed.EXCLUDED)
         .filter(association->{
             if (association.isNotPersisted()) {
                 if (association.isOneToManyAssociation()) {
@@ -125,88 +130,52 @@ public class Memento implements Serializable {
         return data;
     }
 
-    private void createAssociationData(final ObjectAdapter adapter, final ObjectData data, final ObjectAssociation objectAssoc) {
+    private void createAssociationData(ManagedObject adapter, ObjectData data, ObjectAssociation objectAssoc) {
         Object assocData;
         if (objectAssoc.isOneToManyAssociation()) {
             val collAdapter = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
-            assocData = createCollectionData(ManagedObject.promote(collAdapter));
+            assocData = createCollectionData(collAdapter);
         } else if (objectAssoc.getSpecification().isEncodeable()) {
-            final EncodableFacet facet = objectAssoc.getSpecification().getFacet(EncodableFacet.class);
+            val encodableFacet = objectAssoc.getSpecification().getFacet(EncodableFacet.class);
             val value = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
-            assocData = facet.toEncodedString(value);
+            assocData = encodableFacet.toEncodedString(value);
         } else if (objectAssoc.isOneToOneAssociation()) {
             val referencedAdapter = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
-            assocData = createReferenceData(ManagedObject.promote(referencedAdapter));
+            assocData = createReferencedData(referencedAdapter);
         } else {
             throw new UnknownTypeException(objectAssoc);
         }
         data.addField(objectAssoc.getId(), assocData);
     }
 
-    private Data createReferenceData(final ObjectAdapter referencedAdapter) {
+    private Data createReferencedData(ManagedObject referencedAdapter) {
         if (referencedAdapter == null) {
             return null;
         }
 
-        final Oid refOid = clone(referencedAdapter.getOid());
+        val refOid = ManagedObject._oid(referencedAdapter);
 
         if (refOid == null || refOid.isValue()) {
             return createStandaloneData(referencedAdapter);
         }
 
-
-        if (    (referencedAdapter.getSpecification().isParented() || refOid.isTransient()) &&
-                !transientObjects.contains(refOid)) {
-            transientObjects.add(refOid);
-            return createObjectData(referencedAdapter);
+        val refSpec = referencedAdapter.getSpecification();
+        
+        if (refSpec.isParented() || refOid.isTransient()) {
+            
+            if(!oids.contains(refOid)) {
+                oids.add(refOid);
+                return createObjectData(referencedAdapter);    
+            }
         }
 
-        final String specification = referencedAdapter.getSpecification().getFullIdentifier();
-        return new Data(refOid, specification);
+        return new Data(refOid, refSpec.getFullIdentifier());
     }
 
-    private static <T extends Oid> T clone(final T oid) {
-        if(oid == null) { return null; }
-        return _Casts.uncheckedCast(oid.copy()); 
-    }
-
-    private Data createStandaloneData(final ObjectAdapter adapter) {
+    private Data createStandaloneData(ManagedObject adapter) {
         return new StandaloneData(adapter);
     }
 
-    ////////////////////////////////////////////////
-    // properties
-    ////////////////////////////////////////////////
 
-    public Oid getOid() {
-        return data.getOid();
-    }
-
-    protected Data getData() {
-        return data;
-    }
-
-    ////////////////////////////////////////////////
-    // recreateObject
-    ////////////////////////////////////////////////
-
-    public ObjectAdapter recreateObject(SpecificationLoader specLoader, PersistenceSession persistenceSession) {
-        if (data == null) {
-            return null;
-        }
-        val spec = specLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(data.getClassName()));
-        val oid = getOid();
-        return persistenceSession.adapterOfMemento(spec, oid, data);
-    }
-
-
-    // ///////////////////////////////////////////////////////////////
-    // toString, debug
-    // ///////////////////////////////////////////////////////////////
-
-    @Override
-    public String toString() {
-        return "[" + (data == null ? null : data.getClassName() + "/" + data.getOid() + data) + "]";
-    }
 
 }
