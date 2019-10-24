@@ -20,7 +20,8 @@ package org.apache.isis.jdo.metamodel.facets.prop.notpersistent;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 
 /**
@@ -29,6 +30,6 @@ import org.apache.isis.metamodel.facets.MarkerFacet;
  * The JDO {@link PrimaryKey} annotation is used internally the JDO object store to
  * create the {@link Oid}.
  */
-public interface JdoNotPersistentFacet extends MarkerFacet {
+public interface JdoNotPersistentFacet extends Facet {
 
 }

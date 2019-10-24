@@ -43,6 +43,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 
+import lombok.Getter;
+
 public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
 
     /**
@@ -63,6 +65,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     /**
      * Hold facets rather than delegate to the mixin action
      */
+    @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
     /**
@@ -92,7 +95,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
         if(_Strings.isNullOrEmpty(name) || name.equalsIgnoreCase(mixinMethodName)) {
             String memberName = determineNameFrom(mixinAction);
-            super.addFacet(new NamedFacetInferred(memberName, facetHolder));
+            this.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }
 
         // calculate the identifier
@@ -236,13 +239,6 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
                 targetAdapter, actualMixedInAdapter, arguments,
                 interactionInitiatedBy);
     }
-
-    // -- facetHolder
-    @Override
-    protected FacetHolder getFacetHolder() {
-        return facetHolder;
-    }
-
 
     /* (non-Javadoc)
      * @see org.apache.isis.metamodel.specloader.specimpl.ObjectMemberAbstract#getIdentifier()

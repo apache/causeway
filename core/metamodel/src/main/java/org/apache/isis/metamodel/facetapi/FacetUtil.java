@@ -20,34 +20,24 @@
 package org.apache.isis.metamodel.facetapi;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.metamodel.util.snapshot.XmlSchema.ExtensionData;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.val;
 
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FacetUtil {
 
-    private FacetUtil() {
-    }
 
     public static void addOrReplaceFacet(final Facet facet) {
         if (facet == null) {
             return;
         }
         val facetHolder = facet.getFacetHolder();
-
-        Optional.ofNullable(facetHolder.getFacet(facet.facetType()))
-        .filter(each -> facet.getClass() == each.getClass())
-        .ifPresent(existingFacet -> {
-            val underlyingFacet = existingFacet.getUnderlyingFacet();
-            facetHolder.removeFacet(existingFacet);
-            facet.setUnderlyingFacet(underlyingFacet);
-        } );
-        facetHolder.addFacet(facet);
+        facetHolder.addOrReplaceFacet(facet);
     }
 
     /**
@@ -65,14 +55,6 @@ public final class FacetUtil {
         return true;
     }
 
-    public static boolean addMultiTypedFacet(final MultiTypedFacet facet) {
-        if (facet == null) {
-            return false;
-        }
-        facet.getFacetHolder().addMultiTypedFacet(facet);
-        return true;
-    }
-
     /**
      * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
      * holder}.
@@ -81,27 +63,10 @@ public final class FacetUtil {
      */
     public static boolean addFacets(final List<Facet> facetList) {
         boolean addedFacets = false;
-        for (final Facet facet : facetList) {
+        for (val facet : facetList) {
             addedFacets = addFacet(facet) | addedFacets;
         }
         return addedFacets;
-    }
-
-    public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass, final Facet facet) {
-        removeFacet(facetsByClass, facet.facetType());
-    }
-
-    public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass, final Class<? extends Facet> facetType) {
-        final Facet facet = facetsByClass.get(facetType);
-        if (facet == null) {
-            return;
-        }
-        facetsByClass.remove(facetType);
-        facet.setFacetHolder(null);
-    }
-
-    public static void addFacet(final Map<Class<? extends Facet>, Facet> facetsByClass, final Facet facet) {
-        facetsByClass.put(facet.facetType(), facet);
     }
 
     public static <T extends Facet> ExtensionData<T> getFacetsByType(final FacetHolder facetHolder) {

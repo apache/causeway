@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.specloader.specimpl;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -38,10 +37,8 @@ import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.consent.InteractionResultSet;
-import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.metamodel.facets.TypedHolder;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
@@ -65,7 +62,10 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
+import static org.apache.isis.commons.internal.base._With.requires;
+
+public abstract class ObjectActionParameterAbstract 
+implements ObjectActionParameter, FacetHolder.Delegating {
 
     private final FeatureType featureType;
     private final int number;
@@ -77,10 +77,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final int number,
             final ObjectActionDefault objectAction,
             final TypedHolder peer) {
+        
         this.featureType = featureType;
         this.number = number;
         this.parentAction = objectAction;
-        this.peer = peer;
+        this.peer = requires(peer, "peer");
     }
     
     @Override
@@ -215,80 +216,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     // -- FacetHolder
 
-    protected FacetHolder getFacetHolder() {
+    @Override
+    public FacetHolder getFacetHolder() {
         return peer;
     }
-
-    @Override
-    public boolean containsFacet(final Class<? extends Facet> facetType) {
-        final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null && facetHolder.containsFacet(facetType);
-    }
-
-    @Override
-    public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
-        final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null && facetHolder.containsDoOpFacet(facetType);
-    }
-
-    @Override
-    public boolean containsDoOpNotDerivedFacet(final Class<? extends Facet> facetType) {
-        final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null && facetHolder.containsDoOpNotDerivedFacet(facetType);
-    }
-
-
-    @Override
-    public <T extends Facet> T getFacet(final Class<T> cls) {
-        final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null ? facetHolder.getFacet(cls) : null;
-    }
-
-    @Override
-    public int getFacetCount() {
-        final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null ? facetHolder.getFacetCount() : 0;
-    }
-
-    @Override
-    public Stream<Facet> streamFacets() {
-        final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null ? facetHolder.streamFacets() : Stream.of();
-    }
-
-    @Override
-    public void addFacet(final Facet facet) {
-        final FacetHolder facetHolder = getFacetHolder();
-        if (facetHolder != null) {
-            facetHolder.addFacet(facet);
-        }
-    }
-
-    @Override
-    public void addMultiTypedFacet(final MultiTypedFacet facet) {
-        final FacetHolder facetHolder = getFacetHolder();
-        if (facetHolder != null) {
-            facetHolder.addMultiTypedFacet(facet);
-        }
-    }
-
-    @Override
-    public void removeFacet(final Facet facet) {
-        final FacetHolder facetHolder = getFacetHolder();
-        if (facetHolder != null) {
-            facetHolder.removeFacet(facet);
-        }
-    }
-
-    @Override
-    public void removeFacet(final Class<? extends Facet> facetType) {
-        final FacetHolder facetHolder = getFacetHolder();
-        if (facetHolder != null) {
-            facetHolder.removeFacet(facetType);
-        }
-    }
-
-
 
     // -- AutoComplete
 

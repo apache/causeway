@@ -20,6 +20,7 @@
 package org.apache.isis.metamodel.consent;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -77,6 +78,19 @@ public interface InteractionAdvisor {
 
         @Override
         public boolean isDerived() {
+            return false;
+        }
+
+        @Override
+        public void addAlias(Class<? extends Facet> alias) {
+        }
+
+        @Override
+        public void forEachAlias(Consumer<Class<? extends Facet>> onAlias) {
+        }
+
+        @Override
+        public boolean hasAlias(Class<? extends Facet> alias) {
             return false;
         }
 

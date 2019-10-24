@@ -19,19 +19,15 @@
 
 package org.apache.isis.metamodel.facets.object.value;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
 
 /**
  * Indicates that the instances of this class are equal-by-content.
  *
- * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to
- * applying the <tt>@EqualByContent</tt> annotation at the class level.
- *
  * @see ImmutableFacet
  * @see ValueFacet
  */
-public interface EqualByContentFacet extends MarkerFacet {
+public interface EqualByContentFacet extends Facet {
 
 }

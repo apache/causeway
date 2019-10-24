@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.objectvalue.mandatory;
 
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
@@ -37,7 +36,7 @@ import org.apache.isis.metamodel.spec.ManagedObject;
  * In the standard Apache Isis Programming Model, specify mandatory by
  * <i>omitting</i> the <tt>@Optional</tt> annotation.
  */
-public interface MandatoryFacet extends MarkerFacet, ValidatingInteractionAdvisor {
+public interface MandatoryFacet extends Facet, ValidatingInteractionAdvisor {
 
     /**
      * Whether this value is required but has not been provided (and is

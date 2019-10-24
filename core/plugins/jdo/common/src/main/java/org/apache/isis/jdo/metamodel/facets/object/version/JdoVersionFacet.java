@@ -18,8 +18,8 @@
  */
 package org.apache.isis.jdo.metamodel.facets.object.version;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
-public interface JdoVersionFacet extends MarkerFacet {
+public interface JdoVersionFacet extends Facet {
 
 }

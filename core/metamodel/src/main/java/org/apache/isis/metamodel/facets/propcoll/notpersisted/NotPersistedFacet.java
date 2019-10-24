@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.propcoll.notpersisted;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 /**
  * Indicates that a property or a collection shouldn't be persisted.
@@ -33,6 +33,6 @@ import org.apache.isis.metamodel.facets.MarkerFacet;
  *
  * @see http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/201010.mbox/%3C4CB2FA43.7030206@nakedobjects.org%3E
  */
-public interface NotPersistedFacet extends MarkerFacet {
+public interface NotPersistedFacet extends Facet {
 
 }

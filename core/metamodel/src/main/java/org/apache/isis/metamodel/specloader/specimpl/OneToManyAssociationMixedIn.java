@@ -42,6 +42,7 @@ import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.Getter;
 import lombok.val;
 
 public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault implements MixedInMember {
@@ -66,6 +67,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
      * Hold facets rather than delegate to the mixin action (different types might use layout metadata to position
      * the mixin in different ways)
      */
+    @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
     private final Identifier identifier;
@@ -196,13 +198,6 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
                         mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
-    }
-
-    // -- FacetHolder
-
-    @Override
-    protected FacetHolder getFacetHolder() {
-        return facetHolder;
     }
 
     @Override

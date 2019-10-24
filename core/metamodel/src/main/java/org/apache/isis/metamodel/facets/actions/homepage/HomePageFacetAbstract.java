@@ -20,10 +20,10 @@
 package org.apache.isis.metamodel.facets.actions.homepage;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class HomePageFacetAbstract extends MarkerFacetAbstract implements HomePageFacet {
+public abstract class HomePageFacetAbstract extends FacetAbstract implements HomePageFacet {
 
     public static Class<? extends Facet> type() {
         return HomePageFacet.class;

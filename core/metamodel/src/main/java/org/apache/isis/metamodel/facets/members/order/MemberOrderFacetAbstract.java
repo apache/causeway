@@ -24,11 +24,11 @@ import java.util.Map;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
 
-public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstract implements MemberOrderFacet {
+public abstract class MemberOrderFacetAbstract extends FacetAbstract implements MemberOrderFacet {
 
 
     public static Class<? extends Facet> type() {

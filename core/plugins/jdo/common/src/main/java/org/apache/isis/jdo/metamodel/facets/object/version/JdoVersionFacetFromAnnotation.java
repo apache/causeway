@@ -18,10 +18,10 @@
  */
 package org.apache.isis.jdo.metamodel.facets.object.version;
 
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
-public class JdoVersionFacetFromAnnotation extends MarkerFacetAbstract implements JdoVersionFacet {
+public class JdoVersionFacetFromAnnotation extends FacetAbstract implements JdoVersionFacet {
 
     public JdoVersionFacetFromAnnotation(FacetHolder holder) {
         super(JdoVersionFacet.class, holder);

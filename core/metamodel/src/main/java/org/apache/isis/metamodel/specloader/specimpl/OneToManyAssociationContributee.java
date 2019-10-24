@@ -41,6 +41,7 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
+import lombok.Getter;
 import lombok.val;
 
 public class OneToManyAssociationContributee 
@@ -54,6 +55,7 @@ extends OneToManyAssociationDefault implements ContributeeMember {
      * Hold facets rather than delegate to the contributed action (different types might
      * use layout metadata to position the contributee in different ways)
      */
+    @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
     private final Identifier identifier;
@@ -169,11 +171,6 @@ extends OneToManyAssociationDefault implements ContributeeMember {
     }
 
     // -- FacetHolder
-
-    @Override
-    protected FacetHolder getFacetHolder() {
-        return facetHolder;
-    }
 
     private ManagedObject getServiceAdapter() {
         return getObjectAdapterProvider().adapterForBean(serviceBean);

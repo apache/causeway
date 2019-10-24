@@ -22,10 +22,10 @@ package org.apache.isis.metamodel.facets.all.named;
 import java.util.Map;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
 
-public abstract class NamedFacetAbstract extends MultipleValueFacetAbstract implements NamedFacet {
+public abstract class NamedFacetAbstract extends FacetAbstract implements NamedFacet {
 
     private final String value;
     private final boolean escaped;
@@ -34,8 +34,8 @@ public abstract class NamedFacetAbstract extends MultipleValueFacetAbstract impl
         return NamedFacet.class;
     }
 
-    public NamedFacetAbstract(final String value, final boolean escaped, final FacetHolder holder) {
-        super(type(), holder);
+    public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder) {
+        super(type(), holder, Derivation.NOT_DERIVED);
 
         this.value = value;
         this.escaped = escaped;
@@ -51,7 +51,7 @@ public abstract class NamedFacetAbstract extends MultipleValueFacetAbstract impl
         return escaped;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override public void appendAttributesTo(Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("value", value);
         attributeMap.put("escaped", escaped);

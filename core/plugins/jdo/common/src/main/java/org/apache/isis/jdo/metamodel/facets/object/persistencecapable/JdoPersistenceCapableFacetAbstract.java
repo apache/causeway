@@ -18,14 +18,10 @@
  */
 package org.apache.isis.jdo.metamodel.facets.object.persistencecapable;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -53,6 +49,7 @@ implements JdoPersistenceCapableFacet {
         this.schema = schemaName;
         this.table = tableOrTypeName;
         this.identityType = identityType;
+        super.addAlias(EntityFacet.class);
     }
 
     @Override
@@ -74,27 +71,6 @@ implements JdoPersistenceCapableFacet {
         attributeMap.put("schema", schema);
         attributeMap.put("table", table);
         attributeMap.put("identityType", identityType);
-    }
-    
-    private final static List<Class<? extends Facet>> types =
-        _Lists.of(JdoPersistenceCapableFacetAbstract.type(), EntityFacet.class);
-    
-    
-    @Override
-    public Stream<Class<? extends Facet>> facetTypes() {
-        return types.stream();
-    }
-
-    @Override
-    public <T extends Facet> T getFacet(Class<T> facetType) {
-        return containsFacetTypeOf(facetType)
-                ? _Casts.uncheckedCast(this)
-                        : null;
-    }
-
-    @Override
-    public boolean containsFacetTypeOf(Class<? extends Facet> facetType) {
-        return types.contains(facetType);
     }
     
 }

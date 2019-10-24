@@ -33,6 +33,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
@@ -158,7 +159,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenHiddenFacetSetToAlways() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addMultiTypedFacet(new HiddenFacetAbstract(Where.ANYWHERE, testMember) {
+        testMember.addFacet(new HiddenFacetAbstract(Where.ANYWHERE, testMember) {
             @Override
             public String hiddenReason(final ManagedObject target, final Where whereContext) {
                 return null;
@@ -171,7 +172,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenHiddenFacetSet() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addMultiTypedFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
+        testMember.addFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
 
         final Consent visible = testMember.isVisible(transientAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertFalse(visible.isAllowed());
@@ -179,7 +180,7 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testVisibleDeclaratively() {
-        testMember.addMultiTypedFacet(new HiddenFacetAbstractAlwaysEverywhere(testMember) {});
+        testMember.addFacet(new HiddenFacetAbstractAlwaysEverywhere(testMember) {});
         assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
     }
 
@@ -236,6 +237,11 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
         public String getFirstName() {
             return firstName;
         }
+    }
+    
+    @Override
+    public FacetHolder getFacetHolder() {
+        return getFacetedMethod();
     }
 
     protected ObjectMemberAbstractImpl(MetaModelContext mmc, final String id) {

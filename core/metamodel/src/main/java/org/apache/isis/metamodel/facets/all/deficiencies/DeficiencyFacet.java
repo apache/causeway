@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.all.deficiencies;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -112,6 +113,21 @@ public final class DeficiencyFacet implements Facet {
     @Override
     public void appendAttributesTo(Map<String, Object> attributeMap) {
         throw _Exceptions.unsupportedOperation();
+    }
+
+    @Override
+    public void addAlias(Class<? extends Facet> alias) {
+        throw _Exceptions.unsupportedOperation();
+    }
+
+    @Override
+    public void forEachAlias(Consumer<Class<? extends Facet>> onAlias) {
+        throw _Exceptions.unsupportedOperation();
+    }
+
+    @Override
+    public boolean hasAlias(Class<? extends Facet> alias) {
+        return false;
     }
 
 

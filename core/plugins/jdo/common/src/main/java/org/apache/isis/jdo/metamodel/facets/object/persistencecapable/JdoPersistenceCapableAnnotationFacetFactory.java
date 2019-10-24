@@ -66,7 +66,7 @@ implements ObjectSpecIdFacetFactory {
 
         final IdentityType annotationIdentityType = annotation.identityType();
 
-        FacetUtil.addMultiTypedFacet(new JdoPersistenceCapableFacetAnnotation(
+        FacetUtil.addFacet(new JdoPersistenceCapableFacetAnnotation(
                 annotationSchemaAttribute,
                 annotationTableAttribute, annotationIdentityType, processClassContext.getFacetHolder()));
         return;

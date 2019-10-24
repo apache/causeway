@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
@@ -28,6 +27,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -35,7 +35,6 @@ import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.metamodel.facets.actions.command.CommandFacet;
@@ -61,7 +60,8 @@ import org.apache.isis.schema.utils.CommandDtoUtils;
 
 import lombok.val;
 
-public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelContext.Delegating {
+public abstract class ObjectMemberAbstract 
+implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
 
     protected ObjectSpecification specificationOf(final Class<?> type) {
         return type != null 
@@ -104,8 +104,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelCon
         return featureType;
     }
 
-
-
     // -- Facets
 
     /**
@@ -114,62 +112,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelCon
     public FacetedMethod getFacetedMethod() {
         return facetedMethod;
     }
-
-    protected FacetHolder getFacetHolder() {
-        return getFacetedMethod();
-    }
-
-    @Override
-    public boolean containsFacet(final Class<? extends Facet> facetType) {
-        return getFacetHolder().containsFacet(facetType);
-    }
-
-    @Override
-    public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
-        return getFacetHolder().containsDoOpFacet(facetType);
-    }
-
-    @Override
-    public boolean containsDoOpNotDerivedFacet(final Class<? extends Facet> facetType) {
-        return getFacetHolder().containsDoOpNotDerivedFacet(facetType);
-    }
-
-    @Override
-    public <T extends Facet> T getFacet(final Class<T> cls) {
-        return getFacetHolder().getFacet(cls);
-    }
-
-    @Override
-    public int getFacetCount() {
-        return getFacetHolder().getFacetCount();
-    }
-
-    @Override
-    public Stream<Facet> streamFacets() {
-        return getFacetHolder().streamFacets();
-    }
-
-    @Override
-    public void addFacet(final Facet facet) {
-        getFacetHolder().addFacet(facet);
-    }
-
-    @Override
-    public void addMultiTypedFacet(final MultiTypedFacet facet) {
-        getFacetHolder().addMultiTypedFacet(facet);
-    }
-
-    @Override
-    public void removeFacet(final Facet facet) {
-        getFacetHolder().removeFacet(facet);
-    }
-
-    @Override
-    public void removeFacet(final Class<? extends Facet> facetType) {
-        getFacetHolder().removeFacet(facetType);
-    }
-
-
 
     // -- Name, Description, Help (convenience for facets)
     /**

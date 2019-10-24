@@ -20,10 +20,10 @@
 package org.apache.isis.metamodel.facets.object.wizard;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class WizardFacetAbstract extends MarkerFacetAbstract implements WizardFacet {
+public abstract class WizardFacetAbstract extends FacetAbstract implements WizardFacet {
 
     public static Class<? extends Facet> type() {
         return WizardFacet.class;

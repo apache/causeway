@@ -19,11 +19,11 @@
 
 package org.apache.isis.metamodel.facets.properties.publish;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 /**
  * Indicates that the editing of the property should be published.
  */
-public interface PublishedPropertyFacet extends MarkerFacet {
+public interface PublishedPropertyFacet extends Facet {
 
 }

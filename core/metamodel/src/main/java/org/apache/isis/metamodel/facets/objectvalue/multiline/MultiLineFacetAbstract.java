@@ -22,10 +22,10 @@ package org.apache.isis.metamodel.facets.objectvalue.multiline;
 import java.util.Map;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
 
-public abstract class MultiLineFacetAbstract extends MultipleValueFacetAbstract implements MultiLineFacet {
+public abstract class MultiLineFacetAbstract extends FacetAbstract implements MultiLineFacet {
 
     public static Class<? extends Facet> type() {
         return MultiLineFacet.class;

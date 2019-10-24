@@ -41,6 +41,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
+import lombok.Getter;
+
 public class OneToOneAssociationContributee extends OneToOneAssociationDefault implements ContributeeMember {
 
     private final ManagedBeanAdapter serviceBean;
@@ -50,6 +52,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
      * Hold facets rather than delegate to the contributed action (different types might
      * use layout metadata to position the contributee in different ways)
      */
+    @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
     private final Identifier identifier;
@@ -150,11 +153,6 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
                 getServiceAdapter(), interactionInitiatedBy, where);
         ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action
         return InteractionUtils.isUsableResult(this, ic).createConsent();
-    }
-
-    @Override
-    protected FacetHolder getFacetHolder() {
-        return facetHolder;
     }
 
     private ObjectAdapter getServiceAdapter() {

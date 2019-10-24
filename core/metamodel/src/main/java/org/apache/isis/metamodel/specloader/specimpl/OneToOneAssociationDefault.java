@@ -31,6 +31,7 @@ import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -141,23 +142,6 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     public ManagedObject get(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object referencedPojo =
-                facet.getProperty(ownerAdapter, interactionInitiatedBy);
-
-        if (referencedPojo == null) {
-            return null;
-        }
-
-        return getObjectAdapterProvider().adapterFor(referencedPojo);
-    }
-
-
-    @Override
-    public ManagedObject get2(
-            ManagedObject ownerAdapter, 
-            InteractionInitiatedBy interactionInitiatedBy) {
 
         final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
         final Object referencedPojo =

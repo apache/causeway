@@ -20,6 +20,7 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -44,6 +45,11 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
         }
         this.specification = specification;
+    }
+    
+    @Override
+    public FacetHolder getFacetHolder() {
+        return getFacetedMethod();
     }
 
     @Override

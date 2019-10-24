@@ -26,10 +26,10 @@ import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class CommandFacetAbstract extends MarkerFacetAbstract implements CommandFacet {
+public abstract class CommandFacetAbstract extends FacetAbstract implements CommandFacet {
 
     public static Class<? extends Facet> type() {
         return CommandFacet.class;

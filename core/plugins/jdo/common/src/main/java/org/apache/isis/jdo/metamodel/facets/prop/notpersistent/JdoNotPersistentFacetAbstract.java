@@ -19,12 +19,13 @@
 package org.apache.isis.jdo.metamodel.facets.prop.notpersistent;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
 
-public abstract class JdoNotPersistentFacetAbstract extends MarkerFacetAbstract implements
-JdoNotPersistentFacet {
+public abstract class JdoNotPersistentFacetAbstract 
+extends FacetAbstract 
+implements JdoNotPersistentFacet {
 
     public static Class<? extends Facet> type() {
         return JdoNotPersistentFacet.class;

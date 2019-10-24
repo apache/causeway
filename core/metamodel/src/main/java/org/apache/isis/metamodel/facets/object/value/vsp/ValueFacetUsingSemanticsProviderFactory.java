@@ -34,7 +34,7 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
     protected void addFacets(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {
         final ValueFacetUsingSemanticsProvider facet = 
                 new ValueFacetUsingSemanticsProvider(adapter, adapter);
-        FacetUtil.addMultiTypedFacet(facet);
+        FacetUtil.addFacet(facet);
     }
 
 

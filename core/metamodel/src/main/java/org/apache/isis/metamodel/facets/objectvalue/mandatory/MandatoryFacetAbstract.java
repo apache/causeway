@@ -23,10 +23,9 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.metamodel.interactions.PropertyModifyContext;
@@ -36,7 +35,7 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract implements MandatoryFacet {
+public abstract class MandatoryFacetAbstract extends FacetAbstract implements MandatoryFacet {
 
     public static Class<? extends Facet> type() {
         return MandatoryFacet.class;

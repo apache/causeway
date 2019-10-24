@@ -20,9 +20,13 @@
 package org.apache.isis.metamodel.facetapi;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContextAware;
 
@@ -30,6 +34,7 @@ import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 /**
  * For base subclasses or, more likely, to help write tests.
@@ -40,66 +45,61 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     private MetaModelContext metaModelContext;
     
     private final Map<Class<? extends Facet>, Facet> facetsByClass = new ConcurrentHashMap<>();
+    private final _Lazy<Set<Facet>> snapshot = _Lazy.threadSafe(this::snapshot);
 
+    private Set<Facet> snapshot() {
+        val snapshot = _Sets.<Facet>newHashSet();
+        facetsByClass.values().forEach(snapshot::add);
+        return snapshot;
+    }
+    
     @Override
-    public boolean containsFacet(final Class<? extends Facet> facetType) {
+    public boolean containsFacet(Class<? extends Facet> facetType) {
         return facetsByClass.containsKey(facetType);
     }
 
     @Override
-    public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
-        final Facet facet = getFacet(facetType);
-        return facet != null && !facet.isNoop();
-    }
-
-    @Override
-    public boolean containsDoOpNotDerivedFacet(final Class<? extends Facet> facetType) {
-        final Facet facet = getFacet(facetType);
-        return facet != null && !facet.isNoop() && !facet.isDerived();
-    }
-
-    @Override
-    public void addFacet(final Facet facet) {
+    public void addFacet(Facet facet) {
         addFacet(facet.facetType(), facet);
     }
 
     @Override
-    public void addMultiTypedFacet(final MultiTypedFacet mtFacet) {
-        mtFacet.facetTypes()
-        .forEach(facetType->addFacet(facetType, mtFacet.getFacet(facetType)));
-    }
-
-    @Override
-    public void removeFacet(final Facet facet) {
-        FacetUtil.removeFacet(facetsByClass, facet);
-    }
-
-    @Override
-    public void removeFacet(final Class<? extends Facet> facetType) {
-        FacetUtil.removeFacet(facetsByClass, facetType);
-    }
-
-    @Override
-    public <T extends Facet> T getFacet(final Class<T> facetType) {
+    public <T extends Facet> T getFacet(Class<T> facetType) {
         return uncheckedCast(facetsByClass.get(facetType));
     }
 
     @Override
     public Stream<Facet> streamFacets() {
-        return facetsByClass.values()
-                .stream()
-                .distinct();
+        synchronized(snapshot) {
+            return snapshot.get().stream(); // consumers should play nice and don't take too long  
+        }
     }
 
     @Override
     public int getFacetCount() {
-        return facetsByClass.size();
+        synchronized(snapshot) {
+            return snapshot.get().size();    
+        }
+    }
+    
+    @Override
+    public void addOrReplaceFacet(Facet facet) {
+        
+        Optional.ofNullable(getFacet(facet.facetType()))
+        .filter(each -> facet.getClass() == each.getClass())
+        .ifPresent(existingFacet -> {
+            remove(existingFacet);
+            val underlyingFacet = existingFacet.getUnderlyingFacet();
+            facet.setUnderlyingFacet(underlyingFacet);
+        } );
+        
+        addFacet(facet);
     }
 
     // -- HELPER
 
-    private void addFacet(final Class<? extends Facet> facetType, final Facet facet) {
-        final Facet existingFacet = getFacet(facetType);
+    private void addFacet(Class<? extends Facet> facetType, Facet facet) {
+        val existingFacet = getFacet(facetType);
         if (existingFacet == null || existingFacet.isNoop()) {
             put(facetType, facet);
             return;
@@ -114,8 +114,27 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
         put(facetType, facet);
     }
 
-    private void put(final Class<? extends Facet> facetType, final Facet facet) {
-        facetsByClass.put(facetType, facet);
+    private void put(Class<? extends Facet> facetType, Facet facet) {
+        synchronized(snapshot) {
+            snapshot.clear();
+            facetsByClass.put(facetType, facet);
+            facet.forEachAlias(aliasType->facetsByClass.put(aliasType, facet));
+        }
     }
+    
+    private void remove(Facet facet) {
+        synchronized(snapshot) {
+            snapshot.clear();
+            facetsByClass.remove(facet.facetType());
+            // for all the registered aliases that point to the given facet, remove ...
+            facet.forEachAlias(aliasType->{
+                val aliasFor = facetsByClass.get(aliasType);
+                if(facet == aliasFor) {
+                    facetsByClass.remove(aliasType);
+                }
+            });
+        }
+    }
+    
 
 }

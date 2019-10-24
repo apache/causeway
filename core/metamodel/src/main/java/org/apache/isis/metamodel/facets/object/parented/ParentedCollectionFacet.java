@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.object.parented;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 /**
  * Indicates that this class is parented, that is, wholly contained within a
@@ -35,6 +35,6 @@ import org.apache.isis.metamodel.facets.MarkerFacet;
  * Internal collections are the {@link List}s, {@link Set}s etc that hold references to
  * other root entities.
  */
-public interface ParentedCollectionFacet extends MarkerFacet {
+public interface ParentedCollectionFacet extends Facet {
 
 }

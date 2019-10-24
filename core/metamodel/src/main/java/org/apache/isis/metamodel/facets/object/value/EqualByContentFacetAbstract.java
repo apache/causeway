@@ -20,10 +20,10 @@
 package org.apache.isis.metamodel.facets.object.value;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class EqualByContentFacetAbstract extends MarkerFacetAbstract implements EqualByContentFacet {
+public abstract class EqualByContentFacetAbstract extends FacetAbstract implements EqualByContentFacet {
 
     public static Class<? extends Facet> type() {
         return EqualByContentFacet.class;

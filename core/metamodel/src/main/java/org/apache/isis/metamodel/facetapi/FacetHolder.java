@@ -23,6 +23,8 @@ import java.util.stream.Stream;
 
 import org.apache.isis.metamodel.MetaModelContext;
 
+import lombok.val;
+
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that
  * can be extended.
@@ -50,13 +52,19 @@ public interface FacetHolder {
      * Convenience; saves having to {@link #getFacet(Class)} and then check if
      * <tt>null</tt> and not a no-op.
      */
-    boolean containsDoOpFacet(Class<? extends Facet> facetType);
+    default boolean containsDoOpFacet(Class<? extends Facet> facetType) {
+        val facet = getFacet(facetType);
+        return facet != null && !facet.isNoop();
+    }
 
     /**
      * As {@link #containsDoOpFacet(Class)}, which additional requirement that the
      * facet is not {@link Facet#isDerived()}.
      */
-    boolean containsDoOpNotDerivedFacet(Class<? extends Facet> facetType);
+    default boolean containsDoOpNotDerivedFacet(Class<? extends Facet> facetType) {
+        val facet = getFacet(facetType);
+        return facet != null && !facet.isNoop() && !facet.isDerived();
+    }
 
     Stream<Facet> streamFacets();
 
@@ -72,33 +80,66 @@ public interface FacetHolder {
     void addFacet(Facet facet);
 
     /**
-     * Adds the {@link MultiTypedFacet multi-typed facet}, extracting each of
-     * its {@link MultiTypedFacet#facetTypes() types} as keys.
-     *
-     * <p>
-     * If there are any facet of the same type, they will be overwritten
-     * <i>provided</i> that either the {@link Facet} specifies to
-     * {@link Facet#alwaysReplace() always replace} or if the existing
-     * {@link Facet} is a {@link Facet#isNoop() no-op}.
+     * Replaces any existing facet with the given one, while copying any underlying 
+     * facet from the existing to the given one.
+     * 
+     * @param facet
+     * @since 2.0
      */
-    void addMultiTypedFacet(MultiTypedFacet facet);
-
-    /**
-     * Remove the facet whose type is that reported by {@link Facet#facetType()}
-     * .
-     */
-    void removeFacet(Facet facet);
-
-    /**
-     * Remove the facet of the specified type.
-     */
-    void removeFacet(Class<? extends Facet> facetType);
-
-
+    void addOrReplaceFacet(Facet facet);
+    
     /**
      * 
      * @since 2.0
      */
     MetaModelContext getMetaModelContext();
+
+    /**
+     * For those that implement through delegation.
+     * @since 2.0
+     *
+     */
+    public static interface Delegating extends FacetHolder {
+        
+        FacetHolder getFacetHolder();
+
+        @Override
+        default public int getFacetCount() {
+            return getFacetHolder().getFacetCount();
+        }
+
+        @Override
+        default public <T extends Facet> T getFacet(Class<T> cls) {
+            return getFacetHolder().getFacet(cls);
+        }
+
+        @Override
+        default public boolean containsFacet(Class<? extends Facet> facetType) {
+            return getFacetHolder().containsFacet(facetType);
+        }
+
+        @Override
+        default public Stream<Facet> streamFacets() {
+            return getFacetHolder().streamFacets();
+        }
+
+        @Override
+        default public void addFacet(Facet facet) {
+            getFacetHolder().addFacet(facet);
+        }
+
+        @Override
+        default public void addOrReplaceFacet(Facet facet) {
+            getFacetHolder().addOrReplaceFacet(facet);
+        }
+
+        @Override
+        default public MetaModelContext getMetaModelContext() {
+            return getFacetHolder().getMetaModelContext();
+        }
+        
+        
+    }
+    
 
 }

@@ -23,10 +23,10 @@ import java.util.Map;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
 
-public abstract class LabelAtFacetAbstract extends MultipleValueFacetAbstract implements LabelAtFacet {
+public abstract class LabelAtFacetAbstract extends FacetAbstract implements LabelAtFacet {
 
     public static Class<? extends Facet> type() {
         return LabelAtFacet.class;

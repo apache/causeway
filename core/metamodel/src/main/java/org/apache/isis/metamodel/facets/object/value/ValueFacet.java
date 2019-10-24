@@ -19,8 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.value;
 
-import org.apache.isis.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 /**
  * Indicates that this class has value semantics.
@@ -31,6 +30,6 @@ import org.apache.isis.metamodel.facets.MarkerFacet;
  * convenient term for a number of mostly optional semantics all of which are
  * defined elsewhere.
  */
-public interface ValueFacet extends MarkerFacet, MultiTypedFacet {
+public interface ValueFacet extends Facet {
 
 }

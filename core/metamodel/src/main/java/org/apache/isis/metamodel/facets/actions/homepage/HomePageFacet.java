@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.homepage;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 /**
  * Indicates that the (no-arg) action (on a domain service) to be invoked automatically
@@ -29,6 +29,6 @@ import org.apache.isis.metamodel.facets.MarkerFacet;
  * In the standard Apache Isis Programming Model, typically corresponds to
  * applying the <tt>@HomePage</tt> annotation at the class level.
  */
-public interface HomePageFacet extends MarkerFacet {
+public interface HomePageFacet extends Facet {
 
 }

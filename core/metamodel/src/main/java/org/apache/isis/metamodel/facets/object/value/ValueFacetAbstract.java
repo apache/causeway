@@ -19,23 +19,22 @@
 
 package org.apache.isis.metamodel.facets.object.value;
 
-import java.util.stream.Stream;
-
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
 import org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
 import org.apache.isis.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
 import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.metamodel.facets.object.title.parser.TitleFacetUsingParser;
 
-public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract implements ValueFacet {
+import lombok.val;
+
+public abstract class ValueFacetAbstract extends FacetAbstract implements ValueFacet {
 
     public static Class<? extends Facet> type() {
         return ValueFacet.class;
@@ -50,9 +49,6 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         return (ValueSemanticsProvider<?>) ClassExtensions.newInstance(semanticsProviderClass, 
                 new Class<?>[] { FacetHolder.class/*, ServiceInjector.class*/ }, new Object[] { holder });
     }
-
-    // to look after the facets (since MultiTyped)
-    private final FacetHolder facetHolder = new FacetHolderImpl();
 
     private final ValueSemanticsProvider<?> semanticsProvider;
 
@@ -82,7 +78,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid, 
             final FacetHolder holder) {
 
-        super(type(), holder);
+        super(type(), holder, Derivation.NOT_DERIVED);
 
         this.semanticsProvider = semanticsProvider;
 
@@ -102,6 +98,8 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         // but have the
         // facets themselves reference this value's holder.
 
+        val facetHolder = super.getFacetHolder();
+        
         facetHolder.addFacet((Facet) this); // add just ValueFacet.class
         // initially.
 
@@ -151,26 +149,6 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
 
     public boolean isValid() {
         return this.semanticsProvider != null;
-    }
-
-    // /////////////////////////////
-    // MultiTypedFacet impl
-    // /////////////////////////////
-
-    @Override
-    public Stream<Class<? extends Facet>> facetTypes() {
-        return facetHolder.streamFacets()
-                .map(Facet::facetType);
-    }
-
-    @Override
-    public <T extends Facet> T getFacet(final Class<T> facetType) {
-        return facetHolder.getFacet(facetType);
-    }
-
-    @Override
-    public boolean containsFacetTypeOf(final Class<? extends Facet> requiredFacetType) {
-        return facetHolder.containsFacet(requiredFacetType);
     }
 
 }

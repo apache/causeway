@@ -25,13 +25,13 @@ import java.util.Map;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.metamodel.commons.MethodExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
-public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract implements ViewModelFacet {
+public abstract class RecreatableObjectFacetAbstract extends FacetAbstract implements ViewModelFacet {
 
     private final PostConstructMethodCache postConstructMethodCache;
     private final ViewModelFacet.RecreationMechanism recreationMechanism;

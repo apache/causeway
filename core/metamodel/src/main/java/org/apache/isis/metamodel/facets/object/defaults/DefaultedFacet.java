@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets.object.defaults;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 
@@ -36,7 +36,7 @@ import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet
  * {@link PropertyDefaultFacet} and {@link ActionDefaultsFacet} from the
  * method's return type / parameter types, and copy over.
  */
-public interface DefaultedFacet extends MarkerFacet {
+public interface DefaultedFacet extends Facet {
 
     /**
      * The default (as a pojo, not a {@link ObjectAdapter}).

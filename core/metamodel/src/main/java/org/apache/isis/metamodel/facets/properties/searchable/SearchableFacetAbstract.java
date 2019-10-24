@@ -20,10 +20,10 @@
 package org.apache.isis.metamodel.facets.properties.searchable;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
 
-public abstract class SearchableFacetAbstract extends MultipleValueFacetAbstract implements SearchableFacet {
+public abstract class SearchableFacetAbstract extends FacetAbstract implements SearchableFacet {
 
     public static Class<? extends Facet> type() {
         return SearchableFacet.class;

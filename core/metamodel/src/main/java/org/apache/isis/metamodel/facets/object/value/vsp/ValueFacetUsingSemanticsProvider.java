@@ -27,8 +27,8 @@ import org.apache.isis.metamodel.facets.object.value.ValueFacetAbstract;
 public class ValueFacetUsingSemanticsProvider extends ValueFacetAbstract {
 
     public ValueFacetUsingSemanticsProvider(
-            final ValueSemanticsProvider<?> adapter, 
-            final Facet underlyingValueTypeFacet) {
+            ValueSemanticsProvider<?> adapter, 
+            Facet underlyingValueTypeFacet) {
 
         super(adapter, AddFacetsIfInvalidStrategy.DO_ADD, underlyingValueTypeFacet.getFacetHolder());
 

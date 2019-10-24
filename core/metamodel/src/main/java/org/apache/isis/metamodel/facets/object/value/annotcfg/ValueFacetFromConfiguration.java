@@ -26,8 +26,8 @@ import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderU
 public class ValueFacetFromConfiguration extends ValueFacetAbstract {
 
     public ValueFacetFromConfiguration(
-            final String candidateSemanticsProviderName, 
-            final FacetHolder holder) {
+            String candidateSemanticsProviderName, 
+            FacetHolder holder) {
 
         super(
                 ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName), 

@@ -28,7 +28,40 @@ import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderU
 
 public class ValueFacetAnnotation extends ValueFacetAbstract {
 
-    private static String semanticsProviderName(final IsisConfiguration config, final Class<?> annotatedClass) {
+    public ValueFacetAnnotation(
+            IsisConfiguration config,
+            Class<?> annotatedClass, 
+            FacetHolder holder) {
+
+        this(
+                semanticsProviderName(config, annotatedClass), 
+                semanticsProviderClass(annotatedClass),
+                holder);
+    }
+
+    /**
+     * Always valid, even if the specified semanticsProviderName might have been
+     * wrong.
+     */
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+    
+    // -- HELPER
+    
+    private ValueFacetAnnotation(
+            String candidateSemanticsProviderName, 
+            Class<?> candidateSemanticsProviderClass, 
+            FacetHolder holder) {
+
+        super(ValueSemanticsProviderUtil
+                .valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), 
+                AddFacetsIfInvalidStrategy.DO_ADD, 
+                holder);
+    }
+    
+    private static String semanticsProviderName(IsisConfiguration config, Class<?> annotatedClass) {
         
         final Value annotation = annotatedClass.getAnnotation(Value.class);
         final String semanticsProviderName = annotation.semanticsProviderName();
@@ -44,32 +77,5 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
         return annotation.semanticsProviderClass();
     }
 
-    public ValueFacetAnnotation(
-            final IsisConfiguration config,
-            final Class<?> annotatedClass, 
-            final FacetHolder holder) {
-
-        this(semanticsProviderName(config, annotatedClass), 
-                semanticsProviderClass(annotatedClass), holder);
-    }
-
-    private ValueFacetAnnotation(
-            final String candidateSemanticsProviderName, 
-            final Class<?> candidateSemanticsProviderClass, 
-            final FacetHolder holder) {
-
-        super(ValueSemanticsProviderUtil
-                .valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), 
-                AddFacetsIfInvalidStrategy.DO_ADD, holder);
-    }
-
-    /**
-     * Always valid, even if the specified semanticsProviderName might have been
-     * wrong.
-     */
-    @Override
-    public boolean isValid() {
-        return true;
-    }
 
 }

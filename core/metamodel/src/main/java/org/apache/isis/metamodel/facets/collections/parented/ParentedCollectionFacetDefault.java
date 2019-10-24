@@ -20,11 +20,11 @@
 package org.apache.isis.metamodel.facets.collections.parented;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.metamodel.facets.object.parented.ParentedCollectionFacet;
 
-public class ParentedCollectionFacetDefault extends MarkerFacetAbstract implements ParentedCollectionFacet {
+public class ParentedCollectionFacetDefault extends FacetAbstract implements ParentedCollectionFacet {
 
     public static Class<? extends Facet> type() {
         return ParentedCollectionFacet.class;

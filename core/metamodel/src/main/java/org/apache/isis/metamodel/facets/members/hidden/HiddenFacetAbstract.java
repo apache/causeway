@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.facets.members.hidden;
 
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
@@ -30,8 +29,6 @@ import org.apache.isis.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
-
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 /**
  * This implements {@link org.apache.isis.metamodel.facetapi.MultiTypedFacet} so that each concrete implementation
@@ -57,6 +54,7 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
             Where where,
             final FacetHolder holder) {
         super(facetType, holder, where);
+        super.addAlias(HiddenFacet.class);
     }
 
     /**
@@ -64,6 +62,7 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
      */
     public HiddenFacetAbstract(Where where, final FacetHolder holder) {
         super(HiddenFacetAbstract.class, holder, where);
+        super.addAlias(HiddenFacet.class);
     }
 
     @Override
@@ -76,22 +75,6 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
      * <tt>null</tt> if visible.
      */
     protected abstract String hiddenReason(ManagedObject target, Where whereContext);
-
-    @Override
-    public Stream<Class<? extends Facet>> facetTypes() {
-        return Stream.of(facetType(), HiddenFacet.class);
-    }
-
-    @Override
-    public <T extends Facet> T getFacet(final Class<T> facet) {
-        return uncheckedCast(this);
-    }
-
-    @Override
-    public boolean containsFacetTypeOf(final Class<? extends Facet> requiredFacetType) {
-        return facetTypes()
-                .anyMatch(facetType->facetType == requiredFacetType);
-    }
 
 
 }

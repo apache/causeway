@@ -83,16 +83,12 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      */
     List<ObjectActionParameter> parameters;
 
-
-
     // -- constructors
 
     public ObjectActionDefault(
             final FacetedMethod facetedMethod) {
         super(facetedMethod, FeatureType.ACTION);
     }
-
-
 
     // -- ReturnType, OnType, Actions (set)
     /**
@@ -693,6 +689,12 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         }
         sb.append("}]");
         return sb.toString();
+    }
+
+
+    @Override
+    public FacetHolder getFacetHolder() {
+        return super.getFacetedMethod();
     }
 
 }

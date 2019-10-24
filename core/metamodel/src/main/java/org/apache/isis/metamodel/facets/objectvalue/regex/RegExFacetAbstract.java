@@ -23,13 +23,13 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
 import org.apache.isis.metamodel.interactions.ProposedHolder;
 import org.apache.isis.metamodel.interactions.ValidityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract implements RegExFacet {
+public abstract class RegExFacetAbstract extends FacetAbstract implements RegExFacet {
 
     public static Class<? extends Facet> type() {
         return RegExFacet.class;

@@ -53,7 +53,7 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
         .filter(property->property.isUsable(adapter, context.getInitiatedBy(), where).isVetoed())  // ignore disabled properties
         .forEach(property->{
             final OneToOneAssociation otoa = (OneToOneAssociation) property;
-            final ManagedObject value = otoa.get2(adapter, context.getInitiatedBy());
+            final ManagedObject value = otoa.get(adapter, context.getInitiatedBy());
             if (otoa.isAssociationValid(adapter, value, context.getInitiatedBy()).isVetoed()) {
                 if (buf.length() > 0) {
                     buf.append(", ");

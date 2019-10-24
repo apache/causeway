@@ -20,10 +20,11 @@
 package org.apache.isis.metamodel.facets.properties.publish;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class PublishedPropertyFacetAbstract extends MarkerFacetAbstract
+public abstract class PublishedPropertyFacetAbstract 
+extends FacetAbstract
 implements PublishedPropertyFacet {
 
     public static Class<? extends Facet> type() {

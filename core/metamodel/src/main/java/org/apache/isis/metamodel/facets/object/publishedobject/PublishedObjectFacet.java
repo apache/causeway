@@ -19,12 +19,12 @@
 
 package org.apache.isis.metamodel.facets.object.publishedobject;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 /**
  * Indicates that changes to an object's properties are to be published has, specifying the means by which
  * a canonical event representing these changes should be created.
  */
-public interface PublishedObjectFacet extends MarkerFacet {
+public interface PublishedObjectFacet extends Facet {
 
 }

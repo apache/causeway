@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facetapi;
 
+import java.util.function.Consumer;
+
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 
 public interface Facet extends FacetWithAttributes {
@@ -93,6 +95,26 @@ public interface Facet extends FacetWithAttributes {
      * implementations.
      */
     public boolean alwaysReplace();
+
+    // -- FACET ALIAS SUPPORT
+    
+    /**
+     * Add an alias by which the facet can be looked up.
+     * @since 2.0
+     */
+    void addAlias(Class<? extends Facet> alias);
+
+    /**
+     * Traverses all aliases (if any).
+     * @since 2.0
+     */
+    void forEachAlias(Consumer<Class<? extends Facet>> onAlias);
+
+    /**
+     * Whether has an alias by which the facet can be looked up.
+     * @since 2.0
+     */
+    boolean hasAlias(Class<? extends Facet> alias);
 
 
 }

@@ -20,10 +20,10 @@
 package org.apache.isis.metamodel.facets.propcoll.notpersisted;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class NotPersistedFacetAbstract extends MarkerFacetAbstract implements NotPersistedFacet {
+public abstract class NotPersistedFacetAbstract extends FacetAbstract implements NotPersistedFacet {
 
     public static Class<? extends Facet> type() {
         return NotPersistedFacet.class;

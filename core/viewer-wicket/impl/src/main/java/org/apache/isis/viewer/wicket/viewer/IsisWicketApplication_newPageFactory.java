@@ -30,7 +30,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 
- * Initializes new pages with the common-context. 
+ * Uses Wicket's default page factory, except for {@link EntityPage}s which require special instantiation:
+ * <p> 
+ * Constructor
+ * {@link EntityPage#EntityPage(org.apache.isis.webapp.context.IsisWebAppCommonContext, PageParameters)}
+ * needs the common-context as argument. 
  * 
  * @since 2.0
  *

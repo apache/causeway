@@ -231,6 +231,6 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
                 return noop;
             }
         };
-        FacetUtil.addMultiTypedFacet(facet);
+        FacetUtil.addFacet(facet);
     }
 }

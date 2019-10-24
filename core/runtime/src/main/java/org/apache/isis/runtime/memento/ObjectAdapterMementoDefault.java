@@ -459,6 +459,9 @@ public class ObjectAdapterMementoDefault implements Serializable {
         this.cardinality = Cardinality.SCALAR;
 
         this.persistentOidStr = rootOid.enString();
+        
+        requires(persistentOidStr, "persistentOidStr");
+        
         this.bookmark = rootOid.asBookmark();
         this.objectSpecId = rootOid.getObjectSpecId();
         this.recreateStrategy = RecreateStrategy.LOOKUP;

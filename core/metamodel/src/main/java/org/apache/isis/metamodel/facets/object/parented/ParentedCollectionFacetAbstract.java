@@ -20,10 +20,10 @@
 package org.apache.isis.metamodel.facets.object.parented;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class ParentedCollectionFacetAbstract extends MarkerFacetAbstract implements ParentedCollectionFacet {
+public abstract class ParentedCollectionFacetAbstract extends FacetAbstract implements ParentedCollectionFacet {
 
     public static Class<? extends Facet> type() {
         return ParentedCollectionFacet.class;

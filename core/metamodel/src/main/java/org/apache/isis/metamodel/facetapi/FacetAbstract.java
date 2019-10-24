@@ -21,7 +21,10 @@ package org.apache.isis.metamodel.facetapi;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Consumer;
 
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.MetaModelContext;
 
@@ -40,6 +43,8 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
     private Facet underlyingFacet;
 
     private final Class<? extends Facet> facetType;
+    private Set<Class<? extends Facet>> facetAliasTypes; // lazy init
+    
     private final boolean derived;
     private FacetHolder holder;
 
@@ -53,13 +58,20 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
     private IdentifiedHolder identifiedHolder;
 
     public FacetAbstract(
-            final Class<? extends Facet> facetType,
-            final FacetHolder holder,
-            final Derivation derivation) {
+            Class<? extends Facet> facetType,
+            FacetHolder holder,
+            Derivation derivation) {
         
         this.facetType = requires(facetType, "facetType"); 
         setFacetHolder(holder);
         this.derived = (derivation == Derivation.DERIVED);
+    }
+    
+    protected FacetAbstract(
+            Class<? extends Facet> facetType,
+            FacetHolder holder) {
+        
+        this(facetType, holder, Derivation.NOT_DERIVED);
     }
 
     @Override
@@ -99,13 +111,13 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
     @Override
     public void setUnderlyingFacet(final Facet underlyingFacet) {
         if(underlyingFacet != null) {
-            if(underlyingFacet instanceof MultiTypedFacet) {
-                val multiTypedFacet = (MultiTypedFacet) underlyingFacet;
-                val matches = compatible(multiTypedFacet);
-                if(!matches) {
-                    throw new IllegalArgumentException("illegal argument, expected underlying facet (a multi-valued facet) to have equivalent to the facet type (or facet types) of this facet");
-                }
-            } else {
+//            if(underlyingFacet instanceof MultiTypedFacet) {
+//                val multiTypedFacet = (MultiTypedFacet) underlyingFacet;
+//                val matches = compatible(multiTypedFacet);
+//                if(!matches) {
+//                    throw new IllegalArgumentException("illegal argument, expected underlying facet (a multi-valued facet) to have equivalent to the facet type (or facet types) of this facet");
+//                }
+//            } else {
                 
                 val underlyingFacetType = underlyingFacet.facetType();
                 if(!Objects.equals(underlyingFacetType, facetType)) {
@@ -116,22 +128,22 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
                     throw _Exceptions.unrecoverable(msg);
                 }
  
-            }
+ //           }
         }
         this.underlyingFacet = underlyingFacet;
     }
 
-    private boolean compatible(final MultiTypedFacet multiTypedFacet) {
-
-        if (!(this instanceof MultiTypedFacet)) {
-            return multiTypedFacet.containsFacetTypeOf(this.facetType);
-        }
-
-        val thisAsMultiTyped = (MultiTypedFacet) this;
-        
-        return thisAsMultiTyped.facetTypes()
-                .anyMatch(multiTypedFacet::containsFacetTypeOf);
-    }
+//    private boolean compatible(final MultiTypedFacet multiTypedFacet) {
+//
+//        if (!(this instanceof MultiTypedFacet)) {
+//            return multiTypedFacet.containsFacetTypeOf(this.facetType);
+//        }
+//
+//        val thisAsMultiTyped = (MultiTypedFacet) this;
+//        
+//        return thisAsMultiTyped.facetTypes()
+//                .anyMatch(multiTypedFacet::containsFacetTypeOf);
+//    }
 
     /**
      * Assume implementation is <i>not</i> a no-op.
@@ -246,6 +258,33 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
      */
     public static interface Validating {
     }
+
+    // -- FACET ALIAS SUPPORT
+    
+    @Override
+    public void addAlias(Class<? extends Facet> alias) {
+        if(facetAliasTypes==null) {
+            facetAliasTypes = _Sets.newHashSet();
+        }
+        facetAliasTypes.add(alias);
+    }
+    
+    @Override
+    public void forEachAlias(Consumer<Class<? extends Facet>> onAlias) {
+        if(facetAliasTypes!=null) {
+            facetAliasTypes.forEach(onAlias);
+        }
+    }
+    
+    @Override
+    public boolean hasAlias(Class<? extends Facet> alias) {
+        if(facetAliasTypes==null) {
+            return false;
+        }
+        return facetAliasTypes.contains(alias);
+    }
+
+    
 
 
 }

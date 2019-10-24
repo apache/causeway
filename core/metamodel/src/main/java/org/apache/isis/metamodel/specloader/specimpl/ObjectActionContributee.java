@@ -20,19 +20,16 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
@@ -227,50 +224,9 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     // //////////////////////////////////////
 
     @Override
-    public int getFacetCount() {
-        return facetHolder.getFacetCount();
+    public FacetHolder getFacetHolder() {
+        return facetHolder;
     }
-
-    @Override
-    public <T extends Facet> T getFacet(Class<T> cls) {
-        return facetHolder.getFacet(cls);
-    }
-
-    @Override
-    public boolean containsFacet(Class<? extends Facet> facetType) {
-        return facetHolder.containsFacet(facetType);
-    }
-
-    @Override
-    public boolean containsDoOpFacet(java.lang.Class<? extends Facet> facetType) {
-        return facetHolder.containsDoOpFacet(facetType);
-    }
-
-    @Override
-    public Stream<Facet> streamFacets() {
-        return facetHolder.streamFacets();
-    }
-
-    @Override
-    public void addFacet(Facet facet) {
-        facetHolder.addFacet(facet);
-    }
-
-    @Override
-    public void addMultiTypedFacet(MultiTypedFacet facet) {
-        facetHolder.addMultiTypedFacet(facet);
-    }
-
-    @Override
-    public void removeFacet(Facet facet) {
-        facetHolder.removeFacet(facet);
-    }
-
-    @Override
-    public void removeFacet(Class<? extends Facet> facetType) {
-        facetHolder.removeFacet(facetType);
-    }
-
 
     // //////////////////////////////////////
 

@@ -27,7 +27,6 @@ import org.apache.isis.metamodel.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MultiTypedFacet;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -66,11 +65,6 @@ implements FacetFactory, MetaModelContextAware, MetaModelContext.Delegating {
     public void addFacet(final Facet facet) {
         FacetUtil.addFacet(facet);
     }
-    
-    public void addFacet(final MultiTypedFacet facet) {
-        FacetUtil.addMultiTypedFacet(facet);
-    }
-    
     
     // -- METHOD UTILITITES
     

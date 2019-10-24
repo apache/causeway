@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.all.named;
 
-import org.apache.isis.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 /**
  * The name of a class, a property, collection, an action or a parameter.
@@ -28,7 +28,7 @@ import org.apache.isis.metamodel.facets.MultipleValueFacet;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@Named</tt>.
  */
-public interface NamedFacet extends MultipleValueFacet {
+public interface NamedFacet extends Facet {
 
     /**
      * @return The name to use as a label for a collection, a property or a parameter

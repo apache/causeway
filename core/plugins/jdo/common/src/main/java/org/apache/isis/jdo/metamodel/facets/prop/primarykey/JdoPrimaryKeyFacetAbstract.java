@@ -19,12 +19,13 @@
 package org.apache.isis.jdo.metamodel.facets.prop.primarykey;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
 
-public abstract class JdoPrimaryKeyFacetAbstract extends MarkerFacetAbstract implements
-JdoPrimaryKeyFacet {
+public abstract class JdoPrimaryKeyFacetAbstract 
+extends FacetAbstract 
+implements JdoPrimaryKeyFacet {
 
     public static Class<? extends Facet> type() {
         return JdoPrimaryKeyFacet.class;

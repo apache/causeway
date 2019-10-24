@@ -19,12 +19,12 @@
 
 package org.apache.isis.metamodel.facets.actions.publish;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 /**
  * Indicates that the invocation of action should be published, specifying the means by which a
  * canonical event representing this invocation should be created.
  */
-public interface PublishedActionFacet extends MarkerFacet {
+public interface PublishedActionFacet extends Facet {
 
 }

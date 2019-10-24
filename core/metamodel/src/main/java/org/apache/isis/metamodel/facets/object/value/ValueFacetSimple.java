@@ -19,9 +19,6 @@
 
 package org.apache.isis.metamodel.facets.object.value;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -32,22 +29,8 @@ public class ValueFacetSimple extends FacetAbstract implements ValueFacet {
         return ValueFacet.class;
     }
 
-    public ValueFacetSimple(final FacetHolder holder) {
+    public ValueFacetSimple(FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
     }
 
-    @Override
-    public Stream<Class<? extends Facet>> facetTypes() {
-        return Arrays.stream(new Class[]{ValueFacet.class});
-    }
-
-    @Override
-    public <T extends Facet> T getFacet(final Class<T> facet) {
-        return (T)this;
-    }
-
-    @Override
-    public boolean containsFacetTypeOf(final Class<? extends Facet> facetType) {
-        return facetType == ValueFacet.class;
-    }
 }
