@@ -34,9 +34,9 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -44,6 +44,8 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import lombok.val;
 
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
@@ -58,7 +60,9 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  *     It is however still used by some wicket addons (specifically, pdfjs).
  * </p>
  */
-public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> implements ScalarModelProvider {
+public abstract class ScalarPanelAbstract 
+extends PanelAbstract<ScalarModel> 
+implements ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -265,7 +269,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-            final ObjectAdapter parentAdapter = model.getParentEntityModel().load();
+            val parentAdapter = model.getParentEntityModel().load();
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);
         }
@@ -367,7 +371,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      *
      * @return true - indicates has been updated, so update dynamically via ajax
      */
-    public boolean updateChoices(ObjectAdapter[] pendingArguments) {
+    public boolean updateChoices(ManagedObject[] pendingArguments) {
         return false;
     }
 

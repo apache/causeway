@@ -36,7 +36,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -109,11 +108,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                             toggledMementosProviderIfAny.getToggles();
 
                     final List<Object> selectedPojos = _Lists.transform(selectedMementos, stream->stream
-                            .map((@Nullable final ObjectAdapterMemento input) -> {
-                                if(input == null) {
+                            .map((@Nullable final ObjectAdapterMemento memento) -> {
+                                if(memento == null) {
                                     return null;
                                 }
-                                final ObjectAdapter objectAdapter = input.getObjectAdapter();
+                                val objectAdapter = memento.getObjectAdapter(commonContext.getSpecificationLoader());
                                 return objectAdapter != null ? objectAdapter.getPojo() : null;
                             })
                             .filter(_NullSafe::isPresent)
@@ -261,7 +260,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
                     // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
                     // an error page, but is probably 'good enough').
-                    final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+                    val targetAdapter = actionModel.getTargetAdapter();
 
                     final EntityPage entityPage = new EntityPage(getCommonContext(), targetAdapter, null);
 
@@ -293,7 +292,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     }
 
     protected LinkAndLabel newLinkAndLabel(
-            final ObjectAdapter objectAdapter,
+            final ManagedObject objectAdapter,
             final ObjectAction objectAction,
             final AbstractLink link) {
 

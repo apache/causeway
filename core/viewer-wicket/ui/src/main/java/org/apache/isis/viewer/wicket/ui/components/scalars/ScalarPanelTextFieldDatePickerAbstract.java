@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -32,13 +30,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.applib.services.i18n.LocaleProvider;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
+
+import lombok.val;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
@@ -111,8 +107,8 @@ extends ScalarPanelTextFieldAbstract<T>  {
             private static final long serialVersionUID = 1L;
 
             @Override public String getObject() {
-                ObjectAdapter object = scalarModel.getObject();
-                final T value = object != null ? (T) object.getPojo() : null;
+                val adapter = scalarModel.getObject();
+                final T value = adapter != null ? (T) adapter.getPojo() : null;
                 final String str =
                         value != null
                         ? converter.convertToString(value, getLocaleProvider().getLocale())

@@ -66,7 +66,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (memento == null) {
             return null;
         }
-        final Oid oid = memento.getObjectAdapter().getOid();
+        final Oid oid = memento.getObjectAdapter(commonContext.getSpecificationLoader()).getOid();
         if (oid == null || oid.isValue()) {
             // values
             return memento.toString();

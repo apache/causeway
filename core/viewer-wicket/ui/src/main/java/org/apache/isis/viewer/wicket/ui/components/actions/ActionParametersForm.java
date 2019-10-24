@@ -30,11 +30,9 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
@@ -51,6 +49,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import lombok.val;
 
 class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
@@ -87,8 +86,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             paramPanels.add(paramPanel);
 
             // TODO: maybe this logic should move instead to ScalarModel.Kind#whether{Hidden/Disabled}
-            final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
-            final ManagedObject realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
+            val targetAdapter = actionModel.getTargetAdapter();
+            val realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
                     .realTargetAdapter(targetAdapter);
             final Consent consent = apm.getActionParameter(getSpecificationLoader())
                     .isVisible(realTargetAdapter, null, InteractionInitiatedBy.USER);
@@ -190,7 +189,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
             // second attempt should succeed, because the Oid would have
             // been updated in the attempt
-            ObjectAdapter targetAdapter = getActionModel().getTargetAdapter();
+            val targetAdapter = getActionModel().getTargetAdapter();
 
             // forward onto the target page with the concurrency exception
             final EntityPage entityPage = new EntityPage(getActionModel().getCommonContext(), targetAdapter, ex);

@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
@@ -33,6 +32,8 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import lombok.val;
 
 /**
  * Corresponding component to prompt for action (parameters) is {@link ActionParametersPanel}.
@@ -102,7 +103,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
             // should succeed, because the Oid would have
             // been updated in the attempt
-            ObjectAdapter targetAdapter = scalarModel.getParentEntityModel().load();
+            val targetAdapter = scalarModel.getParentEntityModel().load();
 
             // page redirect/handling
             final EntityPage entityPage = new EntityPage(super.getCommonContext(), targetAdapter, null);

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 
@@ -44,12 +44,12 @@ public class EntityModelForReference implements ObjectAdapterModel {
     }
 
     @Override
-    public ObjectAdapter getObject() {
+    public ManagedObject getObject() {
         return scalarModel.getPendingElseCurrentAdapter();
     }
 
     @Override
-    public void setObject(final ObjectAdapter adapter) {
+    public void setObject(final ManagedObject adapter) {
         // no-op
     }
 

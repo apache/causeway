@@ -28,8 +28,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+
+import lombok.val;
 
 /**
  * Panel for rendering numeric scalars.
@@ -77,8 +78,8 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
             private static final long serialVersionUID = 1L;
 
             @Override public String getObject() {
-                ObjectAdapter object = scalarModel.getObject();
-                final T value = object != null ? (T) object.getPojo() : null;
+                val adapter = scalarModel.getObject();
+                final T value = adapter != null ? (T) adapter.getPojo() : null;
                 final String str =
                         value != null
                         ? converter.convertToString(value, getLocaleProvider().getLocale())

@@ -48,6 +48,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
@@ -359,7 +360,7 @@ class IsisToWicketTreeAdapter {
      * @return Wicket's ITreeProvider
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static ITreeProvider<TreeModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
+    private static ITreeProvider<TreeModel> toITreeProvider(ModelAbstract<ManagedObject> model) {
 
         val commonContext = model.getCommonContext();
         val treeNode = (TreeNode) model.getObject().getPojo();
@@ -389,7 +390,7 @@ class IsisToWicketTreeAdapter {
         public LoadableDetachableTreeModel(TreeModel tModel) {
             super(tModel);
             this.treePath = tModel.getTreePath();
-            this.id = (RootOid) tModel.getObject().getOid();
+            this.id = (RootOid) ManagedObject._oid(tModel.getObject());
             this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
             this.commonContext = tModel.getCommonContext();
         }
@@ -448,7 +449,9 @@ class IsisToWicketTreeAdapter {
      * @return Wicket's model for collapse/expand state
      */
     @SuppressWarnings({ "rawtypes" })
-    private static TreeExpansionModel toIModelRepresentingCollapseExpandState(ModelAbstract<ObjectAdapter> model) {
+    private static TreeExpansionModel toIModelRepresentingCollapseExpandState(
+            ModelAbstract<ManagedObject> model) {
+        
         val treeNode = (TreeNode) model.getObject().getPojo();
         val treeState = treeNode.getTreeState();
         val commonContext = model.getCommonContext();

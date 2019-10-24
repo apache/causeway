@@ -33,8 +33,8 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
@@ -45,8 +45,9 @@ import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import lombok.Getter;
+import lombok.val;
 
-public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAjaxIndicatorAware {
+public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAjaxIndicatorAware {
 
     private static final long serialVersionUID = 1L;
 
@@ -219,8 +220,8 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
 
                 @Override
                 protected IRequestHandler getRequestHandler() {
-                    ObjectAdapter resultAdapter = actionModel.execute();
-                    final Object value = resultAdapter.getPojo();
+                    val resultAdapter = actionModel.execute();
+                    val value = resultAdapter.getPojo();
                     return ActionModel.redirectHandler(value);
                 }
             };
@@ -238,10 +239,10 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
 
                 @Override
                 protected IRequestHandler getRequestHandler() {
-                    final ObjectAdapter resultAdapter = actionModel.execute();
-                    final Object value = resultAdapter!=null ? resultAdapter.getPojo() : null;
+                    val resultAdapter = actionModel.execute();
+                    val value = resultAdapter!=null ? resultAdapter.getPojo() : null;
 
-                    final IRequestHandler handler = ActionModel.downloadHandler(value);
+                    val handler = ActionModel.downloadHandler(value);
 
                     //ISIS-1619, prevent clients from caching the response content
                     return isIdempotentOrCachable(actionModel)

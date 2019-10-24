@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -33,6 +32,8 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} representing the summary details (title, icon and
@@ -77,7 +78,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
 
     private void buildEntityActionsGui() {
         final EntityModel model = getModel();
-        final ObjectAdapter adapter = model.getObject();
+        val adapter = model.getObject();
         if (adapter != null) {
             final List<ObjectAction> topLevelActions = ObjectAction.Util
                     .findTopLevel(adapter);

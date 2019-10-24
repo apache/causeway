@@ -24,8 +24,8 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Decouples the handling of concurrency exceptions when a bulk action is invoked (between the toggle box column and the
@@ -34,7 +34,8 @@ import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 public interface OnConcurrencyExceptionHandler extends Serializable {
 
     void onConcurrencyException(
-            Component context, ObjectAdapter selectedAdapter,
+            Component context, 
+            ManagedObject selectedAdapter,
             ConcurrencyException ex,
             AjaxRequestTarget ajaxRequestTarget);
 

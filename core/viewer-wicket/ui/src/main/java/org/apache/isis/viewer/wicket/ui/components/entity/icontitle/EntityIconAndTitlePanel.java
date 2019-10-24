@@ -28,9 +28,9 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.metamodel.facets.object.projection.ProjectionFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
@@ -104,7 +104,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     }
 
     protected WebMarkupContainer addOrReplaceLinkWrapper(final ObjectAdapterModel entityModel) {
-        final ObjectAdapter adapter = entityModel.getObject();
+        val adapter = entityModel.getObject();
 
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
 
@@ -113,7 +113,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return entityLinkWrapper;
     }
 
-    private AbstractLink createLinkWithIconAndTitle(final ObjectAdapter adapterIfAny) {
+    private AbstractLink createLinkWithIconAndTitle(final ManagedObject adapterIfAny) {
         final AbstractLink link = createDynamicallyVisibleLink();
 
         if(adapterIfAny != null) {
@@ -147,7 +147,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
         final ObjectAdapterModel entityModel = getModel();
 
-        final ObjectAdapter targetAdapter = entityModel.getObject();
+        val targetAdapter = entityModel.getObject();
         final ObjectAdapterModel redirectToModel;
 
         if(targetAdapter != null) {
@@ -173,7 +173,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
             @Override
             public boolean isVisible() {
-                final ObjectAdapter targetAdapter = entityModel.getObject();
+                val targetAdapter = entityModel.getObject();
                 return targetAdapter != null;
             }
         };
@@ -192,7 +192,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
     private String determineTitle() {
         ObjectAdapterModel model = getModel();
-        final ObjectAdapter adapter = model.getObject();
+        val adapter = model.getObject();
         return adapter != null ? adapter.titleString(getContextAdapterIfAny()) : "(no object)";
     }
 
@@ -206,7 +206,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return titleString.length();
     }
 
-    protected Image newImage(final String id, final ObjectAdapter adapter) {
+    protected Image newImage(final String id, final ManagedObject adapter) {
         final ResourceReference imageResource = imageCache.resourceReferenceFor(adapter);
 
         final Image image = new Image(id, imageResource) {
@@ -219,11 +219,11 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return image;
     }
 
-    public ObjectAdapter getContextAdapterIfAny() {
+    public ManagedObject getContextAdapterIfAny() {
         ObjectAdapterModel model = getModel();
         ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
         return contextAdapterMementoIfAny != null
-                ? contextAdapterMementoIfAny.getObjectAdapter()
+                ? contextAdapterMementoIfAny.getObjectAdapter(commonContext.getSpecificationLoader())
                         : null;
     }
 

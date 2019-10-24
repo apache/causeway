@@ -51,7 +51,6 @@ import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.Consent;
@@ -77,7 +76,7 @@ import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
-public class ActionModel extends BookmarkableModel<ObjectAdapter> implements FormExecutorContext {
+public class ActionModel extends BookmarkableModel<ManagedObject> implements FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -119,7 +118,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
      *
      * see {@link #ActionModel(PageParameters, SpecificationLoader)}
      */
-    public static PageParameters createPageParameters(ObjectAdapter adapter, ObjectAction objectAction) {
+    public static PageParameters createPageParameters(ManagedObject adapter, ObjectAction objectAction) {
 
         val pageParameters = PageParametersUtils.newPageParameters();
 
@@ -127,7 +126,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         //                adapter.getOid().enString():
         //                    adapter.getOid().enStringNoVersion();
 
-        val oidStr = adapter.getOid().enStringNoVersion();
+        val oidStr = ManagedObject._oid(adapter).enStringNoVersion();
 
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
 
@@ -192,14 +191,14 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        final ObjectAdapter adapter = getTargetAdapter();
+        val adapter = getTargetAdapter();
         final ObjectAction objectAction = getAction();
         final PageParameters pageParameters = createPageParameters(
                 adapter, objectAction);
 
         // capture argument values
-        final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
-        for(final ObjectAdapter argumentAdapter: argumentsAsArray) {
+        final ManagedObject[] argumentsAsArray = getArgumentsAsArray();
+        for(val argumentAdapter: argumentsAsArray) {
             final String encodedArg = encodeArg(argumentAdapter);
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
         }
@@ -215,12 +214,12 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     @Override
     public String getTitle() {
-        final ObjectAdapter adapter = getTargetAdapter();
+        val adapter = getTargetAdapter();
         final ObjectAction objectAction = getAction();
 
         final StringBuilder buf = new StringBuilder();
-        final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
-        for(final ObjectAdapter argumentAdapter: argumentsAsArray) {
+        final ManagedObject[] argumentsAsArray = getArgumentsAsArray();
+        for(val argumentAdapter: argumentsAsArray) {
             if(buf.length() > 0) {
                 buf.append(",");
             }
@@ -240,7 +239,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     //////////////////////////////////////////////////
 
 
-    private static String titleOf(final ObjectAdapter argumentAdapter) {
+    private static String titleOf(ManagedObject argumentAdapter) {
         return argumentAdapter!=null?argumentAdapter.titleString(null):"";
     }
 
@@ -370,11 +369,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
     private void setArgument(final int paramNum, final ObjectSpecification argSpec, final String encoded) {
-        final ObjectAdapter argumentAdapter = decodeArg(argSpec, encoded);
+        val argumentAdapter = decodeArg(argSpec, encoded);
         setArgument(paramNum, argumentAdapter);
     }
 
-    private String encodeArg(final ObjectAdapter adapter) {
+    private String encodeArg(ManagedObject adapter) {
         if(adapter == null) {
             return NULL_ARG;
         }
@@ -385,10 +384,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
             return encodeable.toEncodedString(adapter);
         }
 
-        return adapter.getOid().enStringNoVersion();
+        return ManagedObject._oid(adapter).enStringNoVersion();
     }
 
-    private ObjectAdapter decodeArg(final ObjectSpecification objSpec, final String encoded) {
+    private ManagedObject decodeArg(final ObjectSpecification objSpec, final String encoded) {
         if(NULL_ARG.equals(encoded)) {
             return null;
         }
@@ -407,7 +406,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         }
     }
 
-    private void setArgument(final int paramNum, final ObjectAdapter argumentAdapter) {
+    private void setArgument(int paramNum, ManagedObject argumentAdapter) {
+        
         final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
         final ObjectActionParameter actionParam = action.getParameters().get(paramNum);
         final ActionParameterMemento apm = new ActionParameterMemento(actionParam);
@@ -427,7 +427,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         return actionArgumentModel;
     }
 
-    public ObjectAdapter getTargetAdapter() {
+    public ManagedObject getTargetAdapter() {
         return entityModel.load();
     }
 
@@ -436,13 +436,13 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
     @Override
-    protected ObjectAdapter load() {
+    protected ManagedObject load() {
 
         // from getObject()/reExecute
         detach(); // force re-execute
 
         // TODO: think we need another field to determine if args have been populated.
-        final ObjectAdapter results = executeAction();
+        val results = executeAction();
 
         return results;
     }
@@ -454,10 +454,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     // for any other value for Where
     public static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
 
-    private ObjectAdapter executeAction() {
+    private ManagedObject executeAction() {
 
-        final ObjectAdapter targetAdapter = getTargetAdapter();
-        final ObjectAdapter[] arguments = getArgumentsAsArray();
+        val targetAdapter = getTargetAdapter();
+        final ManagedObject[] arguments = getArgumentsAsArray();
         final ObjectAction action = getAction();
 
         // if this action is a mixin, then it will fill in the details automatically.
@@ -487,7 +487,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     public String getReasonDisabledIfAny() {
 
-        final ObjectAdapter targetAdapter = getTargetAdapter();
+        val targetAdapter = getTargetAdapter();
         final ObjectAction objectAction = getAction();
 
         final Consent usability =
@@ -502,8 +502,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     public boolean isVisible() {
 
-        final ObjectAdapter targetAdapter = getTargetAdapter();
-        final ObjectAction objectAction = getAction();
+        val targetAdapter = getTargetAdapter();
+        val objectAction = getAction();
 
         final Consent visibility =
                 objectAction.isVisible(
@@ -515,8 +515,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
 
     public String getReasonInvalidIfAny() {
-        final ObjectAdapter targetAdapter = getTargetAdapter();
-        final ObjectAdapter[] proposedArguments = getArgumentsAsArray();
+        val targetAdapter = getTargetAdapter();
+        final ManagedObject[] proposedArguments = getArgumentsAsArray();
         final ObjectAction objectAction = getAction();
         final Consent validity = objectAction.isProposedArgumentSetValid(targetAdapter, proposedArguments,
                 InteractionInitiatedBy.USER);
@@ -524,17 +524,17 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
     @Override
-    public void setObject(final ObjectAdapter object) {
+    public void setObject(final ManagedObject object) {
         throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
     }
 
-    public ObjectAdapter[] getArgumentsAsArray() {
+    public ManagedObject[] getArgumentsAsArray() {
         if(this.arguments.size() < getAction().getParameterCount()) {
             primeArgumentModels();
         }
 
         final ObjectAction objectAction = getAction();
-        final ObjectAdapter[] arguments = new ObjectAdapter[objectAction.getParameterCount()];
+        final ManagedObject[] arguments = new ManagedObject[objectAction.getParameterCount()];
         for (int i = 0; i < arguments.length; i++) {
             final ActionArgumentModel actionArgumentModel = this.arguments.get(i);
             arguments[i] = actionArgumentModel.getObject();
@@ -571,8 +571,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
      * Previously there was exception handling code here also, but this has now been centralized
      * within FormExecutorAbstract
      */
-    public ObjectAdapter execute() {
-        final ObjectAdapter resultAdapter = this.getObject();
+    public ManagedObject execute() {
+        final ManagedObject resultAdapter = this.getObject();
         return resultAdapter;
     }
 

@@ -21,10 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.property;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
+
+import lombok.val;
 
 public class PropertyFormExecutorStrategy implements FormExecutorStrategy<ScalarModel> {
 
@@ -41,7 +43,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
 
 
     @Override
-    public ObjectAdapter obtainTargetAdapter() {
+    public ManagedObject obtainTargetAdapter() {
         return model.getParentEntityModel().load();
     }
 
@@ -57,10 +59,10 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
     }
 
     @Override
-    public ObjectAdapter obtainResultAdapter() {
-        ObjectAdapter targetAdapter = obtainTargetAdapter();
+    public ManagedObject obtainResultAdapter() {
+        val targetAdapter = obtainTargetAdapter();
 
-        final ObjectAdapter resultAdapter = this.model.applyValue(targetAdapter);
+        val resultAdapter = this.model.applyValue(targetAdapter);
 
         if (resultAdapter != targetAdapter) {
             this.model.getParentEntityModel().setObject(targetAdapter);
@@ -71,7 +73,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
 
     @Override
     public void redirectTo(
-            final ObjectAdapter resultAdapter,
+            final ManagedObject resultAdapter,
             final AjaxRequestTarget target) {
 
         final EntityPage entityPage = new EntityPage(model.getCommonContext(), resultAdapter, null);

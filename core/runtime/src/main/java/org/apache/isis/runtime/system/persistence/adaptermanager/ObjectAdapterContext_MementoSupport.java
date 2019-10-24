@@ -211,11 +211,12 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     }
 
     private void updateOneToManyAssociation(
-            final ObjectAdapter objectAdapter, 
-            final OneToManyAssociation otma, 
-            final CollectionData collectionData) {
+            ManagedObject objectAdapter, 
+            OneToManyAssociation otma, 
+            CollectionData collectionData) {
 
         val collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
+        
         final Set<ObjectAdapter> original = CollectionFacet.Utils.streamAdapters(ManagedObject.promote(collection))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         final Set<ObjectAdapter> incoming = collectionData.streamElements()

@@ -40,7 +40,7 @@ import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -55,11 +55,11 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
-public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapter>
+public abstract class PromptFormAbstract<T extends BookmarkableModel<ManagedObject>
 & ParentEntityModelProvider
-& IModel<ObjectAdapter>
+& IModel<ManagedObject>
 & FormExecutorContext>
-extends FormAbstract<ObjectAdapter>
+extends FormAbstract<ManagedObject>
 implements ScalarModelSubscriber2 {
 
     private static final long serialVersionUID = 1L;

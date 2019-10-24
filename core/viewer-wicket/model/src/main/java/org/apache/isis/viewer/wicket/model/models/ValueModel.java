@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
@@ -27,20 +27,20 @@ import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 /**
  * Represents a standalone value.
  */
-public class ValueModel extends ModelAbstract<ObjectAdapter> {
+public class ValueModel extends ModelAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
     private final ObjectAdapterMemento adapterMemento;
 
-    public ValueModel(IsisWebAppCommonContext commonContext, ObjectAdapter adapter) {
+    public ValueModel(IsisWebAppCommonContext commonContext, ManagedObject adapter) {
         super(commonContext);
         adapterMemento = ObjectAdapterMemento.ofAdapter(adapter, super.getMementoSupport());
     }
 
     @Override
-    protected ObjectAdapter load() {
-        return adapterMemento.getObjectAdapter();
+    protected ManagedObject load() {
+        return adapterMemento.getObjectAdapter(super.getSpecificationLoader());
     }
 
     // //////////////////////////////////////

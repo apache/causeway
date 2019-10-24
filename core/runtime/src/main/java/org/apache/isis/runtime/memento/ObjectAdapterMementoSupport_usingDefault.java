@@ -53,7 +53,7 @@ implements ObjectAdapterMementoSupport {
     @Override
     public ObjectAdapterMemento mementoForRootOid(RootOid rootOid) {
         val delegate = ObjectAdapterMementoDefault.createPersistent(rootOid, specificationLoader);
-        return ObjectAdapterMementoDelegator.of(delegate, specificationLoader);
+        return ObjectAdapterMementoDelegator.of(delegate);
     }
 
     @Override
@@ -62,7 +62,7 @@ implements ObjectAdapterMementoSupport {
         if(delegate==null) {
             return null;
         }
-        return ObjectAdapterMementoDelegator.of(delegate, specificationLoader);
+        return ObjectAdapterMementoDelegator.of(delegate);
     }
 
     @Override
@@ -74,7 +74,7 @@ implements ObjectAdapterMementoSupport {
 
     @Override
     public ObjectAdapter reconstructObjectAdapter(ObjectAdapterMemento memento) {
-        return memento.getObjectAdapter();
+        return memento.getObjectAdapter(specificationLoader);
     }
 
     @RequiredArgsConstructor(staticName = "of")
@@ -83,7 +83,6 @@ implements ObjectAdapterMementoSupport {
         private static final long serialVersionUID = 1L;
 
         private final ObjectAdapterMementoDefault delegate;
-        private final transient SpecificationLoader specificationLoader;
 
         @Override
         public UUID getStoreKey() {
@@ -121,15 +120,10 @@ implements ObjectAdapterMementoSupport {
         }
 
         @Override
-        public ObjectAdapter getObjectAdapter() {
+        public ObjectAdapter getObjectAdapter(SpecificationLoader specificationLoader) {
             return delegate.getObjectAdapter(persistenceSession(), specificationLoader);
         }
-
-        @Override
-        public void resetVersion() {
-            delegate.resetVersion(persistenceSession(), specificationLoader);
-        }
-
+        
         private PersistenceSession persistenceSession() {
             return IsisContext.getPersistenceSession().get();
         }

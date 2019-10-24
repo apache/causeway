@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
@@ -41,7 +42,7 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
     }
 
     @Override
-    public ObjectAdapter obtainTargetAdapter() {
+    public ManagedObject obtainTargetAdapter() {
         return model.getTargetAdapter();
     }
 
@@ -69,14 +70,12 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
     }
 
     @Override
-    public ObjectAdapter obtainResultAdapter() {
+    public ManagedObject obtainResultAdapter() {
         return model.execute();
     }
 
     @Override
-    public void redirectTo(
-            final ObjectAdapter resultAdapter,
-            final AjaxRequestTarget targetIfany) {
+    public void redirectTo(ManagedObject resultAdapter, AjaxRequestTarget targetIfany) {
         
         ActionResultResponse resultResponse = ActionResultResponseType
                 .determineAndInterpretResult(model, targetIfany, resultAdapter);

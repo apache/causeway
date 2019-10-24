@@ -29,8 +29,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.common.OnConcurrencyExceptionHandler;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -38,7 +38,9 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedTog
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAdapter> {
+import lombok.val;
+
+public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
@@ -101,13 +103,16 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
     private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
 
     @Override
-    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
+    public void populateItem(
+            final Item<ICellPopulator<ManagedObject>> cellItem, 
+            final String componentId, 
+            final IModel<ManagedObject> rowModel) {
 
         cellItem.add(new CssClassAppender("togglebox-column"));
 
         final MarkupContainer row = cellItem.getParent().getParent();
         row.setOutputMarkupId(true);
-        final EntityModel entityModel = (EntityModel) rowModel;
+        val entityModel = (EntityModel) rowModel;
         String concurrencyExceptionIfAny = entityModel.getAndClearConcurrencyExceptionIfAny();
         if(concurrencyExceptionIfAny != null) {
             row.add(new CssClassAppender("reloaded-after-concurrency-exception"));
@@ -117,8 +122,8 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(AjaxRequestTarget target) {
-                final EntityModel entityModel = (EntityModel) rowModel;
-                ObjectAdapter selectedAdapter = null;
+                val entityModel = (EntityModel) rowModel;
+                ManagedObject selectedAdapter = null;
                 try {
                     selectedAdapter = entityModel.loadWithConcurrencyChecking();
                     if(onSelectionHandler != null) {

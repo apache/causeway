@@ -78,7 +78,7 @@ public interface ScalarModelWithPending extends Serializable {
                             if (ownerPending != null) {
                                 log.debug("setting to pending: {}", ownerPending.toString());
                                 ownerScalarModel.setObject(
-                                        ownerPending.getObjectAdapter());
+                                        ownerPending.getObjectAdapter(ownerScalarModel.getSpecificationLoader()));
                             }
                         }
                     }

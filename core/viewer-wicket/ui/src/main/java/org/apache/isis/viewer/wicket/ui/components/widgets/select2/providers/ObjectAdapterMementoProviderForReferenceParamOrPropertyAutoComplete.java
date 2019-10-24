@@ -43,8 +43,8 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -64,9 +64,9 @@ extends ObjectAdapterMementoProviderAbstract {
         
         val commonContext = super.getCommonContext();
         
-        val autoCompleteChoices = _Lists.<ObjectAdapter>newArrayList();
+        val autoCompleteChoices = _Lists.<ManagedObject>newArrayList();
         if (getScalarModel().hasAutoComplete()) {
-            final List<ObjectAdapter> autoCompleteAdapters =
+            val autoCompleteAdapters =
                     getScalarModel().getAutoComplete(term, commonContext.getAuthenticationSession());
             autoCompleteChoices.addAll(autoCompleteAdapters);
         }

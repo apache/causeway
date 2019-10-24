@@ -19,16 +19,16 @@
 
 package org.apache.isis.metamodel.facets.value.image;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface ImageValueFacet extends Facet {
 
-    ObjectAdapter createValue(java.awt.Image image);
+    ManagedObject createValue(java.awt.Image image);
 
-    java.awt.Image getImage(ObjectAdapter object);
+    java.awt.Image getImage(ManagedObject object);
 
-    int getHeight(ObjectAdapter object);
+    int getHeight(ManagedObject object);
 
-    int getWidth(ObjectAdapter object);
+    int getWidth(ManagedObject object);
 }

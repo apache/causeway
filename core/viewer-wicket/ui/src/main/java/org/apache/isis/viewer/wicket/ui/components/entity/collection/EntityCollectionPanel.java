@@ -30,7 +30,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
@@ -50,6 +49,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+
+import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
@@ -110,7 +111,7 @@ implements HasDynamicallyVisibleContent {
 
         final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection(
                 entityCollectionModel.getSpecificationLoader());
-        final ObjectAdapter objectAdapter = getModel().getObject();
+        val objectAdapter = getModel().getObject();
         final Consent visibility = association.isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
 
         if(visibility.isAllowed()) {

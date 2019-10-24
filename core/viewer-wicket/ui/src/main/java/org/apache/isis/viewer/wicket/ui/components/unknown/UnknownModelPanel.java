@@ -23,9 +23,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import lombok.val;
 
 public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
 
@@ -55,13 +57,14 @@ public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
         buf.append(model.getClass().getSimpleName()).append(" ");
         if(model instanceof EntityModel) {
             EntityModel entityModel = (EntityModel) model;
-            ObjectAdapter objectAdapter = entityModel.getObject();
+            val objectAdapter = entityModel.getObject();
             if(objectAdapter != null) {
-                if(objectAdapter.getOid().isValue()) {
+                
+                if(ManagedObject.isValue(objectAdapter)) {
                     //FIXME[ISIS-1976] should be properly intercepted by another Panel and not fall through to the unknowns                     
                     buf.append("FIXME[ISIS-1976] VALUE '" + objectAdapter.getPojo()+"'");
                 } else {
-                    buf.append("??? objectAdapter oid: " + objectAdapter.getOid());    
+                    buf.append("??? objectAdapter oid: " + ManagedObject._oid(objectAdapter));    
                 }
             } else {
                 buf.append("??? objectAdapter is NULL");

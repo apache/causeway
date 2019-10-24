@@ -43,7 +43,6 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -138,13 +137,13 @@ implements ScalarModelSubscriber2 {
             final AjaxRequestTarget target) {
 
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-        final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
+        final ManagedObject[] pendingArguments = actionModel.getArgumentsAsArray();
 
 
         // could almost certainly simplify this... (used by visibility and usability checks)
         final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
-        final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
-        final ManagedObject realTargetAdapter = action.realTargetAdapter(targetAdapter);
+        val targetAdapter = actionModel.getTargetAdapter();
+        val realTargetAdapter = action.realTargetAdapter(targetAdapter);
 
         // check visibility
         final Consent visibilityConsent = actionParameter.isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
@@ -170,14 +169,14 @@ implements ScalarModelSubscriber2 {
         // even if now invisible or unusable, we recalculate args and ensure compatible
         // (else can hit complicated edge cases with stale data when next re-enable/make visible)
         final ScalarModel model = getModel();
-        ObjectAdapter defaultIfAny = model.getKind()
+        val defaultIfAny = model.getKind()
                 .getDefault(scalarModel, pendingArguments, paramNumUpdated,
                         commonContext.getAuthenticationSession());
 
         final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
         final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
 
-        final ObjectAdapter pendingArg = pendingArguments[paramNumToPossiblyUpdate];
+        val pendingArg = pendingArguments[paramNumToPossiblyUpdate];
 
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);
@@ -188,10 +187,10 @@ implements ScalarModelSubscriber2 {
 
             if(pendingArg != null & scalarModel.hasChoices()) {
                 // make sure the object is one of the choices, else blank it out.
-                final List<ObjectAdapter> choices = scalarModel
+                val choices = scalarModel
                         .getChoices(pendingArguments, commonContext.getAuthenticationSession());
 
-                if(pendingArg.isValue()) {
+                if(ManagedObject.isValue(pendingArg)) {
                     // we have to do this if the ObjectAdapters are value type (eg a string)
                     //  because we can end up with a different ObjectAdapter for the same underlying value
                     //  (values have no intrinsic identity)
@@ -199,7 +198,7 @@ implements ScalarModelSubscriber2 {
                     // it might not be necessary to have this special casing; we could probably use this code
                     // even for reference types
                     final Object pendingValue = pendingArg.getPojo();
-                    final List<Object> choiceValues = ObjectAdapter.Util.unwrapPojoList(choices);
+                    final List<Object> choiceValues = ManagedObject.unwrapPojoListElseEmpty(choices);
                     if(!choiceValues.contains(pendingValue)) {
                         scalarModel.setObject(null);
                         scalarModel.setPending(null);
@@ -315,7 +314,7 @@ implements ScalarModelSubscriber2 {
             // there is similar code for invoking actions (ActionLink)
             //
             commonContext.getAuthenticationSession().getMessageBroker().addMessage(ex.getMessage());
-            final ObjectAdapter parentAdapter = getModel().getParentEntityModel().load();
+            val parentAdapter = getModel().getParentEntityModel().load();
             throw new RestartResponseException(new EntityPage(commonContext, parentAdapter));
         }
 
@@ -526,7 +525,7 @@ implements ScalarModelSubscriber2 {
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
 
-            final ObjectAdapter parentAdapter =
+            val parentAdapter =
                     model.getParentEntityModel().load();
 
             final String cssClass = facet.cssClass(parentAdapter);

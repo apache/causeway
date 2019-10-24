@@ -92,14 +92,14 @@ public interface ManagedObject {
         return titleString(null);
     }
 
-    default String titleString(ObjectAdapter contextAdapterIfAny) {
+    default String titleString(ManagedObject contextAdapterIfAny) {
         return TitleUtil.titleString(this, contextAdapterIfAny);
     }
 
 
     public static class TitleUtil {
 
-        public static String titleString(ManagedObject managedObject, ObjectAdapter contextAdapterIfAny) {
+        public static String titleString(ManagedObject managedObject, ManagedObject contextAdapterIfAny) {
             if (managedObject.getSpecification().isParentedOrFreeCollection()) {
                 final CollectionFacet facet = managedObject.getSpecification().getFacet(CollectionFacet.class);
                 return collectionTitleString(managedObject, facet);
@@ -108,7 +108,7 @@ public interface ManagedObject {
             }
         }
 
-        private static String objectTitleString(ManagedObject managedObject, ObjectAdapter contextAdapterIfAny) {
+        private static String objectTitleString(ManagedObject managedObject, ManagedObject contextAdapterIfAny) {
             if (managedObject.getPojo() instanceof String) {
                 return (String) managedObject.getPojo();
             }
@@ -267,16 +267,6 @@ public interface ManagedObject {
     }
 
     @Deprecated
-    static RootOid _rootOidIfAny(ManagedObject adapter) {
-        // TODO Auto-generated method stub
-        val oid = ManagedObject.promote(adapter).getOid();
-        if(!(oid instanceof RootOid)) {
-            return null;
-        }
-        return (RootOid) oid;
-    }
-    
-    @Deprecated
     static RootOid _collectionOidIfAny(ManagedObject adapter) {
         // TODO Auto-generated method stub
         val oid = ManagedObject.promote(adapter).getOid();
@@ -313,13 +303,48 @@ public interface ManagedObject {
 
     static Oid _oid(ManagedObject adapter) {
         if(adapter instanceof ObjectAdapter) {
-            return Oids.copy(promote(adapter).getOid());
+            return Oids.copy(((ObjectAdapter)adapter).getOid());
         }
         
         return Oids.oidFactory.oidFor(adapter);
     }
 
-    
+    static RootOid _rootOidIfAny(ManagedObject adapter) {
+        val oid = _oid(adapter);
+        if(oid instanceof RootOid) {
+            return (RootOid) oid;
+        }
+        return null;
+    }
+
+    static boolean isEntity(ManagedObject adapter) {
+        if(adapter==null) {
+            return false;
+        }
+        return adapter.getSpecification().isEntity();
+    }
+
+    static boolean isValue(ManagedObject adapter) {
+        if(adapter==null) {
+            return false;
+        }
+        return adapter.getSpecification().isValue();
+    }
+
+    static boolean isBookmarkable(ManagedObject adapter) {
+        if(adapter==null) {
+            return false;
+        }
+        val spec = adapter.getSpecification();
+        if(spec.isManagedBean() || spec.isViewModel() || spec.isEntity()) {
+            // services and view models are bookmarkable
+            return true;
+        }
+        return false;
+//        val state = persistenceSession.stateOf(pojo);
+//        val isRepresentingPersistent = state.isAttached() || state.isDestroyed();
+//        return isRepresentingPersistent;
+    }
 
 
 

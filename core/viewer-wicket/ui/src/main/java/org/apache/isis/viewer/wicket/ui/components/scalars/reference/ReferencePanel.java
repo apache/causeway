@@ -36,6 +36,7 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -161,17 +162,18 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     @Override
     protected IModel<String> obtainInlinePromptModel() {
         final IModel<ObjectAdapterMemento> model = select2.getModel();
+        
         return new IModel<String>() {
             private static final long serialVersionUID = 1L;
 
             @Override
             public String getObject() {
-                final ObjectAdapterMemento oam = model.getObject();
-                if(oam == null) {
+                val memento = model.getObject();
+                if(memento == null) {
                     return null;
                 }
-                ObjectAdapter objectAdapter = oam.getObjectAdapter();
-                return objectAdapter != null ? objectAdapter.titleString(null) : null;
+                val adapter = memento.getObjectAdapter(getSpecificationLoader());
+                return adapter != null ? adapter.titleString(null) : null;
             }
 
             @Override
@@ -212,7 +214,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     protected void onInitializeWhenDisabled(final String disableReason) {
         super.onInitializeWhenDisabled(disableReason);
         syncWithInput();
-        final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
+        val entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
         entityLink.setEnabled(false);
         Tooltips.addTooltip(entityLink, disableReason);
@@ -244,7 +246,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // called from onInitialize*
     // (was previous called by EntityLinkSelect2Panel in onBeforeRender, this responsibility now moved)
     private void syncWithInput() {
-        final ObjectAdapter adapter = getModel().getPendingElseCurrentAdapter();
+        val adapter = getModel().getPendingElseCurrentAdapter();
 
         // syncLinkWithInput
         final MarkupContainer componentForRegular = (MarkupContainer) getComponentForRegular();
@@ -337,7 +339,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(final ObjectAdapter[] argsIfAvailable) {
+    protected ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable) {
 
         if (getModel().hasChoices()) {
             List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
@@ -352,11 +354,11 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     }
 
     // called by setProviderAndCurrAndPending
-    private List<ObjectAdapterMemento> obtainChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
+    private List<ObjectAdapterMemento> obtainChoiceMementos(ManagedObject[] argsIfAvailable) {
         
         val commonContext = super.getCommonContext();
         
-        val choices = _Lists.<ObjectAdapter>newArrayList();
+        val choices = _Lists.<ManagedObject>newArrayList();
         if(getModel().hasChoices()) {
             choices.addAll(getModel().getChoices(argsIfAvailable, commonContext.getAuthenticationSession()));
         }
@@ -391,7 +393,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
     // called by EntityLinkSelect2Panel
     String getInput() {
-        final ObjectAdapter pendingElseCurrentAdapter = getModel().getPendingElseCurrentAdapter();
+        val pendingElseCurrentAdapter = getModel().getPendingElseCurrentAdapter();
         return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(null): "(no object)";
     }
 
@@ -402,18 +404,18 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         if(isEditableWithEitherAutoCompleteOrChoices()) {
 
             // flush changes to pending
-            ObjectAdapterMemento convertedInput =
-                    select2.getConvertedInput();
+            ObjectAdapterMemento convertedInput = select2.getConvertedInput();
 
             getModel().setPending(convertedInput);
             if(select2 != null) {
                 select2.getModel().setObject(convertedInput);
             }
 
-            final ObjectAdapter adapter = convertedInput!=null
-                    ? convertedInput.getObjectAdapter()
+            val adapter = convertedInput!=null
+                    ? convertedInput.getObjectAdapter(super.getSpecificationLoader())
                             :null;
-                    getModel().setObject(adapter);
+                    
+            getModel().setObject(adapter);
         }
 
         final ObjectAdapter pendingAdapter = getModel().getPendingAdapter();

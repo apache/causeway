@@ -33,7 +33,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -113,7 +113,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.
      */
-    private void setProviderAndCurrAndPending(final Select2 select2, ObjectAdapter[] argsIfAvailable) {
+    private void setProviderAndCurrAndPending(Select2 select2, ManagedObject[] argsIfAvailable) {
 
         final ChoiceProvider<ObjectAdapterMemento> choiceProvider = buildChoiceProvider(argsIfAvailable);
 
@@ -129,12 +129,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ObjectAdapter[])})
      */
-    protected abstract ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(final ObjectAdapter[] argsIfAvailable);
+    protected abstract ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable);
 
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ObjectAdapter[])})
      */
-    protected abstract void syncIfNull(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos);
+    protected abstract void syncIfNull(Select2 select2, List<ObjectAdapterMemento> choicesMementos);
 
 
     // //////////////////////////////////////
@@ -179,7 +179,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             final int paramNumToPossiblyUpdate,
             final AjaxRequestTarget target) {
 
-        final ObjectAdapter[] argumentsAsArray = actionModel.getArgumentsAsArray();
+        final ManagedObject[] argumentsAsArray = actionModel.getArgumentsAsArray();
 
         final Repaint repaint =
                 super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate, target);
@@ -195,7 +195,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             return repaint;
     }
 
-    private boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
+    private boolean updateChoices(ManagedObject[] argsIfAvailable) {
         if (select2 == null) {
             return false;
         }
@@ -235,19 +235,20 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             final ObjectAdapterMemento proposedValue;
 
             if (proposedValueObj instanceof List) {
+                @SuppressWarnings("unchecked")
                 val proposedValueObjAsList = (List<ObjectAdapterMemento>) proposedValueObj;
                 if (proposedValueObjAsList.isEmpty()) {
                     return;
                 }
-                final ObjectAdapterMemento oam = proposedValueObjAsList.get(0);
-                final ObjectSpecId objectSpecId = oam.getObjectSpecId();
+                val memento = proposedValueObjAsList.get(0);
+                val objectSpecId = memento.getObjectSpecId();
                 proposedValue = ObjectAdapterMemento
                         .wrapMementoList(proposedValueObjAsList, objectSpecId);
             } else {
                 proposedValue = (ObjectAdapterMemento) proposedValueObj;
             }
 
-            final ObjectAdapter proposedAdapter = proposedValue.getObjectAdapter();
+            val proposedAdapter = proposedValue.getObjectAdapter(scalarModel.getSpecificationLoader());
 
             final String reasonIfAny = scalarModel.validate(proposedAdapter);
             if (reasonIfAny != null) {

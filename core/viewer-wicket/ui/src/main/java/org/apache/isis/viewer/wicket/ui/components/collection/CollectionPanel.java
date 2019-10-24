@@ -28,7 +28,7 @@ import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
@@ -47,6 +47,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.val;
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
@@ -75,7 +76,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
 
         final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection(collectionModel.getSpecificationLoader());
         final EntityModel entityModel = collectionModel.getEntityModel();
-        final ObjectAdapter adapter = entityModel.load();
+        val adapter = entityModel.load();
 
         final List<ObjectAction> associatedActions =
                 ObjectAction.Util.findForAssociation(adapter, otma);
@@ -152,7 +153,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
                 @Override
                 public void onSelected(
                         final Component context,
-                        final ObjectAdapter selectedAdapter,
+                        final ManagedObject selectedAdapter,
                         final AjaxRequestTarget ajaxRequestTarget) {
                     getModel().toggleSelectionOn(selectedAdapter);
                 }

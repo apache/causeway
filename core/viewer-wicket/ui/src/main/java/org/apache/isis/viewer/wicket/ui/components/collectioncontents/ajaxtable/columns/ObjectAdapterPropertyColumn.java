@@ -27,6 +27,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -40,6 +41,8 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
+import lombok.val;
+
 /**
  * A {@link ColumnAbstract column} within a
  * {@link CollectionContentsAsAjaxTablePanel} representing a single property of the
@@ -49,7 +52,7 @@ import org.apache.isis.webapp.context.IsisWebAppCommonContext;
  * Looks up the {@link ComponentFactory} to render the property from the
  * {@link ComponentFactoryRegistry}.
  */
-public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdapter> {
+public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
@@ -97,14 +100,18 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
     }
 
     @Override
-    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
+    public void populateItem(
+            final Item<ICellPopulator<ManagedObject>> cellItem, 
+            final String componentId, 
+            final IModel<ManagedObject> rowModel) {
+        
         final Component component = createComponent(componentId, rowModel);
         cellItem.add(component);
     }
 
-    private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
+    private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
 
-        final ObjectAdapter adapter = rowModel.getObject();
+        val adapter = rowModel.getObject();
         final EntityModel entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
         final OneToOneAssociation property = (OneToOneAssociation) adapter.getSpecification().getAssociation(propertyExpression);
         final PropertyMemento pm = new PropertyMemento(property);

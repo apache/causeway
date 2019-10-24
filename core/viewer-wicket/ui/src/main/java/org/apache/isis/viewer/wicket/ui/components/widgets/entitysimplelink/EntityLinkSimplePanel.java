@@ -24,17 +24,22 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
+import lombok.val;
+
 /**
  * {@link FormComponentPanel} representing a reference to an entity: a link and
  * (optionally) an autocomplete field.
  */
-public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired  {
+public class EntityLinkSimplePanel 
+extends FormComponentPanelAbstract<ManagedObject> 
+implements CancelHintRequired  {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,7 +67,7 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
     }
 
     private void syncWithInput() {
-        final ObjectAdapter adapter = getEntityModel().getObject(); // getPendingElseCurrentAdapter();
+        val adapter = getEntityModel().getObject(); // getPendingElseCurrentAdapter();
 
         if (adapter != null) {
             final EntityModel entityModelForLink = getEntityModel();

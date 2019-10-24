@@ -36,12 +36,13 @@ import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Generics;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import lombok.val;
 
 public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
 
@@ -97,13 +98,15 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     protected Item<T> newRowItem(final String id, final int index, final IModel<T> model)
     {
         return new OddEvenItem<T>(id, index, model) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
 
                 if (model instanceof EntityModel) {
                     EntityModel entityModel = (EntityModel) model;
-                    final ObjectAdapter objectAdapter = entityModel.getObject();
+                    val objectAdapter = entityModel.getObject();
                     final ObjectSpecification typeOfSpecification = entityModel.getTypeOfSpecification();
                     String cssClass = typeOfSpecification.getCssClass(objectAdapter);
                     CssClassAppender.appendCssClassTo(tag, cssClass);

@@ -36,8 +36,8 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -154,13 +154,13 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         final List<PropertyLayoutData> properties = this.fieldSet.getProperties();
         // changed to NO_CHECK because more complex BS3 layouts trip concurrency exception
         // (haven't investigated as to why).
-        final ObjectAdapter adapter = getModel().load();
+        val adapter = getModel().load();
         return getObjectAssociations(properties, adapter);
     }
 
     private List<ObjectAssociation> getObjectAssociations(
             final List<PropertyLayoutData> properties,
-            final ObjectAdapter adapter) {
+            final ManagedObject adapter) {
 
         //
         // previously we filtered out any invisible properties.
@@ -217,7 +217,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
-        final ObjectAdapter adapter = entityModel.load();
+        val adapter = entityModel.load();
         final List<ObjectAction> associatedActions =
                 ObjectAction.Util.findForAssociation(adapter, otoa);
 

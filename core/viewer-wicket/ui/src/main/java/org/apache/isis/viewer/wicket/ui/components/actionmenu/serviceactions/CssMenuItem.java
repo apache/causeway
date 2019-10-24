@@ -32,7 +32,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -50,6 +49,8 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+
+import lombok.val;
 
 class CssMenuItem implements Serializable {
 
@@ -352,7 +353,7 @@ class CssMenuItem implements Serializable {
         final boolean separator = serviceAndAction.separator;
         final ServiceActionLinkFactory actionLinkFactory = serviceAndAction.linkAndLabelFactory;
 
-        final ObjectAdapter serviceAdapter = targetEntityModel.load();
+        val serviceAdapter = targetEntityModel.load();
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
         if (serviceSpec.isHidden()) {
             return null;

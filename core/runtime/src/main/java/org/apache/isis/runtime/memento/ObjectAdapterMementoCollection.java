@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.Getter;
@@ -49,16 +50,11 @@ final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
     @Getter(onMethod = @__({@Override})) private final ObjectSpecId objectSpecId;
 
     @Override
-    public void resetVersion() {
-        throw _Exceptions.notImplemented(); // please unwrap at call-site
-    }
-
-    @Override
-    public ObjectAdapter getObjectAdapter() {
+    public ObjectAdapter getObjectAdapter(SpecificationLoader specificationLoader) {
 
         //TODO[2112] we don't need the persistence layer to do that!
         val listOfPojos = getContainer().stream()
-                .map(ObjectAdapterMemento::getObjectAdapter)
+                .map(memento->memento.getObjectAdapter(specificationLoader))
                 .filter(_NullSafe::isPresent)
                 .map(ObjectAdapter::getPojo)
                 .filter(_NullSafe::isPresent)

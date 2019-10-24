@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -91,7 +90,7 @@ implements LinksProvider, UiHintContainer {
     }
 
     public static EntityCollectionModel createStandalone(
-            ObjectAdapter collectionAsAdapter, 
+            ManagedObject collectionAsAdapter, 
             ModelAbstract<?> model) {
 
         // dynamically determine the spec of the elements
@@ -201,7 +200,7 @@ implements LinksProvider, UiHintContainer {
             private Stream<ObjectAdapter> loadElementsOneByOne(final EntityCollectionModel model) {
 
                 return stream(model.mementoList)
-                        .map(ObjectAdapterMemento::getObjectAdapter)
+                        .map(memento->memento.getObjectAdapter(model.getSpecificationLoader()))
                         .filter(_NullSafe::isPresent);
             }
 
@@ -247,10 +246,11 @@ implements LinksProvider, UiHintContainer {
             @Override
             List<ObjectAdapter> load(EntityCollectionModel colModel) {
 
-                final ObjectAdapter adapter = colModel.getParentObjectAdapterMemento().getObjectAdapter();
+                final ObjectAdapter adapter = colModel.getParentObjectAdapterMemento()
+                        .getObjectAdapter(colModel.getSpecificationLoader());
 
-                final OneToManyAssociation collection = colModel.collectionMemento.getCollection(
-                        colModel.getSpecificationLoader());
+                final OneToManyAssociation collection = colModel.collectionMemento
+                        .getCollection(colModel.getSpecificationLoader());
 
                 final ManagedObject collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
 
@@ -514,16 +514,16 @@ implements LinksProvider, UiHintContainer {
         return collectionMemento;
     }
 
-    private static Iterable<Object> asIterable(final ObjectAdapter resultAdapter) {
+    private static Iterable<Object> asIterable(final ManagedObject resultAdapter) {
         return _Casts.uncheckedCast(resultAdapter.getPojo());
     }
 
-    private static Stream<Object> streamElementsOf(final ObjectAdapter resultAdapter) {
+    private static Stream<Object> streamElementsOf(final ManagedObject resultAdapter) {
         return _NullSafe.stream(asIterable(resultAdapter));
     }
 
 
-    public void toggleSelectionOn(ObjectAdapter selectedAdapter) {
+    public void toggleSelectionOn(ManagedObject selectedAdapter) {
         ObjectAdapterMemento selectedAsMemento = ObjectAdapterMemento
                 .ofAdapter(selectedAdapter, super.getMementoSupport());
 

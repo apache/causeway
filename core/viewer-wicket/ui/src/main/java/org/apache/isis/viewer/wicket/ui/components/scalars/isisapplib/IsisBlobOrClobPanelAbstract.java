@@ -143,7 +143,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     private Image asWicketImage(String id) {
 
-        final ObjectAdapter adapter = getModel().getObject();
+        val adapter = getModel().getObject();
         if(adapter == null) {
             return null;
         }
@@ -251,7 +251,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     @SuppressWarnings("unchecked")
     private T getBlobOrClob(final ScalarModel model) {
-        ObjectAdapter adapter = model.getObject();
+        val adapter = model.getObject();
         return adapter != null? (T) adapter.getPojo(): null;
     }
 

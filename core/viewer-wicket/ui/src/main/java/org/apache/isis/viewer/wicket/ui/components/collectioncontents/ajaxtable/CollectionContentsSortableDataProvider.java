@@ -51,7 +51,7 @@ import lombok.val;
 /**
  * Part of the {@link AjaxFallbackDefaultDataTable} API.
  */
-public class CollectionContentsSortableDataProvider extends SortableDataProvider<ObjectAdapter,String> {
+public class CollectionContentsSortableDataProvider extends SortableDataProvider<ManagedObject, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,7 +62,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     }
 
     @Override
-    public IModel<ObjectAdapter> model(final ObjectAdapter adapter) {
+    public IModel<ManagedObject> model(ManagedObject adapter) {
         return EntityModel.ofAdapter(model.getCommonContext(), adapter);
     }
 

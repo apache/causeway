@@ -212,6 +212,7 @@ public interface ObjectAdapter extends ManagedObject {
         public static boolean isVisible(
                 final ManagedObject adapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
+            
             if(adapter == null) {
                 // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
                 return true;

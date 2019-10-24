@@ -37,6 +37,7 @@ import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
@@ -102,7 +103,7 @@ public class EntityPage extends PageAbstract {
         this(pageParameters, entityModel, null);
     }
 
-    public EntityPage(IsisWebAppCommonContext commonContext, ObjectAdapter adapter) {
+    public EntityPage(IsisWebAppCommonContext commonContext, ManagedObject adapter) {
         this(commonContext, adapter, null);
     }
 
@@ -112,7 +113,7 @@ public class EntityPage extends PageAbstract {
      */
     public EntityPage(
             IsisWebAppCommonContext commonContext, 
-            ObjectAdapter adapter, 
+            ManagedObject adapter, 
             ConcurrencyException exIfAny) {
         
         this(PageParametersUtils.newPageParameters(), newEntityModel(commonContext, adapter, exIfAny));
@@ -120,7 +121,7 @@ public class EntityPage extends PageAbstract {
 
     private static EntityModel newEntityModel(
             IsisWebAppCommonContext commonContext,
-            ObjectAdapter adapter,
+            ManagedObject adapter,
             ConcurrencyException exIfAny) {
         
         val entityModel = EntityModel.ofAdapter(commonContext, adapter);
@@ -162,7 +163,7 @@ public class EntityPage extends PageAbstract {
     }
 
     private void buildPage() {
-        final ObjectAdapter objectAdapter;
+        final ManagedObject objectAdapter;
         try {
             // check object still exists
             objectAdapter = model.getObject();

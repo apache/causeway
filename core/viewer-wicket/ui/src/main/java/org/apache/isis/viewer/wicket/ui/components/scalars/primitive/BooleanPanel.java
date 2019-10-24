@@ -29,7 +29,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
@@ -118,7 +117,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
 
             @Override public String getObject() {
                 final ScalarModel model = getModel();
-                final ObjectAdapter adapter = model.getObject();
+                val adapter = model.getObject();
                 final Boolean bool = adapter != null ? (Boolean) adapter.getPojo() : null;
                 return bool == null? "(not set)" : bool ? "Yes" : "No";
             }
@@ -135,7 +134,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
             @Override
             public Boolean getObject() {
                 final ScalarModel model = getModel();
-                final ObjectAdapter adapter = model.getObject();
+                val adapter = model.getObject();
                 return adapter != null? (Boolean) adapter.getPojo(): null;
             }
 

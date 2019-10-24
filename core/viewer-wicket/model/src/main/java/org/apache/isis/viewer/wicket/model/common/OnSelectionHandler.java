@@ -24,7 +24,7 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Decouples the selecting of items (by a toggle box column) from the invocation of bulk actions on those items (by
@@ -32,9 +32,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
  */
 public interface OnSelectionHandler extends Serializable {
 
-    void onSelected(
-            Component context, ObjectAdapter selectedAdapter,
-            AjaxRequestTarget ajaxRequestTarget);
+    void onSelected(Component context, ManagedObject selectedAdapter, AjaxRequestTarget ajaxRequestTarget);
 
 
 }

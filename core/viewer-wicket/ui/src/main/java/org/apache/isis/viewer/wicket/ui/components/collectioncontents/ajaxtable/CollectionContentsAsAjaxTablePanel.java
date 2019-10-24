@@ -46,6 +46,7 @@ import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
@@ -77,7 +78,7 @@ implements CollectionCountProvider {
 
     private static final String ID_TABLE = "table";
 
-    private IsisAjaxFallbackDataTable<ObjectAdapter,String> dataTable;
+    private IsisAjaxFallbackDataTable<ManagedObject, String> dataTable;
 
 
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
@@ -92,7 +93,7 @@ implements CollectionCountProvider {
 
     private void buildGui() {
 
-        final List<IColumn<ObjectAdapter,String>> columns = _Lists.newArrayList();
+        final List<IColumn<ManagedObject, String>> columns = _Lists.newArrayList();
 
         // bulk actions
         final BulkActionsProvider bulkActionsProvider = getBulkActionsProvider();
@@ -129,7 +130,7 @@ implements CollectionCountProvider {
                 @Override
                 public void onConcurrencyException(
                         final Component context,
-                        final ObjectAdapter selectedAdapter,
+                        final ManagedObject selectedAdapter,
                         final ConcurrencyException ex,
                         final AjaxRequestTarget ajaxRequestTarget) {
 
@@ -163,16 +164,17 @@ implements CollectionCountProvider {
 
 
     private void addTitleColumn(
-            final List<IColumn<ObjectAdapter,String>> columns,
+            final List<IColumn<ManagedObject, String>> columns,
             final ObjectAdapterMemento parentAdapterMementoIfAny,
             final int maxTitleParented,
             final int maxTitleStandalone) {
         
         final int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
-        columns.add(new ObjectAdapterTitleColumn(super.commonContext, parentAdapterMementoIfAny, maxTitleLength));
+        columns.add(new ObjectAdapterTitleColumn(
+                super.commonContext, parentAdapterMementoIfAny, maxTitleLength));
     }
 
-    private void addPropertyColumnsIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
+    private void addPropertyColumnsIfRequired(final List<IColumn<ManagedObject, String>> columns) {
         final ObjectSpecification typeOfSpec = getModel().getTypeOfSpecification();
 
 
@@ -187,7 +189,7 @@ implements CollectionCountProvider {
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
             final EntityModel entityModel = getModel().getEntityModel();
-            final ObjectAdapter objectAdapterIfAny = entityModel != null ? entityModel.getObject() : null;
+            final ManagedObject objectAdapterIfAny = entityModel != null ? entityModel.getObject() : null;
             final Grid grid = gridFacet.getGrid(objectAdapterIfAny);
 
 
@@ -217,7 +219,7 @@ implements CollectionCountProvider {
 
         final ObjectSpecification parentSpecIfAny =
                 getModel().isParented()
-                ? getModel().getParentObjectAdapterMemento().getObjectAdapter().getSpecification()
+                ? getModel().getParentObjectAdapterMemento().getObjectAdapter(commonContext.getSpecificationLoader()).getSpecification()
                         : null;
 
                 final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
@@ -261,7 +263,7 @@ implements CollectionCountProvider {
                 for (final String propertyId : propertyIds) {
                     final ObjectAssociation property = propertyById.get(propertyId);
                     if(property != null) {
-                        final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
+                        final ColumnAbstract<ManagedObject> nopc = createObjectAdapterPropertyColumn(property);
                         columns.add(nopc);
                     }
                 }
@@ -275,7 +277,7 @@ implements CollectionCountProvider {
 
         final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
         if(parentObjectAdapterMemento != null) {
-            final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento.getObjectAdapter();
+            final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento.getObjectAdapter(commonContext.getSpecificationLoader());
             final Object parent = parentObjectAdapter.getPojo();
             final String collectionId = getModel().getCollectionMemento().getId();
 

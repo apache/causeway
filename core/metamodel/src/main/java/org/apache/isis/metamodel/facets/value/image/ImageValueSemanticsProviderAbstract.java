@@ -33,7 +33,9 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
-public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements ImageValueFacet {
+public abstract class ImageValueSemanticsProviderAbstract<T> 
+extends ValueSemanticsProviderAndFacetAbstract<T> 
+implements ImageValueFacet {
 
     private static final int TYPICAL_LENGTH = 18;
     private static final Object DEFAULT_VALUE = null; // no default

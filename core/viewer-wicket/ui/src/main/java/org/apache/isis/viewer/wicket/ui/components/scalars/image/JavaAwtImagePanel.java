@@ -26,8 +26,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.value.image.ImageValueFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -52,7 +52,7 @@ public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
         addOrReplace(scalarName);
 
         final ImageValueFacet imageValueFacet = getModel().getTypeOfSpecification().getFacet(ImageValueFacet.class);
-        final ObjectAdapter adapter = getModel().getObject();
+        final ManagedObject adapter = getModel().getObject();
         if (adapter != null) {
             final java.awt.Image imageValue = imageValueFacet.getImage(adapter);
             final RenderedDynamicImageResource imageResource = new RenderedDynamicImageResource(

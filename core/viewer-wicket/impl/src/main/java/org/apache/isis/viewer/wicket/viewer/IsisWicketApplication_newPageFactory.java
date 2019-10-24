@@ -24,6 +24,7 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.RequiredArgsConstructor;
@@ -66,6 +67,11 @@ class IsisWicketApplication_newPageFactory {
         
         @Override
         public <C extends IRequestablePage> C newPage(Class<C> pageClass) {
+            
+            if(EntityPage.class.equals(pageClass)) {
+                return _Casts.uncheckedCast(new EntityPage(holder.getCommonContext(), PageParametersUtils.newPageParameters()));
+            }
+            
             return delegate.newPage(pageClass);
         }
         

@@ -23,7 +23,7 @@ import java.io.Serializable;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
@@ -49,12 +49,12 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
     @Override
     public T getObject() {
         final ScalarModel model = scalarModelProvider.getModel();
-        final ObjectAdapter objectAdapter = model.getObject();
+        val objectAdapter = model.getObject();
         return asT(objectAdapter);
     }
 
     @SuppressWarnings("unchecked")
-    private T asT(final ObjectAdapter objectAdapter) {
+    private T asT(ManagedObject objectAdapter) {
         return (T) (objectAdapter != null? objectAdapter.getPojo(): null);
     }
 

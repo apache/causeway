@@ -44,10 +44,10 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.metamodel.facets.properties.renderunchanged.UnchangingFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.runtime.system.session.IsisRequestCycle;
@@ -70,7 +70,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
+public final class FormExecutorDefault<M extends BookmarkableModel<ManagedObject> & ParentEntityModelProvider>
 implements FormExecutor {
 
     private static final long serialVersionUID = 1L;
@@ -102,7 +102,7 @@ implements FormExecutor {
             final boolean withinPrompt) {
 
         Command command = null;
-        ObjectAdapter targetAdapter = null;
+        ManagedObject targetAdapter = null;
 
         final EntityModel targetEntityModel = model.getParentEntityModel();
 
@@ -142,15 +142,14 @@ implements FormExecutor {
             //
             // (The DB exception might actually be thrown by the flush() that follows.
             //
-            final ObjectAdapter resultAdapter = obtainResultAdapter();
+            val resultAdapter = obtainResultAdapter();
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
             IsisRequestCycle.onResultAdapterObtained();
 
 
             // update target, since version updated (concurrency checks)
-            targetEntityModel.resetVersion();
             targetAdapter = targetEntityModel.load();
-            if(!targetAdapter.isDestroyed()) {
+            if(!ManagedObject._isDestroyed(targetAdapter)) {
                 targetEntityModel.resetPropertyModels();
             }
 
@@ -179,7 +178,7 @@ implements FormExecutor {
                     targetEntityModel.setObject(resultAdapter);
                     targetAdapter = targetEntityModel.load();
                 }
-                if(!targetAdapter.isDestroyed()) {
+                if(!ManagedObject._isDestroyed(targetAdapter)) {
                     targetEntityModel.resetPropertyModels();
                 }
 
@@ -256,8 +255,8 @@ implements FormExecutor {
     }
 
     private boolean shouldRedirect(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter resultAdapter,
+            final ManagedObject targetAdapter,
+            final ManagedObject resultAdapter,
             final RedirectFacet redirectFacet) {
 
         if(redirectFacet == null) {
@@ -283,8 +282,8 @@ implements FormExecutor {
     }
 
     private boolean differs(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter resultAdapter) {
+            final ManagedObject targetAdapter,
+            final ManagedObject resultAdapter) {
 
         final ObjectAdapterMemento targetOam = getCommonContext().mementoFor(targetAdapter);
         final ObjectAdapterMemento resultOam = getCommonContext().mementoFor(resultAdapter);
@@ -348,12 +347,12 @@ implements FormExecutor {
     }
 
     private void forwardOnConcurrencyException(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final ConcurrencyException ex) {
 
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage = new EntityPage(model.getCommonContext() , targetAdapter, ex);
+        val entityPage = new EntityPage(model.getCommonContext() , targetAdapter, ex);
         
         // force any changes in state etc to happen now prior to the redirect;
         // in the case of an object being returned, this should cause our page mementos
@@ -536,7 +535,7 @@ implements FormExecutor {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    private ObjectAdapter obtainTargetAdapter() {
+    private ManagedObject obtainTargetAdapter() {
         return formExecutorStrategy.obtainTargetAdapter();
     }
 
@@ -548,12 +547,12 @@ implements FormExecutor {
         formExecutorStrategy.onExecuteAndProcessResults(target);
     }
 
-    private ObjectAdapter obtainResultAdapter() {
+    private ManagedObject obtainResultAdapter() {
         return formExecutorStrategy.obtainResultAdapter();
     }
 
     private void redirectTo(
-            final ObjectAdapter resultAdapter,
+            final ManagedObject resultAdapter,
             final AjaxRequestTarget target) {
         formExecutorStrategy.redirectTo(resultAdapter, target);
     }

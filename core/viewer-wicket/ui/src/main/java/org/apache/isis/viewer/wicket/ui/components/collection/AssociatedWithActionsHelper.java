@@ -25,16 +25,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ActionType;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.val;
 
 /**
  * See also {@link BulkActionsHelper}.
@@ -67,8 +67,8 @@ public class AssociatedWithActionsHelper implements Serializable {
     }
 
     private ObjectSpecification getObjectSpecification() {
-        final ObjectAdapterMemento parentOam = collectionModel.getParentObjectAdapterMemento();
-        final ObjectAdapter parentAdapter = parentOam.getObjectAdapter();
+        val parentMemento = collectionModel.getParentObjectAdapterMemento();
+        val parentAdapter = parentMemento.getObjectAdapter(collectionModel.getSpecificationLoader());
         return parentAdapter.getSpecification();
     }
 

@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.stream.Stream;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.util.pchain.ParentChain;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
@@ -52,7 +51,7 @@ class WhereAmIModelDefault implements WhereAmIModel {
 
         overrideFromConfigIfNew(commonContext.getConfiguration());
 
-        final ObjectAdapter adapter = startOfChain.getObject();
+        val adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();
 
         ParentChain.of(commonContext.getSpecificationLoader()::loadSpecification)

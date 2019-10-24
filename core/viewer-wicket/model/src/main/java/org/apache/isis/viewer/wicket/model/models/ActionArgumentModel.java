@@ -20,14 +20,14 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
-public interface ActionArgumentModel extends IModel<ObjectAdapter> {
+public interface ActionArgumentModel extends IModel<ManagedObject> {
 
     ActionParameterMemento getParameterMemento();
 
     void reset();
 
-    void setActionArgsHint(ObjectAdapter[] argumentsAsArray);
+    void setActionArgsHint(ManagedObject[] argumentsAsArray);
 }

@@ -28,9 +28,9 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -96,21 +96,21 @@ class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract<int
     }
 
     @Override
-    public int getHeight(final ObjectAdapter object) {
+    public int getHeight(final ManagedObject object) {
         return 0;
     }
 
     @Override
-    public Image getImage(final ObjectAdapter object) {
+    public Image getImage(final ManagedObject object) {
         return null;
     }
 
     @Override
-    public int getWidth(final ObjectAdapter object) {
+    public int getWidth(final ManagedObject object) {
         return 0;
     }
 
-    public ObjectAdapter setImage(final ObjectAdapter object, final Image image) {
+    public ManagedObject setImage(final ManagedObject object, final Image image) {
         return null;
     }
 
@@ -120,7 +120,7 @@ class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract<int
     }
 
     @Override
-    public ObjectAdapter createValue(final Image image) {
+    public ManagedObject createValue(final Image image) {
         return null;
     }
 }

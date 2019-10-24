@@ -35,6 +35,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.ObjectAdapterMementoDefault.RecreateStrategy;
 
 import lombok.val;
@@ -68,9 +69,7 @@ public interface ObjectAdapterMemento extends Serializable {
 
     ObjectSpecId getObjectSpecId();
 
-    ObjectAdapter getObjectAdapter(); 
-
-    void resetVersion();
+    ObjectAdapter getObjectAdapter(SpecificationLoader specificationLoader); 
 
     // -- FACTORIES
 

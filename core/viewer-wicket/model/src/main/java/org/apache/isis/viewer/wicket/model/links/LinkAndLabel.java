@@ -28,8 +28,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 public class LinkAndLabel implements Serializable {
@@ -43,7 +43,7 @@ public class LinkAndLabel implements Serializable {
     }
 
     public static LinkAndLabel newLinkAndLabel(
-            final ObjectAdapter objectAdapter,
+            final ManagedObject objectAdapter,
             final ObjectAction objectAction,
             final AbstractLink link,
             final boolean blobOrClob) {

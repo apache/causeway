@@ -82,27 +82,27 @@ public interface CollectionFacet extends Facet {
 
     public static class Utils {
 
-        public static CollectionFacet getCollectionFacetFromSpec(final ManagedObject objectRepresentingCollection) {
-            final ObjectSpecification collectionSpec = objectRepresentingCollection.getSpecification();
+        public static CollectionFacet getCollectionFacetFromSpec(ManagedObject objectRepresentingCollection) {
+            val collectionSpec = objectRepresentingCollection.getSpecification();
             return collectionSpec.getFacet(CollectionFacet.class);
         }
 
-        public static int size(final ManagedObject collection) {
-            final CollectionFacet facet = getCollectionFacetFromSpec(collection);
-            return facet.size(collection);
+        public static int size(ManagedObject collection) {
+            val collectionFacet = getCollectionFacetFromSpec(collection);
+            return collectionFacet.size(collection);
         }
 
-        public static <T extends ManagedObject> Stream<T> streamAdapters(final T collectionAdapter) {
+        public static <T extends ManagedObject> Stream<T> streamAdapters(T collectionAdapter) {
             val collectionFacet = getCollectionFacetFromSpec(collectionAdapter);
             return Utils.<T>downCast(collectionFacet.stream(collectionAdapter));
         }
 
-        public static <T extends ManagedObject> List<T> toAdapterList(final T collectionAdapter) {
+        public static <T extends ManagedObject> List<T> toAdapterList(T collectionAdapter) {
             return streamAdapters(collectionAdapter)
                     .collect(Collectors.toList());
         }
 
-        private static <T extends ManagedObject> Stream<T> downCast(final Stream<ManagedObject> stream) {
+        private static <T extends ManagedObject> Stream<T> downCast(Stream<ManagedObject> stream) {
             final Function<ManagedObject, T> uncheckedCast = _Casts::uncheckedCast;
             return stream.map(uncheckedCast);
         }

@@ -24,7 +24,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
@@ -33,7 +33,9 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
+import lombok.val;
+
+public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
     private final ObjectAdapterMemento parentAdapterMementoIfAny;
@@ -55,14 +57,18 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
     }
 
     @Override
-    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
+    public void populateItem(
+            final Item<ICellPopulator<ManagedObject>> cellItem, 
+            final String componentId, 
+            final IModel<ManagedObject> rowModel) {
+        
         final Component component = createComponent(componentId, rowModel);
         cellItem.add(component);
         cellItem.add(new CssClassAppender("title-column"));
     }
 
-    private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
-        final ObjectAdapter adapter = rowModel.getObject();
+    private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
+        val adapter = rowModel.getObject();
         final EntityModel model = EntityModel.ofAdapter(super.getCommonContext(), adapter);
         model.setRenderingHint(parentAdapterMementoIfAny != null? RenderingHint.PARENTED_TITLE_COLUMN: RenderingHint.STANDALONE_TITLE_COLUMN);
         model.setContextAdapterIfAny(parentAdapterMementoIfAny);

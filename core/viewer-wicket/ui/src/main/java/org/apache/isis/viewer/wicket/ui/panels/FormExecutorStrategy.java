@@ -20,24 +20,22 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
 
-public interface FormExecutorStrategy<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider> {
+public interface FormExecutorStrategy<M extends BookmarkableModel<ManagedObject> & ParentEntityModelProvider> {
 
     M getModel();
 
-    ObjectAdapter obtainTargetAdapter();
+    ManagedObject obtainTargetAdapter();
 
     String getReasonInvalidIfAny();
 
-    void onExecuteAndProcessResults(final AjaxRequestTarget target);
+    void onExecuteAndProcessResults(AjaxRequestTarget target);
 
-    ObjectAdapter obtainResultAdapter();
+    ManagedObject obtainResultAdapter();
 
-    void redirectTo(
-            final ObjectAdapter resultAdapter,
-            final AjaxRequestTarget target);
+    void redirectTo(ManagedObject resultAdapter, AjaxRequestTarget target);
 
 }

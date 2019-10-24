@@ -20,9 +20,9 @@
 package org.apache.isis.metamodel.facets.value.image;
 
 import org.apache.isis.applib.value.Image;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
@@ -32,16 +32,16 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
     }
 
     @Override
-    public int getHeight(final ObjectAdapter object) {
+    public int getHeight(final ManagedObject object) {
         return image(object).getHeight();
     }
 
-    private Image image(final ObjectAdapter object) {
+    private Image image(final ManagedObject object) {
         return (Image) object.getPojo();
     }
 
     @Override
-    public java.awt.Image getImage(final ObjectAdapter object) {
+    public java.awt.Image getImage(final ManagedObject object) {
         return createImage(image(object).getImage());
     }
 
@@ -55,7 +55,7 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
     }
 
     @Override
-    public int getWidth(final ObjectAdapter object) {
+    public int getWidth(final ManagedObject object) {
         return image(object).getWidth();
     }
 
@@ -93,7 +93,7 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
     }
 
     @Override
-    public ObjectAdapter createValue(final java.awt.Image image) {
+    public ManagedObject createValue(final java.awt.Image image) {
         return getObjectAdapterProvider().adapterFor(new Image(grabPixels(image)));
     }
 

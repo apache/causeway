@@ -22,13 +22,14 @@ package org.apache.isis.viewer.wicket.ui.components.tree;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanel;
+
+import lombok.val;
 
 /**
  * {@link ComponentFactory} for {@link MarkupPanel}.
@@ -82,7 +83,7 @@ public class TreePanelFactories {
             }
 
             final ValueModel valueModel = (ValueModel) model;
-            final ObjectAdapter adapter = valueModel.getObject();
+            val adapter = valueModel.getObject();
             if(adapter==null || adapter.getPojo()==null) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }

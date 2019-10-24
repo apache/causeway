@@ -42,7 +42,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 
 import lombok.val;
 
@@ -74,7 +73,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
             }
 
             private String titleFor(final EntityModel model) {
-                return model.getObjectAdapterMemento().getObjectAdapter().titleString(null);
+                return model.getObjectAdapterMemento().getObjectAdapter(commonContext.getSpecificationLoader()).titleString(null);
             }
 
 

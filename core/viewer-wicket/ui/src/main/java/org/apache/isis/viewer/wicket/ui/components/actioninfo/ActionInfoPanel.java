@@ -21,10 +21,11 @@ package org.apache.isis.viewer.wicket.ui.components.actioninfo;
 
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import lombok.val;
 
 /**
  * Renders a panel providing summary information about an action.
@@ -39,7 +40,7 @@ public class ActionInfoPanel extends PanelAbstract<ActionModel> {
     public ActionInfoPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
 
-        final ObjectAdapter targetAdapter = getModel().getTargetAdapter();
+        val targetAdapter = getModel().getTargetAdapter();
         final ObjectAction objectAction = getModel().getActionMemento().getAction(getModel().getSpecificationLoader());
 
         // TODO: render instead as links (providing isn't a service; provide a

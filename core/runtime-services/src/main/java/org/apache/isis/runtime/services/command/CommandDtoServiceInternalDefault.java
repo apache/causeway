@@ -110,7 +110,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         dto.setTransactionId(transactionId);
 
         for (val targetAdapter : targetAdapters) {
-            final RootOid rootOid = (RootOid) ManagedObject.promote(targetAdapter).getOid();
+            final RootOid rootOid = (RootOid) ManagedObject._oid(targetAdapter);
             final Bookmark bookmark = rootOid.asBookmark();
             final OidsDto targets = CommandDtoUtils.targetsFor(dto);
             targets.getOid().add(bookmark.toOidDto());

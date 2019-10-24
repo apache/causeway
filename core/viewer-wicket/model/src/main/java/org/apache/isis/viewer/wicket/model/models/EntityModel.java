@@ -55,13 +55,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Backing model to represent a {@link ObjectAdapter}.
+ * Backing model to represent a {@link ManagedObject}.
  *
  * <p>
- * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
+ * So that the model is {@link Serializable}, the {@link ManagedObject} is
  * stored as a {@link ObjectAdapterMemento}.
  */
-public class EntityModel extends BookmarkableModel<ObjectAdapter> 
+public class EntityModel extends BookmarkableModel<ManagedObject> 
 implements ObjectAdapterModel, UiHintContainer {
 
     private static final long serialVersionUID = 1L;
@@ -72,14 +72,13 @@ implements ObjectAdapterModel, UiHintContainer {
      * Factory method for creating {@link PageParameters} to represent an
      * entity.
      */
-    public static PageParameters createPageParameters(final ObjectAdapter adapter) {
+    public static PageParameters createPageParameters(ManagedObject adapter) {
 
-        final PageParameters pageParameters = PageParametersUtils.newPageParameters();
+        val pageParameters = PageParametersUtils.newPageParameters();
+        val isEntity = ManagedObject.isEntity(adapter);
 
-        final Boolean persistent = adapter != null && adapter.isRepresentingPersistent();
-
-        if (persistent) {
-            final String oidStr = adapter.getOid().enStringNoVersion();
+        if (isEntity) {
+            val oidStr = ManagedObject._oid(adapter).enStringNoVersion();
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         } else {
             // don't do anything; instead the page should be redirected back to
@@ -89,15 +88,7 @@ implements ObjectAdapterModel, UiHintContainer {
         return pageParameters;
     }
 
-    @Deprecated //TODO [2033] remove
-    public void resetVersion() {
-        if(getObjectAdapterMemento() == null) {
-            return;
-        }
-        getObjectAdapterMemento().resetVersion();
-    }
-
-    public enum RenderingHint {
+     public enum RenderingHint {
         REGULAR(Where.OBJECT_FORMS),
         PARENTED_PROPERTY_COLUMN(Where.PARENTED_TABLES),
         PARENTED_TITLE_COLUMN(Where.PARENTED_TABLES),
@@ -344,21 +335,21 @@ implements ObjectAdapterModel, UiHintContainer {
      * Callback from {@link #getObject()}.
      */
     @Override
-    public ObjectAdapter load() {
+    public ManagedObject load() {
         if (adapterMemento == null) {
             return null;
         }
-        final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter();
-        return objectAdapter;
+        val adapter = adapterMemento.getObjectAdapter(getSpecificationLoader());
+        return adapter;
     }
 
     @Deprecated //removed with ISIS-2154
-    public ObjectAdapter loadWithConcurrencyChecking() {
+    public ManagedObject loadWithConcurrencyChecking() {
         return load();
     }
 
     @Override
-    public void setObject(final ObjectAdapter adapter) {
+    public void setObject(ManagedObject adapter) {
         super.setObject(adapter);
         adapterMemento = ObjectAdapterMemento.ofAdapter(adapter, super.getMementoSupport());
     }
@@ -366,7 +357,7 @@ implements ObjectAdapterModel, UiHintContainer {
     public void setObjectMemento(final ObjectAdapterMemento memento) {
         super.setObject(
                 memento != null
-                ? memento.getObjectAdapter()
+                ? memento.getObjectAdapter(getSpecificationLoader())
                         : null);
         adapterMemento = memento;
     }
@@ -399,14 +390,14 @@ implements ObjectAdapterModel, UiHintContainer {
      * {@link #getObject() entity}.
      */
     public void resetPropertyModels() {
-        adapterMemento.resetVersion();
+        //adapterMemento.resetVersion();
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
             OneToOneAssociation otoa = pm.getProperty(super.getSpecificationLoader());
             val scalarModel = propertyScalarModels.get(pm);
             val adapter = getObject();
             val associatedAdapter =
                     otoa.get(adapter, InteractionInitiatedBy.USER);
-            scalarModel.setObject(ManagedObject.promote(associatedAdapter));
+            scalarModel.setObject(associatedAdapter);
         }
     }
 
@@ -528,7 +519,7 @@ implements ObjectAdapterModel, UiHintContainer {
             if (hasPending) {
                 return pending;
             }
-            final ObjectAdapter adapter = entityModel.getObject();
+            val adapter = entityModel.getObject();
             return ObjectAdapterMemento.ofAdapter(adapter, entityModel.getMementoSupport());
         }
 
@@ -546,11 +537,11 @@ implements ObjectAdapterModel, UiHintContainer {
         private ObjectAdapter getPendingAdapter() {
             final ObjectAdapterMemento memento = getObject();
             return memento != null
-                    ? memento.getObjectAdapter()
+                    ? memento.getObjectAdapter(entityModel.getSpecificationLoader())
                             : null;
         }
 
-        public ObjectAdapter getPendingElseCurrentAdapter() {
+        public ManagedObject getPendingElseCurrentAdapter() {
             return hasPending ? getPendingAdapter() : entityModel.getObject();
         }
 
@@ -565,7 +556,7 @@ implements ObjectAdapterModel, UiHintContainer {
     }
 
 
-    public ObjectAdapter getPendingElseCurrentAdapter() {
+    public ManagedObject getPendingElseCurrentAdapter() {
         return pendingModel.getPendingElseCurrentAdapter();
     }
 
