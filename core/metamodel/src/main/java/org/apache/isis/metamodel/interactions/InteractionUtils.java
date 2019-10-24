@@ -19,68 +19,61 @@
 
 package org.apache.isis.metamodel.interactions;
 
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.consent.InteractionResultSet;
-import org.apache.isis.metamodel.facetapi.DecoratingFacet;
-import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.val;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class InteractionUtils {
 
-    private InteractionUtils() {
-    }
-
-    public static InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext<?> context) {
-        final InteractionResult result = new InteractionResult(context.createInteractionEvent());
-        final Stream<Facet> facets = facetHolder.streamFacets().filter(isA(HidingInteractionAdvisor.class));
-        facets.forEach(facet->{
-            final HidingInteractionAdvisor advisor = (HidingInteractionAdvisor) facet;
-
-            result.advise(advisor.hides(context), advisor);
+    public static InteractionResult isVisibleResult(FacetHolder facetHolder, VisibilityContext<?> context) {
+        
+        val iaResult = new InteractionResult(context.createInteractionEvent());
+        
+        facetHolder.streamFacets(HidingInteractionAdvisor.class)
+        .forEach(advisor->{
+            iaResult.advise(advisor.hides(context), advisor);
         });
-        return result;
+        
+        return iaResult;
     }
 
-    public static InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext<?> context) {
-        final InteractionResult result = new InteractionResult(context.createInteractionEvent());
-        final Stream<Facet> facets = facetHolder.streamFacets().filter(isA(DisablingInteractionAdvisor.class));
-        facets.forEach(facet->{
-            final DisablingInteractionAdvisor advisor = (DisablingInteractionAdvisor) facet;
+    public static InteractionResult isUsableResult(FacetHolder facetHolder, UsabilityContext<?> context) {
+        
+        val isResult = new InteractionResult(context.createInteractionEvent());
+        
+        facetHolder.streamFacets(DisablingInteractionAdvisor.class)
+        .forEach(advisor->{
             final String disables = advisor.disables(context);
-            result.advise(disables, advisor);
+            isResult.advise(disables, advisor);
         });
-        return result;
+        
+        return isResult;
     }
 
-    public static InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext<?> context) {
-        final InteractionResult result = new InteractionResult(context.createInteractionEvent());
-        final Stream<Facet> facets = facetHolder.streamFacets().filter(isA(ValidatingInteractionAdvisor.class));
-        facets.forEach(facet->{
-            val advisor = (ValidatingInteractionAdvisor) facet;
-            result.advise(advisor.invalidates(context), advisor);
+    public static InteractionResult isValidResult(FacetHolder facetHolder, ValidityContext<?> context) {
+        
+        val iaResult = new InteractionResult(context.createInteractionEvent());
+        
+        facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
+        .forEach(advisor->{
+            iaResult.advise(advisor.invalidates(context), advisor);
         });
-        return result;
+        
+        return iaResult;
     }
 
-    public static InteractionResultSet isValidResultSet(final FacetHolder facetHolder, final ValidityContext<?> context, final InteractionResultSet resultSet) {
+    public static InteractionResultSet isValidResultSet(
+            FacetHolder facetHolder, 
+            ValidityContext<?> context, 
+            InteractionResultSet resultSet) {
+        
         return resultSet.add(isValidResult(facetHolder, context));
     }
-
-    static Predicate<Facet> isA(final Class<?> superClass) {
-        return new Predicate<Facet>() {
-            @Override
-            public boolean test(final Facet facet) {
-                if (facet instanceof DecoratingFacet) {
-                    final DecoratingFacet<?> decoratingFacet = (DecoratingFacet<?>) facet;
-                    return test(decoratingFacet.getDecoratedFacet());
-                }
-                return superClass.isAssignableFrom(facet.getClass());
-            }
-        };
-    }
+  
+  
 }

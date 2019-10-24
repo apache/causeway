@@ -67,6 +67,12 @@ public interface FacetHolder {
     }
 
     Stream<Facet> streamFacets();
+    
+    default <F extends Facet> Stream<F> streamFacets(Class<F> requiredType) {
+        return streamFacets()
+                .filter(facet->requiredType.isAssignableFrom(facet.getClass()))
+                .map(requiredType::cast);
+    }
 
     /**
      * Adds the facet, extracting its {@link Facet#facetType() type} as the key.

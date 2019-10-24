@@ -19,14 +19,14 @@
 
 package org.apache.isis.metamodel.interactions;
 
-import java.util.function.Predicate;
-
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 
 import junit.framework.TestCase;
+import lombok.val;
 
 public class InteractionUtils_isA_Test extends TestCase {
 
@@ -81,22 +81,22 @@ public class InteractionUtils_isA_Test extends TestCase {
     }
 
     public void testIsAWhenIs() {
-        final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
+        val predicate = _Predicates.instanceOf(FooFacet.class);
         TestCase.assertTrue(predicate.test(fooFacet));
     }
 
     public void testIsAWhenIsNot() {
-        final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
+        val predicate = _Predicates.instanceOf(FooFacet.class);
         TestCase.assertFalse(predicate.test(barFacet));
     }
 
     public void testIsAWhenIsSubclass() {
-        final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
+        val predicate = _Predicates.instanceOf(FooFacet.class);
         TestCase.assertTrue(predicate.test(fooSubFacet));
     }
 
     public void testIsAWhenIsNotBecauseASuperclass() {
-        final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
+        val predicate = _Predicates.instanceOf(FooFacet.class);
         TestCase.assertFalse(predicate.test(fooSuperFacet));
     }
 

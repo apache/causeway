@@ -79,9 +79,8 @@ public final class _Predicates {
     /**
      * @param cls
      * @return a Predicate that tests for the operand to be an instance of {@code cls}
-     * @deprecated use Class::isInstance instead
+     * @implNote equivalent to {@code Class::isInstance}
      */
-    @Deprecated
     public static Predicate<Object> instanceOf(Class<?> cls) {
         return cls::isInstance;
     }
