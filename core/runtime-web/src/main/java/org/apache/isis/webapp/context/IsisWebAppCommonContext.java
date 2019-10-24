@@ -95,6 +95,12 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
         return ObjectAdapterMemento.ofRootOid(rootOid, getMementoSupport());
     }
     
+    // -- COMMON CONTEXT PROVIDER INTERFACE
+    
+    public static interface Provider {
+        IsisWebAppCommonContext getCommonContext();
+    }
+    
     // -- FOR THOSE THAT IMPLEMENT BY DELEGATION
     
     public static interface Delegating {

@@ -41,6 +41,8 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
+import lombok.val;
+
 public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
     private static final long serialVersionUID = 1L;
@@ -83,7 +85,10 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
     }
 
 
-    protected AdditionalLinksPanel(final String id, final List<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
+    protected AdditionalLinksPanel(
+            String id, 
+            List<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
+        
         super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
 
         final List<LinkAndLabel> linkAndLabels = getModel().getObject();
@@ -93,8 +98,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
             @Override
             public boolean isVisible() {
-                for (LinkAndLabel linkAndLabel : linkAndLabels) {
-                    final AbstractLink link = linkAndLabel.getLink();
+                for (val linkAndLabel : linkAndLabels) {
+                    val link = linkAndLabel.getLink();
                     if(link.isVisible()) {
                         return true;
                     }

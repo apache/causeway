@@ -75,7 +75,7 @@ import lombok.val;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter}s within
  * the collection are stored as {@link ObjectAdapterMemento}s.
  */
-public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> 
+public class EntityCollectionModel extends ModelAbstract<List<ManagedObject>> 
 implements LinksProvider, UiHintContainer {
 
     private static final long serialVersionUID = 1L;
@@ -169,7 +169,7 @@ implements LinksProvider, UiHintContainer {
          */
         STANDALONE {
             @Override
-            List<ObjectAdapter> load(EntityCollectionModel colModel) {
+            List<ManagedObject> load(EntityCollectionModel colModel) {
 
                 //XXX lombok issue, cannot use val here 
                 boolean isBulkLoad = colModel.getConfiguration()
@@ -180,7 +180,7 @@ implements LinksProvider, UiHintContainer {
                                 : loadElementsOneByOne(colModel).collect(Collectors.toList());
             }
 
-            private Stream<ObjectAdapter> loadElementsInBulk(EntityCollectionModel colModel) {
+            private Stream<ManagedObject> loadElementsInBulk(EntityCollectionModel colModel) {
 
                 //XXX lombok issue, cannot use val here 
                 PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
@@ -194,18 +194,20 @@ implements LinksProvider, UiHintContainer {
                 final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
                 final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
                 return stream(adapterList)
-                        .filter(_NullSafe::isPresent);
+                        .filter(_NullSafe::isPresent)
+                        .map(ManagedObject.class::cast);
             }
 
-            private Stream<ObjectAdapter> loadElementsOneByOne(final EntityCollectionModel model) {
+            private Stream<ManagedObject> loadElementsOneByOne(final EntityCollectionModel model) {
 
                 return stream(model.mementoList)
                         .map(memento->memento.getObjectAdapter(model.getSpecificationLoader()))
-                        .filter(_NullSafe::isPresent);
+                        .filter(_NullSafe::isPresent)
+                        .map(ManagedObject.class::cast);
             }
 
             @Override
-            void setObject(EntityCollectionModel colModel, List<ObjectAdapter> adapterList) {
+            void setObject(EntityCollectionModel colModel, List<ManagedObject> adapterList) {
 
                 //XXX lombok issue, cannot use val here 
                 ObjectAdapterMementoSupport mementoSupport = colModel.getMementoSupport();
@@ -244,9 +246,9 @@ implements LinksProvider, UiHintContainer {
          */
         PARENTED {
             @Override
-            List<ObjectAdapter> load(EntityCollectionModel colModel) {
+            List<ManagedObject> load(EntityCollectionModel colModel) {
 
-                final ObjectAdapter adapter = colModel.getParentObjectAdapterMemento()
+                final ManagedObject adapter = colModel.getParentObjectAdapterMemento()
                         .getObjectAdapter(colModel.getSpecificationLoader());
 
                 final OneToManyAssociation collection = colModel.collectionMemento
@@ -264,8 +266,8 @@ implements LinksProvider, UiHintContainer {
                     Collections.sort(objectList, comparator);
                 }
 
-                final List<ObjectAdapter> adapterList =
-                        _Lists.map(objectList, colModel.getPojoToAdapter());
+                final List<ManagedObject> adapterList =
+                        _Lists.map(objectList, x-> (ManagedObject)colModel.getPojoToAdapter().apply(x));
 
                 return adapterList;
             }
@@ -280,7 +282,7 @@ implements LinksProvider, UiHintContainer {
             }
 
             @Override
-            void setObject(EntityCollectionModel colModel, List<ObjectAdapter> list) {
+            void setObject(EntityCollectionModel colModel, List<ManagedObject> list) {
                 // no-op
                 throw new UnsupportedOperationException();
             }
@@ -306,9 +308,9 @@ implements LinksProvider, UiHintContainer {
 
         };
 
-        abstract List<ObjectAdapter> load(EntityCollectionModel entityCollectionModel);
+        abstract List<ManagedObject> load(EntityCollectionModel entityCollectionModel);
 
-        abstract void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list);
+        abstract void setObject(EntityCollectionModel entityCollectionModel, List<ManagedObject> list);
 
         public abstract String getId(EntityCollectionModel entityCollectionModel);
         public abstract String getName(EntityCollectionModel entityCollectionModel);
@@ -467,7 +469,7 @@ implements LinksProvider, UiHintContainer {
     }
 
     @Override
-    protected List<ObjectAdapter> load() {
+    protected List<ManagedObject> load() {
         return type.load(this);
     }
 
@@ -479,7 +481,7 @@ implements LinksProvider, UiHintContainer {
     }
 
     @Override
-    public void setObject(List<ObjectAdapter> list) {
+    public void setObject(List<ManagedObject> list) {
         super.setObject(list);
         type.setObject(this, list);
     }
@@ -487,7 +489,7 @@ implements LinksProvider, UiHintContainer {
     /**
      * Not API, but to refresh the model list.
      */
-    public void setObjectList(ObjectAdapter resultAdapter) {
+    public void setObjectList(ManagedObject resultAdapter) {
         this.mementoList = streamElementsOf(resultAdapter)
                 .map(pojo->ObjectAdapterMemento.ofPojo(pojo, super.getMementoSupport()))
                 .collect(Collectors.toList());
@@ -514,11 +516,11 @@ implements LinksProvider, UiHintContainer {
         return collectionMemento;
     }
 
-    private static Iterable<Object> asIterable(final ManagedObject resultAdapter) {
+    private static Iterable<Object> asIterable(ManagedObject resultAdapter) {
         return _Casts.uncheckedCast(resultAdapter.getPojo());
     }
 
-    private static Stream<Object> streamElementsOf(final ManagedObject resultAdapter) {
+    private static Stream<Object> streamElementsOf(ManagedObject resultAdapter) {
         return _NullSafe.stream(asIterable(resultAdapter));
     }
 

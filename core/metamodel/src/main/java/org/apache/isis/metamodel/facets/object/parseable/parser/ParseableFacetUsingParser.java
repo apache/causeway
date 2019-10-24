@@ -79,7 +79,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
             validate(parseValueContext);
         }
 
-        final Object context = ObjectAdapter.Util.unwrapPojo(contextAdapter);
+        final Object context = ManagedObject.unwrapPojo(contextAdapter);
 
         getServiceInjector().injectServicesInto(parser);
 

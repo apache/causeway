@@ -153,7 +153,7 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
 
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
-            String applicationName = webAppConfigBean.getApplicationName();
+            String applicationName = getWebAppConfigBean().getApplicationName();
             if(applicationName != null) {
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
@@ -183,13 +183,13 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
             log.error("Failed to construct page, going back to sign in page", ex);
 
             // REVIEW: similar code in WebRequestCycleForIsis
-            final Stream<ExceptionRecognizer> exceptionRecognizers = commonContext.getServiceRegistry()
+            final Stream<ExceptionRecognizer> exceptionRecognizers = getCommonContext().getServiceRegistry()
                     .select(ExceptionRecognizer.class)
                     .stream();
 
             final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             
-            final ExceptionModel exceptionModel = ExceptionModel.create(commonContext, recognizedMessageIfAny, ex);
+            final ExceptionModel exceptionModel = ExceptionModel.create(getCommonContext(), recognizedMessageIfAny, ex);
             
             
 
@@ -245,11 +245,11 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
     protected void setTitle(final String title) {
         addOrReplace(new Label(ID_PAGE_TITLE, title != null
                 ? title
-                        : webAppConfigBean.getApplicationName()));
+                        : getWebAppConfigBean().getApplicationName()));
     }
 
     private Class<? extends Page> getSignInPage() {
-        return pageClassRegistry.getPageClass(PageType.SIGN_IN);
+        return getPageClassRegistry().getPageClass(PageType.SIGN_IN);
     }
 
     @Override
@@ -268,19 +268,19 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
 
-        final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour(commonContext);
+        final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour(getCommonContext());
         jGrowlBehaviour.renderFeedbackMessages(response);
 
-        String applicationCss = webAppConfigBean.getApplicationCss();
+        String applicationCss = getWebAppConfigBean().getApplicationCss();
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         }
-        String applicationJs = webAppConfigBean.getApplicationJs();
+        String applicationJs = getWebAppConfigBean().getApplicationJs();
         if(applicationJs != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
 
-        String liveReloadUrl = commonContext.getConfiguration().getViewer().getWicket().getLiveReloadUrl();
+        String liveReloadUrl = getCommonContext().getConfiguration().getViewer().getWicket().getLiveReloadUrl();
         if(liveReloadUrl != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         }
@@ -409,11 +409,11 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
     }
 
     private boolean isShowBookmarks() {
-        return commonContext.getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowChooser();
+        return getCommonContext().getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowChooser();
     }
 
     protected boolean isShowBreadcrumbs() {
-        return commonContext.getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
+        return getCommonContext().getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
     }
 
     protected void bookmarkPageIfShown(final BookmarkableModel<?> model) {
@@ -455,8 +455,8 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
         default:
             final DialogMode dialogMode =
                     sort == BeanSort.MANAGED_BEAN
-                            ? commonContext.getConfiguration().getViewer().getWicket().getDialogModeForMenu()
-                            : commonContext.getConfiguration().getViewer().getWicket().getDialogMode();
+                            ? getCommonContext().getConfiguration().getViewer().getWicket().getDialogModeForMenu()
+                            : getCommonContext().getConfiguration().getViewer().getWicket().getDialogMode();
             switch (dialogMode) {
             case SIDEBAR:
                 return actionPromptSidebar;

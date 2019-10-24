@@ -81,8 +81,8 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(ObjectAdapter.Util.unwrapPojo(targetAdapter));
-                final Object[] arguments = ObjectAdapter.Util.unwrapPojoArray(argumentAdapters);
+                final S source = uncheckedCast(ManagedObject.unwrapPojo(targetAdapter));
+                final Object[] arguments = ManagedObject.unwrapPojoArray(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
@@ -114,7 +114,7 @@ public class DomainEventHelper {
             event.setEventPhase(phase);
 
             if(phase.isExecuted()) {
-                event.setReturnValue(ObjectAdapter.Util.unwrapPojo(resultAdapter));
+                event.setReturnValue(ManagedObject.unwrapPojo(resultAdapter));
             }
 
             metamodelEventService.fireActionDomainEvent(event);
@@ -191,7 +191,7 @@ public class DomainEventHelper {
 
         try {
             final PropertyDomainEvent<S, T> event;
-            final S source = uncheckedCast(ObjectAdapter.Util.unwrapPojo(targetAdapter));
+            final S source = uncheckedCast(ManagedObject.unwrapPojo(targetAdapter));
             final Identifier identifier = identified.getIdentifier();
 
             if(existingEvent != null && phase.isExecuted()) {
@@ -293,7 +293,7 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(ObjectAdapter.Util.unwrapPojo(targetAdapter));
+                final S source = uncheckedCast(ManagedObject.unwrapPojo(targetAdapter));
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
 

@@ -69,11 +69,11 @@ public class MmvErrorPage extends WebPageBase {
     }
 
     private MarkupContainer addPageTitle() {
-        return add(new Label(ID_PAGE_TITLE, webAppConfigBean.getApplicationName()));
+        return add(new Label(ID_PAGE_TITLE, getWebAppConfigBean().getApplicationName()));
     }
 
     private void addApplicationName() {
-        add(new Label(ID_APPLICATION_NAME, webAppConfigBean.getApplicationName()));
+        add(new Label(ID_APPLICATION_NAME, getWebAppConfigBean().getApplicationName()));
     }
 
     private void addValidationErrors() {
@@ -95,11 +95,11 @@ public class MmvErrorPage extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));
 
-        String applicationCss = webAppConfigBean.getApplicationCss();
+        String applicationCss = getWebAppConfigBean().getApplicationCss();
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         }
-        String applicationJs = webAppConfigBean.getApplicationJs();
+        String applicationJs = getWebAppConfigBean().getApplicationJs();
         if(applicationJs != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }

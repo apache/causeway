@@ -21,13 +21,12 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
-import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
+import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -75,7 +74,7 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
 
     @Override
     public ActionArgumentEvent createInteractionEvent() {
-        return new ActionArgumentEvent(unwrapPojo(getTarget()), getIdentifier(), ObjectAdapter.Util.unwrapPojoArray(getArgs()), getPosition());
+        return new ActionArgumentEvent(unwrapPojo(getTarget()), getIdentifier(), ManagedObject.unwrapPojoArray(getArgs()), getPosition());
     }
 
 }

@@ -33,7 +33,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
@@ -82,24 +81,24 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     }
 
     @Override
-    public Iterator<ObjectAdapter> iterator(final long first, final long count) {
+    public Iterator<ManagedObject> iterator(final long first, final long count) {
 
-        final List<ObjectAdapter> adapters = model.getObject();
+        final List<ManagedObject> adapters = model.getObject();
 
-        final List<ObjectAdapter> visibleAdapters =
+        final List<ManagedObject> visibleAdapters =
                 _Lists.filter(adapters, ignoreHidden());
 
         // need to create a list from the iterable, then back to an iterable
         // because guava's Ordering class doesn't support sorting of iterable -> iterable
-        final List<ObjectAdapter> sortedVisibleAdapters = sortedCopy(visibleAdapters, getSort());
-        final List<ObjectAdapter> pagedAdapters = subList(first, count, sortedVisibleAdapters);
+        final List<ManagedObject> sortedVisibleAdapters = sortedCopy(visibleAdapters, getSort());
+        final List<ManagedObject> pagedAdapters = subList(first, count, sortedVisibleAdapters);
         return pagedAdapters.iterator();
     }
 
-    private static List<ObjectAdapter> subList(
+    private static List<ManagedObject> subList(
             final long first,
             final long count,
-            final List<ObjectAdapter> objectAdapters) {
+            final List<ManagedObject> objectAdapters) {
 
         final int fromIndex = (int) first;
         // if adapters where filter out (as invisible), then make sure don't run off the end
@@ -108,8 +107,8 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         return objectAdapters.subList(fromIndex, toIndex);
     }
 
-    private List<ObjectAdapter> sortedCopy(
-            final List<ObjectAdapter> adapters,
+    private List<ManagedObject> sortedCopy(
+            final List<ManagedObject> adapters,
             final SortParam<String> sort) {
 
         val copy = _Lists.newArrayList(adapters);
@@ -140,17 +139,20 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         }
     }
 
-    private Predicate<ObjectAdapter> ignoreHidden() {
-        return new Predicate<ObjectAdapter>() {
+    private Predicate<ManagedObject> ignoreHidden() {
+        return new Predicate<ManagedObject>() {
             @Override
-            public boolean test(ObjectAdapter input) {
-                final InteractionResult visibleResult = InteractionUtils.isVisibleResult(input.getSpecification(), createVisibleInteractionContext(input));
+            public boolean test(ManagedObject input) {
+                final InteractionResult visibleResult = 
+                        InteractionUtils.isVisibleResult(
+                                input.getSpecification(), 
+                                createVisibleInteractionContext(input));
                 return visibleResult.isNotVetoing();
             }
         };
     }
 
-    private VisibilityContext<?> createVisibleInteractionContext(final ObjectAdapter objectAdapter) {
+    private VisibilityContext<?> createVisibleInteractionContext(ManagedObject objectAdapter) {
         return new ObjectVisibilityContext(
                 objectAdapter, objectAdapter.getSpecification().getIdentifier(), InteractionInitiatedBy.USER,
                 Where.ALL_TABLES);

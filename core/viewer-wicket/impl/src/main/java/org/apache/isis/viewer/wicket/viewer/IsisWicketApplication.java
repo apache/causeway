@@ -25,6 +25,7 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -139,7 +140,8 @@ import net.ftlines.wicketsource.WicketSource;
 @Log4j2
 public class IsisWicketApplication
 extends AuthenticatedWebApplication
-implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketViewerSettingsAccessor {
+implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketViewerSettingsAccessor,
+IsisWebAppCommonContext.Provider {
 
     private static final long serialVersionUID = 1L;
 
@@ -152,7 +154,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     @Inject private MetaModelContext metaModelContext;
     
-    @Getter private IsisWebAppCommonContext commonContext; // shared
+    @Getter(onMethod = @__(@Override)) private IsisWebAppCommonContext commonContext; // shared
 
     // injected manually
     @Getter(onMethod = @__(@Override)) private ComponentFactoryRegistry componentFactoryRegistry;

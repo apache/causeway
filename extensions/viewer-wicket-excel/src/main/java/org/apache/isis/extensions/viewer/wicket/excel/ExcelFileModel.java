@@ -42,7 +42,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
@@ -132,8 +132,8 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
 
         // detail rows
-        final List<ObjectAdapter> adapters = model.getObject();
-        for (final ObjectAdapter objectAdapter : adapters) {
+        final List<ManagedObject> adapters = model.getObject();
+        for (val objectAdapter : adapters) {
             row = rowFactory.newRow();
             i=0;
             for (final ObjectAssociation property : propertyList) {
@@ -165,7 +165,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
     }
 
     private void setCellValue(
-            final ObjectAdapter objectAdapter, 
+            final ManagedObject objectAdapter, 
             final ObjectAssociation property, 
             final Cell cell, 
             CellStyle dateCellStyle) {

@@ -125,14 +125,14 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
                 val entityModel = (EntityModel) rowModel;
                 ManagedObject selectedAdapter = null;
                 try {
-                    selectedAdapter = entityModel.loadWithConcurrencyChecking();
+                    selectedAdapter = entityModel.load();
                     if(onSelectionHandler != null) {
                         onSelectionHandler.onSelected(this, selectedAdapter, target);
                     }
                 } catch(ConcurrencyException ex) {
 
                     // should work second time, because the previous attempt will have updated the OAM's OIDs version.
-                    selectedAdapter = entityModel.loadWithConcurrencyChecking();
+                    selectedAdapter = entityModel.load();
                     if(onConcurrencyExceptionHandler != null) {
                         onConcurrencyExceptionHandler.onConcurrencyException(this, selectedAdapter, ex, target);
                     }

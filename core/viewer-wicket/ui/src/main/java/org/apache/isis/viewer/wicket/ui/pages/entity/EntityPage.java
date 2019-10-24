@@ -71,14 +71,12 @@ public class EntityPage extends PageAbstract {
      * Called reflectively, in support of {@link BookmarkablePageLink} links. 
      * Specifically handled by {@link org.apache.isis.viewer.wicket.viewer.IsisWicketApplication_newPageFactory}
      */
-    public EntityPage(IsisWebAppCommonContext commonContext, PageParameters pageParameters) {
-        this(pageParameters, createEntityModel(commonContext, pageParameters));
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(CssHeaderItem.forReference(WHERE_AM_I_CSS));
+    public static EntityPage bookmarked(
+            IsisWebAppCommonContext commonContext, 
+            PageParameters pageParameters) {
+        
+        val entityModel = createEntityModel(commonContext, pageParameters);
+        return new EntityPage(pageParameters, entityModel);
     }
 
     /**
@@ -156,6 +154,13 @@ public class EntityPage extends PageAbstract {
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         breadcrumbModel.remove(entityModel);
     }
+    
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forReference(WHERE_AM_I_CSS));
+    }
+
 
     @Override
     public UiHintContainer getUiHintContainerIfAny() {

@@ -32,7 +32,6 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -43,6 +42,7 @@ import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCo
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
@@ -99,7 +99,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
             item.add(new Label(ID_PROPERTY_NAME, new Model<String>(propertyName)));
 
 
-            List<ObjectAdapter> adapters = model.getObject();
+            List<ManagedObject> adapters = model.getObject();
             Summary summary = new Summary(propertyName, adapters, numberAssociation);
             addItem(item, ID_SUM, summary.getTotal());
             addItem(item, ID_AVG, summary.getAverage());
@@ -119,16 +119,17 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         private BigDecimal average;
         private String propertyName;
 
-        public Summary(List<ObjectAdapter> adapters, ObjectAssociation numberAssociation) {
+        public Summary(List<ManagedObject> adapters, ObjectAssociation numberAssociation) {
             this(null, adapters, numberAssociation);
         }
 
-        public Summary(String propertyName, List<ObjectAdapter> adapters, ObjectAssociation numberAssociation) {
+        public Summary(String propertyName, List<ManagedObject> adapters, ObjectAssociation numberAssociation) {
             this.propertyName = propertyName;
             int nonNullCount = 0;
-            for (ObjectAdapter objectAdapter : adapters) {
-                titles.add(objectAdapter.titleString(null));
-                final ManagedObject valueAdapter = numberAssociation.get(objectAdapter, InteractionInitiatedBy.USER);
+            for (val adapter : adapters) {
+                titles.add(adapter.titleString(null));
+                final ManagedObject valueAdapter =
+                        numberAssociation.get(adapter, InteractionInitiatedBy.USER);
                 if (valueAdapter == null) {
                     values.add(null);
                     continue;

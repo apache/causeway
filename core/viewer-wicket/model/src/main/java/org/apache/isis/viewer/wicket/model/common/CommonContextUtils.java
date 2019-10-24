@@ -16,19 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.wicket.model.common;
 
-package org.apache.isis.metamodel.facets.value.booleans;
+import org.apache.wicket.Session;
 
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-public interface BooleanValueFacet extends Facet {
+import lombok.val;
 
-    boolean isSet(ManagedObject object);
+/**
+ * @since 2.0
+ */
+public class CommonContextUtils {
 
-    //    void set(ObjectAdapter object);
-    //
-    //    void reset(ObjectAdapter object);
-    //
-    //    void toggle(ObjectAdapter object);
+    public static IsisWebAppCommonContext getCommonContext() {
+        val application = Session.get().getApplication();
+        return ((IsisWebAppCommonContext.Provider) application).getCommonContext();
+    }
+    
+    public static IsisWebAppCommonContext computeIfAbsent(IsisWebAppCommonContext commonContext) {
+        return commonContext!=null
+                ? commonContext
+                        : getCommonContext();
+    }
+    
 }

@@ -24,7 +24,7 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ class IsisWicketApplication_newPageFactory {
         public <C extends IRequestablePage> C newPage(Class<C> pageClass, PageParameters parameters) {
             
             if(EntityPage.class.equals(pageClass)) {
-                return _Casts.uncheckedCast(new EntityPage(holder.getCommonContext(), parameters));
+                return _Casts.uncheckedCast(EntityPage.bookmarked(holder.getCommonContext(), parameters));
             }
             
             return delegate.newPage(pageClass, parameters);
@@ -69,7 +69,7 @@ class IsisWicketApplication_newPageFactory {
         public <C extends IRequestablePage> C newPage(Class<C> pageClass) {
             
             if(EntityPage.class.equals(pageClass)) {
-                return _Casts.uncheckedCast(new EntityPage(holder.getCommonContext(), PageParametersUtils.newPageParameters()));
+                throw _Exceptions.unexpectedCodeReach();
             }
             
             return delegate.newPage(pageClass);
@@ -77,6 +77,11 @@ class IsisWicketApplication_newPageFactory {
         
         @Override
         public <C extends IRequestablePage> boolean isBookmarkable(Class<C> pageClass) {
+            
+            if(EntityPage.class.equals(pageClass)) {
+                return true;
+            }
+            
             return delegate.isBookmarkable(pageClass);
         }
     }

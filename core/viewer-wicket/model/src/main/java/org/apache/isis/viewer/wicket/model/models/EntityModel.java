@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -50,6 +51,8 @@ import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -61,7 +64,8 @@ import lombok.val;
  * So that the model is {@link Serializable}, the {@link ManagedObject} is
  * stored as a {@link ObjectAdapterMemento}.
  */
-public class EntityModel extends BookmarkableModel<ManagedObject> 
+public class EntityModel 
+extends BookmarkableModel<ManagedObject> 
 implements ObjectAdapterModel, UiHintContainer {
 
     private static final long serialVersionUID = 1L;
@@ -75,7 +79,7 @@ implements ObjectAdapterModel, UiHintContainer {
     public static PageParameters createPageParameters(ManagedObject adapter) {
 
         val pageParameters = PageParametersUtils.newPageParameters();
-        val isEntity = ManagedObject.isEntity(adapter);
+        val isEntity = ManagedObject.isBookmarkable(adapter);
 
         if (isEntity) {
             val oidStr = ManagedObject._oid(adapter).enStringNoVersion();
@@ -212,7 +216,7 @@ implements ObjectAdapterModel, UiHintContainer {
             Mode mode,
             RenderingHint renderingHint) {
         
-        super(commonContext);
+        super(requires(commonContext, "commonContext"));
         this.adapterMemento = adapterMemento;
         this.pendingModel = new PendingModel(this);
         this.propertyScalarModels = propertyScalarModels!=null ? propertyScalarModels : _Maps.<PropertyMemento, ScalarModel>newHashMap();
@@ -339,13 +343,8 @@ implements ObjectAdapterModel, UiHintContainer {
         if (adapterMemento == null) {
             return null;
         }
-        val adapter = adapterMemento.getObjectAdapter(getSpecificationLoader());
+        val adapter = adapterMemento.getObjectAdapter(super.getSpecificationLoader());
         return adapter;
-    }
-
-    @Deprecated //removed with ISIS-2154
-    public ManagedObject loadWithConcurrencyChecking() {
-        return load();
     }
 
     @Override
@@ -357,7 +356,7 @@ implements ObjectAdapterModel, UiHintContainer {
     public void setObjectMemento(final ObjectAdapterMemento memento) {
         super.setObject(
                 memento != null
-                ? memento.getObjectAdapter(getSpecificationLoader())
+                ? memento.getObjectAdapter(super.getSpecificationLoader())
                         : null);
         adapterMemento = memento;
     }

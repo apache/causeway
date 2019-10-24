@@ -25,6 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -43,33 +44,33 @@ public class ObjectAdapterUtilsTest {
 
     @Test
     public void testUnwrapObjectWhenNull() {
-        assertNull(ObjectAdapter.Util.unwrapPojo((ObjectAdapter)null));
+        assertNull(ManagedObject.unwrapPojo((ManagedObject)null));
     }
 
     @Test
     public void testUnwrapObjectWhenNotNull() {
         underlyingDomainObject = new Object(); 
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals(underlyingDomainObject, ObjectAdapter.Util.unwrapPojo(mockObjectAdapter));
+        assertEquals(underlyingDomainObject, ManagedObject.unwrapPojo(mockObjectAdapter));
     }
 
     @Test
     public void testUnwrapStringWhenNull() {
-        assertNull(ObjectAdapter.Util.unwrapPojoStringElse(null, null));
+        assertNull(ManagedObject.unwrapPojoStringElse(null, null));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullButNotString() {
         underlyingDomainObject = new Object(); 
         expectAdapterWillReturn(underlyingDomainObject);
-        assertNull(ObjectAdapter.Util.unwrapPojoStringElse(mockObjectAdapter, null));
+        assertNull(ManagedObject.unwrapPojoStringElse(mockObjectAdapter, null));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullAndString() {
         underlyingDomainObject = "huzzah";
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals("huzzah", ObjectAdapter.Util.unwrapPojoStringElse(mockObjectAdapter, null));
+        assertEquals("huzzah", ManagedObject.unwrapPojoStringElse(mockObjectAdapter, null));
     }
 
     private void expectAdapterWillReturn(final Object domainObject) {

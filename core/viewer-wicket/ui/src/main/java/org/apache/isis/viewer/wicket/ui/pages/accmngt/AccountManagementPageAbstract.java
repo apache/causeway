@@ -78,7 +78,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
         
         super(parameters);
 
-        Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.SIGN_IN);
+        Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.SIGN_IN);
         BookmarkablePageLink<Void> signInLink = new BookmarkablePageLink<>("signInLink", pageClass);
         signInLink.setAutoEnable(true);
         add(signInLink);
@@ -98,7 +98,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
 
 
     private MarkupContainer addPageTitle() {
-        String applicationName = webAppConfigBean.getApplicationName();
+        String applicationName = getWebAppConfigBean().getApplicationName();
         return add(new Label(ID_PAGE_TITLE, applicationName));
     }
 
@@ -116,11 +116,11 @@ public class AccountManagementPageAbstract extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(
                 BootstrapJavaScriptReference.instance())));
 
-        String applicationCss = webAppConfigBean.getApplicationCss();
+        String applicationCss = getWebAppConfigBean().getApplicationCss();
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         }
-        String applicationJs = webAppConfigBean.getApplicationJs();
+        String applicationJs = getWebAppConfigBean().getApplicationJs();
         if(applicationJs != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }

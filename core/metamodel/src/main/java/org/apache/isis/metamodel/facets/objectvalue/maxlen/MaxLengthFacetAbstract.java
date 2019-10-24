@@ -20,13 +20,14 @@
 package org.apache.isis.metamodel.facets.objectvalue.maxlen;
 
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleIntValueFacetAbstract;
 import org.apache.isis.metamodel.interactions.ProposedHolder;
 import org.apache.isis.metamodel.interactions.ValidityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract implements MaxLengthFacet {
 
@@ -44,7 +45,7 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
      */
     @Override
     public boolean exceeds(final ManagedObject adapter) {
-        final String str = ObjectAdapter.Util.unwrapPojoStringElse(adapter, null);
+        final String str = ManagedObject.unwrapPojoStringElse(adapter, null);
         if (str == null) {
             return false;
         }
@@ -57,8 +58,8 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
         if (!(context instanceof ProposedHolder)) {
             return null;
         }
-        final ProposedHolder proposedHolder = (ProposedHolder) context;
-        final ManagedObject proposedArgument = proposedHolder.getProposed();
+        val proposedHolder = (ProposedHolder) context;
+        val proposedArgument = proposedHolder.getProposed();
         if (!exceeds(proposedArgument)) {
             return null;
         }

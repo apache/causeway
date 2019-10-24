@@ -104,7 +104,8 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     protected abstract void doOnClick(AjaxRequestTarget target);
 
     ActionModel getActionModel() {
-        return (ActionModel) getModel();
+        val actionModel = (ActionModel) getModel();
+        return actionModel;
     }
 
     private transient ObjectAction objectAction;

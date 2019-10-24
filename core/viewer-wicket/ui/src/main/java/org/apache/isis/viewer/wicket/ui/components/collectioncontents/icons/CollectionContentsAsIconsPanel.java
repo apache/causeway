@@ -23,11 +23,13 @@ import java.util.List;
 
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
@@ -46,11 +48,11 @@ public class CollectionContentsAsIconsPanel extends PanelAbstract<EntityCollecti
 
     private void buildGui() {
         final EntityCollectionModel model = getModel();
-        final List<ObjectAdapter> adapterList = model.getObject();
+        final List<ManagedObject> adapterList = model.getObject();
         final RepeatingView entityInstances = new RepeatingView(ID_ENTITY_INSTANCE);
         
         add(entityInstances);
-        for (final ObjectAdapter adapter : adapterList) {
+        for (val adapter : adapterList) {
             final String childId = entityInstances.newChildId();
             final EntityModel entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
             final EntityHeaderPanel entitySummaryPanel = new EntityHeaderPanel(childId, entityModel);

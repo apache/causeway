@@ -18,18 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-
-import lombok.Getter;
 
 /**
  * Provides all the system dependencies for sub-classes.
@@ -39,23 +35,49 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
 
     private static final long serialVersionUID = 1L;
     
-    @Inject protected transient WebAppConfigBean webAppConfigBean;
-    @Inject protected transient PageClassRegistry pageClassRegistry;
-    
-    @Inject private transient MetaModelContext metaModelContext;
-    @Getter protected final transient IsisWebAppCommonContext commonContext;
-    @Getter protected final transient IsisSessionFactory isisSessionFactory;
+    private transient WebAppConfigBean webAppConfigBean;
+    private transient PageClassRegistry pageClassRegistry;
+    private transient IsisWebAppCommonContext commonContext;
+    private transient IsisSessionFactory isisSessionFactory;
     
     protected WebPageBase(PageParameters parameters) {
         super(parameters);
-        this.commonContext = IsisWebAppCommonContext.of(metaModelContext);
-        this.isisSessionFactory = commonContext.lookupServiceElseFail(IsisSessionFactory.class);
     }
     
     protected WebPageBase(final IModel<?> model) {
         super(model);
-        this.commonContext = IsisWebAppCommonContext.of(metaModelContext);
-        this.isisSessionFactory = commonContext.lookupServiceElseFail(IsisSessionFactory.class);
     }
+    
+    @Override
+    public IsisWebAppCommonContext getCommonContext() {
+        commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        
+        this.webAppConfigBean = commonContext.lookupServiceElseFail(WebAppConfigBean.class);
+        this.pageClassRegistry = commonContext.lookupServiceElseFail(PageClassRegistry.class);
+        
+        return commonContext;
+    }
+    
+    public WebAppConfigBean getWebAppConfigBean() {
+        if(webAppConfigBean==null) {
+            webAppConfigBean = getCommonContext().lookupServiceElseFail(WebAppConfigBean.class);
+        }
+        return webAppConfigBean;
+    }
+    
+    public PageClassRegistry getPageClassRegistry() {
+        if(pageClassRegistry==null) {
+            pageClassRegistry = getCommonContext().lookupServiceElseFail(PageClassRegistry.class);
+        }
+        return pageClassRegistry;
+    }
+    
+    public IsisSessionFactory getIsisSessionFactory() {
+        if(isisSessionFactory==null) {
+            isisSessionFactory = getCommonContext().lookupServiceElseFail(IsisSessionFactory.class);
+        }
+        return isisSessionFactory;
+    }
+    
     
 }

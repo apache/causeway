@@ -20,14 +20,15 @@
 package org.apache.isis.metamodel.facets.value.booleans;
 
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
-public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueFacet {
+public abstract class BooleanValueSemanticsProviderAbstract
+extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueFacet {
 
     private static Class<? extends Facet> type() {
         return BooleanValueFacet.class;
@@ -36,7 +37,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     private static final int MAX_LENGTH = 5;
     private static final int TYPICAL_LENGTH = MAX_LENGTH;
 
-    public BooleanValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Boolean> adaptedClass, final Boolean defaultValue) {
+    public BooleanValueSemanticsProviderAbstract(FacetHolder holder, Class<Boolean> adaptedClass, Boolean defaultValue) {
         super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
     }
 
@@ -109,8 +110,8 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public boolean isSet(final ObjectAdapter adapter) {
-        if (!ObjectAdapter.Util.exists(adapter)) {
+    public boolean isSet(ManagedObject adapter) {
+        if (ManagedObject.isNull(adapter)) {
             return false;
         }
         final Object object = adapter.getPojo();

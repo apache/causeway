@@ -45,6 +45,8 @@ import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 /**
  * Adapters to domain objects, where the application is written in terms of
  * domain objects and those objects are represented within the NOF through these
@@ -103,20 +105,10 @@ public interface ObjectAdapter extends ManagedObject {
 
         private Util() {}
 
-        @Deprecated
-        public static Object unwrapPojo(final ManagedObject adapter) {
-            return ManagedObject.unwrapPojo(adapter);
-        }
-
-        @Deprecated// duplicate is in ManagedObject
-        public static Object[] unwrapPojoArray(final ManagedObject[] adapters) {
-            return ManagedObject.unwrapPojoArray(adapters);
-        }
-
         public static List<Object> unwrapPojoList(final List<? extends ManagedObject> adapters) {
             List<Object> objects = _Lists.newArrayList();
-            for (ManagedObject adapter : adapters) {
-                objects.add(unwrapPojo(adapter));
+            for (val adapter : adapters) {
+                objects.add(ManagedObject.unwrapPojo(adapter));
             }
             return objects;
         }
@@ -126,28 +118,9 @@ public interface ObjectAdapter extends ManagedObject {
             return (List<T>) unwrapPojoList(adapters);
         }
 
-        public static String unwrapPojoStringElse(final ManagedObject adapter, String orElse) {
-            final Object obj = ManagedObject.unwrapPojo(adapter);
-            if (obj == null) {
-                return null;
-            }
-            if (!(obj instanceof String)) {
-                return orElse;
-            }
-            return (String) obj;
-        }
-
-        public static String titleString(final ManagedObject adapter) {
-            return adapter != null ? adapter.titleString(null) : "";
-        }
-
-        public static boolean exists(final ManagedObject adapter) {
-            return adapter != null && adapter.getPojo() != null;
-        }
-
-        public static boolean wrappedEqual(final ManagedObject adapter1, final ManagedObject adapter2) {
-            final boolean defined1 = exists(adapter1);
-            final boolean defined2 = exists(adapter2);
+        public static boolean wrappedEqual(ManagedObject adapter1, ManagedObject adapter2) {
+            final boolean defined1 = !ManagedObject.isNull(adapter1);
+            final boolean defined2 = !ManagedObject.isNull(adapter2);
             if (defined1 && !defined2) {
                 return false;
             }
@@ -255,23 +228,23 @@ public interface ObjectAdapter extends ManagedObject {
         }
 
         public static void invokeAll(final Collection<Method> methods, final ManagedObject adapter) {
-            MethodUtil.invoke(methods, Util.unwrapPojo(adapter));
+            MethodUtil.invoke(methods, ManagedObject.unwrapPojo(adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter) {
-            return MethodExtensions.invoke(method, Util.unwrapPojo(adapter));
+            return MethodExtensions.invoke(method, ManagedObject.unwrapPojo(adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final Object arg0) {
-            return MethodExtensions.invoke(method, Util.unwrapPojo(adapter), new Object[] {arg0});
+            return MethodExtensions.invoke(method, ManagedObject.unwrapPojo(adapter), new Object[] {arg0});
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
-            return invoke(method, adapter, Util.unwrapPojo(arg0Adapter));
+            return invoke(method, adapter, ManagedObject.unwrapPojo(arg0Adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
-            return MethodExtensions.invoke(method, Util.unwrapPojo(adapter), Util.unwrapPojoArray(argumentAdapters));
+            return MethodExtensions.invoke(method, ManagedObject.unwrapPojo(adapter), ManagedObject.unwrapPojoArray(argumentAdapters));
         }
 
         public static Object invokeC(final Method method, final ManagedObject adapter, 

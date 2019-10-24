@@ -21,9 +21,12 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-import lombok.Getter;
+import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.NonNull;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
@@ -35,16 +38,30 @@ implements IsisWebAppCommonContext.Delegating {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter private final transient IsisWebAppCommonContext commonContext;
+    @NonNull private transient IsisWebAppCommonContext commonContext;
 
     public ModelAbstract(IsisWebAppCommonContext commonContext) {
-        this.commonContext = commonContext;
+        this.commonContext = requires(commonContext, "commonContext");
     }
 
     public ModelAbstract(IsisWebAppCommonContext commonContext, T t) {
         super(t);
-        this.commonContext = commonContext;
+        this.commonContext = requires(commonContext, "commonContext");
     }
 
+    @Override
+    public IsisWebAppCommonContext getCommonContext() {
+        commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        return commonContext;
+    }
+    
+//    public IsisSessionFactory getIsisSessionFactory() {
+//        if(isisSessionFactory==null) {
+//            isisSessionFactory = getCommonContext().lookupServiceElseFail(IsisSessionFactory.class);
+//        }
+//        return isisSessionFactory;
+//    }
+
+    
     
 }

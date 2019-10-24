@@ -32,6 +32,7 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,7 @@ public interface ManagedObject {
 
     // -- SIMPLE
 
-    @Value @RequiredArgsConstructor(staticName="of") 
+    @Value @RequiredArgsConstructor(staticName="of") @EqualsAndHashCode(of = "pojo") 
     final static class SimpleManagedObject implements ManagedObject {
         @NonNull private final ObjectSpecification specification;
         @NonNull private final Object pojo;
@@ -67,7 +68,7 @@ public interface ManagedObject {
 
     // -- LAZY
     
-    @ToString(of = {"specification", "pojo"}) 
+    @ToString(of = {"specification", "pojo"}) @EqualsAndHashCode(of = "pojo")
     final static class LazyManagedObject implements ManagedObject {
 
         @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;  
@@ -208,18 +209,6 @@ public interface ManagedObject {
     
     // -- SHORTCUTS
     
-//    /**
-//     * Uses the currently available {@link SpecificationLoader} to
-//     * @param pojo
-//     * @return
-//     * @apiNote its not well thought through yet what to do with null argument
-//     */
-//    public static ManagedObject forPojo(Object pojo) {
-//        if(pojo==null) {
-//            return null;
-//        }
-//        return of(MetaModelContext.current()::getSpecification, pojo);
-//    }
     
     // -- UNWRAPPING
     
@@ -237,6 +226,17 @@ public interface ManagedObject {
             unwrappedObjects[i++] = unwrapPojo(adapter);
         }
         return unwrappedObjects;
+    }
+    
+    public static String unwrapPojoStringElse(final ManagedObject adapter, String orElse) {
+        final Object obj = ManagedObject.unwrapPojo(adapter);
+        if (obj == null) {
+            return null;
+        }
+        if (!(obj instanceof String)) {
+            return orElse;
+        }
+        return (String) obj;
     }
     
     public static List<Object> unwrapPojoListElseEmpty(Collection<ManagedObject> adapters) {
@@ -337,13 +337,17 @@ public interface ManagedObject {
         }
         val spec = adapter.getSpecification();
         if(spec.isManagedBean() || spec.isViewModel() || spec.isEntity()) {
-            // services and view models are bookmarkable
+            // services and view models are book-markable
             return true;
         }
         return false;
-//        val state = persistenceSession.stateOf(pojo);
-//        val isRepresentingPersistent = state.isAttached() || state.isDestroyed();
-//        return isRepresentingPersistent;
+    }
+
+    static boolean isNull(ManagedObject adapter) {
+        if(adapter==null) {
+            return true;
+        }
+        return adapter.getPojo()==null;
     }
 
 

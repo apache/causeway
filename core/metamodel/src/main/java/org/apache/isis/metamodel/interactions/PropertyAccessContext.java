@@ -25,7 +25,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 
-import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
+import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
