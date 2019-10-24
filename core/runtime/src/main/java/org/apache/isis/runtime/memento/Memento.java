@@ -99,8 +99,10 @@ public class Memento implements Serializable {
                 .map(this::createReferencedData)
                 .collect(_Arrays.toArray(Data.class, CollectionFacet.Utils.size(adapter)));
 
-        final String elementTypeId = adapter.getSpecification().getFullIdentifier();
-        return new CollectionData(ManagedObject._oid(adapter), elementTypeId, collData);
+        val elementOid = ManagedObject._oid(adapter);
+        val elementSpec = adapter.getSpecification();
+        
+        return new CollectionData(elementOid, elementSpec.getFullIdentifier(), collData);
     }
 
     private ObjectData createObjectData(ManagedObject adapter) {

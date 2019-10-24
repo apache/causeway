@@ -20,58 +20,29 @@ package domainapp.dom.types.blob;
 
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.commons.internal.context._Context;
 
 import lombok.val;
 
-@Service
 public class DemoBlobStore {
-
-    @Inject HttpSession session;
-    
-    @PostConstruct
-    public void init() {
-        _Context.putSingleton(DemoBlobStore.class, this);
-    }
-
-    public void put(UUID uuid, Blob blob) {
-        if(blob==null) {
-            return;
-        }
-        session.setAttribute(uuid.toString(), blob);
-    }
-
-    public Blob get(UUID uuid) {
-        if(uuid==null) {
-            return null;
-        }
-        return (Blob) session.getAttribute(uuid.toString());
-    }
-
-    private static DemoBlobStore current() {
-        return _Context.getOrElse(DemoBlobStore.class, null);
-    }
 
     // -- JAXB ADAPTER
 
     public static final class BlobAdapter extends XmlAdapter<String, Blob> {
-
-
+        
         @Override
         public Blob unmarshal(String data) throws Exception {
             if(data==null) {
                 return null;
             }
             val uuid = UUID.fromString(data);
-            return DemoBlobStore.current().get(uuid);
+            return get(uuid);
         }
 
         @Override
@@ -80,8 +51,28 @@ public class DemoBlobStore {
                 return null;
             }
             val uuid = UUID.randomUUID();
-            DemoBlobStore.current().put(uuid, blob);
+            put(uuid, blob);
             return uuid.toString();
+        }
+        
+        private void put(UUID uuid, Blob blob) {
+            if(blob==null) {
+                return;
+            }
+            session().setAttribute(uuid.toString(), blob);
+        }
+
+        private Blob get(UUID uuid) {
+            if(uuid==null) {
+                return null;
+            }
+            return (Blob) session().getAttribute(uuid.toString());
+        }
+        
+        public static HttpSession session() {
+            ServletRequestAttributes attr = 
+                    (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            return attr.getRequest().getSession(false); // false == don't allow create
         }
 
     }
