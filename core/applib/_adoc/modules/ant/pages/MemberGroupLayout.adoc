@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `@MemberGroupLayout` annotation specifies how an object's properties and collections are grouped together into columns, also specifying the relative positioning of those columns.  It works in conjunction with the xref:applib:ant:MemberOrder.adoc[`@MemberOrder`] annotation.
+The `@MemberGroupLayout` annotation specifies how an object's properties and collections are grouped together into columns, also specifying the relative positioning of those columns.  It works in conjunction with the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] annotation.
 
 The annotation defines four attributes:
 

@@ -4,8 +4,8 @@
 include::_attributes.adoc[]
 :page-partial:
 
-This abstract class constitutes the API of a domain service to execute xref:applib:cms:classes.adoc#FixtureScript[`FixtureScript`]s.
+This abstract class constitutes the API of a domain service to execute xref:rg:cms:classes.adoc#FixtureScript[`FixtureScript`]s.
 
-For more information, see xref:applib:svc:testing/FixtureScripts.adoc[`FixtureScripts`] in the domain services guide.
+For more information, see xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`] in the domain services guide.
 
 See the see the xref:ext-fixtures:ROOT:about.adoc[testing guide] for further discussion on the use of fixture scripts, in particular xref:ext-fixtures:ROOT:about.adoc#api-and-usage[fixture scripts' API and usage].

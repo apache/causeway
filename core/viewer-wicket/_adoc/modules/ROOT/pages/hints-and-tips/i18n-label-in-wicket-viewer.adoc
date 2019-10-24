@@ -11,7 +11,7 @@ Referencing those via their message id inside a .po file didn't work either.
 Can this be done?_
 
 
-Yes, it _is_ possible to internationalize both the Wicket viewer's labels as well as the regular translations of the domain object metadata using the `.po` translation files as supported by the xref:applib:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`].
+Yes, it _is_ possible to internationalize both the Wicket viewer's labels as well as the regular translations of the domain object metadata using the `.po` translation files as supported by the xref:rg:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`].
 
 Full details of the ``msgId``s that must be added to the `translations.po` file can be found in xref:ug:btb:i18n.adoc#wicket-viewer[i18n] section of the xref:ug:btb:about.adoc[beyond the basics] guide.
 

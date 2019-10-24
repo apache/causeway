@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-The `TitleBuffer` utility class is intended to make it easy to construct title strings (returned from the xref:applib:cms:methods.adoc#title[`title()`] method).
+The `TitleBuffer` utility class is intended to make it easy to construct title strings (returned from the xref:rg:cms:methods.adoc#title[`title()`] method).
 
 For example, it has overloaded versions of methods called `append()` and `concat()`.
 

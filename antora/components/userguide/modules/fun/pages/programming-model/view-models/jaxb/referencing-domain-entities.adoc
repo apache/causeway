@@ -8,11 +8,11 @@ It's quite common for view models to be "backed by" (be projections of) some und
 For example, the `CompareCustomers` view model described xref:ug:fun:programming-model.adoc#jaxb[above] actually references two underlying ``Customer`` entities.
 
 It wouldn't make sense to serialize out the state of a persistent entity.
-However, the identity of the underlying entity is well defined; Apache Isis defines the xref:schema:ROOT:common.adoc[common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
-This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:applib:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
+However, the identity of the underlying entity is well defined; Apache Isis defines the xref:rg:schema:common.adoc[common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
+This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
 
-There is only one requirement to make this work: every referenced domain entity must be annotated with xref:applib:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`], specifying the framework-provided `PersistentEntityAdapter`.
-And this class is similar to the xref:applib:svc:integration-api/BookmarkService.adoc[`BookmarkService`]: it knows how to create an `OidDto` from an object reference.
+There is only one requirement to make this work: every referenced domain entity must be annotated with xref:rg:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`], specifying the framework-provided `PersistentEntityAdapter`.
+And this class is similar to the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`]: it knows how to create an `OidDto` from an object reference.
 
 Thus, in our view model we can legitimately write:
 

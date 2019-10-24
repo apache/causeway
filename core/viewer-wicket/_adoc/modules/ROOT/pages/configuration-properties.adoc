@@ -121,7 +121,7 @@ See below for further discussion on this topic.
 (_`welcome.html`_)
 |Location of the HTML file (relative to `src/main/webapp`) whose contents should be displayed on the application's home page.
 
-Note though that if a xref:applib:ant:HomePage.adoc[@HomePage] action exists, then that will take precedence.
+Note though that if a xref:rg:ant:HomePage.adoc[@HomePage] action exists, then that will take precedence.
 
 If no welcome file exists, then the value of `welcome.text` is shown as a fallback.
 
@@ -130,7 +130,7 @@ If no welcome file exists, then the value of `welcome.text` is shown as a fallba
 |Text
 |To be displayed on the application's home page, used as a fallback if `welcome.file` is not specified.
 
-Note though that if a xref:applib:ant:HomePage.adoc[@HomePage] action exists, then that will take precedence.
+Note though that if a xref:rg:ant:HomePage.adoc[@HomePage] action exists, then that will take precedence.
 
 
 |===
@@ -462,10 +462,10 @@ Some of the properties below use the prefix `isis.viewers.` (rather than the usu
 `defaultView`
 |`hidden`, `table` +
 (`hidden`)
-|Default for the default view for all (parented) collections if not explicitly specified using xref:applib:ant:CollectionLayout.adoc#defaultView[`@CollectionLayout#defaultView()`]
+|Default for the default view for all (parented) collections if not explicitly specified using xref:rg:ant:CollectionLayout.adoc#defaultView[`@CollectionLayout#defaultView()`]
 
 By default the framework renders (parented) collections as "hidden", ie collapsed.
-These can be overridden on a case-by-case basis using the xref:applib:ant:CollectionLayout.adoc#defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
+These can be overridden on a case-by-case basis using the xref:rg:ant:CollectionLayout.adoc#defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
 
 If the majority of collections should be displayed as "table" form, then it is more convenient to specify the default view globally.
 
@@ -487,7 +487,7 @@ If the majority of collections should be displayed as "table" form, then it is m
 `labelPosition`
 |`TOP`, `LEFT` +
 (`LEFT`)
-|Default for label position for all properties if not explicitly specified using xref:applib:ant:PropertyLayout.adoc#labelPosition[`@PropertyLayout#labelPosition()`]
+|Default for label position for all properties if not explicitly specified using xref:rg:ant:PropertyLayout.adoc#labelPosition[`@PropertyLayout#labelPosition()`]
 
 
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
@@ -525,7 +525,7 @@ At the time of writing, this means labels are to the left for all datatypes exce
 For actions, `inline_as_if_edit` will suppress the action's button, and instead let the action be invoked as if editing the property.
 The net effect is that being able to "edit" complex properties with multiple parts (eg a date) using a multi-argument editor (this editor, in fact, being the action's argument panel).
 
-The property can be overridden on a property-by-property basis using xref:applib:ant:PropertyLayout.adoc#promptStyle[`@Property#promptStyle()`]) or  xref:applib:ant:ActionLayout.adoc#promptStyle[`@Action#promptStyle()`]).
+The property can be overridden on a property-by-property basis using xref:rg:ant:PropertyLayout.adoc#promptStyle[`@Property#promptStyle()`]) or  xref:rg:ant:ActionLayout.adoc#promptStyle[`@Action#promptStyle()`]).
 
 Note that `inline_as_if_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
 

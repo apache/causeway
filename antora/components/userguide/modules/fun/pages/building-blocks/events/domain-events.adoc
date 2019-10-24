@@ -4,9 +4,9 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-Domain events are fired -- through the internal xref:applib:svc:core-domain-api/EventBusService.adoc[event bus] -- for every user interaction with each object member (property, collection or action).
+Domain events are fired -- through the internal xref:rg:svc:core-domain-api/EventBusService.adoc[event bus] -- for every user interaction with each object member (property, collection or action).
 
-By default, rendering a property causes a `PropertyDomainEvent` to be fired, though the xref:applib:ant:Property.adoc#domainEvent[`@Property#domainEvent()`] attribute allows a custom subclass to be specified if necessary.
+By default, rendering a property causes a `PropertyDomainEvent` to be fired, though the xref:rg:ant:Property.adoc#domainEvent[`@Property#domainEvent()`] attribute allows a custom subclass to be specified if necessary.
 Similarly, rendering a collection causes a `CollectionDomainEvent` to be fired, and rendering an action causes an `ActionDomainEvent` to be fired.
 
 In fact, each event can be fired up to five times, with the event's `getEventPhase()` method indicating to the subscriber the phase:
@@ -32,7 +32,7 @@ For example, a cascade delete could be implemented here.
 For example, a business audit event could be implemented here.
 
 
-For more details on the actual domain event classes, see the xref:applib:cms:classes/domainevent.adoc[domain event] section of the relevant reference guide.
+For more details on the actual domain event classes, see the xref:rg:cms:classes/domainevent.adoc[domain event] section of the relevant reference guide.
 
 
 

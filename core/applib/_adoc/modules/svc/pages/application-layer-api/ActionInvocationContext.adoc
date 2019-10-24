@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 // TODO: v2: remove this domain service
 
-The `ActionInvocationContext` domain service is a xref:applib:ant:RequestScoped.adoc[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:applib:ant:Action.adoc#invokeOn[`@Action#invokeOn()`].
+The `ActionInvocationContext` domain service is a xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:rg:ant:Action.adoc#invokeOn[`@Action#invokeOn()`].
 This allows the user to select multiple objects in a table and then invoke the same action against all of them.
 
 When an action is invoked in this way, this service allows each object instance to "know where it is" in the collection; it acts a little like an iterator.
@@ -37,13 +37,13 @@ public static class ActionInvocationContext {
     public boolean isLast() { /* ... */ }
 }
 ----
-<1> is xref:applib:ant:RequestScoped.adoc[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
+<1> is xref:rg:ant:RequestScoped.adoc[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
 <2> an enum set to either `OBJECT` (if action has been invoked on a single object) or `COLLECTION` (if has been invoked on a collection).
 <3> returns the list of domain objects which are being acted upon
 <4> is the 0-based index to the object being acted upon.
 
 
-To provide an alternative implementation, subclass and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To provide an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == Usage
@@ -51,7 +51,7 @@ To provide an alternative implementation, subclass and use xref:applib:ant:Domai
 For actions that are void or that return null, Apache Isis will return to the list once executed.
 But for bulk actions that are non-void, Apache Isis will render the returned object/value from the last object invoked (and simply discards the object/value of all actions except the last).
 
-One idiom is for the domain objects to also use the xref:applib:svc:core-domain-api/Scratchpad.adoc[`Scratchpad`] service to share information, for example to aggregate values.
+One idiom is for the domain objects to also use the xref:rg:svc:core-domain-api/Scratchpad.adoc[`Scratchpad`] service to share information, for example to aggregate values.
 The `ActionInvocationContext#isLast()` method can then be used to determine if all the information has been gathered, and then do something with it (eg derive variance across a range of values, render a graph etc).
 
 More prosaically, the `ActionInvocationContext` can be used to ensure that the action behaves appropriately depending on how it has been invoked (on a single object and/or a collection) whether it is called in bulk mode or regular mode.

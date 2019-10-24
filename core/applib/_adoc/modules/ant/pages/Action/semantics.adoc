@@ -66,7 +66,7 @@ public class Customer {
 }
 ----
 
-Actions that are safe and request-cacheable automatically use the xref:applib:svc:persistence-layer-api/QueryResultsCache.adoc[`QueryResultsCache`] service to cache the result of the method.  Note though that the results of this caching will only be apparent if the action is invoked from another method using the xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] service.
+Actions that are safe and request-cacheable automatically use the xref:rg:svc:persistence-layer-api/QueryResultsCache.adoc[`QueryResultsCache`] service to cache the result of the method.  Note though that the results of this caching will only be apparent if the action is invoked from another method using the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] service.
 
 Continuing the example above, imagine code that loops over a set of ``Order``s where each `Order` has an associated `Customer`.  We want to check the credit rating of each `Customer` (a potentially expensive operation) but we don't want to do it more than once per `Customer`.  Invoking through the `WrapperFactory` will allow us to accomplish this by exploiting the semantics of `checkCredit()` action:
 

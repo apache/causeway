@@ -28,7 +28,7 @@ public interface ServiceRegistry {
 <4> returns the list of all domain services that constitute the running application (including internal domain services).
 
 Service injection is done automatically if objects are created using the
-xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`].
+xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`].
 
 
 
@@ -46,7 +46,7 @@ cust.setLastName("Mercury");
 repositoryService.persist(cust);
 ----
 
-The alternative is to use the xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`] API which performs both steps in a single factory method.
+The alternative is to use the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`] API which performs both steps in a single factory method.
 
 
 

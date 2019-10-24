@@ -17,14 +17,14 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:applib:ant:DomainObject.adoc#auditing[`auditing()`]
+|xref:rg:ant:DomainObject.adoc#auditing[`auditing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |indicates whether each of the changed properties of an object should be submitted to the registered
-xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s)
+xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s)
 
 
-|xref:applib:ant:DomainObject.adoc#autoCompleteRepository[`autoCompleteRepository()`]
+|xref:rg:ant:DomainObject.adoc#autoCompleteRepository[`autoCompleteRepository()`]
 |Domain service class
 |nominate a method on a domain service to be used for looking up instances of the domain object
 
@@ -35,76 +35,76 @@ xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s)
 |override the method name to use on the auto-complete repository
 
 
-|xref:applib:ant:DomainObject.adoc#bounding[`bounding()`]
+|xref:rg:ant:DomainObject.adoc#bounding[`bounding()`]
 |`true`, `false` +
 (`false`)
 |Whether the number of instances of this domain class is relatively small (a "bounded" set), such that instances could be selected from a drop-down list box or similar.
 
-|xref:applib:ant:DomainObject.adoc#createdLifecycleEvent[`created-` +
+|xref:rg:ant:DomainObject.adoc#createdLifecycleEvent[`created-` +
 `LifecycleEvent()`]
 |subtype of `ObjectCreatedEvent` +
 (`ObjectCreatedEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is created
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is created
 
-|xref:applib:ant:DomainObject.adoc#editing[`editing()`]
+|xref:rg:ant:DomainObject.adoc#editing[`editing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |whether the object's properties and collections can be edited or not (ie whether the instance should be considered to be immutable)
 
 
-|xref:applib:ant:DomainObject.adoc#mixinMethod[`mixinMethod()`]
+|xref:rg:ant:DomainObject.adoc#mixinMethod[`mixinMethod()`]
 |Method name within the mixin
 |How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
 Typical examples are "exec", "execute", "invoke", "apply" and so on.
 The default "reserved" method name is `$$`.
 
 
-|xref:applib:ant:DomainObject.adoc#nature[`nature()`]
+|xref:rg:ant:DomainObject.adoc#nature[`nature()`]
 |`NOT_SPECIFIED`, `JDO_ENTITY`, `EXTERNAL_ENTITY`, `INMEMORY_ENTITY`, `MIXIN`, `VIEW_MODEL` (`NOT_SPECIFIED`)
 |whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); or is a mixin.
 If an entity, indicates how its persistence is managed.
 
 
-|xref:applib:ant:DomainObject.adoc#objectType[`objectType()`]
+|xref:rg:ant:DomainObject.adoc#objectType[`objectType()`]
 |(none, which implies fully qualified class name)
 |specify an alias for the domain class used to uniquely identify the object both within the Apache Isis runtime and externally
 
 
-|xref:applib:ant:DomainObject.adoc#persistedLifecycleEvent[`persisted-` +
+|xref:rg:ant:DomainObject.adoc#persistedLifecycleEvent[`persisted-` +
 `LifecycleEvent()`]
 |subtype of `ObjectPersistedEvent` +
 (`ObjectPersistedEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance has just been persisted
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance has just been persisted
 
-|xref:applib:ant:DomainObject.adoc#persistingLifecycleEvent[`persisting-` +
+|xref:rg:ant:DomainObject.adoc#persistingLifecycleEvent[`persisting-` +
 `LifecycleEvent()`]
 |subtype of `ObjectPersistingEvent` +
 (`ObjectPersistingEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is about to be persisted
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is about to be persisted
 
-|xref:applib:ant:DomainObject.adoc#publishing[`publishing()`]
+|xref:rg:ant:DomainObject.adoc#publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether changes to the object should be published to the registered xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+|whether changes to the object should be published to the registered xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 
 
-|xref:applib:ant:DomainObject.adoc#removingLifecycleEvent[`removing-` +
+|xref:rg:ant:DomainObject.adoc#removingLifecycleEvent[`removing-` +
 `LifecycleEvent()`]
 |subtype of `ObjectRemovingEvent` +
 (`ObjectRemovingEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is about to be deleted
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is about to be deleted
 
-|xref:applib:ant:DomainObject.adoc#updatedLifecycleEvent[`updated-` +
+|xref:rg:ant:DomainObject.adoc#updatedLifecycleEvent[`updated-` +
 `LifecycleEvent()`]
 |subtype of `ObjectUpdatedEvent` +
 (`ObjectUpdatedEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance has just been updated
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance has just been updated
 
-|xref:applib:ant:DomainObject.adoc#updatingLifecycleEvent[`updating-` +
+|xref:rg:ant:DomainObject.adoc#updatingLifecycleEvent[`updating-` +
 `LifecycleEvent()`]
 |subtype of `ObjectUpdatingEvent` +
 (`ObjectUpdatingEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is about to be updated
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is about to be updated
 
 |===
 

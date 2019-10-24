@@ -19,7 +19,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:applib:cms:classes.adoc#AbstractService[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#AbstractService[`o.a.i.applib.` +
 `AbstractService`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -27,7 +27,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:applib:cms:classes.adoc#AbstractSubscriber[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#AbstractSubscriber[`o.a.i.applib.` +
 `AbstractSubscriber`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -35,7 +35,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:applib:cms:classes.adoc#AbstractViewModel[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#AbstractViewModel[`o.a.i.applib.` +
 `AbstractViewModel`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -43,7 +43,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:applib:cms:classes.adoc#FixtureScript[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#FixtureScript[`o.a.i.applib.` +
 `fixturescript` +
 `FixtureScript`]
 |``o.a.i.core`` +
@@ -52,13 +52,13 @@ Impl'n (g: a:)
 |
 
 
-|xref:applib:cms:classes.adoc#FixtureScripts[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#FixtureScripts[`o.a.i.applib.` +
 `fixturescripts` +
 `FixtureScripts`]
 |``o.a.i.core`` +
 ``isis-core-applib``
 |(abstract class). +
-`FixtureScriptsDefault` is a default implementation that is used when the alternative xref:applib:svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] is provided
+`FixtureScriptsDefault` is a default implementation that is used when the alternative xref:rg:svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] is provided
   (and no other implementation of `FixtureScripts` was found).
 |depends on: +
 `ClassDiscoveryService`

@@ -10,7 +10,7 @@ For example, the validator will detect any orphaned supporting methods (eg `hide
 
 [NOTE]
 ====
-The support for xref:applib:ant:aaa.adoc#deprecated[disallowing deprecated annotations] is also implemented using the metamodel validator.
+The support for xref:rg:ant:aaa.adoc#deprecated[disallowing deprecated annotations] is also implemented using the metamodel validator.
 ====
 
 You can also impose your own application-specific rules by installing your own metamodel validator.  To give just one example, you could impose naming standards such as ensuring that a domain-specific abbreviation such as "ISBN" is always consistently capitalized wherever it appears in a class member.

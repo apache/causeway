@@ -61,5 +61,5 @@ public Order addItem(Product product, @ParameterLayout(named="Quantity") int qua
 
 The core framework provides a default implementation of this service, `o.a.i.core.runtime.services.message.MessageServiceDefault`.
 
-To use an alternative implementation, implement the `MessageService` interface and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `MessageService` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 

@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-The xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
+The xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
 And the role of this wrapper is to simulate the UI.
 
 [NOTE]
@@ -156,7 +156,7 @@ public class SomeIntegratTest /* ... */ {
     }
 }
 ----
-<1> inject xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] into this test
+<1> inject xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] into this test
 <2> holder for subscriber to capture event to
 <3> subscriber's callback, using Spring events
 <4> invoking the domain object using the wrapper

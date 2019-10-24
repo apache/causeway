@@ -6,11 +6,11 @@ include::_attributes.adoc[]
 
 
 
-The `mustSatisfy()` attribute allows arbitrary validation to be applied to parameters using an (implementation of a) `org.apache.isis.applib.spec.Specification` object.  The attribute is also supported on xref:applib:ant:Property.adoc#mustSatisfy[properties].
+The `mustSatisfy()` attribute allows arbitrary validation to be applied to parameters using an (implementation of a) `org.apache.isis.applib.spec.Specification` object.  The attribute is also supported on xref:rg:ant:Property.adoc#mustSatisfy[properties].
 
 [TIP]
 ====
-The specification implementations can (of course) be reused between parameters and xref:applib:ant:Property.adoc#mustSatisfy[properties].
+The specification implementations can (of course) be reused between parameters and xref:rg:ant:Property.adoc#mustSatisfy[properties].
 ====
 
 The `Specification` is consulted during validation, being passed the proposed value.  If the proposed value fails, then the value returned is the used as the invalidity reason.

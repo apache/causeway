@@ -50,7 +50,7 @@ When we talk about integration tests/specs here, we mean tests that exercise the
 
 For most other frameworks that would require having to test the application in a very heavy weight/fragile fashion using a tool such as link:http://docs.seleniumhq.org/[Selenium], driving a web browser to navigate .  In this regard though, Apache Isis has a significant trick up its sleeve.  Because Apache Isis implements the naked objects pattern, it means that the UI is generated automatically from declared domain-objects, -views and -services. This therefore allows for other implementations of the UI.
 
-The xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
+The xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
 
 image::integ-tests.png[width="700px",link="{imagesdir}/integ-tests.png"]
 
@@ -123,7 +123,7 @@ In the previous section we discussed using given/when/then as a form of organizi
 
 For integration tests though it can be difficult to keep the "given" short; there could be a lot of prerequisite data that needs to exist before you can actually exercise your system.  Moreover, however we do set up that data, but we also want to do so in a way that is resilient to the system changing over time.
 
-The solution that Apache Isis provides is a domain service called xref:applib:cms:classes/super.adoc#FixtureScripts[Fixture Scripts], that defines a pattern and supporting classes to help ensure that the "data setup" for your tests are reusable and maintainable over time.
+The solution that Apache Isis provides is a domain service called xref:rg:cms:classes/super.adoc#FixtureScripts[Fixture Scripts], that defines a pattern and supporting classes to help ensure that the "data setup" for your tests are reusable and maintainable over time.
 
 
 

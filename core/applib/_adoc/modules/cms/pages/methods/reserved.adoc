@@ -13,29 +13,29 @@ The table below lists the reserved methods that are recognized as part of Apache
 |Method
 |Description
 
-|xref:applib:cms:methods.adoc#cssClass[`cssClass()`]
+|xref:rg:cms:methods.adoc#cssClass[`cssClass()`]
 |Provides a CSS class for this object instance.
-In conjunction with xref:cfg:ROOT:application-specific/application-css.adoc[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered.
+In conjunction with xref:rg:cfg:application-specific/application-css.adoc[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered.
 
-|xref:applib:cms:methods.adoc#disable[`disable(...)`]
+|xref:rg:cms:methods.adoc#disable[`disable(...)`]
 |Disable all or some of an object's properties
 
-|xref:applib:cms:methods.adoc#getId[`getId()`]
+|xref:rg:cms:methods.adoc#getId[`getId()`]
 |Provides an optional unique identifier of a service.
 
 If not provided, the service's fully-qualified class name is used.
 
-|xref:applib:cms:methods.adoc#reserved-hide[`hide(...)`]
+|xref:rg:cms:methods.adoc#reserved-hide[`hide(...)`]
 |Hide all or some of an object's properties
 
-|xref:applib:cms:methods.adoc#iconName[`iconName()`]
+|xref:rg:cms:methods.adoc#iconName[`iconName()`]
 |Provides the name of the image to render, usually alongside the title, to represent the object.
 If not provided, then the class name is used to locate an image.
 
-|xref:applib:cms:methods.adoc#title[`title()`]
+|xref:rg:cms:methods.adoc#title[`title()`]
 |Provides a title for the object. +
 
-|xref:applib:cms:methods.adoc#reserved-validate[`validate()`]
+|xref:rg:cms:methods.adoc#reserved-validate[`validate()`]
 |Validate the object's state prior to persisting.
 
 |===

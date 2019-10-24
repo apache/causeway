@@ -32,4 +32,4 @@ public class CustomerRepository {
 
 == See also
 
-This attribute can also be applied to xref:applib:ant:Property.adoc#maxLength[properties].
+This attribute can also be applied to xref:rg:ant:Property.adoc#maxLength[properties].

@@ -10,8 +10,8 @@ xref:ug:fun:ui-hints/object-titles-and-icons.adoc[Normally] the code to return t
 However, UI events allow this title and icon to be provided instead by a subscriber.
 UI events have higher precedence than the other mechanisms of supplying a title.
 
-If annotated with xref:applib:ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
- Similarly for xref:applib:ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent()`] and xref:applib:ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`].
+If annotated with xref:rg:ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
+ Similarly for xref:rg:ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent()`] and xref:rg:ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`].
 
 This can be particularly useful for xref:ug:fun:programming-model.adoc#jaxb[JAXB-style view models] which are code generated from XSDs and so cannot have any dependencies on the rest of the Apache Isis framework.
 Here a subscriber on the default events can provide a title and icon for such an object.

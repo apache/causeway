@@ -1,6 +1,2 @@
-name: schema
-title: "Schema"
+name: rg
 version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc

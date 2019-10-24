@@ -43,14 +43,14 @@ public String title() {
     return buf.toString();
 }
 ----
-<1> simple xref:applib:cms:classes.adoc#TitleBuffer[utility class] to help construct the title string
+<1> simple xref:rg:cms:classes.adoc#TitleBuffer[utility class] to help construct the title string
 <2> imperative conditional logic
-<3> using the xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
+<3> using the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
 <4> ... but ignore if not
 
 As the example above shows, the implementation can be as complex as you like.
 
-In many cases, though, you may be able to use the xref:applib:ant:Title.adoc[`@Title`] annotation.
+In many cases, though, you may be able to use the xref:rg:ant:Title.adoc[`@Title`] annotation.
 
 
 
@@ -59,7 +59,7 @@ In many cases, though, you may be able to use the xref:applib:ant:Title.adoc[`@T
 
 See also:
 
-* xref:applib:cms:methods.adoc#iconName[`iconName()`]
-* xref:applib:cms:methods.adoc#cssClass[`cssClass()`]
-* xref:applib:cms:methods.adoc#layout[`layout()`]
+* xref:rg:cms:methods.adoc#iconName[`iconName()`]
+* xref:rg:cms:methods.adoc#cssClass[`cssClass()`]
+* xref:rg:cms:methods.adoc#layout[`layout()`]
 

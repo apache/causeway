@@ -10,12 +10,12 @@ or deleting objects from the database.
 
 Its immediate subclasses are:
 
-* xref:applib:cms:classes.adoc#ObjectCreatedEvent[`ObjectCreatedEvent`]
-* xref:applib:cms:classes.adoc#ObjectLoadedEvent[`ObjectLoadedEvent`]
-* xref:applib:cms:classes.adoc#ObjectPersistedEvent[`ObjectPersistedEvent`]
-* xref:applib:cms:classes.adoc#ObjectPersistingEvent[`ObjectPersistingEvent`]
-* xref:applib:cms:classes.adoc#ObjectRemovingEvent[`ObjectRemovingEvent`]
-* xref:applib:cms:classes.adoc#ObjectUpdatedEvent[`ObjectUpdatedEvent`]
-* xref:applib:cms:classes.adoc#ObjectUpdatingEvent[`ObjectUpdatingEvent`]
+* xref:rg:cms:classes.adoc#ObjectCreatedEvent[`ObjectCreatedEvent`]
+* xref:rg:cms:classes.adoc#ObjectLoadedEvent[`ObjectLoadedEvent`]
+* xref:rg:cms:classes.adoc#ObjectPersistedEvent[`ObjectPersistedEvent`]
+* xref:rg:cms:classes.adoc#ObjectPersistingEvent[`ObjectPersistingEvent`]
+* xref:rg:cms:classes.adoc#ObjectRemovingEvent[`ObjectRemovingEvent`]
+* xref:rg:cms:classes.adoc#ObjectUpdatedEvent[`ObjectUpdatedEvent`]
+* xref:rg:cms:classes.adoc#ObjectUpdatingEvent[`ObjectUpdatingEvent`]
 
 

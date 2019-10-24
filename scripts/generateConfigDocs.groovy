@@ -190,20 +190,21 @@ for (PropertyGroup group in groups) {
     if(group.properties.size() > 0) {
 
         for (Property property in group.properties) {
-            buf << "| ${property.name}\n"
+            buf << "| "
+            buf  << format("${property.name}\n")
 //            buf << "|"
 //            if(property.type) {
 //                buf << " ${property.type}"
 //            }
 //            buf << "\n"
-            buf << "|"
+            buf << "| "
             if(property.defaultValue) {
-                buf << " ${property.defaultValue}"
+                buf << format(" ${property.defaultValue}")
             }
             buf << "\n"
-            buf << "|"
+            buf << "| "
             if(property.description) {
-                buf << " ${property.description}"
+                buf << toAsciidoc(" ${property.description}")
             }
             buf << "\n"
             buf << "\n"
@@ -213,4 +214,61 @@ for (PropertyGroup group in groups) {
         def outputFile = new File(outputDir, "${group.fileName()}.adoc")
         outputFile.write(buf.toString())
     }
+}
+
+static String toAsciidoc(String str) {
+
+    String lineFeed = " +\n";
+
+    // simple html -> asciidoc substitutions
+    str = str.replace("<p>", lineFeed);
+    str = str.replace("</p>", "");
+
+    str = str.replace("<i>", "_");
+    str = str.replace("<b>", "*");
+    //str = str.replaceAll("<a href=\"(.*)\">(.*?)</a>", "link:$1[$2]");
+
+    str = str.replace("<code>", "`");
+    str = str.replace("<\\code>", "`");
+    str = str.replace("<tt>", "`");
+    str = str.replace("<\\tt>", "`");
+
+    return str;
+}
+
+static String format(String str, int len = 30) {
+
+    String lineFeed = " +\n";
+
+    if(str.length() <= len) {
+        return str;
+    }
+
+    final StringBuilder buf = new StringBuilder();
+    String remaining = str;
+
+    while(remaining.length() > 0) {
+        int lastDot = remaining.substring(0, len).lastIndexOf('.');
+        int lastDash = remaining.substring(0, len).lastIndexOf('-');
+        int splitAt = lastDot > 0
+                ? lastDot + 1
+                : lastDash > 0
+                ? lastDash + 1
+                : len;
+        if(buf.length() > 0) {
+            buf.append(lineFeed);
+        }
+        buf.append(remaining, 0, splitAt);
+        remaining = remaining.substring(splitAt);
+
+        if(remaining.length() <= len) {
+            buf.append(lineFeed).append(remaining);
+            remaining = "";
+        }
+    }
+
+    def string = buf.toString()
+//    System.out.println(str)
+//    System.out.println(string)
+    return string;
 }

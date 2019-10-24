@@ -16,8 +16,8 @@ The class itself is instantiated automatically by the framework whenever interac
 
 [NOTE]
 ====
-If the domain object defines its own xref:applib:cms:methods.adoc#iconName[`iconName()`] supporting method,
+If the domain object defines its own xref:rg:cms:methods.adoc#iconName[`iconName()`] supporting method,
 or if it has the
-xref:applib:ant:DomainObjectLayout#cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute, then
+xref:rg:ant:DomainObjectLayout#cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute, then
 these will take precedence.
 ====

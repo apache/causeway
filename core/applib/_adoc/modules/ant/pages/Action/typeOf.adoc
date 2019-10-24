@@ -33,5 +33,5 @@ In general we recommend that you use generics instead, eg `List<Customer>`.
 
 == See also
 
-This attribute can also be specified for xref:applib:ant:Collection.adoc#typeOf[collections].
+This attribute can also be specified for xref:rg:ant:Collection.adoc#typeOf[collections].
 

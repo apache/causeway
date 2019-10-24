@@ -16,6 +16,6 @@ public interface HoldsUpdatedBy {
 }
 ----
 
-Entities that implement this interface often also implement xref:applib:cms:classes.adoc#HoldsUpdatedAt[`HoldsUpdatedAt`] role interface; as a convenience the xref:applib:cms:classes.adoc#Timestampable[`Timestampable`] interface combines the two roles.
+Entities that implement this interface often also implement xref:rg:cms:classes.adoc#HoldsUpdatedAt[`HoldsUpdatedAt`] role interface; as a convenience the xref:rg:cms:classes.adoc#Timestampable[`Timestampable`] interface combines the two roles.
 
 

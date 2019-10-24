@@ -30,7 +30,7 @@ public class Order {
 ----
 
 
-It is also possible to specify a global default for the page size of standalone collections, using the xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.viewer.paged.standalone`.
+It is also possible to specify a global default for the page size of standalone collections, using the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.viewer.paged.standalone`.
 
 
 
@@ -38,5 +38,5 @@ It is also possible to specify a global default for the page size of standalone 
 
 This attribute can also be applied to:
 
-* xref:applib:ant:ViewModelLayout.adoc#paged[view models], and
-* xref:applib:ant:CollectionLayout.adoc#paged[collections]
+* xref:rg:ant:ViewModelLayout.adoc#paged[view models], and
+* xref:rg:ant:CollectionLayout.adoc#paged[collections]

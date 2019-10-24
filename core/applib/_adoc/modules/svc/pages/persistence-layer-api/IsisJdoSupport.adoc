@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 The `IsisJdoSupport` service provides a number of general purpose methods for working with the JDO/DataNucleus objectstore.
-In general these act at a lower-level of abstraction than the APIs normally used (specifically, those of xref:applib:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]), but nevertheless deal with some of the most common use cases.
+In general these act at a lower-level of abstraction than the APIs normally used (specifically, those of xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]), but nevertheless deal with some of the most common use cases.
 For service also provides access to the underlying JDO `PersistenceManager` for full control.
 
 The following sections discuss the functionality provided by the service, broken out into categories.
@@ -51,7 +51,7 @@ The returned value is the number of rows updated.
 
 [TIP]
 ====
-As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc#type-safe-query-api[below].
+As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc#type-safe-query-api[below].
 ====
 
 
@@ -62,7 +62,7 @@ As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/p
 DataNucleus provides an link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[extension to JDO],  so that JDOQL queries can be built up and executed using a set of type-safe classes.
 
 The types in question for type safe queries are not the domain entities, but rather are companion "Q..." query classes.
-These classes are generated dynamically by an link:https://www.jcp.org/en/jsr/detail?id=269[annotation processor] as a side-effect of compilation, one "Q..." class for each of the xref:applib:ant:PersistenceCapable.adoc[`@PersistenceCapable`] domain entity in your application.
+These classes are generated dynamically by an link:https://www.jcp.org/en/jsr/detail?id=269[annotation processor] as a side-effect of compilation, one "Q..." class for each of the xref:rg:ant:PersistenceCapable.adoc[`@PersistenceCapable`] domain entity in your application.
 For example, a `ToDoItem` domain entity will give rise to a `QToDoItem` query class.
 These "Q..." classes mirror the structure of domain entity, but expose properties that allow predicates to be built up for querying instances, as well as other functions in support of order by, group by and other clauses.
 
@@ -117,7 +117,7 @@ public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Categor
 
 [NOTE]
 ====
-You can find the full example of the JDOQL equivalent in the xref:applib:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]
+You can find the full example of the JDOQL equivalent in the xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]
 ====
 
 
@@ -145,7 +145,7 @@ private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
 
 == Fixture support
 
-When writing xref:testing:integ-test-support:about.adoc[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc#executing-sql[above].
+When writing xref:testing:integ-test-support:about.adoc[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc#executing-sql[above].
 
 Alternatively, the `deleteAll(...)` method will let your test delete all instances of a class without resorting to SQL:
 

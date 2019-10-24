@@ -98,6 +98,9 @@ content:
       start_path: antora/components/security
       branches: HEAD
     - url: .
+      start_path: core/security/api/_adoc
+      branches: HEAD
+    - url: .
       start_path: core/security/bypass/_adoc
       branches: HEAD
     - url: .
@@ -129,7 +132,8 @@ content:
 
 ui:
   bundle:
-    url: antora/theme/ui-bundle.zip
+    url: ../isis-antora/build/ui-bundle.zip
+    #url: antora/theme/ui-bundle.zip
     snapshot: true
   supplemental_files: antora/supplemental-ui
 

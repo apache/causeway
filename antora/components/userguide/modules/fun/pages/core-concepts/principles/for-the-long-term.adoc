@@ -32,7 +32,7 @@ To support the business domain being split into separate modules, the framework 
 
 * dependency injection of services +
 +
-Both xref:applib:svc:about.adoc[framework-defined domain services] and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:applib:ant:Inject.adoc[`@javax.inject.Inject`] annotation.
+Both xref:rg:svc:about.adoc[framework-defined domain services] and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:rg:ant:Inject.adoc[`@javax.inject.Inject`] annotation.
 
 * mixins allow functionality defined in one module to appear (in the UI) to be provided by some other module. +
 +
@@ -53,7 +53,7 @@ Or, it might conceivably perform a cascade delete of all associated communicatio
 
 For those cases where a module needs to interact with other modules but does not know about their implementations, the module can either define its own link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] domain services or it can define custom domain events and fire them.
 This technique is also used extensively by the framework itself.
- For example, the xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`] SPI enables custom auditing, and the xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] SPI enables custom publishing
+ For example, the xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`] SPI enables custom auditing, and the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] SPI enables custom publishing
 
 When building a modular application, it's important to consider the logical layering of the modules: we don't need every module to be completely decoupled from every other.
 The most important requirement is that there are no cyclic dependencies, because otherwise we run the risk of the application degrading into a link:https://en.wikipedia.org/wiki/Big_ball_of_mud["big ball of mud"].

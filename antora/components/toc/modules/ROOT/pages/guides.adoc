@@ -12,11 +12,11 @@ This page lists the user and reference guides available for developers to create
 
 == xref:rg:ROOT:about.adoc[Reference Guide]
 
-* xref:applib:ant:about.adoc[Annotations]
-* xref:applib:svc:about.adoc[Domain Services]
-* xref:applib:cms:about.adoc[Classes & Methods]
-* xref:schema:ROOT:about.adoc[Schemas]
-* xref:cfg:ROOT:about.adoc[Configuration]
+* xref:rg:ant:about.adoc[Annotations]
+* xref:rg:svc:about.adoc[Domain Services]
+* xref:rg:cms:about.adoc[Classes & Methods]
+* xref:rg:schema:about.adoc[Schemas]
+* xref:rg:cfg:about.adoc[Configuration]
 
 == Testing & Prototyping
 

@@ -1,3 +1,4 @@
+= Menu
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 include::_attributes.adoc[]
 
@@ -12,130 +13,72 @@ include::_attributes.adoc[]
 * *xref:what-is-apache-isis/isis-in-pictures.adoc[Apache Isis in pictures]*
 * xref:what-is-apache-isis/common-use-cases.adoc[Common Use Cases]
 
-| *Examples*
-
 * xref:what-is-apache-isis/screencasts.adoc[Screencasts]
 * xref:what-is-apache-isis/powered-by.adoc[Powered By]
 
-| *xref:toc:ROOT:quick-start.adoc#starter-apps[Starter Apps]*
+| *Quick Start*
 
-* xref:helloworld:ROOT:about.adoc[HelloWorld]
+* xref:helloworld:ROOT:about.adoc[Hello World]
 * xref:simpleapp:ROOT:about.adoc[SimpleApp]
 
-| *xref:toc:ROOT:guides.adoc#user-guides[User Guides]*
+_Demos & Tutorials:_
 
-* *xref:ug:ROOT:about.adoc[Fundamentals & Beyond]*
-* *xref:demoapp:ROOT:about.adoc[Demo App]*
-
-_Tutorials:_
-
+* xref:demoapp:ROOT:about.adoc[Demo App]
 * link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic]
 
-| *xref:rg:ROOT:about.adoc[Reference Guide]*
+| *Guides*
 
-* xref:applib:ant:about.adoc[Annotations]
-* xref:applib:svc:about.adoc[Domain Services]
-* xref:applib:cms:about.adoc[Classes & Methods]
-* xref:schema:ROOT:about.adoc[Schemas]
-* xref:cfg:ROOT:about.adoc[Configuration]
-
-
-| *xref:toc:ROOT:guides.adoc#testing-prototyping[Testing & Prototyping]*
-
+* *xref:ug:ROOT:about.adoc[User Guide]*
+* *xref:rg:ROOT:about.adoc[Reference Guide]*
 * *xref:testing:ROOT:about.adoc[Testing]*
 
 
+| *Components*
+
+* xref:vw:ROOT:about.adoc[Wicket Viewer] +
+ + extensions
+* xref:vro:ROOT:about.adoc[Restful Objects Viewer]
+* xref:odn:ROOT:about.adoc[DataNucleus Object Store]
+* xref:security:ROOT:about.adoc[Security Guide]
+** xref:ext-secman:ROOT:about.adoc[SecMan (extension)]
 
 
 
-| *xref:toc:ROOT:components.adoc#wicket-viewer[Wicket Viewer]*
-
-* xref:vw:ROOT:about.adoc[User Guide]
-
-_Extensions:_
-
-* xref:ext-viewer-wicket-excel:ROOT:about.adoc[Excel Download]
-* xref:ext-asciidoc:ROOT:about.adoc[Asciidoc value type ]
-* xref:ext-markdown:ROOT:about.adoc[Markdown value type]
-* xref:ext-sse:ROOT:about.adoc[Server Sent Events]
-* xref:ext-incubator:ROOT:about.adoc[Experimental framework extensions]
-
-| *xref:toc:ROOT:components.adoc#restful-objects-viewer[Restful Objects Viewer]*
-
-* xref:vro:ROOT:about.adoc[User Guide]
-
-_3rd Party (not ASF):_
-
-** link:https://github/TODO/TODO[Seb's viewer]
-** link:https://github/TODO/TODO[Joerg's viewer]
-
-*xref:toc:ROOT:components.adoc#datanucleus-object-store[DataNucleus Object Store]*
-
-*  xref:odn:ROOT:about.adoc[User Guide]
-
-| *xref:toc:ROOT:components.adoc#security[Security]*
-
-*  xref:security:ROOT:about.adoc[User Guide]
-
-_Extensions:_
-
-* xref:ext-secman:ROOT:about.adoc[Security Manager]
-
-| *xref:toc:ROOT:support.adoc#resources[Support Resources]*
+| *Support*
 
 * xref:toc:devguide:about.adoc[Developers' Guide]
-** xref:toc:devguide:about.adoc#intellij[IntelliJ] & xref:toc:devguide:about.adoc#eclipse[Eclipse]
-** xref:toc:devguide:contributing.adoc[Pull requests]
-//** xref:toc:devguide:asciidoc-syntax.adoc[Asciidoc syntax]
-
 * xref:mavendeps:ROOT:about.adoc[Maven mixins]
 
-| xref:toc:ROOT:support.adoc#help[*Help]*
+_Mailing Lists_
 
 * xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[How to subscribe]
-
 * link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
-_for bug reports & feature requests_
-
-|*xref:toc:ROOT:support.adoc#releases[Releases]*
-
- * xref:toc:ROOT:downloads/how-to.adoc[Downloads]
- * xref:relnotes:ROOT:about.adoc[Release Notes]
- * xref:mignotes:ROOT:about.adoc[Migration Notes]
 
 
+| *Releases*
+
+* xref:toc:ROOT:downloads/how-to.adoc[Downloads]
+* xref:relnotes:ROOT:about.adoc[Release Notes]
+* xref:mignotes:ROOT:about.adoc[Migration Notes]
+
+_Other Resources_
+
+* link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
+* link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
+* link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
 
 
-|*xref:toc:ROOT:internal.adoc#committers[Committers]*
+| *Other Extensions*
 
-*  xref:toc:comguide:about.adoc[Committers' Guide]
-** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
-** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
-
-
-|*xref:toc:ROOT:internal.adoc#implementation[Implementation]*
-
-*  xref:archdesign:ROOT:about.adoc[Architecture & Design]
-*  xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
-*  xref:smoketests:ROOT:about.adoc[SmokeTest App]
-
-
-
-|*Going Deeper*
-
-* xref:going-deeper/articles-and-presentations.adoc[Articles, Conferences, Podcasts]
-* xref:going-deeper/books.adoc[Books]
-* link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
-
-
+* xref:ext-restclient:ROOT:about.adoc[REST Client]
+* xref:ext-incubator:ROOT:about.adoc[Incubator]
 
 
 |*3rd party*
 
-* https://platform.incode.org[Incode Platform]
-
-* https://github.com/incodehq/incode-examples[Incode Domain Examples]
-* https://github.com/incodehq/incode-camel[Incode Camel App]
+* link:https://github.com/sebastianslutzky/AngularViewerCLI[AngularViewer]
+* link:https://github.com/joerg-rade/kroviz[Kroviz]
+* link:https://platform.incode.org[Incode Platform]
 
 _nb: not ASF_
 
@@ -151,16 +94,44 @@ _nb: not ASF_
 * https://github.com/isisaddons/isis-app-kitchensink[Kitchensink]
 * https://github.com/isisaddons/isis-app-quickstart[Quickstart]
 
-*Experiments*
+
+|*Internal*
+
+*  xref:toc:comguide:about.adoc[Committers' Guide]
+** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
+** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
+
+_Implementation_
+
+*  xref:archdesign:ROOT:about.adoc[Architecture & Design]
+*  xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
+*  xref:smoketests:ROOT:about.adoc[SmokeTest App]
+
+
+
+
+
+
+
+
+
+| *Further reading:*
+
+* xref:going-deeper/articles-and-presentations.adoc[Articles & Presentations]
+* xref:going-deeper/books.adoc[Books]
+
+
+
+| *Academia*
+
+* link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD] (Pawson)
+* https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Bachelors dissertation, Ginn)
+* https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
+
+_Experiments_
 
 * https://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
 * https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
-
-
-| *Other academia*
-
-* https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Bachelors dissertation, Ginn)
-* https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
 
 
 |===

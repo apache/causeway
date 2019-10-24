@@ -38,20 +38,20 @@ public interface JaxbService {
 
 With respect to the `IsisSchemas` enum: a JAXB-annotated domain object will live in its own XSD namespace and may
 reference multiple other XSD schemas.  In particular, many JAXB domain objects will reference the
-xref:schema:ROOT:about.adoc[common Isis schemas] (for example the `OidDto` class that represents a reference to
+xref:rg:schema:about.adoc[common Isis schemas] (for example the `OidDto` class that represents a reference to
 a persistent entity).  The enum indicates whether these schemas should be included or excluded from the map.
 
 Apache Isis provides a default implementation of the service, `o.a.i.applib.services.jaxb.JaxbServiceDefault`.
 
-To use an alternative implementation, implement `JaxbService` interface and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement `JaxbService` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 
 == Usage within the framework
 
 This service is provided as a convenience for applications, but is also used internally by the framework to
-xref:applib:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated
+xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated
 xref:ug:fun:building-blocks.adoc#view-models[view models].  The functionality to download XML and XSD schemas is also
-exposed in the UI through mixins to xref:applib:cms:classes/mixins.adoc#Dto[`Dto`] interface.
+exposed in the UI through mixins to xref:rg:cms:classes/mixins.adoc#Dto[`Dto`] interface.
 
 

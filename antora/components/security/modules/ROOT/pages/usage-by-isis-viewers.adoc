@@ -16,20 +16,20 @@ NOTE: the content below also appears in the respective user guides for the xref:
 
 == Wicket Viewer
 
-include::vw:security:partial$pages.adoc[]
+include::vw:ROOT:partial$security/pages.adoc[]
 
 [[vw-user-registration]]
 === User-registration
 
-include::vw:security:partial$user-registration.adoc[]
+include::vw:ROOT:partial$security/user-registration.adoc[]
 
 
 
 == Restful Objects Viewer
 
-include::vro:security:partial$web-xml.adoc[]
+include::vro:ROOT:partial$security/web-xml.adoc[]
 
 [[vro-user-registration]]
 === User-registration
 
-include::vro:security:partial$user-registration.adoc[]
+include::vro:ROOT:partial$security/user-registration.adoc[]

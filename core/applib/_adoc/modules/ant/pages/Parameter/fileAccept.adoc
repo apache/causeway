@@ -6,9 +6,9 @@ include::_attributes.adoc[]
 
 
 
-The `fileAccept()` attribute applies only to xref:applib:cms:classes/value-types.adoc#Blob[`Blob`]
-or xref:applib:cms:classes/value-types.adoc#Clob[`Clob`] parameters, indicating the type of file to accept when
-uploading a new value.   The attribute is also supported on xref:applib:ant:Property.adoc#fileAccept[properties].
+The `fileAccept()` attribute applies only to xref:rg:cms:classes/value-types.adoc#Blob[`Blob`]
+or xref:rg:cms:classes/value-types.adoc#Clob[`Clob`] parameters, indicating the type of file to accept when
+uploading a new value.   The attribute is also supported on xref:rg:ant:Property.adoc#fileAccept[properties].
 
 For example:
 

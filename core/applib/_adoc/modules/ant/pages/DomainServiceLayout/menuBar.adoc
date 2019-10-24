@@ -33,7 +33,7 @@ Domain services placed on the `TERTIARY` appear in the menu bar associated with 
 image::reference-annotations/DomainServiceLayout/menuBar-tertiary.png[width="720px",link="{imagesdir}/reference-annotations/DomainServiceLayout/menuBar-tertiary.png"]
 
 
-The grouping of multiple domain services actions within a single drop-down is managed by the xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
+The grouping of multiple domain services actions within a single drop-down is managed by the xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
 
 
 [NOTE]

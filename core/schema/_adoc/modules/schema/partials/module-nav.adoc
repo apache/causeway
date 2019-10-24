@@ -1,0 +1,7 @@
+* xref:rg:schema:about.adoc[Schema]
+
+** xref:rg:schema:mml.adoc[MetaModel]
+** xref:rg:schema:cmd.adoc[Command]
+** xref:rg:schema:ixn.adoc[Interaction]
+** xref:rg:schema:chg.adoc[Changes]
+** xref:rg:schema:common.adoc[Common]

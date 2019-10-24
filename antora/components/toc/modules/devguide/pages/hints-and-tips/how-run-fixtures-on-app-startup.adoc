@@ -14,7 +14,7 @@ Use events?_
 
 
 The standard approach is to use xref:ext-fixtures:ROOT:about.adoc[fixture scripts].
-These can be run in on start-up typically by being specified in the xref:applib:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`], see for example the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype].
+These can be run in on start-up typically by being specified in the xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`], see for example the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype].
 
 Alternatively just set `isis.fixtures` and `isis.persistor.datanucleus.install-fixtures` properties.
 

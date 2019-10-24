@@ -28,7 +28,7 @@ public interface TransactionService3 {
 Under certain circumstances (eg actions used to perform data migration, say, or for large fixture scripts), it can be helpful to programmatically complete one transaction and start another one.
 <3> overload of nextTransaction() that provides more control on the action to be performed if the current transaction has been marked for abort only
 <4> If the user interaction creates/persists an object or deletes an object (eg using the
-xref:applib:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]'s `persist()` or `delete()` methods), then the framework actually queues up the work and only performs the persistence command either at the end of the transaction or immediately prior to the next query.
+xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]'s `persist()` or `delete()` methods), then the framework actually queues up the work and only performs the persistence command either at the end of the transaction or immediately prior to the next query.
 Performing a flush will cause any pending calls to be performed immediately.
 <5> the state of the current or most recently completed transaction.
 
@@ -84,7 +84,7 @@ public interface Transaction2 {
 }
 ----
 <1> is a unique identifier for the interaction/request, as defined by the
-xref:applib:cms:classes/mixins.adoc#HasTransactionId[`HasTransactionId`] mixin.
+xref:rg:cms:classes/mixins.adoc#HasTransactionId[`HasTransactionId`] mixin.
 <2> there can actually be multiple transactions within such a request/interaction; the sequence is a (0-based) is used to distinguish such.
 <3> as per `TransactionService#flushTransaction()` described above.
 <4> The state of this transaction (same as `TransactionService#getTransactionState()`).

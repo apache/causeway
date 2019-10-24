@@ -6,11 +6,11 @@ include::_attributes.adoc[]
 
 
 
-The `publishing()` attribute determines whether and how a modified object instance is published via the registered implementation of xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+The `publishing()` attribute determines whether and how a modified object instance is published via the registered implementation of xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 
 A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
 
-The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.services.publish.objects` is used to determine the whether the action is published:
+The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.services.publish.objects` is used to determine the whether the action is published:
 
 * `all` +
 +
@@ -45,10 +45,10 @@ public class InterestRate {
 
 This attribute is also supported for:
 
-* xref:applib:ant:Action.adoc#publishing[actions]
+* xref:rg:ant:Action.adoc#publishing[actions]
 +
 where it controls whether action invocations are published as events, and for
 
-* xref:applib:ant:Property.adoc#publishing[properties]
+* xref:rg:ant:Property.adoc#publishing[properties]
 +
 where it controls whether property edits are published as events.

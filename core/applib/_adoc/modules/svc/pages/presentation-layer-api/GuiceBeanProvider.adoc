@@ -10,7 +10,7 @@ TODO: v2: this service has been deleted - remove this doc and update the migrati
 The `GuiceBeanProvider` domain service acts as a bridge between Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer] internal bootstrapping using link:https://github.com/google/guice[Google Guice].
 
 This service operates at a very low-level, and you are unlikely to have a need for it.
-It is used internally by the framework, in the default implementation of the xref:applib:svc:presentation-api/DeepLinkService.adoc[`DeepLinkService`].
+It is used internally by the framework, in the default implementation of the xref:rg:svc:presentation-api/DeepLinkService.adoc[`DeepLinkService`].
 
 [NOTE]
 ====
@@ -36,7 +36,7 @@ public interface GuiceBeanProvider {
 
 The xref:vw:ROOT:about.adoc[Wicket viewer] this provides a default implementation of this service.
 
-To use an alternative implementation, implement the `GuideBeanProvider` interface and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `GuideBeanProvider` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 

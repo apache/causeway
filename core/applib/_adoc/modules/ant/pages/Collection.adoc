@@ -16,13 +16,13 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:applib:ant:Collection.adoc#domainEvent[`domainEvent()`]
+|xref:rg:ant:Collection.adoc#domainEvent[`domainEvent()`]
 |subtype of `CollectionDomainEvent` +
 (`CollectionDomainEvent.Default`)
-|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
-|xref:applib:ant:Collection.adoc#editing[`editing()`]
+|xref:rg:ant:Collection.adoc#editing[`editing()`]
 |`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |whether a collection can be added to or removed from within the UI
@@ -33,13 +33,13 @@ The table below summarizes the annotation's attributes.
 |if `editing()` is `DISABLED`, provides a reason as to why.
 
 
-|xref:applib:ant:Collection.adoc#hidden[`hidden()`]
+|xref:rg:ant:Collection.adoc#hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the collection should be hidden from the user.
 
 
-|xref:applib:ant:Collection.adoc#notPersisted[`notPersisted()`]
+|xref:rg:ant:Collection.adoc#notPersisted[`notPersisted()`]
 |`true`, `false` +
 (`false`)
 |whether to exclude from snapshots. +
@@ -51,7 +51,7 @@ Collection must also be annotated with `@javax.jdo.annotations.NotPersistent` in
 
 
 
-|xref:applib:ant:Collection.adoc#typeOf[`typeOf()`]
+|xref:rg:ant:Collection.adoc#typeOf[`typeOf()`]
 |
 |hints as to the run-time type of the objects within that collection (as a fallback)
 
@@ -86,7 +86,7 @@ public class ToDoItem {
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:applib:ant:CollectionLayout.adoc[`@CollectionLayout`], xref:applib:ant:Property.adoc[`@Property`] and xref:applib:ant:PropertyLayout.adoc[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`], xref:rg:ant:Property.adoc[`@Property`] and xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

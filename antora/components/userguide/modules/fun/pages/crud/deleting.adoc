@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 :page-partial:
 
-Domain entities can be deleted using xref:applib:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`].
+Domain entities can be deleted using xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`].
 For example:
 
 [source,java]
@@ -15,7 +15,7 @@ repositoryService.remove(customer);
 
 It's worth being aware that (as for persisting new entities) the framework does _not_ eagerly delete the object.
 Rather, it queues up an internal command structure representing the object deletion request.
-This is then executed either at the end of the transaction, or if a  xref:ug:fun:crud/finding.adoc[query is run], or if the internal queue is manually flushed using xref:applib:svc:application-layer-api/TransactionService.adoc[`TransactionService`]'s `flush()` method.
+This is then executed either at the end of the transaction, or if a  xref:ug:fun:crud/finding.adoc[query is run], or if the internal queue is manually flushed using xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`]'s `flush()` method.
 
 Alternatively, you can use:
 

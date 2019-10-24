@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the action.   xref:cfg:ROOT:application-specific/application-css.adoc[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
+The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the action.   xref:rg:cfg:application-specific/application-css.adoc[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
 
 For example:
@@ -22,7 +22,7 @@ public class ToDoItem {
 
 [NOTE]
 ====
-The similar xref:applib:ant:ActionLayout.adoc#cssClassFa[`@ActionLayout#cssClassFa()`] annotation attribute is also used as a hint
+The similar xref:rg:ant:ActionLayout.adoc#cssClassFa[`@ActionLayout#cssClassFa()`] annotation attribute is also used as a hint
 to apply CSS, specifically to add http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] on action menu items or buttons.
 ====
 
@@ -36,9 +36,9 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-
 
 This attribute can also be applied to:
 
-* xref:applib:ant:DomainObjectLayout.adoc#cssClass[domain objects]
-* xref:applib:ant:ViewModelLayout.adoc#cssClass[view models]
-* xref:applib:ant:PropertyLayout.adoc#cssClass[properties]
-* xref:applib:ant:CollectionLayout.adoc#cssClass[collections]
-* xref:applib:ant:ParameterLayout.adoc#cssClass[parameters].
+* xref:rg:ant:DomainObjectLayout.adoc#cssClass[domain objects]
+* xref:rg:ant:ViewModelLayout.adoc#cssClass[view models]
+* xref:rg:ant:PropertyLayout.adoc#cssClass[properties]
+* xref:rg:ant:CollectionLayout.adoc#cssClass[collections]
+* xref:rg:ant:ParameterLayout.adoc#cssClass[parameters].
 

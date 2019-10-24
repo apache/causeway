@@ -18,6 +18,6 @@ This is in the form:
 
     (filename):(mime type):(binary data in base64)
 
-This is basically the xref:applib:cms:classes/value-types.adoc#Blob[`Blob`] value type, in string form.
+This is basically the xref:rg:cms:classes/value-types.adoc#Blob[`Blob`] value type, in string form.
 
 To use, split the parts then format the mime type and base64 data correctly before using as source in an `<img>` tag.

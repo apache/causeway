@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-The `LocaleProvider` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:applib:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`].
+The `LocaleProvider` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:rg:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`].
 
 The role of the service itself is simply to return the `Locale` of the current user.
 
@@ -30,7 +30,7 @@ public interface LocaleProvider {
 }
 ----
 
-This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.  (Note that the implementation is not required to actually be xref:applib:ant:RequestScoped.adoc[`@RequestScoped`], however).
+This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.  (Note that the implementation is not required to actually be xref:rg:ant:RequestScoped.adoc[`@RequestScoped`], however).
 
 
 
@@ -51,7 +51,7 @@ Currently there is no equivalent implementation for the xref:vro:ROOT:about.adoc
 
 == Related Services
 
-This service works in conjunction with xref:applib:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`] and xref:applib:svc:presentation-layer-spi/TranslationsResolver.adoc[`TranslationsResolver`] in order to provide i18n support.
+This service works in conjunction with xref:rg:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`] and xref:rg:svc:presentation-layer-spi/TranslationsResolver.adoc[`TranslationsResolver`] in order to provide i18n support.
 
 
 

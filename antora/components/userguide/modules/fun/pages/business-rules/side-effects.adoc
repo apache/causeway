@@ -46,6 +46,6 @@ Datanucleus does _not_ call the setter when reloading the object from the databa
 
 [NOTE]
 ====
-The framework also allows side-effect code to be placed in separate xref:applib:cms:methods.adoc#modify[`modify...()`], xref:applib:cms:methods.adoc#clear[`clear...()`] supporting methods; if present then these will be called by the framework rather than the setter.
+The framework also allows side-effect code to be placed in separate xref:rg:cms:methods.adoc#modify[`modify...()`], xref:rg:cms:methods.adoc#clear[`clear...()`] supporting methods; if present then these will be called by the framework rather than the setter.
 However, because of DataNucleus' smart handling of setters, these supporting methods are in essence redundant, and so should be considered deprecated.
 ====

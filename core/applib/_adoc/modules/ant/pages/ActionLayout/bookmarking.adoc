@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-The `bookmarking()` attribute indicates if an action (with safe xref:applib:ant:Action.adoc#semantics[action semantics]) is automatically bookmarked.
+The `bookmarking()` attribute indicates if an action (with safe xref:rg:ant:Action.adoc#semantics[action semantics]) is automatically bookmarked.
 
 
 
@@ -46,7 +46,7 @@ indicates that the `notYetComplete()` action is bookmarkable.
 
 [NOTE]
 ====
-The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmarked xref:applib:ant:DomainObject.adoc#bookmarking[domain object]s.
+The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmarked xref:rg:ant:DomainObject.adoc#bookmarking[domain object]s.
 ====
 
 
@@ -57,4 +57,4 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-
 
 == See also
 
-This attribute is also supported for xref:applib:ant:DomainObjectLayout.adoc#bookmarking[domain objects].
+This attribute is also supported for xref:rg:ant:DomainObjectLayout.adoc#bookmarking[domain objects].

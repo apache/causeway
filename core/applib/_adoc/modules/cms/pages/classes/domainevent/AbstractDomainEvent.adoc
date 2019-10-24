@@ -10,9 +10,9 @@ properties or collections.
 
 Its immediate subclasses are:
 
-* xref:applib:cms:classes.adoc#ActionDomainEvent[`ActionDomainEvent`]
-* xref:applib:cms:classes.adoc#PropertyDomainEvent[`PropertyDomainEvent`]
-* xref:applib:cms:classes.adoc#CollectionDomainEvent[`CollectionDomainEvent`]
+* xref:rg:cms:classes.adoc#ActionDomainEvent[`ActionDomainEvent`]
+* xref:rg:cms:classes.adoc#PropertyDomainEvent[`PropertyDomainEvent`]
+* xref:rg:cms:classes.adoc#CollectionDomainEvent[`CollectionDomainEvent`]
 
 The main purpose of the class is to define the protocol by which subscribers can influence an interaction (eg hide a
 collection, disable a property, validate action arguments).  It class also provides a simple mechanism to allow

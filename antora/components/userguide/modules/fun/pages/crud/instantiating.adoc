@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-Both domain entities and view models can be instantiated using the xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`] provided by the framework.
+Both domain entities and view models can be instantiated using the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`] provided by the framework.
 For example:
 
 [source,java]
@@ -41,7 +41,7 @@ public class Customer {
 ----
 
 In such cases, the domain object cannot be instantiated using `FactoryService`.
-Instead the xref:applib:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] service can be used to inject services:
+Instead the xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] service can be used to inject services:
 
 [source,java]
 ----

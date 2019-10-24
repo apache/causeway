@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 The interfaces and classes listed in this chapter provide support for the  `Specification` pattern, as described in Eric Evans' book _Domain Driven Design_, p224.
 
-Apache Isis will automatically apply such specifications as validation rules on properties (as per xref:applib:ant:Property.adoc#mustSatisfy[`@Property#mustSatisfy()`]) and on action parameters (as per xref:applib:ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`]).
+Apache Isis will automatically apply such specifications as validation rules on properties (as per xref:rg:ant:Property.adoc#mustSatisfy[`@Property#mustSatisfy()`]) and on action parameters (as per xref:rg:ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`]).
 
 
 
@@ -50,7 +50,7 @@ public class Customer {
 == `Specification2`
 
 The `Specification2` interface extends the `Specification` API to add support for i18n.
-This is done by defining an additional method that returns a xref:applib:cms:classes.adoc#TranslatableString[translatable string]:
+This is done by defining an additional method that returns a xref:rg:cms:classes.adoc#TranslatableString[translatable string]:
 
 [source,java]
 ----

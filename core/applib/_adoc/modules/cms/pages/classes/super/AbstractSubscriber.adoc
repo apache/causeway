@@ -5,11 +5,11 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-This is a convenience superclass for creating subscriber domain services on the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
-It uses xref:applib:ant:PostConstruct.adoc[`@PostConstruct`] and xref:applib:ant:PreDestroy.adoc[`@PreDestroy`] callbacks to automatically register/unregister itself with the `EventBusService`.
+This is a convenience superclass for creating subscriber domain services on the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
+It uses xref:rg:ant:PostConstruct.adoc[`@PostConstruct`] and xref:rg:ant:PreDestroy.adoc[`@PreDestroy`] callbacks to automatically register/unregister itself with the `EventBusService`.
 
-It's important that subscribers register before any domain services that might emit events on the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
-For example, the xref:ext-secman:ROOT:about.adoc[SecMan extension] provides a domain service that automatically seeds certain domain entities; these will generate xref:applib:cms:classes/lifecycleevent.adoc[lifecycle events] and so any subscribers must be registered before such seed services.
-The easiest way to do this is to use the xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
+It's important that subscribers register before any domain services that might emit events on the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
+For example, the xref:ext-secman:ROOT:about.adoc[SecMan extension] provides a domain service that automatically seeds certain domain entities; these will generate xref:rg:cms:classes/lifecycleevent.adoc[lifecycle events] and so any subscribers must be registered before such seed services.
+The easiest way to do this is to use the xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
 
 As a convenience, the `AbstractSubscriber` specifies this attribute.

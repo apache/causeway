@@ -9,7 +9,7 @@ For the more commonly used collections though, we'll probably want to show the t
 
 image::programming-model/todoapp-Dashboard.png[width="800px",link="{imagesdir}/programming-model/todoapp-Dashboard.png"]
 
-For this we annotate the collection using xref:applib:ant:CollectionLayout.adoc#defaultView[`@CollectionLayout#defaultView()`]; for example
+For this we annotate the collection using xref:rg:ant:CollectionLayout.adoc#defaultView[`@CollectionLayout#defaultView()`]; for example
 
 [source,java]
 ----

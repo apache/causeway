@@ -14,96 +14,96 @@ In these cases there is (usually) no default implementation; it is up to the app
 
 General purpose:
 
-* xref:applib:svc:core-domain-api/ClockService.adoc[`ClockService`]
-* xref:applib:svc:presentation-layer-api/ConfigurationViewService.adoc[`ConfigurationViewService`]
-* xref:applib:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]
-* xref:applib:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`]
-* xref:applib:svc:core-domain-api/UserService.adoc[`UserService`]
-* xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`]
-* xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`]
-* xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`]
-* xref:applib:svc:integration-api/EmailService.adoc[`EmailService`]
+* xref:rg:svc:core-domain-api/ClockService.adoc[`ClockService`]
+* xref:rg:svc:presentation-layer-api/ConfigurationViewService.adoc[`ConfigurationViewService`]
+* xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]
+* xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`]
+* xref:rg:svc:core-domain-api/UserService.adoc[`UserService`]
+* xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`]
+* xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`]
+* xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`]
+* xref:rg:svc:integration-api/EmailService.adoc[`EmailService`]
 
 Commands/Interactions/Background/Auditing/Publishing/Profiling:
 
-* xref:applib:svc:application-layer-api/CommandContext.adoc[`CommandContext`] (SPI)
-* xref:applib:svc:application-layer-spi/CommandService.adoc[`CommandService`] (SPI)
-* xref:applib:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] (SPI)
-* xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`] (SPI)
-* xref:applib:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`]
-* xref:applib:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`] (SPI)
-* xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] (SPI)
-* xref:applib:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`]
+* xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] (SPI)
+* xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] (SPI)
+* xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] (SPI)
+* xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`] (SPI)
+* xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`]
+* xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`] (SPI)
+* xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] (SPI)
+* xref:rg:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`]
 
 
 Information Sharing:
 
-* xref:applib:svc:core-domain-api/Scratchpad.adoc[`Scratchpad`]
-* xref:applib:svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`]
-* xref:applib:svc:persistence-layer-api/QueryResultsCache.adoc[`QueryResultsCache`]
+* xref:rg:svc:core-domain-api/Scratchpad.adoc[`Scratchpad`]
+* xref:rg:svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`]
+* xref:rg:svc:persistence-layer-api/QueryResultsCache.adoc[`QueryResultsCache`]
 
 UserManagement:
 
-* xref:applib:svc:presentation-layer-spi/UserProfileService.adoc[`UserProfileService`] (SPI)
-* xref:applib:svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`] (SPI)
-* xref:applib:svc:presentation-layer-spi/EmailNotificationService.adoc[`EmailNotificationService`] (SPI)
+* xref:rg:svc:presentation-layer-spi/UserProfileService.adoc[`UserProfileService`] (SPI)
+* xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`] (SPI)
+* xref:rg:svc:presentation-layer-spi/EmailNotificationService.adoc[`EmailNotificationService`] (SPI)
 
 Bookmarks and Mementos:
 
-* xref:applib:svc:integration-api/BookmarkService.adoc[`BookmarkService`]
-* xref:applib:svc:integration-api/MementoService.adoc[`MementoService`]
-* xref:applib:svc:presentation-layer-api/DeepLinkService.adoc[`DeepLinkService`]
-* xref:applib:svc:integration-api/JaxbService.adoc[`JaxbService`]
-* xref:applib:svc:integration-api/XmlSnapshotService.adoc[`XmlSnapshotService`]
+* xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`]
+* xref:rg:svc:integration-api/MementoService.adoc[`MementoService`]
+* xref:rg:svc:presentation-layer-api/DeepLinkService.adoc[`DeepLinkService`]
+* xref:rg:svc:integration-api/JaxbService.adoc[`JaxbService`]
+* xref:rg:svc:integration-api/XmlSnapshotService.adoc[`XmlSnapshotService`]
 
 Layout and UI Management:
 
-* xref:applib:svc:presentation-layer-spi/GridLoaderService.adoc[`GridLoaderService`] (SPI)
-* xref:applib:svc:presentation-layer-spi/GridService.adoc[`GridService`] (SPI)
-* xref:applib:svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`] (SPI)
-* xref:applib:svc:application-layer-spi/HomePageProviderService.adoc[`HomePageProviderService`]
-* xref:applib:svc:presentation-layer-spi/HintStore.adoc[`HintStore`] (SPI)
-* xref:applib:svc:metadata-api/LayoutService.adoc[`LayoutService`]
-* xref:applib:svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`] (SPI)
-* xref:applib:svc:application-layer-api/TitleService.adoc[`TitleService`]
-* xref:applib:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`] (SPI)
+* xref:rg:svc:presentation-layer-spi/GridLoaderService.adoc[`GridLoaderService`] (SPI)
+* xref:rg:svc:presentation-layer-spi/GridService.adoc[`GridService`] (SPI)
+* xref:rg:svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`] (SPI)
+* xref:rg:svc:application-layer-spi/HomePageProviderService.adoc[`HomePageProviderService`]
+* xref:rg:svc:presentation-layer-spi/HintStore.adoc[`HintStore`] (SPI)
+* xref:rg:svc:metadata-api/LayoutService.adoc[`LayoutService`]
+* xref:rg:svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`] (SPI)
+* xref:rg:svc:application-layer-api/TitleService.adoc[`TitleService`]
+* xref:rg:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`] (SPI)
 
 REST Support:
 
-* xref:applib:svc:presentation-layer-api/AcceptHeaderService.adoc[`AcceptHeaderService`]
-* xref:applib:svc:metadata-api/SwaggerService.adoc[`SwaggerService`]
-* xref:applib:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] (SPI)
+* xref:rg:svc:presentation-layer-api/AcceptHeaderService.adoc[`AcceptHeaderService`]
+* xref:rg:svc:metadata-api/SwaggerService.adoc[`SwaggerService`]
+* xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] (SPI)
 
 Metamodel:
 
-* xref:applib:svc:metadata-api/ApplicationFeatureRepository.adoc[`ApplicationFeatureRepository`]
-* xref:applib:svc:metadata-api/MetamodelService.adoc[`MetamodelService`]
+* xref:rg:svc:metadata-api/ApplicationFeatureRepository.adoc[`ApplicationFeatureRepository`]
+* xref:rg:svc:metadata-api/MetamodelService.adoc[`MetamodelService`]
 
 Error handling:
 
-* xref:applib:svc:presentation-layer-spi/ErrorReportingService.adoc[`ErrorReportingService`] (SPI)
-* xref:applib:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`] (SPI)
-* xref:applib:svc:application-layer-api/MessageService.adoc[`MessageService`]
+* xref:rg:svc:presentation-layer-spi/ErrorReportingService.adoc[`ErrorReportingService`] (SPI)
+* xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`] (SPI)
+* xref:rg:svc:application-layer-api/MessageService.adoc[`MessageService`]
 
 i18n:
 
-* xref:applib:svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`] (SPI)
-* xref:applib:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`] (SPI)
-* xref:applib:svc:presentation-layer-spi/TranslationsResolver.adoc[`TranslationsResolver`] (SPI)
+* xref:rg:svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`] (SPI)
+* xref:rg:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`] (SPI)
+* xref:rg:svc:presentation-layer-spi/TranslationsResolver.adoc[`TranslationsResolver`] (SPI)
 
 Other API:
 
-* xref:applib:svc:testing/SudoService.adoc[`SudoService`]
-* xref:applib:svc:application-layer-api/TransactionService.adoc[`TransactionService`]
+* xref:rg:svc:testing/SudoService.adoc[`SudoService`]
+* xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`]
 
 Other SPI:
 
-* xref:applib:svc:bootstrapping-spi/ClassDiscoveryService.adoc[`ClassDiscoveryService`] (SPI)
+* xref:rg:svc:bootstrapping-spi/ClassDiscoveryService.adoc[`ClassDiscoveryService`] (SPI)
 
 Extensions:
 
-* xref:applib:svc:testing/FixtureScripts.adoc[`FixtureScripts`]
-* xref:applib:svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] (SPI)
+* xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`]
+* xref:rg:svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] (SPI)
 
-A full list of services can be found in the xref:applib:svc:about.adoc[Domain Services] reference guide.
+A full list of services can be found in the xref:rg:svc:about.adoc[Domain Services] reference guide.
 

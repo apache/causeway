@@ -33,4 +33,4 @@ public class LibraryMember {
 <2> perform some additional business logic
 
 
-See also xref:applib:cms:methods.adoc#addTo[`addTo...()`]`
+See also xref:rg:cms:methods.adoc#addTo[`addTo...()`]`

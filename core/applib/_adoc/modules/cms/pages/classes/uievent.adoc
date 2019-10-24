@@ -6,8 +6,8 @@ include::_attributes.adoc[]
 
 This section catalogues the various UI event classes defined by Apache Isis.
 
-These events are broadcast on the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`].  The domain
-events are broadcast as a result of being specified in the xref:applib:ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`],  xref:applib:ant:DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] or xref:applib:ant:DomainObjectLayout.adoc#cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attributes.
+These events are broadcast on the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].  The domain
+events are broadcast as a result of being specified in the xref:rg:ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`],  xref:rg:ant:DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] or xref:rg:ant:DomainObjectLayout.adoc#cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attributes.
 
 They are listed in the table below.
 
@@ -22,32 +22,32 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:applib:cms:classes.adoc#TitleUiEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#TitleUiEvent[`o.a.i.applib.` +
 `TitleUiEvent`]
 |``o.a.i.core`` +
 ``events.ui`` +
 ``isis-core-applib``
 |(abstract class). +
 `TitleUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#titleUiEvent` attribute is specified
-|Broadcast whenever there is a requirement to obtain a title for a domain object.  Note that if the domain object defines its own xref:applib:cms:methods.adoc#title[`title()`] supporting method, or has xref:applib:ant:Title.adoc[`@Title`] annotation(s) on its properties, then these will take precedence.
+|Broadcast whenever there is a requirement to obtain a title for a domain object.  Note that if the domain object defines its own xref:rg:cms:methods.adoc#title[`title()`] supporting method, or has xref:rg:ant:Title.adoc[`@Title`] annotation(s) on its properties, then these will take precedence.
 
-|xref:applib:cms:classes.adoc#IconUiEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#IconUiEvent[`o.a.i.applib.` +
 `IconUiEvent`]
 |``o.a.i.core`` +
 ``events.ui`` +
 ``isis-core-applib``
 |(abstract class). +
 `IconUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#iconUiEvent` attribute is specified
-|Broadcast whenever there is a requirement to obtain an icon (or rather, the name of an icon) for a domain object.  Note that if the domain object defines its own xref:applib:cms:methods.adoc#iconName[`iconName()`] supporting method, or if it has the xref:applib:ant:DomainObjectLayout#cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute, then these will take precedence.
+|Broadcast whenever there is a requirement to obtain an icon (or rather, the name of an icon) for a domain object.  Note that if the domain object defines its own xref:rg:cms:methods.adoc#iconName[`iconName()`] supporting method, or if it has the xref:rg:ant:DomainObjectLayout#cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute, then these will take precedence.
 
-|xref:applib:cms:classes.adoc#CssClassUiEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#CssClassUiEvent[`o.a.i.applib.` +
 `CssClassUiEvent`]
 |``o.a.i.core`` +
 ``events.ui`` +
 ``isis-core-applib``
 |(abstract class). +
 `CssClassUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#cssClassUiEvent` attribute is specified
-|Broadcast whenever there is a requirement to obtain a CSS class hint for a domain object.  Note that if the domain object defines its own xref:applib:cms:methods.adoc#cssClass[`cssClass()`] supporting method then this
+|Broadcast whenever there is a requirement to obtain a CSS class hint for a domain object.  Note that if the domain object defines its own xref:rg:cms:methods.adoc#cssClass[`cssClass()`] supporting method then this
 will take precedence.
 
 |===

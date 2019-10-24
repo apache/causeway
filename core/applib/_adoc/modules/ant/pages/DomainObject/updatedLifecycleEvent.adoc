@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 Whenever a (persistent) domain object has been modified and has been updated in the database, an "updated" lifecycle event is fired.
 
-Subscribers subscribe through the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the domain object.
+Subscribers subscribe through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the domain object.
 
 [WARNING]
 ====
@@ -49,7 +49,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
 The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The recommended way to run integration tests is against an HSQLDB in-memory database.
-This can be done using the application's usual xref:applib:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`], and then overriding JDBC URL and similar.
+This can be done using the application's usual xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`], and then overriding JDBC URL and similar.
 
 If inheriting from `IntegrationTestAbstract3`'s then these configuration properties are set up automatically:
 

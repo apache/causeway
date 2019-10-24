@@ -17,33 +17,33 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:applib:ant:ParameterLayout.adoc#cssClass[`cssClass()`]
+|xref:rg:ant:ParameterLayout.adoc#cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a parameter should have, to allow more targetted styling in xref:cfg:ROOT:application-specific/application-css.adoc[`application.css`]
+|the css class that a parameter should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
 
 
-|xref:applib:ant:ParameterLayout.adoc#describedAs[`describedAs()`]
+|xref:rg:ant:ParameterLayout.adoc#describedAs[`describedAs()`]
 |String
 |description of this parameter, eg to be rendered in a tooltip.
 
 
-|xref:applib:ant:ParameterLayout.adoc#labelPosition[`labelPosition()`]
+|xref:rg:ant:ParameterLayout.adoc#labelPosition[`labelPosition()`]
 |`LEFT`, `TOP`, `RIGHT`, `NONE` +
 (`LEFT`)
 |in forms, the positioning of the label relative to the property value. +
 
-Default is `LEFT`, unless xref:applib:ant:ParameterLayout.adoc#multiLine[`multiLine`] in which case `TOP`.
+Default is `LEFT`, unless xref:rg:ant:ParameterLayout.adoc#multiLine[`multiLine`] in which case `TOP`.
 The value `RIGHT` is only supported for boolean parameters.
 
 
-|xref:applib:ant:ParameterLayout.adoc#multiLine[`multiLine()`]
+|xref:rg:ant:ParameterLayout.adoc#multiLine[`multiLine()`]
 |Positive integer
 |for string parameters, render as a text area over multiple lines. +
 
-If set > 1, then then xref:applib:ant:ParameterLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP`.
+If set > 1, then then xref:rg:ant:ParameterLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP`.
 
 
-|xref:applib:ant:ParameterLayout.adoc#named[`named()`]
+|xref:rg:ant:ParameterLayout.adoc#named[`named()`]
 |String
 |the name of this parameter.
 
@@ -61,12 +61,12 @@ The only reason then to name the parameter is if the desired name is a reserved 
 |whether to HTML escape the name of this parameter.
 
 
-|xref:applib:ant:ParameterLayout.adoc#renderedAsDayBefore[`renderedAsDayBefore()`]
+|xref:rg:ant:ParameterLayout.adoc#renderedAsDayBefore[`renderedAsDayBefore()`]
 |
 |for date parameters only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
 
 
-|xref:applib:ant:ParameterLayout.adoc#typicalLength[`typicalLength()`]
+|xref:rg:ant:ParameterLayout.adoc#typicalLength[`typicalLength()`]
 |
 |the typical entry length of a field, use to determine the optimum width for display
 

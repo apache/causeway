@@ -6,8 +6,8 @@ include::_attributes.adoc[]
 
 
 
-Subclass of xref:applib:cms:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be updated in the database.
-This is done either explicitly when the current transaction is flushed using the xref:applib:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
+Subclass of xref:rg:cms:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be updated in the database.
+This is done either explicitly when the current transaction is flushed using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
-`ObjectUpdatingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:applib:ant:DomainObject.adoc#updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`].
+`ObjectUpdatingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:rg:ant:DomainObject.adoc#updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`].

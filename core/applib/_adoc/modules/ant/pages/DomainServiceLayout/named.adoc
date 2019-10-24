@@ -12,7 +12,7 @@ The `named()` attribute explicitly specifies the domain service's name, overridi
 [TIP]
 ====
 The value of this attribute also has an important role to play in the positioning of the domain service's actions relative to the actions of other domain services.
-See xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`menuOrder()`] for a full discussion with examples.
+See xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`menuOrder()`] for a full discussion with examples.
 ====
 
 For example:
@@ -33,9 +33,9 @@ public class CustomerRepository {
 
 This attribute can also be specified for:
 
-* xref:applib:ant:ActionLayout.adoc#named[actions]
-* xref:applib:ant:CollectionLayout.adoc#named[collections]
-* xref:applib:ant:PropertyLayout.adoc#named[properties]
-* xref:applib:ant:ParameterLayout.adoc#named[parameters]
-* xref:applib:ant:DomainObjectLayout.adoc#named[domain objects]
-* xref:applib:ant:ViewModelLayout.adoc#named[view models].
+* xref:rg:ant:ActionLayout.adoc#named[actions]
+* xref:rg:ant:CollectionLayout.adoc#named[collections]
+* xref:rg:ant:PropertyLayout.adoc#named[properties]
+* xref:rg:ant:ParameterLayout.adoc#named[parameters]
+* xref:rg:ant:DomainObjectLayout.adoc#named[domain objects]
+* xref:rg:ant:ViewModelLayout.adoc#named[view models].

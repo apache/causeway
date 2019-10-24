@@ -7,6 +7,6 @@ include::_attributes.adoc[]
 
 Whenever a view model is to be rendered, the framework fires off a title UI event to obtain a title for the object.
 
-This attribute is the same as xref:applib:ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], but for view models instead of entities.
+This attribute is the same as xref:rg:ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], but for view models instead of entities.
 
 A default event that is emitted if none specified, unless the `isis.reflector.facet.viewModelLayoutAnnotation.titleUiEvent.postForDefault` configuration property is set to "false".

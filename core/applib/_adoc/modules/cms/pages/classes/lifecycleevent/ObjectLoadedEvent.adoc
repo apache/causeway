@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-Subclass of xref:applib:cms:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is retrieved from the database.
+Subclass of xref:rg:cms:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is retrieved from the database.
 
 `ObjectLoadedEvent.Default` is the concrete implementation that is used.
 
