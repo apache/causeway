@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
@@ -67,7 +68,6 @@ import org.wicketstuff.select2.ApplicationSettings;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -107,6 +107,7 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+import lombok.Getter;
 import lombok.val;
 //import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -151,16 +152,18 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     @Inject private MetaModelContext metaModelContext;
     
-    private IsisWebAppCommonContext commonContext; // shared
+    @Getter private IsisWebAppCommonContext commonContext; // shared
 
     // injected manually
-    private ComponentFactoryRegistry componentFactoryRegistry;
-    private PageClassRegistry pageClassRegistry;
-    private WicketViewerSettings settings;
+    @Getter(onMethod = @__(@Override)) private ComponentFactoryRegistry componentFactoryRegistry;
+    @Getter(onMethod = @__(@Override)) private PageClassRegistry pageClassRegistry;
+    @Getter(onMethod = @__(@Override)) private WicketViewerSettings settings;
     private IsisSystemEnvironment systemEnvironment;
     private IsisConfiguration configuration;
 
     private final IsisWicketApplication_Experimental experimental;
+    private final IsisWicketApplication_newSession newSessionMixin;
+    private final IsisWicketApplication_newPageFactory newPageFactoryMixin;
 
     // /////////////////////////////////////////////////
     // constructor, init
@@ -168,8 +171,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     public IsisWicketApplication() {
         experimental = new IsisWicketApplication_Experimental(this);
+        newSessionMixin = new IsisWicketApplication_newSession(this);
+        newPageFactoryMixin = new IsisWicketApplication_newPageFactory(this);
     }
-
 
     /**
      * Although there are warnings about not overriding this method, it doesn't seem possible
@@ -336,12 +340,20 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                .addRunnable("Configure WicketSelect2",      this::configureWicketSelect2);
     }
     
+    /*
+     * @since 2.0 ... overrides the default, to handle special cases when recreating bookmarked pages
+     */
+    @Override
+    protected IPageFactory newPageFactory() {
+        return newPageFactoryMixin.interceptPageFactory(super.newPageFactory());
+    }
+
+    /*
+     * @since 2.0 ... overrides the default, to 'inject' the commonContext into new sessions
+     */
     @Override
     public Session newSession(Request request, Response response) {
-        // intercept session creation
-        val session = (AuthenticatedWebSessionForIsis) super.newSession(request, response);
-        session.init(commonContext);
-        return session;
+        return newSessionMixin.interceptNewSession(super.newSession(request, response));
     }
 
     /**
@@ -409,24 +421,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         }
     }
 
-    /**
-     * For convenience of subclasses.
-     */
-    protected static String readLines(final Class<?> contextClass, final String resourceName, final String fallback) {
-        if(resourceName == null) {
-            return fallback;
-        }
-        try {
-
-            return _Resources.loadAsStringUtf8(contextClass, resourceName)
-                    .replace("\r", "");
-
-        } catch (Exception e) {
-            return fallback;
-        }
-    }
-
-
     // //////////////////////////////////////
 
     /**
@@ -466,17 +460,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     protected IRequestCycleListener newWebRequestCycleForIsis() {
         return new WebRequestCycleForIsis();
     }
-
-    // //////////////////////////////////////
-    //TODO[2112] cleanup
-    //    /**
-    //     * Override if required
-    //     */
-    //    protected IsisWicketModule newIsisWicketModule() {
-    //        return new IsisWicketModule(getServletContext());
-    //    }
-
-    // //////////////////////////////////////
 
     /**
      * Made protected visibility for easy (informal) pluggability.
@@ -642,30 +625,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         return converterLocator;
     }
 
-    // /////////////////////////////////////////////////
-    // Component Factories
-    // /////////////////////////////////////////////////
-
-    @Override
-    public final ComponentFactoryRegistry getComponentFactoryRegistry() {
-        return componentFactoryRegistry;
-    }
-
-    // /////////////////////////////////////////////////
-    // Page Registry
-    // /////////////////////////////////////////////////
-
-    /**
-     * Access to other page types.
-     *
-     * <p>
-     * Non-final only for testing purposes; should not typically be overridden.
-     */
-    @Override
-    public PageClassRegistry getPageClassRegistry() {
-        return pageClassRegistry;
-    }
-
     /**
      * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
      */
@@ -705,11 +664,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     @SuppressWarnings("unchecked")
     public Class<? extends WebPage> getForgotPasswordPageClass() {
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
-    }
-
-    @Override
-    public WicketViewerSettings getSettings() {
-        return settings;
     }
 
 }

@@ -67,8 +67,8 @@ public class EntityPage extends PageAbstract {
     private final String titleString;
 
     /**
-     * Called reflectively, in support of
-     * {@link BookmarkablePageLink} links. //FIXME we've added commonContext, hence will likely fail 
+     * Called reflectively, in support of {@link BookmarkablePageLink} links. 
+     * Specifically handled by {@link org.apache.isis.viewer.wicket.viewer.IsisWicketApplication_newPageFactory}
      */
     public EntityPage(IsisWebAppCommonContext commonContext, PageParameters pageParameters) {
         this(pageParameters, createEntityModel(commonContext, pageParameters));

@@ -58,5 +58,4 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
         this.isisSessionFactory = commonContext.lookupServiceElseFail(IsisSessionFactory.class);
     }
     
-    
 }
