@@ -24,8 +24,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.NonNull;
 
 /**
@@ -41,12 +39,12 @@ implements IsisWebAppCommonContext.Delegating {
     @NonNull private transient IsisWebAppCommonContext commonContext;
 
     public ModelAbstract(IsisWebAppCommonContext commonContext) {
-        this.commonContext = requires(commonContext, "commonContext");
+        this.commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
     public ModelAbstract(IsisWebAppCommonContext commonContext, T t) {
         super(t);
-        this.commonContext = requires(commonContext, "commonContext");
+        this.commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
     @Override

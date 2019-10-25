@@ -146,7 +146,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         final BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>(ID_ABOUT_LINK, AboutPage.class);
         add(aboutLink);
 
-        String applicationVersion = webAppConfigBean.getApplicationVersion();
+        String applicationVersion = getWebAppConfigBean().getApplicationVersion();
 
         final Label aboutLabel =
                 applicationVersion != null && !applicationVersion.isEmpty()?

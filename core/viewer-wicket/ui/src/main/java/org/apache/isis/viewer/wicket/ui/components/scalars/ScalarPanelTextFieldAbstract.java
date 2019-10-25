@@ -143,7 +143,7 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
     }
 
     private void addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(final Component component) {
-        if(!getSettings().isReplaceDisabledTagWithReadonlyTag()) {
+        if(!getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
             return;
         }
         if (component == null) {

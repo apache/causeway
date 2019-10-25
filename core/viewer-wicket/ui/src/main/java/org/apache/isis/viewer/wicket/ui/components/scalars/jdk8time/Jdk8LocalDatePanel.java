@@ -32,7 +32,7 @@ public class Jdk8LocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<L
 
     public Jdk8LocalDatePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, LocalDate.class);
-        init(new DateConverterForJdk8LocalDate(getSettings(), getAdjustBy()));
+        init(new DateConverterForJdk8LocalDate(getWicketViewerSettings(), getAdjustBy()));
     }
 
     @Override

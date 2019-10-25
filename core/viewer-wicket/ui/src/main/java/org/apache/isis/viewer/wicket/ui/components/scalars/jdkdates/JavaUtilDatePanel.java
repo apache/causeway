@@ -33,7 +33,7 @@ public class JavaUtilDatePanel extends ScalarPanelTextFieldDatePickerAbstract<ja
 
     public JavaUtilDatePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, java.util.Date.class);
-        init(new DateConverterForJavaUtilDate(getSettings(), getAdjustBy()));
+        init(new DateConverterForJavaUtilDate(getWicketViewerSettings(), getAdjustBy()));
     }
 
     @Override

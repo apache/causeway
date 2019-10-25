@@ -36,7 +36,7 @@ public class JodaLocalDateTimePanel extends ScalarPanelTextFieldDatePickerAbstra
 
     public JodaLocalDateTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, LocalDateTime.class);
-        init(new DateConverterForJodaLocalDateTime(getSettings(), getAdjustBy()));
+        init(new DateConverterForJodaLocalDateTime(getWicketViewerSettings(), getAdjustBy()));
     }
 
     // TODO mgrigorov: Check whether this is really needed after fixing ISIS-1015

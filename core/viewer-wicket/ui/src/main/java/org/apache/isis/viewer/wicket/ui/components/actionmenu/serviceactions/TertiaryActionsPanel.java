@@ -63,7 +63,7 @@ public class TertiaryActionsPanel extends PanelBase {
                     addFolderItem(subMenuItem, listItem);
                 } else {
                     ServiceActionUtil.addLeafItem(
-                            TertiaryActionsPanel.super.commonContext, subMenuItem, listItem, TertiaryActionsPanel.this);
+                            TertiaryActionsPanel.super.getCommonContext(), subMenuItem, listItem, TertiaryActionsPanel.this);
                 }
             }
         };
@@ -113,7 +113,7 @@ public class TertiaryActionsPanel extends PanelBase {
 
     private void addFolderItem(CssMenuItem subMenuItem, ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = TertiaryActionsPanel.this;
-        ServiceActionUtil.addFolderItem(super.commonContext, subMenuItem, listItem, parent, ServiceActionUtil.SeparatorStrategy.WITHOUT_SEPARATORS);
+        ServiceActionUtil.addFolderItem(super.getCommonContext(), subMenuItem, listItem, parent, ServiceActionUtil.SeparatorStrategy.WITHOUT_SEPARATORS);
     }
 
     @Override

@@ -167,7 +167,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                         ObjectSpecId objectSpecId = oid.getObjectSpecId();
                         objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
                     }
-                    final ResourceReference imageResource = imageCache.resourceReferenceForSpec(objectSpec);
+                    final ResourceReference imageResource = getImageResourceCache().resourceReferenceForSpec(objectSpec);
                     final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {
                         private static final long serialVersionUID = 1L;
                         @Override

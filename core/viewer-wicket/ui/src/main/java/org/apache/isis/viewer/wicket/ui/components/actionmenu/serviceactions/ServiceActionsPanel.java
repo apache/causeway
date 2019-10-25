@@ -91,7 +91,7 @@ public class ServiceActionsPanel extends PanelBase {
 
                             final MarkupContainer parent = ServiceActionsPanel.this;
                             ServiceActionUtil.addLeafItem(
-                                    ServiceActionsPanel.super.commonContext, subMenuItem, listItem, parent);
+                                    ServiceActionsPanel.super.getCommonContext(), subMenuItem, listItem, parent);
 
                         }
                     }
@@ -129,7 +129,7 @@ public class ServiceActionsPanel extends PanelBase {
 
     private void addFolderItem(CssMenuItem subMenuItem, ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = ServiceActionsPanel.this;
-        ServiceActionUtil.addFolderItem(super.commonContext, subMenuItem, listItem, parent, ServiceActionUtil.SeparatorStrategy.WITH_SEPARATORS);
+        ServiceActionUtil.addFolderItem(super.getCommonContext(), subMenuItem, listItem, parent, ServiceActionUtil.SeparatorStrategy.WITH_SEPARATORS);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class JavaSqlTimestampPanel extends ScalarPanelTextFieldDatePickerAbstrac
 
     public JavaSqlTimestampPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, java.sql.Timestamp.class);
-        init(new DateConverterForJavaSqlTimestamp(getSettings(), getAdjustBy()));
+        init(new DateConverterForJavaSqlTimestamp(getWicketViewerSettings(), getAdjustBy()));
     }
 
     @Override

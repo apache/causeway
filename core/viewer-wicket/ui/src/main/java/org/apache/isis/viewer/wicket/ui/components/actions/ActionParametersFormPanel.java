@@ -50,7 +50,7 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
         model.primeArgumentModels();
         model.clearArguments();  // in case previously used, eg prompt displayed then cancelled
         final ActionParametersForm inputForm =
-                new ActionParametersForm("inputForm", this, this.getSettings(), model);
+                new ActionParametersForm("inputForm", this, this.getWicketViewerSettings(), model);
 
         final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());
         CssClassAppender.appendCssClassTo(inputForm, "isis-" + CssClassAppender.asCssStyle(action.getOnType().getSpecId().asString().replace(".","-") + "-" + action.getId()));

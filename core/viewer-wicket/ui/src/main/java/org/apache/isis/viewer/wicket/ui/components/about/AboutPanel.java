@@ -30,6 +30,8 @@ import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
+import lombok.val;
+
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on
  * {@link HomePage}).
@@ -75,12 +77,14 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     public AboutPanel(final String id) {
         super(id);
 
+        val webAppConfigBean = super.getWebAppConfigBean();
+        
         add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, webAppConfigBean.getApplicationName()));
         add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, webAppConfigBean.getApplicationVersion()));
         add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, webAppConfigBean.getAboutMessage()));
 
         if(jarManifestModel == null) {
-            jarManifestModel = new JarManifestModel(super.commonContext,  metaInfManifestIs);
+            jarManifestModel = new JarManifestModel(super.getCommonContext(),  metaInfManifestIs);
         }
 
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));

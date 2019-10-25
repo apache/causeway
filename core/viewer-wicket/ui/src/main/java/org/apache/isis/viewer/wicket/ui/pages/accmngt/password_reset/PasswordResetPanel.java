@@ -106,7 +106,7 @@ public class PasswordResetPanel extends PanelBase<Void> {
     }
 
     private INotificationMessage createPasswordChangeSuccessfulMessage() {
-        Class<? extends Page> signInPage = pageClassRegistry.getPageClass(PageType.SIGN_IN);
+        Class<? extends Page> signInPage = getPageClassRegistry().getPageClass(PageType.SIGN_IN);
         CharSequence signInUrl = urlFor(signInPage, null);
         Map<String, CharSequence> map = new HashMap<>();
         map.put("signInUrl", signInUrl);

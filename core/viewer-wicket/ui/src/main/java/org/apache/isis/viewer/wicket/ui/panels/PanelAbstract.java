@@ -95,7 +95,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends PanelBase {
             Component component, 
             SemanticsOf semanticsOf) {
         
-        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(super.translationService, component, semanticsOf);
+        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(super.getTranslationService(), component, semanticsOf);
     }
 
 

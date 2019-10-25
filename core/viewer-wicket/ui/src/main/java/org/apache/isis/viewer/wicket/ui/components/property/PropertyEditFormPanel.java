@@ -46,7 +46,7 @@ extends PromptFormPanelAbstract<ScalarModel> {
 
     private void buildGui() {
         ScalarModel model = getModel();
-        add(new PropertyEditForm("inputForm", this, this.getSettings(), model));
+        add(new PropertyEditForm("inputForm", this, this.getWicketViewerSettings(), model));
     }
 
 }

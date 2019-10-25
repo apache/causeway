@@ -70,7 +70,7 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
         final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
-        emailField.add(EmailAvailableValidator.exists(commonContext));
+        emailField.add(EmailAvailableValidator.exists(getCommonContext()));
 
         FormGroup formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);
@@ -101,7 +101,7 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
                 final PasswordResetEvent passwordResetEvent = new PasswordResetEvent(
                         email, 
                         confirmationUrl, 
-                        webAppConfigBean.getApplicationName());
+                        getWebAppConfigBean().getApplicationName());
 
                 boolean emailSent = emailNotificationService.send(passwordResetEvent);
                 if (emailSent) {

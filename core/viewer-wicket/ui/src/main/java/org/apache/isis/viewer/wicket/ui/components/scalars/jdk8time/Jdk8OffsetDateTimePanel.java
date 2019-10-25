@@ -37,7 +37,7 @@ public class Jdk8OffsetDateTimePanel extends ScalarPanelTextFieldDatePickerAbstr
 
     public Jdk8OffsetDateTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, OffsetDateTime.class);
-        init(new DateConverterForJdk8OffsetDateTime(getSettings(), getAdjustBy()));
+        init(new DateConverterForJdk8OffsetDateTime(getWicketViewerSettings(), getAdjustBy()));
     }
 
     @Override

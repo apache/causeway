@@ -198,16 +198,16 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
     private int abbreviateTo(ObjectAdapterModel model, String titleString) {
         if(model.getRenderingHint().isInStandaloneTableTitleColumn()) {
-            return getSettings().getMaxTitleLengthInStandaloneTables();
+            return getWicketViewerSettings().getMaxTitleLengthInStandaloneTables();
         }
         if(model.getRenderingHint().isInParentedTableTitleColumn()) {
-            return getSettings().getMaxTitleLengthInParentedTables();
+            return getWicketViewerSettings().getMaxTitleLengthInParentedTables();
         }
         return titleString.length();
     }
 
     protected Image newImage(final String id, final ManagedObject adapter) {
-        final ResourceReference imageResource = imageCache.resourceReferenceFor(adapter);
+        final ResourceReference imageResource = getImageResourceCache().resourceReferenceFor(adapter);
 
         final Image image = new Image(id, imageResource) {
             private static final long serialVersionUID = 1L;
@@ -223,7 +223,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         ObjectAdapterModel model = getModel();
         ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
         return contextAdapterMementoIfAny != null
-                ? contextAdapterMementoIfAny.getObjectAdapter(commonContext.getSpecificationLoader())
+                ? contextAdapterMementoIfAny.getObjectAdapter(getCommonContext().getSpecificationLoader())
                         : null;
     }
 

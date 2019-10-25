@@ -112,8 +112,8 @@ implements CollectionCountProvider {
         addTitleColumn(
                 columns, 
                 model.getParentObjectAdapterMemento(), 
-                getSettings().getMaxTitleLengthInParentedTables(), 
-                getSettings().getMaxTitleLengthInStandaloneTables());
+                getWicketViewerSettings().getMaxTitleLengthInParentedTables(), 
+                getWicketViewerSettings().getMaxTitleLengthInStandaloneTables());
 
         addPropertyColumnsIfRequired(columns);
 
@@ -171,7 +171,7 @@ implements CollectionCountProvider {
         
         final int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
         columns.add(new ObjectAdapterTitleColumn(
-                super.commonContext, parentAdapterMementoIfAny, maxTitleLength));
+                super.getCommonContext(), parentAdapterMementoIfAny, maxTitleLength));
     }
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ManagedObject, String>> columns) {
@@ -219,7 +219,7 @@ implements CollectionCountProvider {
 
         final ObjectSpecification parentSpecIfAny =
                 getModel().isParented()
-                ? getModel().getParentObjectAdapterMemento().getObjectAdapter(commonContext.getSpecificationLoader()).getSpecification()
+                ? getModel().getParentObjectAdapterMemento().getObjectAdapter(getCommonContext().getSpecificationLoader()).getSpecification()
                         : null;
 
                 final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
@@ -277,7 +277,7 @@ implements CollectionCountProvider {
 
         final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
         if(parentObjectAdapterMemento != null) {
-            final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento.getObjectAdapter(commonContext.getSpecificationLoader());
+            final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento.getObjectAdapter(getCommonContext().getSpecificationLoader());
             final Object parent = parentObjectAdapter.getPojo();
             final String collectionId = getModel().getCollectionMemento().getId();
 

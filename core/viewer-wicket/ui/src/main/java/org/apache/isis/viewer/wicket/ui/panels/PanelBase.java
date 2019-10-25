@@ -46,7 +46,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
 
     private static final long serialVersionUID = 1L;
 
-    private transient WicketViewerSettings settings;
+    private transient WicketViewerSettings wicketViewerSettings;
     private transient WebAppConfigBean webAppConfigBean;
     private transient PageClassRegistry pageClassRegistry;
     private transient ImageResourceCache imageCache;
@@ -72,7 +72,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     }
     
     public WicketViewerSettings getWicketViewerSettings() {
-        return settings = computeIfAbsent(WicketViewerSettings.class, settings);
+        return wicketViewerSettings = computeIfAbsent(WicketViewerSettings.class, wicketViewerSettings);
     }
     
     public WebAppConfigBean getWebAppConfigBean() {

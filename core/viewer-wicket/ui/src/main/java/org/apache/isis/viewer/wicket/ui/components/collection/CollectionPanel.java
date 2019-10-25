@@ -144,7 +144,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
                 return null;
             }
 
-            toggleboxColumn = new ObjectAdapterToggleboxColumn(super.commonContext);
+            toggleboxColumn = new ObjectAdapterToggleboxColumn(super.getCommonContext());
             
             final OnSelectionHandler handler = new OnSelectionHandler() {
 

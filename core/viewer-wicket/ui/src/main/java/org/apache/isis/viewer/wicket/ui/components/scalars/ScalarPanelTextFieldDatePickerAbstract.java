@@ -54,7 +54,7 @@ extends ScalarPanelTextFieldAbstract<T>  {
      * Expected to be in subclasses' constructor.
      *
      * <p>
-     * Is not passed into constructor only to allow subclass to read from injected {@link #getSettings()}.
+     * Is not passed into constructor only to allow subclass to read from injected {@link #getWicketViewerSettings()}.
      */
     protected void init(DateConverter<T> converter) {
         this.converter = converter;
