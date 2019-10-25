@@ -481,7 +481,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
                 .map(super.getPojoToAdapter())
                 .filter(_NullSafe::isPresent)
                 .findFirst()
-                .orElse(ManagedObject.promote(resultAdapter));
+                .orElse(resultAdapter);
 
     }
 

@@ -123,8 +123,9 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
             return getCommonContext().getMementoSupport();
         }
         
-        default Function<Object, ObjectAdapter> getPojoToAdapter() {
-            return getCommonContext().getPojoToAdapter();
+        default Function<Object, ManagedObject> getPojoToAdapter() {
+            return pojo->ManagedObject.of(
+                    getCommonContext().getSpecificationLoader()::loadSpecification, pojo);
         }
         
         default ServiceInjector getServiceInjector() {

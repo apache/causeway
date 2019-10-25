@@ -316,6 +316,8 @@ public interface ManagedObject {
         }
         return null;
     }
+    
+    // -- BASIC PREDICATES
 
     static boolean isEntity(ManagedObject adapter) {
         if(adapter==null) {
