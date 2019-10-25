@@ -21,6 +21,7 @@ package org.apache.isis.config;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -37,6 +38,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
@@ -51,6 +53,7 @@ import org.apache.isis.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.viewer.wicket.ui.DialogMode;
 
 import lombok.Data;
+import lombok.val;
 
 
 /**
@@ -79,6 +82,12 @@ public class IsisConfiguration {
             private boolean autoLogoutIfAlreadyAuthenticated = false;
         }
     }
+    
+    /**
+     * Optional: set to override {@link Locale#getDefault()}
+     * <p>{@code null} is allowed
+     */
+    private String locale = null; //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
 
     private final Objects objects = new Objects();
     @Data
@@ -834,6 +843,41 @@ public class IsisConfiguration {
                  */
                 private boolean showChooser = true;
             }
+            
+            
+            //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes 
+            private List<Credit> credit = _Lists.newArrayList();
+            
+            //@RequiredArgsConstructor(staticName = "of") @Getter
+            
+            @Data
+            public static class Credit {
+                private int num;
+                private String url;
+                private String name;
+                private String image;
+                
+                public boolean isDefined() { return (name != null || image != null) && url != null; }
+                public String getId() { return idFor(""); }
+                public String getUrlId() { return idFor("Url"); }
+                public String getNameId() { return idFor("Name"); }
+                public String getImageId() { return idFor("Image"); }
+                
+                private String idFor(final String component) {
+                    return "credit" + getNum() + component;
+                }
+            }
+            
+            public Credit getCredit(int indexOneBased) {
+                int indexZeroBased = indexOneBased - 1;
+                int maxIndex = credit.size() - 1;
+                val credit = (indexZeroBased<0 || indexZeroBased>maxIndex)
+                        ? new Credit()
+                                : Wicket.this.credit.get(indexZeroBased);
+                credit.setNum(indexOneBased);
+                return credit;
+            }
+            
             private final DatePicker datePicker = new DatePicker();
             @Data
             public static class DatePicker {
@@ -902,6 +946,8 @@ public class IsisConfiguration {
                 private boolean enabled = true;
                 private int maxParentChainLength = 64;
             }
+            
+            
         }
     }
 
@@ -981,6 +1027,59 @@ public class IsisConfiguration {
             return valueByPattern;
         }
 
+    }
+    
+    //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
+    private final Value value = new Value();
+    @Data
+    public static class Value {
+        
+        private Map<String, String> format = new HashMap<>();
+        
+        public enum FormatIdentifier {
+            /**
+             * Key to indicate how LocalDateTime should be parsed/rendered.
+             * <p>
+             * eg: {@code isis.value.format.datetime=iso}
+             * <p>
+             * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
+             * {@link org.apache.isis.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeValueSemanticsProvider.NAMED_TITLE_FORMATTERS}).  
+             * Alternatively, can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
+             */
+            DATETIME,
+            /**
+             * Key to indicate how LocalDate should be parsed/rendered.
+             * <p>
+             * eg: {@code isis.value.format.date=iso}
+             * <p>
+             * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
+             * {@link org.apache.isis.metamodel.facets.value.datejdk8local.Jdk8LocalDateValueSemanticsProvider.NAMED_TITLE_FORMATTERS}).  
+             * Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
+             */
+            DATE, 
+            TIMESTAMP, 
+            TIME,
+            
+            INT, DECIMAL, BYTE, DOUBLE, FLOAT, LONG, SHORT, 
+            PERCENTAGE
+        }
+        
+        public String getFormatOrElse(FormatIdentifier formatIdentifier, String defaultFormat) {
+            return format.getOrDefault(formatIdentifier.name().toLowerCase(), defaultFormat);
+        }
+        
+        private final Money money = new Money();
+        @Data
+        public static class Money {
+            
+            private String currency = null;
+
+            public String getCurrencyOrElse(String fallback) { 
+                return _Strings.isNotEmpty(getCurrency()) ? getCurrency() : fallback;
+            }
+        }
+        
+        
     }
 
 

@@ -31,7 +31,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.config.IsisConfiguration.Viewer.Wicket.Credit;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
@@ -61,66 +61,6 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         super(id);
     }
 
-    static class Credit {
-        private final int num;
-        private final String url;
-        private final String name;
-        private final String image;
-
-        final boolean defined;
-        private Credit(final int num, final String url, final String name, final String image) {
-            this.num = num;
-            this.url = url;
-            this.name = name;
-            this.image = image;
-            this.defined = (name != null || image != null) && url != null;
-        }
-
-        int getNum() {
-            return num;
-        }
-
-        boolean isDefined() {
-            return defined;
-        }
-
-        String getId() {
-            return idFor("");
-        }
-
-        String getUrl() {
-            return url;
-        }
-        String getUrlId() {
-            return idFor("Url");
-        }
-
-        String getName() {
-            return name;
-        }
-        String getNameId() {
-            return idFor("Name");
-        }
-
-        String getImage() {
-            return image;
-        }
-        String getImageId() {
-            return idFor("Image");
-        }
-
-        private String idFor(final String component) {
-            return "credit" + num + component;
-        }
-
-        public static Credit create(final IsisConfigurationLegacy configurationLegacy, final int num) {
-            String base = "isis.viewer.wicket.credit." + num + ".";
-            String url = configurationLegacy.getString(base + "url");
-            String name = configurationLegacy.getString(base + "name");
-            String image = configurationLegacy.getString(base + "image");
-            return new Credit(num, url, name, image);
-        }
-    }
 
     @Override
     protected void onInitialize() {
@@ -133,17 +73,17 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     }
 
     private void addCredits() {
-        boolean credits = false;
-        credits = addCredit(1) || credits;
-        credits = addCredit(2) || credits;
-        credits = addCredit(3) || credits;
+        boolean hasAnyCredits = false;
+        hasAnyCredits = addCredit(1) || hasAnyCredits;
+        hasAnyCredits = addCredit(2) || hasAnyCredits;
+        hasAnyCredits = addCredit(3) || hasAnyCredits;
         final Label creditsLabel = new Label("creditsLabel", "Credits: ");
         add(creditsLabel);
-        creditsLabel.setVisibilityAllowed(credits);
+        creditsLabel.setVisibilityAllowed(hasAnyCredits);
     }
 
     private boolean addCredit(final int num) {
-        final Credit credit = Credit.create(super.getCommonContext().getConfigurationLegacy(), num);
+        final Credit credit = super.getConfiguration().getViewer().getWicket().getCredit(num); 
         final WebMarkupContainer creditLink = newLink(credit);
         if(credit.isDefined()) {
             creditLink.add(new CreditImage(credit.getImageId(), credit.getImage()));

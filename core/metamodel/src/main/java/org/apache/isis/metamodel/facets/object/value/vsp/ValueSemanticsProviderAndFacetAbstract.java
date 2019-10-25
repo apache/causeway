@@ -31,7 +31,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.LocaleUtil;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -279,8 +279,10 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     // Helper: Locale handling
     // ///////////////////////////////////////////////////////////////////////////
 
-    protected NumberFormat determineNumberFormat(final String suffix) {
-        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + suffix);
+    protected NumberFormat determineNumberFormat(FormatIdentifier formatIdentifier) {
+        final String formatRequired = getConfiguration()
+                .getValue().getFormatOrElse(formatIdentifier, null);  
+                
         if (formatRequired != null) {
             return new DecimalFormat(formatRequired);
         } else {
@@ -289,8 +291,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     }
 
     private Locale findLocale() {
-        final String localeStr = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "locale");
-
+        final String localeStr = getConfiguration().getLocale();
         final Locale findLocale = LocaleUtil.findLocale(localeStr);
         return findLocale != null ? findLocale : Locale.getDefault();
     }

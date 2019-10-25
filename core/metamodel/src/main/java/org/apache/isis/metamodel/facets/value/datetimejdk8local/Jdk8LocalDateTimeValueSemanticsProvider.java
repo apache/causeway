@@ -31,7 +31,7 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -66,7 +66,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
         OVERRIDE_TITLE_PATTERN.set(pattern);
     }
 
-    /**
+    /*
      * Key to indicate how LocalDateTime should be parsed/rendered.
      *
      * <p>
@@ -81,7 +81,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
      *
      * @see #NAMED_TITLE_FORMATTERS
      */
-    public final static String CFG_FORMAT_KEY = ConfigurationConstants.ROOT + "value.format.datetime";
+   //public final static String CFG_FORMAT_KEY = ConfigurationConstants.ROOT + "value.format.datetime";
 
 
     /**
@@ -146,7 +146,8 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     public Jdk8LocalDateTimeValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, LocalDateTime.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
-        String configuredNameOrPattern = getConfigurationLegacy().getString(CFG_FORMAT_KEY, "medium").toLowerCase().trim();
+        String configuredNameOrPattern = getConfiguration()
+                .getValue().getFormatOrElse(FormatIdentifier.DATETIME, "medium");
         updateTitleStringFormatter(configuredNameOrPattern);
     }
 

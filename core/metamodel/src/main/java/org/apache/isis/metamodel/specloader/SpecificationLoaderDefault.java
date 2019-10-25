@@ -376,7 +376,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
         
         specs.parallelStream()
-        .forEach(spec -> spec.introspectUpTo(upTo));
+        .forEach(spec -> spec.introspectUpTo(upTo)); // TODO swallows exceptions that happen inside (makes debugging hard)
         
     }
 

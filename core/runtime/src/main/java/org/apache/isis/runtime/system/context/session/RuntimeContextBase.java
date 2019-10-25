@@ -25,7 +25,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -57,7 +56,6 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     @Getter(onMethod = @__(@Override)) protected final MetaModelContext metaModelContext;
     @Getter(onMethod = @__(@Override)) protected final IsisConfiguration configuration;
-    @Getter(onMethod = @__(@Override)) protected final IsisConfigurationLegacy configurationLegacy;
     @Getter(onMethod = @__(@Override)) protected final ServiceInjector serviceInjector;
     @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
@@ -71,7 +69,6 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     protected RuntimeContextBase(MetaModelContext mmc) {
         this.metaModelContext= mmc;
         this.configuration = mmc.getConfiguration();
-        this.configurationLegacy = mmc.getConfigurationLegacy();
         this.serviceInjector = mmc.getServiceInjector();
         this.serviceRegistry = mmc.getServiceRegistry();
         this.specificationLoader = mmc.getSpecificationLoader();

@@ -28,7 +28,7 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -62,41 +62,23 @@ public class Jdk8LocalDateValueSemanticsProvider extends ValueSemanticsProviderA
      * A replacement for {@link #setFormat(String, String)}.
      */
     public static void setTitlePatternOverride(final String pattern) {
-        OVERRIDE_TITLE_PATTERN.set(pattern);
+        override_title_pattern.set(pattern);
     }
-
-    /**
-     * Key to indicate how LocalDate should be parsed/rendered.
-     *
-     * <p>
-     * eg:
-     * <pre>
-     * isis.value.format.date=iso
-     * </pre>
-     *
-     * <p>
-     * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
-     * {@link #NAMED_TITLE_FORMATTERS}).  Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
-     *
-     * @see #NAMED_TITLE_FORMATTERS
-     */
-    public final static String CFG_FORMAT_KEY = ConfigurationConstants.ROOT + "value.format.date";
-
 
     /**
      * Keys represent the values which can be configured, and which are used for the rendering of dates.
      *
      */
-    private static Map<String, TimeFormatter> NAMED_TITLE_FORMATTERS = _Maps.newHashMap();
+    private static Map<String, TimeFormatter> named_title_formatters = _Maps.newHashMap();
     static {
-        NAMED_TITLE_FORMATTERS.put("iso_encoding", formatterOf(DateTimeFormatter.ofPattern("yyyyMMdd")));
-        NAMED_TITLE_FORMATTERS.put("iso", formatterOf(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        NAMED_TITLE_FORMATTERS.put("long", formatterOfStyle("L-"));
-        NAMED_TITLE_FORMATTERS.put("medium", formatterOfStyle("M-"));
-        NAMED_TITLE_FORMATTERS.put("short", formatterOfStyle("S-"));
+        named_title_formatters.put("iso_encoding", formatterOf(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        named_title_formatters.put("iso", formatterOf(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        named_title_formatters.put("long", formatterOfStyle("L-"));
+        named_title_formatters.put("medium", formatterOfStyle("M-"));
+        named_title_formatters.put("short", formatterOfStyle("S-"));
     }
 
-    private final static ThreadLocal<String> OVERRIDE_TITLE_PATTERN = new ThreadLocal<String>() {
+    private final static ThreadLocal<String> override_title_pattern = new ThreadLocal<String>() {
         @Override
         protected String initialValue() {
             return null;
@@ -104,13 +86,13 @@ public class Jdk8LocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     };
 
 
-    private final static List<TimeParser> PARSE_FORMATTERS = _Lists.newArrayList();
+    private final static List<TimeParser> parse_formatters = _Lists.newArrayList();
     static {
-        PARSE_FORMATTERS.add(parserOfStyle("L-"));
-        PARSE_FORMATTERS.add(parserOfStyle("M-"));
-        PARSE_FORMATTERS.add(parserOfStyle("S-"));
-        PARSE_FORMATTERS.add(parserOf(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        PARSE_FORMATTERS.add(parserOf(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        parse_formatters.add(parserOfStyle("L-"));
+        parse_formatters.add(parserOfStyle("M-"));
+        parse_formatters.add(parserOfStyle("S-"));
+        parse_formatters.add(parserOf(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        parse_formatters.add(parserOf(DateTimeFormatter.ofPattern("yyyyMMdd")));
     }
 
     public static Class<? extends Facet> type() {
@@ -146,13 +128,14 @@ public class Jdk8LocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     public Jdk8LocalDateValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
-        String configuredNameOrPattern = getConfigurationLegacy().getString(CFG_FORMAT_KEY, "medium").trim();
+        String configuredNameOrPattern = getConfiguration()
+                .getValue().getFormatOrElse(FormatIdentifier.DATE, "medium");
         updateTitleStringFormatter(configuredNameOrPattern);
     }
 
 
     private void updateTitleStringFormatter(String titleStringFormatNameOrPattern) {
-        titleStringFormatter = NAMED_TITLE_FORMATTERS.get(titleStringFormatNameOrPattern);
+        titleStringFormatter = named_title_formatters.get(titleStringFormatNameOrPattern);
         if (titleStringFormatter == null) {
             titleStringFormatter = formatterOf(DateTimeFormatter.ofPattern(titleStringFormatNameOrPattern));
         }
@@ -184,7 +167,7 @@ public class Jdk8LocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     }
 
     private void updateTitleStringFormatterIfOverridden() {
-        final String overridePattern = OVERRIDE_TITLE_PATTERN.get();
+        final String overridePattern = override_title_pattern.get();
         if (overridePattern == null ||
                 titleStringFormatNameOrPattern.equals(overridePattern)) {
             return;
@@ -195,7 +178,7 @@ public class Jdk8LocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     }
 
     private LocalDate parseDate(final String dateStr, final Object original) {
-        return Jdk8LocalDateUtil.parseDate(dateStr, PARSE_FORMATTERS);
+        return Jdk8LocalDateUtil.parseDate(dateStr, parse_formatters);
     }
 
 

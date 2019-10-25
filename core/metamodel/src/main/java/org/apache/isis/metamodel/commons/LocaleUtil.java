@@ -21,10 +21,12 @@ package org.apache.isis.metamodel.commons;
 
 import java.util.Locale;
 
+import org.apache.isis.commons.internal.base._Strings;
+
 public class LocaleUtil {
 
     public static Locale findLocale(final String localeStr) {
-        if (localeStr != null) {
+        if (_Strings.isNotEmpty(localeStr)) {
             final Locale[] availableLocales = Locale.getAvailableLocales();
             for (final Locale locale : availableLocales) {
                 if (locale.toString().equals(localeStr)) {

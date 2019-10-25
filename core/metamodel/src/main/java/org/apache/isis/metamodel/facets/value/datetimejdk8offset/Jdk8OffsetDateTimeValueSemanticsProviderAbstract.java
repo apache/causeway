@@ -27,7 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
@@ -42,9 +42,11 @@ public abstract class Jdk8OffsetDateTimeValueSemanticsProviderAbstract<T> extend
     }
 
     public Jdk8OffsetDateTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final T defaultValue) {
-        super("date", holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
+        super(FormatIdentifier.DATE, holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
 
-        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "value.format.date");
+        String formatRequired = getConfiguration()
+                .getValue().getFormatOrElse(FormatIdentifier.DATE, "medium");
+        
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

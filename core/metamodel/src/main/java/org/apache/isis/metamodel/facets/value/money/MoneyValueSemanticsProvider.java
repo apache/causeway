@@ -28,7 +28,6 @@ import java.util.Map;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Money;
-import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -81,8 +80,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     public MoneyValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Money.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
-        final String property = ConfigurationConstants.ROOT + "value.money.currency";
-        defaultCurrencyCode = getConfigurationLegacy().getString(property, LOCAL_CURRENCY_CODE);
+        defaultCurrencyCode = getConfiguration().getValue().getMoney().getCurrencyOrElse(LOCAL_CURRENCY_CODE);        
     }
 
     // //////////////////////////////////////////////////////////////////

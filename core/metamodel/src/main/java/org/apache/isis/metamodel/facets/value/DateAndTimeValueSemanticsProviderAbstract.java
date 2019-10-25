@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 
@@ -46,9 +46,11 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
 
     @SuppressWarnings("unchecked")
     public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent) {
-        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE);
+        super(FormatIdentifier.DATETIME, holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE);
 
-        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "value.format.datetime");
+        final String formatRequired = getConfiguration()
+                .getValue().getFormatOrElse(FormatIdentifier.DATETIME, null);
+                
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

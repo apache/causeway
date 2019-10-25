@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -89,11 +88,6 @@ class DomainResourceHelper {
             return rendererContext.getAuthenticationSession();
         }
 
-        @Override
-        public IsisConfigurationLegacy getConfigurationLegacy() {
-            return rendererContext.getConfigurationLegacy();
-        }
-        
         @Override
         public IsisConfiguration getConfiguration() {
             return rendererContext.getConfiguration();

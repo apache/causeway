@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
@@ -42,8 +42,11 @@ abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemantics
 
     @SuppressWarnings("unchecked")
     public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
-        super("timestamp", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
-        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "value.format.timestamp");
+        super(FormatIdentifier.TIMESTAMP, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
+        
+        final String formatRequired = getConfiguration()
+                .getValue().getFormatOrElse(FormatIdentifier.TIMESTAMP, null);
+        
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

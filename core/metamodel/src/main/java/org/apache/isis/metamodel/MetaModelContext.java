@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
@@ -49,8 +48,7 @@ import org.apache.isis.security.authorization.manager.AuthorizationManager;
 public interface MetaModelContext {
 
     // -- INTERFACE
-    @Deprecated
-    IsisConfigurationLegacy getConfigurationLegacy();
+    //@Deprecated IsisConfigurationLegacy getConfigurationLegacy();
     
     IsisSystemEnvironment getSystemEnvironment();
     
@@ -110,11 +108,6 @@ public interface MetaModelContext {
 
         public MetaModelContext getMetaModelContext();
 
-        @Override
-        public default IsisConfigurationLegacy getConfigurationLegacy() {
-            return getMetaModelContext().getConfigurationLegacy();
-        }
-        
         @Override
         default IsisSystemEnvironment getSystemEnvironment() {
             return getMetaModelContext().getSystemEnvironment();

@@ -33,7 +33,7 @@ import java.util.TimeZone;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -61,7 +61,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     protected static final String ISO_ENCODING_FORMAT = "iso_encoding";
     protected static final TimeZone UTC_TIME_ZONE;
 
-    public final static String FORMAT_KEY_PREFIX = ConfigurationConstants.ROOT + "value.format.";
+    //public final static String FORMAT_KEY_PREFIX = ConfigurationConstants.ROOT + "value.format.";
 
     static {
         TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC");
@@ -99,20 +99,22 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     /**
      * Uses {@link #type()} as the facet type.
      */
-    public ValueSemanticsProviderAbstractTemporal(final String propertyName, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        this(propertyName, type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
+    public ValueSemanticsProviderAbstractTemporal(final FormatIdentifier formatIdentifier, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
+        this(formatIdentifier, type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
     }
 
     /**
      * Allows the specific facet subclass to be specified (rather than use
      * {@link #type()}.
      */
-    public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
+    public ValueSemanticsProviderAbstractTemporal(final FormatIdentifier formatIdentifier, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
         super(facetType, holder, adaptedClass, typicalLength, -1, immutability, equalByContent, defaultValue);
         configureFormats();
 
-        this.propertyType = propertyType;
-        configuredFormat = getConfigurationLegacy().getString(FORMAT_KEY_PREFIX + propertyType, defaultFormat()).toLowerCase().trim();
+        this.propertyType = formatIdentifier.name().toLowerCase();
+        configuredFormat = getConfiguration()
+                .getValue().getFormatOrElse(formatIdentifier, defaultFormat()).toLowerCase().trim();
+               
         buildFormat(configuredFormat);
 
         encodingFormat = formats().get(ISO_ENCODING_FORMAT);

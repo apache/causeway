@@ -26,7 +26,7 @@ import java.text.ParseException;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Percentage;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -59,7 +59,9 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     public PercentageValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Percentage.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
-        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "value.format.percentage");
+        final String formatRequired = getConfiguration()
+                .getValue().getFormatOrElse(FormatIdentifier.PERCENTAGE, null);
+                
         if (formatRequired == null) {
             format = PERCENTAGE_FORMAT;
         } else {

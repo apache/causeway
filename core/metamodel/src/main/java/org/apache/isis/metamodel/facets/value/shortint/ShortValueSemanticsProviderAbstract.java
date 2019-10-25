@@ -24,6 +24,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Map;
 
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -45,7 +46,7 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     public ShortValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Short> adaptedClass) {
         super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        format = determineNumberFormat("value.format.short");
+        format = determineNumberFormat(FormatIdentifier.SHORT);
     }
 
     // //////////////////////////////////////////////////////////////////

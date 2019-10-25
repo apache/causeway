@@ -124,7 +124,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return specificationLoader.loadSpecification(type);
     }
 
-    @Override
+    //@Override
     public IsisConfigurationLegacy getConfigurationLegacy() {
         return _Config.getConfiguration();
     }

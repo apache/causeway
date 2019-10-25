@@ -28,6 +28,7 @@ import java.util.Map;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
@@ -57,7 +58,7 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
 
     public BigDecimalValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        format = determineNumberFormat("value.format.decimal");
+        format = determineNumberFormat(FormatIdentifier.DECIMAL);
     }
 
     public void setLocale(final Locale l) {

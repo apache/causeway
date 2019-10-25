@@ -27,7 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
@@ -42,13 +42,15 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
     }
 
     public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        super("date", holder, adaptedClass, 12, immutability, equalByContent, defaultValue);
+        super(FormatIdentifier.DATE, holder, adaptedClass, 12, immutability, equalByContent, defaultValue);
 
-        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "value.format.date");
+        final String formatRequired = getConfiguration().getValue()
+                .getFormatOrElse(FormatIdentifier.DATE, null);
+        
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {
-            setMask(formatRequired);
+            setMask(formatRequired); //TODO fails when using format names eg 'medium'
         }
     }
 

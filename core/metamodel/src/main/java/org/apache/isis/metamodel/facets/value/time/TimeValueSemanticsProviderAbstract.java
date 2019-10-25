@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
@@ -42,9 +42,10 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
 
     @SuppressWarnings("unchecked")
     public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
-        super("time", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
+        super(FormatIdentifier.TIME, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
 
-        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "value.format.time");
+        final String formatRequired = getConfiguration()
+                .getValue().getFormatOrElse(FormatIdentifier.TIME, null); 
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

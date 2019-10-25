@@ -70,7 +70,7 @@ class MetaModelContext_configTest {
     // -- HELPER
 
     private IsisConfigurationLegacy config() {
-        return mmc.getConfigurationLegacy();
+        return ((MetaModelContext_forTesting) mmc).getConfigurationLegacy();
     }
 
 }

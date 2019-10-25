@@ -33,7 +33,7 @@ import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -64,24 +64,6 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     public static void setTitlePatternOverride(final String pattern) {
         OVERRIDE_TITLE_PATTERN.set(pattern);
     }
-
-    /**
-     * Key to indicate how LocalDateTime should be parsed/rendered.
-     *
-     * <p>
-     * eg:
-     * <pre>
-     * isis.value.format.datetime=iso
-     * </pre>
-     *
-     * <p>
-     * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
-     * {@link #NAMED_TITLE_FORMATTERS}).  Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
-     *
-     * @see #NAMED_TITLE_FORMATTERS
-     */
-    public final static String CFG_FORMAT_KEY = ConfigurationConstants.ROOT + "value.format.datetime";
-
 
     /**
      * Keys represent the values which can be configured, and which are used for the rendering of dates.
@@ -148,7 +130,8 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     public JodaLocalDateTimeValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, LocalDateTime.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
-        String configuredNameOrPattern = getConfigurationLegacy().getString(CFG_FORMAT_KEY, "medium").toLowerCase().trim();
+        String configuredNameOrPattern = getConfiguration()
+                .getValue().getFormatOrElse(FormatIdentifier.DATETIME, "medium");
         updateTitleStringFormatter(configuredNameOrPattern);
     }
 

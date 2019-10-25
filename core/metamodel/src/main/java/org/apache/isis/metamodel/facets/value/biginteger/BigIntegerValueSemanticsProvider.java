@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
@@ -55,7 +56,7 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
     public BigIntegerValueSemanticsProvider(final FacetHolder holder) {
 
         super(type(), holder, BigInteger.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        format = determineNumberFormat("value.format.int");
+        format = determineNumberFormat(FormatIdentifier.INT);
     }
 
     // //////////////////////////////////////////////////////////////////
