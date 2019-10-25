@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.assertions._Ensure;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -211,7 +211,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             pojo = objectAdapterContext.instantiateAndInjectServices(spec);
         }
 
-        _Ensure.ensure("Pojo most likely should not be an Oid", !(pojo instanceof Oid));
+        _Assert.assertFalse("Pojo most likely should not be an Oid", (pojo instanceof Oid));
 
         return pojo;
     }

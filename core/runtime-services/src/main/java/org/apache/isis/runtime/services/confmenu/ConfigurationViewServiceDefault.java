@@ -20,7 +20,6 @@ package org.apache.isis.runtime.services.confmenu;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;

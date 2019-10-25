@@ -21,6 +21,8 @@ package org.apache.isis.commons.internal.assertions;
 
 import java.util.Objects;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+
 public final class _Assert {
 
     public static void assertFalse(final String message, final boolean flag) {
@@ -45,19 +47,19 @@ public final class _Assert {
 
     public static void assertTrue(final String message, final Object target, final boolean flag) {
         if (!flag) {
-            throw new IsisAssertException(message + (target == null ? "" : (": " + target)));
+            throw _Exceptions.unrecoverable(message + (target == null ? "" : (": " + target)));
         }
     }
 
     public static void assertEquals(final String message, Object left, Object right) {
         if (!Objects.equals(left, right)) {
-            throw new IsisAssertException(message + String.format(": '%s' != '%s' ", ""+left, ""+right));
+            throw _Exceptions.unrecoverable(message + String.format(": '%s' != '%s' ", ""+left, ""+right));
         }
     }
 
     public static void assertTypeIsInstanceOf(Class<?> type, Class<?> requiredType) {
         if(!requiredType.isAssignableFrom(type)) {
-            throw new IsisAssertException(String.format(
+            throw _Exceptions.unrecoverable(String.format(
                     "unexpected type: '%s' is not an instance of '%s' ", ""+type, ""+requiredType));
         }
     }

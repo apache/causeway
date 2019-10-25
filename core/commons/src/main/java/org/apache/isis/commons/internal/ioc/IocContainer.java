@@ -19,15 +19,12 @@
 package org.apache.isis.commons.internal.ioc;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
-
-import org.springframework.core.env.ConfigurableEnvironment;
 
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -38,14 +35,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  *
  */
 public interface IocContainer {
-
-    /**
-     * Returns a key/value pair copy of Spring's environment
-     * @see {@linkplain <a href="https://jira.spring.io/browse/SPR-10241">https://jira.spring.io/browse/SPR-10241</a>}
-     * @param configurableEnvironment
-     * @deprecated alternative solution {@linkplain <a href="https://stackoverflow.com/a/53950574/56880">stack-overflow</a>}
-     */
-    Map<String, String> copyEnvironmentToMap(ConfigurableEnvironment configurableEnvironment);
 
     Stream<ManagedBeanAdapter> streamAllBeans();
 

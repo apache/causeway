@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.assertions._Ensure;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -252,13 +252,13 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
     // -- marshal
     @Override
     public final String marshal(RootOid rootOid) {
-        _Ensure.ensure("can not marshal values", !rootOid.isValue());
+        _Assert.assertFalse("can not marshal values", rootOid.isValue());
         return marshalNoVersion(rootOid) + marshal(rootOid.getVersion());
     }
 
     @Override
     public final String marshalNoVersion(RootOid rootOid) {
-        _Ensure.ensure("can not marshal values", !rootOid.isValue());
+        _Assert.assertFalse("can not marshal values", rootOid.isValue());
         final String transientIndicator = rootOid.isTransient()? TRANSIENT_INDICATOR : "";
         final String viewModelIndicator = rootOid.isViewModel()? VIEWMODEL_INDICATOR : "";
         return transientIndicator + viewModelIndicator + rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();

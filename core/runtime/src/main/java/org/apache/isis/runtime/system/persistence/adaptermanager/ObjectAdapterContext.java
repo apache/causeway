@@ -21,8 +21,8 @@ package org.apache.isis.runtime.system.persistence.adaptermanager;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.assertions.IsisAssertException;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
@@ -278,12 +278,12 @@ final public class ObjectAdapterContext {
         Objects.requireNonNull(persistentOid);
         _Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());
         if(persistentOid.isTransient()) {
-            throw new IsisAssertException("hintRootOid must be persistent");
+            throw _Exceptions.unrecoverable("hintRootOid must be persistent");
         }
         final ObjectSpecId hintRootOidObjectSpecId = persistentOid.getObjectSpecId();
         final ObjectSpecId adapterObjectSpecId = rootAdapter.getSpecification().getSpecId();
         if(!hintRootOidObjectSpecId.equals(adapterObjectSpecId)) {
-            throw new IsisAssertException("hintRootOid's objectType must be same as that of adapter " +
+            throw _Exceptions.unrecoverable("hintRootOid's objectType must be same as that of adapter " +
                     "(was: '" + hintRootOidObjectSpecId + "'; adapter's is " + adapterObjectSpecId + "'");
         }
     }

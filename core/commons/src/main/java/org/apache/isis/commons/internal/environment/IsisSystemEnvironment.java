@@ -38,15 +38,16 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Represents configuration, that is available in an early phase of bootstrapping. 
- * It is regarded immutable for an application's life-cycle.
+ * Represents configuration, that is required in an early bootstrapping phase. 
+ * Regarded immutable during an application's life-cycle.
  * 
  * @since 2.0
+ * @implNote acts as the framework's bootstrapping entry-point for Spring  
  */
 @Service @Singleton @Log4j2
 public class IsisSystemEnvironment {
     
-    public static final String VERSION = "2.0.0-M3";
+    public static final String VERSION = "2.0.0-M3"; // landed here, but could be anywhere else if reasonable
     
     @Inject private ApplicationContext springContext;
     

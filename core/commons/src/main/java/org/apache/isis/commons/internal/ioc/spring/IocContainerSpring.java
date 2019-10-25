@@ -19,9 +19,6 @@
 package org.apache.isis.commons.internal.ioc.spring;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -30,12 +27,10 @@ import javax.annotation.Nullable;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.ResolvableType;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
@@ -55,15 +50,6 @@ public class IocContainerSpring implements IocContainer {
     
     @NonNull private final ApplicationContext springContext;
 
-
-    @Override
-    public Map<String, String> copyEnvironmentToMap(
-            ConfigurableEnvironment configurableEnvironment) {
-        
-        // TODO Auto-generated method stub
-        return _Spring.copySpringEnvironmentToMap(configurableEnvironment);
-    }
-    
     @Override
     public Stream<ManagedBeanAdapter> streamAllBeans() {
 
