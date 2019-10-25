@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
@@ -30,6 +29,7 @@ import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.MessageBroker;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
@@ -37,8 +37,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-
-import lombok.Getter;
 
 /**
  * Provides the <em>common context</em> for all implementing sub-classes.
@@ -48,17 +46,15 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
 
     private static final long serialVersionUID = 1L;
 
-    @Inject @Getter protected transient WicketViewerSettings settings;
-    @Inject protected transient WebAppConfigBean webAppConfigBean;
-    @Inject @Getter protected transient PageClassRegistry pageClassRegistry;
-    @Inject @Getter protected transient ImageResourceCache imageCache;
-    
-    @Inject private transient MetaModelContext metaModelContext;
-    @Getter protected final transient IsisWebAppCommonContext commonContext;
-    
-    @Getter protected final transient IsisSessionFactory isisSessionFactory;
-    @Getter protected final transient TranslationService translationService;
-    @Getter protected final transient LocaleProvider localeProvider;
+    private transient WicketViewerSettings settings;
+    private transient WebAppConfigBean webAppConfigBean;
+    private transient PageClassRegistry pageClassRegistry;
+    private transient ImageResourceCache imageCache;
+    private transient MetaModelContext metaModelContext;
+    private transient IsisWebAppCommonContext commonContext;
+    private transient IsisSessionFactory isisSessionFactory;
+    private transient TranslationService translationService;
+    private transient LocaleProvider localeProvider;
     
     protected PanelBase(String id) {
         this(id, null);
@@ -66,14 +62,49 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     
     public PanelBase(String id, @Nullable IModel<T> model) {
         super(id, model);
-        this.commonContext = IsisWebAppCommonContext.of(metaModelContext);
-        this.isisSessionFactory = commonContext.lookupServiceElseFail(IsisSessionFactory.class);
-        this.translationService = commonContext.lookupServiceElseFail(TranslationService.class);
-        this.localeProvider = commonContext.lookupServiceElseFail(LocaleProvider.class);
+    }
+    
+    
+    @Override
+    public IsisWebAppCommonContext getCommonContext() {
+        commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        return commonContext;
+    }
+    
+    public WicketViewerSettings getWicketViewerSettings() {
+        return settings = computeIfAbsent(WicketViewerSettings.class, settings);
+    }
+    
+    public WebAppConfigBean getWebAppConfigBean() {
+        return webAppConfigBean = computeIfAbsent(WebAppConfigBean.class, webAppConfigBean);
+    }
+    
+    public PageClassRegistry getPageClassRegistry() {
+        return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
+    }
+    
+    public ImageResourceCache getImageResourceCache() {
+        return imageCache = computeIfAbsent(ImageResourceCache.class, imageCache);
+    }
+    
+    public MetaModelContext getMetaModelContext() {
+        return metaModelContext = computeIfAbsent(MetaModelContext.class, metaModelContext);
+    }
+    
+    public IsisSessionFactory getIsisSessionFactory() {
+        return isisSessionFactory = computeIfAbsent(IsisSessionFactory.class, isisSessionFactory);
+    }
+    
+    public TranslationService getTranslationService() {
+        return translationService = computeIfAbsent(TranslationService.class, translationService);
+    }
+    
+    public LocaleProvider getLocaleProvider() {
+        return localeProvider = computeIfAbsent(LocaleProvider.class, localeProvider);
     }
     
     protected MessageBroker getMessageBroker() {
-        return commonContext.getAuthenticationSession().getMessageBroker();
+        return commonContext.getAuthenticationSession().getMessageBroker(); // don't cache?
     }
 
     // Hint support
@@ -88,5 +119,12 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
         return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
     }
 
+    // -- HELPER
+    
+    private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
+        return existingIfAny!=null
+                ? existingIfAny
+                        : getCommonContext().lookupServiceElseFail(type);
+    }
 
 }

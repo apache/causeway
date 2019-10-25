@@ -50,34 +50,28 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
     
     @Override
     public IsisWebAppCommonContext getCommonContext() {
-        commonContext = CommonContextUtils.computeIfAbsent(commonContext);
-        
-        this.webAppConfigBean = commonContext.lookupServiceElseFail(WebAppConfigBean.class);
-        this.pageClassRegistry = commonContext.lookupServiceElseFail(PageClassRegistry.class);
-        
-        return commonContext;
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     
     public WebAppConfigBean getWebAppConfigBean() {
-        if(webAppConfigBean==null) {
-            webAppConfigBean = getCommonContext().lookupServiceElseFail(WebAppConfigBean.class);
-        }
-        return webAppConfigBean;
+        return webAppConfigBean = computeIfAbsent(WebAppConfigBean.class, webAppConfigBean);
     }
     
     public PageClassRegistry getPageClassRegistry() {
-        if(pageClassRegistry==null) {
-            pageClassRegistry = getCommonContext().lookupServiceElseFail(PageClassRegistry.class);
-        }
-        return pageClassRegistry;
+        return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }
-    
+
     public IsisSessionFactory getIsisSessionFactory() {
-        if(isisSessionFactory==null) {
-            isisSessionFactory = getCommonContext().lookupServiceElseFail(IsisSessionFactory.class);
-        }
-        return isisSessionFactory;
+        return isisSessionFactory = computeIfAbsent(IsisSessionFactory.class, isisSessionFactory);
     }
     
+    
+    // -- HELPER
+    
+    private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
+        return existingIfAny!=null
+                ? existingIfAny
+                        : getCommonContext().lookupServiceElseFail(type);
+    }
     
 }

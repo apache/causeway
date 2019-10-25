@@ -51,17 +51,8 @@ implements IsisWebAppCommonContext.Delegating {
 
     @Override
     public IsisWebAppCommonContext getCommonContext() {
-        commonContext = CommonContextUtils.computeIfAbsent(commonContext);
-        return commonContext;
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
-    
-//    public IsisSessionFactory getIsisSessionFactory() {
-//        if(isisSessionFactory==null) {
-//            isisSessionFactory = getCommonContext().lookupServiceElseFail(IsisSessionFactory.class);
-//        }
-//        return isisSessionFactory;
-//    }
-
     
     
 }
