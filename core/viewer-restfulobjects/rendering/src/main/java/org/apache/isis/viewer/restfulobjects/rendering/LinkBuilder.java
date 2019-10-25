@@ -28,15 +28,15 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 
 public final class LinkBuilder {
 
-    public static LinkBuilder newBuilder(final RendererContext resourceContext, final String rel, final RepresentationType representationType, final String hrefFormat, final Object... hrefArgs) {
+    public static LinkBuilder newBuilder(final IResourceContext resourceContext, final String rel, final RepresentationType representationType, final String hrefFormat, final Object... hrefArgs) {
         return newBuilder(resourceContext, rel, representationType.getJsonElseXmlMediaType(), hrefFormat, hrefArgs);
     }
 
-    public static LinkBuilder newBuilder(final RendererContext resourceContext, final String rel, final MediaType mediaType, final String hrefFormat, final Object... hrefArgs) {
+    public static LinkBuilder newBuilder(final IResourceContext resourceContext, final String rel, final MediaType mediaType, final String hrefFormat, final Object... hrefArgs) {
         return new LinkBuilder(resourceContext, rel, String.format(hrefFormat, hrefArgs), mediaType);
     }
 
-    private final RendererContext resourceContext;
+    private final IResourceContext resourceContext;
     private final JsonRepresentation representation = JsonRepresentation.newMap();
 
     private final String rel;
@@ -48,7 +48,7 @@ public final class LinkBuilder {
     private JsonRepresentation arguments;
     private JsonRepresentation value;
 
-    protected LinkBuilder(final RendererContext resourceContext, final String rel, final String href, final MediaType mediaType) {
+    protected LinkBuilder(final IResourceContext resourceContext, final String rel, final String href, final MediaType mediaType) {
         this.resourceContext = resourceContext;
         this.rel = rel;
         this.href = href;

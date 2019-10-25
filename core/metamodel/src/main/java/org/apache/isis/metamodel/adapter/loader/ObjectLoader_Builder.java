@@ -17,40 +17,46 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.adapter.oid.factory;
+package org.apache.isis.metamodel.adapter.loader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.isis.metamodel.adapter.oid.factory.OidFactory.OidFactoryBuilder;
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.adapter.loader.ObjectLoader.ObjectLoaderBuilder;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-class OidFactory_Builder implements OidFactoryBuilder {
+@RequiredArgsConstructor
+class ObjectLoader_Builder implements ObjectLoaderBuilder {
+    
+    private final MetaModelContext metaModelContext;
 
-    private final List<OidFactory.Handler> handlers = new ArrayList<>();
+    private final List<ObjectLoader.Handler> handlers = new ArrayList<>();
 
     @Override
-    public OidFactoryBuilder add(OidFactory.Handler handler) {
+    public ObjectLoader_Builder add(ObjectLoader.Handler handler) {
+        handler.setMetaModelContext(metaModelContext);
         handlers.add(handler);
         return this;
     }
 
     @Override
-    public OidFactory build() {
-        return managedObject -> {
+    public ObjectLoader build() {
+        return oid -> {
 
-            val rootOid = handlers.stream()
-                    .filter(h->h.isHandling(managedObject))
+            val managedObject = handlers.stream()
+                    .filter(h->h.isHandling(oid))
                     .findFirst()
-                    .map(h->h.oidFor(managedObject))
+                    .map(h->h.loadObject(oid))
                     .orElse(null);
 
-            Objects.requireNonNull(rootOid, 
-                    () -> "Could not create an Oid for managedObject: " + managedObject);
+            Objects.requireNonNull(managedObject, 
+                    () -> "Could not create a ManagedObject for Oid: " + oid);
 
-            return rootOid;
+            return managedObject;
         };
     }
 

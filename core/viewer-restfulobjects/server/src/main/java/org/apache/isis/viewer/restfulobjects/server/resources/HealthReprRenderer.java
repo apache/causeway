@@ -22,13 +22,13 @@ import org.apache.isis.applib.services.health.Health;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public class HealthReprRenderer extends ReprRendererAbstract<HealthReprRenderer, Health> {
 
     HealthReprRenderer(
-            final RendererContext resourceContext,
+            final IResourceContext resourceContext,
             final LinkFollowSpecs linkFollower,
             final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.HEALTH, representation);

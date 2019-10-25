@@ -20,6 +20,7 @@
 package org.apache.isis.metamodel.facets.object.entity;
 
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 /**
  * Indicates that this class is managed by a persistence context.
@@ -27,6 +28,12 @@ import org.apache.isis.metamodel.facetapi.Facet;
  */
 public interface EntityFacet extends Facet {
 
-    String identifierFor(Object pojo);
+    String identifierFor(ObjectSpecification spec, Object pojo);
+
+    Object fetchByIdentifier(ObjectSpecification spec, String identifier);
+    
+    void persist(ObjectSpecification spec, Object pojo);
+
+    
 
 }

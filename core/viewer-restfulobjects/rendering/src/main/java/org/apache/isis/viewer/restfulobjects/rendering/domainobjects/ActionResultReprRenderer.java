@@ -23,8 +23,8 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -34,17 +34,17 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultReprRenderer, ObjectAndActionInvocation> {
 
     private ObjectAdapterLinkTo adapterLinkTo = new DomainObjectLinkTo();
 
-    private ObjectAdapter objectAdapter;
+    private ManagedObject objectAdapter;
     private ObjectAction action;
     private JsonRepresentation arguments;
-    private ObjectAdapter returnedAdapter;
+    private ManagedObject returnedAdapter;
     private final SelfLink selfLink;
     private ObjectAndActionInvocation objectAndActionInvocation;
 
@@ -53,11 +53,11 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     }
 
     public ActionResultReprRenderer(
-            final RendererContext rendererContext,
+            final IResourceContext resourceContext,
             final LinkFollowSpecs linkFollower,
             final SelfLink selfLink,
             final JsonRepresentation representation) {
-        super(rendererContext, linkFollower, RepresentationType.ACTION_RESULT, representation);
+        super(resourceContext, linkFollower, RepresentationType.ACTION_RESULT, representation);
         this.selfLink = selfLink;
     }
 
@@ -137,11 +137,11 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         case LIST:
 
-            final Stream<ObjectAdapter> collectionAdapters =
+            final Stream<ManagedObject> collectionAdapters =
             CollectionFacet.Utils.streamAdapters(returnedAdapter);
 
             final ListReprRenderer listReprRenderer =
-                    new ListReprRenderer(rendererContext, null, representation).withElementRel(Rel.ELEMENT);
+                    new ListReprRenderer(resourceContext, null, representation).withElementRel(Rel.ELEMENT);
             listReprRenderer.with(collectionAdapters)
             .withReturnType(action.getReturnType())
             .withElementType(returnedAdapter.getElementSpecification());
@@ -151,7 +151,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         case SCALAR_VALUE:
 
             final ScalarValueReprRenderer scalarValueReprRenderer =
-            new ScalarValueReprRenderer(rendererContext, null, representation);
+            new ScalarValueReprRenderer(resourceContext, null, representation);
             scalarValueReprRenderer.with(returnedAdapter)
             .withReturnType(action.getReturnType());
 
@@ -160,7 +160,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         case DOMAIN_OBJECT:
 
             final DomainObjectReprRenderer objectReprRenderer =
-            new DomainObjectReprRenderer(rendererContext, null, representation);
+            new DomainObjectReprRenderer(resourceContext, null, representation);
 
             objectReprRenderer.with(returnedAdapter).includesSelf();
 

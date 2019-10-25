@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -38,23 +37,23 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 
 import lombok.val;
 
 public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectActionReprRenderer, ObjectAction> {
 
-    public ObjectActionReprRenderer(RendererContext rendererContext) {
-        this(rendererContext, null, null, JsonRepresentation.newMap());
+    public ObjectActionReprRenderer(IResourceContext resourceContext) {
+        this(resourceContext, null, null, JsonRepresentation.newMap());
     }
 
     public ObjectActionReprRenderer(
-            final RendererContext rendererContext,
+            final IResourceContext resourceContext,
             final LinkFollowSpecs linkFollowSpecs,
             String actionId,
             final JsonRepresentation representation) {
-        super(rendererContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation,
+        super(resourceContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation,
                 Where.OBJECT_FORMS);
     }
 
@@ -80,7 +79,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
+        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
         renderer.with(new ObjectAndAction(objectAdapter, objectMember)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
@@ -109,12 +108,12 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             return super.linkToForMutatorInvoke();
         }
         final DomainServiceLinkTo linkTo = new DomainServiceLinkTo();
-        return linkTo.usingUrlBase(getRendererContext()).with(contributingServiceAdapter());
+        return linkTo.usingUrlBase(getResourceContext()).with(contributingServiceAdapter());
     }
 
-    private ObjectAdapter contributingServiceAdapter() {
+    private ManagedObject contributingServiceAdapter() {
         final ObjectSpecification serviceType = objectMember.getOnType();
-        final Stream<ObjectAdapter> serviceAdapters = streamServiceAdapters();
+        final Stream<ManagedObject> serviceAdapters = streamServiceAdapters();
         return serviceAdapters
                 .filter(serviceAdapter->serviceAdapter.getSpecification() == serviceType)
                 .findFirst()
@@ -141,7 +140,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     // ///////////////////////////////////////////////////
 
     private ObjectActionReprRenderer addParameterDetails() {
-        boolean gsoc2013 = getRendererContext().getConfiguration().getViewer().getRestfulobjects().getGsoc2013().isLegacyParamDetails();
+        boolean gsoc2013 = getResourceContext().getConfiguration().getViewer().getRestfulobjects().getGsoc2013().isLegacyParamDetails();
         if(gsoc2013) {
             final List<Object> parameters = _Lists.newArrayList();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {
@@ -190,7 +189,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         for (val choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();
-            list.add(DomainObjectReprRenderer.valueOrRef(rendererContext, super.getJsonValueEncoder(), choiceAdapter));
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, super.getJsonValueEncoder(), choiceAdapter));
         }
         return list;
     }
@@ -202,7 +201,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         }
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification defaultSpec = param.getSpecification();
-        return DomainObjectReprRenderer.valueOrRef(rendererContext, super.getJsonValueEncoder(), defaultAdapter);
+        return DomainObjectReprRenderer.valueOrRef(resourceContext, super.getJsonValueEncoder(), defaultAdapter);
     }
 
     // ///////////////////////////////////////////////////
@@ -211,10 +210,10 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(rendererContext.suppressDescribedByLinks()) {
+        if(resourceContext.suppressDescribedByLinks()) {
             return;
         }
-        final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(rendererContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 
@@ -222,8 +221,8 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     protected void addLinksIsisProprietary() {
         // umm...
         if (false /*objectMember.isContributed() */) {
-            final ObjectAdapter serviceAdapter = contributingServiceAdapter();
-            final JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
+            final ManagedObject serviceAdapter = contributingServiceAdapter();
+            final JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
             getLinks().arrayAdd(contributedByLink);
         }
     }

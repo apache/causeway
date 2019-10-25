@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.ServiceUtil;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
@@ -28,14 +28,14 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
     private String serviceId;
 
     @Override
-    public ObjectAdapterLinkTo with(final ObjectAdapter objectAdapter) {
+    public ObjectAdapterLinkTo with(final ManagedObject objectAdapter) {
         serviceId = ServiceUtil.idOfAdapter(objectAdapter);
         return super.with(objectAdapter);
     }
 
     @Override
     public LinkBuilder builder(final Rel rel) {
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(rendererContext,
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext,
                 relElseDefault(rel).andParam("serviceId", serviceId),
                 RepresentationType.DOMAIN_OBJECT,
                 linkRef(new StringBuilder()).toString());

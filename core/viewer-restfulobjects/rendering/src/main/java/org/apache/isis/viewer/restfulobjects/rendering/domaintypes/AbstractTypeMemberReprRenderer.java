@@ -24,7 +24,7 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType;
 
@@ -32,7 +32,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
 
     protected MemberType memberType;
 
-    public AbstractTypeMemberReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public AbstractTypeMemberReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
@@ -59,7 +59,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
 
     @Override
     protected void addLinkUpToParent() {
-        final LinkBuilder parentLinkBuilder = DomainTypeReprRenderer.newLinkToBuilder(rendererContext, Rel.UP, objectSpecification);
+        final LinkBuilder parentLinkBuilder = DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, objectSpecification);
         getLinks().arrayAdd(parentLinkBuilder.build());
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
 
         final ObjectMember objectMember = getObjectFeature();
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(
-                getRendererContext(), Rel.SELF.getName(), getMediaType(),
+                getResourceContext(), Rel.SELF.getName(), getMediaType(),
                 "domain-types/%s/%s%s", getParentSpecification().getSpecId().asString(), getMemberType().getUrlPart(), objectMember.getId());
         getLinks().arrayAdd(linkBuilder.build());
     }

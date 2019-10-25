@@ -18,12 +18,12 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 public class ObjectAndAction extends ObjectAndMember<ObjectAction> {
 
-    public ObjectAndAction(final ObjectAdapter objectAdapter, final ObjectAction action) {
+    public ObjectAndAction(final ManagedObject objectAdapter, final ObjectAction action) {
         super(objectAdapter, action);
     }
 

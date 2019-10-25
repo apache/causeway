@@ -26,8 +26,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -42,7 +42,7 @@ import lombok.val;
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> 
 implements ReprRenderer<R, T> {
 
-    @Getter protected final RendererContext rendererContext;
+    @Getter protected final IResourceContext resourceContext;
     @Getter protected final JsonValueEncoder jsonValueEncoder;
     
     private final LinkFollowSpecs linkFollower;
@@ -55,24 +55,24 @@ implements ReprRenderer<R, T> {
     protected boolean includesSelf;
 
     public ReprRendererAbstract(
-            final RendererContext rendererContext,
+            final IResourceContext resourceContext,
             final LinkFollowSpecs linkFollower,
             final RepresentationType representationType,
             final JsonRepresentation representation) {
-        this.rendererContext = rendererContext;
-        this.jsonValueEncoder = rendererContext.getServiceRegistry()
+        this.resourceContext = resourceContext;
+        this.jsonValueEncoder = resourceContext.getServiceRegistry()
                 .lookupServiceElseFail(JsonValueEncoder.class);
                 
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
         this.representation = representation;
 
-        this.interactionInitiatedBy = determineInteractionInitiatedByFrom(this.rendererContext);
+        this.interactionInitiatedBy = determineInteractionInitiatedByFrom(this.resourceContext);
     }
 
     private static InteractionInitiatedBy determineInteractionInitiatedByFrom(
-            final RendererContext rendererContext) {
-        return rendererContext.getInteractionInitiatedBy();
+            final IResourceContext resourceContext) {
+        return resourceContext.getInteractionInitiatedBy();
     }
 
     protected InteractionInitiatedBy getInteractionInitiatedBy() {
@@ -87,7 +87,7 @@ implements ReprRenderer<R, T> {
         if (linkFollower != null) {
             return linkFollower;
         }
-        return LinkFollowSpecs.create(rendererContext.getFollowLinks());
+        return LinkFollowSpecs.create(resourceContext.getFollowLinks());
     }
 
     @Override
@@ -107,7 +107,7 @@ implements ReprRenderer<R, T> {
 
     public R withLink(final Rel rel, final String href) {
         if (href != null) {
-            getLinks().arrayAdd(LinkBuilder.newBuilder(rendererContext, rel.getName(), representationType, href).build());
+            getLinks().arrayAdd(LinkBuilder.newBuilder(resourceContext, rel.getName(), representationType, href).build());
         }
         return cast(this);
     }
@@ -140,13 +140,13 @@ implements ReprRenderer<R, T> {
         if (objectSpec == null) {
             return;
         }
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), rel, objectSpec);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), rel, objectSpec);
         JsonRepresentation link = linkBuilder.build();
         getLinks().arrayAdd(link);
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
-            final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap())
+            final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap())
                     .with(objectSpec);
             link.mapPut("value", renderer.render());
         }
@@ -187,29 +187,29 @@ implements ReprRenderer<R, T> {
      */
     protected final void addExtensionsIsisProprietaryChangedObjects() {
 
-        // TODO: have removed UpdateNotifier, plan is to re-introduce using the IsisTransaction enlisted objects
-        // (which would also allow newly-created objects to be shown)
-        final List<ObjectAdapter> changedObjects = _Lists.newArrayList(); // updateNotifier.getChangedObjects();
-        final List<ObjectAdapter> disposedObjects = _Lists.newArrayList(); // updateNotifier.getDisposedObjects();
+        // TODO: have removed UpdateNotifier, plan is to re-introduce using the IsisTransaction 
+        // enlisted objects (which would also allow newly-created objects to be shown)
+        final List<ManagedObject> changedObjects = _Lists.newArrayList(); // updateNotifier.getChangedObjects();
+        final List<ManagedObject> disposedObjects = _Lists.newArrayList(); // updateNotifier.getDisposedObjects();
 
         addToExtensions("changed", changedObjects);
         addToExtensions("disposed", disposedObjects);
     }
 
-    private void addToExtensions(final String key, final List<ObjectAdapter> adapters) {
+    private void addToExtensions(final String key, final List<ManagedObject> adapters) {
         if(adapters == null || adapters.isEmpty()) {
             return;
         }
         final JsonRepresentation adapterList = JsonRepresentation.newArray();
         getExtensions().mapPut(key, adapterList);
-        for (final ObjectAdapter adapter : adapters) {
-            adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getRendererContext(), Rel.VALUE, adapter).build());
+        for (val adapter : adapters) {
+            adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.VALUE, adapter).build());
         }
     }
 
-    protected Stream<ObjectAdapter> streamServiceAdapters() {
-        val metaModelContext = rendererContext.getMetaModelContext();
-        return metaModelContext.streamServiceAdapters();
+    protected Stream<ManagedObject> streamServiceAdapters() {
+        val metaModelContext = resourceContext.getMetaModelContext();
+        return metaModelContext.streamServiceAdapters2();
     }
 
 }

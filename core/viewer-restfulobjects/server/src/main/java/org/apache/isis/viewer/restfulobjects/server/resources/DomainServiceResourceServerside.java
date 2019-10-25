@@ -36,8 +36,8 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -56,7 +56,7 @@ import lombok.val;
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
 
-    private final static Predicate<ObjectAdapter> NATURE_REST_ALSO = (final ObjectAdapter input) -> {
+    private final static Predicate<ManagedObject> NATURE_REST_ALSO = (final ManagedObject input) -> {
         final ObjectSpecification specification = input.getSpecification();
         final DomainServiceFacet facet = specification.getFacet(DomainServiceFacet.class);
         if (facet == null) {
@@ -76,7 +76,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         val metaModelContext = super.getResourceContext().getMetaModelContext();
 
-        final Stream<ObjectAdapter> serviceAdapters = metaModelContext.streamServiceAdapters()
+        final Stream<ManagedObject> serviceAdapters = metaModelContext.streamServiceAdapters2()
                 .filter(NATURE_REST_ALSO);
 
         final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
@@ -116,7 +116,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response service(@PathParam("serviceId") final String serviceId) {
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
 
         final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
@@ -156,7 +156,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId) {
         init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
 
         return helper.actionPrompt(actionId);
@@ -201,7 +201,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
-        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
 
         return helper.invokeActionQueryOnly(actionId, arguments);
@@ -226,7 +226,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
-        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
 
         return helper.invokeActionIdempotent(actionId, arguments);
@@ -247,7 +247,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
-        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
 
         return helper.invokeAction(actionId, arguments);
@@ -258,7 +258,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting an action invocation resource is not allowed.");
     }
 
-    private DomainResourceHelper newDomainResourceHelper(final ObjectAdapter serviceAdapter) {
+    private DomainResourceHelper newDomainResourceHelper(final ManagedObject serviceAdapter) {
         return new DomainResourceHelper(getResourceContext(), serviceAdapter, new DomainServiceLinkTo());
     }
 

@@ -40,7 +40,7 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 
 import lombok.val;
@@ -48,12 +48,12 @@ import lombok.val;
 public class ObjectPropertyReprRenderer 
 extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
-    public ObjectPropertyReprRenderer(RendererContext context) {
+    public ObjectPropertyReprRenderer(IResourceContext context) {
         this(context, null, null, JsonRepresentation.newMap());
     }
 
     public ObjectPropertyReprRenderer(
-            final RendererContext context,
+            final IResourceContext context,
             final LinkFollowSpecs linkFollower,
             final String propertyId,
             final JsonRepresentation representation) {
@@ -115,11 +115,11 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
                     format = String.format("big-integer");
                 }
             }
-            return jsonValueEncoder.appendValueAndFormat(ManagedObject.promote(valueAdapter), representation, format, rendererContext.suppressMemberExtensions());
+            return jsonValueEncoder.appendValueAndFormat(ManagedObject.promote(valueAdapter), representation, format, resourceContext.suppressMemberExtensions());
         }
 
         boolean eagerlyRender =
-                (renderEagerly() && rendererContext.canEagerlyRender(ManagedObject.promote(valueAdapter)))
+                (renderEagerly() && resourceContext.canEagerlyRender(ManagedObject.promote(valueAdapter)))
                 || (linkFollower != null && !linkFollower.isTerminated());
 
         if(valueAdapter == null) {
@@ -130,10 +130,10 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
             final TitleFacet titleFacet = spec.getFacet(TitleFacet.class);
             final String title = titleFacet.title(valueAdapter);
 
-            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, ManagedObject.promote(valueAdapter)).withTitle(title);
+            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, ManagedObject.promote(valueAdapter)).withTitle(title);
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = 
-                        new DomainObjectReprRenderer(rendererContext, linkFollower, JsonRepresentation.newMap());
+                        new DomainObjectReprRenderer(resourceContext, linkFollower, JsonRepresentation.newMap());
                 renderer.with(ManagedObject.promote(valueAdapter));
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
@@ -178,7 +178,7 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         final JsonRepresentation representation = JsonRepresentation.newMap();
-        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), getLinkFollowSpecs(), null, representation);
+        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, representation);
         renderer.with(new ObjectAndProperty(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
@@ -226,7 +226,7 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();
 
             // REVIEW: check that it works for ToDoItem$Category, though...
-            list.add(DomainObjectReprRenderer.valueOrRef(rendererContext, super.getJsonValueEncoder(), choiceAdapter));
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, super.getJsonValueEncoder(), choiceAdapter));
         }
         return list;
     }
@@ -237,10 +237,10 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(rendererContext.suppressDescribedByLinks()) {
+        if(resourceContext.suppressDescribedByLinks()) {
             return;
         }
-        final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 

@@ -20,9 +20,9 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -30,19 +30,19 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRe
 
 public class ObjectAndActionInvocation {
 
-    private final ObjectAdapter objectAdapter;
+    private final ManagedObject objectAdapter;
     private final ObjectAction action;
     private final JsonRepresentation arguments;
-    private final List<ObjectAdapter> argAdapters;
-    private final ObjectAdapter returnedAdapter;
+    private final List<ManagedObject> argAdapters;
+    private final ManagedObject returnedAdapter;
     private final ActionResultReprRenderer.SelfLink selfLink;
 
     public ObjectAndActionInvocation(
-            final ObjectAdapter objectAdapter,
+            final ManagedObject objectAdapter,
             final ObjectAction action,
             final JsonRepresentation arguments,
-            final List<ObjectAdapter> argAdapters,
-            final ObjectAdapter returnedAdapter,
+            final List<ManagedObject> argAdapters,
+            final ManagedObject returnedAdapter,
             final ActionResultReprRenderer.SelfLink selfLink) {
         this.objectAdapter = objectAdapter;
         this.action = action;
@@ -52,7 +52,7 @@ public class ObjectAndActionInvocation {
         this.selfLink = selfLink;
     }
 
-    public ObjectAdapter getObjectAdapter() {
+    public ManagedObject getObjectAdapter() {
         return objectAdapter;
     }
 
@@ -64,11 +64,11 @@ public class ObjectAndActionInvocation {
         return arguments;
     }
 
-    public List<ObjectAdapter> getArgAdapters() {
+    public List<ManagedObject> getArgAdapters() {
         return argAdapters;
     }
 
-    public ObjectAdapter getReturnedAdapter() {
+    public ManagedObject getReturnedAdapter() {
         return returnedAdapter;
     }
 

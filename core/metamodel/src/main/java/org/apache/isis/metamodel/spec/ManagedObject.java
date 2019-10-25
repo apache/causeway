@@ -25,12 +25,18 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.loader.ObjectLoader;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
+import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -207,9 +213,6 @@ public interface ManagedObject {
         return new LazyManagedObject(specLoader, pojo);
     }
     
-    // -- SHORTCUTS
-    
-    
     // -- UNWRAPPING
     
     public static Object unwrapPojo(final ManagedObject adapter) {
@@ -247,74 +250,14 @@ public interface ManagedObject {
             .map(ManagedObject::unwrapPojo)
             .collect(Collectors.toList());
     }
-
-    // -- DEPRECATIONS (in an attempt to decouple the metamodel from ObjectAdapter)
     
-    @Deprecated
-    public static ObjectAdapter promote(ManagedObject managedObject) {
-        if(managedObject==null) {
+    // -- SHORTCUTS
+    
+    public static String getDomainType(ManagedObject objectAdapter) {
+        if (objectAdapter == null) {
             return null;
         }
-        return (ObjectAdapter) managedObject;
-    }
-
-    // -- DEPRECATIONS - SPECIALIZED
-    
-    @Deprecated
-    static boolean _isDestroyed(ManagedObject adapter) {
-        //TODO only applicable when persistable
-        return ManagedObject.promote(adapter).isDestroyed();
-    }
-
-    @Deprecated
-    static RootOid _collectionOidIfAny(ManagedObject adapter) {
-        // TODO Auto-generated method stub
-        val oid = ManagedObject.promote(adapter).getOid();
-        if(!(oid instanceof RootOid)) {
-            return null;
-        }
-        return (RootOid) oid;
-    }
-
-    @Deprecated
-    static boolean _whenFirstIsRepresentingPersistent_ensureSecondIsAsWell(
-            ManagedObject first,
-            ManagedObject second) {
-        
-        //if(ownerAdapter.getSpecification().isEntity() && !referencedAdapter.getSpecification().isEntity()) {
-        
-        if(ManagedObject.promote(first).isRepresentingPersistent() &&
-                ManagedObject.promote(second).isTransient()) {
-            return false; 
-        }
-        return true;
-    }
-    
-    // -- OID UTILITIES
-    
-    static final class Oids {
-        static final OidFactory oidFactory = OidFactory.buildDefault();
-        
-        static final <T extends Oid> T copy(T oid) {
-            if(oid == null) { return null; }
-            return _Casts.uncheckedCast(oid.copy()); 
-        }
-    }
-
-    static Oid _oid(ManagedObject adapter) {
-        if(adapter instanceof ObjectAdapter) {
-            return Oids.copy(((ObjectAdapter)adapter).getOid());
-        }
-        
-        return Oids.oidFactory.oidFor(adapter);
-    }
-
-    static RootOid _rootOidIfAny(ManagedObject adapter) {
-        val oid = _oid(adapter);
-        if(oid instanceof RootOid) {
-            return (RootOid) oid;
-        }
-        return null;
+        return objectAdapter.getSpecification().getSpecId().asString();
     }
     
     // -- BASIC PREDICATES
@@ -351,7 +294,127 @@ public interface ManagedObject {
         }
         return adapter.getPojo()==null;
     }
+    
+    // -- DEPRECATIONS (in an attempt to decouple the metamodel from ObjectAdapter)
+    
+    @Deprecated
+    public static ObjectAdapter promote(ManagedObject managedObject) {
+        if(managedObject==null) {
+            return null;
+        }
+        return (ObjectAdapter) managedObject;
+    }
 
+    // -- DEPRECATIONS - SPECIALIZED
+    
+    @Deprecated
+    static boolean _isDestroyed(ManagedObject adapter) {
+        return ManagedObject.promote(adapter).isDestroyed();
+    }
 
+    @Deprecated
+    static RootOid _collectionOidIfAny(ManagedObject adapter) {
+        val oid = ManagedObject.promote(adapter).getOid();
+        if(!(oid instanceof RootOid)) {
+            return null;
+        }
+        return (RootOid) oid;
+    }
 
-}
+    @Deprecated
+    static boolean _whenFirstIsRepresentingPersistent_ensureSecondIsAsWell(
+            ManagedObject first,
+            ManagedObject second) {
+        
+        //if(ownerAdapter.getSpecification().isEntity() && !referencedAdapter.getSpecification().isEntity()) {
+        
+        if(ManagedObject.promote(first).isRepresentingPersistent() &&
+                ManagedObject.promote(second).isTransient()) {
+            return false; 
+        }
+        return true;
+    }
+    
+    @Deprecated
+    static Version _version(ManagedObject adapter) {
+        if(adapter instanceof ObjectAdapter) {
+            return ((ObjectAdapter)adapter).getVersion();
+        }
+        System.err.println("version support is not fully implemented yet");
+        return null;
+    }
+    
+    // -- OID UTILITIES
+    
+    static final class Oids {
+        static final OidFactory oidFactory = OidFactory.buildDefault();
+        
+        static final <T extends Oid> T copy(T oid) {
+            if(oid == null) { return null; }
+            return _Casts.uncheckedCast(oid.copy()); 
+        }
+    }
+
+    static Oid _oid(ManagedObject adapter) {
+        if(adapter instanceof ObjectAdapter) {
+            return Oids.copy(((ObjectAdapter)adapter).getOid());
+        }
+        
+        return Oids.oidFactory.oidFor(adapter);
+    }
+
+    static RootOid _rootOidIfAny(ManagedObject adapter) {
+        val oid = _oid(adapter);
+        if(oid instanceof RootOid) {
+            return (RootOid) oid;
+        }
+        return null;
+    }
+    
+    static RootOid _rootOidElseThrow(ManagedObject adapter) {
+        val rootOid = _rootOidIfAny(adapter);
+        if(rootOid==null) {
+            throw new IllegalArgumentException("adapter must be a root adapter");
+        }
+        return rootOid;
+    }
+    
+    static String _instanceIdIfAny(ManagedObject adapter) {
+        String oidStr = ManagedObject._rootOidElseThrow(adapter).enStringNoVersion();
+        // REVIEW: it's a bit hokey to join these together just to split them out again.
+        return oidStr != null ? Oid.unmarshaller().splitInstanceId(oidStr): null;
+    }
+
+    @Deprecated
+    static ManagedObject _adapterOfList(DomainObjectList list) {
+        // TODO Auto-generated method stub
+        // legacy of
+        // resourceContext.adapterOfPojo(list);
+        throw _Exceptions.notImplemented();
+    }
+
+    @Deprecated
+    static void _makePersistentInTransaction(ManagedObject adapter) {
+        
+        // TODO Auto-generated method stub
+        // legacy of
+        // getResourceContext().makePersistentInTransaction(adapter);
+        throw _Exceptions.notImplemented();
+    }
+
+    @Deprecated
+    static ManagedObject _adapterOfRootOid(SpecificationLoader specificationLoader, RootOid rootOid) {
+        
+        val mmc = ((SpecificationLoaderDefault)specificationLoader).getMetaModelContext();
+        
+        val spec = specificationLoader.loadSpecification(rootOid.getObjectSpecId());
+        val objectId = rootOid.getIdentifier();
+        
+        val objectLoadRequest = ObjectLoader.ObjectLoadRequest.of(spec, objectId);
+        val managedObject = mmc.getObjectLoader().loadObject(objectLoadRequest);
+        
+        return managedObject;
+        
+    }
+    
+ }

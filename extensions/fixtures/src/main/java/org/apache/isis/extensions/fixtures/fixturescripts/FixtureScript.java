@@ -666,7 +666,7 @@ extends AbstractViewModel {
                 return childFixtureScript;
 
             default:
-                throw _Exceptions.unmatchedCase("Execution strategy: '%s' not recognized", executionStrategy);
+                throw _Exceptions.illegalArgument("Execution strategy: '%s' not recognized", executionStrategy);
             }
         }
 

@@ -21,7 +21,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -78,17 +77,6 @@ public final class Util {
             return JsonRepresentation.newMap();
         }
         return read(queryStringTrimmed, "query string");
-    }
-
-    /**
-     * REVIEW - looks similar to above methods, but now unused; can it be deleted?
-     */
-    public static JsonRepresentation readParameterMapAsMap(final Map<String, String[]> parameterMap) {
-        final JsonRepresentation map = JsonRepresentation.newMap();
-        for (final Map.Entry<String, String[]> parameter : parameterMap.entrySet()) {
-            map.mapPut(parameter.getKey(), parameter.getValue()[0]);
-        }
-        return map;
     }
 
     private static JsonRepresentation read(final String args, final String argsNature) {

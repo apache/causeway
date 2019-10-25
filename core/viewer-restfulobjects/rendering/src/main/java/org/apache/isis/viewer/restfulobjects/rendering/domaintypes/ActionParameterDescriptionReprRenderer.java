@@ -27,11 +27,11 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureReprRenderer<ActionParameterDescriptionReprRenderer, ObjectActionParameter> {
 
-    public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectActionParameter objectActionParameter) {
+    public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectActionParameter objectActionParameter) {
         final String domainType = objectSpecification.getSpecId().asString();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
@@ -40,7 +40,7 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         return LinkBuilder.newBuilder(resourceContext, rel.andParam("id", deriveId(objectActionParameter)), RepresentationType.ACTION_PARAMETER_DESCRIPTION, url);
     }
 
-    public ActionParameterDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public ActionParameterDescriptionReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.ACTION_PARAMETER_DESCRIPTION, representation);
     }
 
@@ -67,14 +67,14 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         if (!includesSelf) {
             return;
         }
-        getLinks().arrayAdd(newLinkToBuilder(getRendererContext(), Rel.SELF, getParentSpecification(), getObjectFeature()).build());
+        getLinks().arrayAdd(newLinkToBuilder(getResourceContext(), Rel.SELF, getParentSpecification(), getObjectFeature()).build());
     }
 
     @Override
     protected void addLinkUpToParent() {
         final ObjectAction parentAction = this.objectFeature.getAction();
 
-        final LinkBuilder parentLinkBuilder = ActionDescriptionReprRenderer.newLinkToBuilder(rendererContext, Rel.UP, objectSpecification, parentAction);
+        final LinkBuilder parentLinkBuilder = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, objectSpecification, parentAction);
         getLinks().arrayAdd(parentLinkBuilder.build());
     }
 
@@ -91,7 +91,7 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
 
     @Override
     protected void addLinksSpecificToFeature() {
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(rendererContext, Rel.RETURN_TYPE, objectFeature.getSpecification());
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.RETURN_TYPE, objectFeature.getSpecification());
         getLinks().arrayAdd(linkBuilder.build());
     }
 

@@ -32,7 +32,6 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder.JsonValueConverter;
@@ -45,13 +44,13 @@ import lombok.val;
  */
 public final class JsonValueEncoder_Converters {
 
-    public List<JsonValueConverter> asList(final Function<Object, ObjectAdapter> pojoToAdapter) {
+    public List<JsonValueConverter> asList(final Function<Object, ManagedObject> pojoToAdapter) {
         
         val converters = _Lists.<JsonValueConverter>newArrayList(); 
         
         converters.add(new JsonValueConverter(null, "string", String.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     return pojoToAdapter.apply(repr.asString());
                 }
@@ -72,7 +71,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter(null, "boolean", boolean.class, Boolean.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isBoolean()) {
                     return pojoToAdapter.apply(repr.asBoolean());
                 }
@@ -93,7 +92,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter("int", "byte", byte.class, Byte.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isNumber()) {
                     return pojoToAdapter.apply(repr.asNumber().byteValue());
                 }
@@ -123,7 +122,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter("int", "short", short.class, Short.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isNumber()) {
                     return pojoToAdapter.apply(repr.asNumber().shortValue());
                 }
@@ -153,7 +152,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter("int", "int", int.class, Integer.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isInt()) {
                     return pojoToAdapter.apply(repr.asInt());
                 }
@@ -183,7 +182,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter("int", "long", long.class, Long.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isLong()) {
                     return pojoToAdapter.apply(repr.asLong());
                 }
@@ -214,7 +213,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter("decimal", "float", float.class, Float.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isDecimal()) {
                     return pojoToAdapter.apply(repr.asDouble().floatValue());
                 }
@@ -248,7 +247,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter("decimal", "double", double.class, Double.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isDecimal()) {
                     return pojoToAdapter.apply(repr.asDouble());
                 }
@@ -285,7 +284,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter(null, "char", char.class, Character.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String str = repr.asString();
                     if(str != null && str.length()>0) {
@@ -318,7 +317,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter("big-integer(18)", "javamathbiginteger", BigInteger.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     return pojoToAdapter.apply(new BigInteger(repr.asString()));
                 }
@@ -352,7 +351,7 @@ public final class JsonValueEncoder_Converters {
 
         converters.add(new JsonValueConverter("big-decimal", "javamathbigdecimal", BigDecimal.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     return pojoToAdapter.apply(new BigDecimal(repr.asString()));
                 }
@@ -397,7 +396,7 @@ public final class JsonValueEncoder_Converters {
                     );
 
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -438,7 +437,7 @@ public final class JsonValueEncoder_Converters {
                     );
 
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -479,7 +478,7 @@ public final class JsonValueEncoder_Converters {
                     );
 
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -519,7 +518,7 @@ public final class JsonValueEncoder_Converters {
                     JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
                     );
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -559,7 +558,7 @@ public final class JsonValueEncoder_Converters {
                     JsonRepresentation.yyyyMMdd.withZoneUTC()
                     );
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -599,7 +598,7 @@ public final class JsonValueEncoder_Converters {
                     JsonRepresentation._HHmmss.withZoneUTC()
                     );
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -633,7 +632,7 @@ public final class JsonValueEncoder_Converters {
         converters.add(new JsonValueConverter("utc-millisec", "javasqltimestamp", java.sql.Timestamp.class){
 
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+            public ManagedObject asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isLong()) {
                     final Long millis = repr.asLong();
                     final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(millis);

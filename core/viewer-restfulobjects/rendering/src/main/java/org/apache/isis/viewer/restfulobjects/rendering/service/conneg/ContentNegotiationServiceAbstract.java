@@ -27,67 +27,63 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
-import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 public abstract class ContentNegotiationServiceAbstract implements ContentNegotiationService {
 
     @Override
-    @Programmatic
+    
     @PostConstruct
     public void init() {}
 
     @Override
-    @Programmatic
     @PreDestroy
     public void shutdown() {}
 
     @Override
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext2,
-            final ObjectAdapter objectAdapter) {
+            final IResourceContext renderContext2,
+            final ManagedObject objectAdapter) {
         return null;
     }
 
     @Override
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext2,
+            final IResourceContext renderContext2,
             final ObjectAndProperty objectAndProperty)  {
         return null;
     }
 
     @Override
-    @Programmatic
+    
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext2,
+            final IResourceContext renderContext2,
             final ObjectAndCollection objectAndCollection) {
         return null;
     }
 
     @Override
-    @Programmatic
+    
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext2,
+            final IResourceContext renderContext2,
             final ObjectAndAction objectAndAction)  {
         return null;
     }
 
     @Override
-    @Programmatic
+    
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext2,
+            final IResourceContext renderContext2,
             final ObjectAndActionInvocation objectAndActionInvocation) {
         return null;
     }
@@ -97,12 +93,12 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     /**
      * Potential hook to allow a domain object to be mapped.
      */
-    protected Object objectOf(final ObjectAdapter objectAdapter) {
+    protected Object objectOf(final ManagedObject objectAdapter) {
         return objectAdapter.getPojo();
     }
 
     protected Object returnedObjectOf(final ObjectAndActionInvocation objectAndActionInvocation) {
-        final ObjectAdapter returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
+        final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
         return objectOf(returnedAdapter);
     }
 

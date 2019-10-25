@@ -26,14 +26,14 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public class TypeListReprRenderer extends ReprRendererAbstract<TypeListReprRenderer, Collection<ObjectSpecification>> {
 
     private Collection<ObjectSpecification> specifications;
 
-    public TypeListReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public TypeListReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.TYPE_LIST, representation);
     }
 
@@ -53,7 +53,7 @@ public class TypeListReprRenderer extends ReprRendererAbstract<TypeListReprRende
 
         final JsonRepresentation specList = JsonRepresentation.newArray();
         for (final ObjectSpecification objectSpec : specifications) {
-            final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.DOMAIN_TYPE.getName(), RepresentationType.DOMAIN_TYPE, "domain-types/%s", objectSpec.getSpecId().asString());
+            final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.DOMAIN_TYPE.getName(), RepresentationType.DOMAIN_TYPE, "domain-types/%s", objectSpec.getSpecId().asString());
             specList.arrayAdd(linkBuilder.build());
         }
 

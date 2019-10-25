@@ -29,18 +29,18 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<ActionDescriptionReprRenderer, ObjectAction> {
 
-    public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
         final String domainType = objectSpecification.getSpecId().asString();
         final String actionId = objectAction.getId();
         final String url = "domain-types/" + domainType + "/actions/" + actionId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.ACTION_DESCRIPTION, url);
     }
 
-    public ActionDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public ActionDescriptionReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.ACTION_DESCRIPTION, representation);
     }
 
@@ -55,7 +55,7 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
         final JsonRepresentation parameterList = JsonRepresentation.newArray();
         final List<ObjectActionParameter> parameters = getObjectFeature().getParameters();
         for (final ObjectActionParameter parameter : parameters) {
-            final LinkBuilder linkBuilder = ActionParameterDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.ACTION_PARAM, objectSpecification, parameter);
+            final LinkBuilder linkBuilder = ActionParameterDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, objectSpecification, parameter);
             parameterList.arrayAdd(linkBuilder.build());
         }
 
@@ -68,7 +68,7 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
             return;
         }
         final ObjectSpecification typeOfSpec = facet.valueSpec();
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), Rel.ELEMENT_TYPE, typeOfSpec);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ELEMENT_TYPE, typeOfSpec);
         getLinks().arrayAdd(linkBuilder.build());
     }
 
@@ -77,7 +77,7 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
         if (returnType == null) {
             return;
         }
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), Rel.RETURN_TYPE, returnType);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
         getLinks().arrayAdd(linkBuilder.build());
     }
 

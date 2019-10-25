@@ -21,16 +21,16 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> 
@@ -67,7 +67,7 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 
     protected ObjectAdapterLinkTo linkTo;
 
-    protected ObjectAdapter objectAdapter;
+    protected ManagedObject objectAdapter;
     protected Mode mode = Mode.INLINE; // unless we determine otherwise
     /**
      * Derived from {@link #objectMember} using {@link org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType#determineFrom(org.apache.isis.metamodel.spec.feature.ObjectFeature)}
@@ -85,13 +85,13 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
     private final Where where;
 
     public AbstractObjectMemberReprRenderer(
-            final RendererContext rendererContext,
+            final IResourceContext resourceContext,
             final LinkFollowSpecs linkFollower,
             final String memberId,
             final RepresentationType representationType,
             final JsonRepresentation representation,
             final Where where) {
-        super(rendererContext, linkFollower, representationType, representation);
+        super(resourceContext, linkFollower, representationType, representation);
         this.memberId = memberId;
         this.where = where;
     }
@@ -117,7 +117,7 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
      * {@link #objectAdapter}).
      */
     public R usingLinkTo(final ObjectAdapterLinkTo linkTo) {
-        this.linkTo = linkTo.usingUrlBase(rendererContext).with(objectAdapter);
+        this.linkTo = linkTo.usingUrlBase(resourceContext).with(objectAdapter);
         return cast(this);
     }
 
@@ -165,7 +165,7 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
      */
     protected void renderMemberContent() {
 
-        if(!rendererContext.suppressMemberId()) {
+        if(!resourceContext.suppressMemberId()) {
             representation.mapPut("id", objectMember.getId());
         }
 
@@ -173,7 +173,7 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
             representation.mapPut("memberType", objectMemberType.getName());
         }
 
-        if (mode.isInline() && !rendererContext.suppressMemberLinks()) {
+        if (mode.isInline() && !resourceContext.suppressMemberLinks()) {
             addDetailsLinkIfPersistent();
         }
 
@@ -188,7 +188,7 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
         if (mode.isFollowed() || mode.isStandalone() || mode.isMutated()) {
             addMutatorLinksIfEnabled();
 
-            if(!mode.isInline() || !rendererContext.suppressUpdateLink()) {
+            if(!mode.isInline() || !resourceContext.suppressUpdateLink()) {
                 putExtensionsIsisProprietary();
             }
             addLinksToFormalDomainModel();
@@ -255,7 +255,7 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
     }
 
     private void addDetailsLinkIfPersistent() {
-        if (!objectAdapter.isRepresentingPersistent()) {
+        if (!ManagedObject.isBookmarkable(objectAdapter)) {
             return;
         }
         final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, objectMemberType, objectMember).build();
@@ -276,7 +276,7 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
     protected abstract void followDetailsLink(JsonRepresentation detailsLink);
 
     protected final void putDisabledReasonIfDisabled() {
-        if(rendererContext.suppressMemberDisabledReason()) {
+        if(resourceContext.suppressMemberDisabledReason()) {
             return;
         }
         final String disabledReasonRep = usability().getReason();

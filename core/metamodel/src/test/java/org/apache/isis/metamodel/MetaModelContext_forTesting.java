@@ -37,6 +37,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.adapter.loader.ObjectLoader;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
@@ -145,6 +146,9 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return serviceAdaptersById.get(serviceId);
     }
+    
+    @Getter(onMethod = @__(@Override))
+    final ObjectLoader objectLoader = ObjectLoader.buildDefault(this);
     
     // -- LOOKUP
 

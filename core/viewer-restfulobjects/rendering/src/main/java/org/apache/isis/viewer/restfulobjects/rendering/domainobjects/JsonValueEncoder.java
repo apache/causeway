@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
@@ -68,7 +67,7 @@ public class JsonValueEncoder {
         }
     }
 
-    public ObjectAdapter asAdapter(
+    public ManagedObject asAdapter(
             final ObjectSpecification objectSpec, 
             final JsonRepresentation argValueRepr, 
             final String format) {
@@ -100,7 +99,7 @@ public class JsonValueEncoder {
             throw new IllegalArgumentException("Unable to parse value");
         }
 
-        final ObjectAdapter asAdapter = jvc.asAdapter(argValueRepr, format);
+        final ManagedObject asAdapter = jvc.asAdapter(argValueRepr, format);
         if(asAdapter != null) {
             return asAdapter;
         }
@@ -119,7 +118,7 @@ public class JsonValueEncoder {
     }
 
     public Object appendValueAndFormat(
-            ObjectAdapter objectAdapter, 
+            ManagedObject objectAdapter, 
             JsonRepresentation repr, 
             String format, 
             boolean suppressExtensions) {
@@ -175,7 +174,7 @@ public class JsonValueEncoder {
         return adapter != null? adapter.getPojo(): NullNode.getInstance();
     }
 
-    ObjectAdapter adapterFor(Object pojo) {
+    ManagedObject adapterFor(Object pojo) {
         return objectAdapterProvider.adapterFor(pojo);
     }
     
@@ -206,7 +205,7 @@ public class JsonValueEncoder {
         /**
          * The value, otherwise <tt>null</tt>.
          */
-        public abstract ObjectAdapter asAdapter(JsonRepresentation repr, String format);
+        public abstract ManagedObject asAdapter(JsonRepresentation repr, String format);
 
         public Object appendValueAndFormat(
                 ManagedObject objectAdapter, 

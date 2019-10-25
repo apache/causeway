@@ -28,8 +28,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
@@ -42,17 +42,17 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNeg
 @Service
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
-
+    @Inject List<ContentNegotiationService> contentNegotiationServices;
+    
     @PostConstruct
     public void init() {
     }
 
 
     @Override
-    @Programmatic
     public Response objectRepresentation(
-            final Context renderContext,
-            final ObjectAdapter objectAdapter) {
+            final IResourceContext renderContext,
+            final ManagedObject objectAdapter) {
 
         final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
             @Override
@@ -66,9 +66,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     }
 
     @Override
-    @Programmatic
     public Response propertyDetails(
-            final Context renderContext,
+            final IResourceContext renderContext,
             final ObjectAndProperty objectAndProperty,
             final MemberReprMode memberReprMode) {
 
@@ -85,9 +84,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
 
 
     @Override
-    @Programmatic
     public Response collectionDetails(
-            final Context renderContext,
+            final IResourceContext renderContext,
             final ObjectAndCollection objectAndCollection,
             final MemberReprMode memberReprMode) {
 
@@ -106,9 +104,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
 
 
     @Override
-    @Programmatic
     public Response actionPrompt(
-            final Context renderContext,
+            final IResourceContext renderContext,
             final ObjectAndAction objectAndAction) {
 
         final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
@@ -124,9 +121,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
 
 
     @Override
-    @Programmatic
     public Response actionResult(
-            final Context renderContext,
+            final IResourceContext renderContext,
             final ObjectAndActionInvocation objectAndActionInvocation,
             final SelfLink selfLink) {
 
@@ -176,5 +172,5 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
         return responseBuilder.build();
     }
 
-    @Inject List<ContentNegotiationService> contentNegotiationServices;
+    
 }

@@ -18,18 +18,18 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 public interface ObjectAdapterLinkTo {
 
-    ObjectAdapterLinkTo usingUrlBase(RendererContext resourceContext);
+    ObjectAdapterLinkTo usingUrlBase(IResourceContext resourceContext);
 
-    ObjectAdapterLinkTo with(ObjectAdapter objectAdapter);
+    ObjectAdapterLinkTo with(ManagedObject objectAdapter);
 
     LinkBuilder builder();
 

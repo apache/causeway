@@ -46,10 +46,10 @@ import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
@@ -66,7 +66,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
-//TODO deprecated non standard import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.PrettyPrinting;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
 
@@ -106,9 +105,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no class with domainType Id of '%s')", domainType);
         }
 
-        final ObjectAdapter objectAdapter = getResourceContext().newTransientInstance(domainTypeSpec);
+        final ManagedObject adapter = getResourceContext().newTransientInstance(domainTypeSpec);
 
-        final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), objectAdapter);
+        final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), adapter);
 
         final JsonRepresentation membersMap = objectRepr.getMap("members");
         if (membersMap == null) {
@@ -119,13 +118,15 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
         }
 
-        final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter, InteractionInitiatedBy.USER);
+        final Consent validity = adapter.getSpecification().isValid(adapter, InteractionInitiatedBy.USER);
         if (validity.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
         }
-        getResourceContext().makePersistentInTransaction(objectAdapter);
+        
+        ManagedObject._makePersistentInTransaction(adapter);
+        
 
-        return newDomainResourceHelper(objectAdapter).objectRepresentation();
+        return newDomainResourceHelper(adapter).objectRepresentation();
     }
 
 
@@ -141,11 +142,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO deprecated non standard @PrettyPrinting
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId) {
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
 
         return newDomainResourceHelper(objectAdapter).objectRepresentation();
     }
@@ -159,7 +159,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO deprecated non standard @PrettyPrinting
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream object) {
 
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
@@ -170,7 +169,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", argRepr);
         }
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), objectAdapter);
 
         if (!updateHelper.copyOverProperties(argRepr, ObjectAdapterUpdateHelper.Intent.UPDATE_EXISTING)) {
@@ -270,7 +269,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         init(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
         final String iconName = objectSpec.getIconName(objectAdapter);
         final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
@@ -289,7 +288,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3
     })
-    //TODO deprecated non standard  @PrettyPrinting
     public Response layout(
             @PathParam("domainType")
             final String domainType,
@@ -311,7 +309,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         if(gridFacet == null) {
             builder = Responses.ofNotFound();
         } else {
-            final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+            final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
             Grid grid = gridFacet.getGrid(objectAdapter);
             addLinks(domainType, instanceId, grid);
             builder = Response.status(Response.Status.OK)
@@ -389,11 +387,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO deprecated non standard @PrettyPrinting
     public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
         init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
 
         return helper.propertyDetails(
@@ -415,7 +412,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         setCommandExecutor(Command.Executor.USER);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
@@ -425,7 +422,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectSpecification propertySpec = property.getSpecification();
         final String bodyAsString = Util.asStringUtf8(body);
 
-        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), propertySpec).parseAsMapWithSingleValue(
+        final ManagedObject argAdapter = new JsonParserHelper(getResourceContext(), propertySpec).parseAsMapWithSingleValue(
                 bodyAsString);
 
         final Consent consent = property.isAssociationValid(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
@@ -454,7 +451,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         setCommandExecutor(Command.Executor.USER);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
@@ -491,11 +488,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    // TODO deprecated non standard  @PrettyPrinting
     public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
         init(RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
 
         return newDomainResourceHelper(objectAdapter).collectionDetails(collectionId, MemberReprMode.READ);
     }
@@ -511,7 +507,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
         init(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
@@ -524,7 +520,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final String bodyAsString = Util.asStringUtf8(body);
-        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
+        final ManagedObject argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
                 bodyAsString);
 
         final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
@@ -548,7 +544,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
         init(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
@@ -561,7 +557,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final String bodyAsString = Util.asStringUtf8(body);
-        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
+        final ManagedObject argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
                 bodyAsString);
 
         final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
@@ -585,7 +581,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
         init(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
@@ -593,7 +589,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
-        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
+        final ManagedObject argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
                 getResourceContext().getUrlUnencodedQueryString());
 
         final Consent consent = collection.isValidToRemove(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
@@ -618,11 +614,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO deprecated non standard @PrettyPrinting
     public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
         init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
 
         return helper.actionPrompt(actionId);
@@ -655,7 +650,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO deprecated non standard @PrettyPrinting
     public Response invokeActionQueryOnly(
             final @PathParam("domainType") String domainType,
             final @PathParam("instanceId") String instanceId,
@@ -670,7 +664,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
 
         return helper.invokeActionQueryOnly(actionId, arguments);
@@ -684,7 +678,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO deprecated non standard @PrettyPrinting
     public Response invokeActionIdempotent(
             final @PathParam("domainType") String domainType,
             final @PathParam("instanceId") String instanceId,
@@ -697,7 +690,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
 
         return helper.invokeActionIdempotent(actionId, arguments);
@@ -711,7 +704,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO deprecated non standard @PrettyPrinting
     public Response invokeAction(
             @PathParam("domainType") String domainType,
             @PathParam("instanceId") final String instanceId,
@@ -724,7 +716,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
-        final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
 
         return helper.invokeAction(actionId, arguments);
@@ -736,7 +728,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     }
 
 
-    private DomainResourceHelper newDomainResourceHelper(final ObjectAdapter objectAdapter) {
+    private DomainResourceHelper newDomainResourceHelper(final ManagedObject objectAdapter) {
         return new DomainResourceHelper(getResourceContext(), objectAdapter);
     }
 

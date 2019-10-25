@@ -20,12 +20,10 @@ package org.apache.isis.viewer.restfulobjects.rendering.service;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
@@ -42,7 +40,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 public interface RepresentationService {
 
     /**
-     * As returned by {@link RendererContext6#getIntent()}, applies only to the representation of
+     * As returned by {@link resourceContext6#getIntent()}, applies only to the representation of
      * domain objects.
      */
     enum Intent {
@@ -60,36 +58,28 @@ public interface RepresentationService {
         NOT_APPLICABLE
     }
 
-    @Programmatic
     Response objectRepresentation(
-            Context resourceContext,
-            ObjectAdapter objectAdapter);
+            IResourceContext resourceContext,
+            ManagedObject objectAdapter);
 
-    @Programmatic
     Response propertyDetails(
-            Context rendererContext,
+            IResourceContext resourceContext,
             ObjectAndProperty objectAndProperty,
             MemberReprMode memberReprMode);
 
-    @Programmatic
     Response collectionDetails(
-            Context rendererContext,
+            IResourceContext resourceContext,
             ObjectAndCollection objectAndCollection,
             MemberReprMode memberReprMode);
 
-    @Programmatic
     Response actionPrompt(
-            Context rendererContext,
+            IResourceContext resourceContext,
             ObjectAndAction objectAndAction);
 
-    @Programmatic
     Response actionResult(
-            Context rendererContext,
+            IResourceContext resourceContext,
             ObjectAndActionInvocation objectAndActionInvocation,
             ActionResultReprRenderer.SelfLink selfLink);
-
-    interface Context extends RendererContext {
-        ObjectAdapterLinkTo getAdapterLinkTo();
-    }
+    
 
 }

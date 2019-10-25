@@ -31,6 +31,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.adapter.loader.ObjectLoader;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -47,9 +48,6 @@ import org.apache.isis.security.authorization.manager.AuthorizationManager;
  */
 public interface MetaModelContext {
 
-    // -- INTERFACE
-    //@Deprecated IsisConfigurationLegacy getConfigurationLegacy();
-    
     IsisSystemEnvironment getSystemEnvironment();
     
     /**
@@ -90,7 +88,14 @@ public interface MetaModelContext {
 
     HomePageAction getHomePageAction();
 
+    ObjectLoader getObjectLoader();
+    
+    @Deprecated
     Stream<ObjectAdapter> streamServiceAdapters();
+    
+    default Stream<ManagedObject> streamServiceAdapters2() {
+        return streamServiceAdapters().map(ManagedObject.class::cast);
+    }
 
     ObjectAdapter lookupServiceAdapterById(String serviceId);
     
@@ -205,6 +210,11 @@ public interface MetaModelContext {
         @Override
         default <T> T getSingletonElseFail(Class<T> type) {
             return getMetaModelContext().getSingletonElseFail(type);
+        }
+        
+        @Override
+        default ObjectLoader getObjectLoader() {
+            return getObjectLoader();
         }
 
     }
