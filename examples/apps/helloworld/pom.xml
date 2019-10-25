@@ -92,9 +92,13 @@
 			<artifactId>isis-security-shiro</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-security-keycloak</artifactId>
+		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->
-
+		
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>

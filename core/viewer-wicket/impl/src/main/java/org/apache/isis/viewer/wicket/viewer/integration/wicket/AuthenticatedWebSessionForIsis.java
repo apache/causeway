@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
+import org.apache.isis.core.runtime.web.AuthenticationSessionWormhole;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -40,6 +41,9 @@ import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.Getter;
 import lombok.val;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -63,24 +67,33 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
     private BreadcrumbModel breadcrumbModel;
     private BookmarkedPagesModel bookmarkedPagesModel;
 
+    /**
+     * As populated in {@link #signIn(String, String)}.
+     *
+     * <p>
+     * However, if a valid session has been set up previously and stored in {@link AuthenticationSessionWormhole}, then
+     * it will be used instead.
+     * </p>
+     */
     private AuthenticationSession authenticationSession;
 
     public AuthenticatedWebSessionForIsis(Request request) {
         super(request);
     }
-    
+
     public void init(IsisWebAppCommonContext commonContext) {
         this.commonContext = commonContext;
         bookmarkedPagesModel = new BookmarkedPagesModel(commonContext);
         breadcrumbModel = new BreadcrumbModel(commonContext);
+
     }
 
     @Override
     public synchronized boolean authenticate(final String username, final String password) {
         AuthenticationRequest authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(USER_ROLE);
-        authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
-        if (authenticationSession != null) {
+        this.authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
+        if (this.authenticationSession != null) {
             log(SessionLoggingService.Type.LOGIN, username, null);
             return true;
         } else {
@@ -106,7 +119,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         //        org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor.logout(ShiroAuthenticatorOrAuthorizor.java:179)
         //        org.apache.isis.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
 
-        getAuthenticationManager().closeSession(authenticationSession);
+        getAuthenticationManager().closeSession(getAuthenticationSession());
         getIsisSessionFactory().closeSession();
 
         super.invalidateNow();
@@ -121,15 +134,58 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
                         : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
 
         String userName = null;
-        if (authenticationSession != null) {
-            userName = authenticationSession.getUserName();
+        if (getAuthenticationSession() != null) {
+            userName = getAuthenticationSession().getUserName();
         }
 
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
     public synchronized AuthenticationSession getAuthenticationSession() {
-        return authenticationSession;
+        final AuthenticationSession authenticationSession = AuthenticationSessionWormhole.sessionByThread.get();
+        if (authenticationSession != null) {
+            if (getAuthenticationManager().isSessionValid(authenticationSession)) {
+                if (this.authenticationSession != null) {
+                    if (Objects.equals(authenticationSession.getUserName(), this.authenticationSession.getUserName())) {
+                        // ok, same session so far as Wicket is concerned
+                        if (isSignedIn()) {
+                            // nothing to do...
+                        } else {
+                            // force as signed in (though not sure if this case can occur)
+                            signIn(true);
+                            this.authenticationSession = authenticationSession;
+                        }
+                    } else {
+                        // different user name
+                        if (isSignedIn()) {
+                            // invalidate previous session
+                            super.invalidate();
+                        }
+
+                        // either way, the current one is now signed in
+                        signIn(true);
+                        this.authenticationSession = authenticationSession;
+                    }
+                } else {
+                    signIn(true);
+                    this.authenticationSession = authenticationSession;
+                }
+            }
+        }
+        return this.authenticationSession;
+    }
+
+    /**
+     * This is a no-op if the {@link #getAuthenticationSession() authentication session}'s
+     * {@link AuthenticationSession#getType() type} is {@link AuthenticationSession.Type#EXTERNAL external} (eg as
+     * managed by keycloak).
+     */
+    public void invalidate() {
+        if(this.authenticationSession.getType() == AuthenticationSession.Type.EXTERNAL) {
+            return;
+        }
+        // otherwise
+        super.invalidate();
     }
 
     @Override
@@ -139,7 +195,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         }
 
         final Roles roles = new Roles();
-        authenticationSession.streamRoles()
+        getAuthenticationSession().streamRoles()
         .forEach(roles::add);
         return roles;
     }

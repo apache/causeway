@@ -1,0 +1,101 @@
+[[run-as]]
+= Run-as
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+This hint shows how to temporarily change the current user as reported by Shiro.
+This can be useful to support "Run As", for example.
+
+The heavy lifting is done in `ShiroService`:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class ShiroService {
+
+    public void runAs(String userName) {
+        SimplePrincipalCollection principals =
+            new SimplePrincipalCollection(userName, "jdbcRealm");                       // <1>
+        getSubject().runAs(principals);
+    }
+
+    public String releaseRunAs() {
+        final PrincipalCollection principals = getSubject().releaseRunAs();
+        String username = (String)principals.asList().get(0);
+        return username;
+    }
+
+    public String getUsername() {                                                       // <2>
+        String principalAsString = ((String)getSubject().getPrincipal());
+        return principalAsString.toLowerCase();
+    }
+
+    public String getRealUsername() {                                                   // <3>
+        return userService.getUser().getName().toLowerCase();
+    }
+
+    public boolean isRunAs() {
+        return getSubject().isRunAs();
+    }
+
+    private static Subject getSubject() {
+        return org.apache.shiro.SecurityUtils.getSubject();
+    }
+
+    @Inject
+    private UserService userService;
+}
+----
+<1> "jdbcRealm" is realm as configured in Shiro config (shiro.ini).
+Might want to look this up from `ConfigurationService`.
+<2> The username of the currently logged in user (by which permissions are determined).
+This could be the user name the real user is running as.
+<3> The username of the real currently logged in user.
+
+
+This could be exposed in the UI using a simple `RunAsService`, for example:
+
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
+@DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
+public class RunAsService {
+
+    public Dashboard runAs(User user) {
+        shiroService.runAs(user.getUsername());
+        return dashboardService.openDashboard();                    // <1>
+    }
+    public List<User> choices0RunAs() {
+        return ...                                                  // <2>
+    }
+    public boolean hideRunAs() {
+        return shiroService.isRunAs();
+    }
+
+
+
+    public User releaseRunAs() {
+        String username = shiroService.releaseRunAs();
+        return usersRepository.findByUsername(username);
+    }
+    public boolean hideReleaseRunAs() {
+        return !shiroService.isRunAs();
+    }
+
+
+    @Inject
+    private ShiroService shiroService;
+    @Inject
+    private UsersRepository usersRepository;
+    @Inject
+    private DashboardService dashboardService;                      // <1>
+}
+----
+<1> go to the home page (application-specific)
+<2> return a list of users to run as
+
+
+Credits: adapted from link:https://gist.github.com/erikdehair/efa3005440ca982cca41ebe5347e82d8[this gist].

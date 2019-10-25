@@ -1,0 +1,66 @@
+[[enhanced-wildcard-permission]]
+= Enhanced Wildcard Permission
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+If using the text-based xref:security:shiro:ini-realm.adoc[`IniRealm`] or xref:security:shiro-realm-ldap:about.adoc[Apache Isis' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.
+Apache Isis provides its own `IsisPermission` which introduces the concept of a "veto".
+
+A vetoing permission is one that prevents access to a feature, rather than grants it.
+This is useful in some situations where most users have access to most features, and only a small number of features are particularly sensitive.
+The configuration can therefore be set up to grant fairly broad-brush permissions and then veto permission for the sensitive features for those users that do not have access.
+
+The string representation of the `IsisPermission` uses the following format:
+
+[source,ini]
+----
+([!]?)([^/]+)[/](.+)
+----
+
+where:
+
+* the optional `!` prefix indicates this permission is a vetoing permission
+* the optional `xxx/` prefix is a permission group that scopes any vetoing permissions
+* the remainder of the string is the permission (possibly wild-carded, with :rw as optional suffix)
+
+
+For example:
+
+[source,ini]
+----
+user_role   = !reg/org.estatio.api,\
+              !reg/org.estatio.webapp.services.admin,\
+              reg/* ; \
+api_role    = org.estatio.api ;\
+admin_role = adm/*
+----
+
+sets up:
+
+* the `user_role` with access to all permissions except those in `org.estatio.api` and `org.estatio.webapp.services.admin`
+* the `api_role` with access to all permissions in `org.estatio.api`
+* the `admin_role` with access to everything.
+
+The permission group concept is required to scope the applicability of any veto permission.
+This is probably best explained by an example.
+Suppose that a user has both `admin_role` and `user_role`; we would want the `admin_role` to trump the vetos of the `user_role`, in other words to give the user access to everything.
+
+
+Because of the permission groups, the two "+++!reg/...+""" vetos in user_role only veto out selected permissions granted by the "+++reg/*+++" permissions, but they do not veto the permissions granted by a different scope, namely "+++adm/*+++".
+
+The net effect is therefore what we would want: that a user with both `admin_role` and `user_role` would have access to everything, irrespective of those two veto permissions of the `user_role`.
+
+
+
+Finally, the Apache Isis permission resolver is specified in `WEB-INF/shiro.ini` file:
+
+[source,ini]
+----
+permissionResolver = org.apache.isis.security.shiro.authorization.IsisPermissionResolver
+myRealm.permissionResolver = $permissionResolver  # <1>
+----
+<1> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$isisLdapRealm` etc.
+
+

@@ -19,10 +19,14 @@
 
 package org.apache.isis.security.authentication.standard;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.IOException;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionAbstract;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -68,6 +72,9 @@ public class SimpleSession extends AuthenticationSessionAbstract {
     public SimpleSession(final DataInputExtended input) throws IOException {
         super(input);
     }
+
+    @Getter @Setter
+    private Type type = Type.DEFAULT;
 
     // ///////////////////////////////////////////////////////////////
     // equals, hashCode

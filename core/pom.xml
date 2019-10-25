@@ -1410,6 +1410,12 @@
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-security-keycloak</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
@@ -2555,6 +2561,7 @@
 		<module>plugins/jdo/common</module>
 		<module>plugins/jdo/datanucleus-5</module>
 		<module>security/shiro</module>
+		<module>security/keycloak</module>
 
 		<!-- to break cyclic dependencies some tests needed to be moved to their 
 			own modules -->
