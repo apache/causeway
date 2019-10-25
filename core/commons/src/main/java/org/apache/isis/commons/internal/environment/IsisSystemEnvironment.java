@@ -46,10 +46,12 @@ import lombok.extern.log4j.Log4j2;
 @Service @Singleton @Log4j2
 public class IsisSystemEnvironment {
     
+    public static final String VERSION = "2.0.0-M3";
+    
     @Inject private ApplicationContext springContext;
     
     @Getter private IocContainer iocContainer; 
-
+    
     // -- LIFE-CYCLE
     
     @PostConstruct
@@ -172,7 +174,6 @@ public class IsisSystemEnvironment {
         return deploymentType;
 
     }
-
 
 }
 

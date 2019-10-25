@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,7 +42,8 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.config.IsisConfiguration;
 
 import static org.apache.isis.commons.internal.collections._Lists.lastElementIfAny;
 
@@ -414,30 +414,33 @@ public class DomainObjectContainer {
 
 
     /**
-     * @deprecated - use {@link IsisConfigurationLegacy#getProperty(String)} instead.
+     * @deprecated - use {@link IsisConfiguration} instead.
      */
     @Deprecated
     @Programmatic
     public String getProperty(String name) {
-    	return serviceRegistry.lookupServiceElseFail(IsisConfigurationLegacy.class).getString(name);
+    	return serviceRegistry.lookupServiceElseFail(IsisConfiguration.class)
+    	        .getEnvironment()
+    	        .getProperty(name);
     }
 
     /**
-     * @deprecated - use {@link IsisConfigurationLegacy#getProperty(String, String)} instead.
+     * @deprecated - use {@link IsisConfiguration} instead.
      */
     @Deprecated
     @Programmatic
     public String getProperty(String name, String defaultValue) {
-    	return serviceRegistry.lookupServiceElseFail(IsisConfigurationLegacy.class).getString(name, defaultValue);
+    	return serviceRegistry.lookupServiceElseFail(IsisConfiguration.class)
+    	        .getEnvironment().getProperty(name, defaultValue);
     }
 
     /**
-     * @deprecated - use {@link IsisConfigurationLegacy#asMap()} instead.
+     * @deprecated - use {@link IsisConfiguration} instead.
      */
     @Deprecated
     @Programmatic
     public List<String> getPropertyNames() {
-        return new ArrayList<>(serviceRegistry.lookupServiceElseFail(IsisConfigurationLegacy.class).copyToMap().keySet());
+        throw _Exceptions.notImplemented();
     }
 
     /**

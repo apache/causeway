@@ -21,8 +21,6 @@ package org.apache.isis.jdo;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Named;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -54,10 +52,8 @@ import org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo;
 public class IsisBootDataNucleus {
     
     // reserved for datanucleus' own config props
-    public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; 
-    
-    @ConfigurationProperties(prefix = DATANUCLEUS_CONFIG_PREFIX)
-    @Bean @Named("dn-settings")
+    @ConfigurationProperties(prefix = "isis.persistor.datanucleus.impl")
+    @Bean("dn-settings")
     public Map<String, String> getAsMap() {
         return new HashMap<>();
     }

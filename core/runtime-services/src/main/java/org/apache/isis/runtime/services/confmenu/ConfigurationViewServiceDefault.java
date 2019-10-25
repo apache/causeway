@@ -30,20 +30,19 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.IsisConfiguration;
 
 /**
  * @since 2.0
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
 public class ConfigurationViewServiceDefault implements ConfigurationViewService {
 
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private IsisConfiguration isisConfiguration;
+    
     @Override
     public Set<ConfigurationProperty> allProperties() {
         return new TreeSet<>(config.get().values());
@@ -55,12 +54,12 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
     private Map<String, ConfigurationProperty> loadConfiguration() {
 
-        final Map<String, ConfigurationProperty> map = new HashMap<>();
+        final Map<String, ConfigurationProperty> map = new HashMap<>(); // sorting happens later
 
-        isisConfigurationLegacy.copyToMap().forEach((k, v)->add(k, v, map));
+        isisConfiguration.getAsMap().forEach((k, v)->add(k, v, map));
 
         // for convenience add some additional info to the top ...
-        add("[ Isis Version ]", isisConfigurationLegacy.getVersion(), map);
+        add("[ Isis Version ]", IsisSystemEnvironment.VERSION, map);
         add("[ Deployment Type ]", isisSystemEnvironment.getDeploymentType().name(), map);
         add("[ Unit Testing ]", ""+isisSystemEnvironment.isUnitTesting(), map);
 
@@ -74,6 +73,6 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
         map.put(key, new ConfigurationProperty(key, value));
     }
 
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
-    @Inject IsisConfigurationLegacy isisConfigurationLegacy;
+    
+    
 }

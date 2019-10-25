@@ -52,7 +52,7 @@ public final class SystemConstants {
      */
     public static final String ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT = "__isis_force_logout";
 
-    public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
+    //public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
 
     // -- SERVICE SUPPORT
     public static final String SERVICE_IDENTIFIER = "1";

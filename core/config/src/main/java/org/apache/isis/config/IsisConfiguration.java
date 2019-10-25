@@ -19,6 +19,7 @@
 package org.apache.isis.config;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -26,6 +27,9 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -70,8 +74,10 @@ import lombok.val;
 @Data
 public class IsisConfiguration {
 
-    @Autowired
-    private ConfigurableEnvironment environment;
+    @Autowired private ConfigurableEnvironment environment;
+    
+    @Inject @Named("isis-settings") private Map<String, String> isisSettings;
+    public Map<String, String> getAsMap() { return Collections.unmodifiableMap(isisSettings); }
     
     private final Authentication authentication = new Authentication();
     @Data
@@ -1030,6 +1036,9 @@ public class IsisConfiguration {
     }
     
     //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
+    private String timezone;
+    
+    //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
     private final Value value = new Value();
     @Data
     public static class Value {
@@ -1081,6 +1090,8 @@ public class IsisConfiguration {
         
         
     }
+    
+    
 
 
 }

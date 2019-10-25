@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 import lombok.Getter;
@@ -35,7 +34,6 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject @Getter private transient IsisConfigurationLegacy configurationLegacy;
     @Inject @Getter private transient IsisConfiguration configuration;
 
     @Override

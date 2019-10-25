@@ -34,7 +34,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
@@ -67,6 +67,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Inject private RuntimeEventService runtimeEventService;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private MetaModelContext metaModelContext;
+    @Inject private IsisConfiguration configuration;
 
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
@@ -80,10 +81,8 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         log.info("Initialising Isis System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
-        val configurationLegacy = _Config.getConfiguration();
-
-        localeInitializer.initLocale(configurationLegacy);
-        timeZoneInitializer.initTimeZone(configurationLegacy);
+        localeInitializer.initLocale(configuration);
+        timeZoneInitializer.initTimeZone(configuration);
 
         runtimeEventService.fireAppPreMetamodel();
         

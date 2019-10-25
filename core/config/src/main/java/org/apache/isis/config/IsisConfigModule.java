@@ -18,20 +18,16 @@
  */
 package org.apache.isis.config;
 
-import javax.inject.Singleton;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
-import org.apache.isis.config.internal._Config;
-
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Configuration
 @Import({
@@ -40,31 +36,35 @@ import lombok.extern.log4j.Log4j2;
     IsisSystemEnvironment.class
 })
 @EnableConfigurationProperties(IsisConfiguration.class)
-@Log4j2
 public class IsisConfigModule {
     
-    
-    /** @deprecated this is just a historical workaround */
-    @Bean @Singleton
-    public IsisConfigurationLegacy getConfigurationLegacy(
-            ConfigurableEnvironment configurableEnvironment,
-            IsisSystemEnvironment isisSystemEnvironment) {
-        
-        _Config.clear();
-        
-        val rawKeyValueMap = isisSystemEnvironment.getIocContainer()
-                .copyEnvironmentToMap(configurableEnvironment);
-        _Config.putAll(rawKeyValueMap);
-
-        log.info("Spring's context was passed over to Isis");
-
-        // dump config to log
-        if(log.isInfoEnabled() && !isisSystemEnvironment.isUnitTesting()) {
-            log.info("\n" + _Config.getConfiguration().toStringFormatted(isisSystemEnvironment));
-        }    
-        
-        val isisConfigurationLegacy = _Config.getConfiguration(); // finalize config
-        return isisConfigurationLegacy;
+    @ConfigurationProperties(prefix = "isis")
+    @Bean("isis-settings")
+    public Map<String, String> getAsMap() {
+        return new HashMap<>();
     }
+    
+//    /** @deprecated this is just a historical workaround */
+//    @Bean @Singleton
+//    public IsisConfigurationLegacy getConfigurationLegacy(
+//            ConfigurableEnvironment configurableEnvironment,
+//            IsisSystemEnvironment isisSystemEnvironment) {
+//        
+//        _Config.clear();
+//        
+//        val rawKeyValueMap = isisSystemEnvironment.getIocContainer()
+//                .copyEnvironmentToMap(configurableEnvironment);
+//        _Config.putAll(rawKeyValueMap);
+//
+//        log.info("Spring's context was passed over to Isis");
+//
+//        // dump config to log
+//        if(log.isInfoEnabled() && !isisSystemEnvironment.isUnitTesting()) {
+//            log.info("\n" + _Config.getConfiguration().toStringFormatted(isisSystemEnvironment));
+//        }    
+//        
+//        val isisConfigurationLegacy = _Config.getConfiguration(); // finalize config
+//        return isisConfigurationLegacy;
+//    }
 
 }

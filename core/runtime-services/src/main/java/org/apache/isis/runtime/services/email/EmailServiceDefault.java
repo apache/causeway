@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -56,7 +55,9 @@ public class EmailServiceDefault implements EmailService {
             super(cause);
         }
     }
-
+    
+    @Inject private IsisConfiguration configuration;
+    
     // -- INIT
 
     private boolean initialized;
@@ -233,7 +234,6 @@ public class EmailServiceDefault implements EmailService {
         return addresses != null && addresses.length > 0;
     }
 
-    @Inject IsisConfigurationLegacy configurationLegacy;
-    @Inject IsisConfiguration configuration;
+    
 
 }
