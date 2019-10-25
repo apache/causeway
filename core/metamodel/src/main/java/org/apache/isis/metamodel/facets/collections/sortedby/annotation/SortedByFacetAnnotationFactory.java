@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.collections.sortedby.annotation;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;

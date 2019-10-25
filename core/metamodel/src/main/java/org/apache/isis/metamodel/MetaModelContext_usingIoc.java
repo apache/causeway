@@ -35,8 +35,6 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.ServiceUtil;
@@ -60,9 +58,9 @@ class MetaModelContext_usingIoc implements MetaModelContext {
         this.iocContainer = iocContainer;
     }
 
-    @Getter(lazy=true) 
-    private final IsisConfigurationLegacy configurationLegacy = 
-    _Config.getConfiguration();
+//    @Getter(lazy=true) 
+//    private final IsisConfigurationLegacy configurationLegacy = 
+//    _Config.getConfiguration();
 
     @Getter(lazy=true) 
     private final IsisSystemEnvironment systemEnvironment = 

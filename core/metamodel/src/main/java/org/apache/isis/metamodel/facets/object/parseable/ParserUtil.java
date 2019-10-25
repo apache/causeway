@@ -20,8 +20,6 @@
 package org.apache.isis.metamodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
@@ -31,15 +29,6 @@ public final class ParserUtil {
 
     private ParserUtil() {
     }
-
-//    public static final String PARSER_NAME_KEY_PREFIX = "isis.reflector.java.facets.parser.";
-//    public static final String PARSER_NAME_KEY_SUFFIX = ".parserName";
-
-//    public static String parserNameFromConfiguration(final Class<?> type, final IsisConfigurationLegacy configuration) {
-//        final String key = PARSER_NAME_KEY_PREFIX + type.getCanonicalName() + PARSER_NAME_KEY_SUFFIX;
-//        final String parserName = configuration.getString(key);
-//        return !_Strings.isNullOrEmpty(parserName) ? parserName : null;
-//    }
 
     public static Class<? extends Parser<?>> parserOrNull(final Class<?> candidateClass, final String classCandidateName) {
 
