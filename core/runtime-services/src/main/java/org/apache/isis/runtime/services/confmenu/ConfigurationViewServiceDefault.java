@@ -18,11 +18,12 @@
  */
 package org.apache.isis.runtime.services.confmenu;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -30,22 +31,66 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0
  */
 @DomainService(nature = NatureOfService.DOMAIN)
+@Log4j2
 public class ConfigurationViewServiceDefault implements ConfigurationViewService {
 
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
-    @Inject private IsisConfiguration isisConfiguration;
+    @Inject private IsisSystemEnvironment systemEnvironment;
+    @Inject private IsisConfiguration configuration;
     
     @Override
     public Set<ConfigurationProperty> allProperties() {
         return new TreeSet<>(config.get().values());
+    }
+    
+    @PostConstruct
+    public void postConstruct() {
+       log.info("\n\n" + toStringFormatted()); 
+    }
+    
+    // -- DUMP AS STRING 
+
+    /**
+     * to support config dumping, with sensitive data masked out
+     */
+    public String toStringFormatted() {
+
+        val sb = new StringBuilder();
+        
+        String head = String.format("APACHE ISIS %s (%s) ", 
+                IsisSystemEnvironment.VERSION, 
+                systemEnvironment.getDeploymentType().name());
+        
+        final Map<String, ConfigurationProperty> map = config.get();
+        
+        final int fillCount = 46-head.length();
+        final int fillLeft = fillCount/2;
+        final int fillRight = fillCount-fillLeft;
+        head = _Strings.padStart("", fillLeft, ' ') + head + _Strings.padEnd("", fillRight, ' ');
+
+        sb.append("================================================\n");
+        sb.append("="+head+"=\n");
+        sb.append("================================================\n");
+        map.forEach((k, v)->{
+            if(!k.startsWith("[ ")) { // ignore additional info from below
+                sb.append(k+" -> "+v.getValue()).append("\n");
+            }
+        });
+        sb.append("================================================\n");
+
+        return sb.toString();
     }
 
     // -- HELPER
@@ -54,14 +99,14 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
     private Map<String, ConfigurationProperty> loadConfiguration() {
 
-        final Map<String, ConfigurationProperty> map = new HashMap<>(); // sorting happens later
+        final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
 
-        isisConfiguration.getAsMap().forEach((k, v)->add(k, v, map));
+        configuration.getAsMap().forEach((k, v)->add(k, v, map));
 
         // for convenience add some additional info to the top ...
         add("[ Isis Version ]", IsisSystemEnvironment.VERSION, map);
-        add("[ Deployment Type ]", isisSystemEnvironment.getDeploymentType().name(), map);
-        add("[ Unit Testing ]", ""+isisSystemEnvironment.isUnitTesting(), map);
+        add("[ Deployment Type ]", systemEnvironment.getDeploymentType().name(), map);
+        add("[ Unit Testing ]", ""+systemEnvironment.isUnitTesting(), map);
 
         return map;
     }

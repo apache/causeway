@@ -21,10 +21,10 @@ package org.apache.isis.metamodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.annotation.Defaulted;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
+import org.apache.isis.unittestsupport.config.internal._Config;
 
 public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 

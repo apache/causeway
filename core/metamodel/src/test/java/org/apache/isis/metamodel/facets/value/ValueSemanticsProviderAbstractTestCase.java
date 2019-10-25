@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -41,6 +40,7 @@ import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUs
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.unittestsupport.config.internal._Config;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 

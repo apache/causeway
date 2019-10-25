@@ -61,14 +61,11 @@ import lombok.val;
 
 
 /**
- * 
  * Configuration 'beans' with meta-data (IDE-support).
  * 
  * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html">spring.io</a>
- * @apiNote should ultimately replace {@link IsisConfigurationLegacy}
  * 
  * @since 2.0
- *
  */
 @ConfigurationProperties(ConfigurationConstants.ROOT_PREFIX)
 @Data

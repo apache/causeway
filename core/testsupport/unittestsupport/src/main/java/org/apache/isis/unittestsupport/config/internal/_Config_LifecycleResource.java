@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.internal;
+package org.apache.isis.unittestsupport.config.internal;
 
 import java.util.Map;
 import java.util.Optional;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

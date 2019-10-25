@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.config;
+package org.apache.isis.unittestsupport.config;
 
 import java.awt.Color;
 import java.awt.Font;

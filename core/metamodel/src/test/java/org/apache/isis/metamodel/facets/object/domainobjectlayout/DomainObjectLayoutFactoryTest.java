@@ -28,7 +28,6 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -41,6 +40,7 @@ import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.unittestsupport.config.internal._Config;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

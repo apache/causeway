@@ -23,7 +23,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
@@ -33,6 +32,7 @@ import org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEv
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
+import org.apache.isis.unittestsupport.config.internal._Config;
 
 import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
 import static org.junit.Assert.assertThat;

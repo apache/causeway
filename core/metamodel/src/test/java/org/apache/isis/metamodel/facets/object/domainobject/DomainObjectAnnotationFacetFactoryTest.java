@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -57,6 +56,7 @@ import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFa
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.unittestsupport.config.internal._Config;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

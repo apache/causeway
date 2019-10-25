@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContextAware;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
@@ -38,6 +37,7 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.unittestsupport.config.internal._Config;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.containsString;

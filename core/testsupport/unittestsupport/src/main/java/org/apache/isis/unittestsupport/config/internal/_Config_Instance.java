@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.internal;
+package org.apache.isis.unittestsupport.config.internal;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 
 import static org.apache.isis.commons.internal.base._With.computeIfAbsent;
 

@@ -24,7 +24,6 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.object.defaults.DefaultedFacet;
@@ -36,6 +35,7 @@ import org.apache.isis.metamodel.facets.object.value.annotcfg.ValueFacetAnnotati
 import org.apache.isis.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
 import org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.unittestsupport.config.internal._Config;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFacetFactoryTest {

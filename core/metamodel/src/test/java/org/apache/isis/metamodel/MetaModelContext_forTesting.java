@@ -35,8 +35,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
@@ -49,6 +47,8 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
+import org.apache.isis.unittestsupport.config.internal._Config;
 
 import static java.util.Objects.requireNonNull;
 

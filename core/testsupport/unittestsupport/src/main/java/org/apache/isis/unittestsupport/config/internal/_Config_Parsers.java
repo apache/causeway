@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.internal;
+package org.apache.isis.unittestsupport.config.internal;
 
 import java.awt.Color;
 import java.awt.Font;

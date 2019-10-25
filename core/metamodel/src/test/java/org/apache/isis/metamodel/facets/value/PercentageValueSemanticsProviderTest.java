@@ -23,11 +23,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.value.Percentage;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.value.percentage.PercentageValueSemanticsProvider;
+import org.apache.isis.unittestsupport.config.internal._Config;
 
 import static org.junit.Assert.assertEquals;
 

@@ -16,30 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.property;
+package org.apache.isis.unittestsupport.config.internal;
 
-import java.util.AbstractMap;
 import java.util.Map;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.commons.internal.collections._Maps;
 
-public class ConfigPropertyBoolean extends ConfigPropertyAbstract<Boolean> {
+import lombok.val;
 
-    public ConfigPropertyBoolean(final String key, final boolean defaultValue) {
-        super(key, defaultValue);
-    }
+final class _Config_trim {
 
     /**
-     * @returns not-null
+     * Given {@code map}, for every key trim the corresponding value. 
+     * Filter any absent values, but keep empty Strings.
+     * @param map
      */
-    @Override
-    public Boolean from(final IsisConfigurationLegacy configuration) {
-        return configuration.getBoolean(key, defaultValue);
-    }
+    static Map<String, String> trim(Map<String, String> map) {
 
-    @Override
-    public Map.Entry<String, String> of(final Boolean value) {
-        return new AbstractMap.SimpleImmutableEntry<>(key, value.toString());
+        val trimmed = _Maps.<String, String> newHashMap();
+
+        map.forEach((k, v)->{
+
+            if(v!=null) {
+                trimmed.put(k, v.trim());
+            }
+
+        });
+
+        return trimmed;
     }
 
 }

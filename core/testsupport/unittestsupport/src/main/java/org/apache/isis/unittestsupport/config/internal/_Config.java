@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.internal;
+package org.apache.isis.unittestsupport.config.internal;
 
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 
 import lombok.val;
 

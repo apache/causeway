@@ -27,10 +27,10 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
