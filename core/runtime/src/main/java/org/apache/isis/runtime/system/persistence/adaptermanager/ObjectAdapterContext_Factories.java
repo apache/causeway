@@ -25,7 +25,6 @@ import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterContext.ObjectAdapterFactories;
 import org.apache.isis.runtime.system.session.IsisSession;
@@ -45,7 +44,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
 
-    private final RuntimeContext runtimeContext;
     private final PersistenceSession persistenceSession;
 
     @Override
