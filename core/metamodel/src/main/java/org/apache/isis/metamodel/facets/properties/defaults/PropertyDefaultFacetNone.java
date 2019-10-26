@@ -38,7 +38,7 @@ public class PropertyDefaultFacetNone extends PropertyDefaultFacetAbstract {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

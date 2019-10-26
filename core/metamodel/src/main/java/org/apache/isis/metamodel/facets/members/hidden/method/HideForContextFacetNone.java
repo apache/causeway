@@ -38,7 +38,7 @@ public class HideForContextFacetNone extends HideForContextFacetAbstract {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

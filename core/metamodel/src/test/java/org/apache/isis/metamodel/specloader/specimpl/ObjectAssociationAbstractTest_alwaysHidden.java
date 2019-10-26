@@ -227,7 +227,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public boolean isNoop() {
+            public boolean isFallback() {
                 return noop;
             }
         };

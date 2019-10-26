@@ -32,7 +32,7 @@ public class DescribedAsFacetNone extends DescribedAsFacetAbstract {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

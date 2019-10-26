@@ -84,7 +84,7 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         representation.mapPut("number", getObjectFeature().getNumber());
         representation.mapPut("optional", getObjectFeature().isOptional());
         final MaxLengthFacet maxLength = getObjectFeature().getFacet(MaxLengthFacet.class);
-        if (maxLength != null && !maxLength.isNoop()) {
+        if (maxLength != null && !maxLength.isFallback()) {
             representation.mapPut("maxLength", maxLength.value());
         }
     }

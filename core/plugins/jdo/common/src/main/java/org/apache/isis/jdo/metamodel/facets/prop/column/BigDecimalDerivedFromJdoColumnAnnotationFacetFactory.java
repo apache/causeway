@@ -69,7 +69,7 @@ implements MetaModelRefiner {
                 .orElse(null);
 
         if (jdoColumnAnnotation == null) {
-            if(existingFacet != null && !existingFacet.isNoop()) {
+            if(existingFacet != null && !existingFacet.isFallback()) {
                 // do nothing
             } else {
                 final BigDecimalValueFacet facet = new BigDecimalFacetFallback(holder);
@@ -82,7 +82,7 @@ implements MetaModelRefiner {
             // if there was an *explicit* value defined on the @Column annotation that is incompatible with existing.
             Integer existingLength = null;
             Integer existingScale = null;
-            if(existingFacet != null && !existingFacet.isNoop()) {
+            if(existingFacet != null && !existingFacet.isFallback()) {
                 existingLength = existingFacet.getPrecision();
                 existingScale = existingFacet.getScale();
             }

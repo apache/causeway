@@ -33,7 +33,7 @@ public class ObjectSpecIdFacetForJdoPersistenceCapableAnnotation extends ObjectS
             final JdoPersistenceCapableFacet persistenceCapableFacet,
             final FacetHolder holder) {
 
-        if(persistenceCapableFacet.isNoop()) {
+        if(persistenceCapableFacet.isFallback()) {
             return null;
         }
         final String schema = persistenceCapableFacet.getSchema();

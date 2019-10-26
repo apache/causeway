@@ -369,7 +369,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     protected boolean isHidden(final ObjectSpecification spec) {
         final HiddenFacet facet = spec.getFacet(HiddenFacet.class);
         return facet != null &&
-                !facet.isNoop() &&
+                !facet.isFallback() &&
                 (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE);
     }
 

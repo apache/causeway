@@ -41,7 +41,7 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

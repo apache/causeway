@@ -544,7 +544,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 }
 
                 final AutoCompleteFacet autoCompleteFacet = thisSpec.getFacet(AutoCompleteFacet.class);
-                if(autoCompleteFacet != null && !autoCompleteFacet.isNoop() && autoCompleteFacet instanceof AutoCompleteFacetAbstract) {
+                if(autoCompleteFacet != null && !autoCompleteFacet.isFallback() && autoCompleteFacet instanceof AutoCompleteFacetAbstract) {
                     val autoCompleteFacetAbstract = (AutoCompleteFacetForDomainObjectAnnotation) autoCompleteFacet;
                     val repositoryClass = autoCompleteFacetAbstract.getRepositoryClass();
                     val isRepositoryResolvable = getServiceRegistry()

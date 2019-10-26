@@ -373,7 +373,7 @@ class MetaModelExporter {
 
         final List<org.apache.isis.schema.metamodel.v1.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
-        .filter(facet -> !facet.isNoop() || !config.isIgnoreNoop())
+        .filter(facet -> !facet.isFallback() || !config.isIgnoreNoop())
         .map(facet -> asXsdType(facet, config))
         .forEach(facetList::add);
 

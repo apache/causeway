@@ -169,7 +169,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
     public boolean isAlwaysHidden() {
         final HiddenFacet facet = getFacet(HiddenFacet.class);
         return facet != null &&
-                !facet.isNoop() &&
+                !facet.isFallback() &&
                 (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE)
                 ;
 

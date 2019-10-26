@@ -248,7 +248,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     }
 
     private static boolean canOverwrite(final Facet facet) {
-        return facet == null || facet.isNoop() || facet.isDerived();
+        return facet == null || facet.isFallback() || facet.isDerived();
     }
 
     private void tweakActionDomainEventForMixin(
@@ -606,7 +606,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     }
 
     private static boolean existsAndIsDoOp(final Facet facet) {
-        return facet != null && !facet.isNoop();
+        return facet != null && !facet.isFallback();
     }
 
     private List<ActionType> inferActionTypes() {

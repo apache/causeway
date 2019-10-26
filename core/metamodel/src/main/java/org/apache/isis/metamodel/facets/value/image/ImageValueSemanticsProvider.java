@@ -83,7 +83,7 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return false;
     }
 

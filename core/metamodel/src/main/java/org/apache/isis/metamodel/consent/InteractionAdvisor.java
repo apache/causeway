@@ -58,7 +58,7 @@ public interface InteractionAdvisor {
         }
 
         @Override
-        public boolean isNoop() {
+        public boolean isFallback() {
             return true;
         }
 

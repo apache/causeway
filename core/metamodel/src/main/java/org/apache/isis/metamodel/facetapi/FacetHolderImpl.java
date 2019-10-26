@@ -100,12 +100,12 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
 
     private void addFacet(Class<? extends Facet> facetType, Facet facet) {
         val existingFacet = getFacet(facetType);
-        if (existingFacet == null || existingFacet.isNoop()) {
+        if (existingFacet == null || existingFacet.isFallback()) {
             put(facetType, facet);
             return;
         }
         if (!facet.alwaysReplace()) {
-            return;
+            return; //eg. ValueSemanticsProviderAndFacetAbstract is alwaysReplace=false
         }
         if (facet.isDerived() && !existingFacet.isDerived()) {
             return;

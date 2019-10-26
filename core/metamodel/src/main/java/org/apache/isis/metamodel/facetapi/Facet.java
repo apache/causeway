@@ -86,12 +86,13 @@ public interface Facet extends FacetWithAttributes {
     public boolean isDerived();
 
     /**
-     * Whether this facet implementation is a no-op.
+     * Whether this facet implementation is a fallback. Meaning it is treated 
+     * with lowest priority, always overruled by any other facet of same type.  
      */
-    public boolean isNoop();
+    public boolean isFallback();
 
     /**
-     * Whether this facet implementation should replace existing (none-noop)
+     * Whether this facet implementation should replace existing (none-fallback)
      * implementations.
      */
     public boolean alwaysReplace();

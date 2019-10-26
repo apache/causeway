@@ -568,7 +568,7 @@ public class FacetedMethodsBuilder {
      */
     private boolean isMixinMain(Method method) {
         val mixinFacet = inspectedTypeSpec.getFacet(MixinFacet.class);
-        if(mixinFacet==null || mixinFacet.isNoop()) {
+        if(mixinFacet==null || mixinFacet.isFallback()) {
             return false;
         }
         if(inspectedTypeSpec.isLessThan(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED)) {

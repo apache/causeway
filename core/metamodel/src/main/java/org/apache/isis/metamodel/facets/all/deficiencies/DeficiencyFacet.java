@@ -101,7 +101,7 @@ public final class DeficiencyFacet implements Facet {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

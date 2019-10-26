@@ -35,7 +35,7 @@ public class TitleFacetNone extends TitleFacetAbstract {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

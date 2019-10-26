@@ -41,7 +41,7 @@ public class NotContributedFacetDerivedFromMixinFacetFactory extends FacetFactor
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
 
         final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
-        if(mixinFacet == null || mixinFacet.isNoop()) {
+        if(mixinFacet == null || mixinFacet.isFallback()) {
             return;
         }
 

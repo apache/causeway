@@ -235,7 +235,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 Assert.assertThat(facet.isDisabled(), is(true));
                 Assert.assertThat(facet.alwaysReplace(), is(true));
-                Assert.assertThat(facet.isNoop(), is(false));
+                Assert.assertThat(facet.isFallback(), is(false));
                 Assert.assertThat(facet.isDerived(), is(false));
 
                 expectNoMethodsRemoved();

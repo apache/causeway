@@ -38,7 +38,7 @@ public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

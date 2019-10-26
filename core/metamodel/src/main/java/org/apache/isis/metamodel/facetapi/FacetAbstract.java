@@ -152,13 +152,13 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
      * No-op implementations should override and return <tt>true</tt>.
      */
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return false;
     }
 
     /**
      * Default implementation of this method that returns <tt>true</tt>, ie
-     * should replace (none {@link #isNoop() no-op} implementations.
+     * should replace (none {@link #isFallback() no-op} implementations.
      *
      * <p>
      * Implementations that don't wish to replace none no-op implementations
@@ -227,8 +227,8 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
             attributeMap.put("derived", derived);
         }
         attributeMap.put("underlyingFacet", underlyingFacet);
-        if(isNoop()) {
-            attributeMap.put("noop", isNoop());
+        if(isFallback()) {
+            attributeMap.put("noop", isFallback());
         }
         if(isHiding()) {
             attributeMap.put("hiding", isHiding());

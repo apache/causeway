@@ -42,7 +42,7 @@ public class DisableForContextFacetNone extends DisableForContextFacetAbstract {
 
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

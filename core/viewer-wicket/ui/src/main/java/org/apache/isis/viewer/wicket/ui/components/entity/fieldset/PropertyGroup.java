@@ -190,7 +190,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                         return false;
                     }
                     final HiddenFacet facet = objectAssociation.getFacet(HiddenFacet.class);
-                    if(facet != null && !facet.isNoop()) {
+                    if(facet != null && !facet.isFallback()) {
                         // static invisible.
                         if(facet.where() == Where.EVERYWHERE || facet.where() == Where.OBJECT_FORMS) {
                             return false;
