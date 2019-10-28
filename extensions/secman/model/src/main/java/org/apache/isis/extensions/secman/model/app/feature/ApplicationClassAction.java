@@ -31,14 +31,11 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 @ViewModelLayout(paged=100)
 public class ApplicationClassAction extends ApplicationClassMember {
 
-    public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassAction, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassAction, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassAction, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassAction, T> {}
 
-    public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassAction> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassAction> {}
 
 
 
@@ -52,12 +49,9 @@ public class ApplicationClassAction extends ApplicationClassMember {
     }
 
 
-
-
     // -- returnTypeName (property)
 
-    public static class ReturnTypeDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class ReturnTypeDomainEvent extends PropertyDomainEvent<String> {}
 
     @Property(
             domainEvent = ReturnTypeDomainEvent.class
@@ -67,12 +61,8 @@ public class ApplicationClassAction extends ApplicationClassMember {
         return getFeature().getReturnTypeName();
     }
 
-
-
-
     // -- actionSemantics (property)
-    public static class ActionSemanticsDomainEvent extends PropertyDomainEvent<SemanticsOf> {
-        private static final long serialVersionUID = 1L;}
+    public static class ActionSemanticsDomainEvent extends PropertyDomainEvent<SemanticsOf> {}
 
     @Property(
             domainEvent = ActionSemanticsDomainEvent.class

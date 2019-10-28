@@ -49,7 +49,6 @@ public class ApplicationUser_filterPermissions {
 
 
     public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationUser_filterPermissions> {
-        private static final long serialVersionUID = 1L;
     }
 
     private final ApplicationUser holder;

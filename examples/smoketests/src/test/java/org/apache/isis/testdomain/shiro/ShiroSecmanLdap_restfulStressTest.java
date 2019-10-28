@@ -43,7 +43,7 @@ import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
-import org.apache.isis.testdomain.rest.RestEndpointTestService;
+import org.apache.isis.testdomain.rest.RestEndpointService;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 
 import static java.time.Duration.ofMillis;
@@ -71,7 +71,7 @@ import lombok.val;
 
     // Restful server
     IsisBootWebRestfulObjects.class,
-    RestEndpointTestService.class,
+    RestEndpointService.class,
 
     // Embedded LDAP server for testing
     LdapServerService.class,
@@ -86,7 +86,7 @@ import lombok.val;
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;
-    @Inject RestEndpointTestService restService;
+    @Inject RestEndpointService restService;
     @Inject LdapServerService ldapServerService;
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationRoleRepository applicationRoleRepository;

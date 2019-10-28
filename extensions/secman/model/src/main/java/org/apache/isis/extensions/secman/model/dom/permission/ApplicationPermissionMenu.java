@@ -44,14 +44,11 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRep
 public class ApplicationPermissionMenu {
 
     // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermissionMenu, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermissionMenu, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermissionMenu, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermissionMenu, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermissionMenu> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermissionMenu> {}
 
 
     // -- iconName
@@ -61,8 +58,7 @@ public class ApplicationPermissionMenu {
 
 
     // -- findOrphanedPermissions (action)
-    public static class FindOrphanedPermissionsDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class FindOrphanedPermissionsDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent=FindOrphanedPermissionsDomainEvent.class,
@@ -75,8 +71,7 @@ public class ApplicationPermissionMenu {
 
 
     // -- allPermissions (action)
-    public static class AllPermissionsDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AllPermissionsDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent=AllPermissionsDomainEvent.class,

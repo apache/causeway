@@ -56,22 +56,18 @@ public class ApplicationUserMenu {
 
     public static abstract class PropertyDomainEvent<T> 
     extends SecurityModule.PropertyDomainEvent<ApplicationUserMenu, T> {
-        private static final long serialVersionUID = 1L;
     }
 
     public static abstract class CollectionDomainEvent<T>
     extends SecurityModule.CollectionDomainEvent<ApplicationUserMenu, T> {
-        private static final long serialVersionUID = 1L;
     }
 
     public static abstract class ActionDomainEvent 
     extends SecurityModule.ActionDomainEvent<ApplicationUserMenu> {
-        private static final long serialVersionUID = 1L;
     }
 
     public static class FindUsersByNameDomainEvent
     extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;
     }
 
     public String iconName() {
@@ -89,7 +85,6 @@ public class ApplicationUserMenu {
     }
 
     public static class NewDelegateUserDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;
     }
 
     @Action(
@@ -119,7 +114,6 @@ public class ApplicationUserMenu {
     }
 
     public static class NewLocalUserDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;
     }
 
     @Action(
@@ -166,7 +160,6 @@ public class ApplicationUserMenu {
     }
 
     public static class AllUsersDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;
     }
 
     @Action(

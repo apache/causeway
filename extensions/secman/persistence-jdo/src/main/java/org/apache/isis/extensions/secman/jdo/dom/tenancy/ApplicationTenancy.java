@@ -103,8 +103,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- name (property, title)
 
-    public static class NameDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
     @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
     @Title
@@ -124,8 +123,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- updateName (action)
 
-    public static class UpdateNameDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent =UpdateNameDomainEvent.class,
@@ -147,8 +145,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- path
 
-    public static class PathDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class PathDomainEvent extends PropertyDomainEvent<String> {}
 
 
     @javax.jdo.annotations.PrimaryKey
@@ -164,8 +161,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- users (collection)
 
-    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {
-        private static final long serialVersionUID = 1L;}
+    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
 
     @Collection(
             domainEvent = UsersDomainEvent.class,
@@ -191,8 +187,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- addUser (action)
 
-    public static class AddUserDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AddUserDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AddUserDomainEvent.class,
@@ -218,8 +213,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- removeUser (action)
 
-    public static class RemoveUserDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class RemoveUserDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = RemoveUserDomainEvent.class,
@@ -245,8 +239,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- parent (property)
 
-    public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {
-        private static final long serialVersionUID = 1L;}
+    public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
 
 
     @javax.jdo.annotations.Column(name = "parentPath", allowsNull = "true")
@@ -264,8 +257,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- updateParent (action)
 
-    public static class UpdateParentDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateParentDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateParentDomainEvent.class,
@@ -289,8 +281,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- children
 
-    public static class ChildrenDomainEvent extends CollectionDomainEvent<ApplicationTenancy> {
-        private static final long serialVersionUID = 1L;}
+    public static class ChildrenDomainEvent extends CollectionDomainEvent<ApplicationTenancy> {}
 
     @javax.jdo.annotations.Persistent(mappedBy = "parent")
     @Collection(
@@ -316,8 +307,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- addChild (action)
 
-    public static class AddChildDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AddChildDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AddChildDomainEvent.class,
@@ -336,8 +326,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- removeChild (action)
 
-    public static class RemoveChildDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class RemoveChildDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = RemoveChildDomainEvent.class,
@@ -358,8 +347,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
 
     // -- delete (action)
-    public static class DeleteDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class DeleteDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = DeleteDomainEvent.class,

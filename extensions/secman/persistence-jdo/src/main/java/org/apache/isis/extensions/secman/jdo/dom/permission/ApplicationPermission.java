@@ -151,14 +151,11 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     // -- domain events
 
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermission, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermission, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermission, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermission, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermission> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermission> {}
 
 
 
@@ -199,8 +196,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     // -- role (property)
 
-    public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {
-        private static final long serialVersionUID = 1L;}
+    public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
 
 
     @javax.jdo.annotations.Column(name = "roleId", allowsNull="false")
@@ -218,8 +214,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
 
     // -- updateRole (action)
-    public static class UpdateRoleDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateRoleDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateRoleDomainEvent.class,
@@ -238,8 +233,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
 
     // -- rule (property)
-    public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {
-        private static final long serialVersionUID = 1L;}
+    public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -254,8 +248,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
 
     // -- allow (action)
-    public static class AllowDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AllowDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AllowDomainEvent.class,
@@ -273,8 +266,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
 
     // -- veto (action)
-    public static class VetoDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class VetoDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = VetoDomainEvent.class,
@@ -292,8 +284,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
 
     // -- mode (property)
-    public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {
-        private static final long serialVersionUID = 1L;}
+    public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -309,8 +300,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     // -- viewing(action)
 
-    public static class ViewingDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class ViewingDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = ViewingDomainEvent.class,
@@ -329,8 +319,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     // -- changing (action)
 
-    public static class ChangingDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class ChangingDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = ChangingDomainEvent.class,
@@ -365,8 +354,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     // region > type (derived, memberType of associated feature)
 
-    public static class TypeDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
     /**
      * Combines {@link #getFeatureType() feature type} and member type.
@@ -416,8 +404,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     // -- featureFqn
 
-    public static class FeatureFqnDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class FeatureFqnDomainEvent extends PropertyDomainEvent<String> {}
 
     /**
      * The {@link ApplicationFeatureId#getFullyQualifiedName() fully qualified name}
@@ -444,8 +431,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
 
     // -- delete (action)
-    public static class DeleteDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class DeleteDomainEvent extends ActionDomainEvent {}
 
     @Action(
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE,

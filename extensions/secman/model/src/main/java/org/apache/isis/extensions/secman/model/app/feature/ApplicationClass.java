@@ -39,16 +39,13 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 public class ApplicationClass extends ApplicationFeatureViewModel {
 
     public static abstract class PropertyDomainEvent<T> 
-    extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClass, T> {
-        private static final long serialVersionUID = 1L;}
+    extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClass, T> {}
 
     public static abstract class CollectionDomainEvent<T> 
-    extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationClass, T> {
-        private static final long serialVersionUID = 1L;}
+    extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationClass, T> {}
 
     public static abstract class ActionDomainEvent 
-    extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationClass> {
-        private static final long serialVersionUID = 1L;}
+    extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationClass> {}
 
 
 
@@ -67,8 +64,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
     // -- actions (collection)
 
     public static class ActionsDomainEvent 
-    extends CollectionDomainEvent<ApplicationClassAction> {
-        private static final long serialVersionUID = 1L;}
+    extends CollectionDomainEvent<ApplicationClassAction> {}
 
     @Collection(
             domainEvent = ActionsDomainEvent.class
@@ -86,8 +82,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
     // -- properties (collection)
 
     public static class PropertiesCollectionDomainEvent 
-    extends CollectionDomainEvent<ApplicationClassAction> {
-        private static final long serialVersionUID = 1L;}
+    extends CollectionDomainEvent<ApplicationClassAction> {}
 
 
     @Collection(
@@ -105,8 +100,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
 
     // -- collections (collection)
     public static class CollectionsCollectionDomainEvent 
-    extends CollectionDomainEvent<ApplicationClassAction> {
-        private static final long serialVersionUID = 1L;}
+    extends CollectionDomainEvent<ApplicationClassAction> {}
 
     @Collection(
             domainEvent = CollectionsCollectionDomainEvent.class

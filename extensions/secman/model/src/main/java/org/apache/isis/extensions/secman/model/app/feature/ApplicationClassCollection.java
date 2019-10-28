@@ -30,14 +30,11 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 @ViewModelLayout(paged=100)
 public class ApplicationClassCollection extends ApplicationClassMember {
 
-    public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassCollection, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassCollection, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassCollection, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassCollection, T> {}
 
-    public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassCollection> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassCollection> {}
 
 
 
@@ -54,8 +51,7 @@ public class ApplicationClassCollection extends ApplicationClassMember {
 
     // -- returnType
 
-    public static class ElementTypeDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class ElementTypeDomainEvent extends PropertyDomainEvent<String> {}
 
     @Property(
             domainEvent = ElementTypeDomainEvent.class
@@ -68,8 +64,7 @@ public class ApplicationClassCollection extends ApplicationClassMember {
 
     // -- derived
 
-    public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {
-        private static final long serialVersionUID = 1L;}
+    public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {}
 
     @Property(
             domainEvent = DerivedDomainEvent.class

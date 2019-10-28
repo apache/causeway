@@ -47,14 +47,11 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 public class  ApplicationRoleMenu {
 
     // -- domain event classes
-    public static class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationRoleMenu, T> {
-        private static final long serialVersionUID = 1L;}
+    public static class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationRoleMenu, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationRoleMenu, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationRoleMenu, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationRoleMenu> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationRoleMenu> {}
 
 
     // -- iconName
@@ -64,8 +61,7 @@ public class  ApplicationRoleMenu {
 
 
     // -- findRoles
-    public static class FindRolesDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class FindRolesDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = FindRolesDomainEvent.class,
@@ -81,8 +77,7 @@ public class  ApplicationRoleMenu {
 
 
     // -- newRole
-    public static class NewRoleDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class NewRoleDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = NewRoleDomainEvent.class,
@@ -101,8 +96,7 @@ public class  ApplicationRoleMenu {
 
 
     // -- allRoles
-    public static class AllRolesDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AllRolesDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AllRolesDomainEvent.class,

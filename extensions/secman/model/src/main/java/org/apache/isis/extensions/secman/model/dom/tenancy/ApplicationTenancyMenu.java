@@ -48,14 +48,11 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepositor
 public class ApplicationTenancyMenu {
 
     // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationTenancyMenu, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationTenancyMenu, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationTenancyMenu, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationTenancyMenu, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationTenancyMenu> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationTenancyMenu> {}
 
 
     // -- iconName
@@ -65,8 +62,7 @@ public class ApplicationTenancyMenu {
 
 
     // -- findTenancies
-    public static class FindTenanciesDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class FindTenanciesDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = FindTenanciesDomainEvent.class,
@@ -83,8 +79,7 @@ public class ApplicationTenancyMenu {
 
 
     // -- newTenancy
-    public static class NewTenancyDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class NewTenancyDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = NewTenancyDomainEvent.class,
@@ -106,8 +101,7 @@ public class ApplicationTenancyMenu {
 
 
     // -- allTenancies
-    public static class AllTenanciesDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AllTenanciesDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AllTenanciesDomainEvent.class,

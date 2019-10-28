@@ -140,16 +140,13 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     public static abstract class PropertyDomainEvent<T>
-    extends SecurityModule.PropertyDomainEvent<ApplicationUser, T> {
-        private static final long serialVersionUID = 1L;}
+    extends SecurityModule.PropertyDomainEvent<ApplicationUser, T> {}
 
     public static abstract class CollectionDomainEvent<T> 
-    extends SecurityModule.CollectionDomainEvent<ApplicationUser, T> {
-        private static final long serialVersionUID = 1L;}
+    extends SecurityModule.CollectionDomainEvent<ApplicationUser, T> {}
 
     public static abstract class ActionDomainEvent 
-    extends SecurityModule.ActionDomainEvent<ApplicationUser> {
-        private static final long serialVersionUID = 1L;}
+    extends SecurityModule.ActionDomainEvent<ApplicationUser> {}
 
 
     // -- identification
@@ -166,8 +163,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- name (derived property)
 
-    public static class NameDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
     @Override
     @javax.jdo.annotations.NotPersistent
@@ -199,8 +195,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- username (property)
 
-    public static class UsernameDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class UsernameDomainEvent extends PropertyDomainEvent<String> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_USERNAME)
@@ -219,8 +214,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- updateUsername (action)
 
-    public static class UpdateUsernameDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateUsernameDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateUsernameDomainEvent.class,
@@ -242,8 +236,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- familyName (property)
 
-    public static class FamilyNameDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class FamilyNameDomainEvent extends PropertyDomainEvent<String> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_FAMILY_NAME)
@@ -261,8 +254,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- givenName (property)
 
-    public static class GivenNameDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class GivenNameDomainEvent extends PropertyDomainEvent<String> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_GIVEN_NAME)
@@ -281,8 +273,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- knownAs (property)
 
-    public static class KnownAsDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_KNOWN_AS)
@@ -300,8 +291,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- updateName (action)
 
-    public static class UpdateNameDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateNameDomainEvent.class,
@@ -354,8 +344,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- emailAddress (property)
 
-    public static class EmailAddressDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class EmailAddressDomainEvent extends PropertyDomainEvent<String> {}
 
 
 
@@ -372,8 +361,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- updateEmailAddress (action)
 
-    public static class UpdateEmailAddressDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateEmailAddressDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateEmailAddressDomainEvent.class,
@@ -399,8 +387,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- phoneNumber (property)
 
-    public static class PhoneNumberDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class PhoneNumberDomainEvent extends PropertyDomainEvent<String> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_PHONE_NUMBER)
@@ -416,8 +403,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- phoneNumber (property)
 
-    public static class UpdatePhoneNumberDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdatePhoneNumberDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdatePhoneNumberDomainEvent.class,
@@ -443,8 +429,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- faxNumber (property)
 
-    public static class FaxNumberDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class FaxNumberDomainEvent extends PropertyDomainEvent<String> {}
 
 
 
@@ -464,8 +449,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- updateFaxNumber (action)
 
-    public static class UpdateFaxNumberDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateFaxNumberDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateFaxNumberDomainEvent.class,
@@ -492,8 +476,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- atPath (property)
 
-    public static class AtPathDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class AtPathDomainEvent extends PropertyDomainEvent<String> {}
 
 
     @javax.jdo.annotations.Column(name = "atPath", allowsNull="true")
@@ -509,8 +492,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- updateAtPath (action)
 
-    public static class UpdateAtPathDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateAtPathDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateAtPathDomainEvent.class,
@@ -532,8 +514,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- accountType (property)
 
-    public static class AccountTypeDomainEvent extends PropertyDomainEvent<AccountType> {
-        private static final long serialVersionUID = 1L;}
+    public static class AccountTypeDomainEvent extends PropertyDomainEvent<AccountType> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -549,8 +530,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- updateAccountType (action)
 
-    public static class UpdateAccountTypeDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateAccountTypeDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateAccountTypeDomainEvent.class,
@@ -583,8 +563,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- status (property), visible (action), usable (action)
 
-    public static class StatusDomainEvent extends PropertyDomainEvent<ApplicationUserStatus> {
-        private static final long serialVersionUID = 1L;}
+    public static class StatusDomainEvent extends PropertyDomainEvent<ApplicationUserStatus> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -600,8 +579,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- unlock (action)
 
-    public static class UnlockDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UnlockDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UnlockDomainEvent.class,
@@ -621,8 +599,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- lock (action)
 
-    public static class LockDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class LockDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = LockDomainEvent.class,
@@ -658,8 +635,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- hasPassword (derived property)
 
-    public static class HasPasswordDomainEvent extends PropertyDomainEvent<Boolean> {
-        private static final long serialVersionUID = 1L;}
+    public static class HasPasswordDomainEvent extends PropertyDomainEvent<Boolean> {}
 
     @Property(
             domainEvent = HasPasswordDomainEvent.class,
@@ -678,8 +654,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- updatePassword (action)
 
-    public static class UpdatePasswordDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdatePasswordDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdatePasswordDomainEvent.class,
@@ -748,8 +723,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- resetPassword (action)
 
-    public static class ResetPasswordDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class ResetPasswordDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent =ResetPasswordDomainEvent.class,
@@ -795,8 +769,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
 
     // -- roles (collection)
-    public static class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {
-        private static final long serialVersionUID = 1L;}
+    public static class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {}
 
     @javax.jdo.annotations.Persistent(table="ApplicationUserRoles")
     @javax.jdo.annotations.Join(column="userId")
@@ -827,8 +800,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- addRole (action)
 
-    public static class AddRoleDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AddRoleDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AddRoleDomainEvent.class,
@@ -857,8 +829,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- removeRole (action)
 
-    public static class RemoveRoleDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class RemoveRoleDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = RemoveRoleDomainEvent.class,
@@ -893,8 +864,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // -- delete (action)
 
-    public static class DeleteDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class DeleteDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = DeleteDomainEvent.class,

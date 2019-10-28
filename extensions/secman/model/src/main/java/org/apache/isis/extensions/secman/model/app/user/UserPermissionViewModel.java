@@ -74,14 +74,11 @@ import lombok.val;
 
 public class UserPermissionViewModel implements ViewModel {
 
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<UserPermissionViewModel, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<UserPermissionViewModel, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<UserPermissionViewModel, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<UserPermissionViewModel, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<UserPermissionViewModel> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<UserPermissionViewModel> {}
 
 
 
@@ -243,8 +240,7 @@ public class UserPermissionViewModel implements ViewModel {
 
 
     // -- user (derived property, hidden in parented tables)
-    public static class UserDomainEvent extends PropertyDomainEvent<ApplicationUser> {
-        private static final long serialVersionUID = 1L;}
+    public static class UserDomainEvent extends PropertyDomainEvent<ApplicationUser> {}
 
     @Property(
             domainEvent = UserDomainEvent.class
@@ -266,8 +262,7 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- verb (derived property)
 
-    public static class VerbDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class VerbDomainEvent extends PropertyDomainEvent<String> {}
 
     private boolean viewingGranted;
     private boolean changingGranted;
@@ -288,8 +283,7 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- feature (derived property)
 
-    public static class FeatureDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel> {
-        private static final long serialVersionUID = 1L;}
+    public static class FeatureDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel> {}
 
     @Property(
             domainEvent = FeatureDomainEvent.class,
@@ -319,8 +313,7 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- viewingPermission (derived property)
 
-    public static class ViewingPermissionDomainEvent extends PropertyDomainEvent<ApplicationPermission> {
-        private static final long serialVersionUID = 1L;}
+    public static class ViewingPermissionDomainEvent extends PropertyDomainEvent<ApplicationPermission> {}
 
     private ApplicationFeatureId viewingFeatureId;
     private ApplicationPermissionMode viewingMode;
@@ -349,8 +342,7 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- changingPermission (derived property)
 
-    public static class ChangingPermissionDomainEvent extends PropertyDomainEvent<ApplicationPermission> {
-        private static final long serialVersionUID = 1L;}
+    public static class ChangingPermissionDomainEvent extends PropertyDomainEvent<ApplicationPermission> {}
 
     private ApplicationFeatureId changingFeatureId;
     private ApplicationPermissionMode changingMode;
