@@ -98,13 +98,13 @@ class ColumnFactory {
                 field = "selected",
                 formatter = Formatter.TICKCROSS,
                 formatterParams = checkFormatterParams,
- /*               formatterComponentFunction = { cell, _, _ ->
-                    if (isSelected(cell)) {
-                        obj {"<i class='fa fa-check-square-o'></i>"}
-                    } else {
-                        obj {"<i class='fa fa-square-o'></i>"}
-                    }
-                }, */
+                /*               formatterComponentFunction = { cell, _, _ ->
+                                   if (isSelected(cell)) {
+                                       obj {"<i class='fa fa-check-square-o'></i>"}
+                                   } else {
+                                       obj {"<i class='fa fa-square-o'></i>"}
+                                   }
+                               }, */
                 align = Align.CENTER,
                 width = "40",
                 headerSort = false,
@@ -131,14 +131,18 @@ class ColumnFactory {
     private fun showContextMenu(mouseEvent: MouseEvent, cell: Tabulator.CellComponent): ContextMenu {
         val exposer = getData(cell)
         val tObject = exposer.delegate
-        val contextMenu = ContextMenuFactory().buildFor(tObject)
-        //FIXME use absolute coordinates, clientX/y are sometimes off screen
+        val menu = MenuFactory.buildFor(tObject)
+        //FIXME x/y coordinates are sometimes off screen
+        //val menuWidth =  menu.maxWidth?.first!!.toInt()
         val mei = MouseEventInit(
-                clientX = mouseEvent.clientX - 250,
-                clientY = mouseEvent.clientY - 500)
+                clientX = (mouseEvent.clientX - 250),
+                clientY = (mouseEvent.clientY - 500),
+                screenY = (mouseEvent.clientY - 500))
         val positionedEvent = MouseEvent("", mei)
-        contextMenu.positionMenu(positionedEvent)
-        return contextMenu
+        menu.positionMenu(positionedEvent)
+        console.log("[ColFac.showContextMenu]")
+        console.log(mouseEvent)
+        return menu
     }
 
     private fun getData(cell: Tabulator.CellComponent): Exposer {
@@ -152,7 +156,7 @@ class ColumnFactory {
         val exposer = getData(cell)
         val oldValue = exposer.selected
         exposer.selected = !oldValue
-   }
+    }
 
     private fun isSelected(cell: Tabulator.CellComponent): Boolean {
         return getData(cell).selected
