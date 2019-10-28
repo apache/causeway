@@ -18,11 +18,11 @@
  	<parent>
  		<groupId>org.apache.isis.mixins</groupId>
  		<artifactId>isis-mixins</artifactId>
- 		<version>${revision}</version>
+		<version>1.0.0-SNAPSHOT</version>
  	</parent>
 
 	<artifactId>isis-mixin-surefire</artifactId>
-	<version>${revision}</version>
+	<version>1.0.0-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -31,10 +31,6 @@
         Maven mixin that configures the surefire plugin to run unit tests, integration tests and BDD specs in separate executions.
     </description>
     
-    <properties>
-		<revision>2.0.0-M3-SNAPSHOT</revision>
-	</properties>
-
 	<profiles>
 
 		<profile>

@@ -2487,7 +2487,6 @@
 	<modules>
 	
 		<module>../supplemental-model</module>
-		<module>../mixins</module>
 
 		<module>schema</module>
 		<module>commons</module>

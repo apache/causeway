@@ -15,15 +15,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
-		<version>${revision}</version>
-		<relativePath>../core/pom.xml</relativePath>
+		<groupId>org.apache</groupId>
+		<artifactId>apache</artifactId>
+		<version>21</version>
+		<relativePath />
 	</parent>
 
 	<groupId>org.apache.isis.mixins</groupId>
 	<artifactId>isis-mixins</artifactId>
-	<version>${revision}</version>
+	<version>1.0.0</version>
 
 	<name>Apache Isis Maven Mixins</name>
 	<description>
@@ -36,64 +36,10 @@
 		<jar-plugin.automaticModuleName>org.apache.isis.mixins</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/mixins</git-plugin.propertiesDir>
 
-		<lombok.version>[1.18,)</lombok.version>
-
-		<failOnMissingWebXml>false</failOnMissingWebXml>
-
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 	</properties>
-
-	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>flatten-maven-plugin</artifactId>
-				<version>1.1.0</version>
-				<configuration>
-					<updatePomFile>true</updatePomFile>
-					<flattenMode>minimum</flattenMode>
-				</configuration>
-				<executions>
-					<execution>
-						<id>flatten</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>flatten</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>flatten.clean</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 
 	<modules>
 		<module>standard</module>
@@ -101,6 +47,66 @@
 		<module>datanucleus-enhance</module>
 		<module>docker</module>
 	</modules>
+
+	<profiles>
+		<!-- this profile allows builds to be deployed to GCP, hosting a Maven
+    repo backed by Google Storage see: https://github.com/renaudcerrato/appengine-maven-repository
+    export GCPAPPENGINEREPO_USERNAME=... export GCPAPPENGINEREPO_PASSWORD=...
+    export GCPAPPENGINEREPO_URL=... export REVISION=... mvn -s .m2/settings.xml
+    \ -B \ clean deploy \ -Dgcpappenginerepo-deploy \ -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL
+    \ -Drevision=$REVISION \ -Dskip.assemble-zip \ $CORE_ADDITIONAL_OPTS with
+    .m2/settings.xml as: <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+    http://maven.apache.org/xsd/settings-1.0.0.xsd"> <servers> <server> <id>gcpappenginerepo-deploy.serverId</id>
+    <username>${env.GCPAPPENGINEREPO_USERNAME}</username> <password>${env.GCPAPPENGINEREPO_PASSWORD}</password>
+    </server> </servers> </settings> -->
+		<profile>
+			<id>gcpappenginerepo-deploy</id>
+			<activation>
+				<property>
+					<name>gcpappenginerepo-deploy</name>
+				</property>
+			</activation>
+			<properties>
+				<gcpappenginerepo-deploy.repositoryUrl>https://my-gcp-project-id.appspot.com</gcpappenginerepo-deploy.repositoryUrl>
+			</properties>
+			<distributionManagement>
+				<repository>
+					<id>gcpappenginerepo-deploy.serverId</id>
+					<url>${gcpappenginerepo-deploy.repositoryUrl}</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+
+		<profile>
+			<id>apache-release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-toolchains-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>toolchain</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<toolchains>
+								<jdk>
+									<version>1.8</version>
+									<vendor>oracle</vendor>
+								</jdk>
+							</toolchains>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 
 </project>
 

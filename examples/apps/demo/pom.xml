@@ -227,19 +227,19 @@
 				<configuration>
 					<mixins>
 						<mixin>
-							<groupId>org.apache.isis.mavendeps</groupId>
+							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-standard</artifactId>
 						</mixin>
 						<mixin>
-							<groupId>org.apache.isis.mavendeps</groupId>
+							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-datanucleus-enhance</artifactId>
 						</mixin>
 						<mixin>
-							<groupId>org.apache.isis.mavendeps</groupId>
+							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-surefire</artifactId>
 						</mixin>
 						<mixin>
-							<groupId>org.apache.isis.mavendeps</groupId>
+							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-docker</artifactId>
 						</mixin>
 					</mixins>

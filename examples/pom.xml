@@ -150,19 +150,19 @@
 				<configuration>
 					<mixins>
 						<mixin>
-							<groupId>org.apache.isis.mavendeps</groupId>
+							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-standard</artifactId>
 						</mixin>
 						<mixin>
-							<groupId>org.apache.isis.mavendeps</groupId>
+							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-datanucleus-enhance</artifactId>
 						</mixin>
 						<mixin>
-							<groupId>org.apache.isis.mavendeps</groupId>
+							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-surefire</artifactId>
 						</mixin>
 						<mixin>
-							<groupId>org.apache.isis.mavendeps</groupId>
+							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-docker</artifactId>
 						</mixin>
 					</mixins>
@@ -288,78 +288,30 @@
 			<!-- MIXINS -->
 
 			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
+				<groupId>org.apache.isis.mixins</groupId>
 				<artifactId>isis-mixin-standard</artifactId>
 				<version>${isis.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
+				<groupId>org.apache.isis.mixins</groupId>
 				<artifactId>isis-mixin-datanucleus-enhance</artifactId>
 				<version>${isis.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
+				<groupId>org.apache.isis.mixins</groupId>
 				<artifactId>isis-mixin-surefire</artifactId>
 				<version>${isis.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
+				<groupId>org.apache.isis.mixins</groupId>
 				<artifactId>isis-mixin-docker</artifactId>
 				<version>${isis.version}</version>
 				<type>pom</type>
 			</dependency>
 
-			<!-- <dependency> -->
-			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
-			<!-- <artifactId>datanucleusenhance</artifactId> -->
-			<!-- <version>${mavenmixin-datanucleusenhance.version}</version> -->
-			<!-- <type>pom</type> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
-			<!-- <artifactId>docker</artifactId> -->
-			<!-- <version>${mavenmixin-docker.version}</version> -->
-			<!-- <type>pom</type> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
-			<!-- <artifactId>standard</artifactId> -->
-			<!-- <version>${mavenmixin-standard.version}</version> -->
-			<!-- <type>pom</type> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
-			<!-- <artifactId>surefire</artifactId> -->
-			<!-- <version>${mavenmixin-surefire.version}</version> -->
-			<!-- <type>pom</type> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
-			<!-- <artifactId>enforcerrelaxed</artifactId> -->
-			<!-- <version>${mavenmixin-enforcerrelaxed.version}</version> -->
-			<!-- <type>pom</type> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
-			<!-- <artifactId>sourceandjavadoc</artifactId> -->
-			<!-- <version>${mavenmixin-sourceandjavadoc.version}</version> -->
-			<!-- <type>pom</type> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
-			<!-- <artifactId>staticanalysis</artifactId> -->
-			<!-- <version>${mavenmixin-staticanalysis.version}</version> -->
-			<!-- <type>pom</type> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
-			<!-- <artifactId>cucumberreporting</artifactId> -->
-			<!-- <version>${mavenmixin-cucumberreporting.version}</version> -->
-			<!-- <type>pom</type> -->
-			<!-- </dependency> -->
 
 		</dependencies>
 	</dependencyManagement>
