@@ -20,7 +20,8 @@ cd examples
 
 mvn -s ../.m2/settings.xml \
     --batch-mode \
-    -Dexample-apps \
+    -Dskip.default-apps \
+    -Dsimpleapp \
     clean deploy \
     -Dgcpappenginerepo-deploy \
     -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \

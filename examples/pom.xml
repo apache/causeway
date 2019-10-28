@@ -55,7 +55,7 @@
 			<id>default-apps</id>
 			<activation>
 				<property>
-					<name>!example-apps</name>
+					<name>!skip.default-apps</name>
 				</property>
 			</activation>
 			<modules>
@@ -66,14 +66,13 @@
 			</modules>
 		</profile>
 		<profile>
-			<id>example-apps</id>
+			<id>simpleapp</id>
 			<activation>
 				<property>
-					<name>example-apps</name>
+					<name>simpleapp</name>
 				</property>
 			</activation>
 			<modules>
-				<module>apps/helloworld</module>
 				<module>apps/simpleapp</module>
 			</modules>
 		</profile>
