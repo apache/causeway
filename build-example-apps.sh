@@ -16,7 +16,7 @@ echo ""
 echo ""
 echo ""
 
-pushd examples/apps/$APP_NAME
+cd examples/apps/$APP_NAME
 
 mvn -s ../.m2/settings.xml \
     --batch-mode \
@@ -24,6 +24,9 @@ mvn -s ../.m2/settings.xml \
     -Dgcpappenginerepo-deploy \
     -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
     -Drevision=$REVISION
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
 mvn --batch-mode \
     install \
@@ -31,6 +34,9 @@ mvn --batch-mode \
     -Disis.version=$REVISION
     -Dmavenmixin-docker \
     -Ddocker-plugin.imageName=$ORG_NAME/$APP_NAME
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
 mvn -s ../.m2/settings.xml \
     --batch-mode \
@@ -45,6 +51,9 @@ mvn -s ../.m2/settings.xml \
     -Ddocker-plugin.imageName=$ORG_NAME/$APP_NAME \
     -Ddocker-plugin.serverId=docker-registry \
     -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
-popd
+cd ..
 

@@ -13,7 +13,7 @@ echo ""
 echo ""
 echo ""
 
-pushd core
+cd core
 
 mvn -s ../.m2/settings.xml \
     --batch-mode \
@@ -23,6 +23,10 @@ mvn -s ../.m2/settings.xml \
     -Drevision=$REVISION \
     -Dskip.assemble-zip \
     $CORE_ADDITIONAL_OPTS
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
-popd
+
+cd ..
 

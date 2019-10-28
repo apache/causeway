@@ -14,10 +14,13 @@ echo ""
 echo ""
 
 
-pushd mixins
+cd mixins
 
 # can't use flatten pom, so have to edit directly instead...
 mvn versions:set -DnewVersion=$REVISION > /dev/null
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
 mvn -s ../.m2/settings.xml \
     --batch-mode \
@@ -30,6 +33,9 @@ mvn -s ../.m2/settings.xml \
     -Dskip.mavenmixin-surefire \
     -Dskip.mavenmixin-datanucleus-enhance \
     $CORE_ADDITIONAL_OPTS
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
-popd
+cd ..
 
