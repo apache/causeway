@@ -37,11 +37,11 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+cd ..
+
 # revert the edits from earlier
 git checkout $(git status --porcelain | awk '{ print $2 }')
 if [ $? -ne 0 ]; then
   exit 1
 fi
-
-cd ..
 
