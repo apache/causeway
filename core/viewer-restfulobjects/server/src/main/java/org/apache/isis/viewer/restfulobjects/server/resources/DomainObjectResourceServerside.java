@@ -729,7 +729,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
 
     private DomainResourceHelper newDomainResourceHelper(final ManagedObject objectAdapter) {
-        return new DomainResourceHelper(getResourceContext(), objectAdapter);
+        return DomainResourceHelper.ofObjectResource(getResourceContext(), objectAdapter);
     }
 
 

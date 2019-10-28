@@ -275,7 +275,7 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
 
 
     @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
+    @Setter //(onMethod = @__(@Override))
     private ObjectAdapterLinkTo objectAdapterLinkTo;
 
 

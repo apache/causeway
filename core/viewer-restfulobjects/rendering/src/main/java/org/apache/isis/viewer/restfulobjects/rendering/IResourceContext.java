@@ -44,6 +44,7 @@ public interface IResourceContext {
 
     Where getWhere();
 
+    ObjectAdapterLinkTo getObjectAdapterLinkTo();
     List<List<String>> getFollowLinks();
     boolean isValidateOnly();
 
@@ -72,9 +73,6 @@ public interface IResourceContext {
      * Applies only when rendering a domain object.
      */
     RepresentationService.Intent getIntent();
-    
-    ObjectAdapterLinkTo getObjectAdapterLinkTo();
-    void setObjectAdapterLinkTo(ObjectAdapterLinkTo adapterLinkTo);
     
     AuthenticationSession getAuthenticationSession();
     

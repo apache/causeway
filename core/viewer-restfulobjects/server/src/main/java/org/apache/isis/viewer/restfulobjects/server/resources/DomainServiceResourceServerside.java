@@ -259,7 +259,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     }
 
     private DomainResourceHelper newDomainResourceHelper(final ManagedObject serviceAdapter) {
-        return new DomainResourceHelper(getResourceContext(), serviceAdapter, new DomainServiceLinkTo());
+        return DomainResourceHelper.ofServiceResource(getResourceContext(), serviceAdapter);
     }
 
 

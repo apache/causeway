@@ -35,6 +35,7 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -386,20 +387,33 @@ public interface ManagedObject {
     }
 
     @Deprecated
-    static ManagedObject _adapterOfList(DomainObjectList list) {
-        // TODO Auto-generated method stub
+    static ManagedObject _adapterOfList(SpecificationLoader specificationLoader, DomainObjectList list) {
+        
+        if(list == null) {
+            return null;
+        }
+        
+        val spec = specificationLoader.loadSpecification(list.getClass());
+        return ManagedObject.of(spec, list);
+        
         // legacy of
         // resourceContext.adapterOfPojo(list);
-        throw _Exceptions.notImplemented();
     }
-
+    
     @Deprecated
     static void _makePersistentInTransaction(ManagedObject adapter) {
-        
-        // TODO Auto-generated method stub
+
         // legacy of
         // getResourceContext().makePersistentInTransaction(adapter);
-        throw _Exceptions.notImplemented();
+        
+        val spec = adapter.getSpecification();
+        if(spec.isEntity()) {
+            val entityFacet = spec.getFacet(EntityFacet.class);
+            entityFacet.persist(spec, adapter.getPojo());
+            return;
+        }
+
+        throw _Exceptions.unexpectedCodeReach();
     }
 
     @Deprecated

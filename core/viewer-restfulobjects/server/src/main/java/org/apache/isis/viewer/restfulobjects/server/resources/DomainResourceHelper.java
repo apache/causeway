@@ -35,6 +35,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
@@ -46,188 +47,28 @@ import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 
 class DomainResourceHelper {
 
-//    static class RepresentationServiceContextAdapter implements resourceContext {
-//
-//        private final resourceContext resourceContext;
-//        @Getter private final ObjectAdapterLinkTo adapterLinkTo;
-//        @Getter private RepresentationService.Intent intent;
-//
-//        RepresentationServiceContextAdapter(
-//                final resourceContext resourceContext,
-//                final ObjectAdapterLinkTo adapterLinkTo) {
-//            
-//            this.resourceContext = resourceContext;
-//            this.adapterLinkTo = adapterLinkTo;
-//            this.intent = resourceContext.getIntent();
-//        }
-//
-//        @Override
-//        public String urlFor(String url) {
-//            return resourceContext.urlFor(url);
-//        }
-//
-//        @Override
-//        public AuthenticationSession getAuthenticationSession() {
-//            return resourceContext.getAuthenticationSession();
-//        }
-//
-//        @Override
-//        public IsisConfiguration getConfiguration() {
-//            return resourceContext.getConfiguration();
-//        }
-//
-//        @Override
-//        public Where getWhere() {
-//            return resourceContext.getWhere();
-//        }
-//
-//        @Override
-//        public List<List<String>> getFollowLinks() {
-//            return resourceContext.getFollowLinks();
-//        }
-//
-//        @Override
-//        public boolean isValidateOnly() {
-//            return resourceContext.isValidateOnly();
-//        }
-//
-//        @Override
-//        public List<MediaType> getAcceptableMediaTypes() {
-//            return resourceContext.getAcceptableMediaTypes();
-//        }
-//
-//        @Override
-//        public boolean canEagerlyRender(ManagedObject objectAdapter) {
-//            return resourceContext.canEagerlyRender(objectAdapter);
-//        }
-//
-//        @Override
-//        public boolean honorUiHints() {
-//            return resourceContext.honorUiHints();
-//        }
-//
-//        @Override
-//        public boolean objectPropertyValuesOnly() {
-//            return resourceContext.objectPropertyValuesOnly();
-//        }
-//
-//        @Override
-//        public boolean suppressDescribedByLinks() {
-//            return resourceContext.suppressDescribedByLinks();
-//        }
-//
-//        @Override
-//        public boolean suppressUpdateLink() {
-//            return resourceContext.suppressUpdateLink();
-//        }
-//
-//        @Override
-//        public boolean suppressMemberId() {
-//            return resourceContext.suppressMemberId();
-//        }
-//
-//        @Override
-//        public boolean suppressMemberLinks() {
-//            return resourceContext.suppressMemberLinks();
-//        }
-//
-//        @Override
-//        public boolean suppressMemberExtensions() {
-//            return resourceContext.suppressMemberExtensions();
-//        }
-//
-//        @Override
-//        public boolean suppressMemberDisabledReason() {
-//            return resourceContext.suppressMemberDisabledReason();
-//        }
-//
-//        @Override
-//        public InteractionInitiatedBy getInteractionInitiatedBy() {
-//            return resourceContext.getInteractionInitiatedBy();
-//        }
-//
-//        @Override
-//        public SpecificationLoader getSpecificationLoader() {
-//            return resourceContext.getSpecificationLoader();
-//        }
-//
-//        @Override
-//        public ServiceInjector getServiceInjector() {
-//            return resourceContext.getServiceInjector();
-//        }
-//
-//        @Override
-//        public ServiceRegistry getServiceRegistry() {
-//            return resourceContext.getServiceRegistry();
-//        }
-//
-//        @Override
-//        public ManagedObject adapterOfPojo(Object pojo) {
-//            return resourceContext.adapterOfPojo(pojo);
-//        }
-//
-//        @Override
-//        public ManagedObject adapterOfMemento(ObjectSpecification spec, Oid oid, Data data) {
-//            return resourceContext.adapterOfMemento(spec, oid, data);
-//        }
-//
-//        @Override
-//        public ManagedObject newTransientInstance(ObjectSpecification domainTypeSpec) {
-//            return resourceContext.newTransientInstance(domainTypeSpec);
-//        }
-//
-//        @Override
-//        public void makePersistentInTransaction(ManagedObject objectAdapter) {
-//            resourceContext.makePersistentInTransaction(objectAdapter);
-//        }
-//
-//        @Override
-//        public Object fetchPersistentPojoInTransaction(RootOid rootOid) {
-//            return resourceContext.fetchPersistentPojoInTransaction(rootOid);
-//        }
-//
-//        @Override
-//        public ManagedObjectState stateOf(Object domainObject) {
-//            return resourceContext.stateOf(domainObject);
-//        }
-//
-//        @Override
-//        public void logoutAuthenticationSession() {
-//            resourceContext.logoutAuthenticationSession();
-//        }
-//
-//        @Override
-//        public HomePageAction getHomePageAction() {
-//            return resourceContext.getHomePageAction();
-//        }
-//
-//        @Override
-//        public FixturesInstalledState getFixturesInstalledState() {
-//            return resourceContext.getFixturesInstalledState();
-//        }
-//
-//        @Override
-//        public MetaModelContext getMetaModelContext() {
-//            return resourceContext.getMetaModelContext();
-//        }
-//
-//
-//    }
-
     private final IResourceContext resourceContext;
     private final RepresentationService representationService;
     private final TransactionService transactionService;
 
-    public DomainResourceHelper(final ResourceContext resourceContext, final ManagedObject objectAdapter) {
-        this(resourceContext, objectAdapter, new DomainObjectLinkTo());
+    public static DomainResourceHelper ofObjectResource(
+            IResourceContext resourceContext,
+            ManagedObject objectAdapter) {
+        return new DomainResourceHelper(resourceContext, objectAdapter, new DomainObjectLinkTo());
     }
-
-    public DomainResourceHelper(
+    
+    public static DomainResourceHelper ofServiceResource(
+            IResourceContext resourceContext,
+            ManagedObject objectAdapter) {
+        return new DomainResourceHelper(resourceContext, objectAdapter, new DomainServiceLinkTo());
+    }
+    
+    private DomainResourceHelper(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter,
             final ObjectAdapterLinkTo adapterLinkTo) {
 
-        resourceContext.setObjectAdapterLinkTo(adapterLinkTo);
+        ((ResourceContext)resourceContext).setObjectAdapterLinkTo(adapterLinkTo);
         
         this.resourceContext = resourceContext;
         this.objectAdapter = objectAdapter;
