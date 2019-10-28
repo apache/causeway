@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -x
+set -x
 #trap read debug
 
 echo ""
@@ -17,7 +17,7 @@ echo ""
 cd mixins
 
 # can't use flatten pom, so have to edit directly instead...
-mvn versions:set -DnewVersion=$REVISION > /dev/null
+mvn versions:set -DnewVersion=$REVISION
 if [ $? -ne 0 ]; then
   exit 1
 fi
