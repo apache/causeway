@@ -38,7 +38,7 @@ import javax.enterprise.inject.spi.CDIProvider;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedRunnable;
@@ -108,7 +108,7 @@ public final class _CDI {
      * @param qualifiers
      * @return non-null {@code Bin}
      */
-    public static <T> Bin<T> select(final Class<T> subType, Collection<Annotation> qualifiers) {
+    public static <T> Can<T> select(final Class<T> subType, Collection<Annotation> qualifiers) {
         if(isEmpty(qualifiers)) {
             return select(subType);
         }
@@ -117,8 +117,8 @@ public final class _CDI {
 
         return cdi()
                 .map(cdi->tryGet(()->cdi.select(subType, _qualifiers)))
-                .map(instance->Bin.ofInstance(instance))
-                .orElse(Bin.empty());
+                .map(instance->Can.ofInstance(instance))
+                .orElse(Can.empty());
     }
 
     /**
@@ -126,11 +126,11 @@ public final class _CDI {
      * @param subType
      * @return non-null {@code Bin}
      */
-    public static <T> Bin<T> select(final Class<T> subType) {
+    public static <T> Can<T> select(final Class<T> subType) {
         return cdi()
                 .map(cdi->tryGet(()->cdi.select(subType)))
-                .map(instance->Bin.ofInstance(instance))
-                .orElse(Bin.empty());
+                .map(instance->Can.ofInstance(instance))
+                .orElse(Can.empty());
     }
 
 

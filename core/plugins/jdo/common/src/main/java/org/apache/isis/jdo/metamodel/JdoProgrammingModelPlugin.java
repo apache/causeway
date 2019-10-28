@@ -158,7 +158,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
     private void addValidatorToCheckForUnsupportedAnnotations() {
 
         pm.addValidator((objSpec, validation) -> {
-            if (objSpec.containsDoOpFacet(ParentedCollectionFacet.class) && !objSpec.containsDoOpFacet(CollectionFacet.class)) {
+            if (objSpec.containsNonFallbackFacet(ParentedCollectionFacet.class) && !objSpec.containsNonFallbackFacet(CollectionFacet.class)) {
                 validation.onFailure(
                         objSpec,
                         objSpec.getIdentifier(),

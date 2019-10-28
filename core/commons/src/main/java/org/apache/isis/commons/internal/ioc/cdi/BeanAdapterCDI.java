@@ -20,7 +20,7 @@ package org.apache.isis.commons.internal.ioc.cdi;
 
 import javax.enterprise.inject.spi.Bean;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import lombok.Value;
@@ -33,7 +33,7 @@ final class BeanAdapterCDI implements ManagedBeanAdapter {
     private final Bean<?> bean;
 
     @Override
-    public Bin<?> getInstance() {
+    public Can<?> getInstance() {
         val type = bean.getBeanClass();
         return _CDI.select(type, bean.getQualifiers());
     }

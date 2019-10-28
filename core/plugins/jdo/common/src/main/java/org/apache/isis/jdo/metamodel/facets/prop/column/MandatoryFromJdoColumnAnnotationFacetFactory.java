@@ -140,7 +140,7 @@ implements MetaModelRefiner {
 
                 associations
                 // skip checks if annotated with JDO @NotPersistent
-                .filter(association->!association.containsDoOpFacet(JdoNotPersistentFacet.class))
+                .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
                 .forEach(association->validateMandatoryFacet(association, validator));
             }
 

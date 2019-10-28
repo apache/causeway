@@ -99,7 +99,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.AS_CONFIGURED));
 
-                allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
+                allowing(mockFacetHolder).containsNonFallbackFacet(PromptStyleFacet.class);
                 will(returnValue(false));
             }});
 
@@ -117,7 +117,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.AS_CONFIGURED));
 
-                allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
+                allowing(mockFacetHolder).containsNonFallbackFacet(PromptStyleFacet.class);
                 will(returnValue(true));
 
             }});
@@ -135,7 +135,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.NOT_SPECIFIED));
 
-                allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
+                allowing(mockFacetHolder).containsNonFallbackFacet(PromptStyleFacet.class);
                 will(returnValue(false));
             }});
 
@@ -153,7 +153,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.NOT_SPECIFIED));
 
-                allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
+                allowing(mockFacetHolder).containsNonFallbackFacet(PromptStyleFacet.class);
                 will(returnValue(true));
 
             }});

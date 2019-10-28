@@ -46,22 +46,21 @@ public interface FacetHolder {
 
     /**
      * Whether there is a facet registered of the specified type that is not a
-     * {@link Facet#isFallback() no-op}.
-     *
+     * {@link Facet#isFallback() fallback} .
      * <p>
      * Convenience; saves having to {@link #getFacet(Class)} and then check if
-     * <tt>null</tt> and not a no-op.
+     * <tt>null</tt> and not a fallback.
      */
-    default boolean containsDoOpFacet(Class<? extends Facet> facetType) {
+    default boolean containsNonFallbackFacet(Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
         return facet != null && !facet.isFallback();
     }
 
     /**
-     * As {@link #containsDoOpFacet(Class)}, which additional requirement that the
-     * facet is not {@link Facet#isDerived()}.
+     * As {@link #containsNonFallbackFacet(Class)}, with additional requirement, that the
+     * facet is <i>explicit</i>, not {@link Facet#isDerived() derived}.
      */
-    default boolean containsDoOpNotDerivedFacet(Class<? extends Facet> facetType) {
+    default boolean containsExplicitNonFallbackFacet(Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
         return facet != null && !facet.isFallback() && !facet.isDerived();
     }

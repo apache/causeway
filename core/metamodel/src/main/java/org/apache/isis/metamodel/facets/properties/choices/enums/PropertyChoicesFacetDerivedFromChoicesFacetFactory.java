@@ -35,7 +35,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacetFactory extends FacetFac
 
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
 
-        if(!getSpecificationLoader().loadSpecification(returnType).containsDoOpFacet(ChoicesFacet.class)) {
+        if(!getSpecificationLoader().loadSpecification(returnType).containsNonFallbackFacet(ChoicesFacet.class)) {
             return;
         }
 

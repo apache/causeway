@@ -149,7 +149,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             @Override
             public boolean test(final ObjectAssociation association) {
                 return association.isOneToOneAssociation() &&
-                        !association.getSpecification().containsDoOpFacet(ValueFacet.class);
+                        !association.getSpecification().containsNonFallbackFacet(ValueFacet.class);
             }
         };
         public final static Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {

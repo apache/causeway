@@ -132,7 +132,7 @@ implements MetaModelRefiner {
                         }
 
                         final ObjectSpecification parameterType = parameter.getSpecification();
-                        if(parameterType.containsDoOpFacet(AutoCompleteFacet.class)) {
+                        if(parameterType.containsNonFallbackFacet(AutoCompleteFacet.class)) {
                             return;
                         }
 

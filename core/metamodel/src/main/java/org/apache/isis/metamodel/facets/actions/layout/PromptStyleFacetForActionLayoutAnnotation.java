@@ -60,7 +60,7 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
                     case AS_CONFIGURED:
 
                         // do not replace
-                        if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+                        if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
                             return null;
                         }
 
@@ -73,7 +73,7 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
                 })
                 .orElseGet(() -> {
                     // do not replace
-                    if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+                    if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
                         return null;
                     }
 

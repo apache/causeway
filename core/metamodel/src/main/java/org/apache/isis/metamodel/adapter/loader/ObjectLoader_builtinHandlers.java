@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.adapter.loader;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.MetaModelContext;
@@ -97,7 +97,7 @@ final class ObjectLoader_builtinHandlers {
             val servicePojo = metaModelContext.getServiceRegistry()
                 .lookupRegisteredBeanById(beanName)
                 .map(ManagedBeanAdapter::getInstance)
-                .flatMap(Bin::getFirst)
+                .flatMap(Can::getFirst)
                 .orElseThrow(()->_Exceptions.noSuchElement(
                         "loader: %s loading beanName %s", 
                         this.getClass().getName(), beanName));

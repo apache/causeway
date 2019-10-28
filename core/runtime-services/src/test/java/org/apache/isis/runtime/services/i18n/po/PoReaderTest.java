@@ -30,7 +30,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -54,10 +54,10 @@ public class PoReaderTest {
 
         context.checking(new Expectations() {{
             allowing(mockTranslationServicePo).getLocaleProvider();
-            will(returnValue(Bin.ofSingleton(mockLocaleProvider)));
+            will(returnValue(Can.ofSingleton(mockLocaleProvider)));
 
             allowing(mockTranslationServicePo).getTranslationsResolver();
-            will(returnValue(Bin.ofSingleton(mockTranslationsResolver)));
+            will(returnValue(Can.ofSingleton(mockTranslationsResolver)));
 
             allowing(mockLocaleProvider).getLocale();
             will(returnValue(Locale.UK));

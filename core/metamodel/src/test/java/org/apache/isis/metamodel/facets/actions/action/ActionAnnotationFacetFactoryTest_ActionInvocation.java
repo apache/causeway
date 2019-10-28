@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;

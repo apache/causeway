@@ -37,7 +37,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -52,6 +51,8 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import lombok.val;
 
 public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
 
@@ -121,14 +122,15 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         // actions
         // (rendering depends on whether also showing the icon/title)
         final List<ActionLayoutData> actionLayoutDatas = bs3Col.getActions();
-        final List<ObjectAction> visibleActions = _Lists.transform(actionLayoutDatas, stream->stream
+        val visibleActions = _NullSafe.stream(actionLayoutDatas)
                 .filter((final ActionLayoutData actionLayoutData) -> {
                     return actionLayoutData.getMetadataError() == null;
                 })
                 .map((@Nullable final ActionLayoutData actionLayoutData) -> {
                     return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
                 })
-                .filter(_NullSafe::isPresent));
+                .filter(_NullSafe::isPresent)
+                .collect(Collectors.toList());
         //
         // visibility needs to be determined at point of rendering, by ActionLink itself
         //

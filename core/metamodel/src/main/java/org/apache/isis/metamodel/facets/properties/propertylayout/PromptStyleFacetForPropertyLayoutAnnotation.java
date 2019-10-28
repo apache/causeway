@@ -61,7 +61,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
                     case AS_CONFIGURED:
 
                         // do not replace
-                        if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+                        if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
                             return null;
                         }
 
@@ -74,7 +74,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
                 .orElseGet(() -> {
 
                     // do not replace
-                    if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+                    if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
                         return null;
                     }
 

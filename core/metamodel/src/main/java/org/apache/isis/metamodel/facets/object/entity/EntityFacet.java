@@ -34,6 +34,4 @@ public interface EntityFacet extends Facet {
     
     void persist(ObjectSpecification spec, Object pojo);
 
-    
-
 }

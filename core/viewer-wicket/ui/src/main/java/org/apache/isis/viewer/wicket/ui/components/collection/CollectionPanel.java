@@ -27,6 +27,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -186,7 +187,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
         }
 
         @Override
-        public List<ObjectAdapterMemento> getToggles() {
+        public Can<ObjectAdapterMemento> getToggles() {
             return collectionModel.getToggleMementosList();
         }
 

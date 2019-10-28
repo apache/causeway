@@ -115,7 +115,7 @@ implements MetaModelRefiner {
 
                 associations.forEach(association->{
                     // skip checks if annotated with JDO @NotPersistent
-                    if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
+                    if(association.containsNonFallbackFacet(JdoNotPersistentFacet.class)) {
                         return;
                     }
 

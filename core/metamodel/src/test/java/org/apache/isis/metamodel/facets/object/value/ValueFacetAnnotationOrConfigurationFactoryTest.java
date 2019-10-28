@@ -36,11 +36,8 @@ import org.apache.isis.metamodel.facets.object.value.annotcfg.ValueFacetAnnotati
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
 import org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.unittestsupport.config.internal._Config;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFacetFactoryTest {
-
-    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private ValueFacetAnnotationOrConfigurationFactory facetFactory;
 

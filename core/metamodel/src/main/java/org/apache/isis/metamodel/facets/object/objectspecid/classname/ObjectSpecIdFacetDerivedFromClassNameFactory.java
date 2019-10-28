@@ -56,7 +56,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
     public void process(final ProcessObjectSpecIdContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         // don't trash existing facet
-        if(facetHolder.containsDoOpFacet(ObjectSpecIdFacet.class)) {
+        if(facetHolder.containsNonFallbackFacet(ObjectSpecIdFacet.class)) {
             return;
         }
         final Class<?> cls = processClassContext.getCls();

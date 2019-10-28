@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.ResolvableType;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.ioc.IocContainer;
@@ -75,15 +75,15 @@ public class IocContainerSpring implements IocContainer {
     }
     
     @Override
-    public <T> Bin<T> select(final Class<T> requiredType) {
+    public <T> Can<T> select(final Class<T> requiredType) {
         requires(requiredType, "requiredType");
 
         val allMatchingBeans = springContext.getBeanProvider(requiredType).orderedStream();
-        return Bin.ofStream(allMatchingBeans);
+        return Can.ofStream(allMatchingBeans);
     }
 
     @Override
-    public <T> Bin<T> select(
+    public <T> Can<T> select(
             final Class<T> requiredType, 
             @Nullable Set<Annotation> qualifiersRequired) {
 
@@ -93,7 +93,7 @@ public class IocContainerSpring implements IocContainer {
                 .orderedStream();
 
         if(_NullSafe.isEmpty(qualifiersRequired)) {
-            return Bin.ofStream(allMatchingBeans);
+            return Can.ofStream(allMatchingBeans);
         }
 
         final Predicate<T> hasAllQualifiers = t -> {
@@ -101,7 +101,7 @@ public class IocContainerSpring implements IocContainer {
             return qualifiersPresent.containsAll(qualifiersRequired);
         };
 
-        return Bin.ofStream(allMatchingBeans
+        return Can.ofStream(allMatchingBeans
                 .filter(hasAllQualifiers));
     }
     

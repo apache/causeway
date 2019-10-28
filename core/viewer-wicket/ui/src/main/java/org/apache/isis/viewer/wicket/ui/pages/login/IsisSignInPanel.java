@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -52,8 +52,8 @@ public class IsisSignInPanel extends SignInPanel {
     @Inject transient ServiceInjector serviceInjector;
     @Inject transient ServiceRegistry serviceRegistry;
     @Inject transient private PageClassRegistry pageClassRegistry;
-    transient Bin<UserRegistrationService> anyUserRegistrationService;
-    transient Bin<EmailNotificationService> anyEmailNotificationService;
+    transient Can<UserRegistrationService> anyUserRegistrationService;
+    transient Can<EmailNotificationService> anyEmailNotificationService;
 
     private final boolean signUpLink;
     private final boolean passwordResetLink;

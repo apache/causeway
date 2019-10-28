@@ -23,41 +23,45 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import lombok.Value;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Value(staticConstructor="of")
-final class Bin_Empty<T> implements Bin<T> {
+@RequiredArgsConstructor(staticName="of")
+final class Can_Singleton<T> implements Can<T> {
 
-    static final Bin_Empty<?> INSTANCE = new Bin_Empty<>(); 
+    private final T element;
+
+    @Getter(lazy=true, onMethod=@__({@Override})) 
+    private final Optional<T> singleton = Optional.of(element);
 
     @Override
     public Cardinality getCardinality() {
-        return Cardinality.ZERO;
+        return Cardinality.ONE;
     }
 
     @Override
     public Stream<T> stream() {
-        return Stream.empty();
-    }
-
-    @Override
-    public Optional<T> getSingleton() {
-        return Optional.empty();
+        return Stream.of(element);
     }
 
     @Override
     public Optional<T> getFirst() {
-        return Optional.empty();
+        return getSingleton();
     }
 
     @Override
     public int size() {
-        return 0;
+        return 1;
     }
 
     @Override
     public Iterator<T> iterator() {
-        return Collections.<T>emptyList().iterator();
+        return Collections.singletonList(element).iterator();
+    }
+
+    @Override
+    public String toString() {
+        return "Bin["+element+"]";
     }
 
 }

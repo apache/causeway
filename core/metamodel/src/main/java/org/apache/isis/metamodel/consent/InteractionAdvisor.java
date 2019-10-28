@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.consent;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.interactions.InteractionAdvisorFacet;
@@ -82,17 +83,20 @@ public interface InteractionAdvisor {
         }
 
         @Override
-        public void addAlias(Class<? extends Facet> alias) {
+        public void addContributedFacet(Facet contributedFacet) {
+            throw _Exceptions.unsupportedOperation();
         }
 
         @Override
-        public void forEachAlias(Consumer<Class<? extends Facet>> onAlias) {
+        public void forEachContributedFacet(Consumer<Facet> onContributedFacet) {
+            throw _Exceptions.unsupportedOperation();
         }
 
         @Override
-        public boolean hasAlias(Class<? extends Facet> alias) {
-            return false;
+        public Class<? extends Facet> facetAliasType() {
+            return null;
         }
+
 
     };
 

@@ -46,10 +46,10 @@ implements JdoPersistenceCapableFacet {
             final IdentityType identityType,
             final FacetHolder holder) {
         super(JdoPersistenceCapableFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
+        super.setFacetAliasType(EntityFacet.class);
         this.schema = schemaName;
         this.table = tableOrTypeName;
         this.identityType = identityType;
-        super.addAlias(EntityFacet.class);
     }
 
     @Override

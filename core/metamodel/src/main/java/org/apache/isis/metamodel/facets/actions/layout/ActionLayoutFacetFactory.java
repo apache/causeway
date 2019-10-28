@@ -161,7 +161,7 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
         // position
         ActionPositionFacet actionPositionFacet = null;
-        if(! holder.containsDoOpFacet(ActionPositionFacet.class)) {
+        if(! holder.containsNonFallbackFacet(ActionPositionFacet.class)) {
             actionPositionFacet = new ActionPositionFacetFallback(holder);
         }
         super.addFacet(actionPositionFacet);

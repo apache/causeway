@@ -30,6 +30,7 @@ import org.apache.isis.metamodel.MetaModelContext;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.Setter;
 import lombok.val;
 
 
@@ -43,7 +44,8 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
     private Facet underlyingFacet;
 
     private final Class<? extends Facet> facetType;
-    private Set<Class<? extends Facet>> facetAliasTypes; // lazy init
+    @Setter private Class<? extends Facet> facetAliasType;
+    private Set<Facet> contributedFacets; // lazy init
     
     private final boolean derived;
     private FacetHolder holder;
@@ -78,7 +80,12 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
     public final Class<? extends Facet> facetType() {
         return facetType;
     }
-
+    
+    @Override
+    public Class<? extends Facet> facetAliasType() {
+        return facetAliasType!=facetType ? facetAliasType : null; // avoids facetAliasType equals facetType 
+    }
+    
     @Override
     public FacetHolder getFacetHolder() {
         return holder;
@@ -259,32 +266,22 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
     public static interface Validating {
     }
 
-    // -- FACET ALIAS SUPPORT
+    // -- CONTRIBUTED FACET SUPPORT
     
     @Override
-    public void addAlias(Class<? extends Facet> alias) {
-        if(facetAliasTypes==null) {
-            facetAliasTypes = _Sets.newHashSet();
+    public void addContributedFacet(Facet contributedFacet) {
+        if(contributedFacets==null) {
+            contributedFacets = _Sets.newHashSet();
         }
-        facetAliasTypes.add(alias);
+        contributedFacets.add(contributedFacet);
     }
     
     @Override
-    public void forEachAlias(Consumer<Class<? extends Facet>> onAlias) {
-        if(facetAliasTypes!=null) {
-            facetAliasTypes.forEach(onAlias);
+    public void forEachContributedFacet(Consumer<Facet> onContributedFacet) {
+        if(contributedFacets!=null) {
+            contributedFacets.forEach(onContributedFacet);
         }
     }
-    
-    @Override
-    public boolean hasAlias(Class<? extends Facet> alias) {
-        if(facetAliasTypes==null) {
-            return false;
-        }
-        return facetAliasTypes.contains(alias);
-    }
-
-    
 
 
 }

@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -52,7 +52,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     private final Set<ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();
 
     @Override
-    public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers) {
+    public <T> Can<T> select(Class<T> type, Annotation[] qualifiers) {
 
         if(iocContainer!=null) {
             return iocContainer
@@ -70,17 +70,17 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
                 .findFirst();
 
         if(match.isPresent()) {
-            return Bin.ofSingleton(match.get());
+            return Can.ofSingleton(match.get());
         }
 
         // lookup the _Context 
         // XXX lombok bug, cannot use val here (https://github.com/rzwitserloot/lombok/issues/1588)
         T singleton = _Context.getIfAny(type);
         if(singleton!=null) {
-            return Bin.ofSingleton(singleton);
+            return Can.ofSingleton(singleton);
         }
 
-        return Bin.empty();
+        return Can.empty();
     }
 
     @Override
@@ -125,7 +125,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     private static class PojoBeanAdapter implements ManagedBeanAdapter {
 
         String id;
-        Bin<?> instance;
+        Can<?> instance;
         public Class<?> beanClass;
 
         @Override
@@ -139,7 +139,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
         return PojoBeanAdapter.builder()
                 .id(singleton.getClass().getName())
-                .instance(Bin.ofSingleton(singleton))
+                .instance(Can.ofSingleton(singleton))
                 .beanClass(singleton.getClass())
                 .build();
 

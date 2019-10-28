@@ -20,31 +20,26 @@ package org.apache.isis.commons.collections;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@RequiredArgsConstructor(staticName="of")
-final class Bin_Multiple<T> implements Bin<T> {
+@Value @NoArgsConstructor(access = AccessLevel.PRIVATE)
+final class Can_Empty<T> implements Can<T> {
 
-    private final List<T> elements;
-
-    @Getter(lazy=true, onMethod=@__({@Override})) 
-    private final Optional<T> first = Optional.of(elements.get(0));
+    static final Can_Empty<?> INSTANCE = new Can_Empty<>(); 
 
     @Override
     public Cardinality getCardinality() {
-        return Cardinality.MULTIPLE;
+        return Cardinality.ZERO;
     }
 
     @Override
     public Stream<T> stream() {
-        return elements.stream();
+        return Stream.empty();
     }
 
     @Override
@@ -53,21 +48,18 @@ final class Bin_Multiple<T> implements Bin<T> {
     }
 
     @Override
+    public Optional<T> getFirst() {
+        return Optional.empty();
+    }
+
+    @Override
     public int size() {
-        return elements.size();
+        return 0;
     }
 
     @Override
     public Iterator<T> iterator() {
-        return Collections.unmodifiableList(elements).iterator();
-    }
-
-    @Override
-    public String toString() {
-        val literal = stream()
-                .map(s->""+s)
-                .collect(Collectors.joining(", "));
-        return "Bin["+literal+"]";
+        return Collections.<T>emptyList().iterator();
     }
 
 }

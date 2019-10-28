@@ -185,7 +185,7 @@ implements MetaModelRefiner {
 
                         properties
                         // ignore derived
-                        .filter(property->property.containsDoOpFacet(PropertySetterFacet.class))
+                        .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
                         .forEach(property->{
                             for (final PropertyValidator adapterValidator : propertyValidators) {
                                 adapterValidator.validate(objectSpec, property, validator);

@@ -40,7 +40,7 @@ public class DisabledFacetOnCollectionDerivedFromViewModelFacetFactory extends F
         final Class<?> declaringClass = method.getDeclaringClass();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
 
-        if (!spec.containsDoOpFacet(ViewModelFacet.class)) {
+        if (!spec.containsNonFallbackFacet(ViewModelFacet.class)) {
             return;
         }
         final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);

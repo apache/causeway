@@ -26,7 +26,7 @@ import javax.jdo.PersistenceManager;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -163,7 +163,7 @@ SessionScopedComponent {
 
     // -- LOOKUP
 
-    static <T extends PersistenceSession> Bin<T> current(Class<T> requiredType) {
+    static <T extends PersistenceSession> Can<T> current(Class<T> requiredType) {
         return _Context.threadLocalSelect(PersistenceSession.class, requiredType);
     }
 

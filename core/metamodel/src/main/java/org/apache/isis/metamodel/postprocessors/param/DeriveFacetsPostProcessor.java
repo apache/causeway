@@ -373,7 +373,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces some of the functionality in {@link DescribedAsFacetOnMemberFactory}.
      */
     private void deriveActionDescribedAsFromType(final ObjectAction objectAction) {
-        if(objectAction.containsDoOpFacet(DescribedAsFacet.class)) {
+        if(objectAction.containsNonFallbackFacet(DescribedAsFacet.class)) {
             return;
         }
         final ObjectSpecification returnSpec = objectAction.getReturnType();
@@ -388,7 +388,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      */
     private void deriveParameterDefaultFacetFromType(final ObjectActionParameter parameter) {
 
-        if (parameter.containsDoOpFacet(ActionDefaultsFacet.class)) {
+        if (parameter.containsNonFallbackFacet(ActionDefaultsFacet.class)) {
             return;
         }
 
@@ -413,7 +413,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces {@link ActionParameterChoicesFacetDerivedFromChoicesFacetFactory}.
      */
     private void deriveParameterChoicesFromExistingChoices(final ObjectActionParameter parameter) {
-        if(parameter.containsDoOpFacet(ActionParameterChoicesFacet.class)) {
+        if(parameter.containsNonFallbackFacet(ActionParameterChoicesFacet.class)) {
             return;
         }
         final ObjectSpecification paramSpec = parameter.getSpecification();
@@ -429,7 +429,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces {@link DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory}
      */
     private void deriveParameterDescribedAsFromType(final ObjectActionParameter parameter) {
-        if(parameter.containsDoOpFacet(DescribedAsFacet.class)) {
+        if(parameter.containsNonFallbackFacet(DescribedAsFacet.class)) {
             return;
         }
         final ObjectSpecification paramSpec = parameter.getSpecification();
@@ -446,7 +446,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces {@link TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory}
      */
     private void deriveParameterTypicalLengthFromType(final ObjectActionParameter parameter) {
-        if(parameter.containsDoOpFacet(TypicalLengthFacet.class)) {
+        if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
         final ObjectSpecification paramSpec = parameter.getSpecification();
@@ -460,7 +460,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces {@link PropertyChoicesFacetDerivedFromChoicesFacetFactory}
      */
     private void derivePropertyChoicesFromExistingChoices(final OneToOneAssociation property) {
-        if(property.containsDoOpFacet(PropertyChoicesFacet.class)) {
+        if(property.containsNonFallbackFacet(PropertyChoicesFacet.class)) {
             return;
         }
         final ObjectSpecification propertySpec = property.getSpecification();
@@ -475,7 +475,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces {@link PropertyDefaultFacetDerivedFromTypeFactory}
      */
     private void derivePropertyDefaultsFromType(final OneToOneAssociation property) {
-        if(property.containsDoOpFacet(PropertyDefaultFacet.class)) {
+        if(property.containsNonFallbackFacet(PropertyDefaultFacet.class)) {
             return;
         }
         final ObjectSpecification propertySpec = property.getSpecification();
@@ -491,7 +491,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * replaces {@link TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory}
      */
     private void derivePropertyTypicalLengthFromType(final OneToOneAssociation property) {
-        if(property.containsDoOpFacet(TypicalLengthFacet.class)) {
+        if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
         final ObjectSpecification propertySpec = property.getSpecification();
@@ -506,7 +506,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces some of the functionality in {@link DescribedAsFacetOnMemberFactory}.
      */
     private void derivePropertyOrCollectionDescribedAsFromType(final ObjectAssociation objectAssociation) {
-        if(objectAssociation.containsDoOpFacet(DescribedAsFacet.class)) {
+        if(objectAssociation.containsNonFallbackFacet(DescribedAsFacet.class)) {
             return;
         }
         final ObjectSpecification returnSpec = objectAssociation.getSpecification();
@@ -522,7 +522,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * @param property
      */
     private void derivePropertyDisabledFromViewModel(final OneToOneAssociation property) {
-        if(property.containsDoOpFacet(DisabledFacet.class)){
+        if(property.containsNonFallbackFacet(DisabledFacet.class)){
             return;
         }
 
@@ -539,7 +539,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces {@link DisabledFacetOnPropertyDerivedFromImmutableFactory}
      */
     private void derivePropertyDisabledFromImmutable(final OneToOneAssociation property) {
-        if(property.containsDoOpFacet(DisabledFacet.class)) {
+        if(property.containsNonFallbackFacet(DisabledFacet.class)) {
             return;
         }
         final ObjectSpecification onType = property.getOnType();
@@ -555,7 +555,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * @param collection
      */
     private void deriveCollectionDisabledFromViewModel(final OneToManyAssociation collection) {
-        if(collection.containsDoOpFacet(DisabledFacet.class)){
+        if(collection.containsNonFallbackFacet(DisabledFacet.class)){
             return;
         }
 
@@ -572,7 +572,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces {@link DisabledFacetOnCollectionDerivedFromImmutableFactory}
      */
     private void deriveCollectionDisabledFromImmutable(final OneToManyAssociation collection) {
-        if(collection.containsDoOpFacet(DisabledFacet.class)) {
+        if(collection.containsNonFallbackFacet(DisabledFacet.class)) {
             return;
         }
         final ObjectSpecification onType = collection.getOnType();
@@ -586,7 +586,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
 
     private void addCollectionParamDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
-        if(collectionParam.containsDoOpFacet(ActionParameterDefaultsFacet.class)) {
+        if(collectionParam.containsNonFallbackFacet(ActionParameterDefaultsFacet.class)) {
             return;
         }
         this.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
@@ -595,8 +595,8 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     private void addCollectionParamChoicesFacetIfNoneAlready(
             final OneToManyAssociation otma,
             final ObjectActionParameter scalarOrCollectionParam) {
-        if (scalarOrCollectionParam.containsDoOpFacet(ActionParameterChoicesFacet.class) ||
-                scalarOrCollectionParam.containsDoOpFacet(ActionParameterAutoCompleteFacet.class)) {
+        if (scalarOrCollectionParam.containsNonFallbackFacet(ActionParameterChoicesFacet.class) ||
+                scalarOrCollectionParam.containsNonFallbackFacet(ActionParameterAutoCompleteFacet.class)) {
             return;
         }
 

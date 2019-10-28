@@ -38,13 +38,13 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
         
         val paramType = processParameterContext.getParameterType();
 
-        if(!getSpecificationLoader().loadSpecification(paramType).containsDoOpFacet(ChoicesFacet.class)) {
+        if(!getSpecificationLoader().loadSpecification(paramType).containsNonFallbackFacet(ChoicesFacet.class)) {
             return;
         }
 
         // don't trample over any existing facets.
         final FacetedMethodParameter facetHolder = processParameterContext.getFacetHolder();
-        if(facetHolder.containsDoOpFacet(ActionParameterChoicesFacet.class)) {
+        if(facetHolder.containsNonFallbackFacet(ActionParameterChoicesFacet.class)) {
             return;
         }
 

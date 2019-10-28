@@ -20,7 +20,7 @@ package org.apache.isis.commons.internal.ioc.spring;
 
 import org.springframework.beans.factory.ObjectProvider;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import lombok.Value;
@@ -34,9 +34,9 @@ final class BeanAdapterSpring implements ManagedBeanAdapter {
     private final ObjectProvider<?> beanProvider;
 
     @Override
-    public Bin<?> getInstance() {
+    public Can<?> getInstance() {
         val allMatchingBeans = beanProvider.stream(); 
-        return Bin.ofStream(allMatchingBeans);
+        return Can.ofStream(allMatchingBeans);
     }
 
     @Override

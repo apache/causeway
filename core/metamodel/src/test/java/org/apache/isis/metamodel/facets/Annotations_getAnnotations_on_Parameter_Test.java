@@ -23,14 +23,10 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.reflect.Method;
-import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.metamodel.facets.Annotations_getAnnotations_on_Method_Test.DomainObj;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

@@ -131,7 +131,7 @@ public class ObjectAssociationAbstractTest {
             }
 
             @Override
-            public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
+            public boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {
                 return false;
             }
 

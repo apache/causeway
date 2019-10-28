@@ -100,22 +100,24 @@ public interface Facet extends FacetWithAttributes {
     // -- FACET ALIAS SUPPORT
     
     /**
-     * Add an alias by which the facet can be looked up.
+     * Adds a facet this facet contributes.
      * @since 2.0
      */
-    void addAlias(Class<? extends Facet> alias);
+    void addContributedFacet(Facet contributedFacet);
 
     /**
-     * Traverses all aliases (if any).
+     * Traverses all contributed facets (if any).
      * @since 2.0
      */
-    void forEachAlias(Consumer<Class<? extends Facet>> onAlias);
+    void forEachContributedFacet(Consumer<Facet> onContributedFacet);
 
     /**
-     * Whether has an alias by which the facet can be looked up.
+     * An alternative type this Facet can be looked up via {@link FacetHolder#getFacet(Class)}.
+     * @apiNote like {@link #facetType()} the alias must be unique within any facet-holder's 
+     * registered facet-types, otherwise an {@link IllegalArgumentException} is thrown during
+     * facet-processing; this is to ensure unambiguous lookup of facets by their alias type 
      * @since 2.0
      */
-    boolean hasAlias(Class<? extends Facet> alias);
-
+    Class<? extends Facet> facetAliasType();
 
 }
