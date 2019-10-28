@@ -57,8 +57,8 @@ public class InventoryResource {
         return Book.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
     }
 
-    @Action
-    public Book storeBook(String newBook) throws JAXBException {
+    @Action //TODO improve the REST client such that the param can be of type Book
+    public Book storeBook(String newBook) throws JAXBException { 
         Book book = BookDto.decode(newBook).toBook();
         return repository.persist(book);
     }

@@ -171,21 +171,25 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             typeMeta.setBeanNameOverride(extractObjectType(typeMeta.getUnderlyingClass()).orElse(null));
         }
         
-        val isToBeRegistered = beanSort.isManagedBean();
-        val isToBeInspected = !beanSort.isUnknown();
+        val isManagedBeanToBeInspected = beanSort.isManagedBean() 
+                && findNearestAnnotation(type, DomainService.class).isPresent();
+        
+        val isManagedObjectToBeInspected = !beanSort.isManagedBean() 
+                && !beanSort.isUnknown();
 
+        val isToBeInspected = isManagedBeanToBeInspected || isManagedObjectToBeInspected;
+        
         if(isToBeInspected) {
             addIntrospectableType(beanSort, typeMeta);
-        }
-
-        if(log.isDebugEnabled()) {
-            if(isToBeInspected || isToBeRegistered) {
-                log.debug("{} {} [{}]",
-                        isToBeRegistered ? "provision" : beanSort.isEntity() ? "entity" : "skip",
+        
+            if(log.isDebugEnabled()) {
+                log.debug("to-be-inspected: {} [{}]",                        
                                 type,
                                 beanSort.name());
             }
         }
+
+        
 
         
     }
@@ -218,7 +222,6 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     private BeanSort quickClassify(Class<?> type) {
 
         requires(type, "type");
-
         
         if(findNearestAnnotation(type, Vetoed.class).isPresent()) {
             return BeanSort.UNKNOWN; // reject

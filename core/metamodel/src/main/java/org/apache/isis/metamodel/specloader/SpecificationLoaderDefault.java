@@ -276,6 +276,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             return null;
         }
 
+//        if(type.getName().equals("com.fasterxml.jackson.core.Version")) {
+//            System.out.println("####");
+//        }
+        
         requires(upTo, "upTo");
 
         val substitutedType = classSubstitutor.getClass(type);

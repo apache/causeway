@@ -81,8 +81,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
     }
 
-    @Inject
-    IsisConfiguration configuration;
+    @Inject IsisConfiguration configuration;
 
     private boolean isEagerInitialize() {
         ApplicationFeaturesInitConfiguration setting = configuration.getServices().getApplicationFeatures().getInit();
