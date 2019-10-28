@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 #trap read debug
 
 echo ""
@@ -18,7 +18,7 @@ echo ""
 
 cd examples/apps/$APP_NAME
 
-mvn -s ../.m2/settings.xml \
+mvn -s ../../../.m2/settings.xml \
     --batch-mode \
     clean deploy \
     -Dgcpappenginerepo-deploy \
@@ -38,7 +38,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-mvn -s ../.m2/settings.xml \
+mvn -s ../../../.m2/settings.xml \
     --batch-mode \
     docker:push@push-image-tagged \
     -pl webapp \
