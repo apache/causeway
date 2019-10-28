@@ -131,15 +131,15 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
     }
 
     private void configureAutoCreateSchema(final Map<String, String> datanucleusProps) {
-        // we *don't* use DN's eager loading (autoStart), because doing so means that it attempts to
-        // create the table before the schema (for any entities annotated @PersistenceCapable(schema=...)
+        // unlike v1, we DO now use we DN's eager loading for schema (ie set to PROPERTY_SCHEMA_AUTOCREATE_ALL to true).
         //
-        // instead, we manually create the schema ourselves
-        // (if the configured StoreMgr supports it, and if requested in isis.properties)
-        //
-        datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL, "false"); // turn off, cos want to do the schema object ourselves...
+        // the mechanism in v1 was to register a listener to create a schema just-in-time
+        // (CreateSchemaObjectFromClassMetadata); this does seem to be needed still if running the tests within an IDE
+        // but it is called too late if running from mvn.  Luckily, it seems that DN's autocreate works within mvn.
+        datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL, "true");
+
         datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_DATABASE, "false");
-        datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_TABLES, "true"); // but have DN do everything else...
+        datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_TABLES, "true");
         datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_COLUMNS, "true");
         datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_CONSTRAINTS, "true");
     }

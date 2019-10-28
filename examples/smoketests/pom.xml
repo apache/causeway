@@ -29,6 +29,37 @@
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.odavid.maven.plugins</groupId>
+				<artifactId>mixin-maven-plugin</artifactId>
+				<version>0.1-alpha-40</version>
+				<extensions>true</extensions>
+				<configuration>
+					<mixins>
+						<mixin>
+							<groupId>org.apache.isis.mixins</groupId>
+							<artifactId>isis-mixin-standard</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mixins</groupId>
+							<artifactId>isis-mixin-datanucleus-enhance</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mixins</groupId>
+							<artifactId>isis-mixin-surefire</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mixins</groupId>
+							<artifactId>isis-mixin-docker</artifactId>
+						</mixin>
+					</mixins>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 
 		<!-- ISIS WEB-APP BUNDLE -->

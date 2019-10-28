@@ -28,6 +28,33 @@
 		<maven-pmd-plugin.ruleset>${project.parent.basedir}/_checks/pmd.xml</maven-pmd-plugin.ruleset>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.odavid.maven.plugins</groupId>
+				<artifactId>mixin-maven-plugin</artifactId>
+				<version>0.1-alpha-40</version>
+				<extensions>true</extensions>
+				<configuration>
+					<mixins>
+						<mixin>
+							<groupId>org.apache.isis.mixins</groupId>
+							<artifactId>isis-mixin-standard</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mixins</groupId>
+							<artifactId>isis-mixin-datanucleus-enhance</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mixins</groupId>
+							<artifactId>isis-mixin-surefire</artifactId>
+						</mixin>
+					</mixins>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 
 		<!-- ISIS API -->
@@ -82,17 +109,19 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--         <dependency> -->
-<!--             <groupId>com.h2database</groupId> -->
-<!--             <artifactId>h2</artifactId> -->
-<!--             <scope>test</scope> -->
-<!--         </dependency> -->
-
 		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax-servlet.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 

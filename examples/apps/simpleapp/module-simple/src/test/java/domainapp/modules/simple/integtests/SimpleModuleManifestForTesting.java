@@ -43,7 +43,7 @@ import domainapp.modules.simple.SimpleModule;
 @Configuration
 @PropertySources({
     //@PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
-    @PropertySource(IsisPresets.HsqlDbInMemory),
+    @PropertySource(IsisPresets.H2InMemory),
     @PropertySource(IsisPresets.DataNucleusAutoCreate),
 })
 @Import({

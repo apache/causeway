@@ -34,6 +34,7 @@
 	</scm>
 
 	<modules>
+		<module>mixins</module>
 		<module>core</module>
 	</modules>
 
@@ -49,6 +50,7 @@
 				</property>
 			</activation>
 			<modules>
+				<module>mixins</module>
 				<module>core</module>
 				<module>examples</module>
 			</modules>

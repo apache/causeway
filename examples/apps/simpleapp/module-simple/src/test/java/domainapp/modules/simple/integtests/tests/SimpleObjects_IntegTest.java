@@ -22,6 +22,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.jdo.JDODataStoreException;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
@@ -100,7 +101,7 @@ public class SimpleObjects_IntegTest extends SimpleModuleIntegTestAbstract {
 
             // also expect
             MatcherAssert.assertThat(cause, 
-                    ThrowableMatchers.causedBy(SQLIntegrityConstraintViolationException.class));
+                    ThrowableMatchers.causedBy(JDODataStoreException.class));
 
         }
 
