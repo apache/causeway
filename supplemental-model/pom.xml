@@ -27,4 +27,16 @@
 	To compensate for incomplete dependency POMs, we use the supplemental models support.
   	</description>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
