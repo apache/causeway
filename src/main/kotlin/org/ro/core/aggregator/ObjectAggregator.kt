@@ -4,10 +4,10 @@ import org.ro.core.event.LogEntry
 import org.ro.core.model.BaseDisplayable
 import org.ro.core.model.DisplayObject
 import org.ro.layout.Layout
-import org.ro.ui.kv.UiManager
 import org.ro.to.HttpError
 import org.ro.to.TObject
 import org.ro.ui.ErrorAlert
+import org.ro.ui.kv.UiManager
 
 class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     override var dsp: BaseDisplayable? = null
@@ -17,7 +17,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     override fun update(logEntry: LogEntry) {
-        val obj = logEntry.getObj()
+        val obj = logEntry.getTransferObject()
 
         when (obj) {
             is TObject -> handleObject(obj)

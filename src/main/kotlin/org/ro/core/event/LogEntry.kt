@@ -1,5 +1,6 @@
 package org.ro.core.event
 
+import kotlinext.js.Object
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
 import org.ro.core.Session
@@ -7,16 +8,17 @@ import org.ro.core.Utils.removeHexCode
 import org.ro.core.aggregator.IAggregator
 import org.ro.to.TransferObject
 import pl.treksoft.kvision.core.Col
+import pl.treksoft.kvision.panel.VPanel
 import kotlin.js.Date
 
 //Eventually color codes from css instead
-enum class EventState(val id: String, val iconName: String, val color: Col ) {
+enum class EventState(val id: String, val iconName: String, val color: Col) {
     INITIAL("INITIAL", "fa-power-off", Col.GRAY),
     RUNNING("RUNNING", "fa-play-circle", Col.YELLOW),
     ERROR("ERROR", "fa-exclamation-circle", Col.RED),
     SUCCESS("SUCCESS", "fa-check-circle", Col.GREEN),
     VIEW("VIEW", "fa-info-circle", Col.BLUE),
-    CACHE_USED ("CACHE_USED", "fa-caret-circle-left", Col.VIOLET),
+    CACHE_USED("CACHE_USED", "fa-caret-circle-left", Col.VIOLET),
     CLOSED("CLOSED", "fa-times-circle", Col.LIGHTBLUE)
 }
 
@@ -52,7 +54,9 @@ data class LogEntry(
 
     var cacheHits = 0
     var aggregator: IAggregator? = null
-    var obj: TransferObject? = null
+
+    @ContextualSerialization
+    var obj: Any? = null
 
     // alternative constructor for UI events (eg. from user interaction)
     constructor(title: String, aggregator: IAggregator) : this("", "", "") {
@@ -88,12 +92,12 @@ data class LogEntry(
         state = EventState.CACHE_USED
     }
 
-    fun getObj(): TransferObject? {
-        return obj
+    fun getTransferObject(): TransferObject? {
+        return obj as TransferObject
     }
 
-    fun setObj(obj: TransferObject?) {
-        this.obj = obj
+    fun setTransferObject(to: TransferObject?) {
+        this.obj = to
     }
 
     // region response

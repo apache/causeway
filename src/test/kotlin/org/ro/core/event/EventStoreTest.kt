@@ -5,6 +5,7 @@ import org.ro.core.aggregator.ObjectAggregator
 import org.ro.to.Method
 import org.ro.urls.RESTFUL
 import org.ro.urls.RESTFUL_SERVICES
+import pl.treksoft.kvision.panel.VPanel
 import kotlin.test.*
 
 @UnstableDefault
@@ -58,9 +59,9 @@ class EventStoreTest {
 
         // construct list with urls
         EventStore.add(h1)
-        EventStore.addView(i1, agg)
+        EventStore.addView(i1, agg, VPanel())
         EventStore.add(h2)
-        EventStore.addView(i2, agg)
+        EventStore.addView(i2, agg, VPanel())
 
         val le1 = EventStore.find(h1)!!
         assertEquals(h1, le1.url)   //1

@@ -3,10 +3,10 @@ package org.ro.core.aggregator
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.layout.Layout
-import org.ro.ui.kv.UiManager
 import org.ro.to.Property
 import org.ro.to.ResultList
 import org.ro.to.TObject
+import org.ro.ui.kv.UiManager
 
 /** sequence of operations:
  * (0) list
@@ -21,7 +21,7 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     override fun update(logEntry: LogEntry) {
-        val obj = logEntry.getObj()
+        val obj = logEntry.getTransferObject()
 
         when (obj) {
             is ResultList -> handleList(obj)

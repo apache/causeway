@@ -2,7 +2,6 @@ package org.ro.core.aggregator
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
-import org.ro.core.aggregator.ObjectAggregator
 import org.ro.to.ResultObject
 import org.ro.to.ResultType
 import org.ro.urls.ACTION_SO_CREATE
@@ -18,7 +17,7 @@ class ObjectAggregatorTest : IntegrationTest() {
         val aggregator = ObjectAggregator("object test")
         // when
         val logEntry = mockResponse(ACTION_SO_CREATE, aggregator)
-        val ro = logEntry.obj as ResultObject
+        val ro = logEntry.getTransferObject() as ResultObject
         val type = ro.resulttype
         // then
         assertEquals(ResultType.DOMAINOBJECT.type, type)

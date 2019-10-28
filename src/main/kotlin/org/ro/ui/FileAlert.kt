@@ -8,7 +8,7 @@ import org.ro.ui.uicomp.FormItem
 class FileAlert(val logEntry: LogEntry) : Command {
 
     fun open() {
-        val rv = logEntry.getObj() as ResultValue
+        val rv = logEntry.getTransferObject() as ResultValue
         val rvr = rv.result!!
         val value = rvr.value!!.content as String
         val list = value.split(":")

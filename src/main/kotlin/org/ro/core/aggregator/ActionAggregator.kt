@@ -9,34 +9,41 @@ import org.ro.ui.kv.ActionPrompt
 class ActionAggregator : BaseAggregator() {
 
     override fun update(logEntry: LogEntry) {
-        val action = logEntry.getObj() as Action
-        for (l in action.links) {
-            // l.rel should be neither: (self | up | describedBy )
-            if (l.isInvokeAction()) {
-                when (l.method) {
-                    Method.GET.name -> {
-                        //val obs = logEntry.aggregator!! ? this==obs?
-                        if (l.hasArguments()) {
-                            ActionPrompt(action).open()
-                        } else {
-                            this.invoke(l)
-                        }
-                    }
-                    Method.POST.name -> {
-                        ActionPrompt(action).open()
-                    }
-                    Method.PUT.name -> {
-                        // TODO
-                    }
-                    Method.DELETE.name -> {
-                        // TODO
-                    }
+        val action = logEntry.getTransferObject() as Action
+        action.links.forEach {
+            // it.rel should be neither: (self | up | describedBy )
+            if (it.isInvokeAction()) {
+                when (it.method) {
+                    Method.GET.name -> processGet(action, it)
+                    Method.POST.name -> processPost(action)
+                    Method.PUT.name -> processPut(action)
+                    Method.DELETE.name -> processDelete(action)
                 }
             }
         }
     }
 
-    fun Link.isInvokeAction(): Boolean {
+    private fun processGet(action: Action, link: Link) {
+        if (link.hasArguments()) {
+            ActionPrompt(action).open()
+        } else {
+            this.invoke(link)
+        }
+    }
+
+    private fun processPost(action: Action) {
+        ActionPrompt(action).open()
+    }
+
+    private fun processPut(action: Action) {
+        throw Exception("[ActionAggregator.processPut] notImplementedYet")
+    }
+
+    private fun processDelete(action: Action) {
+        throw Exception("[ActionAggregator.processDelete] notImplementedYet")
+    }
+
+    private fun Link.isInvokeAction(): Boolean {
         if (rel.contains("invokeaction")) {
             return true
         }

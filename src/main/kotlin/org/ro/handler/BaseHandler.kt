@@ -36,7 +36,7 @@ abstract class BaseHandler : IResponseHandler {
         var answer = false
         try {
             val obj = parse(jsonStr)
-            logEntry.setObj(obj)
+            logEntry.setTransferObject(obj)
             answer = true
         } catch (ex: Exception) {
             // empty catch by purpose - answer = false (default)

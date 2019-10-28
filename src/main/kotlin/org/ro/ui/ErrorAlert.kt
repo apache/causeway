@@ -8,7 +8,7 @@ import org.ro.ui.uicomp.FormItem
 class ErrorAlert(val logEntry: LogEntry) : Command {
 
     fun open() {
-        val error = logEntry.getObj() as HttpError
+        val error = logEntry.getTransferObject() as HttpError
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("URL", "Text", logEntry.url))
         formItems.add(FormItem("Message", "Text", error.message))

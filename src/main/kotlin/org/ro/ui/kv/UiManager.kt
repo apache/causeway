@@ -20,11 +20,14 @@ object UiManager {
 
     fun add(title: String, panel: VPanel, aggregator: IAggregator = UndefinedAggregator()) {
         RoView.addTab(title, panel)
-        EventStore.addView(title, aggregator)
+        EventStore.addView(title, aggregator, panel)
     }
 
     fun closeView(tab: VPanel) {
-        EventStore.closeView(tab.title!!)
+        val tt = tab.title
+        if (tt != null) {
+            EventStore.closeView(tt)
+        }
     }
 
     /**

@@ -25,6 +25,9 @@ class RoXmlHttpRequest {
 
     private fun processCached(url: String) {
         val le = EventStore.find(url)!!
+        if (le.isRoot) {
+            le.aggregator?.reset()
+        }
         le.retrieveResponse()
         ResponseHandler.handle(le)
         EventStore.cached(url)

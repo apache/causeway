@@ -29,14 +29,14 @@ class ListAggregatorTest : IntegrationTest() {
             val pdLe = mockResponse(FR_PROPERTY_DESCRIPTION, obs)
             val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
 
-            val p = pLe.getObj() as Property
+            val p = pLe.getTransferObject() as Property
             val links = p.links
             val descLink = links.find {
                 it.rel == RelType.DESCRIBEDBY.type
             }
             val actObs = pLe.aggregator as ListAggregator
             val dl = obs.dsp
-            val property = pdLe.getObj() as Property
+            val property = pdLe.getTransferObject() as Property
             val propertyLabels = (dl as DisplayList).propertyLabels
             val lbl = propertyLabels.get(property.id)!!
             // then

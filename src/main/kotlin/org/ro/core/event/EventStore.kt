@@ -3,6 +3,7 @@ package org.ro.core.event
 import org.ro.core.Utils
 import org.ro.core.aggregator.IAggregator
 import org.ro.ui.kv.UiManager
+import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.utils.observableListOf
 
 /**
@@ -38,8 +39,9 @@ object EventStore {
         updateStatus(entry)
     }
 
-    fun addView(title: String, aggregator: IAggregator) {
+    fun addView(title: String, aggregator: IAggregator, panel: VPanel) {
         val entry = LogEntry(title = title, aggregator = aggregator)
+        entry.obj = panel
         log(entry)
         updateStatus(entry)
     }

@@ -2,12 +2,12 @@ package org.ro.core.aggregator
 
 import kotlinx.serialization.Serializable
 import org.ro.core.Menu
-import org.ro.ui.kv.UiManager
 import org.ro.core.event.LogEntry
 import org.ro.core.model.BaseDisplayable
 import org.ro.to.ResultListResult
 import org.ro.to.Service
 import org.ro.to.TransferObject
+import org.ro.ui.kv.UiManager
 
 @Serializable
 class NavigationAggregator : BaseAggregator() {
@@ -19,7 +19,7 @@ class NavigationAggregator : BaseAggregator() {
 
     @ExperimentalUnsignedTypes
     override fun update(logEntry: LogEntry) {
-        val obj = logEntry.getObj()
+        val obj = logEntry.getTransferObject()
 
         when (obj) {
             is ResultListResult -> handleResult(obj)

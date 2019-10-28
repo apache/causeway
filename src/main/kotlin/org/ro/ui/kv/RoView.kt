@@ -1,6 +1,5 @@
 package org.ro.ui.kv
 
-import org.ro.ui.kv.UiManager
 import org.ro.ui.IconManager
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.panel.VPanel
@@ -21,6 +20,15 @@ object RoView {
     fun addTab(
             title: String,
             panel: Component) {
+
+        val index = tabPanel.findTab(title)
+        console.log("[RV.addTab] $title")
+        console.log(index)
+        if (index != null) {
+            val tab = tabPanel.getChildComponent(index) as VPanel
+            removeTab(tab)
+            tabPanel.removeTab(index)
+        }
 
         val icon = IconManager.find(title)
 

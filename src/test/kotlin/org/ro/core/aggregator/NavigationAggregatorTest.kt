@@ -16,7 +16,7 @@ class NavigationAggregatorTest : IntegrationTest() {
         val aggregator = NavigationAggregator()
         // when
         val logEntry = mockResponse(RESTFUL_SERVICES, aggregator)
-        val result = logEntry.obj as ResultListResult
+        val result = logEntry.getTransferObject() as ResultListResult
         val actual = result.value.size
         // then
         assertEquals(8, actual)
