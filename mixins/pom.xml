@@ -73,9 +73,6 @@
 	</modules>
 
 	<profiles>
-		<!--
-		this profile allows builds to be deployed to GCP.  See build-mixins.sh script.
-        -->
 		<profile>
 			<id>gcpappenginerepo-deploy</id>
 			<activation>
