@@ -47,17 +47,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<!-- MIXINS -->
-
-		<!-- <mavenmixin-standard.version>0.0.4</mavenmixin-standard.version> -->
-		<!-- <mavenmixin-datanucleusenhance.version>0.0.5</mavenmixin-datanucleusenhance.version> -->
-		<!-- <mavenmixin-surefire.version>0.0.6</mavenmixin-surefire.version> -->
-		<!-- <mavenmixin-docker.version>0.0.4</mavenmixin-docker.version> -->
-		<!-- <mavenmixin-enforcerrelaxed.version>0.0.2</mavenmixin-enforcerrelaxed.version> -->
-		<!-- <mavenmixin-sourceandjavadoc.version>0.0.2</mavenmixin-sourceandjavadoc.version> -->
-		<!-- <mavenmixin-staticanalysis.version>0.0.2</mavenmixin-staticanalysis.version> -->
-		<!-- <mavenmixin-cucumberreporting.version>0.0.2</mavenmixin-cucumberreporting.version> -->
-
 	</properties>
 
 	<profiles>
