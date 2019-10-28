@@ -16,10 +16,11 @@ echo ""
 echo ""
 echo ""
 
-cd examples/apps/$APP_NAME
+cd examples
 
-mvn -s ../../../.m2/settings.xml \
+mvn -s ../.m2/settings.xml \
     --batch-mode \
+    -Dexample-apps \
     clean deploy \
     -Dgcpappenginerepo-deploy \
     -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
@@ -27,6 +28,9 @@ mvn -s ../../../.m2/settings.xml \
 if [ $? -ne 0 ]; then
   exit 1
 fi
+
+cd ..
+cd examples/apps/$APP_NAME
 
 mvn --batch-mode \
     install \
@@ -55,5 +59,5 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-cd ..
+cd ../../..
 

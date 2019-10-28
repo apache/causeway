@@ -52,6 +52,33 @@
 	<profiles>
 
 		<profile>
+			<id>default-apps</id>
+			<activation>
+				<property>
+					<name>!example-apps</name>
+				</property>
+			</activation>
+			<modules>
+				<module>apps/helloworld</module>
+				<module>apps/simpleapp</module>
+				<module>apps/demo</module>
+				<module>smoketests</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>example-apps</id>
+			<activation>
+				<property>
+					<name>example-apps</name>
+				</property>
+			</activation>
+			<modules>
+				<module>apps/helloworld</module>
+				<module>apps/simpleapp</module>
+			</modules>
+		</profile>
+
+		<profile>
 			<id>jdk11</id>
 			<activation>
 				<jdk>[11,)</jdk>
@@ -273,16 +300,9 @@
 				<type>pom</type>
 			</dependency>
 
-
 		</dependencies>
 	</dependencyManagement>
 
-	<modules>
-		<module>apps/helloworld</module>
-		<module>apps/simpleapp</module>
-		<module>apps/demo</module>
-		<module>smoketests</module>
-	</modules>
 
 </project>
 
