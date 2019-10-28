@@ -23,7 +23,7 @@
 
 	<groupId>org.apache.isis.mixins</groupId>
 	<artifactId>isis-mixins</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.0-SNAPSHOT</version>
 
 	<name>Apache Isis Maven Mixins</name>
 	<description>
