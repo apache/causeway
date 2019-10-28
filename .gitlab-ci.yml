@@ -72,7 +72,7 @@ build-package-push:
     - echo ""
     - echo ""
     - echo ""
-    - cd example/application/$APP_NAME
+    - cd examples/apps/$APP_NAME
     - >
       mvn --batch-mode \
           install \
