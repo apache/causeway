@@ -9,7 +9,6 @@ echo ""
 echo "\$REVISION             = ${REVISION}"
 echo "\$GCPAPPENGINEREPO_URL = ${GCPAPPENGINEREPO_URL}"
 echo "\$ORG_NAME             = ${ORG_NAME}"
-echo "\$APP_NAME             = ${APP_NAME}"
 echo "\$DOCKER_REGISTRY_URL  = ${DOCKER_REGISTRY_URL}"
 
 echo ""
@@ -18,19 +17,19 @@ echo ""
 
 cd examples
 
-mvn -s ../.m2/settings.xml \
-    --batch-mode \
-    -Dskip.default-apps \
-    -Dsimpleapp \
-    clean deploy \
-    -Dgcpappenginerepo-deploy \
-    -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
+mvn --batch-mode \
+    -Dexample-apps \
+    clean install \
     -Drevision=$REVISION
 if [ $? -ne 0 ]; then
   exit 1
 fi
 
 cd ..
+
+
+export APP_NAME=helloworld
+
 cd examples/apps/$APP_NAME
 
 mvn --batch-mode \
@@ -42,6 +41,26 @@ mvn --batch-mode \
 if [ $? -ne 0 ]; then
   exit 1
 fi
+
+mvn -s ../../../.m2/settings.xml \
+    --batch-mode \
+    docker:push@push-image-tagged \
+    -DskipTests \
+    -Dskip.isis-validate \
+    -Dskip.isis-swagger \
+    -Drevision=$REVISION \
+    -Disis.version=$REVISION \
+    -Dmavenmixin-docker \
+    -Ddocker-plugin.imageName=$ORG_NAME/$APP_NAME \
+    -Ddocker-plugin.serverId=docker-registry \
+    -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+cd ../../..
+
+export APP_NAME=simpleapp
 
 mvn -s ../../../.m2/settings.xml \
     --batch-mode \
@@ -61,4 +80,3 @@ if [ $? -ne 0 ]; then
 fi
 
 cd ../../..
-

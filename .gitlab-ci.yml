@@ -37,7 +37,6 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
   ORG_NAME: "apacheisis"
-  APP_NAME: "simpleapp"
 
 stages:
   - build-package-push
