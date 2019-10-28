@@ -47,6 +47,8 @@ public class ClassSubstitutor {
         ignore("javassist.util.proxy.ProxyObject");
         ignore("javassist.util.proxy.MethodHandler");
         
+        ignore("org.springframework.aop.framework.autoproxy.InfrastructureAdvisorAutoProxyCreator");
+        
         ignorePackage("com.fasterxml.jackson.");
         ignorePackage("com.google.gson.");
 

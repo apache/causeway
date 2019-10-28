@@ -39,7 +39,7 @@ import lombok.Getter;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.DependentArgs", editing=Editing.ENABLED)
 public class DependentArgsActionDemo extends DemoStub {
 
     // -- INIT

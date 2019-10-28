@@ -43,7 +43,7 @@ import lombok.Setter;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Homepage")
 @HomePage
 public class DemoHomePage extends DemoStub {
 

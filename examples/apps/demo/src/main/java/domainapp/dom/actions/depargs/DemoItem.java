@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@DomainObject(nature=Nature.INMEMORY_ENTITY)
+@DomainObject(nature=Nature.INMEMORY_ENTITY, objectType = "demo.DependentArgsDemoItem")
 @Named("depargs.DemoItem")
 @NoArgsConstructor 
 @AllArgsConstructor(staticName="of")

@@ -34,7 +34,7 @@ import domainapp.utils.DemoStub;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Jee")
 public class JeeDemo extends DemoStub {
 
     @Inject private JeeDemoService jeeDemoService;

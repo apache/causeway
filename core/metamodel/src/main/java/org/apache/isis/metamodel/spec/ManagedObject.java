@@ -385,6 +385,20 @@ public interface ManagedObject {
         // REVIEW: it's a bit hokey to join these together just to split them out again.
         return oidStr != null ? Oid.unmarshaller().splitInstanceId(oidStr): null;
     }
+    
+    static ManagedObject _adapterOfRootOid(SpecificationLoader specificationLoader, RootOid rootOid) {
+        
+        val mmc = ((SpecificationLoaderDefault)specificationLoader).getMetaModelContext();
+        
+        val spec = specificationLoader.loadSpecification(rootOid.getObjectSpecId());
+        val objectId = rootOid.getIdentifier();
+        
+        val objectLoadRequest = ObjectLoader.ObjectLoadRequest.of(spec, objectId);
+        val managedObject = mmc.getObjectLoader().loadObject(objectLoadRequest);
+        
+        return managedObject;
+        
+    }
 
     @Deprecated
     static ManagedObject _adapterOfList(SpecificationLoader specificationLoader, DomainObjectList list) {
@@ -416,19 +430,6 @@ public interface ManagedObject {
         throw _Exceptions.unexpectedCodeReach();
     }
 
-    @Deprecated
-    static ManagedObject _adapterOfRootOid(SpecificationLoader specificationLoader, RootOid rootOid) {
-        
-        val mmc = ((SpecificationLoaderDefault)specificationLoader).getMetaModelContext();
-        
-        val spec = specificationLoader.loadSpecification(rootOid.getObjectSpecId());
-        val objectId = rootOid.getIdentifier();
-        
-        val objectLoadRequest = ObjectLoader.ObjectLoadRequest.of(spec, objectId);
-        val managedObject = mmc.getObjectLoader().loadObject(objectLoadRequest);
-        
-        return managedObject;
-        
-    }
+
     
  }

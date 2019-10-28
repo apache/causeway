@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.commons.internal.base._Strings;
@@ -343,7 +342,7 @@ class Generation {
 
         final String serviceModelDefinition = serviceId + "Repr";
 
-        final String tag = tagFor(serviceId, "> services");
+        final String tag = tagForObjectType(serviceId, "> services");
         path.get(
                 new Operation()
                 .tag(tag)
@@ -372,7 +371,7 @@ class Generation {
         final Path path = new Path();
         swagger.path(String.format("/objects/%s/{objectId}", objectType), path);
 
-        final String tag = tagFor(objectType, null);
+        final String tag = tagForObjectType(objectType, null);
         final Operation operation = new Operation();
         path.get(operation);
         operation
@@ -452,7 +451,7 @@ class Generation {
         final Path path = new Path();
         swagger.path(String.format("/services/%s/actions/%s/invoke", serviceId, actionId), path);
 
-        final String tag = tagFor(serviceId, "> services");
+        final String tag = tagForObjectType(serviceId, "> services");
         final Operation invokeOperation =
                 new Operation()
                 .tag(tag)
@@ -537,7 +536,7 @@ class Generation {
         final Path path = new Path();
         swagger.path(String.format("/objects/%s/{objectId}/collections/%s", objectType, collectionId), path);
 
-        final String tag = tagFor(objectType, null);
+        final String tag = tagForObjectType(objectType, null);
         final Operation collectionOperation =
                 new Operation()
                 .tag(tag)
@@ -571,7 +570,7 @@ class Generation {
         final Path path = new Path();
         swagger.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", objectType, actionId), path);
 
-        final String tag = tagFor(objectType, null);
+        final String tag = tagForObjectType(objectType, null);
         final Operation invokeOperation =
                 new Operation()
                 .tag(tag)
@@ -825,8 +824,8 @@ class Generation {
         return Util.withCachingHeaders(new Response(), caching);
     }
 
-    String tagFor(final String str, final String fallback) {
-        return tagger.tagFor(str, fallback);
+    String tagForObjectType(final String objectType, final String fallback) {
+        return tagger.tagForObjectType(objectType, fallback);
     }
 
     private Property newRefProperty(final String model) {

@@ -42,7 +42,7 @@ import lombok.Getter;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.AssociatedAction", editing=Editing.ENABLED)
 public class AssociatedActionDemo extends DemoStub {
 
     @XmlTransient
