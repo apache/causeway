@@ -18,12 +18,12 @@
  	<parent>
  		<groupId>org.apache.isis.mixins</groupId>
  		<artifactId>isis-mixins</artifactId>
- 		<version>1.0.0-SNAPSHOT</version>
+ 		<version>${revision}</version>
+		<relativePath>../pom.xml</relativePath>
  	</parent>
 
 	<artifactId>isis-mixin-datanucleus-enhance</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
-
+	
 	<packaging>pom</packaging>
 
 	<name>Apache Isis Maven Mixin - Datanucleus Enhance Mixin</name>

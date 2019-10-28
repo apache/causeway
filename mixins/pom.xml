@@ -23,7 +23,7 @@
 
 	<groupId>org.apache.isis.mixins</groupId>
 	<artifactId>isis-mixins</artifactId>
-	<version>1.0.0</version>
+	<version>${revision}</version>
 
 	<name>Apache Isis Maven Mixins</name>
 	<description>
@@ -33,6 +33,9 @@
 	<packaging>pom</packaging>
 
 	<properties>
+	
+		<revision>1.0.0</revision>
+	
 		<jar-plugin.automaticModuleName>org.apache.isis.mixins</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/mixins</git-plugin.propertiesDir>
 
