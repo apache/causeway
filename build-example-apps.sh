@@ -29,7 +29,6 @@ cd ..
 
 
 #export APP_NAME=helloworld
-#
 #cd examples/apps/$APP_NAME
 #
 #mvn --batch-mode \
@@ -61,6 +60,17 @@ cd ..
 #cd ../../..
 
 export APP_NAME=simpleapp
+cd examples/apps/$APP_NAME
+
+mvn --batch-mode \
+    install \
+    -Drevision=$REVISION \
+    -Disis.version=$REVISION \
+    -Dmavenmixin-docker \
+    -Ddocker-plugin.imageName=$ORG_NAME/$APP_NAME
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
 mvn -s ../../../.m2/settings.xml \
     --batch-mode \
