@@ -18,7 +18,7 @@ echo ""
 
 pushd examples/apps/$APP_NAME
 
-mvn -s .m2/settings.xml \
+mvn -s ../.m2/settings.xml \
     --batch-mode \
     clean deploy \
     -Dgcpappenginerepo-deploy \
@@ -32,7 +32,7 @@ mvn --batch-mode \
     -Dmavenmixin-docker \
     -Ddocker-plugin.imageName=$ORG_NAME/$APP_NAME
 
-mvn -s .m2/settings.xml \
+mvn -s ../.m2/settings.xml \
     --batch-mode \
     docker:push@push-image-tagged \
     -pl webapp \

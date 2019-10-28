@@ -15,7 +15,7 @@ echo ""
 
 pushd core
 
-mvn -s .m2/settings.xml \
+mvn -s ../.m2/settings.xml \
     --batch-mode \
     clean deploy \
     -Dgcpappenginerepo-deploy \

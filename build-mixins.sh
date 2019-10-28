@@ -19,7 +19,7 @@ pushd mixins
 # can't use flatten pom, so have to edit directly instead...
 mvn versions:set -DnewVersion=$REVISION > /dev/null
 
-mvn -s .m2/settings.xml \
+mvn -s ../.m2/settings.xml \
     --batch-mode \
     clean deploy \
     -Dgcpappenginerepo-deploy \
