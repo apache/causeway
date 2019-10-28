@@ -315,11 +315,12 @@ public interface ManagedObject {
 
     @Deprecated
     static RootOid _collectionOidIfAny(ManagedObject adapter) {
-        val oid = ManagedObject.promote(adapter).getOid();
-        if(!(oid instanceof RootOid)) {
-            return null;
-        }
-        return (RootOid) oid;
+        return _rootOidIfAny(adapter);
+//        val oid = ManagedObject.promote(adapter).getOid();
+//        if(!(oid instanceof RootOid)) {
+//            return null;
+//        }
+//        return (RootOid) oid;
     }
 
     @Deprecated

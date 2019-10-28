@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.services;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,8 +30,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -60,7 +59,7 @@ import lombok.val;
 properties = {
         "isis.services.injector.setPrefix=true"
 })
-@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+@Disabled("legacy injector is no longer used")
 class ServiceInjectorLegacyTest {
 
     // -- SPRING SETUP

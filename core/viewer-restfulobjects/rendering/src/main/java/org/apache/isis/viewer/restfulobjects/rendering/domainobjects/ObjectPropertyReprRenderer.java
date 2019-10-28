@@ -115,11 +115,11 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
                     format = String.format("big-integer");
                 }
             }
-            return jsonValueEncoder.appendValueAndFormat(ManagedObject.promote(valueAdapter), representation, format, resourceContext.suppressMemberExtensions());
+            return jsonValueEncoder.appendValueAndFormat(valueAdapter, representation, format, resourceContext.suppressMemberExtensions());
         }
 
         boolean eagerlyRender =
-                (renderEagerly() && resourceContext.canEagerlyRender(ManagedObject.promote(valueAdapter)))
+                (renderEagerly() && resourceContext.canEagerlyRender(valueAdapter))
                 || (linkFollower != null && !linkFollower.isTerminated());
 
         if(valueAdapter == null) {
@@ -130,11 +130,11 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
             final TitleFacet titleFacet = spec.getFacet(TitleFacet.class);
             final String title = titleFacet.title(valueAdapter);
 
-            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, ManagedObject.promote(valueAdapter)).withTitle(title);
+            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, valueAdapter).withTitle(title);
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = 
                         new DomainObjectReprRenderer(resourceContext, linkFollower, JsonRepresentation.newMap());
-                renderer.with(ManagedObject.promote(valueAdapter));
+                renderer.with(valueAdapter);
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
                 }

@@ -105,11 +105,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
         elementAdapters.forEach(elementAdapter->{
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer
-                    .newLinkToBuilder(resourceContext, Rel.VALUE, ManagedObject.promote(elementAdapter));
+                    .newLinkToBuilder(resourceContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), followHref, JsonRepresentation.newMap()
                         );
-                renderer.with(ManagedObject.promote(elementAdapter));
+                renderer.with(elementAdapter);
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
                 }
@@ -124,7 +124,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     private boolean renderEagerly(ManagedObject valueAdapter) {
-        return renderEagerly() && resourceContext.canEagerlyRender(ManagedObject.promote(valueAdapter));
+        return renderEagerly() && resourceContext.canEagerlyRender(valueAdapter);
     }
 
     // ///////////////////////////////////////////////////
