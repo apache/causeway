@@ -19,7 +19,6 @@
 		<groupId>org.apache.isis.mavendeps</groupId>
 		<artifactId>isis-mavendeps</artifactId>
 		<version>${revision}</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>isis-mavendeps-testing</artifactId>

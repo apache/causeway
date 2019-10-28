@@ -1,0 +1,4 @@
+= Maven Mixins
+include::_attributes.adoc[]
+
+TODO: to document

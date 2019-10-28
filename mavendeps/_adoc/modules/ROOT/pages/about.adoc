@@ -1,3 +1,4 @@
-= Maven Mixins
+= Maven Dependencies
 include::_attributes.adoc[]
 
+TODO: to document

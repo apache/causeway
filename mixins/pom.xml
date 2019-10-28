@@ -21,19 +21,19 @@
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.mavendeps</groupId>
-	<artifactId>isis-mavendeps</artifactId>
+	<groupId>org.apache.isis.mixins</groupId>
+	<artifactId>isis-mixins</artifactId>
 
-	<name>Apache Isis Maven Dependency Bundles</name>
+	<name>Apache Isis Maven Mixins</name>
 	<description>
-        Collection of Apache Isis Maven Dependency Bundles.
+        Collection of Apache Isis Maven Mixins
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.mavendeps</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/mavendeps</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.mixins</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/mixins</git-plugin.propertiesDir>
 
 		<lombok.version>[1.18,)</lombok.version>
 
@@ -152,9 +152,10 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>intellij</module>
-		<module>testing</module>
-		<module>webapp</module>
+		<module>standard</module>
+		<module>surefire</module>
+		<module>datanucleus-enhance</module>
+		<module>docker</module>
 	</modules>
 
 </project>

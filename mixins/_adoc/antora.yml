@@ -1,5 +1,5 @@
-name: mavendeps
-title: Maven Dependencies
+name: mixins
+title: Maven Mixins
 version: master
 start_page: ROOT:about.adoc
 nav:
