@@ -15,14 +15,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
-		<version>${revision}</version>
-		<relativePath>../core/pom.xml</relativePath>
+		<groupId>org.apache</groupId>
+		<artifactId>apache</artifactId>
+		<version>21</version>
+		<relativePath />
 	</parent>
 
 	<groupId>org.apache.isis.mixins</groupId>
 	<artifactId>isis-mixins</artifactId>
+	<version>${revision}</version>
 
 	<name>Apache Isis Maven Mixins</name>
 	<description>
@@ -66,17 +67,13 @@
 		</resources>
 
 		<plugins>
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>flatten-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<version>1.1.0</version>
 				<configuration>
 					<updatePomFile>true</updatePomFile>
-					<pomElements>
-						<dependencyManagement>resolve</dependencyManagement>
-						<dependencies>resolve</dependencies>
-					</pomElements>
+					<flattenMode>minimum</flattenMode>
 				</configuration>
 				<executions>
 					<execution>

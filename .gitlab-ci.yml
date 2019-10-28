@@ -63,6 +63,10 @@ build-package-push:
           -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
           -Drevision=$REVISION \
           -Dskip.assemble-zip \
+          -Dskip.mavenmixin-standard \
+          -Dskip.mavenmixin-docker \
+          -Dskip.mavenmixin-surefire \
+          -Dskip.mavenmixin-datanucleus-enhance \
           $CORE_ADDITIONAL_OPTS
     - cd ..
     - echo ""
