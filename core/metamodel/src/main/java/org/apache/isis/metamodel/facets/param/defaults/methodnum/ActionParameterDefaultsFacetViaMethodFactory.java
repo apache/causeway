@@ -85,7 +85,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
             processMethodContext.removeMethod(defaultMethod);
 
             final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
-            if (facetedMethod.containsDoOpFacet(ActionDefaultsFacet.class)) {
+            if (facetedMethod.containsNonFallbackFacet(ActionDefaultsFacet.class)) {
                 final Class<?> cls2 = processMethodContext.getCls();
                 throw new MetaModelException(cls2 + " uses both old and new default syntax for " + actionMethod.getName() + "(...) - must use one or other");
             }

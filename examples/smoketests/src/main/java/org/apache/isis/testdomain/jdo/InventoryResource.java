@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.xml.bind.JAXBException;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -39,6 +40,8 @@ import lombok.val;
         objectType = "testdomain.InventoryResource")
 public class InventoryResource {
 
+    @Inject private RepositoryService repository;
+    
     @Action
     public List<Product> listProducts() {
         return repository.allInstances(Product.class);
@@ -54,6 +57,12 @@ public class InventoryResource {
         return Book.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
     }
 
+    @Action //TODO improve the REST client such that the param can be of type Book
+    public Book storeBook(String newBook) throws JAXBException { 
+        Book book = BookDto.decode(newBook).toBook();
+        return repository.persist(book);
+    }
+    
     @Action
     public String httpSessionInfo() {
         
@@ -70,10 +79,5 @@ public class InventoryResource {
         
         return String.format("http-session attribute names: {%s}", sessionAttributeNames);
     }
-    
-    
-    // -- DEPENDENCIES
-
-    @Inject RepositoryService repository;
 
 }

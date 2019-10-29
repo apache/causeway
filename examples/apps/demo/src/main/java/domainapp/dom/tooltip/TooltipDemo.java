@@ -51,7 +51,7 @@ import lombok.Setter;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Tooltip")
 public class TooltipDemo extends DemoStub {
 
     @Override

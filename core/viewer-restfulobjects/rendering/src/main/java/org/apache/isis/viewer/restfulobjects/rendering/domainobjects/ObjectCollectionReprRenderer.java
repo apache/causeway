@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -35,7 +34,7 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
 
 import lombok.val;
@@ -43,11 +42,16 @@ import lombok.val;
 public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
     public ObjectCollectionReprRenderer(
-            final RendererContext rendererContext,
+            final IResourceContext resourceContext,
             final LinkFollowSpecs linkFollowSpecs,
             final String collectionId,
             final JsonRepresentation representation) {
-        super(rendererContext, linkFollowSpecs, collectionId, RepresentationType.OBJECT_COLLECTION, representation,
+        
+        super(resourceContext, 
+                linkFollowSpecs, 
+                collectionId, 
+                RepresentationType.OBJECT_COLLECTION, 
+                representation,
                 Where.PARENTED_TABLES);
     }
 
@@ -61,9 +65,9 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         renderMemberContent();
 
         final LinkFollowSpecs followValue = getLinkFollowSpecs().follow("value");
-        boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly() || !followValue.isTerminated();
+        boolean eagerlyRender = resourceContext.honorUiHints() && renderEagerly() || !followValue.isTerminated();
 
-        if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !objectAdapter.isRepresentingPersistent()) {
+        if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !ManagedObject.isBookmarkable(objectAdapter)) {
             addValue(followValue);
         }
         if(!mode.isEventSerialization()) {
@@ -93,7 +97,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         }
 
         final LinkFollowSpecs followHref = linkFollower.follow("href");
-        boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
+        boolean eagerlyRender = resourceContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
 
         final Stream<ManagedObject> elementAdapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
 
@@ -101,11 +105,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
         elementAdapters.forEach(elementAdapter->{
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer
-                    .newLinkToBuilder(rendererContext, Rel.VALUE, ManagedObject.promote(elementAdapter));
+                    .newLinkToBuilder(resourceContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), followHref, JsonRepresentation.newMap()
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), followHref, JsonRepresentation.newMap()
                         );
-                renderer.with(ManagedObject.promote(elementAdapter));
+                renderer.with(elementAdapter);
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
                 }
@@ -120,7 +124,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     private boolean renderEagerly(ManagedObject valueAdapter) {
-        return renderEagerly() && rendererContext.canEagerlyRender(ManagedObject.promote(valueAdapter));
+        return renderEagerly() && resourceContext.canEagerlyRender(valueAdapter);
     }
 
     // ///////////////////////////////////////////////////
@@ -133,7 +137,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         final JsonRepresentation representation = JsonRepresentation.newMap();
-        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), getLinkFollowSpecs(), null,
+        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null,
                 representation);
         renderer.with(new ObjectAndCollection(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
@@ -168,10 +172,10 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(rendererContext.suppressDescribedByLinks()) {
+        if(resourceContext.suppressDescribedByLinks()) {
             return;
         }
-        final JsonRepresentation link = CollectionDescriptionReprRenderer.newLinkToBuilder(rendererContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        final JsonRepresentation link = CollectionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 

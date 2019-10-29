@@ -31,6 +31,7 @@ public class ValueFacetSimple extends FacetAbstract implements ValueFacet {
 
     public ValueFacetSimple(FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
+        super.setFacetAliasType(ValueFacet.class);
     }
 
 }

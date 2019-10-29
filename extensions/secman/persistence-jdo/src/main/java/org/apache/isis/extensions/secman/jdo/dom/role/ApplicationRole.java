@@ -106,14 +106,11 @@ import lombok.Setter;
 public class ApplicationRole 
 implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparable<ApplicationRole> {
 
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationRole, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationRole, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationRole, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationRole, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationRole> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationRole> {}
 
 
     // -- constants, moved to interface
@@ -135,8 +132,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     // -- name (property)
 
-    public static class NameDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
@@ -153,8 +149,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     // -- updateName (action)
 
-    public static class UpdateNameDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateNameDomainEvent.class,
@@ -176,8 +171,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     // -- description (property)
 
-    public static class DescriptionDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class DescriptionDomainEvent extends PropertyDomainEvent<String> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="true", length = DescriptionType.Meta.MAX_LEN)
@@ -196,8 +190,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     // -- updateDescription (action)
 
-    public static class UpdateDescriptionDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateDescriptionDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = UpdateDescriptionDomainEvent.class,
@@ -222,8 +215,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
 
     // -- permissions (derived collection)
-    public static class PermissionsCollectionDomainEvent extends CollectionDomainEvent<ApplicationPermission> {
-        private static final long serialVersionUID = 1L;}
+    public static class PermissionsCollectionDomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
 
     @Collection(
             domainEvent = PermissionsCollectionDomainEvent.class
@@ -240,8 +232,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     // -- addPackage (action)
 
-    public static class AddPackageDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AddPackageDomainEvent extends ActionDomainEvent {}
 
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
@@ -278,8 +269,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
 
     // -- addClass (action)
-    public static class AddClassDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AddClassDomainEvent extends ActionDomainEvent {}
 
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
@@ -333,8 +323,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
 
     // -- addAction (action)
-    public static class AddActionDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AddActionDomainEvent extends ActionDomainEvent {}
 
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
@@ -392,8 +381,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
 
     // -- addProperty (action)
-    public static class AddPropertyDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AddPropertyDomainEvent extends ActionDomainEvent {}
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
      * {@link ApplicationMemberType#PROPERTY property}
@@ -458,8 +446,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
 
     // -- addCollection (action)
-    public static class AddCollectionDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AddCollectionDomainEvent extends ActionDomainEvent {}
 
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
@@ -517,8 +504,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
 
     // -- removePermission (action)
-    public static class RemovePermissionDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class RemovePermissionDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent= RemovePermissionDomainEvent.class,
@@ -573,8 +559,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     // -- users (collection)
 
-    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {
-        private static final long serialVersionUID = 1L;}
+    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
 
     @javax.jdo.annotations.Persistent(mappedBy = "roles")
     @Collection(
@@ -601,8 +586,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     // -- addUser (action)
 
-    public static class AddUserDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AddUserDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AddUserDomainEvent.class,
@@ -628,8 +612,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     // -- removeUser (action)
 
-    public static class RemoveUserDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class RemoveUserDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = RemoveUserDomainEvent.class,
@@ -657,8 +640,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
 
     // -- delete (action)
-    public static class DeleteDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class DeleteDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = DeleteDomainEvent.class,

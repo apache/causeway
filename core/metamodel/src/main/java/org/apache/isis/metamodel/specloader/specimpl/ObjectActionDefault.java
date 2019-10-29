@@ -469,7 +469,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         final Object[] parameterDefaultPojos;
 
         final ActionDefaultsFacet facet = getFacet(ActionDefaultsFacet.class);
-        if (!facet.isNoop()) {
+        if (!facet.isFallback()) {
             // use the old defaultXxx approach
             parameterDefaultPojos = facet.getDefaults(target);
             if (parameterDefaultPojos.length != parameterCount) {
@@ -491,7 +491,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             parameterDefaultPojos = new Object[parameterCount];
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterDefaultsFacet paramFacet = parameters.get(i).getFacet(ActionParameterDefaultsFacet.class);
-                if (paramFacet != null && !paramFacet.isNoop()) {
+                if (paramFacet != null && !paramFacet.isFallback()) {
                     parameterDefaultPojos[i] = paramFacet.getDefault(target, null, null);
                 } else {
                     parameterDefaultPojos[i] = null;
@@ -547,7 +547,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         final ActionChoicesFacet facet = getFacet(ActionChoicesFacet.class);
         final List<ObjectActionParameter> parameters = getParameters();
 
-        if (!facet.isNoop()) {
+        if (!facet.isFallback()) {
             // using the old choicesXxx() approach
             parameterChoicesPojos = facet.getChoices(target,
                     interactionInitiatedBy);
@@ -567,7 +567,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             parameterChoicesPojos = new Object[parameterCount][];
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterChoicesFacet paramFacet = parameters.get(i).getFacet(ActionParameterChoicesFacet.class);
-                if (paramFacet != null && !paramFacet.isNoop()) {
+                if (paramFacet != null && !paramFacet.isFallback()) {
                     parameterChoicesPojos[i] = paramFacet.getChoices(target, null,
                             interactionInitiatedBy);
                 } else {

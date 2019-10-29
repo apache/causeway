@@ -20,14 +20,15 @@ package domainapp.dom.tree;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
 
 import domainapp.utils.DemoStub;
 import lombok.val;
 
-@ViewModel
+@DomainObject(nature = Nature.VIEW_MODEL, objectType = "demo.Tree")
 public class TreeDemo extends DemoStub {
 
     // this is the actual view model rendered by the framework

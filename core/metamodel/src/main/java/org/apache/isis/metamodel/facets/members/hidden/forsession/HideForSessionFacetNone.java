@@ -38,7 +38,7 @@ public class HideForSessionFacetNone extends HideForSessionFacetAbstract {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

@@ -34,7 +34,7 @@ import lombok.ToString;
 import lombok.val;
 
 @XmlRootElement(name="FileNode") 
-@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.FileNode")
 @ToString
 public class FileNode {
 

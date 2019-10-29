@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 
@@ -275,7 +275,7 @@ public final class _Context {
      * @param type - the key into the thread-local store
      * @return
      */
-    public static <T> Bin<T> threadLocalGet(Class<? super T> type) {
+    public static <T> Can<T> threadLocalGet(Class<? super T> type) {
         return _Context_ThreadLocal.get(type);
     }
 
@@ -286,7 +286,7 @@ public final class _Context {
      * @param requiredType - the required type of the elements in the returned bin
      * @return
      */
-    public static <T> Bin<T> threadLocalSelect(Class<? super T> type, Class<? super T> requiredType) {
+    public static <T> Can<T> threadLocalSelect(Class<? super T> type, Class<? super T> requiredType) {
         return _Context_ThreadLocal.select(type, requiredType);
     }
 

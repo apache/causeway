@@ -81,8 +81,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
     }
 
-    @Inject
-    IsisConfiguration configuration;
+    @Inject IsisConfiguration configuration;
 
     private boolean isEagerInitialize() {
         ApplicationFeaturesInitConfiguration setting = configuration.getServices().getApplicationFeatures().getInit();
@@ -153,12 +152,12 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             final Class<?> returnType = correspondingClassFor(property.getSpecification());
             final Integer maxLength = returnType == String.class ? valueOf(property, MaxLengthFacet.class) : null;
             final Integer typicalLength = returnType == String.class ? valueOf(property, TypicalLengthFacet.class) : null;
-            final boolean derived = !property.containsDoOpFacet(PropertySetterFacet.class);
+            final boolean derived = !property.containsNonFallbackFacet(PropertySetterFacet.class);
             final boolean contributed = property instanceof ContributeeMember;
             addedMembers = newProperty(classFeatureId, property, returnType, contributed, maxLength, typicalLength, derived) || addedMembers;
         }
         for (final ObjectAssociation collection : collections) {
-            final boolean derived = !(collection.containsDoOpFacet(CollectionAddToFacet.class) || collection.containsDoOpFacet(CollectionRemoveFromFacet.class));
+            final boolean derived = !(collection.containsNonFallbackFacet(CollectionAddToFacet.class) || collection.containsNonFallbackFacet(CollectionRemoveFromFacet.class));
             final Class<?> elementType = correspondingClassFor(collection.getSpecification());
             final boolean contributed = collection instanceof ContributeeMember;
             addedMembers = newCollection(classFeatureId, collection, elementType, contributed, derived) || addedMembers;
@@ -369,7 +368,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     protected boolean isHidden(final ObjectSpecification spec) {
         final HiddenFacet facet = spec.getFacet(HiddenFacet.class);
         return facet != null &&
-                !facet.isNoop() &&
+                !facet.isFallback() &&
                 (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE);
     }
 

@@ -46,7 +46,7 @@ import lombok.val;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.AsyncAction", editing=Editing.ENABLED)
 public class AsyncActionDemo extends DemoStub {
 
     @XmlTransient

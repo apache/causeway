@@ -46,24 +46,23 @@ public interface FacetHolder {
 
     /**
      * Whether there is a facet registered of the specified type that is not a
-     * {@link Facet#isNoop() no-op}.
-     *
+     * {@link Facet#isFallback() fallback} .
      * <p>
      * Convenience; saves having to {@link #getFacet(Class)} and then check if
-     * <tt>null</tt> and not a no-op.
+     * <tt>null</tt> and not a fallback.
      */
-    default boolean containsDoOpFacet(Class<? extends Facet> facetType) {
+    default boolean containsNonFallbackFacet(Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
-        return facet != null && !facet.isNoop();
+        return facet != null && !facet.isFallback();
     }
 
     /**
-     * As {@link #containsDoOpFacet(Class)}, which additional requirement that the
-     * facet is not {@link Facet#isDerived()}.
+     * As {@link #containsNonFallbackFacet(Class)}, with additional requirement, that the
+     * facet is <i>explicit</i>, not {@link Facet#isDerived() derived}.
      */
-    default boolean containsDoOpNotDerivedFacet(Class<? extends Facet> facetType) {
+    default boolean containsExplicitNonFallbackFacet(Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
-        return facet != null && !facet.isNoop() && !facet.isDerived();
+        return facet != null && !facet.isFallback() && !facet.isDerived();
     }
 
     Stream<Facet> streamFacets();
@@ -81,7 +80,7 @@ public interface FacetHolder {
      * If there are any facet of the same type, they will be overwritten
      * <i>provided</i> that either the {@link Facet} specifies to
      * {@link Facet#alwaysReplace() always replace} or if the existing
-     * {@link Facet} is a {@link Facet#isNoop() no-op}.
+     * {@link Facet} is a {@link Facet#isFallback() no-op}.
      */
     void addFacet(Facet facet);
 

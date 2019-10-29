@@ -37,6 +37,7 @@ import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.adapter.loader.ObjectLoader;
 import org.apache.isis.metamodel.services.ServiceUtil;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
@@ -153,6 +154,12 @@ class MetaModelContext_usingIoc implements MetaModelContext {
         return iocContainer.getSingletonElseFail(type);
     }
 
+    // -- OBJECT LOADING
+    
+    @Getter(onMethod = @__(@Override))
+    final ObjectLoader objectLoader = ObjectLoader.buildDefault(this);    
+
+    
     // -- HELPER
 
     private final _Lazy<Map<String, ObjectAdapter>> objectAdaptersForBeansOfKnownSort = 

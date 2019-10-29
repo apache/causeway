@@ -69,7 +69,8 @@ class IsisWicketApplication_newPageFactory {
         public <C extends IRequestablePage> C newPage(Class<C> pageClass) {
             
             if(EntityPage.class.equals(pageClass)) {
-                //TODO whenever this happens we should redirect to home
+                //TODO whenever this happens we should redirect to home, 
+                // almost certainly the session has timed out
                 throw _Exceptions.unexpectedCodeReach();
             }
             

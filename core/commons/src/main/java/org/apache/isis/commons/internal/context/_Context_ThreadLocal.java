@@ -21,7 +21,7 @@ package org.apache.isis.commons.internal.context;
 
 import java.util.Map;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
@@ -65,15 +65,15 @@ final class _Context_ThreadLocal {
         val threadLocalMap = getOrCreateThreadLocalMap();
         threadLocalMap
         .compute(type, (k, v) -> v == null 
-        ? Bin.<T>ofSingleton(variant)
-                : Bin.<T>concat(_Casts.uncheckedCast(v), variant));
+        ? Can.<T>ofSingleton(variant)
+                : Can.<T>concat(_Casts.uncheckedCast(v), variant));
 
         val key = THREAD_LOCAL_MAP_KEY.get();
 
         return ()->{MAPS_BY_KEY.remove(key);};
     }
 
-    static <T> Bin<T> select(Class<? super T> type, Class<? super T> instanceOf) {
+    static <T> Can<T> select(Class<? super T> type, Class<? super T> instanceOf) {
         val bin = _Context_ThreadLocal.<T>get(type);
         return bin.filter(t -> isInstanceOf(t, instanceOf));
     }
@@ -82,14 +82,14 @@ final class _Context_ThreadLocal {
         return type.isAssignableFrom(obj.getClass());
     }
 
-    static <T> Bin<T> get(Class<? super T> type) {
+    static <T> Can<T> get(Class<? super T> type) {
         val threadLocalMap = getThreadLocalMap();
         if(threadLocalMap==null) {
-            return Bin.empty();
+            return Can.empty();
         }
         val bin = threadLocalMap.get(type);
         if(bin==null) {
-            return Bin.empty();	
+            return Can.empty();	
         }
         return _Casts.uncheckedCast(bin);
     }
@@ -129,22 +129,22 @@ final class _Context_ThreadLocal {
             InheritableThreadLocal.withInitial(()->ThreadKey.of(Thread.currentThread()));
 
 
-    private final static _Multimaps.MapMultimap<ThreadKey, Class<?>, Bin<?>> MAPS_BY_KEY = 
+    private final static _Multimaps.MapMultimap<ThreadKey, Class<?>, Can<?>> MAPS_BY_KEY = 
             _Multimaps.newConcurrentMapMultimap(); 
 
-    private static Map<Class<?>, Bin<?>> getThreadLocalMap() {
+    private static Map<Class<?>, Can<?>> getThreadLocalMap() {
         val key = THREAD_LOCAL_MAP_KEY.get(); // non-null
         val threadLocalMap = MAPS_BY_KEY.get(key); // might be null
         return threadLocalMap;
     }
 
-    private static Map<Class<?>, Bin<?>> getOrCreateThreadLocalMap() {
+    private static Map<Class<?>, Can<?>> getOrCreateThreadLocalMap() {
         val key = THREAD_LOCAL_MAP_KEY.get(); // non-null
         val threadLocalMap = MAPS_BY_KEY.get(key); // might be null
         if(threadLocalMap!=null) {
             return threadLocalMap;
         }
-        val map = _Maps.<Class<?>, Bin<?>>newHashMap();
+        val map = _Maps.<Class<?>, Can<?>>newHashMap();
         MAPS_BY_KEY.put(key, map);
         return map;
     }

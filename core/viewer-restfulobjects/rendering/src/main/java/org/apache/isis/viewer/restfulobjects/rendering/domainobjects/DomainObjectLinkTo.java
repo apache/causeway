@@ -18,26 +18,26 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
-    protected RendererContext rendererContext;
-    protected ObjectAdapter objectAdapter;
+    protected IResourceContext resourceContext;
+    protected ManagedObject objectAdapter;
 
     @Override
-    public final DomainObjectLinkTo usingUrlBase(final RendererContext resourceContext) {
-        this.rendererContext = resourceContext;
+    public final DomainObjectLinkTo usingUrlBase(final IResourceContext resourceContext) {
+        this.resourceContext = resourceContext;
         return this;
     }
 
     @Override
-    public ObjectAdapterLinkTo with(final ObjectAdapter objectAdapter) {
+    public ObjectAdapterLinkTo with(final ManagedObject objectAdapter) {
         this.objectAdapter = objectAdapter;
         return this;
     }
@@ -49,7 +49,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
     @Override
     public LinkBuilder builder(final Rel rel) {
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(rendererContext, relElseDefault(rel).getName(), RepresentationType.DOMAIN_OBJECT, linkRef(new StringBuilder()).toString());
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, relElseDefault(rel).getName(), RepresentationType.DOMAIN_OBJECT, linkRef(new StringBuilder()).toString());
         linkBuilder.withTitle(objectAdapter.titleString());
         return linkBuilder;
     }
@@ -58,8 +58,8 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
      * hook method
      */
     protected StringBuilder linkRef(StringBuilder buf) {
-        String domainType = OidUtils.getDomainType(objectAdapter);
-        String instanceId = OidUtils.getInstanceId(objectAdapter);
+        String domainType = ManagedObject.getDomainType(objectAdapter);
+        String instanceId = ManagedObject._instanceIdIfAny(objectAdapter);
         return buf.append("objects/").append(domainType).append("/").append(instanceId);
     }
 
@@ -90,7 +90,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
             buf.append("/").append(part);
         }
         final String url = buf.toString();
-        return LinkBuilder.newBuilder(rendererContext, rel.andParam(memberType.getName(), objectMember.getId()), representationType, url);
+        return LinkBuilder.newBuilder(resourceContext, rel.andParam(memberType.getName(), objectMember.getId()), representationType, url);
     }
 
 

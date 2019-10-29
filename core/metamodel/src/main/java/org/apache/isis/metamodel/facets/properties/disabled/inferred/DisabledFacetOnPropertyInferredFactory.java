@@ -40,11 +40,11 @@ public class DisabledFacetOnPropertyInferredFactory extends FacetFactoryAbstract
 
         final FacetedMethod property = processMethodContext.getFacetHolder();
 
-        if(property.containsDoOpFacet(DisabledFacet.class)) {
+        if(property.containsNonFallbackFacet(DisabledFacet.class)) {
             // already disabled
             return;
         }
-        if(property.containsDoOpFacet(PropertySetterFacet.class)) {
+        if(property.containsNonFallbackFacet(PropertySetterFacet.class)) {
             // already known to be modifiable
             return;
         }

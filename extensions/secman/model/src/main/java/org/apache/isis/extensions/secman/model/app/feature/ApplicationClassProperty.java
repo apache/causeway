@@ -31,14 +31,11 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 @ViewModelLayout(paged=100)
 public class ApplicationClassProperty extends ApplicationClassMember {
 
-    public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassProperty, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassProperty, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassProperty, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassProperty, T> {}
 
-    public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassProperty> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassProperty> {}
 
 
 
@@ -53,8 +50,7 @@ public class ApplicationClassProperty extends ApplicationClassMember {
 
     // -- returnType
 
-    public static class ReturnTypeDomainEvent extends PropertyDomainEvent<String> {
-        private static final long serialVersionUID = 1L;}
+    public static class ReturnTypeDomainEvent extends PropertyDomainEvent<String> {}
 
     @Property(
             domainEvent = ReturnTypeDomainEvent.class
@@ -67,8 +63,7 @@ public class ApplicationClassProperty extends ApplicationClassMember {
 
     // -- derived
 
-    public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {
-        private static final long serialVersionUID = 1L;}
+    public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {}
 
     @Property(
             domainEvent = DerivedDomainEvent.class
@@ -81,8 +76,7 @@ public class ApplicationClassProperty extends ApplicationClassMember {
 
 
     // -- maxLength
-    public static class MaxLengthDomainEvent extends PropertyDomainEvent<Integer> {
-        private static final long serialVersionUID = 1L;}
+    public static class MaxLengthDomainEvent extends PropertyDomainEvent<Integer> {}
 
     @Property(
             domainEvent = MaxLengthDomainEvent.class,
@@ -101,8 +95,7 @@ public class ApplicationClassProperty extends ApplicationClassMember {
 
 
     // -- typicalLength
-    public static class TypicalLengthDomainEvent extends PropertyDomainEvent<Integer> {
-        private static final long serialVersionUID = 1L;}
+    public static class TypicalLengthDomainEvent extends PropertyDomainEvent<Integer> {}
 
     @Property(
             domainEvent = TypicalLengthDomainEvent.class,

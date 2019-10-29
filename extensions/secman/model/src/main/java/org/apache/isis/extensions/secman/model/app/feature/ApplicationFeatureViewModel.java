@@ -60,14 +60,11 @@ import lombok.val;
 //)
 public abstract class ApplicationFeatureViewModel implements ViewModel {
 
-    public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends SecurityModule.PropertyDomainEvent<S, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends SecurityModule.PropertyDomainEvent<S, T> {}
 
-    public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends SecurityModule.CollectionDomainEvent<S, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends SecurityModule.CollectionDomainEvent<S, T> {}
 
-    public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends SecurityModule.ActionDomainEvent<S> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends SecurityModule.ActionDomainEvent<S> {}
 
 
 
@@ -175,8 +172,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     }
 
     // -- packageName
-    public static class PackageNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {
-        private static final long serialVersionUID = 1L;}
+    public static class PackageNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
 
     @Property(
             domainEvent = PackageNameDomainEvent.class
@@ -189,8 +185,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     // -- className
 
-    public static class ClassNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {
-        private static final long serialVersionUID = 1L;}
+    public static class ClassNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
 
     /**
      * For packages, will be null. Is in this class (rather than subclasses) so is shown in
@@ -210,8 +205,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     // -- memberName
 
-    public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {
-        private static final long serialVersionUID = 1L;}
+    public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
 
     /**
      * For packages and class names, will be null.
@@ -232,8 +226,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     // -- parent (property)
 
-    public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, ApplicationFeatureViewModel> {
-        private static final long serialVersionUID = 1L;}
+    public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, ApplicationFeatureViewModel> {}
 
     @Property(
             domainEvent = ParentDomainEvent.class
@@ -262,8 +255,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     // -- contributed (property)
 
-    public static class ContributedDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, Boolean> {
-        private static final long serialVersionUID = 1L;}
+    public static class ContributedDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, Boolean> {}
 
     /**
      * For packages and class names, will be null.
@@ -282,8 +274,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 
     // -- permissions (collection)
-    public static class PermissionsDomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel, ApplicationPermission> {
-        private static final long serialVersionUID = 1L;}
+    public static class PermissionsDomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel, ApplicationPermission> {}
 
     @Collection(
             domainEvent = PermissionsDomainEvent.class

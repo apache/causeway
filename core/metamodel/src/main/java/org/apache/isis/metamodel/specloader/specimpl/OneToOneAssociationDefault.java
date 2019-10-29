@@ -234,7 +234,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         // if no default on the association, attempt to find a default on the
         // specification (eg an int should
         // default to 0).
-        if (propertyDefaultFacet == null || propertyDefaultFacet.isNoop()) {
+        if (propertyDefaultFacet == null || propertyDefaultFacet.isFallback()) {
             propertyDefaultFacet = this.getSpecification().getFacet(PropertyDefaultFacet.class);
         }
         if (propertyDefaultFacet == null) {

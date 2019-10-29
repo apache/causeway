@@ -52,6 +52,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class JsonValueEncoderTest_asAdapter {
 
     @Rule public JUnitRuleMockery2 context = 
@@ -136,7 +138,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -183,7 +185,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -225,7 +227,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -272,7 +274,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -305,7 +307,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -338,7 +340,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);
@@ -371,7 +373,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
+        val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
         assertSame(mockObjectAdapter, adapter);

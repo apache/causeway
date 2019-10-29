@@ -572,7 +572,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if(facet==null) {
                 return false;
             }
-            if(!facet.isNoop()) {
+            if(!facet.isFallback()) {
                 return true;
             }
             if(noopFacet == null) {

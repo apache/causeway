@@ -22,13 +22,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
-import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 public interface ContentNegotiationService {
 
@@ -38,28 +37,23 @@ public interface ContentNegotiationService {
     @PreDestroy
     public void shutdown();
 
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext,
-            final ObjectAdapter objectAdapter);
+            IResourceContext renderContext,
+            ManagedObject objectAdapter);
 
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext,
-            final ObjectAndProperty objectAndProperty);
+            IResourceContext renderContext,
+            ObjectAndProperty objectAndProperty);
 
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext,
-            final ObjectAndCollection objectAndCollection);
+            IResourceContext renderContext,
+            ObjectAndCollection objectAndCollection);
 
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext,
-            final ObjectAndAction objectAndAction);
+            IResourceContext renderContext,
+            ObjectAndAction objectAndAction);
 
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext,
-            final ObjectAndActionInvocation objectAndActionInvocation);
+            IResourceContext renderContext,
+            ObjectAndActionInvocation objectAndActionInvocation);
 }

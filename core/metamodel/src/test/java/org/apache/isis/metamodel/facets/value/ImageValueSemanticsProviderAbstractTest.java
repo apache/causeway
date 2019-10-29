@@ -115,7 +115,7 @@ class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract<int
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return false;
     }
 

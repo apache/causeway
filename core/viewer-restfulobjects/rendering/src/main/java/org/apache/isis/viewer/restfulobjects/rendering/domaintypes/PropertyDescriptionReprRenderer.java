@@ -26,18 +26,18 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<PropertyDescriptionReprRenderer, OneToOneAssociation> {
 
-    public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         final String domainType = objectSpecification.getSpecId().asString();
         final String propertyId = property.getId();
         final String url = "domain-types/" + domainType + "/properties/" + propertyId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.PROPERTY_DESCRIPTION, url);
     }
 
-    public PropertyDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public PropertyDescriptionReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.PROPERTY_DESCRIPTION, representation);
     }
 
@@ -50,7 +50,7 @@ public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRende
     protected void addPropertiesSpecificToFeature() {
         representation.mapPut("optional", !getObjectFeature().isMandatory());
         final MaxLengthFacet maxLength = getObjectFeature().getFacet(MaxLengthFacet.class);
-        if (maxLength != null && !maxLength.isNoop()) {
+        if (maxLength != null && !maxLength.isFallback()) {
             representation.mapPut("maxLength", maxLength.value());
         }
     }
@@ -60,7 +60,7 @@ public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRende
         if (returnType == null) {
             return;
         }
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), Rel.RETURN_TYPE, returnType);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
         getLinks().arrayAdd(linkBuilder.build());
     }
 

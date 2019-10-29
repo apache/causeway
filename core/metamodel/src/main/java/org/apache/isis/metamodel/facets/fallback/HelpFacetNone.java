@@ -37,7 +37,7 @@ public class HelpFacetNone extends HelpFacetAbstract {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

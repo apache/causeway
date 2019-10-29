@@ -34,8 +34,8 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSession;
@@ -123,8 +123,8 @@ public abstract class ResourceAbstract {
     // Isis integration
     // //////////////////////////////////////////////////////////////
 
-    protected ObjectAdapter getObjectAdapterElseThrowNotFound(String domainType, final String instanceId) {
-        ObjectAdapter objectAdapter = getObjectAdapterElseNull(domainType, instanceId);
+    protected ManagedObject getObjectAdapterElseThrowNotFound(String domainType, final String instanceId) {
+        ManagedObject objectAdapter = getObjectAdapterElseNull(domainType, instanceId);
 
         if (objectAdapter == null) {
             final String instanceIdUnencoded = org.apache.isis.viewer.restfulobjects.rendering.UrlDecoderUtils.urlDecode(instanceId);
@@ -134,16 +134,16 @@ public abstract class ResourceAbstract {
         return objectAdapter;
     }
 
-    protected ObjectAdapter getObjectAdapterElseNull(String domainType, final String instanceId) {
+    protected ManagedObject getObjectAdapterElseNull(String domainType, final String instanceId) {
         return resourceContext.getObjectAdapterElseNull(domainType, instanceId);
     }
 
-    protected ObjectAdapter getServiceAdapter(final String serviceId) {
+    protected ManagedObject getServiceAdapter(final String serviceId) {
 
         val metaModelContext = resourceContext.getServiceRegistry()
                 .lookupServiceElseFail(MetaModelContext.class);
 
-        final ObjectAdapter serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceId);
+        final ManagedObject serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceId);
         if(serviceAdapter==null) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
                     "Could not locate service '%s'", serviceId);    

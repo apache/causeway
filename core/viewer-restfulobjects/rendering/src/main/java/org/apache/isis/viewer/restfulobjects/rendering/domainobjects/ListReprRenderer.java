@@ -22,35 +22,35 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Stream<ObjectAdapter>> {
+public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Stream<ManagedObject>> {
 
     private ObjectAdapterLinkTo linkTo;
-    private List<ObjectAdapter> objectAdapters;
+    private List<ManagedObject> objectAdapters;
     private ObjectSpecification elementType;
     private ObjectSpecification returnType;
     private Rel elementRel;
 
-    public ListReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public ListReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.LIST, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
 
     public ListReprRenderer usingLinkToBuilder(final ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
-        this.linkTo = objectAdapterLinkToBuilder.usingUrlBase(rendererContext);
+        this.linkTo = objectAdapterLinkToBuilder.usingUrlBase(resourceContext);
         return this;
     }
 
     @Override
-    public ListReprRenderer with(final Stream<ObjectAdapter> objectAdapters) {
+    public ListReprRenderer with(final Stream<ManagedObject> objectAdapters) {
         this.objectAdapters = objectAdapters!=null 
                 ? objectAdapters
                         .filter(adapter->!adapter.getSpecification().isHidden())
@@ -105,7 +105,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Str
 
             final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("value");
             if (linkFollower.matches(linkToObject)) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap()
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap()
                         );
                 final JsonRepresentation domainObject = renderer.with(adapter).render();
                 linkToObject.mapPut("value", domainObject);

@@ -49,14 +49,11 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDe
         )
 public class ApplicationFeatureViewModels  {
 
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationFeatureViewModels, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationFeatureViewModels, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationFeatureViewModels, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationFeatureViewModels, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationFeatureViewModels> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationFeatureViewModels> {}
 
     // -- ICON NAME
 
@@ -66,8 +63,7 @@ public class ApplicationFeatureViewModels  {
 
     // -- ALL PACKAGES
 
-    public static class AllPackagesDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AllPackagesDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AllPackagesDomainEvent.class,
@@ -84,8 +80,7 @@ public class ApplicationFeatureViewModels  {
 
     // -- ALL CLASSES
 
-    public static class AllClassesDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AllClassesDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AllClassesDomainEvent.class,
@@ -102,8 +97,7 @@ public class ApplicationFeatureViewModels  {
 
     // -- ALL ACTIONS
 
-    public static class AllActionsDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AllActionsDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AllActionsDomainEvent.class,
@@ -120,8 +114,7 @@ public class ApplicationFeatureViewModels  {
 
     // -- ALL PROPERTIES
 
-    public static class AllPropertiesDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AllPropertiesDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AllPropertiesDomainEvent.class,
@@ -138,8 +131,7 @@ public class ApplicationFeatureViewModels  {
 
     // -- ALL COLLECTIONS
 
-    public static class AllCollectionsDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class AllCollectionsDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AllCollectionsDomainEvent.class,

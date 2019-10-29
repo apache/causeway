@@ -106,7 +106,7 @@ public final class Responses {
 
     private static Date now(ReprRenderer<?, ?> renderer) {
         if(renderer instanceof ReprRendererAbstract) {
-            ((ReprRendererAbstract<?, ?>)renderer).getRendererContext().getServiceRegistry()
+            ((ReprRendererAbstract<?, ?>)renderer).getResourceContext().getServiceRegistry()
             .lookupServiceElseFail(ClockService.class).nowAsDateTime().toDate();
         }
         return new Date();
@@ -142,7 +142,7 @@ public final class Responses {
     public static JsonMapper.PrettyPrinting inferPrettyPrinting(ReprRenderer<?, ?> renderer) {
 
         if(renderer instanceof ReprRendererAbstract) {
-            val systemEnvironment =  ((ReprRendererAbstract<?, ?>) renderer).getRendererContext()
+            val systemEnvironment =  ((ReprRendererAbstract<?, ?>) renderer).getResourceContext()
                     .getMetaModelContext().getSystemEnvironment();
             return systemEnvironment.isPrototyping()
                     ? JsonMapper.PrettyPrinting.ENABLE 

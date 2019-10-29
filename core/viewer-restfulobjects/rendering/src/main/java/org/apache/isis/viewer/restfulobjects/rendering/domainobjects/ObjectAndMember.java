@@ -18,20 +18,20 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 
 public abstract class ObjectAndMember<T extends ObjectMember> {
 
-    private final ObjectAdapter objectAdapter;
+    private final ManagedObject objectAdapter;
     private final T objectMember;
 
-    public ObjectAndMember(final ObjectAdapter objectAdapter, final T objectMember) {
+    public ObjectAndMember(final ManagedObject objectAdapter, final T objectMember) {
         this.objectAdapter = objectAdapter;
         this.objectMember = objectMember;
     }
 
-    public ObjectAdapter getObjectAdapter() {
+    public ManagedObject getObjectAdapter() {
         return objectAdapter;
     }
 

@@ -18,21 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering;
 
-import org.apache.isis.commons.collections.Bin;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.exceptions.persistence.ObjectNotFoundException;
-import org.apache.isis.metamodel.exceptions.persistence.PojoRecreationException;
-import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
-
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
+@Deprecated // use framework API instead, needs migration
 final class OidUtils {
 
     private OidUtils() {
@@ -41,104 +33,36 @@ final class OidUtils {
     /**
      * @return {@code null} if not persistent and not a view model.
      */
-    public static ObjectAdapter getObjectAdapterElseNull(
-            final RendererContext rendererContext,
+    public static ManagedObject getObjectAdapterElseNull(
+            final IResourceContext resourceContext,
             final String domainType, 
             final String instanceIdEncoded) {
 
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
         String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
-        return getObjectAdapter(rendererContext, oidStrUnencoded);
+        return getObjectAdapter(resourceContext, oidStrUnencoded);
     }
 
     /**
-     * see {@link #getObjectAdapterElseNull(org.apache.isis.viewer.restfulobjects.rendering.RendererContext, String, String)}
+     * see {@link #getObjectAdapterElseNull(org.apache.isis.viewer.restfulobjects.rendering.IResourceContext, String, String)}
      */
-    public static ObjectAdapter getObjectAdapterElseNull(
-            final RendererContext rendererContext,
+    public static ManagedObject getObjectAdapterElseNull(
+            final IResourceContext resourceContext,
             final String oidStrEncoded) {
 
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidStrEncoded);
-        return getObjectAdapter(rendererContext, oidStrUnencoded);
+        return getObjectAdapter(resourceContext, oidStrUnencoded);
     }
 
     // -- HELPER
 
-    private static ObjectAdapter getObjectAdapter(
-            final RendererContext rendererContext,
+    private static ManagedObject getObjectAdapter(
+            final IResourceContext resourceContext,
             final String oidStrUnencoded) {
 
-        final RootOid rootOid = RootOid.deString(oidStrUnencoded);
-        final Object domainObject = domainObjectForAny(rendererContext, rootOid);
-
-        return rendererContext.adapterOfPojo(domainObject);
+        val rootOid = RootOid.deString(oidStrUnencoded);
+        return ManagedObject._adapterOfRootOid(resourceContext.getSpecificationLoader(), rootOid);
     }
 
-    private static Object domainObjectForAny(final RendererContext rendererContext, final RootOid rootOid) {
-
-        val specId = rootOid.getObjectSpecId();
-        val spec = rendererContext.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
-        if(spec == null) {
-            // eg "NONEXISTENT:123"
-            return null;
-        }
-
-        //TODO[2158] remove eventually
-        _Assert.assertEquals("expected same", 
-                spec.getBeanSort().isViewModel(), 
-                spec.containsFacet(ViewModelFacet.class));
-        
-        if(spec.getBeanSort().isViewModel()) {
-
-            try {
-                val fixedRootOid = ensureConsistentOidState(rootOid);
-                val adapter = rendererContext.adapterOfPojo(fixedRootOid);
-
-                val pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
-                return pojo;
-
-            } catch(ObjectNotFoundException | PojoRecreationException ex) {
-                return null;
-            }
-        } else if(spec.getBeanSort().isEntity()){
-            try {
-                val pojo = rendererContext.fetchPersistentPojoInTransaction(rootOid);
-                //TODO[ISIS-1976] changed behavior: predicate was objectAdapter.isTransient();
-                return rendererContext.stateOf(pojo).isDetached()
-                        ? null 
-                                : pojo;
-            } catch(ObjectNotFoundException ex) {
-                return null;
-            }
-        } else if(spec.getBeanSort().isManagedBean()){
-            
-            val servicePojo = rendererContext.getServiceRegistry()
-                    .lookupRegisteredBeanById(spec.getSpecId().asString())
-                    .map(ManagedBeanAdapter::getInstance)
-                    .flatMap(Bin::getFirst)
-                    .orElse(null);
-            
-            if(servicePojo!=null) {
-                return servicePojo;
-            }
-            // fall through and throw
-            
-        } 
-        throw _Exceptions.unrecoverableFormatted(
-                "unhandled request for a %s having rootId %s",
-                spec,
-                rootOid);
-        
-    }
-
-    private static RootOid ensureConsistentOidState(RootOid rootOid) {
-        // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
-        // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
-        // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
-        if(!rootOid.isViewModel()) {
-            return Oid.Factory.viewmodelOf(rootOid.getObjectSpecId(), rootOid.getIdentifier());
-        }
-        return rootOid;
-    }
 
 }

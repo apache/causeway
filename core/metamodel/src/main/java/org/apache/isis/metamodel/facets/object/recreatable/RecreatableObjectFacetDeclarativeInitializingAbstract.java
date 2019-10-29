@@ -104,7 +104,7 @@ extends RecreatableObjectFacetAbstract {
 
         properties
         // ignore read-only
-        .filter(property->property.containsDoOpFacet(PropertySetterFacet.class)) 
+        .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class)) 
         // ignore those explicitly annotated as @NotPersisted
         .filter(property->!property.isNotPersisted())
         .forEach(property->{

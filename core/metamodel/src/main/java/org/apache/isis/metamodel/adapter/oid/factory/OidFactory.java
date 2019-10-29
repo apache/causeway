@@ -31,13 +31,17 @@ public interface OidFactory {
 
     RootOid oidFor(ManagedObject managedObject);
 
-    public interface OidProvider {
+    // -- HANDLER
+    
+    public interface Handler {
         boolean isHandling(ManagedObject managedObject);
         RootOid oidFor(ManagedObject managedObject);
     }
 
+    // -- BUILDER
+    
     public interface OidFactoryBuilder {
-        OidFactoryBuilder add(OidProvider handler);
+        OidFactoryBuilder add(Handler handler);
         OidFactory build();
     }
 
@@ -47,12 +51,12 @@ public interface OidFactory {
 
     public static OidFactory buildDefault() {
         val oidFactory = OidFactory.builder()
-                .add(new OidFactory_OidProviders.GuardAgainstRootOid())
-                .add(new OidFactory_OidProviders.OidForServices())
-                .add(new OidFactory_OidProviders.OidForValues())
-                .add(new OidFactory_OidProviders.OidForViewModels())
-                .add(new OidFactory_OidProviders.OidForEntities())
-                .add(new OidFactory_OidProviders.OidForOthers())
+                .add(new OidFactory_builtinHandlers.GuardAgainstRootOid())
+                .add(new OidFactory_builtinHandlers.OidForServices())
+                .add(new OidFactory_builtinHandlers.OidForValues())
+                .add(new OidFactory_builtinHandlers.OidForViewModels())
+                .add(new OidFactory_builtinHandlers.OidForEntities())
+                .add(new OidFactory_builtinHandlers.OidForOthers())
                 .build();
         return oidFactory;
     }

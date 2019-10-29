@@ -50,23 +50,23 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implements HiddenFacet {
 
     public HiddenFacetAbstract(
-            final Class<? extends Facet> facetType,
+            Class<? extends Facet> facetType,
             Where where,
-            final FacetHolder holder) {
+            FacetHolder holder) {
+        
         super(facetType, holder, where);
-        super.addAlias(HiddenFacet.class);
+        super.setFacetAliasType(HiddenFacet.class);
     }
 
     /**
      * For testing only.
      */
-    public HiddenFacetAbstract(Where where, final FacetHolder holder) {
+    public HiddenFacetAbstract(Where where, FacetHolder holder) {
         super(HiddenFacetAbstract.class, holder, where);
-        super.addAlias(HiddenFacet.class);
     }
 
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
         return hiddenReason(ic.getTarget(), ic.getWhere());
     }
 

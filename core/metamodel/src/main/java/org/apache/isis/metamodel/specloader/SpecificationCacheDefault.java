@@ -123,7 +123,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
     private boolean hasUsableSpecId(T spec) {
         // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
         // don't have an ObjectSpecId; hence the guard.
-        return spec!=null && spec.containsDoOpFacet(ObjectSpecIdFacet.class);
+        return spec!=null && spec.containsNonFallbackFacet(ObjectSpecIdFacet.class);
     }
 
 }

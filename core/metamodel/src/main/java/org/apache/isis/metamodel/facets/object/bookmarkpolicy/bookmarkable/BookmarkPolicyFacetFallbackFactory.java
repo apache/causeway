@@ -62,7 +62,7 @@ implements MetaModelRefiner {
             objectActions
             .filter(objectAction->{
                 final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
-                if(bookmarkFacet == null || bookmarkFacet.isNoop() || 
+                if(bookmarkFacet == null || bookmarkFacet.isFallback() || 
                         bookmarkFacet.value() == BookmarkPolicy.NEVER) {
                     return false;
                 }
@@ -70,7 +70,7 @@ implements MetaModelRefiner {
             })
             .forEach(objectAction->{
                 final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
-                if(semanticsFacet == null || semanticsFacet.isNoop() || !semanticsFacet.value().isSafeInNature()) {
+                if(semanticsFacet == null || semanticsFacet.isFallback() || !semanticsFacet.value().isSafeInNature()) {
                     validator.onFailure(objectAction,
                             objectAction.getIdentifier(),
                             "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +

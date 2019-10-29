@@ -19,9 +19,9 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
@@ -29,13 +29,13 @@ import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType;
 
 /**
  * Utility class that encapsulates the logic for checking access to the specified
- * {@link org.apache.isis.metamodel.adapter.ObjectAdapter object}'s members.
+ * {@link ManagedObject}'s members.
  */
 public class ObjectAdapterAccessHelper {
 
@@ -52,19 +52,19 @@ public class ObjectAdapterAccessHelper {
         }
     }
 
-    private final ObjectAdapter objectAdapter;
-    private final RendererContext rendererContext;
+    private final ManagedObject objectAdapter;
+    private final IResourceContext resourceContext;
 
-    public ObjectAdapterAccessHelper(RendererContext rendererContext, ObjectAdapter objectAdapter) {
+    public ObjectAdapterAccessHelper(IResourceContext resourceContext, ManagedObject objectAdapter) {
         this.objectAdapter = objectAdapter;
-        this.rendererContext = rendererContext;
+        this.resourceContext = resourceContext;
     }
 
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final Intent intent) {
 
         //[ahuber] unused, any side-effects?
-        final Where where = rendererContext.getWhere();
+        final Where where = resourceContext.getWhere();
 
         final ObjectAssociation association;
         try {
@@ -87,7 +87,7 @@ public class ObjectAdapterAccessHelper {
             final String collectionId, final Intent intent) {
 
         //[ahuber] unused, any side-effects?
-        final Where where = rendererContext.getWhere();
+        final Where where = resourceContext.getWhere();
 
         final ObjectAssociation association;
         try {
@@ -108,7 +108,7 @@ public class ObjectAdapterAccessHelper {
             final String actionId, final Intent intent) {
 
         //[ahuber] unused, any side-effects?
-        final Where where = rendererContext.getWhere();
+        final Where where = resourceContext.getWhere();
 
         final ObjectAction action;
         try {
@@ -126,7 +126,7 @@ public class ObjectAdapterAccessHelper {
     public <T extends ObjectMember> T memberThatIsVisibleForIntent(
             final T objectMember, final MemberType memberType, final Intent intent) {
 
-        final Where where = rendererContext.getWhere();
+        final Where where = resourceContext.getWhere();
 
         final String memberId = objectMember.getId();
         final Consent visibilityConsent =

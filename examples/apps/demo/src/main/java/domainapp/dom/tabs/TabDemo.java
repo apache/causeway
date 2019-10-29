@@ -35,7 +35,7 @@ import lombok.Setter;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Tab")
 public class TabDemo extends DemoStub {
 
     @Override

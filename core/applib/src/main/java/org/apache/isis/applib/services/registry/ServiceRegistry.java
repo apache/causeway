@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Priority;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Reduction;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -52,7 +52,7 @@ public interface ServiceRegistry {
      * @return non-null
      * 
      */
-    public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers);
+    public <T> Can<T> select(Class<T> type, Annotation[] qualifiers);
 
     /**
      * Obtains a Bin container containing any matching instances for the given required type. 
@@ -60,7 +60,7 @@ public interface ServiceRegistry {
      * @return non-null
      * 
      */
-    default public <T> Bin<T> select(final Class<T> type){
+    default public <T> Can<T> select(final Class<T> type){
         return select(type, _Constants.emptyAnnotations);
     }
 

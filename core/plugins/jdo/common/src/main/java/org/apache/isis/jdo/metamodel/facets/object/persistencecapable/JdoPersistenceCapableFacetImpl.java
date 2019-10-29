@@ -19,14 +19,14 @@
 package org.apache.isis.jdo.metamodel.facets.object.persistencecapable;
 
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.val;
@@ -38,11 +38,26 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
             final String tableOrTypeName,
             final IdentityType identityType,
             final FacetHolder holder) {
+        
         super(schemaName, tableOrTypeName, identityType, holder);
     }
 
     @Override
-    public String identifierFor(Object pojo) {
+    public Object fetchByIdentifier(ObjectSpecification spec, String identifier) {
+        
+        //TODO simplify, spec is already loaded
+        
+        val persistenceSession = IsisContext.getPersistenceSession().get();
+        val adapter = persistenceSession.getObjectAdapterByIdProvider()
+                .adapterFor(Oid.Factory.persistentOf(spec.getSpecId(), identifier)); 
+        
+        return adapter.getPojo();
+    }
+    
+    @Override
+    public String identifierFor(ObjectSpecification spec, Object pojo) {
+
+        //TODO simplify, spec is already loaded
         
         if(pojo==null || !isPersistableType(pojo.getClass())) {
             return "?";
@@ -57,6 +72,12 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
             final String identifier = UUID.randomUUID().toString();
             return identifier;    
         }
+    }
+
+    @Override
+    public void persist(ObjectSpecification spec, Object pojo) {
+        // TODO Auto-generated method stub
+        
     }
 
     // -- HELPER
@@ -74,6 +95,8 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     private static boolean isPersistableType(Class<?> type) {
         return persistable_type.get().isAssignableFrom(type);
     }
+
+
 
 
 }

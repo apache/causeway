@@ -35,14 +35,11 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 @ViewModelLayout(paged=100)
 public class ApplicationPackage extends ApplicationFeatureViewModel {
 
-    public static abstract class PropertyDomainEvent<T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClass, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClass, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationClass, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationClass, T> {}
 
-    public static abstract class ActionDomainEvent extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationClass> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationClass> {}
 
 
 
@@ -58,8 +55,7 @@ public class ApplicationPackage extends ApplicationFeatureViewModel {
 
     // -- contents (collection, for packages only)
 
-    public static class ContentsDomainEvent extends CollectionDomainEvent<ApplicationPackage> {
-        private static final long serialVersionUID = 1L;}
+    public static class ContentsDomainEvent extends CollectionDomainEvent<ApplicationPackage> {}
 
     @Collection(
             domainEvent = ContentsDomainEvent.class

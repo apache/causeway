@@ -267,7 +267,7 @@ public class DomainMemberDefault implements DomainMember {
     }
 
     private static String interpretFacet(final Facet facet) {
-        if (facet == null || facet.isNoop()) {
+        if (facet == null || facet.isFallback()) {
             return "";
         }
         if (facet instanceof ImperativeFacet) {

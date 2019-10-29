@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
@@ -38,9 +38,9 @@ public interface IocContainer {
 
     Stream<ManagedBeanAdapter> streamAllBeans();
 
-    <T> Bin<T> select(Class<T> requiredType);
+    <T> Can<T> select(Class<T> requiredType);
     
-    <T> Bin<T> select(Class<T> requiredType, Set<Annotation> qualifiersRequired);
+    <T> Can<T> select(Class<T> requiredType, Set<Annotation> qualifiersRequired);
 
     /**
      * @return IoC managed singleton wrapped in an Optional

@@ -58,6 +58,7 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -90,7 +91,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private ProgrammingModel programmingModel;
     private FacetProcessor facetProcessor;
     private PostProcessor postProcessor;
-    private MetaModelContext metaModelContext; // cannot inject, would cause circular dependency
+    @Getter private MetaModelContext metaModelContext; // cannot inject, would cause circular dependency
     
     private final SpecificationCacheDefault<ObjectSpecification> cache = 
             new SpecificationCacheDefault<>();
@@ -275,6 +276,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             return null;
         }
 
+//        if(type.getName().equals("com.fasterxml.jackson.core.Version")) {
+//            System.out.println("####");
+//        }
+        
         requires(upTo, "upTo");
 
         val substitutedType = classSubstitutor.getClass(type);

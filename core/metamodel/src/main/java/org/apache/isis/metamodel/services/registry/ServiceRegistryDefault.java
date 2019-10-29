@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -60,7 +60,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     }
     
     @Override
-    public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers) {
+    public <T> Can<T> select(Class<T> type, Annotation[] qualifiers) {
         return isisSystemEnvironment.getIocContainer()
                 .select(type, _Spring.filterQualifiers(qualifiers));
     }

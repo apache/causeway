@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.rest;
 
 import javax.inject.Inject;
+import javax.xml.bind.JAXBException;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -29,13 +30,16 @@ import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.extensions.restclient.RestfulClient;
 import org.apache.isis.extensions.restclient.RestfulClientConfig;
 import org.apache.isis.testdomain.jdo.Book;
+import org.apache.isis.testdomain.jdo.BookDto;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service @Log4j2
-public class RestEndpointTestService {
+public class RestEndpointService {
+    
+    @Inject private Environment environment;
 
     public int getPort() {
         if(port==null) {
@@ -84,6 +88,22 @@ public class RestEndpointTestService {
         return digest;
     }
     
+    public ResponseDigest<Book> storeBook(RestfulClient client, Book newBook) throws JAXBException {
+        val request = client.request(
+                "services/testdomain.InventoryResource/actions/storeBook/invoke", 
+                SuppressionType.ALL);
+        
+        val args = client.arguments()
+                .addActionParameter("newBook", BookDto.from(newBook).encode())
+                .build();
+
+        val response = request.post(args);
+        val digest = client.digest(response, Book.class);
+
+        return digest;
+    }
+
+    
     public ResponseDigest<String> getHttpSessionInfo(RestfulClient client) {
         val request = client.request(
                 "services/testdomain.InventoryResource/actions/httpSessionInfo/invoke", 
@@ -107,13 +127,6 @@ public class RestEndpointTestService {
         // spring embedded web server port
         port = Integer.parseInt(environment.getProperty("local.server.port"));
     }
-
-    // -- DEPENDENCIES
-
-    @Inject Environment environment;
-
-
-
 
 
 }

@@ -84,7 +84,7 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
             processMethodContext.removeMethod(choicesMethod);
 
             final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
-            if (facetedMethod.containsDoOpFacet(ActionChoicesFacet.class)) {
+            if (facetedMethod.containsNonFallbackFacet(ActionChoicesFacet.class)) {
                 final Class<?> cls = processMethodContext.getCls();
                 throw new MetaModelException(cls + " uses both old and new choices syntax - must use one or other");
             }

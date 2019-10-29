@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 import org.apache.wicket.Component;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -536,8 +537,8 @@ implements LinksProvider, UiHintContainer {
         }
     }
 
-    public List<ObjectAdapterMemento> getToggleMementosList() {
-        return Collections.unmodifiableList(_Lists.newArrayList(this.toggledMementosList));
+    public Can<ObjectAdapterMemento> getToggleMementosList() {
+        return Can.ofCollection(this.toggledMementosList);
     }
 
     public void clearToggleMementosList() {

@@ -44,8 +44,7 @@ import lombok.val;
 @Mixin @RequiredArgsConstructor
 public class ApplicationUser_permissions {
 
-    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationUser_permissions> {
-        private static final long serialVersionUID = 1L;}
+    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationUser_permissions> {}
 
     private final ApplicationUser holder;
 

@@ -26,6 +26,8 @@ import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.commons.ClassUtil;
 
+import lombok.val;
+
 /**
  * Provides capability to translate or ignore classes.
  */
@@ -44,6 +46,11 @@ public class ClassSubstitutor {
         // ignore javassist
         ignore("javassist.util.proxy.ProxyObject");
         ignore("javassist.util.proxy.MethodHandler");
+        
+        ignore("org.springframework.aop.framework.autoproxy.InfrastructureAdvisorAutoProxyCreator");
+        
+        ignorePackage("com.fasterxml.jackson.");
+        ignorePackage("com.google.gson.");
 
     }
 
@@ -95,6 +102,7 @@ public class ClassSubstitutor {
 
     private final Set<Class<?>> classesToIgnore = _Sets.newConcurrentHashSet();
     private final Set<String> classNamesToIgnore = _Sets.newHashSet();
+    private final Set<String> packageNamesToIgnore = _Sets.newHashSet();
 
 
     /**
@@ -103,6 +111,10 @@ public class ClassSubstitutor {
      */
     private void ignore(final String className) {
         classNamesToIgnore.add(className);
+    }
+    
+    private void ignorePackage(final String packageName) {
+        packageNamesToIgnore.add(packageName);
     }
 
     private boolean shouldIgnore(final Class<?> cls) {
@@ -115,8 +127,14 @@ public class ClassSubstitutor {
             return true;
         }
 
+        val className = cls.getName();
+        
         try{
-            return classesToIgnore.contains(cls) || classNamesToIgnore.contains(cls.getCanonicalName());
+            return classesToIgnore.contains(cls) 
+                    || classNamesToIgnore.contains(cls.getCanonicalName())
+                    || packageNamesToIgnore.stream().anyMatch(className::startsWith)
+                    ;
+                    
         } catch(java.lang.NoClassDefFoundError e) {
 
             try{

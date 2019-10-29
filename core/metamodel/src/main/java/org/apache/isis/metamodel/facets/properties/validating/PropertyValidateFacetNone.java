@@ -40,7 +40,7 @@ public class PropertyValidateFacetNone extends PropertyValidateFacetAbstract {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

@@ -97,7 +97,7 @@ final public class ObjectAdapterContext {
         this.specificationLoader = mmc.getSpecificationLoader();
         this.serviceInjector = mmc.getServiceInjector();
 
-        this.objectAdapterFactories = new ObjectAdapterContext_Factories(runtimeContext, persistenceSession);
+        this.objectAdapterFactories = new ObjectAdapterContext_Factories(persistenceSession);
     }
 
     // -- DEBUG

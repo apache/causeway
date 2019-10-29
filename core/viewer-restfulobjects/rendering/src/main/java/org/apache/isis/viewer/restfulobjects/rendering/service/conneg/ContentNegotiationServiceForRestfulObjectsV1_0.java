@@ -35,10 +35,10 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -46,6 +46,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.Caching;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
@@ -60,6 +61,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+
+import lombok.val;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -82,14 +85,14 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context rendererContext,
-            final ObjectAdapter objectAdapter) {
+            final IResourceContext resourceContext,
+            final ManagedObject objectAdapter) {
 
-        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
+        final List<MediaType> list = resourceContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.DOMAIN_OBJECT, list);
 
         final ResponseBuilder responseBuilder = buildResponseTo(
-                rendererContext, objectAdapter, JsonRepresentation.newMap(), null);
+                resourceContext, objectAdapter, JsonRepresentation.newMap(), null);
 
         return responseBuilder(responseBuilder);
     }
@@ -98,25 +101,25 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
      * Not API
      */
     ResponseBuilder buildResponseTo(
-            final RepresentationService.Context rendererContext,
-            final ObjectAdapter objectAdapter,
+            final IResourceContext resourceContext,
+            final ManagedObject objectAdapter,
             final JsonRepresentation representationIfAnyRequired,
             final JsonRepresentation rootRepresentation) {
 
         final DomainObjectReprRenderer renderer =
-                new DomainObjectReprRenderer(rendererContext, null, representationIfAnyRequired);
+                new DomainObjectReprRenderer(resourceContext, null, representationIfAnyRequired);
         renderer.with(objectAdapter).includesSelf();
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
 
         if(true) {
-            final RepresentationService.Intent intent = rendererContext.getIntent();
+            final RepresentationService.Intent intent = resourceContext.getIntent();
             if(intent == RepresentationService.Intent.JUST_CREATED) {
                 responseBuilder.status(Response.Status.CREATED);
             }
         }
 
-        final Version version = objectAdapter.getVersion();
+        final Version version = ManagedObject._version(objectAdapter);
         if (version != null && version.getTime() != null) {
             responseBuilder.tag(etagFormat().format(version.getTime()));
         }
@@ -129,15 +132,15 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context rendererContext,
+            final IResourceContext resourceContext,
             final ObjectAndProperty objectAndProperty) {
 
-        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
+        final List<MediaType> list = resourceContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_PROPERTY, list);
 
-        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(rendererContext);
+        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(resourceContext);
         renderer.with(objectAndProperty)
-        .usingLinkTo(rendererContext.getAdapterLinkTo());
+        .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
 
         if(objectAndProperty instanceof ObjectAndProperty2) {
             final ObjectAndProperty2 objectAndProperty2 = (ObjectAndProperty2) objectAndProperty;
@@ -152,14 +155,14 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context rendererContext,
+            final IResourceContext resourceContext,
             final ObjectAndCollection objectAndCollection) {
 
-        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
+        final List<MediaType> list = resourceContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_COLLECTION, list);
 
         final ResponseBuilder responseBuilder =
-                buildResponseTo(rendererContext, objectAndCollection, JsonRepresentation.newMap(), null);
+                buildResponseTo(resourceContext, objectAndCollection, JsonRepresentation.newMap(), null);
 
         return responseBuilder(responseBuilder);
     }
@@ -168,14 +171,14 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
      * Not API
      */
     ResponseBuilder buildResponseTo(
-            final RepresentationService.Context rendererContext,
+            final IResourceContext resourceContext,
             final ObjectAndCollection objectAndCollection,
             final JsonRepresentation representation,
             final JsonRepresentation rootRepresentation) {
         final ObjectCollectionReprRenderer renderer =
-                new ObjectCollectionReprRenderer(rendererContext, null, null, representation);
+                new ObjectCollectionReprRenderer(resourceContext, null, null, representation);
         renderer.with(objectAndCollection)
-        .usingLinkTo(rendererContext.getAdapterLinkTo());
+        .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
 
         if(objectAndCollection instanceof ObjectAndCollection2) {
             final ObjectAndCollection2 objectAndCollection2 = (ObjectAndCollection2) objectAndCollection;
@@ -188,15 +191,15 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context rendererContext,
+            final IResourceContext resourceContext,
             final ObjectAndAction objectAndAction) {
 
-        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
+        final List<MediaType> list = resourceContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_ACTION, list);
 
-        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(rendererContext);
+        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(resourceContext);
         renderer.with(objectAndAction)
-        .usingLinkTo(rendererContext.getAdapterLinkTo())
+        .usingLinkTo(resourceContext.getObjectAdapterLinkTo())
         .asStandalone();
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
@@ -206,16 +209,16 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context rendererContext,
+            final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
         final ResponseBuilder responseBuilder;
 
-        final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
         if(isAccepted(RepresentationType.DOMAIN_OBJECT, acceptableMediaTypes, true)) {
 
-            final ObjectAdapter adapter;
-            final Collection<ObjectAdapter> collectionAdapters = objectAdaptersFrom(objectAndActionInvocation);
+            final ManagedObject adapter;
+            final Collection<ManagedObject> collectionAdapters = objectAdaptersFrom(objectAndActionInvocation);
 
             if(collectionAdapters != null) {
                 final ObjectSpecification elementSpec = elementSpecFrom(objectAndActionInvocation);
@@ -224,15 +227,15 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
                 final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
                 final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec, actionOwningType, actionId, actionArguments);
 
-                adapter = rendererContext.adapterOfPojo(list);
+                adapter = ManagedObject._adapterOfList(resourceContext.getSpecificationLoader(), list);
 
             } else {
                 adapter = objectAndActionInvocation.getReturnedAdapter();
             }
-            responseBuilder = buildResponse(rendererContext, adapter);
+            responseBuilder = buildResponse(resourceContext, adapter);
 
         } else if(isAccepted(RepresentationType.ACTION_RESULT, acceptableMediaTypes)) {
-            responseBuilder = buildResponseTo(rendererContext, objectAndActionInvocation, JsonRepresentation.newMap(), null);
+            responseBuilder = buildResponseTo(resourceContext, objectAndActionInvocation, JsonRepresentation.newMap(), null);
         } else {
             throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE);
         }
@@ -251,11 +254,11 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     private static String actionArgumentsFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
         final StringBuilder buf = new StringBuilder();
         final List<ObjectActionParameter> parameters = objectAndActionInvocation.getAction().getParameters();
-        final List<ObjectAdapter> argAdapters = objectAndActionInvocation.getArgAdapters();
+        final List<ManagedObject> argAdapters = objectAndActionInvocation.getArgAdapters();
         if(parameters.size() == argAdapters.size()) {
             for (int i = 0; i < parameters.size(); i++) {
                 final ObjectActionParameter param = parameters.get(i);
-                final ObjectAdapter argAdapter = argAdapters.get(i);
+                final ManagedObject argAdapter = argAdapters.get(i);
 
                 if(buf.length() > 0) {
                     buf.append(",");
@@ -268,7 +271,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         return buf.toString();
     }
 
-    private static String titleOf(final ObjectAdapter argumentAdapter) {
+    private static String titleOf(final ManagedObject argumentAdapter) {
         return argumentAdapter!=null?argumentAdapter.titleString(null):"";
     }
 
@@ -277,7 +280,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     }
 
     private static DomainObjectList domainObjectListFrom(
-            final Collection<ObjectAdapter> collectionAdapters,
+            final Collection<ManagedObject> collectionAdapters,
             final ObjectSpecification elementSpec,
             final String actionOwningType,
             final String actionId,
@@ -285,15 +288,16 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         final String title = titleFrom(collectionAdapters, elementSpec);
 
-        final DomainObjectList list = new DomainObjectList(title, elementSpec.getSpecId().asString(), actionOwningType, actionId, actionArguments);
-        for (final ObjectAdapter adapter : collectionAdapters) {
+        final DomainObjectList list = new DomainObjectList(
+                title, elementSpec.getSpecId().asString(), actionOwningType, actionId, actionArguments);
+        for (val adapter : collectionAdapters) {
             list.getObjects().add(adapter.getPojo());
         }
         return list;
     }
 
     private static String titleFrom(
-            final Collection<ObjectAdapter> collectionAdapters,
+            final Collection<ManagedObject> collectionAdapters,
             final ObjectSpecification elementSpec) {
         final String singularName = elementSpec.getSingularName();
         final String pluralName = elementSpec.getPluralName();
@@ -320,8 +324,8 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
                         : specificationLoader.loadSpecification(Object.class) ;
     }
 
-    private Collection<ObjectAdapter> objectAdaptersFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
-        final ObjectAdapter returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
+    private Collection<ManagedObject> objectAdaptersFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
         final ObjectSpecification returnType = objectAndActionInvocation.getAction().getReturnType();
 
         final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
@@ -334,17 +338,17 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
      * Not API
      */
     ResponseBuilder buildResponseTo(
-            final RepresentationService.Context rendererContext,
+            final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation,
             final JsonRepresentation representation,
             final JsonRepresentation rootRepresentation) {
         final ActionResultReprRenderer renderer =
-                new ActionResultReprRenderer(rendererContext, null, objectAndActionInvocation.getSelfLink(), representation);
+                new ActionResultReprRenderer(resourceContext, null, objectAndActionInvocation.getSelfLink(), representation);
         renderer.with(objectAndActionInvocation)
-        .using(rendererContext.getAdapterLinkTo());
+        .using(resourceContext.getObjectAdapterLinkTo());
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
-        Responses.addLastModifiedAndETagIfAvailable(responseBuilder, objectAndActionInvocation.getObjectAdapter().getVersion());
+        Responses.addLastModifiedAndETagIfAvailable(responseBuilder, ManagedObject._version(objectAndActionInvocation.getObjectAdapter()));
         return responseBuilder;
     }
 

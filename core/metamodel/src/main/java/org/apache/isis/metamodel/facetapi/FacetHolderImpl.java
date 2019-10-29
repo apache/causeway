@@ -19,14 +19,14 @@
 
 package org.apache.isis.metamodel.facetapi;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Maps.AliasMap;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContextAware;
 
@@ -44,97 +44,125 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
     
-    private final Map<Class<? extends Facet>, Facet> facetsByClass = new ConcurrentHashMap<>();
-    private final _Lazy<Set<Facet>> snapshot = _Lazy.threadSafe(this::snapshot);
-
-    private Set<Facet> snapshot() {
-        val snapshot = _Sets.<Facet>newHashSet();
-        facetsByClass.values().forEach(snapshot::add);
-        return snapshot;
-    }
+    private final Map<Class<? extends Facet>, Facet> facetsByType = _Maps.newHashMap();
+    private final Object $lock = new Object();
     
     @Override
     public boolean containsFacet(Class<? extends Facet> facetType) {
-        return facetsByClass.containsKey(facetType);
+        synchronized($lock) {
+            return snapshot.get().containsKey(facetType);
+        }
     }
 
     @Override
     public void addFacet(Facet facet) {
-        addFacet(facet.facetType(), facet);
+        synchronized($lock) {
+            val changed = addFacetOrKeepExisting(facetsByType, facet);
+            if(changed) {
+                snapshot.clear(); //invalidate
+            }
+        }
     }
 
     @Override
     public <T extends Facet> T getFacet(Class<T> facetType) {
-        return uncheckedCast(facetsByClass.get(facetType));
+        synchronized($lock) {
+            return uncheckedCast(snapshot.get().get(facetType));
+        }
     }
 
     @Override
     public Stream<Facet> streamFacets() {
-        synchronized(snapshot) {
-            return snapshot.get().stream(); // consumers should play nice and don't take too long  
+        synchronized($lock) {
+            return snapshot.get().values().stream(); // consumers should play nice and don't take too long  
         }
     }
 
     @Override
     public int getFacetCount() {
-        synchronized(snapshot) {
+        synchronized($lock) {
             return snapshot.get().size();    
         }
     }
     
     @Override
     public void addOrReplaceFacet(Facet facet) {
-        
-        Optional.ofNullable(getFacet(facet.facetType()))
-        .filter(each -> facet.getClass() == each.getClass())
-        .ifPresent(existingFacet -> {
-            remove(existingFacet);
-            val underlyingFacet = existingFacet.getUnderlyingFacet();
-            facet.setUnderlyingFacet(underlyingFacet);
-        } );
-        
-        addFacet(facet);
+        synchronized($lock) {
+            val facetType = facet.facetType();
+            val existingFacet = getFacet(facetType);
+            if (existingFacet != null) {
+                remove(existingFacet);
+                val underlyingFacet = existingFacet.getUnderlyingFacet();
+                facet.setUnderlyingFacet(underlyingFacet);
+            }
+            
+            addFacet(facet);
+        }
     }
 
     // -- HELPER
+    
+    private final _Lazy<Map<Class<? extends Facet>, Facet>> snapshot = _Lazy.threadSafe(this::snapshot);
 
-    private void addFacet(Class<? extends Facet> facetType, Facet facet) {
-        val existingFacet = getFacet(facetType);
-        if (existingFacet == null || existingFacet.isNoop()) {
-            put(facetType, facet);
-            return;
+    // collect all facet information provided with the top-level facets (contributed facets and aliases)
+    private Map<Class<? extends Facet>, Facet> snapshot() {
+        val snapshot = _Maps.<Class<? extends Facet>, Facet>newAliasMap(HashMap::new);
+        facetsByType.values().forEach(topLevelFacet->{
+             
+            snapshot.put(
+                    topLevelFacet.facetType(), 
+                    Can.ofNullable(topLevelFacet.facetAliasType()), 
+                    topLevelFacet);
+
+            // honor contributed facets via recursive lookup
+            collectChildren(snapshot, topLevelFacet);
+
+
+        });
+        return snapshot;
+    }
+
+    private void collectChildren(AliasMap<Class<? extends Facet>, Facet> target, Facet parentFacet) {
+        parentFacet.forEachContributedFacet(child->{
+            val added = addFacetOrKeepExisting(target, child);
+            if(added) {
+                collectChildren(target, child); 
+            }
+        });        
+    }
+
+    private boolean addFacetOrKeepExisting(
+            Map<Class<? extends Facet>, Facet> facetsByType,
+            Facet facet) {
+        
+        val existingFacet = facetsByType.get(facet.facetType());
+        
+        val addOrKeep = whichPrecedesTheOther(existingFacet, facet);
+        if(addOrKeep==facet) {
+            facetsByType.put(facet.facetType(), facet);
+            return true;
+        }
+        return false;
+    }
+    
+    private void remove(Facet topLevelFacet) {
+        snapshot.clear(); //invalidate
+        facetsByType.remove(topLevelFacet.facetType());
+    }
+    
+    // also has side-effects (not really suggested by the naming)
+    private Facet whichPrecedesTheOther(Facet existingFacet, Facet facet) {
+        if (existingFacet == null || existingFacet.isFallback()) {
+            return facet;
         }
         if (!facet.alwaysReplace()) {
-            return;
+            return existingFacet; //eg. ValueSemanticsProviderAndFacetAbstract is alwaysReplace=false
         }
         if (facet.isDerived() && !existingFacet.isDerived()) {
-            return;
+            return existingFacet;
         }
         facet.setUnderlyingFacet(existingFacet);
-        put(facetType, facet);
+        return facet;
     }
-
-    private void put(Class<? extends Facet> facetType, Facet facet) {
-        synchronized(snapshot) {
-            snapshot.clear();
-            facetsByClass.put(facetType, facet);
-            facet.forEachAlias(aliasType->facetsByClass.put(aliasType, facet));
-        }
-    }
-    
-    private void remove(Facet facet) {
-        synchronized(snapshot) {
-            snapshot.clear();
-            facetsByClass.remove(facet.facetType());
-            // for all the registered aliases that point to the given facet, remove ...
-            facet.forEachAlias(aliasType->{
-                val aliasFor = facetsByClass.get(aliasType);
-                if(facet == aliasFor) {
-                    facetsByClass.remove(aliasType);
-                }
-            });
-        }
-    }
-    
 
 }

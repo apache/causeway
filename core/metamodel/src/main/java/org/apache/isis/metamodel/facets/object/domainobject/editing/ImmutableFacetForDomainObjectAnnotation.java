@@ -51,7 +51,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
                     case NOT_SPECIFIED:
                     case AS_CONFIGURED:
 
-                        if(holder.containsDoOpFacet(ImmutableFacet.class)) {
+                        if(holder.containsNonFallbackFacet(ImmutableFacet.class)) {
                             // do not replace
                             return null;
                         }

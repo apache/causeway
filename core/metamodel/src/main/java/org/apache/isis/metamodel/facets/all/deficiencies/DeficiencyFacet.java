@@ -101,7 +101,7 @@ public final class DeficiencyFacet implements Facet {
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 
@@ -116,18 +116,18 @@ public final class DeficiencyFacet implements Facet {
     }
 
     @Override
-    public void addAlias(Class<? extends Facet> alias) {
+    public void addContributedFacet(Facet contributedFacet) {
         throw _Exceptions.unsupportedOperation();
     }
 
     @Override
-    public void forEachAlias(Consumer<Class<? extends Facet>> onAlias) {
+    public void forEachContributedFacet(Consumer<Facet> onContributedFacet) {
         throw _Exceptions.unsupportedOperation();
     }
 
     @Override
-    public boolean hasAlias(Class<? extends Facet> alias) {
-        return false;
+    public Class<? extends Facet> facetAliasType() {
+        return null;
     }
 
 

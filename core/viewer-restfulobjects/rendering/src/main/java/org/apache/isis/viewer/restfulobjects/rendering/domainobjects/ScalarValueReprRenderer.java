@@ -20,22 +20,22 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
 
-public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueReprRenderer, ObjectAdapter> {
+public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueReprRenderer, ManagedObject> {
 
     private ObjectSpecification returnType;
 
     public ScalarValueReprRenderer(
-            final RendererContext resourceContext,
+            final IResourceContext resourceContext,
             final LinkFollowSpecs linkFollower,
             final JsonRepresentation representation) {
         super(resourceContext, linkFollower, null, representation); // null for representationType (there is none)
@@ -53,7 +53,7 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
     }
 
     @Override
-    public ScalarValueReprRenderer with(final ObjectAdapter objectAdapter) {
+    public ScalarValueReprRenderer with(final ManagedObject objectAdapter) {
         final EncodableFacet facet = objectAdapter.getSpecification().getFacet(EncodableFacet.class);
         if (facet == null) {
             throw ReprRendererException.create("Not an (encodable) value", objectAdapter.titleString());

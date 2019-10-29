@@ -31,8 +31,6 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.enterprise.inject.Instance;
 
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-
 import org.apache.isis.commons.internal.base._NullSafe;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -41,88 +39,125 @@ import lombok.val;
 
 /**
  * 
- * Immutable 'multi-set', that is particularly designed to conveniently deal 
- * with the 3 possible states of {@link Cardinality}. 
+ * Immutable {@link Iterable}, that can specifically represent 3 possible variants of 
+ * {@link Cardinality}. 
  * <p>
- * A {@code Bin} must not contain elements equal to {@code null}.
+ * Java's {@link Optional}, can be seen as a holder of element(s), that is restricted to 
+ * cardinality ZERO or ONE. {@link Can} is the logical extension to that, allowing also a 
+ * cardinality of MULTIPLE.
+ * <p> 
+ * Same idiomatic convention applies: References to {@link Can} 
+ * should never be initialized to {@code null}.
+ * <p>
+ * A {@link Can} must not contain elements equal to {@code null}.
  * 
  * @param <T>
  * @since 2.0
  */
-public interface Bin<T> extends Iterable<T> {
+public interface Can<T> extends Iterable<T> {
 
     /**
-     * @return this Bin's cardinality
+     * @return this Can's cardinality
      */
     Cardinality getCardinality();
-    
+
     /**
-     * @return number of elements this Bin contains 
+     * @return number of elements this Can contains 
      */
     int size();
 
     /**
-     * @return Stream of elements this Bin contains
+     * @return Stream of elements this Can contains
      */
     Stream<T> stream();
 
     /**
-     * @return this Bin's first element or an empty Optional if no such element
+     * @return this Can's first element or an empty Optional if no such element
      */
     Optional<T> getFirst();
-    
+
     /**
-     * @return this Bin's single element or an empty Optional if this Bin has any cardinality other than ONE 
+     * @return this Can's single element or an empty Optional if this Can has any cardinality other than ONE 
      */
     Optional<T> getSingleton();
 
     // -- FACTORIES
 
     /**
-     * Returns an empty {@code Bin}.
+     * Returns an empty {@code Can}.
      * @param <T>
      */
     @SuppressWarnings("unchecked") // this is how the JDK does it for eg. empty lists
-    public static <T> Bin<T> empty() {
-        return (Bin<T>) Bin_Empty.INSTANCE;
+    public static <T> Can<T> empty() {
+        return (Can<T>) Can_Empty.INSTANCE;
     }
 
     /**
-     * Returns either a {@code Bin} with the given {@code element} or an empty {@code Bin} if the
+     * Returns either a {@code Can} with the given {@code element} or an empty {@code Can} if the
      * {@code element} is {@code null}.
      * @param <T>
      * @param element
      * @return non-null
      */
-    public static <T> Bin<T> ofNullable(@Nullable T element) {
+    public static <T> Can<T> ofNullable(@Nullable T element) {
         if(element==null) {
             return empty();
         }
-        return Bin_Singleton.of(element);
+        return Can_Singleton.of(element);
     }
 
     /**
-     * Returns either a {@code Bin} with the given {@code element} or throws if the
+     * Returns either a {@code Can} with the given {@code element} or throws if the
      * {@code element} is {@code null}.
      * @param <T>
      * @param element
      * @return non-null
      * @throws NullPointerException if {@code element} is {@code null}
      */
-    public static <T> Bin<T> ofSingleton(T element) {
+    public static <T> Can<T> ofSingleton(T element) {
         requires(element, "element");
-        return Bin_Singleton.of(element);
+        return Can_Singleton.of(element);
+    }
+
+    public static <T> Can<T> ofArray(@Nullable T[] array) {
+
+        if(_NullSafe.size(array)==0) {
+            return empty();
+        }
+
+        // this is just an optimization, to pre-allocate a reasonable list size,
+        // specifically targeted at small list sizes
+        val maxSize = Math.min(array.length, 1024);
+        
+        val nonNullElements = Stream.of(array)
+                .filter(_NullSafe::isPresent)
+                .collect(Collectors.toCollection(()->new ArrayList<>(maxSize)));
+
+        nonNullElements.trimToSize(); // in case we have a 'sparse' collection as input to this method
+
+        val size = nonNullElements.size();
+
+        if(size==0) {
+            return empty();
+        }
+
+        if(size==1) {
+            return ofSingleton(((List<T>)nonNullElements).get(0));
+        }
+
+        return Can_Multiple.of(nonNullElements);
+
     }
 
     /**
-     * Returns either a {@code Bin} with all the elements from given {@code collection} 
-     * or an empty {@code Bin} if the {@code collection} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Bin}.
+     * Returns either a {@code Can} with all the elements from given {@code collection} 
+     * or an empty {@code Can} if the {@code collection} is {@code null}. Any elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * @param <T>
      * @param collection
      * @return non-null
      */
-    public static <T> Bin<T> ofCollection(@Nullable Collection<T> collection) {
+    public static <T> Can<T> ofCollection(@Nullable Collection<T> collection) {
 
         if(_NullSafe.size(collection)==0) {
             return empty();
@@ -148,20 +183,18 @@ public interface Bin<T> extends Iterable<T> {
             return ofSingleton(((List<T>)nonNullElements).get(0));
         }
 
-        nonNullElements.sort(AnnotationAwareOrderComparator.INSTANCE);
-
-        return Bin_Multiple.of(nonNullElements);
+        return Can_Multiple.of(nonNullElements);
     }
 
     /**
-     * Returns either a {@code Bin} with all the elements from given {@code stream} 
-     * or an empty {@code Bin} if the {@code stream} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Bin}.
+     * Returns either a {@code Can} with all the elements from given {@code stream} 
+     * or an empty {@code Can} if the {@code stream} is {@code null}. Any elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * @param <T>
      * @param stream
      * @return non-null
      */
-    public static <T> Bin<T> ofStream(@Nullable Stream<T> stream) {
+    public static <T> Can<T> ofStream(@Nullable Stream<T> stream) {
 
         if(stream==null) {
             return empty();
@@ -181,32 +214,28 @@ public interface Bin<T> extends Iterable<T> {
             return ofSingleton(((List<T>)nonNullElements).get(0));
         }
 
-        nonNullElements.sort(AnnotationAwareOrderComparator.INSTANCE);
-
-        return Bin_Multiple.of(nonNullElements);
+        return Can_Multiple.of(nonNullElements);
     }
 
     /**
-     * Returns either a {@code Bin} with all the elements from given {@code instance} 
-     * or an empty {@code Bin} if the {@code instance} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Bin}.
+     * Returns either a {@code Can} with all the elements from given {@code instance} 
+     * or an empty {@code Can} if the {@code instance} is {@code null}. Any elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * @param <T>
      * @param instance
      * @return non-null
      */
-    public static <T> Bin<T> ofInstance(@Nullable Instance<T> instance) {
+    public static <T> Can<T> ofInstance(@Nullable Instance<T> instance) {
         if(instance==null || instance.isUnsatisfied()) {
             return empty();
         }
         if(instance.isResolvable()) { 
-            return Bin_Singleton.of(instance.get());
+            return Can_Singleton.of(instance.get());
         }
         val nonNullElements = instance.stream()
                 .collect(Collectors.toCollection(()->new ArrayList<>()));
 
-        nonNullElements.sort(AnnotationAwareOrderComparator.INSTANCE);
-
-        return Bin_Multiple.of(nonNullElements);
+        return Can_Multiple.of(nonNullElements);
 
     }
 
@@ -214,13 +243,13 @@ public interface Bin<T> extends Iterable<T> {
     // -- OPERATORS
 
     /**
-     * Returns a {@code Bin} with all the elements from this {@code Bin},
+     * Returns a {@code Can} with all the elements from this {@code Can},
      * that are accepted by the given {@code predicate}. If {@code predicate}
      * is {@code null} <em>all</em> elements are accepted.
      * @param predicate - if absent accepts all
      * @return non-null
      */
-    public default Bin<T> filter(@Nullable Predicate<? super T> predicate) {
+    public default Can<T> filter(@Nullable Predicate<? super T> predicate) {
         if(predicate==null || isEmpty()) {
             return this;
         }
@@ -247,15 +276,15 @@ public interface Bin<T> extends Iterable<T> {
     }
 
     /**
-     * Returns a {@code Bin} with all the elements from this {@code Bin}
+     * Returns a {@code Can} with all the elements from this {@code Can}
      * 'transformed' by the given {@code mapper} function. Any resulting elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Bin}.
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * 
      * @param <R>
-     * @param mapper - if absent throws if this {@code Bin} is non-empty 
+     * @param mapper - if absent throws if this {@code Can} is non-empty 
      * @return non-null
      */
-    default <R> Bin<R> map(Function<? super T, R> mapper) {
+    default <R> Can<R> map(Function<? super T, R> mapper) {
 
         if(isEmpty()) {
             return empty();
@@ -271,32 +300,32 @@ public interface Bin<T> extends Iterable<T> {
 
         return ofCollection(mappedElements);
     }
-    
+
     // -- CONCATENATION
 
     /**
-     * Returns a {@code Bin} with all the elements from given {@code bin} joined by 
-     * the given {@code element}. If any of given {@code bin} or {@code element} are {@code null}
+     * Returns a {@code Can} with all the elements from given {@code can} joined by 
+     * the given {@code element}. If any of given {@code can} or {@code element} are {@code null}
      * these do not contribute any elements and are ignored.
      * @param <T>
-     * @param bin - nullable
+     * @param can - nullable
      * @param element - nullable
      * @return non-null
      */
-    public static <T> Bin<T> concat(@Nullable Bin<T> bin, @Nullable T element) {
-        if(bin==null || bin.isEmpty()) {
+    public static <T> Can<T> concat(@Nullable Can<T> can, @Nullable T element) {
+        if(can==null || can.isEmpty()) {
             return ofNullable(element);
         }
         if(element==null) {
-            return bin;
+            return can;
         }
-        // at this point: bin is not empty and variant is not null
-        val newSize = bin.size() + 1;
-        val union = bin.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
+        // at this point: can is not empty and variant is not null
+        val newSize = can.size() + 1;
+        val union = can.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
         union.add(element);
-        return Bin_Multiple.of(union);
+        return Can_Multiple.of(union);
     }
-    
+
     // -- TRAVERSAL
 
     @Override
@@ -322,6 +351,8 @@ public interface Bin<T> extends Iterable<T> {
     default boolean isCardinalityMultiple() {
         return getCardinality().isMultiple();
     }
+
+
 
 
 }

@@ -24,7 +24,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.SystemConstants;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.oid.factory.OidFactory.OidProvider;
+import org.apache.isis.metamodel.adapter.oid.factory.OidFactory.Handler;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -32,10 +32,10 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-class OidFactory_OidProviders {
+class OidFactory_builtinHandlers {
 
 
-    static class GuardAgainstRootOid implements OidProvider {
+    static class GuardAgainstRootOid implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -51,7 +51,7 @@ class OidFactory_OidProviders {
 
     }
 
-    static class OidForServices implements OidProvider {
+    static class OidForServices implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -66,7 +66,7 @@ class OidFactory_OidProviders {
 
     }
 
-    static class OidForEntities implements OidProvider {
+    static class OidForEntities implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -82,13 +82,13 @@ class OidFactory_OidProviders {
                 val msg = String.format("entity '%s' has not EntityFacet associated", managedObject);
                 throw _Exceptions.unrecoverable(msg);
             }
-            val identifier = entityFacet.identifierFor(pojo);
+            val identifier = entityFacet.identifierFor(spec, pojo);
             return Oid.Factory.persistentOf(spec.getSpecId(), identifier);
         }
 
     }
 
-    static class OidForValues implements OidProvider {
+    static class OidForValues implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -102,7 +102,7 @@ class OidFactory_OidProviders {
 
     }
 
-    static class OidForViewModels implements OidProvider {
+    static class OidForViewModels implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -119,7 +119,7 @@ class OidFactory_OidProviders {
 
     }
 
-    static class OidForOthers implements OidProvider {
+    static class OidForOthers implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {

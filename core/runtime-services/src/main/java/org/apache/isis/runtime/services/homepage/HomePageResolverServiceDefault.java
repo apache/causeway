@@ -150,7 +150,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     protected HomePageAction homePageActionIfUsable(ObjectAction objectAction, ObjectSpecification spec) {
 
-        if (!objectAction.containsDoOpFacet(HomePageFacet.class)) {
+        if (!objectAction.containsNonFallbackFacet(HomePageFacet.class)) {
             return null;
         }
 

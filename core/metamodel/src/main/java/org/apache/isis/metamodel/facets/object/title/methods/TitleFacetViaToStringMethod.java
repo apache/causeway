@@ -58,7 +58,7 @@ public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements I
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return true;
     }
 

@@ -72,9 +72,9 @@ public final class _Exceptions {
      * @param _case the unmatched case to be reported
      * @return
      */
-    public static final IllegalArgumentException unmatchedCase(String format, @Nullable Object _case) {
+    public static final IllegalArgumentException illegalArgument(String format, @Nullable Object ... args) {
         requires(format, "format");
-        return new IllegalArgumentException(String.format(format, _case));
+        return new IllegalArgumentException(String.format(format, args));
     }
 
     public static final NoSuchElementException noSuchElement(String msg) {

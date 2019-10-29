@@ -18,7 +18,7 @@
  */
 package org.apache.isis.commons.internal.ioc;
 
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 
 /**
  * @since 2.0
@@ -26,7 +26,7 @@ import org.apache.isis.commons.collections.Bin;
 public interface ManagedBeanAdapter { 
 
     String getId();
-    Bin<?> getInstance();
+    Can<?> getInstance();
     Class<?> getBeanClass();
 
     boolean isCandidateFor(Class<?> requiredType);

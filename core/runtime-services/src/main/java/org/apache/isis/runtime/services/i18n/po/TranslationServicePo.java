@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
@@ -164,17 +164,17 @@ public class TranslationServicePo implements TranslationService {
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private ServiceRegistry serviceRegistry;
     
-    private _Lazy<Bin<TranslationsResolver>> translationsResolvers = _Lazy.threadSafe(()->
+    private _Lazy<Can<TranslationsResolver>> translationsResolvers = _Lazy.threadSafe(()->
     serviceRegistry.select(TranslationsResolver.class) );
 
-    Bin<TranslationsResolver> getTranslationsResolver() {
+    Can<TranslationsResolver> getTranslationsResolver() {
         return translationsResolvers.get();
     }
 
-    private _Lazy<Bin<LocaleProvider>> localeProviders = _Lazy.threadSafe(()->
+    private _Lazy<Can<LocaleProvider>> localeProviders = _Lazy.threadSafe(()->
     serviceRegistry.select(LocaleProvider.class) );
 
-    Bin<LocaleProvider> getLocaleProvider() {
+    Can<LocaleProvider> getLocaleProvider() {
         return localeProviders.get();
     }
 

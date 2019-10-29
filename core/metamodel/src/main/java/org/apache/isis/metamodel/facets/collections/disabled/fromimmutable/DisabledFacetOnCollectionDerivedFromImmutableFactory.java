@@ -35,7 +35,7 @@ public class DisabledFacetOnCollectionDerivedFromImmutableFactory extends FacetF
     public void process(final ProcessMethodContext processMethodContext) {
         final Class<?> declaringClass = processMethodContext.getMethod().getDeclaringClass();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
-        if (spec.containsDoOpFacet(ImmutableFacet.class)) {
+        if (spec.containsNonFallbackFacet(ImmutableFacet.class)) {
             final ImmutableFacet immutableFacet = spec.getFacet(ImmutableFacet.class);
             final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
             super.addFacet(new DisabledFacetOnCollectionDerivedFromImmutable(immutableFacet, facetHolder));

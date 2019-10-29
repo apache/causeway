@@ -92,7 +92,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
     @Inject ServiceInjector serviceInjector;
 
     @BeforeEach
-    void setupSvenInDb() {
+    void beforeEach() {
         
         setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
         

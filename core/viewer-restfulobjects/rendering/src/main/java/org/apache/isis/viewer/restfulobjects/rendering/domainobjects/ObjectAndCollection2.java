@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 public class ObjectAndCollection2 extends ObjectAndCollection {
@@ -26,7 +26,7 @@ public class ObjectAndCollection2 extends ObjectAndCollection {
     private final MemberReprMode memberReprMode;
 
     public ObjectAndCollection2(
-            final ObjectAdapter objectAdapter,
+            final ManagedObject objectAdapter,
             final OneToManyAssociation collection,
             final MemberReprMode memberReprMode) {
         super(objectAdapter, collection);

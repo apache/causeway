@@ -36,29 +36,30 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.webapp.IsisWebAppUtils;
 
 import lombok.Getter;
+import lombok.Setter;
 
-public class ResourceContext extends RuntimeContextBase implements RendererContext {
+public class ResourceContext extends RuntimeContextBase implements IResourceContext {
 
     @Getter private final HttpHeaders httpHeaders;
     @Getter private final UriInfo uriInfo;
     @Getter private final Request request;
-    //not used ... private final Providers providers;
     @Getter private final HttpServletRequest httpServletRequest;
     @Getter private final HttpServletResponse httpServletResponse;
     @Getter private final SecurityContext securityContext;
@@ -214,8 +215,8 @@ public class ResourceContext extends RuntimeContextBase implements RendererConte
     // -- canEagerlyRender
     private Set<Oid> rendered = _Sets.newHashSet();
     @Override
-    public boolean canEagerlyRender(ObjectAdapter objectAdapter) {
-        final Oid oid = objectAdapter.getOid();
+    public boolean canEagerlyRender(ManagedObject objectAdapter) {
+        final Oid oid = ManagedObject._oid(objectAdapter);
         return rendered.add(oid);
     }
 
@@ -271,5 +272,11 @@ public class ResourceContext extends RuntimeContextBase implements RendererConte
     public List<MediaType> getAcceptableMediaTypes() {
         return httpHeaders.getAcceptableMediaTypes();
     }
+
+
+    @Getter(onMethod = @__(@Override))
+    @Setter //(onMethod = @__(@Override))
+    private ObjectAdapterLinkTo objectAdapterLinkTo;
+
 
 }

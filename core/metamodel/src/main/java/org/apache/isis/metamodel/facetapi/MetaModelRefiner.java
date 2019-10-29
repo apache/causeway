@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facetapi;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
 
@@ -35,7 +35,7 @@ public interface MetaModelRefiner {
 
     // -- LOOKUP ALL REFINERS
 
-    static Bin<MetaModelRefiner> getAll(ServiceRegistry serviceRegistry) {
+    static Can<MetaModelRefiner> getAll(ServiceRegistry serviceRegistry) {
         return serviceRegistry.select(MetaModelRefiner.class);
     }
 

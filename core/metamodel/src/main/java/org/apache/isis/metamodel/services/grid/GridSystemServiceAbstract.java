@@ -466,7 +466,7 @@ implements GridSystemService<G> {
     }
 
     private static boolean isDoOp(final Facet facet) {
-        return facet != null && !facet.isNoop();
+        return facet != null && !facet.isFallback();
     }
 
     protected void setBookmarkingIfAny(

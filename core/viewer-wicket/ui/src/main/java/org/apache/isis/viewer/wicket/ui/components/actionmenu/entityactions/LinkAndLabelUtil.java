@@ -20,9 +20,9 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -75,11 +75,12 @@ public final class LinkAndLabelUtil {
 
         final ActionLinkFactory linkFactory = new EntityActionLinkFactory(parentEntityModel, scalarModelIfAny);
 
-        return _Lists.transform(objectActions, stream -> stream
+        return _NullSafe.stream(objectActions)
                 .map((ObjectAction objectAction) ->
-                linkFactory.newLink(
+                    linkFactory.newLink(
                         objectAction, AdditionalLinksPanel.ID_ADDITIONAL_LINK, toggledMementosProviderIfAny))
-                .filter(_NullSafe::isPresent));
+                .filter(_NullSafe::isPresent)
+                .collect(Collectors.toList());
     }
 
 }

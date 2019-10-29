@@ -36,7 +36,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
 import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult;
@@ -240,7 +240,7 @@ public class FixtureScriptsDefault extends FixtureScripts {
         return fixtureScriptsSpecificationProvider.isEmpty() || getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
     }
 
-    private Bin<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider;
+    private Can<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider;
 
     // -- DEPS
 

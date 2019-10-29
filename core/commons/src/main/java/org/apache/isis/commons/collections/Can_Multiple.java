@@ -20,48 +20,54 @@ package org.apache.isis.commons.collections;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(staticName="of")
-final class Bin_Singleton<T> implements Bin<T> {
+final class Can_Multiple<T> implements Can<T> {
 
-    private final T element;
+    private final List<T> elements;
 
     @Getter(lazy=true, onMethod=@__({@Override})) 
-    private final Optional<T> singleton = Optional.of(element);
+    private final Optional<T> first = Optional.of(elements.get(0));
 
     @Override
     public Cardinality getCardinality() {
-        return Cardinality.ONE;
+        return Cardinality.MULTIPLE;
     }
 
     @Override
     public Stream<T> stream() {
-        return Stream.of(element);
+        return elements.stream();
     }
 
     @Override
-    public Optional<T> getFirst() {
-        return getSingleton();
+    public Optional<T> getSingleton() {
+        return Optional.empty();
     }
 
     @Override
     public int size() {
-        return 1;
+        return elements.size();
     }
 
     @Override
     public Iterator<T> iterator() {
-        return Collections.singletonList(element).iterator();
+        return Collections.unmodifiableList(elements).iterator();
     }
 
     @Override
     public String toString() {
-        return "Bin["+element+"]";
+        val literal = stream()
+                .map(s->""+s)
+                .collect(Collectors.joining(", "));
+        return "Bin["+literal+"]";
     }
 
 }

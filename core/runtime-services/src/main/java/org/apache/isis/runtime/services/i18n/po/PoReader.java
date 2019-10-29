@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
-import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -60,8 +60,8 @@ class PoReader extends PoAbstract {
      * </p>
      */
     private final String basename = "translations";
-    private final Bin<TranslationsResolver> translationsResolver;
-    private final Bin<LocaleProvider> localeProvider;
+    private final Can<TranslationsResolver> translationsResolver;
+    private final Can<LocaleProvider> localeProvider;
 
     private List<String> fallback;
 

@@ -79,6 +79,7 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
             final FacetHolder holder) {
 
         super(type(), holder, Derivation.NOT_DERIVED);
+        super.setFacetAliasType(ValueFacet.class);
 
         this.semanticsProvider = semanticsProvider;
 
@@ -109,13 +110,13 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
         // ImmutableFacet, if appropriate
         final boolean immutable = semanticsProvider == null || semanticsProvider.isImmutable();
         if (immutable) {
-            facetHolder.addFacet(new ImmutableFacetViaValueSemantics(holder));
+            this.addContributedFacet(new ImmutableFacetViaValueSemantics(holder));
         }
 
         // EqualByContentFacet, if appropriate
         final boolean equalByContent = semanticsProvider == null || semanticsProvider.isEqualByContent();
         if (equalByContent) {
-            facetHolder.addFacet(new EqualByContentFacetViaValueSemantics(holder));
+            this.addContributedFacet(new EqualByContentFacetViaValueSemantics(holder));
         }
 
         if (semanticsProvider != null) {
@@ -123,7 +124,7 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
             // install the EncodeableFacet if we've been given an EncoderDecoder
             final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
             if (encoderDecoder != null) {
-                facetHolder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
+                this.addContributedFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
             }
 
             // install the ParseableFacet and other facets if we've been given a
@@ -135,14 +136,14 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
                 facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder));
                 final int maxLength = parser.maxLength();
                 if(maxLength >=0) {
-                    facetHolder.addFacet(new MaxLengthFacetUsingParser(parser, holder));
+                    this.addContributedFacet(new MaxLengthFacetUsingParser(parser, holder));
                 }
             }
 
             // install the DefaultedFacet if we've been given a DefaultsProvider
             final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
             if (defaultsProvider != null) {
-                facetHolder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
+                this.addContributedFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
         }
     }

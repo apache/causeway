@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.shiro;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,12 +37,13 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryp
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
+import org.apache.isis.security.shiro.WebModuleShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
-import org.apache.isis.testdomain.rest.RestEndpointTestService;
+import org.apache.isis.testdomain.rest.RestEndpointService;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 
 import static java.time.Duration.ofMillis;
@@ -69,7 +71,7 @@ import lombok.val;
 
     // Restful server
     IsisBootWebRestfulObjects.class,
-    RestEndpointTestService.class,
+    RestEndpointService.class,
 
     // Embedded LDAP server for testing
     LdapServerService.class,
@@ -84,12 +86,17 @@ import lombok.val;
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;
-    @Inject RestEndpointTestService restService;
+    @Inject RestEndpointService restService;
     @Inject LdapServerService ldapServerService;
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject SecurityModuleConfig securityConfig;
     @Inject ServiceInjector serviceInjector;
+    
+    @BeforeAll
+    static void setup() {
+        WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
+    }
     
     @BeforeEach
     void beforeEach() {

@@ -20,9 +20,9 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.util.stream.Stream;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
@@ -32,7 +32,7 @@ import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 
 /**
  * Utility class that encapsulates the logic for updating an
- * {@link org.apache.isis.metamodel.adapter.ObjectAdapter object}'s with the
+ * {@link ManagedObject}'s with the
  * values of a {@link org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation}.
  *
  * <p>
@@ -41,10 +41,10 @@ import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
  */
 public class ObjectAdapterUpdateHelper {
 
-    private final ObjectAdapter objectAdapter;
+    private final ManagedObject objectAdapter;
     private final ResourceContext resourceContext;
 
-    public ObjectAdapterUpdateHelper(ResourceContext resourceContext, ObjectAdapter objectAdapter) {
+    public ObjectAdapterUpdateHelper(ResourceContext resourceContext, ManagedObject objectAdapter) {
         this.objectAdapter = objectAdapter;
         this.resourceContext = resourceContext;
     }
@@ -143,7 +143,7 @@ public class ObjectAdapterUpdateHelper {
 
             // ok, we have a value, and
             // (if validating) then the property is not invisible, and is not disabled
-            final ObjectAdapter valueAdapter;
+            final ManagedObject valueAdapter;
             try {
                 valueAdapter = new JsonParserHelper(resourceContext, propertySpec).objectAdapterFor(propertyRepr);
             } catch(IllegalArgumentException ex) {

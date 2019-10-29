@@ -28,7 +28,7 @@ import org.apache.isis.extensions.sse.api.SseSource;
 
 import lombok.RequiredArgsConstructor;
 
-@DomainObject(nature=Nature.INMEMORY_ENTITY, editing=Editing.DISABLED) 
+@DomainObject(nature=Nature.INMEMORY_ENTITY, objectType = "demo.AsyncDemoTask", editing=Editing.DISABLED) 
 @RequiredArgsConstructor(staticName="of")
 public class DemoTask implements SseSource {
 

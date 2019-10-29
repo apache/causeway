@@ -39,8 +39,7 @@ public class HasUsername_open {
 
     private final HasUsername holder;
 
-    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<HasUsername_open> {
-        private static final long serialVersionUID = 1L;}
+    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<HasUsername_open> {}
 
     @Action(
             semantics = SemanticsOf.SAFE,

@@ -25,13 +25,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -50,19 +50,21 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
  *     unambiguously serialize it.
  * </p>
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@Service
 @Order(100) //in effect, is the relative priority (lower numbers have higher priority)
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
 
     public static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";
 
+    @Inject List<ContentMappingService> contentMappingServices;
+    
     /**
      * search for an accept header in form <code>application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto</code>
      */
     @Override
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext,
-            final ObjectAdapter objectAdapter) {
+            final IResourceContext renderContext,
+            final ManagedObject objectAdapter) {
 
         final Object domainObject = objectOf(objectAdapter);
         final RepresentationType representationType = RepresentationType.DOMAIN_OBJECT;
@@ -76,7 +78,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     }
 
     protected MediaType mediaTypeFrom(
-            final RepresentationService.Context renderContext,
+            final IResourceContext renderContext,
             final RepresentationType representationType) {
         final List<MediaType> acceptableMediaTypes = renderContext.getAcceptableMediaTypes();
         MediaType mediaType =
@@ -94,7 +96,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
      */
     @Override
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext,
+            final IResourceContext renderContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
         final RepresentationType representationType = RepresentationType.ACTION_RESULT;
@@ -112,7 +114,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     }
 
     protected Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context renderContext,
+            final IResourceContext renderContext,
             final Object domainObject,
             final RepresentationType representationType) {
 
@@ -154,6 +156,6 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         return domainObject;
     }
 
-    @Inject List<ContentMappingService> contentMappingServices;
+    
 
 }

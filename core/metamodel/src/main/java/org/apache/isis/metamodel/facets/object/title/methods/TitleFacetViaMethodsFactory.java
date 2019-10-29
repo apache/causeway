@@ -69,7 +69,7 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
 
         // may have a facet by virtue of @Title, say.
         final TitleFacet existingTitleFacet = facetHolder.getFacet(TitleFacet.class);
-        if(existingTitleFacet != null && !existingTitleFacet.isNoop()) {
+        if(existingTitleFacet != null && !existingTitleFacet.isFallback()) {
             return;
         }
 

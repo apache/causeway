@@ -20,11 +20,13 @@
 package org.apache.isis.commons.internal.collections;
 
 import java.util.AbstractMap;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
@@ -33,9 +35,15 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.Value;
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -52,6 +60,27 @@ import static org.apache.isis.commons.internal.base._With.requires;
 public final class _Maps {
 
     private _Maps(){}
+    
+    /**
+     * A Map that supports value lookup by key and <em>alias</em> keys.
+     * <p>
+     * example use-case: store values by class type then allow lookup by interface type
+     * @param <K>
+     * @param <V>
+     */
+    public static interface AliasMap<K, V> extends Map<K, V> {
+
+        /**
+         * 
+         * @param key
+         * @param aliases
+         * @param value
+         * @return
+         * @throws IllegalArgumentException if there is a aliasKey collision
+         */
+        public V put(K key, Can<K> aliases, V value);
+        
+    }
 
     // -- UNMODIFIABLE MAP
 
@@ -164,6 +193,122 @@ public final class _Maps {
 
     public static <K, V> TreeMap<K, V> newTreeMap(Comparator<? super K> comparator) {
         return new TreeMap<K, V>(comparator);
+    }
+    
+    // -- ALIAS MAP
+    
+    @Value(staticConstructor = "of") 
+    private final static class KeyPair<K> {
+        K key;
+        Can<K> aliasKeys;
+    }
+    
+    public static <K, V> AliasMap<K, V> newAliasMap(
+            final Supplier<Map<K, V>> mapFactory){
+        
+        requires(mapFactory, "mapFactory");
+
+        return new AliasMap<K, V>() {
+
+            final Map<K, V> delegate = mapFactory.get();
+
+            @Override public int size() { return delegate.size(); }
+            @Override public boolean isEmpty() { return delegate.isEmpty(); }
+            @Override public boolean containsValue(Object value) { return delegate.containsValue(value); }
+            @Override public Set<K> keySet() { return delegate.keySet(); }
+            @Override public Collection<V> values() { return delegate.values();   }
+            @Override public Set<Entry<K, V>> entrySet() { return delegate.entrySet(); }
+            
+            @Override 
+            public V put(K key, V value) { 
+                return this.put(key, Can.empty(), value); 
+            }
+            
+            @Override 
+            public void putAll(Map<? extends K, ? extends V> other) { 
+                if(!_NullSafe.isEmpty(other)) {
+                    other.forEach((k, v)->this.put(k, v)); 
+                }
+            }
+            
+            @Override
+            public V put(K key, Can<K> aliases, V value) {
+                putAliasKeys(key, aliases);
+                return delegate.put(key, value);
+            }
+            
+            @Override
+            public boolean containsKey(Object keyOrAliasKey) {
+                return delegate.containsKey(keyOrAliasKey) ||
+                    containsAliasKey(keyOrAliasKey);
+            }
+            
+
+            @Override
+            public V get(Object keyOrAliasKey) {
+                val v = delegate.get(keyOrAliasKey);
+                if(v!=null) {
+                    return v;
+                }
+                return getByAliasKey(keyOrAliasKey);
+            }
+            
+            @Override 
+            public V remove(Object key) { 
+                removeAliasKeysOf(key);
+                return delegate.remove(key); 
+            }
+            
+            @Override 
+            public void clear() {
+                delegate.clear(); 
+                clearAliasKeys();
+            }
+            
+            // -- HELPER
+            
+            private final Map<K, KeyPair<K>> pairByAliasKey = _Maps.newHashMap();
+            
+            private void putAliasKeys(K key, Can<K> aliasKeys) {
+                if(aliasKeys.isNotEmpty()) {
+                    val keyPair = KeyPair.of(key, aliasKeys);
+                    for(val aliasKey : aliasKeys) {
+                        val existing = pairByAliasKey.put(aliasKey, keyPair);
+                        if(existing!=null) {
+                            throw _Exceptions.illegalArgument("alias key collision %s", aliasKey);
+                        }
+                    }
+                }
+            }
+            
+            private V getByAliasKey(Object aliasKey) {
+                val keyPair = pairByAliasKey.get(aliasKey);
+                if(keyPair!=null) {
+                    return delegate.get(keyPair.getKey()); 
+                }
+                return null;
+            }
+
+            private boolean containsAliasKey(Object aliasKey) {
+                return pairByAliasKey.containsKey(aliasKey);
+            }
+            
+            private void removeAliasKeysOf(final Object key) {
+                //XXX this implementation is slow for large alias maps, since we traverse the entire map
+                pairByAliasKey.entrySet()
+                .removeIf(entry->{
+                    val keyPair = entry.getValue();
+                    return keyPair.getKey().equals(key);
+                });
+                
+            }
+            
+            private void clearAliasKeys() {
+                pairByAliasKey.clear();
+            }
+            
+
+        };
     }
 
     // --

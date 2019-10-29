@@ -42,7 +42,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
     public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        if(facetHolder.containsDoOpFacet(CssClassFacet.class)) {
+        if(facetHolder.containsNonFallbackFacet(CssClassFacet.class)) {
             return;
         }
 
@@ -73,7 +73,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
         if(!(objectMember instanceof ObjectAction)) {
             return;
         }
-        if(objectMember.containsDoOpFacet(CssClassFacet.class)) {
+        if(objectMember.containsNonFallbackFacet(CssClassFacet.class)) {
             return;
         }
 

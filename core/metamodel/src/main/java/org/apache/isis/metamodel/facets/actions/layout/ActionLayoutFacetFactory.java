@@ -125,13 +125,13 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
     private static boolean isContributingService(final ObjectSpecification spec) {
         final DomainServiceFacet domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-        return domainServiceFacet != null && !domainServiceFacet.isNoop() && 
+        return domainServiceFacet != null && !domainServiceFacet.isFallback() && 
                 !domainServiceFacet.getNatureOfService().isProgrammatic();
     }
 
     private static boolean isMixinObject(final ObjectSpecification spec) {
         final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
-        final boolean b = mixinFacet != null && !mixinFacet.isNoop();
+        final boolean b = mixinFacet != null && !mixinFacet.isFallback();
         return b;
     }
 
@@ -161,7 +161,7 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
         // position
         ActionPositionFacet actionPositionFacet = null;
-        if(! holder.containsDoOpFacet(ActionPositionFacet.class)) {
+        if(! holder.containsNonFallbackFacet(ActionPositionFacet.class)) {
             actionPositionFacet = new ActionPositionFacetFallback(holder);
         }
         super.addFacet(actionPositionFacet);

@@ -32,7 +32,6 @@ import org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEv
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
-import org.apache.isis.unittestsupport.config.internal._Config;
 
 import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
 import static org.junit.Assert.assertThat;

@@ -65,7 +65,7 @@ public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProvi
     }
 
     @Override
-    public boolean isNoop() {
+    public boolean isFallback() {
         return false;
     }
 

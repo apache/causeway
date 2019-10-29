@@ -18,14 +18,18 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 
 public class ObjectAndProperty2 extends ObjectAndProperty {
 
     private final MemberReprMode memberReprMode;
 
-    public ObjectAndProperty2(final ObjectAdapter objectAdapter, final OneToOneAssociation property, final MemberReprMode memberReprMode) {
+    public ObjectAndProperty2(
+            ManagedObject objectAdapter,
+            OneToOneAssociation property, 
+            MemberReprMode memberReprMode) {
+        
         super(objectAdapter, property);
         this.memberReprMode = memberReprMode;
     }

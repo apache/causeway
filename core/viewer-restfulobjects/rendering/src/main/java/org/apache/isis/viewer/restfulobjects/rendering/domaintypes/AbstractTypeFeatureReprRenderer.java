@@ -24,7 +24,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbstract<R, ParentSpecAndFeature<T>>, T extends ObjectFeature> extends ReprRendererAbstract<R, ParentSpecAndFeature<T>> {
@@ -32,7 +32,7 @@ public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbst
     protected ObjectSpecification objectSpecification;
     protected T objectFeature;
 
-    public AbstractTypeFeatureReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public AbstractTypeFeatureReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 

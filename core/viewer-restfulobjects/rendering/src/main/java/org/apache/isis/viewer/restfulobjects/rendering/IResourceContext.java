@@ -23,13 +23,18 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.runtime.system.context.session.RuntimeContext;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
-public interface RendererContext extends RuntimeContext {
+public interface IResourceContext {
 
     String urlFor(final String url);
 
@@ -39,6 +44,7 @@ public interface RendererContext extends RuntimeContext {
 
     Where getWhere();
 
+    ObjectAdapterLinkTo getObjectAdapterLinkTo();
     List<List<String>> getFollowLinks();
     boolean isValidateOnly();
 
@@ -61,21 +67,33 @@ public interface RendererContext extends RuntimeContext {
      * @param objectAdapter - the object proposed to be rendered eagerly
      * @return whether this adapter has already been rendered (implying the caller should not render the value).
      */
-    boolean canEagerlyRender(ObjectAdapter objectAdapter);
+    boolean canEagerlyRender(ManagedObject objectAdapter);
 
     /**
      * Applies only when rendering a domain object.
      */
     RepresentationService.Intent getIntent();
+    
+    AuthenticationSession getAuthenticationSession();
+    
+    SpecificationLoader getSpecificationLoader();
+    MetaModelContext getMetaModelContext(); // TODO derive from specLoader
+    ServiceRegistry getServiceRegistry(); // TODO derive from specLoader
+    IsisConfiguration getConfiguration(); // TODO derive from specLoader
 
     // -- TEMPORARY FOR REFACTORING
 
-    default ObjectAdapter getObjectAdapterElseNull(String oidFromHref) {
+    @Deprecated
+    default ManagedObject getObjectAdapterElseNull(String oidFromHref) {
         return OidUtils.getObjectAdapterElseNull(this, oidFromHref);
     }
 
-    default ObjectAdapter getObjectAdapterElseNull(String domainType, String instanceIdEncoded) {
+    @Deprecated
+    default ManagedObject getObjectAdapterElseNull(String domainType, String instanceIdEncoded) {
         return OidUtils.getObjectAdapterElseNull(this, domainType, instanceIdEncoded);
     }
+
+    
+    
 
 }

@@ -58,7 +58,7 @@ public class DtoMappingHelper {
         case VIEW_MODEL:
             return BookmarkObjectState.VIEW_MODEL;
         default:
-            throw _Exceptions.unmatchedCase("objectState '%s' not recognized", bookmark.getObjectState());
+            throw _Exceptions.illegalArgument("objectState '%s' not recognized", bookmark.getObjectState());
         }
 
     }

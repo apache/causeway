@@ -22,15 +22,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 /**
@@ -39,30 +39,30 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
  */
 public class ObjectActionArgHelper {
 
-    private final RendererContext rendererContext;
-    private final ObjectAdapter objectAdapter;
+    private final IResourceContext resourceContext;
+    private final ManagedObject objectAdapter;
     private final ObjectAction action;
 
     public ObjectActionArgHelper(
-            final RendererContext rendererContext,
-            final ObjectAdapter objectAdapter,
+            final IResourceContext resourceContext,
+            final ManagedObject objectAdapter,
             final ObjectAction action) {
-        this.rendererContext = rendererContext;
+        this.resourceContext = resourceContext;
         this.objectAdapter = objectAdapter;
         this.action = action;
     }
 
-    public List<ObjectAdapter> parseAndValidateArguments(final JsonRepresentation arguments) {
+    public List<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 
-        final List<ObjectAdapter> argAdapters = _Lists.newArrayList();
+        final List<ManagedObject> argAdapters = _Lists.newArrayList();
         final List<ObjectActionParameter> parameters = action.getParameters();
         boolean valid = true;
         for (int i = 0; i < argList.size(); i++) {
             final JsonRepresentation argRepr = argList.get(i);
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
             try {
-                final ObjectAdapter argAdapter = new JsonParserHelper(rendererContext, paramSpec).objectAdapterFor(argRepr);
+                final ManagedObject argAdapter = new JsonParserHelper(resourceContext, paramSpec).objectAdapterFor(argRepr);
                 argAdapters.add(argAdapter);
 
                 // validate individual arg
@@ -80,7 +80,7 @@ public class ObjectActionArgHelper {
         }
 
         // validate entire argument set
-        final ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
+        final ManagedObject[] argArray = argAdapters.toArray(new ManagedObject[0]);
         final Consent consent = action.isArgumentSetValid(objectAdapter, argArray, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());

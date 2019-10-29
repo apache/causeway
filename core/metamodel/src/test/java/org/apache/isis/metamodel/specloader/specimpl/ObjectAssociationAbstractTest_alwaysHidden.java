@@ -133,7 +133,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
+            public boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {
                 return false;
             }
 
@@ -227,7 +227,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public boolean isNoop() {
+            public boolean isFallback() {
                 return noop;
             }
         };

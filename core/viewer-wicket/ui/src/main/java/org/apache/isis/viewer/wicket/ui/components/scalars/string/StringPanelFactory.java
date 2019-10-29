@@ -36,7 +36,7 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
         final MultiLineFacet multiLineFacet = scalarModel.getFacet(MultiLineFacet.class);
-        if (multiLineFacet != null && !multiLineFacet.isNoop()) {
+        if (multiLineFacet != null && !multiLineFacet.isFallback()) {
             return new MultiLineStringPanel(id, scalarModel);
         } else {
             return new StringPanel(id, scalarModel);

@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Temporal", editing=Editing.ENABLED)
 @Log4j2
 public class TemporalDemo extends DemoStub {
 

@@ -29,7 +29,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -169,21 +168,16 @@ public final class _Lists {
 
     // -- TRANSFORMATIONS
 
-    public static <T, R> List<R> transform(@Nullable Collection<T> input, Function<Stream<T>, Stream<R>> transformation) {
-        if(input==null) {
-            return Collections.emptyList();
-        }
-        requires(transformation, "transformation");
-        return transformation.apply(_NullSafe.stream(input))
+    public static <T, R> List<R> map(@Nullable Collection<T> input, Function<T, R> mapper) {
+        return _NullSafe.stream(input)
+                .map(mapper)
                 .collect(Collectors.toList());
     }
 
-    public static <T, R> List<R> map(@Nullable Collection<T> input, Function<T, R> mapper) {
-        return transform(input, stream->stream.map(mapper));
-    }
-
     public static <T> List<T> filter(@Nullable Collection<T> input, Predicate<? super T> filter) {
-        return transform(input, stream->stream.filter(filter));
+        return _NullSafe.stream(input)
+                .filter(filter)
+                .collect(Collectors.toList());
     }
 
 }

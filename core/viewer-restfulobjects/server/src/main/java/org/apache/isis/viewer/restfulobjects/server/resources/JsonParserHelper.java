@@ -21,33 +21,33 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
 /**
  * Utility class that encapsulates the logic for parsing some content (JSON, or a simple string that is JSON)
- * into an{@link org.apache.isis.metamodel.adapter.ObjectAdapter} of a specified
+ * into an{@link ManagedObject} of a specified
  * {@link org.apache.isis.metamodel.spec.ObjectSpecification type}.
  */
 public class JsonParserHelper {
 
     private final static Pattern OBJECT_OID = Pattern.compile(".*objects\\/([^/]+)\\/(.+)");
 
-    private final RendererContext rendererContext;
+    private final IResourceContext resourceContext;
     private final ObjectSpecification objectSpec;
     private final JsonValueEncoder jsonValueEncoder;
 
-    public JsonParserHelper(RendererContext rendererContext, ObjectSpecification objectSpecification) {
+    public JsonParserHelper(IResourceContext resourceContext, ObjectSpecification objectSpecification) {
         this.objectSpec = objectSpecification;
-        this.rendererContext = rendererContext;
-        this.jsonValueEncoder = rendererContext.getServiceRegistry()
+        this.resourceContext = resourceContext;
+        this.jsonValueEncoder = resourceContext.getServiceRegistry()
                 .lookupServiceElseFail(JsonValueEncoder.class);
     }
 
@@ -57,12 +57,12 @@ public class JsonParserHelper {
      *            - as per {@link org.apache.isis.viewer.restfulobjects.rendering.util.Util#asStringUtf8(java.io.InputStream)}
      * @return
      */
-    ObjectAdapter parseAsMapWithSingleValue(final String bodyAsString) {
+    ManagedObject parseAsMapWithSingleValue(final String bodyAsString) {
         final JsonRepresentation arguments = Util.readAsMap(bodyAsString);
         return parseAsMapWithSingleValue(arguments);
     }
 
-    ObjectAdapter parseAsMapWithSingleValue(final JsonRepresentation arguments) {
+    ManagedObject parseAsMapWithSingleValue(final JsonRepresentation arguments) {
         final JsonRepresentation representation = arguments.getRepresentation("value");
         if (arguments.size() != 1 || representation == null) {
             throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "Body should be a map with a single key 'value' whose value represents an instance of type '%s'", resourceFor(objectSpec));
@@ -77,7 +77,7 @@ public class JsonParserHelper {
      *            - expected to be either a String or a Map (ie from within a
      *            List, built by parsing a JSON structure).
      */
-    ObjectAdapter objectAdapterFor(final JsonRepresentation argRepr) {
+    ManagedObject objectAdapterFor(final JsonRepresentation argRepr) {
 
         if (argRepr == null) {
             return null;
@@ -131,7 +131,7 @@ public class JsonParserHelper {
             throw new IllegalArgumentException(reason);
         }
 
-        final ObjectAdapter objectAdapter = rendererContext.getObjectAdapterElseNull(oidFromHref);
+        final ManagedObject objectAdapter = resourceContext.getObjectAdapterElseNull(oidFromHref);
         if (objectAdapter == null) {
             final String reason = "'href' does not reference a known entity";
             argRepr.mapPut("invalidReason", reason);
