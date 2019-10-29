@@ -35,6 +35,7 @@ public enum PageType {
     SIGN_UP_VERIFY,
     PASSWORD_RESET,
     HOME,
+    HOME_AFTER_PAGETIMEOUT,
     ABOUT,
     ENTITY,
     ACTION_PROMPT,

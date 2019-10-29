@@ -23,36 +23,36 @@ import java.util.Locale;
 
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 /**
- * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s,
+ * Implementation of a Wicket {@link IConverter} for {@link ManagedObject}s,
  * converting to-and-from their {@link Oid}'s string representation.
  */
-public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
+public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Converts string representation of {@link Oid} to
-     * {@link ObjectAdapter}.
+     * {@link ManagedObject}.
      */
     @Override
-    public ObjectAdapter convertToObject(final String value, final Locale locale) {
+    public ManagedObject convertToObject(final String value, final Locale locale) {
         final RootOid rootOid = RootOid.deStringEncoded(value);
         return getPersistenceSession().adapterFor(rootOid);
     }
 
     /**
-     * Converts {@link ObjectAdapter} to string representation of {@link Oid}.
+     * Converts {@link ManagedObject} to string representation of {@link Oid}.
      */
     @Override
-    public String convertToString(final ObjectAdapter adapter, final Locale locale) {
-        final Oid oid = adapter.getOid();
+    public String convertToString(final ManagedObject adapter, final Locale locale) {
+        final Oid oid = ManagedObject._oid(adapter);
         if (oid == null) {
             // values don't have an Oid
             return null;

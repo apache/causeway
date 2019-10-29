@@ -26,7 +26,7 @@ import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
@@ -58,14 +58,14 @@ public class MarkupComponent extends WebComponent {
             return fallback;
         }
 
-        if(modelObject instanceof ObjectAdapter) {
+        if(modelObject instanceof ManagedObject) {
 
-            final ObjectAdapter objAdapter = (ObjectAdapter) modelObject;
+            val adapter = (ManagedObject) modelObject;
 
-            if(objAdapter.getPojo()==null)
+            if(adapter.getPojo()==null)
                 return fallback;
 
-            final Object value = objAdapter.getPojo();
+            final Object value = adapter.getPojo();
 
             if(!(value instanceof Markup))
                 return fallback;

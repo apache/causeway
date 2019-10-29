@@ -55,6 +55,7 @@ public class PageClassListDefault implements PageClassList {
         pageRegistry.registerPage(PageType.ABOUT, getAboutPageClass());
         pageRegistry.registerPage(PageType.ENTITY, getEntityPageClass());
         pageRegistry.registerPage(PageType.HOME, getHomePageClass());
+        pageRegistry.registerPage(PageType.HOME_AFTER_PAGETIMEOUT, getHomePageClass());
         pageRegistry.registerPage(PageType.ACTION_PROMPT, getActionPromptPageClass());
         pageRegistry.registerPage(PageType.STANDALONE_COLLECTION, getStandaloneCollectionPageClass());
         pageRegistry.registerPage(PageType.VALUE, getValuePageClass());

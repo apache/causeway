@@ -44,9 +44,9 @@ import lombok.val;
  */
 public final class JsonValueEncoder_Converters {
 
-    public List<JsonValueConverter> asList(final Function<Object, ManagedObject> pojoToAdapter) {
+    public List<JsonValueConverter> asList(Function<Object, ManagedObject> pojoToAdapter) {
         
-        val converters = _Lists.<JsonValueConverter>newArrayList(); 
+        val converters = _Lists.<JsonValueConverter>newArrayList();
         
         converters.add(new JsonValueConverter(null, "string", String.class){
             @Override

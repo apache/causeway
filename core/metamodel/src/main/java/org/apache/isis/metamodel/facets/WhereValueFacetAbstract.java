@@ -33,6 +33,7 @@ public abstract class WhereValueFacetAbstract extends FacetAbstract implements W
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
             final Where where) {
+        
         super(facetType, holder, Derivation.NOT_DERIVED);
         this.where = where;
     }

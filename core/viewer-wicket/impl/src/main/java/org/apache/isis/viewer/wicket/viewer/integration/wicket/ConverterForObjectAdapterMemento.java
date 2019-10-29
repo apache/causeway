@@ -26,6 +26,7 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
@@ -66,11 +67,12 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (memento == null) {
             return null;
         }
-        final Oid oid = memento.getObjectAdapter(commonContext.getSpecificationLoader()).getOid();
-        if (oid == null || oid.isValue()) {
-            // values
+        val adapter = memento.getObjectAdapter(commonContext.getSpecificationLoader());
+        val spec = adapter.getSpecification();
+        if(spec!=null && spec.isValue()) {
             return memento.toString();
         }
+        val oid = ManagedObject._oid(adapter);
         return oid.enString();
     }
 

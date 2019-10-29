@@ -24,10 +24,11 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * 
@@ -71,7 +72,9 @@ class IsisWicketApplication_newPageFactory {
             if(EntityPage.class.equals(pageClass)) {
                 //TODO whenever this happens we should redirect to home, 
                 // almost certainly the session has timed out
-                throw _Exceptions.unexpectedCodeReach();
+                
+                val pageTimeoutPageClass = holder.getPageClassRegistry().getPageClass(PageType.HOME_AFTER_PAGETIMEOUT);
+                return _Casts.uncheckedCast(delegate.newPage(pageTimeoutPageClass));
             }
             
             return delegate.newPage(pageClass);

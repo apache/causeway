@@ -56,6 +56,8 @@ public class PageClassListDefault_RegistrationAndCaching {
     @Test
     public void canRegisterNewPageType() {
         class TestingActionPage extends ActionPromptPage {
+            private static final long serialVersionUID = 1L;
+
             TestingActionPage() {
                 super((ActionModel) null);
             }

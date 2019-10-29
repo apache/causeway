@@ -73,7 +73,7 @@ implements ObjectAdapterMementoSupport {
     }
 
     @Override
-    public ObjectAdapter reconstructObjectAdapter(ObjectAdapterMemento memento) {
+    public ManagedObject reconstructObjectAdapter(ObjectAdapterMemento memento) {
         return memento.getObjectAdapter(specificationLoader);
     }
 

@@ -32,7 +32,6 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -127,12 +126,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ObjectAdapter[])})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ManagedObject[])})
      */
     protected abstract ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable);
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ObjectAdapter[])})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ManagedObject[])})
      */
     protected abstract void syncIfNull(Select2 select2, List<ObjectAdapterMemento> choicesMementos);
 

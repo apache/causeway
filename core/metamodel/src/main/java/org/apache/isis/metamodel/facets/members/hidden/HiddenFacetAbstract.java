@@ -57,6 +57,11 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
         super(facetType, holder, where);
         super.setFacetAliasType(HiddenFacet.class);
     }
+    
+    // to instantiate contributed facets
+    private HiddenFacetAbstract(HiddenFacetAbstract toplevelFacet) {
+        super(HiddenFacet.class, toplevelFacet.getFacetHolder(), toplevelFacet.where());
+    }
 
     /**
      * For testing only.
@@ -75,6 +80,5 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
      * <tt>null</tt> if visible.
      */
     protected abstract String hiddenReason(ManagedObject target, Where whereContext);
-
-
+    
 }

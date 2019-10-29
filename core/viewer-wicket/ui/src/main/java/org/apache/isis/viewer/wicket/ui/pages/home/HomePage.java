@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.pages.home;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -53,6 +54,12 @@ public class HomePage extends PageAbstract {
     }
 
     private void buildGui() {
+
+        if(super.getPageParameters() == null) {
+            super.getCommonContext().lookupServiceElseFail(MessageService.class)
+            .informUser("Page timeout");
+        }
+        
         val isisSession = IsisSession.currentOrElseNull();
         val homePageAction = isisSession.getHomePageAction();
         if(homePageAction != null) {

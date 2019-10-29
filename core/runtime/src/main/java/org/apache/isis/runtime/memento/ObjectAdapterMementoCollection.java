@@ -26,8 +26,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -50,13 +50,13 @@ final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
     @Getter(onMethod = @__({@Override})) private final ObjectSpecId objectSpecId;
 
     @Override
-    public ObjectAdapter getObjectAdapter(SpecificationLoader specificationLoader) {
+    public ManagedObject getObjectAdapter(SpecificationLoader specificationLoader) {
 
         //TODO[2112] we don't need the persistence layer to do that!
         val listOfPojos = getContainer().stream()
                 .map(memento->memento.getObjectAdapter(specificationLoader))
                 .filter(_NullSafe::isPresent)
-                .map(ObjectAdapter::getPojo)
+                .map(ManagedObject::getPojo)
                 .filter(_NullSafe::isPresent)
                 .collect(Collectors.toCollection(ArrayList::new));
         return IsisContext.getPersistenceSession().get().adapterFor(listOfPojos);

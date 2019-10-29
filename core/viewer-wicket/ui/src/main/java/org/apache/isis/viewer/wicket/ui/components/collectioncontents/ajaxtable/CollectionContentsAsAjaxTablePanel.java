@@ -277,7 +277,7 @@ implements CollectionCountProvider {
 
         final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
         if(parentObjectAdapterMemento != null) {
-            final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento.getObjectAdapter(getCommonContext().getSpecificationLoader());
+            val parentObjectAdapter = parentObjectAdapterMemento.getObjectAdapter(getCommonContext().getSpecificationLoader());
             final Object parent = parentObjectAdapter.getPojo();
             final String collectionId = getModel().getCollectionMemento().getId();
 

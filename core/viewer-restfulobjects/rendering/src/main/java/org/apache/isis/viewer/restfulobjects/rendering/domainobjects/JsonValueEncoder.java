@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -32,12 +33,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -51,12 +52,16 @@ import lombok.val;
 @Service @Singleton
 public class JsonValueEncoder {
 
-    @Inject private ObjectAdapterProvider objectAdapterProvider;
+    @Inject private SpecificationLoader specificationLoader;
     
     @PostConstruct
     public void init() {
-        new JsonValueEncoder_Converters().asList(objectAdapterProvider::adapterFor)
-        .forEach(this::registerConverter);
+        
+        val pojoToAdapter = (Function<Object, ManagedObject>) pojo ->
+            ManagedObject.of(specificationLoader::loadSpecification, pojo);
+        
+        new JsonValueEncoder_Converters().asList(pojoToAdapter)
+            .forEach(this::registerConverter);
     }
     
     private Map<ObjectSpecId, JsonValueConverter> converterBySpecId = _Maps.newLinkedHashMap();
@@ -174,9 +179,9 @@ public class JsonValueEncoder {
         return adapter != null? adapter.getPojo(): NullNode.getInstance();
     }
 
-    ManagedObject adapterFor(Object pojo) {
-        return objectAdapterProvider.adapterFor(pojo);
-    }
+//    ManagedObject adapterFor(Object pojo) {
+//        return objectAdapterProvider.adapterFor(pojo);
+//    }
     
     // -- NESTED TYPE DECLARATIONS
     
@@ -228,9 +233,9 @@ public class JsonValueEncoder {
     /**
      * JUnit support
      */
-    public static JsonValueEncoder forTesting(ObjectAdapterProvider mockAdapterManager) {
+    public static JsonValueEncoder forTesting(SpecificationLoader specificationLoader) {
         val jsonValueEncoder = new JsonValueEncoder();
-        jsonValueEncoder.objectAdapterProvider = mockAdapterManager;
+        jsonValueEncoder.specificationLoader = specificationLoader;
         jsonValueEncoder.init();
         return jsonValueEncoder;
     }

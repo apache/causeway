@@ -28,6 +28,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -72,7 +73,7 @@ public class IsisWicketApplication_Defaults {
     @Test
     public void providesConverterLocatorRegistersIsisSpecificConverters() {
         final IConverterLocator converterLocator = application.newConverterLocator();
-        assertThat(converterLocator.getConverter(ObjectAdapter.class), is(not(nullValue())));
+        assertThat(converterLocator.getConverter(ManagedObject.class), is(not(nullValue())));
         assertThat(converterLocator.getConverter(ObjectAdapterMemento.class), is(not(nullValue())));
     }
 

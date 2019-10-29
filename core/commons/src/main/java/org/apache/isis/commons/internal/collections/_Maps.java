@@ -76,9 +76,18 @@ public final class _Maps {
          * @param aliases
          * @param value
          * @return
-         * @throws IllegalArgumentException if there is a aliasKey collision
+         * @throws IllegalArgumentException if there is an alias-key collision
          */
         public V put(K key, Can<K> aliases, V value);
+
+        /**
+         * Like {@link #put(Object, Can, Object)}, but on alias-key collision re-maps existing alias-keys
+         * @param key
+         * @param aliases
+         * @param value
+         * @return
+         */
+        public V remap(K key, Can<K> aliases, V value);
         
     }
 
@@ -233,7 +242,13 @@ public final class _Maps {
             
             @Override
             public V put(K key, Can<K> aliases, V value) {
-                putAliasKeys(key, aliases);
+                putAliasKeys(key, aliases, /*re-map*/ false);
+                return delegate.put(key, value);
+            }
+            
+            @Override
+            public V remap(K key, Can<K> aliases, V value) {
+                putAliasKeys(key, aliases, /*re-map*/ true);
                 return delegate.put(key, value);
             }
             
@@ -269,13 +284,17 @@ public final class _Maps {
             
             private final Map<K, KeyPair<K>> pairByAliasKey = _Maps.newHashMap();
             
-            private void putAliasKeys(K key, Can<K> aliasKeys) {
+            private void putAliasKeys(K key, Can<K> aliasKeys, boolean remap) {
                 if(aliasKeys.isNotEmpty()) {
                     val keyPair = KeyPair.of(key, aliasKeys);
                     for(val aliasKey : aliasKeys) {
-                        val existing = pairByAliasKey.put(aliasKey, keyPair);
-                        if(existing!=null) {
-                            throw _Exceptions.illegalArgument("alias key collision %s", aliasKey);
+                        
+                        val existingKeyPair = pairByAliasKey.put(aliasKey, keyPair);
+                        if(existingKeyPair!=null && !remap) {
+                            
+                            throw _Exceptions.illegalArgument(
+                                    "alias key collision on alias %s: existing-key=%s, new-key=%s", 
+                                    aliasKey, existingKeyPair.key, keyPair.key);
                         }
                     }
                 }

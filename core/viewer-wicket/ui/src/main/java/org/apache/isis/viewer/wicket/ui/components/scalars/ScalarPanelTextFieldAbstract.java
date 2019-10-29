@@ -38,11 +38,11 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -222,7 +222,7 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
             @Override
             public void validate(final IValidatable<T> validatable) {
                 final T proposedValue = validatable.getValue();
-                final ObjectAdapter proposedAdapter = adapterProvider().adapterFor(proposedValue);
+                final ManagedObject proposedAdapter = adapterProvider().adapterFor(proposedValue);
                 final String reasonIfAny = scalarModel.validate(proposedAdapter);
                 if (reasonIfAny != null) {
                     final ValidationError error = new ValidationError();

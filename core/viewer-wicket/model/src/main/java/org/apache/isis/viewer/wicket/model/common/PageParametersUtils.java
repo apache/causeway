@@ -18,11 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.model.common;
 
-import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+
+import lombok.val;
 
 /**
  * A helper class for dealing with PageParameters
@@ -48,12 +49,12 @@ public class PageParametersUtils {
      * @return a new PageParameters instance
      */
     public static PageParameters newPageParameters() {
-        final PageParameters newPageParameters = new PageParameters();
-        final RequestCycle cycle = RequestCycle.get();
+        val newPageParameters = new PageParameters();
+        val requestCycle = RequestCycle.get();
 
-        if (cycle != null) {
-            final IPageRequestHandler pageRequestHandler = PageRequestHandlerTracker.getFirstHandler(cycle);
-            final PageParameters currentPageParameters = pageRequestHandler.getPageParameters();
+        if (requestCycle != null) {
+            val pageRequestHandler = PageRequestHandlerTracker.getFirstHandler(requestCycle);
+            val currentPageParameters = pageRequestHandler.getPageParameters();
             if (currentPageParameters != null) {
                 final StringValue noHeader = currentPageParameters.get(ISIS_NO_HEADER_PARAMETER_NAME);
                 if (!noHeader.isNull()) {

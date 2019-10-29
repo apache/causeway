@@ -796,9 +796,9 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
     /**
      * Overrides superclass' implementation, because a {@link ScalarModel} can
-     * know the {@link ObjectSpecification of} the {@link ObjectAdapter adapter}
+     * know the {@link ObjectSpecification of} the {@link ManagedObject adapter}
      * without there necessarily being any adapter being
-     * {@link #setObject(ObjectAdapter) set}.
+     * {@link #setObject(ManagedObject) set}.
      */
     @Override
     public ObjectSpecification getTypeOfSpecification() {
@@ -854,7 +854,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
         if (parseableFacet == null) {
             throw new RuntimeException("unable to parse string for " + getTypeOfSpecification().getFullIdentifier());
         }
-        ObjectAdapter adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
+        ManagedObject adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
                 InteractionInitiatedBy.USER);
 
         setObject(adapter);
