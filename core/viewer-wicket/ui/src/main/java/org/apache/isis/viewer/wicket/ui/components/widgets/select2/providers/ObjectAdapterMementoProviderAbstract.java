@@ -112,7 +112,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
 
     /**
      * Filters all choices against a term by using their
-     * {@link org.apache.isis.metamodel.adapter.ObjectAdapter#titleString(org.apache.isis.metamodel.adapter.ObjectAdapter) title string}
+     * {@link ManagedObject#titleString(ManagedObject) title string}
      *
      * @param term The term entered by the user
      * @param choicesMementos The collections of choices to filter

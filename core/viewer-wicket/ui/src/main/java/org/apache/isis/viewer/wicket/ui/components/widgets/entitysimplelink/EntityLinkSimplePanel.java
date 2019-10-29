@@ -23,7 +23,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -48,7 +47,7 @@ implements CancelHintRequired  {
 
     public EntityLinkSimplePanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
-        setType(ObjectAdapter.class);
+        setType(ManagedObject.class);
         buildGui();
     }
 

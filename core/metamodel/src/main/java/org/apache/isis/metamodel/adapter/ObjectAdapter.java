@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -37,11 +36,7 @@ import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.MethodExtensions;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.interactions.InteractionUtils;
-import org.apache.isis.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
@@ -173,48 +168,11 @@ public interface ObjectAdapter extends ManagedObject {
                 final InteractionInitiatedBy interactionInitiatedBy) {
 
             return objectAdapters
-                    .filter(adapter->isVisible(adapter, interactionInitiatedBy))
+                    .filter(adapter->ManagedObject.Visibility.isVisible(adapter, interactionInitiatedBy))
                     .collect(Collectors.toList());
         }
 
 
-        /**
-         * @param adapter - an adapter around the domain object whose visibility is being checked
-         * @param interactionInitiatedBy
-         */
-        public static boolean isVisible(
-                final ManagedObject adapter,
-                final InteractionInitiatedBy interactionInitiatedBy) {
-            
-            if(adapter == null) {
-                // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
-                return true;
-            }
-            if(ManagedObject._isDestroyed(adapter)) {
-                return false;
-            }
-            if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { 
-                return true; 
-            }
-            return isVisibleForUser(adapter);
-        }
-
-        private static boolean isVisibleForUser(final ManagedObject adapter) {
-            final VisibilityContext<?> context = createVisibleInteractionContextForUser(adapter);
-            final ObjectSpecification objectSpecification = adapter.getSpecification();
-            final InteractionResult visibleResult = InteractionUtils.isVisibleResult(objectSpecification, context);
-            return visibleResult.isNotVetoing();
-        }
-
-        private static VisibilityContext<?> createVisibleInteractionContextForUser(
-                final ManagedObject objectAdapter) {
-            
-            return new ObjectVisibilityContext(
-                    objectAdapter,
-                    objectAdapter.getSpecification().getIdentifier(),
-                    InteractionInitiatedBy.USER,
-                    Where.OBJECT_FORMS);
-        }
     }
 
     boolean isTransient();

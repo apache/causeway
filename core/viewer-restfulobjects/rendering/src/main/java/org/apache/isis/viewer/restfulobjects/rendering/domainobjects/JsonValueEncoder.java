@@ -45,6 +45,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
+
 /**
  * Similar to Isis' value encoding, but with additional support for JSON
  * primitives.
@@ -57,7 +58,8 @@ public class JsonValueEncoder {
     @PostConstruct
     public void init() {
         
-        val pojoToAdapter = (Function<Object, ManagedObject>) pojo ->
+        //XXX no lombok val here
+        Function<Object, ManagedObject> pojoToAdapter = pojo ->
             ManagedObject.of(specificationLoader::loadSpecification, pojo);
         
         new JsonValueEncoder_Converters().asList(pojoToAdapter)

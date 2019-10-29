@@ -25,7 +25,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -40,7 +40,7 @@ public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
     private static final String ID_COPY_LINK = "copyLink";
     private static final String ID_SIMPLE_CLIPBOARD_MODAL_WINDOW = "simpleClipboardModalWindow";
 
-    private AjaxLink<ObjectAdapter> copyLink;
+    private AjaxLink<ManagedObject> copyLink;
     private SimpleClipboardModalWindow simpleClipboardModalWindow;
 
     public ZeroClipboardPanel(String id, ObjectAdapterModel entityModel) {
@@ -67,12 +67,12 @@ public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
         setVisibilityAllowed(false);
     }
 
-    private AjaxLink<ObjectAdapter> createLink(String linkId) {
+    private AjaxLink<ManagedObject> createLink(String linkId) {
         return newSimpleClipboardLink(linkId);
     }
 
-    private AjaxLink<ObjectAdapter> newSimpleClipboardLink(String linkId) {
-        return new AjaxLink<ObjectAdapter>(linkId) {
+    private AjaxLink<ManagedObject> newSimpleClipboardLink(String linkId) {
+        return new AjaxLink<ManagedObject>(linkId) {
             private static final long serialVersionUID = 1L;
 
             @Override

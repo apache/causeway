@@ -75,7 +75,7 @@ implements ImperativeFacet {
         boolean filterForVisibility = super.getMetaModelContext().getConfiguration().getReflector().getFacet().isFilterVisibility();
         if(filterForVisibility) {
             final ObjectAdapter referencedAdapter = getObjectAdapterProvider().adapterFor(referencedObject);
-            final boolean visible = ObjectAdapter.Util
+            final boolean visible = ManagedObject.Visibility
                     .isVisible(referencedAdapter, interactionInitiatedBy);
             if (!visible) {
                 return null;

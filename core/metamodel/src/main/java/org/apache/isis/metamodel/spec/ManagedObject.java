@@ -26,6 +26,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -35,8 +36,13 @@ import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.adapter.version.Version;
+import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.metamodel.interactions.InteractionUtils;
+import org.apache.isis.metamodel.interactions.ObjectVisibilityContext;
+import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -347,6 +353,48 @@ public interface ManagedObject {
         return null;
     }
     
+    // -- VISIBILITY UTILITIES
+    
+    static final class Visibility {
+        /**
+         * @param adapter - an adapter around the domain object whose visibility is being checked
+         * @param interactionInitiatedBy
+         */
+        public static boolean isVisible(
+                ManagedObject adapter,
+                InteractionInitiatedBy interactionInitiatedBy) {
+            
+            if(adapter == null) {
+                // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
+                return true;
+            }
+            if(ManagedObject._isDestroyed(adapter)) {
+                return false;
+            }
+            if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { 
+                return true; 
+            }
+            return isVisibleForUser(adapter);
+        }
+
+        private static boolean isVisibleForUser(ManagedObject adapter) {
+            val visibilityContext = createVisibleInteractionContextForUser(adapter);
+            val spec = adapter.getSpecification();
+            final InteractionResult visibleResult = InteractionUtils.isVisibleResult(spec, visibilityContext);
+            return visibleResult.isNotVetoing();
+        }
+
+        private static VisibilityContext<?> createVisibleInteractionContextForUser(
+                ManagedObject objectAdapter) {
+            
+            return new ObjectVisibilityContext(
+                    objectAdapter,
+                    objectAdapter.getSpecification().getIdentifier(),
+                    InteractionInitiatedBy.USER,
+                    Where.OBJECT_FORMS);
+        }
+    }
+    
     // -- OID UTILITIES
     
     static final class Oids {
@@ -446,7 +494,6 @@ public interface ManagedObject {
 //                .filter(_NullSafe::isPresent)
 //                .map(ManagedObject.class::cast);
     }
-
 
     
  }

@@ -470,7 +470,7 @@ implements ImperativeFacet {
             return resultAdapter;
 
         } else {
-            boolean visible = ObjectAdapter.Util.isVisible(resultAdapter, interactionInitiatedBy);
+            boolean visible = ManagedObject.Visibility.isVisible(resultAdapter, interactionInitiatedBy);
             return visible ? resultAdapter : null;
         }
     }

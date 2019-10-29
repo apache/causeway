@@ -181,7 +181,7 @@ public class EntityPage extends PageAbstract {
         }
 
         // check that the entity overall can be viewed.
-        if(!ObjectAdapter.Util.isVisible(objectAdapter, InteractionInitiatedBy.USER)) {
+        if(!ManagedObject.Visibility.isVisible(objectAdapter, InteractionInitiatedBy.USER)) {
             throw new ObjectMember.AuthorizationException();
         }
 
