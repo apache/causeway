@@ -25,7 +25,6 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import javax.inject.Inject;
 

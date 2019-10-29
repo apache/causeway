@@ -22,36 +22,57 @@ import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.security.authentication.MessageBroker;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 public class JGrowlUtil {
 
     private JGrowlUtil(){}
+    
+    @RequiredArgsConstructor @Getter
+    static enum MessageSeverity {
+        INFO(3500),
+        WARNING(0), // sticky
+        DANGER(0) // sticky
+        ;
+        
+        private final int delayMillis; 
+        
+        public String cssClassSuffix() {
+            return name().toLowerCase();
+        }
+    }
 
     public static String asJGrowlCalls(final MessageBroker messageBroker) {
         final StringBuilder buf = new StringBuilder();
 
         for (String info : messageBroker.getMessages()) {
-            addJGrowlCall(info, "info", false, buf);
+            addJGrowlCall(info, MessageSeverity.INFO, buf);
         }
         for (String warning : messageBroker.getWarnings()) {
-            addJGrowlCall(warning, "warning", true, buf);
+            addJGrowlCall(warning, MessageSeverity.WARNING, buf);
         }
 
         final String error =  messageBroker.getApplicationError();
         if(error!=null) {
-            addJGrowlCall(error, "danger", true, buf);
+            addJGrowlCall(error, MessageSeverity.DANGER, buf);
         }
         return buf.toString();
     }
 
-    private static void addJGrowlCall(final String origMsg, final String cssClassSuffix, boolean sticky, final StringBuilder buf) {
+    public static void addJGrowlCall(
+            final String origMsg, 
+            final MessageSeverity severity, 
+            final StringBuilder buf) {
+        
         final CharSequence escapedMsg = escape(origMsg);
         buf.append("$.growl(\"")
         .append(escapedMsg)
         .append("&#160;&#160;&#160;") // add some space so that the dismiss icon (x) doesn't overlap with the text
         .append('"');
         buf.append(", {");
-        buf.append("type: \"").append(cssClassSuffix).append('"');
-        buf.append(", delay: " + (sticky ? "0" : "2000"));
+        buf.append("type: \"").append(severity.cssClassSuffix()).append('"');
+        buf.append(", delay: " + severity.delayMillis);
         buf.append(", placement: { from: 'top', align: 'right' }");
         buf.append(", offset: 50");
         buf.append('}');

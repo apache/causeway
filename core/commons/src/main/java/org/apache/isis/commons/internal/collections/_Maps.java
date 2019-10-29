@@ -273,9 +273,13 @@ public final class _Maps {
                 if(aliasKeys.isNotEmpty()) {
                     val keyPair = KeyPair.of(key, aliasKeys);
                     for(val aliasKey : aliasKeys) {
-                        val existing = pairByAliasKey.put(aliasKey, keyPair);
-                        if(existing!=null) {
-                            throw _Exceptions.illegalArgument("alias key collision %s", aliasKey);
+                        
+                        val existingKeyPair = pairByAliasKey.put(aliasKey, keyPair);
+                        if(existingKeyPair!=null) {
+                            
+                            throw _Exceptions.illegalArgument(
+                                    "alias key collision on alias %s: existing-key=%s, new-key=%s", 
+                                    aliasKey, existingKeyPair.key, keyPair.key);
                         }
                     }
                 }
