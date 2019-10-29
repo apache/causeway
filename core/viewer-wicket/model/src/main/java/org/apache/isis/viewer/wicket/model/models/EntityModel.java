@@ -32,8 +32,6 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
@@ -189,11 +187,11 @@ implements ObjectAdapterModel, UiHintContainer {
     }
     
     /**
-     * As used by TreeModel (same as {@link #ofAdapter(IsisWebAppCommonContext, ObjectAdapter)}
+     * As used by TreeModel (same as {@link #ofAdapter(IsisWebAppCommonContext, ManagedObject)}
      */
     protected EntityModel(
             IsisWebAppCommonContext commonContext,
-            ObjectAdapter adapter) {
+            ManagedObject adapter) {
         
         this(commonContext, 
                 commonContext.mementoFor(adapter), 
@@ -533,7 +531,7 @@ implements ObjectAdapterModel, UiHintContainer {
             this.pending = null;
         }
 
-        private ObjectAdapter getPendingAdapter() {
+        private ManagedObject getPendingAdapter() {
             final ObjectAdapterMemento memento = getObject();
             return memento != null
                     ? memento.getObjectAdapter(entityModel.getSpecificationLoader())
@@ -559,7 +557,7 @@ implements ObjectAdapterModel, UiHintContainer {
         return pendingModel.getPendingElseCurrentAdapter();
     }
 
-    public ObjectAdapter getPendingAdapter() {
+    public ManagedObject getPendingAdapter() {
         return pendingModel.getPendingAdapter();
     }
 

@@ -37,13 +37,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
@@ -61,20 +61,16 @@ public class JsonValueEncoderTest_asAdapter {
 
     @Mock private ObjectSpecification mockObjectSpec;
     @Mock private EncodableFacet mockEncodableFacet;
-    @Mock private ObjectAdapter mockObjectAdapter;
-    @Mock private ObjectAdapterProvider mockAdapterManager;
+    @Mock private ManagedObject mockObjectAdapter;
+    @Mock private SpecificationLoader specLoader;
     
     private JsonRepresentation representation;
     private JsonValueEncoder jsonValueEncoder;
 
     @Before
     public void setUp() throws Exception {
-        mockObjectSpec = context.mock(ObjectSpecification.class);
-        mockEncodableFacet = context.mock(EncodableFacet.class);
-        mockObjectAdapter = context.mock(ObjectAdapter.class);
-        mockAdapterManager = context.mock(ObjectAdapterProvider.class);
 
-        jsonValueEncoder = JsonValueEncoder.forTesting(mockAdapterManager);
+        jsonValueEncoder = JsonValueEncoder.forTesting(specLoader);
 
         representation = new JsonRepresentation(TextNode.valueOf("aString"));
     }
@@ -132,8 +128,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(BooleanNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(mockAdapterManager).adapterFor(value);
-                will(returnValue(mockObjectAdapter));
+                oneOf(specLoader).loadSpecification(((Object)value).getClass());
+                will(returnValue(mockObjectSpec));
             }
         });
 
@@ -141,7 +137,7 @@ public class JsonValueEncoderTest_asAdapter {
         val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
-        assertSame(mockObjectAdapter, adapter);
+        assertSame(mockObjectSpec, adapter.getSpecification());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -179,8 +175,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(IntNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(mockAdapterManager).adapterFor(value);
-                will(returnValue(mockObjectAdapter));
+                oneOf(specLoader).loadSpecification(((Object)value).getClass());
+                will(returnValue(mockObjectSpec));
             }
         });
 
@@ -188,7 +184,7 @@ public class JsonValueEncoderTest_asAdapter {
         val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
-        assertSame(mockObjectAdapter, adapter);
+        assertSame(mockObjectSpec, adapter.getSpecification());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -221,8 +217,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(LongNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(mockAdapterManager).adapterFor(value);
-                will(returnValue(mockObjectAdapter));
+                oneOf(specLoader).loadSpecification(((Object)value).getClass());
+                will(returnValue(mockObjectSpec));
             }
         });
 
@@ -230,7 +226,7 @@ public class JsonValueEncoderTest_asAdapter {
         val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
-        assertSame(mockObjectAdapter, adapter);
+        assertSame(mockObjectSpec, adapter.getSpecification());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -268,8 +264,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(DoubleNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(mockAdapterManager).adapterFor(value);
-                will(returnValue(mockObjectAdapter));
+                oneOf(specLoader).loadSpecification(((Object)value).getClass());
+                will(returnValue(mockObjectSpec));
             }
         });
 
@@ -277,7 +273,7 @@ public class JsonValueEncoderTest_asAdapter {
         val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
-        assertSame(mockObjectAdapter, adapter);
+        assertSame(mockObjectSpec, adapter.getSpecification());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -301,8 +297,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(BigIntegerNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(mockAdapterManager).adapterFor(value);
-                will(returnValue(mockObjectAdapter));
+                oneOf(specLoader).loadSpecification(value.getClass());
+                will(returnValue(mockObjectSpec));
             }
         });
 
@@ -310,7 +306,7 @@ public class JsonValueEncoderTest_asAdapter {
         val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
-        assertSame(mockObjectAdapter, adapter);
+        assertSame(mockObjectSpec, adapter.getSpecification());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -334,8 +330,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(DecimalNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(mockAdapterManager).adapterFor(value);
-                will(returnValue(mockObjectAdapter));
+                oneOf(specLoader).loadSpecification(value.getClass());
+                will(returnValue(mockObjectSpec));
             }
         });
 
@@ -343,7 +339,7 @@ public class JsonValueEncoderTest_asAdapter {
         val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
-        assertSame(mockObjectAdapter, adapter);
+        assertSame(mockObjectSpec, adapter.getSpecification());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -367,8 +363,8 @@ public class JsonValueEncoderTest_asAdapter {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockAdapterManager).adapterFor("aString");
-                will(returnValue(mockObjectAdapter));
+                oneOf(specLoader).loadSpecification(String.class);
+                will(returnValue(mockObjectSpec));
             }
         });
 
@@ -376,7 +372,7 @@ public class JsonValueEncoderTest_asAdapter {
         val adapter = jsonValueEncoder.asAdapter(mockObjectSpec, representation, null);
 
         // then
-        assertSame(mockObjectAdapter, adapter);
+        assertSame(mockObjectSpec, adapter.getSpecification());
     }
 
     private <T extends Facet> void allowingObjectSpecHas(final Class<T> facetClass, final T encodableFacet) {

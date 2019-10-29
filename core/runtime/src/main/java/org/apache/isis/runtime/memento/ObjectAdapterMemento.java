@@ -69,7 +69,7 @@ public interface ObjectAdapterMemento extends Serializable {
 
     ObjectSpecId getObjectSpecId();
 
-    ObjectAdapter getObjectAdapter(SpecificationLoader specificationLoader); 
+    ManagedObject getObjectAdapter(SpecificationLoader specificationLoader); 
 
     // -- FACTORIES
 

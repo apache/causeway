@@ -30,11 +30,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
@@ -49,8 +49,8 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Mock private ObjectSpecification mockObjectSpec;
     @Mock private EncodableFacet mockEncodableFacet;
-    @Mock private ObjectAdapter mockObjectAdapter;
-    @Mock private ObjectAdapterProvider mockAdapterManager;
+    @Mock private ManagedObject mockObjectAdapter;
+    @Mock private SpecificationLoader specLoader;
     
     private JsonRepresentation representation;
     private JsonValueEncoder jsonValueEncoder;
@@ -58,7 +58,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     @Before
     public void setUp() {
         
-        jsonValueEncoder = JsonValueEncoder.forTesting(mockAdapterManager);
+        jsonValueEncoder = JsonValueEncoder.forTesting(specLoader);
         
         representation = JsonRepresentation.newMap();
     }

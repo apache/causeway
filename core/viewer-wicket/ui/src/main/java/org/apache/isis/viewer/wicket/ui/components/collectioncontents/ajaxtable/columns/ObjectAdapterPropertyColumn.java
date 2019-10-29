@@ -26,7 +26,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
@@ -46,7 +45,7 @@ import lombok.val;
 /**
  * A {@link ColumnAbstract column} within a
  * {@link CollectionContentsAsAjaxTablePanel} representing a single property of the
- * provided {@link ObjectAdapter}.
+ * provided {@link ManagedObject}.
  *
  * <p>
  * Looks up the {@link ComponentFactory} to render the property from the
@@ -82,8 +81,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
     }
 
     @Override
-    public Component getHeader(final String componentId)
-    {
+    public Component getHeader(final String componentId) {
         final Label label = new Label(componentId, getDisplayModel());
         label.setEscapeModelStrings(escaped);
         if(describedAs!=null) {

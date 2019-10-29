@@ -24,14 +24,16 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+
+import lombok.val;
 /**
  * Backing model for actions of application services menu bar (typically, as
  * displayed along the top or side of the page).
  */
-public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
+public class ServiceActionsModel extends ModelAbstract<List<ManagedObject>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,18 +55,18 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
     }
 
     @Override
-    protected List<ObjectAdapter> load() {
+    protected List<ManagedObject> load() {
         return super.getCommonContext().streamServiceAdapters()
                 .filter(with(menuBar))
                 .collect(Collectors.toList());
     }
 
-    private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {
-        return (ObjectAdapter input) -> {
-            final DomainServiceLayoutFacet facet = input.getSpecification().getFacet
+    private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBar) {
+        return (ManagedObject adapter) -> {
+            val domainServiceLayoutFacet = adapter.getSpecification().getFacet
                     (DomainServiceLayoutFacet.class);
-            return (facet != null && facet.getMenuBar() == menuBar) ||
-                    (facet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
+            return (domainServiceLayoutFacet != null && domainServiceLayoutFacet.getMenuBar() == menuBar) ||
+                    (domainServiceLayoutFacet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
         };
     }
 

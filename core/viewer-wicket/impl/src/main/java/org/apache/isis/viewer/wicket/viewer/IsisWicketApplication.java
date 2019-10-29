@@ -70,7 +70,7 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -621,7 +621,7 @@ IsisWebAppCommonContext.Provider {
     @Override
     protected IConverterLocator newConverterLocator() {
         final ConverterLocator converterLocator = new ConverterLocator();
-        converterLocator.set(ObjectAdapter.class, new ConverterForObjectAdapter());
+        converterLocator.set(ManagedObject.class, new ConverterForObjectAdapter());
         converterLocator.set(ObjectAdapterMemento.class, new ConverterForObjectAdapterMemento(commonContext));
         return converterLocator;
     }

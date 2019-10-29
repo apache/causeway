@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.object.parseable;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.metamodel.facets.object.title.TitleFacet;
@@ -37,7 +36,7 @@ public interface ParseableFacet extends MultipleValueFacet {
      * Equivalent to <tt>Parser#parseTextEntry(Object, String)</tt>, though may
      * be implemented through some other mechanism.
      */
-    ObjectAdapter parseTextEntry(
+    ManagedObject parseTextEntry(
             final ManagedObject original,
             final String text,
             final InteractionInitiatedBy interactionInitiatedBy);

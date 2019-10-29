@@ -30,8 +30,6 @@ import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-import lombok.val;
-
 /**
  * This implements {@link org.apache.isis.metamodel.facetapi.MultiTypedFacet} so that each concrete implementation
  * is added to the eventual {@link org.apache.isis.metamodel.facetapi.FacetHolder} twice: once under
@@ -57,19 +55,9 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
             FacetHolder holder) {
         
         super(facetType, holder, where);
-        
-        val toplevelFacet = this;
-        
-        super.addContributedFacet(new HiddenFacetAbstract(toplevelFacet) {
-            @Override
-            protected String hiddenReason(ManagedObject target, Where whereContext) {
-                return toplevelFacet.hiddenReason(target, whereContext);
-            }
-        });
-        
-        //super.setFacetAliasType(HiddenFacet.class);
+        super.setFacetAliasType(HiddenFacet.class);
     }
-        
+    
     // to instantiate contributed facets
     private HiddenFacetAbstract(HiddenFacetAbstract toplevelFacet) {
         super(HiddenFacet.class, toplevelFacet.getFacetHolder(), toplevelFacet.where());
@@ -92,6 +80,5 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
      * <tt>null</tt> if visible.
      */
     protected abstract String hiddenReason(ManagedObject target, Where whereContext);
-
-
+    
 }

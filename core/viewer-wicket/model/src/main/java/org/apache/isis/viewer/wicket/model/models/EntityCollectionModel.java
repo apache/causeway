@@ -20,11 +20,9 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,9 +33,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.ClassUtil;
@@ -52,8 +48,6 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.runtime.memento.ObjectAdapterMementoSupport;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -73,7 +67,7 @@ import lombok.val;
  * parented} (contents of the collection of an entity).
  *
  * <p>
- * So that the model is {@link Serializable}, the {@link ObjectAdapter}s within
+ * So that the model is {@link Serializable}, the {@link ManagedObject}s within
  * the collection are stored as {@link ObjectAdapterMemento}s.
  */
 public class EntityCollectionModel extends ModelAbstract<List<ManagedObject>> 
@@ -184,27 +178,20 @@ implements LinksProvider, UiHintContainer {
             private Stream<ManagedObject> loadElementsInBulk(EntityCollectionModel colModel) {
 
                 //XXX lombok issue, cannot use val here 
-                PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
-                        .orElseThrow(()->_Exceptions.unrecoverable("no PersistenceSession available"));
 
                 final Stream<RootOid> rootOids = stream(colModel.mementoList)
                         .map(ObjectAdapterMemento::asBookmarkIfSupported)
                         .filter(_NullSafe::isPresent)
                         .map(Oid.Factory::ofBookmark);
-
-                final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
-                final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
-                return stream(adapterList)
-                        .filter(_NullSafe::isPresent)
-                        .map(ManagedObject.class::cast);
+                
+                return ManagedObject._bulkLoadStream(rootOids);
             }
 
             private Stream<ManagedObject> loadElementsOneByOne(final EntityCollectionModel model) {
 
                 return stream(model.mementoList)
                         .map(memento->memento.getObjectAdapter(model.getSpecificationLoader()))
-                        .filter(_NullSafe::isPresent)
-                        .map(ManagedObject.class::cast);
+                        .filter(_NullSafe::isPresent);
             }
 
             @Override

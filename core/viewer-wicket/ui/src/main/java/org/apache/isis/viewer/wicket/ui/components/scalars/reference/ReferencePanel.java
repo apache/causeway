@@ -418,7 +418,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
             getModel().setObject(adapter);
         }
 
-        final ObjectAdapter pendingAdapter = getModel().getPendingAdapter();
+        val pendingAdapter = getModel().getPendingAdapter();
         entityLink.setConvertedInput(pendingAdapter);
     }
 

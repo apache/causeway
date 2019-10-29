@@ -28,12 +28,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.junit.Assert.assertEquals;
@@ -46,15 +46,13 @@ public class JsonValueEncoderTest_asObject {
 
     @Mock private ObjectSpecification mockObjectSpec;
     @Mock private EncodableFacet mockEncodableFacet;
-    @Mock private ObjectAdapter mockObjectAdapter;
-    @Mock private ObjectAdapterProvider mockAdapterManager;
+    @Mock private ManagedObject mockObjectAdapter;
+    @Mock private SpecificationLoader specLoader;
 
     private JsonValueEncoder jsonValueEncoder;
 
     @Before
     public void setUp() throws Exception {
-        mockObjectAdapter = context.mock(ObjectAdapter.class);
-        mockObjectSpec = context.mock(ObjectSpecification.class);
 
         context.checking(new Expectations() {
             {
@@ -62,10 +60,8 @@ public class JsonValueEncoderTest_asObject {
                 will(returnValue(mockObjectSpec));
             }
         });
-        mockEncodableFacet = context.mock(EncodableFacet.class);
-        mockAdapterManager = context.mock(ObjectAdapterProvider.class);
 
-        jsonValueEncoder = JsonValueEncoder.forTesting(mockAdapterManager);
+        jsonValueEncoder = JsonValueEncoder.forTesting(specLoader);
         
     }
 

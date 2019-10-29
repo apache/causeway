@@ -25,6 +25,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -32,7 +33,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-import lombok.Getter;
+import lombok.val;
 
 /**
  * Represents a {@link AbstractColumn} within a
@@ -45,7 +46,9 @@ public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
 
     private static final long serialVersionUID = 1L;
     
-    @Getter private final transient IsisWebAppCommonContext commonContext;
+    private transient IsisWebAppCommonContext commonContext;
+    private transient ComponentFactoryRegistry componentRegistry;
+    
     
     public ColumnAbstract(IsisWebAppCommonContext commonContext, String columnName) {
         this(commonContext, Model.of(columnName), null);
@@ -56,13 +59,20 @@ public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
         this.commonContext = commonContext;
     }
 
+    public IsisWebAppCommonContext getCommonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    }
+    
     protected ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {
         return getComponentRegistry().findComponentFactory(componentType, model);
     }
 
     protected ComponentFactoryRegistry getComponentRegistry() {
-        final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) Application.get();
-        return cfra.getComponentFactoryRegistry();
+        if(componentRegistry==null) {
+            val componentFactoryRegistryAccessor = (ComponentFactoryRegistryAccessor) Application.get();
+            componentRegistry = componentFactoryRegistryAccessor.getComponentFactoryRegistry();
+        }
+        return componentRegistry;
     }
-
+    
 }

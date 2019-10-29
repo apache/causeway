@@ -29,6 +29,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
@@ -75,7 +76,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         return Session.exists() ? Session.get().getLocale() : Locale.ENGLISH;
     }
 
-    protected IConverter<Object> findConverter(final ObjectAdapter objectAdapter) {
+    protected IConverter<Object> findConverter(final ManagedObject objectAdapter) {
         return IsisConverterLocator.findConverter(objectAdapter, wicketViewerSettings);
     }
 

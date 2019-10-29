@@ -18,7 +18,6 @@
  */
 package org.apache.isis.runtime.memento;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
@@ -35,6 +34,6 @@ public interface ObjectAdapterMementoSupport {
 
     ObjectAdapterMemento mementoForPojo(Object pojo);
 
-    ObjectAdapter reconstructObjectAdapter(ObjectAdapterMemento memento);
+    ManagedObject reconstructObjectAdapter(ObjectAdapterMemento memento);
 
 }

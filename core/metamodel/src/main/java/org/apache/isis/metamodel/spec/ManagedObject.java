@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.commons.internal.base._Casts;
@@ -429,6 +430,21 @@ public interface ManagedObject {
         }
 
         throw _Exceptions.unexpectedCodeReach();
+    }
+
+    @Deprecated
+    static Stream<ManagedObject> _bulkLoadStream(Stream<RootOid> rootOids) {
+        
+        throw _Exceptions.notImplemented();
+        
+//        PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
+//                .orElseThrow(()->_Exceptions.unrecoverable("no PersistenceSession available"));
+//        
+//        final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
+//        final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
+//        return stream(adapterList)
+//                .filter(_NullSafe::isPresent)
+//                .map(ManagedObject.class::cast);
     }
 
 

@@ -109,7 +109,7 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
         val snapshot = _Maps.<Class<? extends Facet>, Facet>newAliasMap(HashMap::new);
         facetsByType.values().forEach(topLevelFacet->{
              
-            snapshot.put(
+            snapshot.remap(
                     topLevelFacet.facetType(), 
                     Can.ofNullable(topLevelFacet.facetAliasType()), 
                     topLevelFacet);

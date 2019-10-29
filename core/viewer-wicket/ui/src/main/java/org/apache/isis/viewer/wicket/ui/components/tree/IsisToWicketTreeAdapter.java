@@ -46,7 +46,6 @@ import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -205,11 +204,11 @@ class IsisToWicketTreeAdapter {
         private final TreePath treePath;
 
         public TreeModel(IsisWebAppCommonContext commonContext, TreePath treePath) {
-            super(commonContext, (ObjectAdapter)null);
+            super(commonContext, (ManagedObject)null);
             this.treePath = treePath;
         }
 
-        public TreeModel(IsisWebAppCommonContext commonContext, ObjectAdapter adapter, TreePath treePath) {
+        public TreeModel(IsisWebAppCommonContext commonContext, ManagedObject adapter, TreePath treePath) {
             super(commonContext, Objects.requireNonNull(adapter));
             this.treePath = treePath;
         }
@@ -238,7 +237,7 @@ class IsisToWicketTreeAdapter {
         
         private final transient IsisWebAppCommonContext commonContext;
         private final transient FactoryService factoryService;
-        private final transient Function<Object, ObjectAdapter> pojoToAdapter;
+        private final transient Function<Object, ManagedObject> pojoToAdapter;
         
 
         private TreeModelTreeAdapter(
@@ -249,7 +248,8 @@ class IsisToWicketTreeAdapter {
             this.treeAdapterClass = treeAdapterClass;
             
             this.factoryService = commonContext.lookupServiceElseFail(FactoryService.class);
-            this.pojoToAdapter = commonContext.getPojoToAdapter();
+            this.pojoToAdapter = pojo ->
+                ManagedObject.of(commonContext.getSpecificationLoader()::loadSpecification, pojo);
         }
 
         private TreeAdapter wrappedTreeAdapter() {
