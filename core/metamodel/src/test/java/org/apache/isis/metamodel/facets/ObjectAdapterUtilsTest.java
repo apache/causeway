@@ -24,7 +24,6 @@ import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -37,8 +36,7 @@ public class ObjectAdapterUtilsTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
-    @Mock
-    private ObjectAdapter mockObjectAdapter;
+    @Mock private ManagedObject mockObjectAdapter;
 
     private Object underlyingDomainObject;
 

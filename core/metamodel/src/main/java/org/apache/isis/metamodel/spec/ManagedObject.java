@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -372,6 +373,11 @@ public interface ManagedObject {
     // -- VISIBILITY UTILITIES
     
     static final class Visibility {
+        
+        public static Predicate<? super ManagedObject> filterOn(InteractionInitiatedBy interactionInitiatedBy) {
+            return $->ManagedObject.Visibility.isVisible($, interactionInitiatedBy);
+        }
+        
         /**
          * @param adapter - an adapter around the domain object whose visibility is being checked
          * @param interactionInitiatedBy

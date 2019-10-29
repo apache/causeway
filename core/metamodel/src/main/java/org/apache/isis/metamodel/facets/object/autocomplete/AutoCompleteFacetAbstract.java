@@ -24,9 +24,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
@@ -95,9 +94,10 @@ implements AutoCompleteFacet {
             return Collections.emptyList();
         }
 
-        final Stream<ManagedObject> adapterList = CollectionFacet.Utils.streamAdapters(resultAdapter) ;
+        return CollectionFacet.Utils.streamAdapters(resultAdapter)
+        .filter(ManagedObject.Visibility.filterOn(interactionInitiatedBy))
+        .collect(Collectors.toList());
 
-        return ObjectAdapter.Util.visibleAdapters(adapterList, interactionInitiatedBy);
     }
 
     private Object getRepository() {

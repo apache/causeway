@@ -347,6 +347,7 @@ public class Interaction implements HasUniqueId {
                 final Object target,
                 final String targetMember,
                 final String targetClass) {
+            
             this.interaction = interaction;
             this.interactionType = interactionType;
             this.memberIdentifier = memberIdentifier;

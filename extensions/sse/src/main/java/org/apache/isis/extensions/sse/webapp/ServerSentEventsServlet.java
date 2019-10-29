@@ -36,6 +36,9 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.extensions.sse.api.SseChannel;
 import org.apache.isis.extensions.sse.api.SseService;
 import org.apache.isis.extensions.sse.markup.ListeningMarkup;
+import org.apache.isis.webapp.IsisWebAppUtils;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -58,6 +61,13 @@ public class ServerSentEventsServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         threadPool = ForkJoinPool.commonPool();
+        
+        if(sseService==null) {
+            sseService = IsisWebAppUtils.getManagedBean(SseService.class, super.getServletContext());  
+        }
+
+        requires(sseService, "sseService");
+        
     }
 
     @Override
@@ -151,7 +161,8 @@ public class ServerSentEventsServlet extends HttpServlet {
         }
         try {
             return Optional.of(_Context.loadClass(eventStreamId));
-        } catch (Exception e) {
+        } catch (Throwable e) {
+            e.printStackTrace();
             return Optional.empty();
         }
     }

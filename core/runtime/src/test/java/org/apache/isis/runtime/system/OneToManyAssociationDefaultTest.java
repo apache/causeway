@@ -28,13 +28,13 @@ import org.junit.Test;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -62,10 +62,11 @@ public class OneToManyAssociationDefaultTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock private ObjectAdapter mockOwnerAdapter;
-    @Mock private ObjectAdapter mockAssociatedAdapter;
+    @Mock private ManagedObject mockOwnerAdapter;
+    @Mock private ManagedObject mockAssociatedAdapter;
     @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock private SpecificationLoader mockSpecificationLoader;
+    @Mock private ObjectSpecification mockOwnerAdapterSpec;
     @Mock private MessageService mockMessageService;
     @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock private FacetedMethod mockPeer;
@@ -126,14 +127,29 @@ public class OneToManyAssociationDefaultTest {
                 oneOf(mockPeer).containsFacet(NotPersistedFacet.class);
                 will(returnValue(false));
 
-//                oneOf(mockOwnerAdapter).promote();
-//                will(returnValue(mockOwnerAdapter));
+                oneOf(mockOwnerAdapter).getSpecification();
+                will(returnValue(mockOwnerAdapterSpec));
                 
-                oneOf(mockOwnerAdapter).isRepresentingPersistent();
-                will(returnValue(true));
-
-                oneOf(mockAssociatedAdapter).isTransient();
+                oneOf(mockOwnerAdapterSpec).isManagedBean();
                 will(returnValue(false));
+                
+                oneOf(mockOwnerAdapterSpec).isViewModel();
+                will(returnValue(true));
+                
+                oneOf(mockOwnerAdapterSpec).isParented();
+                will(returnValue(false));
+                
+                oneOf(mockOwnerAdapterSpec).isEntity();
+                will(returnValue(false));
+                
+                oneOf(mockAssociatedAdapter).getSpecification();
+                will(returnValue(mockOwnerAdapterSpec));
+                
+//                oneOf(mockOwnerAdapter).isRepresentingPersistent();
+//                will(returnValue(true));
+//
+//                oneOf(mockAssociatedAdapter).isTransient();
+//                will(returnValue(false));
 
                 oneOf(mockPeer).getFacet(CollectionAddToFacet.class);
                 will(returnValue(mockCollectionAddToFacet));

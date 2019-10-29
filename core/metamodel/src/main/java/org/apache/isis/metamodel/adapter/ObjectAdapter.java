@@ -157,21 +157,10 @@ public interface ObjectAdapter extends ManagedObject {
                 final ManagedObject collectionAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
 
-            final Stream<ManagedObject> objectAdapters = 
-                    CollectionFacet.Utils.streamAdapters(collectionAdapter);
-
-            return visibleAdapters(objectAdapters, interactionInitiatedBy);
+            return CollectionFacet.Utils.streamAdapters(collectionAdapter)
+            .filter(ManagedObject.Visibility.filterOn(interactionInitiatedBy))
+            .collect(Collectors.toList());
         }
-
-        public static List<ManagedObject> visibleAdapters(
-                final Stream<ManagedObject> objectAdapters,
-                final InteractionInitiatedBy interactionInitiatedBy) {
-
-            return objectAdapters
-                    .filter(adapter->ManagedObject.Visibility.isVisible(adapter, interactionInitiatedBy))
-                    .collect(Collectors.toList());
-        }
-
 
     }
 

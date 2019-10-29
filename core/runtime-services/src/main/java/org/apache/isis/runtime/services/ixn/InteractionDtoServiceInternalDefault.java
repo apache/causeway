@@ -30,7 +30,6 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -72,7 +71,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
 
         final ActionDto actionDto = new ActionDto();
         commandDtoServiceInternal.addActionArgs(
-                objectAction, actionDto, argumentAdapters.toArray(new ObjectAdapter[]{}));
+                objectAction, actionDto, argumentAdapters.toArray(new ManagedObject[]{}));
         final List<ParamDto> parameterDtos = CommandDtoUtils.parametersFor(actionDto).getParameter();
 
         return InteractionDtoUtils.newActionInvocation(

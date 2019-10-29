@@ -52,7 +52,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.MethodInvocationPreprocessor;
 import org.apache.isis.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -72,7 +71,6 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
@@ -450,12 +448,10 @@ implements ImperativeFacet {
 
             final Stream<ManagedObject> adapters = CollectionFacet.Utils.streamAdapters(resultAdapter);
 
-            final List<ManagedObject> visibleAdapters =
-                    ObjectAdapter.Util.visibleAdapters(adapters, interactionInitiatedBy);
-
             final Object visibleObjects =
                     CollectionUtils.copyOf(
-                            stream(visibleAdapters)
+                            adapters
+                            .filter(ManagedObject.Visibility.filterOn(interactionInitiatedBy))
                             .map(ManagedObject::unwrapPojo)
                             .collect(Collectors.toList()),
                             method.getReturnType());

@@ -49,13 +49,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 @RequiredArgsConstructor
 public class WebModuleContext {
 
-    //    /**
-    //     * This key was deprecated from config, but we still use it for reference. It is auto-populated 
-    //     * such that it can be looked up, to see what viewers have been discovered by the framework.
-    //     */
-    //    private final static String ISIS_VIEWERS = "isis.viewers";
-    //    private final static String ISIS_PROTECTED = "isis.protected";
-
     private boolean hasBootstrapper = false;
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
