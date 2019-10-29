@@ -253,7 +253,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     }
 
     public ManagedObject getServiceAdapter() {
-        return getObjectAdapterProvider().adapterFor(servicePojo);
+        return getObjectManager().adapt(servicePojo);
     }
 
     @Override

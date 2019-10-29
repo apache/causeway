@@ -19,11 +19,12 @@
 
 package org.apache.isis.metamodel.facets.value.bytes;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface ByteValueFacet extends Facet {
-    Byte byteValue(ObjectAdapter object);
+    
+    Byte byteValue(ManagedObject object);
 
-    ObjectAdapter createValue(Byte value);
+    ManagedObject createValue(Byte value);
 }

@@ -36,8 +36,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.adapter.loader.ObjectLoader;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
@@ -61,22 +60,12 @@ import lombok.val;
 @Builder @Getter
 public final class MetaModelContext_forTesting implements MetaModelContext {
     
-//    public static MetaModelContext current() {
-//        return _Context.getElseFail(MetaModelContext.class);
-//    }
     
     public static MetaModelContext buildDefault() {
         return MetaModelContext_forTesting.builder()
         .build();
     }
     
-//    public static void preset(MetaModelContext primed) {
-//        _Context.clear();
-//        _Context.putSingleton(MetaModelContext.class, primed);
-//    }
-
-    private ObjectAdapterProvider objectAdapterProvider;
-
     private ServiceInjector serviceInjector;
     private ServiceRegistry serviceRegistry; 
 
@@ -90,6 +79,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     
     @Builder.Default
     private IsisConfiguration configuration = newIsisConfiguration();
+    
+    private ObjectManager objectManager;
 
     private SpecificationLoader specificationLoader;
     
@@ -147,9 +138,6 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return serviceAdaptersById.get(serviceId);
     }
     
-    @Getter(onMethod = @__(@Override))
-    final ObjectLoader objectLoader = ObjectLoader.buildDefault(this);
-    
     // -- LOOKUP
 
     @Override
@@ -162,7 +150,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         val fields = _Lists.of(
                 getConfigurationLegacy(),
                 getConfiguration(),
-                objectAdapterProvider,
+                getObjectManager(),
                 systemEnvironment,
                 serviceInjector,
                 serviceRegistry,
@@ -238,6 +226,14 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return specificationLoader;
     }
-
+    
+    @Override
+    public ObjectManager getObjectManager() {
+        if(objectManager==null) {
+            objectManager = ObjectManager.of((MetaModelContext)this);
+        }
+        return objectManager;
+    }
+    
 
 }

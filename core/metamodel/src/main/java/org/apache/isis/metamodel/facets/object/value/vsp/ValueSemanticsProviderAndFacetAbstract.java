@@ -32,16 +32,18 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.LocaleUtil;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
+public abstract class ValueSemanticsProviderAndFacetAbstract<T> 
+extends FacetAbstract 
+implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
 
     private final Class<T> adaptedClass;
     private final int typicalLength;
@@ -300,10 +302,10 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     // Helper: createAdapter
     // //////////////////////////////////////////////////////////
 
-    protected ObjectAdapter createAdapter(final Class<?> type, final Object object) {
+    protected ManagedObject createAdapter(final Class<?> type, final Object object) {
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(type);
         if (specification.isNotCollection()) {
-            return getObjectAdapterProvider().adapterFor(object);
+            return getObjectManager().adapt(object);
         } else {
             throw new UnknownTypeException("not an object, is this a collection?");
         }

@@ -123,7 +123,7 @@ public class StandaloneData extends Data {
     //
     // ///////////////////////////////////////////////////////
 
-    public ObjectAdapter getAdapter(
+    public ManagedObject getAdapter(
             ObjectAdapterProvider objectAdapterProvider,
             SpecificationLoader specificationLoader) {
         

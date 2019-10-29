@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
@@ -37,13 +36,14 @@ import org.apache.isis.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
+public abstract class AutoCompleteFacetAbstract 
+extends FacetAbstract 
+implements AutoCompleteFacet {
 
     public static Class<? extends Facet> type() {
         return AutoCompleteFacet.class;
     }
 
-    private final ObjectAdapterProvider adapterProvider;
     private final Class<?> repositoryClass;
     private final Method repositoryMethod;
 
@@ -61,7 +61,6 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
 
         this.repositoryClass = repositoryClass;
         this.repositoryMethod = repositoryMethod;
-        this.adapterProvider = getObjectAdapterProvider();
     }
 
     public Class<?> getRepositoryClass() {
@@ -79,7 +78,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
                     @Override
                     public ManagedObject exec() {
                         final Object list = invoke();
-                        return adapterProvider.adapterFor(list);
+                        return getObjectManager().adapt(list);
                     }
 
                     private Object invoke()  {

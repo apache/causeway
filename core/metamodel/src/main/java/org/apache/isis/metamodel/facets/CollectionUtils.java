@@ -41,9 +41,9 @@ import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public final class CollectionUtils {
@@ -54,9 +54,9 @@ public final class CollectionUtils {
     public static Object[] getCollectionAsObjectArray(
             final Object optionPojo, 
             final ObjectSpecification spec, 
-            final ObjectAdapterProvider adapterProvider) {
+            final ObjectManager objectManger) {
         
-        final ObjectAdapter collection = adapterProvider.adapterFor(optionPojo);
+        final ManagedObject collection = objectManger.adapt(optionPojo);
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         
 //        {//TODO[2158] migrate
@@ -66,7 +66,7 @@ public final class CollectionUtils {
 //                    facet, collectionFacet);
 //        }
 
-        final Stream<ObjectAdapter> objectAdapters = 
+        final Stream<ManagedObject> objectAdapters = 
                 CollectionFacet.Utils.streamAdapters(collection);
 
         return objectAdapters

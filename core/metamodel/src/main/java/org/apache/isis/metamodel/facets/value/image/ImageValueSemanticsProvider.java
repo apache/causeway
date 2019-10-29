@@ -94,7 +94,7 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
 
     @Override
     public ManagedObject createValue(final java.awt.Image image) {
-        return getObjectAdapterProvider().adapterFor(new Image(grabPixels(image)));
+        return getObjectManager().adapt(new Image(grabPixels(image)));
     }
 
 }

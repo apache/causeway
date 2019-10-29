@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.consent.Allow;
 import org.apache.isis.metamodel.consent.Consent;
@@ -54,7 +53,9 @@ import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 import org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -77,7 +78,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock private ObjectAdapterProvider mockAdapterManager;
+    //@Mock private ObjectAdapterProvider mockAdapterManager;
     @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock private SpecificationLoader mockSpecificationLoader;
@@ -86,14 +87,15 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Mock private TransactionService mockTransactionService;
     
     
-    @Mock private ObjectAdapter mockEmployeeAdapter;
+    @Mock private ManagedObject mockEmployeeAdapter;
     @Mock private ObjectSpecificationDefault mockOnType;
     @Mock private ObjectSpecificationDefault mockEmployeeSpec;
     @Mock private OneToOneAssociation mockPasswordMember;
     @Mock private Identifier mockPasswordIdentifier;
     @Mock private ServiceInjector mockServiceInjector;
     @Mock private ServiceRegistry mockServiceRegistry;
-    @Mock protected ObjectAdapter mockPasswordAdapter;
+    @Mock protected ManagedObject mockPasswordAdapter;
+    @Mock protected ObjectManager mockObjectManager;
 
     private Employee employeeDO;
 
@@ -117,7 +119,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .objectManager(mockObjectManager)
+                .singleton(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .singleton(wrapperFactory = createWrapperFactory())
                 .singleton(mockFactoryService)
@@ -134,21 +137,21 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         setPasswordMethod = Employee.class.getMethod("setPassword", String.class);
 
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
-        wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
+        //wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
 
         context.checking(new Expectations() {
             {
 
-                allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
-                will(returnValue(mockEmployeeAdapter));
-                
-                allowing(mockPersistenceSessionServiceInternal).adapterFor(passwordValue);
-                will(returnValue(mockPasswordAdapter));
+//                allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
+//                will(returnValue(mockEmployeeAdapter));
+//                
+//                allowing(mockPersistenceSessionServiceInternal).adapterFor(passwordValue);
+//                will(returnValue(mockPasswordAdapter));
 
-                allowing(mockAdapterManager).adapterFor(employeeDO);
+                allowing(mockObjectManager).adapt(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
-                allowing(mockAdapterManager).adapterFor(passwordValue);
+                allowing(mockObjectManager).adapt(passwordValue);
                 will(returnValue(mockPasswordAdapter));
 
                 allowing(mockEmployeeAdapter).getSpecification();

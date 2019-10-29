@@ -16,27 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.metamodel.objectmanager;
 
-package org.apache.isis.metamodel.facets.object.encodeable;
+import org.apache.isis.metamodel.MetaModelContext;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.metamodel.facets.MultipleValueFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-/**
- * Indicates that this class can be encoded/decoded as a string.
- */
-public interface EncodableFacet extends MultipleValueFacet {
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+class ObjectManager_default implements ObjectManager {
 
-    /**
-     * Equivalent to {@link EncoderDecoder#fromEncodedString(String)}, though
-     * may be implemented through some other equivalent mechanism.
-     */
-    ManagedObject fromEncodedString(String encodedData);
-
-    /**
-     * Equivalent to {@link EncoderDecoder#toEncodedString(Object)}, though may
-     * be implemented through some other equivalent mechanism.
-     */
-    String toEncodedString(ManagedObject object);
+    @Getter(onMethod = @__(@Override)) private final MetaModelContext metaModelContext;
+    @Getter(onMethod = @__(@Override)) private final ObjectLoader objectLoader;
+    
 }

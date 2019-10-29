@@ -19,15 +19,15 @@
 
 package org.apache.isis.metamodel.facets.value.money;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface MoneyValueFacet extends Facet {
 
-    float getAmount(ObjectAdapter object);
+    float getAmount(ManagedObject object);
 
-    String getCurrencyCode(ObjectAdapter object);
+    String getCurrencyCode(ManagedObject object);
 
-    ObjectAdapter createValue(float amount, String currencyCode);
+    ManagedObject createValue(float amount, String currencyCode);
 
 }

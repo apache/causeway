@@ -59,7 +59,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.wrapper.dispatchers.InteractionEventDispatcher;
@@ -240,7 +239,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // -- DEPENDENCES
 
     @Inject AuthenticationSessionProvider authenticationSessionProvider;
-    @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+//    @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     @Inject FactoryService factoryService;
     @Inject MetaModelContext metaModelContext;
     @Inject IsisSessionFactory isisSessionFactory;

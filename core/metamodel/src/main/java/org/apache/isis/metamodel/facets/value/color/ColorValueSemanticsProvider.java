@@ -24,14 +24,16 @@ import java.text.DecimalFormat;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Color;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
-public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Color> implements ColorValueFacet {
+public class ColorValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<Color> 
+implements ColorValueFacet {
 
     public static Class<? extends Facet> type() {
         return ColorValueFacet.class;
@@ -103,7 +105,7 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public int colorValue(final ObjectAdapter object) {
+    public int colorValue(final ManagedObject object) {
         if (object == null) {
             return 0;
         }
@@ -112,9 +114,9 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     @Override
-    public ObjectAdapter createValue(final ObjectAdapter object, final int colorAsInt) {
+    public ManagedObject createValue(final ManagedObject object, final int colorAsInt) {
         final Color color = new Color(colorAsInt);
-        return getObjectAdapterProvider().adapterFor(color);
+        return getObjectManager().adapt(color);
     }
 
     @Override

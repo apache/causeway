@@ -25,7 +25,8 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
+public class JavaAwtImageValueSemanticsProvider 
+extends ImageValueSemanticsProviderAbstract<Image> {
 
     public JavaAwtImageValueSemanticsProvider(final FacetHolder holder) {
         super(holder, Image.class);
@@ -76,7 +77,7 @@ public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProvi
 
     @Override
     public ManagedObject createValue(final Image image) {
-        return getObjectAdapterProvider().adapterFor(image);
+        return getObjectManager().adapt(image);
     }
 
 }

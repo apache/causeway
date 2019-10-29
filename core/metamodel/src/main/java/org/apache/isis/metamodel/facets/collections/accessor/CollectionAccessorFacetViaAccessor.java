@@ -34,6 +34,8 @@ import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAc
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 public class CollectionAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract
 implements ImperativeFacet {
@@ -71,7 +73,7 @@ implements ImperativeFacet {
             return null;
         }
 
-        final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
+        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
         final boolean filterForVisibility = getConfiguration().getReflector().getFacet().isFilterVisibility();
         if(filterForVisibility) {

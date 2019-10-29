@@ -31,7 +31,6 @@ import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -151,7 +150,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             return null;
         }
 
-        return getObjectAdapterProvider().adapterFor(referencedPojo);
+        return getObjectManager().adapt(referencedPojo);
     }
 
     @Override
@@ -198,23 +197,14 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final ManagedObject newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final PropertySetterFacet setterFacet = getFacet(PropertySetterFacet.class);
-        if (setterFacet == null) {
+        val propertySetterFacet = getFacet(PropertySetterFacet.class);
+        if (propertySetterFacet == null) {
             return;
         }
         
-        if (    
-                newReferencedAdapter != null && 
-                !newReferencedAdapter.getSpecification().isParented() &&
-                !ManagedObject._whenFirstIsRepresentingPersistent_ensureSecondIsAsWell(
-                        ownerAdapter, 
-                        newReferencedAdapter)) {
+        ManagedObject._whenFirstIsBookmarkable_ensureSecondIsNotTransient(ownerAdapter, newReferencedAdapter);
 
-            // TODO: I've never seen this exception, and in any case DataNucleus supports persistence-by-reachability; so probably not required
-            throw new IsisException("can't set a reference to a transient object from a persistent one: " + newReferencedAdapter.titleString(null) + " (transient)");
-        }
-
-        setterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
+        propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }
 
     private void clearValue(
@@ -280,7 +270,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
                 interactionInitiatedBy);
 
         List<ManagedObject> adapters = _NullSafe.stream(pojoOptions)
-                .map(  getObjectAdapterProvider()::adapterFor )
+                .map(  getObjectManager()::adapt )
                 .collect(Collectors.toList());
         return adapters.toArray(new ManagedObject[]{});
     }
@@ -303,7 +293,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         if (pojoOptions != null) {
             final ManagedObject[] options = new ManagedObject[pojoOptions.length];
             for (int i = 0; i < options.length; i++) {
-                options[i] = getObjectAdapterProvider().adapterFor(pojoOptions[i]);
+                options[i] = getObjectManager().adapt(pojoOptions[i]);
             }
             return options;
         }

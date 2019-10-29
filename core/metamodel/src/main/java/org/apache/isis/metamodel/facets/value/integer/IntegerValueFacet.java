@@ -19,11 +19,12 @@
 
 package org.apache.isis.metamodel.facets.value.integer;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface IntegerValueFacet extends Facet {
-    Integer integerValue(ObjectAdapter object);
+    
+    Integer integerValue(ManagedObject object);
 
-    ObjectAdapter createValue(Integer value);
+    ManagedObject createValue(Integer value);
 }

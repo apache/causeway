@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.value.booleans;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -48,7 +47,7 @@ public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemantic
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getDefault(final ManagedObject inObject) {
+    public ManagedObject getDefault(final ManagedObject inObject) {
         return createAdapter(boolean.class, Boolean.FALSE);
     }
 

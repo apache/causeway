@@ -20,12 +20,13 @@
 package org.apache.isis.metamodel.facets.value.localrespath;
 
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface LocalResourcePathValueFacet extends Facet {
-    LocalResourcePath localResourcePathValue(ObjectAdapter object);
+    
+    LocalResourcePath localResourcePathValue(ManagedObject object);
 
-    ObjectAdapter createValue(LocalResourcePath value);
+    ManagedObject createValue(LocalResourcePath value);
 
 }

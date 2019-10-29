@@ -21,11 +21,11 @@ package org.apache.isis.metamodel.facets.value.chars;
 
 import java.text.DecimalFormat;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Character> implements CharValueFacet {
@@ -84,13 +84,13 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public Character charValue(final ObjectAdapter object) {
+    public Character charValue(final ManagedObject object) {
         return object == null ? null : (Character) object.getPojo();
     }
 
     @Override
-    public ObjectAdapter createValue(final Character value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final Character value) {
+        return getObjectManager().adapt(value);
     }
 
     // /////// toString ///////

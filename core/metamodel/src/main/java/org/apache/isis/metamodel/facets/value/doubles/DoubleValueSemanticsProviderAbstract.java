@@ -25,14 +25,16 @@ import java.text.ParseException;
 import java.util.Map;
 
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
-public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Double> implements DoubleFloatingPointValueFacet {
+public abstract class DoubleValueSemanticsProviderAbstract 
+extends ValueSemanticsProviderAndFacetAbstract<Double> 
+implements DoubleFloatingPointValueFacet {
 
     private static Class<? extends Facet> type() {
         return DoubleFloatingPointValueFacet.class;
@@ -95,13 +97,13 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public Double doubleValue(final ObjectAdapter object) {
+    public Double doubleValue(final ManagedObject object) {
         return (Double) (object == null ? null : object.getPojo());
     }
 
     @Override
-    public ObjectAdapter createValue(final Double value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final Double value) {
+        return getObjectManager().adapt(value);
     }
 
     // /////// toString ///////

@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -164,10 +163,20 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         if (collection == null) {
             return null;
         }
-
-        val parentOid = ManagedObject._collectionOidIfAny(ownerAdapter); 
-        val newAdapter = getObjectAdapterProvider().adapterForCollection(collection, parentOid, this);
-        return newAdapter.injectServices(getServiceInjector());
+        
+        val objectManager = super.getObjectManager();
+        System.err.println("#### likely won't work");
+        return objectManager.adapt(collection);
+        
+//        val objectIdentifier = ManagedObject._collectionOidIfAny(ownerAdapter).getIdentifier();
+//
+//        
+//        //val spec = objectManager.loadSpec(collection); 
+//        val objectLoadRequest = ObjectLoadRequest.ofParentedCollection(ownerAdapter, this);
+//        val collectionAdapter = objectManager.loadObject(objectLoadRequest);
+//         
+//        val newAdapter = getObjectAdapterProvider().adapterForCollection(collection, parentOid, this);
+//        return newAdapter.injectServices(getServiceInjector());
     }
 
     @Override
@@ -186,19 +195,16 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             final ManagedObject ownerAdapter,
             final ManagedObject referencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         if (referencedAdapter == null) {
             throw new IllegalArgumentException("Can't use null to add an item to a collection");
         }
         if (readWrite()) {
             
-            if (!ManagedObject._whenFirstIsRepresentingPersistent_ensureSecondIsAsWell(
+            ManagedObject._whenFirstIsBookmarkable_ensureSecondIsNotTransient(
                     ownerAdapter, 
-                    referencedAdapter)) {
-                
-                throw new IsisException("can't set a reference to a transient object from a persistent one: "
-                        + ownerAdapter.titleString(null)
-                        + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");
-            }
+                    referencedAdapter);
+                    
             val facet = getFacet(CollectionAddToFacet.class);
             facet.add(ownerAdapter, referencedAdapter, interactionInitiatedBy);
         }

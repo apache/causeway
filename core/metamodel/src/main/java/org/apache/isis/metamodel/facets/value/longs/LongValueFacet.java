@@ -19,11 +19,12 @@
 
 package org.apache.isis.metamodel.facets.value.longs;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface LongValueFacet extends Facet {
-    Long longValue(ObjectAdapter object);
+    
+    Long longValue(ManagedObject object);
 
-    ObjectAdapter createValue(Long value);
+    ManagedObject createValue(Long value);
 }

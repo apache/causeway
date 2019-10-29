@@ -25,11 +25,11 @@ import java.text.ParseException;
 import java.util.Map;
 
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Integer> implements IntegerValueFacet {
@@ -91,13 +91,13 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public Integer integerValue(final ObjectAdapter object) {
+    public Integer integerValue(final ManagedObject object) {
         return (Integer) (object == null ? null : object.getPojo());
     }
 
     @Override
-    public ObjectAdapter createValue(final Integer value) {
-        return value == null ? null : getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final Integer value) {
+        return value == null ? null : getObjectManager().adapt(value);
     }
 
     // /////// toString ///////

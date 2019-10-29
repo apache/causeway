@@ -76,7 +76,7 @@ class SpringServiceProvisioningTest {
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
 
-        val singletonListing = _Resources.loadAsStringUtf8(this.getClass(), "builtin-singleton.list");
+        val singletonListing = _Resources.loadAsStringUtf8(this.getClass(), "builtin-domain-services.list");
         val expectedSingletons = _Strings.splitThenStreamTrimmed(singletonListing, "\n")
                 .filter(entry->!entry.startsWith("#"))
                 .collect(Collectors.toCollection(TreeSet::new));

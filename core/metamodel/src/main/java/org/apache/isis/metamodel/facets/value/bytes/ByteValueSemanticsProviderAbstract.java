@@ -25,13 +25,15 @@ import java.text.ParseException;
 import java.util.Map;
 
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
-public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Byte> implements ByteValueFacet {
+public abstract class ByteValueSemanticsProviderAbstract 
+extends ValueSemanticsProviderAndFacetAbstract<Byte> 
+implements ByteValueFacet {
 
     private static Class<? extends Facet> type() {
         return ByteValueFacet.class;
@@ -90,13 +92,13 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public Byte byteValue(final ObjectAdapter object) {
+    public Byte byteValue(final ManagedObject object) {
         return (Byte) object.getPojo();
     }
 
     @Override
-    public ObjectAdapter createValue(final Byte value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final Byte value) {
+        return getObjectManager().adapt(value);
     }
 
     // ///// toString ///////

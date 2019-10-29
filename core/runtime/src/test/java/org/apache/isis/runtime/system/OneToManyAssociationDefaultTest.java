@@ -80,7 +80,7 @@ public class OneToManyAssociationDefaultTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .singleton(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .singleton(mockMessageService)
                 .build();

@@ -70,7 +70,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     private ManagedObject createAdapter(final Class<?> type, final Object object) {
         val specification = getSpecificationLoader().loadSpecification(type);
         if (specification.isNotCollection()) {
-            return getObjectAdapterProvider().adapterFor(object);
+            return getObjectManager().adapt(object);
         } else {
             throw new UnknownTypeException("not an object, is this a collection?");
         }

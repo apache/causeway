@@ -26,7 +26,9 @@ import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet
 import org.apache.isis.metamodel.spec.ManagedObject;
 
 
-public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsProviderAbstract implements PropertyDefaultFacet {
+public class FloatPrimitiveValueSemanticsProvider
+extends FloatValueSemanticsProviderAbstract
+implements PropertyDefaultFacet {
 
     /**
      * Required because implementation of {@link Parser} and

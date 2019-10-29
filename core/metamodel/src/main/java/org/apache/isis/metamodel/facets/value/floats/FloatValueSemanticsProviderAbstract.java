@@ -25,14 +25,16 @@ import java.text.ParseException;
 import java.util.Map;
 
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
-public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Float> implements FloatingPointValueFacet {
+public class FloatValueSemanticsProviderAbstract
+extends ValueSemanticsProviderAndFacetAbstract<Float>
+implements FloatingPointValueFacet {
 
     public static Class<? extends Facet> type() {
         return FloatingPointValueFacet.class;
@@ -91,13 +93,13 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public Float floatValue(final ObjectAdapter object) {
+    public Float floatValue(final ManagedObject object) {
         return object == null ? null : (Float) object.getPojo();
     }
 
     @Override
-    public ObjectAdapter createValue(final Float value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final Float value) {
+        return getObjectManager().adapt(value);
     }
 
     // /////// toString ///////

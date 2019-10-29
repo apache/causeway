@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.adapter.loader;
+package org.apache.isis.metamodel.objectmanager;
 
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContextAware;
@@ -57,7 +57,7 @@ public interface ObjectLoader {
     }
 
     public static ObjectLoaderBuilder builder(MetaModelContext metaModelContext) {
-        return new ObjectLoader_Builder(metaModelContext);
+        return new ObjectLoader_builder(metaModelContext);
     }
 
     public static ObjectLoader buildDefault(MetaModelContext metaModelContext) {

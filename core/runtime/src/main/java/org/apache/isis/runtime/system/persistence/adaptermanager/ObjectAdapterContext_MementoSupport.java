@@ -100,7 +100,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         return adapter;
     }
 
-    private ObjectAdapter recreateReference(Data data) {
+    private ManagedObject recreateReference(Data data) {
         // handle values
         if (data instanceof StandaloneData) {
             val standaloneData = (StandaloneData) data;
@@ -144,7 +144,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             final ObjectSpecification collectionSpec, 
             final CollectionData state) {
 
-        final Stream<ObjectAdapter> initData = state.streamElements()
+        final Stream<ManagedObject> initData = state.streamElements()
                 .map((final Data elementData) -> recreateReference(elementData));
 
         final CollectionFacet facet = collectionSpec.getFacet(CollectionFacet.class);
@@ -194,19 +194,23 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
 
     }
 
-    private void updateField(final ObjectAdapter objectAdapter, final ObjectData objectData, final ObjectAssociation objectAssoc) {
+    private void updateField(
+            final ManagedObject adapter, 
+            final ObjectData objectData, 
+            final ObjectAssociation objectAssoc) {
+        
         final Object fieldData = objectData.getEntry(objectAssoc.getId());
 
         if (objectAssoc.isOneToManyAssociation()) {
-            updateOneToManyAssociation(objectAdapter, (OneToManyAssociation) objectAssoc, (CollectionData) fieldData);
+            updateOneToManyAssociation(adapter, (OneToManyAssociation) objectAssoc, (CollectionData) fieldData);
 
         } else if (objectAssoc.getSpecification().containsFacet(EncodableFacet.class)) {
             final EncodableFacet facet = objectAssoc.getSpecification().getFacet(EncodableFacet.class);
-            final ObjectAdapter value = facet.fromEncodedString((String) fieldData);
-            ((OneToOneAssociation) objectAssoc).initAssociation(objectAdapter, value);
+            final ManagedObject value = facet.fromEncodedString((String) fieldData);
+            ((OneToOneAssociation) objectAssoc).initAssociation(adapter, value);
 
         } else if (objectAssoc.isOneToOneAssociation()) {
-            updateOneToOneAssociation(objectAdapter, (OneToOneAssociation) objectAssoc, (Data) fieldData);
+            updateOneToOneAssociation(adapter, (OneToOneAssociation) objectAssoc, (Data) fieldData);
         }
     }
 
@@ -217,9 +221,9 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
 
         val collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
         
-        final Set<ObjectAdapter> original = CollectionFacet.Utils.streamAdapters(ManagedObject.promote(collection))
+        final Set<ManagedObject> original = CollectionFacet.Utils.streamAdapters(collection)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
-        final Set<ObjectAdapter> incoming = collectionData.streamElements()
+        final Set<ManagedObject> incoming = collectionData.streamElements()
                 .map(this::recreateReference)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
@@ -227,7 +231,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         .filter(original::contains)
         .forEach(elementAdapter->{
             if (log.isDebugEnabled()) {
-                log.debug("  association {} changed, added {}", otma, elementAdapter.getOid());
+                log.debug("  association {} changed, added {}", otma, ManagedObject._oid(elementAdapter));
             }
             otma.addElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
         });
@@ -236,21 +240,25 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         .filter(not(incoming::contains))
         .forEach(elementAdapter->{
             if (log.isDebugEnabled()) {
-                log.debug("  association {} changed, removed {}", otma, elementAdapter.getOid());
+                log.debug("  association {} changed, removed {}", otma, ManagedObject._oid(elementAdapter));
             }
             otma.removeElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
         });
 
     }
 
-    private void updateOneToOneAssociation(final ObjectAdapter objectAdapter, final OneToOneAssociation otoa, final Data assocData) {
+    private void updateOneToOneAssociation(
+            final ManagedObject objectAdapter,
+            final OneToOneAssociation otoa, 
+            final Data assocData) {
+        
         if (assocData == null) {
             otoa.initAssociation(objectAdapter, null);
         } else {
-            final ObjectAdapter ref = recreateReference(assocData);
+            final ManagedObject ref = recreateReference(assocData);
             if (otoa.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK) != ref) {
                 if (log.isDebugEnabled()) {
-                    log.debug("  association {} changed to {}", otoa, ref.getOid());
+                    log.debug("  association {} changed to {}", otoa, ManagedObject._oid(ref));
                 }
                 otoa.initAssociation(objectAdapter, ref);
             }

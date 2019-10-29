@@ -508,7 +508,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     private ManagedObject adapterFor(final Object pojo) {
-        return pojo == null ? null : getObjectAdapterProvider().adapterFor(pojo);
+        return pojo == null ? null : getObjectManager().adapt(pojo);
     }
 
     private static ThreadLocal<List<ManagedObject>> commandTargetAdaptersHolder = new ThreadLocal<>();

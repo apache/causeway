@@ -25,11 +25,12 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class JavaCollectionFacet extends CollectionFacetAbstract {
 
@@ -58,20 +59,19 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     @Override
     public <T extends ManagedObject> Stream<T> stream(T collectionAdapter) {
 
-        final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
+        val objectManager = super.getObjectManager();
 
         return pojoCollection(collectionAdapter)
                 .stream()
-                .map(adapterProvider::adapterFor) //FIXME[ISIS-1976] we always generate an OA here
-                .map(x->(T)x);
+                .map(objectManager::adapt)
+                .map(x->_Casts.<T>uncheckedCast(x));
     }
 
     /**
      * The underlying collection of objects (not {@link ObjectAdapter}s).
      */
-    @SuppressWarnings("unchecked")
-    private Collection<? super Object> pojoCollection(final ManagedObject collectionAdapter) {
-        return (Collection<? super Object>) collectionAdapter.getPojo();
+    private Collection<?> pojoCollection(final ManagedObject collectionAdapter) {
+        return (Collection<?>) collectionAdapter.getPojo();
     }
 
 

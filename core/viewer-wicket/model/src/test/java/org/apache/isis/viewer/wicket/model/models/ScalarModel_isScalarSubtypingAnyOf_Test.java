@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.ObjectAdapterMementoSupport;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -46,7 +46,7 @@ public class ScalarModel_isScalarSubtypingAnyOf_Test {
     @Mock ObjectSpecification mockObjectSpecification;
     @Mock EntityModel mockEntityModel;
     @Mock ObjectAdapterMementoSupport mockObjectAdapterMementoSupport;
-    @Mock ObjectAdapterProvider mockObjectAdapterProvider; 
+    @Mock ObjectManager mockObjectManager; 
     
     MetaModelContext metaModelContext;
 
@@ -58,7 +58,7 @@ public class ScalarModel_isScalarSubtypingAnyOf_Test {
     public void setup() {
         
         metaModelContext = MetaModelContext_forTesting.builder()
-                .objectAdapterProvider(mockObjectAdapterProvider)
+                .objectManager(mockObjectManager)
                 .singleton(mockObjectAdapterMementoSupport)
                 .build();
         

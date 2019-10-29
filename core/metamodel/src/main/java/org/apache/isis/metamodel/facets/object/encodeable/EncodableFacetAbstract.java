@@ -74,7 +74,7 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
     }
 
     @Override
-    public ObjectAdapter fromEncodedString(final String encodedData) {
+    public ManagedObject fromEncodedString(final String encodedData) {
         return encodeableFacetUsingEncoderDecoder.fromEncodedString(encodedData);
     }
 

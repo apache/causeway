@@ -34,13 +34,15 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
-public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<LocalDateTime> implements JodaLocalDateTimeValueFacet {
+public class JodaLocalDateTimeValueSemanticsProvider 
+extends ValueSemanticsProviderAndFacetAbstract<LocalDateTime> 
+implements JodaLocalDateTimeValueFacet {
 
     public static final int MAX_LENGTH = 36;
     public static final int TYPICAL_LENGTH = 22;
@@ -237,13 +239,13 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public final LocalDateTime dateValue(final ObjectAdapter object) {
+    public final LocalDateTime dateValue(final ManagedObject object) {
         return (LocalDateTime) (object == null ? null : object.getPojo());
     }
 
     @Override
-    public final ObjectAdapter createValue(final LocalDateTime date) {
-        return getObjectAdapterProvider().adapterFor(date);
+    public final ManagedObject createValue(final LocalDateTime date) {
+        return getObjectManager().adapt(date);
     }
 
 

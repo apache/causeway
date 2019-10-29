@@ -28,7 +28,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.StringExtensions;
@@ -54,6 +53,7 @@ import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.ValidityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -244,7 +244,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
                     interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
-                adapters.add(getObjectAdapterProvider().adapterFor(choice));
+                adapters.add(getObjectManager().adapt(choice));
             }
         }
         /* // now incorporated into above choices processing (BoundedFacet is no more)
@@ -296,7 +296,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
                     interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
-                ManagedObject adapter = choice != null? getObjectAdapterProvider().adapterFor(choice) : null;
+                ManagedObject adapter = choice != null? getObjectManager().adapt(choice) : null;
                 adapters.add(adapter);
             }
         }
@@ -337,7 +337,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
                 // invoked it is unable to return a default.
                 return null;
             }
-            return getObjectAdapterProvider().adapterFor(dflt);
+            return getObjectManager().adapt(dflt);
         }
         return null;
     }
@@ -471,7 +471,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         ManagedObject proposedValueAdapter = null;
         ObjectSpecification proposedValueSpec;
         if(proposedValue != null) {
-            proposedValueAdapter = getObjectAdapterProvider().adapterFor(proposedValue);
+            proposedValueAdapter = getObjectManager().adapt(proposedValue);
             if(proposedValueAdapter == null) {
                 return null;
             }
@@ -516,8 +516,8 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         return parentAction.getSpecificationLoader();
     }
 
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return parentAction.getObjectAdapterProvider();
+    protected ObjectManager getObjectManager() {
+        return parentAction.getObjectManager();
     }
 
     protected PersistenceSessionServiceInternal getObjectPersistor() {

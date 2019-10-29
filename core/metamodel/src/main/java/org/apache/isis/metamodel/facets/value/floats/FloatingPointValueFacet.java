@@ -19,12 +19,12 @@
 
 package org.apache.isis.metamodel.facets.value.floats;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface FloatingPointValueFacet extends Facet {
 
-    Float floatValue(ObjectAdapter object);
+    Float floatValue(ManagedObject object);
 
-    ObjectAdapter createValue(Float value);
+    ManagedObject createValue(Float value);
 }

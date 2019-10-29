@@ -117,7 +117,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
         SCALAR {
 
             @Override
-            public ObjectAdapter asAdapter(
+            public ManagedObject asAdapter(
                     ObjectAdapterMementoDefault memento,
                     PersistenceSession persistenceSession,
                     SpecificationLoader specificationLoader) {
@@ -153,7 +153,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
         VECTOR {
 
             @Override
-            public ObjectAdapter asAdapter(
+            public ManagedObject asAdapter(
                     ObjectAdapterMementoDefault memento,
                     PersistenceSession persistenceSession,
                     SpecificationLoader specificationLoader) {
@@ -194,7 +194,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
             throw new IllegalStateException("Memento is not for " + sort);
         }
 
-        public abstract ObjectAdapter asAdapter(
+        public abstract ManagedObject asAdapter(
                 ObjectAdapterMementoDefault memento,
                 PersistenceSession persistenceSession,
                 SpecificationLoader specificationLoader);
@@ -214,7 +214,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
          */
         ENCODEABLE {
             @Override
-            ObjectAdapter recreateAdapter(
+            ManagedObject recreateAdapter(
                     ObjectAdapterMementoDefault memento,
                     PersistenceSession persistenceSession,
                     SpecificationLoader specificationLoader) {
@@ -257,14 +257,14 @@ public class ObjectAdapterMementoDefault implements Serializable {
          */
         LOOKUP {
             @Override
-            ObjectAdapter recreateAdapter(
+            ManagedObject recreateAdapter(
                     ObjectAdapterMementoDefault memento,
                     PersistenceSession persistenceSession, 
                     SpecificationLoader specificationLoader) {
                 
                 RootOid oid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);
                 try {
-                    final ObjectAdapter adapter = persistenceSession.adapterFor(oid);
+                    final ManagedObject adapter = persistenceSession.adapterFor(oid);
                     return adapter;
 
                 } finally {
@@ -284,9 +284,9 @@ public class ObjectAdapterMementoDefault implements Serializable {
                     SpecificationLoader specificationLoader) {
                 
                 //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
-                final ObjectAdapter adapter = recreateAdapter(
+                final ManagedObject adapter = recreateAdapter(
                         memento, persistenceSession, specificationLoader);
-                Oid oid = adapter.getOid();
+                Oid oid = ManagedObject._oid(adapter);
                 memento.persistentOidStr = oid.enString();
             }
 
@@ -315,7 +315,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
              * {@link ConcurrencyChecking} is ignored for transients.
              */
             @Override
-            ObjectAdapter recreateAdapter(
+            ManagedObject recreateAdapter(
                     ObjectAdapterMementoDefault memento,
                     PersistenceSession persistenceSession, 
                     SpecificationLoader specificationLoader) {
@@ -346,7 +346,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
             }
         };
 
-        public ObjectAdapter getAdapter(
+        public ManagedObject getAdapter(
                 ObjectAdapterMementoDefault memento,
                 PersistenceSession persistenceSession,
                 SpecificationLoader specificationLoader) {
@@ -354,7 +354,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
             return recreateAdapter(memento, persistenceSession, specificationLoader);
         }
 
-        abstract ObjectAdapter recreateAdapter(
+        abstract ManagedObject recreateAdapter(
                 ObjectAdapterMementoDefault memento,
                 PersistenceSession persistenceSession, 
                 SpecificationLoader specificationLoader);
@@ -554,7 +554,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
      * best to call once and then hold onto the value thereafter. Alternatively,
      * can call {@link #setAdapter(ObjectAdapter)} to keep this memento in sync.
      */
-    public ObjectAdapter getObjectAdapter(
+    public ManagedObject getObjectAdapter(
             PersistenceSession persistenceSession,
             SpecificationLoader specificationLoader) {
         
@@ -639,7 +639,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
             return pojo->ObjectAdapterMementoDefault.createOrNull( adapterProvider.adapterFor(pojo) );
         }
 
-        public static Function<ObjectAdapterMementoDefault, ObjectAdapter> fromMemento(
+        public static Function<ObjectAdapterMementoDefault, ManagedObject> fromMemento(
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
 

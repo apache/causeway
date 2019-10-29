@@ -19,11 +19,12 @@
 
 package org.apache.isis.metamodel.facets.value.doubles;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface DoubleFloatingPointValueFacet extends Facet {
-    Double doubleValue(ObjectAdapter object);
+    
+    Double doubleValue(ManagedObject object);
 
-    ObjectAdapter createValue(Double value);
+    ManagedObject createValue(Double value);
 }

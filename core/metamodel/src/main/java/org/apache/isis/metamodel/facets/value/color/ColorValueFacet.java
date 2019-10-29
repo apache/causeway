@@ -19,11 +19,12 @@
 
 package org.apache.isis.metamodel.facets.value.color;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface ColorValueFacet extends Facet {
-    int colorValue(ObjectAdapter object);
+    
+    int colorValue(ManagedObject object);
 
-    ObjectAdapter createValue(ObjectAdapter object, int color);
+    ManagedObject createValue(ManagedObject object, int color);
 }

@@ -29,7 +29,6 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 
@@ -42,6 +41,7 @@ extends RecreatableObjectFacetAbstract {
             final FacetHolder holder,
             final RecreationMechanism recreationMechanism,
             final PostConstructMethodCache postConstructMethodCache) {
+        
         super(holder, recreationMechanism, postConstructMethodCache);
     }
 
@@ -60,12 +60,12 @@ extends RecreatableObjectFacetAbstract {
             return;
         }
 
-        val viewModelAdapter = getObjectAdapterProvider()
-                .adapterForViewModel(viewModelPojo, mementoStr);
+        val objectManager = super.getObjectManager();
+        val spec = objectManager.loadSpec(viewModelPojo);
+        val viewModelAdapter = ManagedObject.of(spec, viewModelPojo); 
 
-        viewModelAdapter.injectServices(getServiceInjector());
-
-        val spec = viewModelAdapter.getSpecification();
+        super.getServiceInjector().injectServicesInto(viewModelPojo);
+        
         val propertiesStream = spec.streamProperties(Contributed.EXCLUDED)
                 .filter(property->mementoKeys.contains(property.getId()));
 
@@ -76,7 +76,7 @@ extends RecreatableObjectFacetAbstract {
             val propertyValue = memento.get(propertyId, propertyType);
 
             if(propertyValue != null) {
-                property.set(viewModelAdapter, getObjectAdapterProvider().adapterFor(propertyValue), InteractionInitiatedBy.FRAMEWORK);
+                property.set(viewModelAdapter, objectManager.adapt(propertyValue), InteractionInitiatedBy.FRAMEWORK);
             }
         });
 
@@ -87,18 +87,17 @@ extends RecreatableObjectFacetAbstract {
 
         final _Mementos.Memento memento = newMemento();
 
-        final ManagedObject ownerAdapter = 
-                /*
-                 * ObjectAdapter that holds the ObjectSpecification used for 
-                 * interrogating the domain object's metadata. 
-                 * 
-                 * Does _not_ perform dependency injection on the domain object. Also bypasses 
-                 * caching (if any), that is each call to this method creates a new unique instance.
-                 */
-                ManagedObject.of(getSpecificationLoader().loadSpecification(viewModelPojo.getClass()), viewModelPojo);
-
-
-        final ObjectSpecification spec = ownerAdapter.getSpecification();
+        val objectManager = super.getObjectManager();
+        val spec = objectManager.loadSpec(viewModelPojo);
+        
+        /*
+         * ManagedObject that holds the ObjectSpecification used for 
+         * interrogating the domain object's metadata. 
+         * 
+         * Does _not_ perform dependency injection on the domain object. Also bypasses 
+         * caching (if any), that is each call to this method creates a new instance.
+         */
+        val ownerAdapter = ManagedObject.of(spec, viewModelPojo);
 
         final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);
 

@@ -50,7 +50,6 @@ public interface RuntimeContext {
     ServiceRegistry getServiceRegistry();
     HomePageAction getHomePageAction();
 
-    ObjectAdapter adapterOfPojo(Object pojo);
     ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data);
 
     ObjectAdapter newTransientInstance(ObjectSpecification domainTypeSpec);

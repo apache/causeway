@@ -32,13 +32,13 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -51,8 +51,8 @@ public class TitleFacetViaTitleAnnotationTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
     @Mock private FacetHolder mockFacetHolder;
-    @Mock private ObjectAdapter mockObjectAdapter;
-    @Mock private ObjectAdapterProvider mockAdapterManager;
+    @Mock private ManagedObject mockManagedObject;
+    @Mock private ObjectManager mockObjectManager;
 
     protected MetaModelContext metaModelContext;
     
@@ -87,7 +87,8 @@ public class TitleFacetViaTitleAnnotationTest {
     @Before
     public void setUp() {
         metaModelContext = MetaModelContext_forTesting.builder()
-                .objectAdapterProvider(mockAdapterManager)
+//                .objectAdapterProvider(mockAdapterManager)
+                .objectManager(mockObjectManager)
                 .build();
     }
 
@@ -108,21 +109,21 @@ public class TitleFacetViaTitleAnnotationTest {
                 allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));
                 
-                allowing(mockObjectAdapter).getPojo();
+                allowing(mockManagedObject).getPojo();
                 will(returnValue(normalPojo));
 
-                allowing(mockAdapterManager).adapterFor("Normal");
+                allowing(mockObjectManager).adapt("Normal");
                 inSequence(sequence);
 
-                allowing(mockAdapterManager).adapterFor("Domain");
+                allowing(mockObjectManager).adapt("Domain");
                 inSequence(sequence);
 
-                allowing(mockAdapterManager).adapterFor("Object");
+                allowing(mockObjectManager).adapt("Object");
                 inSequence(sequence);
             }
         });
 
-        final String title = facet.title(mockObjectAdapter);
+        final String title = facet.title(mockManagedObject);
         assertThat(title, is("Normal Domain Object"));
     }
 
@@ -141,12 +142,12 @@ public class TitleFacetViaTitleAnnotationTest {
                 allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));
                 
-                allowing(mockObjectAdapter).getPojo();
+                allowing(mockManagedObject).getPojo();
                 will(returnValue(screwedPojo));
             }
         });
 
-        final String title = facet.title(mockObjectAdapter);
+        final String title = facet.title(mockManagedObject);
         assertThat(title, is("Failed Title"));
     }
 

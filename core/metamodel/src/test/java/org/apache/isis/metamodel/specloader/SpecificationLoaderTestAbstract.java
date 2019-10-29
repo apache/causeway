@@ -127,7 +127,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .configuration(isisConfiguration = producers.newConfiguration())
                 .programmingModel(programmingModel)
                 .translationService(producers.mockTranslationService())
-                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
+//                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
                 .authenticationSessionProvider(mockAuthenticationSessionProvider = producers.mockAuthenticationSessionProvider())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())

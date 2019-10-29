@@ -60,7 +60,7 @@ public class JavaCollectionFacetTest {
         facet = new JavaCollectionFacet(mockFacetHolder);
         
         metaModelContext = MetaModelContext_forTesting.builder()
-                .objectAdapterProvider(mockOAProvider)
+//                .objectAdapterProvider(mockOAProvider)
                 .build();
     }
 

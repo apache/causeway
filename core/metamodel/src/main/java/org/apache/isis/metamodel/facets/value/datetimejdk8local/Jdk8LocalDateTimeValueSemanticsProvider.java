@@ -32,10 +32,10 @@ import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import static org.apache.isis.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeUtil.formatterOf;
 import static org.apache.isis.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeUtil.parserOf;
@@ -255,13 +255,13 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public final LocalDateTime dateValue(final ObjectAdapter object) {
+    public final LocalDateTime dateValue(final ManagedObject object) {
         return (LocalDateTime) (object == null ? null : object.getPojo());
     }
 
     @Override
-    public final ObjectAdapter createValue(final LocalDateTime date) {
-        return getObjectAdapterProvider().adapterFor(date);
+    public final ManagedObject createValue(final LocalDateTime date) {
+        return getObjectManager().adapt(date);
     }
 
 

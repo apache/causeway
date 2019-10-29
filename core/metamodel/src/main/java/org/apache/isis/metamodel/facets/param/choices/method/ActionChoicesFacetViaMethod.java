@@ -96,7 +96,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             return null;
         }
 
-        final ManagedObject collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
+        final ManagedObject collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
         final List<ManagedObject> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
@@ -106,7 +106,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
                 _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
-        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getObjectAdapterProvider());
+        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getObjectManager());
     }
 
     @Override

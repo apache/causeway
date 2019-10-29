@@ -28,12 +28,12 @@ import java.util.Map;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Money;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements MoneyValueFacet {
 
@@ -190,7 +190,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public float getAmount(final ObjectAdapter object) {
+    public float getAmount(final ManagedObject object) {
         final Money money = (Money) object.getPojo();
         if (money == null) {
             return 0.0f;
@@ -200,7 +200,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     @Override
-    public String getCurrencyCode(final ObjectAdapter object) {
+    public String getCurrencyCode(final ManagedObject object) {
         final Money money = (Money) object.getPojo();
         if (money == null) {
             return "";
@@ -210,8 +210,8 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     @Override
-    public ObjectAdapter createValue(final float amount, final String currencyCode) {
-        return getObjectAdapterProvider().adapterFor(new Money(amount, currencyCode));
+    public ManagedObject createValue(final float amount, final String currencyCode) {
+        return getObjectManager().adapt(new Money(amount, currencyCode));
     }
 
     // /////// toString ///////

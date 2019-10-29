@@ -33,10 +33,10 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<LocalDate> implements JodaLocalDateValueFacet {
@@ -237,13 +237,13 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public final LocalDate dateValue(final ObjectAdapter object) {
+    public final LocalDate dateValue(final ManagedObject object) {
         return (LocalDate) (object == null ? null : object.getPojo());
     }
 
     @Override
-    public final ObjectAdapter createValue(final LocalDate date) {
-        return getObjectAdapterProvider().adapterFor(date);
+    public final ManagedObject createValue(final LocalDate date) {
+        return getObjectManager().adapt(date);
     }
 
 

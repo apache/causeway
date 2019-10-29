@@ -36,6 +36,8 @@ import org.apache.isis.metamodel.facets.properties.autocomplete.PropertyAutoComp
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAbstract implements ImperativeFacet {
 
     private final Method method;
@@ -82,7 +84,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
             return null;
         }
 
-        final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
+        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
         final FacetedMethod facetedMethod = (FacetedMethod) getFacetHolder();
         final Class<?> propertyType = facetedMethod.getType();
@@ -95,7 +97,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
                 _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
 
         final ObjectSpecification propertySpec = getSpecification(propertyType);
-        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, propertySpec, getObjectAdapterProvider());
+        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, propertySpec, getObjectManager());
     }
 
     @Override

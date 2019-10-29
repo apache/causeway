@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
@@ -77,7 +77,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         this.resolveObjectChangedEnabled = resolveObjectChangedEnabled;
     }
 
-    protected void resolveIfRequired(final ObjectAdapter targetAdapter) {
+    protected void resolveIfRequired(final ManagedObject targetAdapter) {
         resolveIfRequired(targetAdapter.getPojo());
     }
 

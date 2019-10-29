@@ -173,7 +173,7 @@ extends OneToManyAssociationDefault implements ContributeeMember {
     // -- FacetHolder
 
     private ManagedObject getServiceAdapter() {
-        return getObjectAdapterProvider().adapterForBean(serviceBean);
+        return getObjectManager().adapt(serviceBean);
     }
 
     // -- ContributeeMember2 impl (getServiceContributedBy)

@@ -122,8 +122,8 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     @Override
     public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
+        val stringBuilder = new StringBuilder();
+        val objectManager = getObjectManager();
 
         try {
             for (final TitleComponent component : this.components) {
@@ -132,7 +132,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
                     continue;
                 }
                 // ignore context, if provided
-                final ObjectAdapter titlePartAdapter = adapterProvider.adapterFor(titlePart);
+                val titlePartAdapter = objectManager.adapt(titlePart);
                 if(Objects.equals(contextAdapter, titlePartAdapter)) {
                     continue;
                 }

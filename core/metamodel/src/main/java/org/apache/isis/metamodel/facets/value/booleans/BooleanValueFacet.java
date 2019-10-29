@@ -26,9 +26,4 @@ public interface BooleanValueFacet extends Facet {
 
     boolean isSet(ManagedObject object);
 
-    //    void set(ObjectAdapter object);
-    //
-    //    void reset(ObjectAdapter object);
-    //
-    //    void toggle(ObjectAdapter object);
 }

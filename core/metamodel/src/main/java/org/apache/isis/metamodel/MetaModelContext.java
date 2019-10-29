@@ -30,8 +30,7 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.adapter.loader.ObjectLoader;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -60,8 +59,8 @@ public interface MetaModelContext {
      */
     IsisConfiguration getConfiguration();
 
-    ObjectAdapterProvider getObjectAdapterProvider();
-
+    ObjectManager getObjectManager();
+    
     ServiceInjector getServiceInjector();
 
     ServiceRegistry getServiceRegistry();
@@ -88,8 +87,6 @@ public interface MetaModelContext {
 
     HomePageAction getHomePageAction();
 
-    ObjectLoader getObjectLoader();
-    
     @Deprecated
     Stream<ObjectAdapter> streamServiceAdapters();
     
@@ -121,11 +118,6 @@ public interface MetaModelContext {
         @Override
         public default IsisConfiguration getConfiguration() {
             return getMetaModelContext().getConfiguration();
-        }
-
-        @Override
-        public default ObjectAdapterProvider getObjectAdapterProvider() {
-            return getMetaModelContext().getObjectAdapterProvider();
         }
 
         @Override
@@ -197,12 +189,12 @@ public interface MetaModelContext {
             return getMetaModelContext().getTransactionService();
         }
 
-        @Override
+        @Override @Deprecated
         public default Stream<ObjectAdapter> streamServiceAdapters() {
             return getMetaModelContext().streamServiceAdapters();
         }
 
-        @Override
+        @Override @Deprecated
         default ObjectAdapter lookupServiceAdapterById(String serviceId) {
             return getMetaModelContext().lookupServiceAdapterById(serviceId);
         }
@@ -213,11 +205,13 @@ public interface MetaModelContext {
         }
         
         @Override
-        default ObjectLoader getObjectLoader() {
-            return getObjectLoader();
+        default ObjectManager getObjectManager() {
+            return getMetaModelContext().getObjectManager();
         }
 
     }
+
+    
     
 
 }

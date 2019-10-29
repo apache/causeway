@@ -66,7 +66,7 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     private final ObjectAdapterMementoSupport mementoSupport = lookupServiceElseFail(ObjectAdapterMementoSupport.class);
     
     @Getter(lazy = true)
-    private final Function<Object, ObjectAdapter> pojoToAdapter = metaModelContext.getObjectAdapterProvider()::adapterFor;
+    private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
     
     public IsisSession getCurrentSession() {
         return IsisSession.currentOrElseNull();

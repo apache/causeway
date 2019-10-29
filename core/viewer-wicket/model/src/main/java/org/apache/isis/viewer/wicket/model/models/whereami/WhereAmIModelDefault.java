@@ -84,7 +84,7 @@ class WhereAmIModelDefault implements WhereAmIModel {
     // -- HELPER
 
     private EntityModel toEntityModel(Object domainObject) {
-        val objectAdapter = commonContext.getObjectAdapterProvider().adapterFor(domainObject);
+        val objectAdapter = commonContext.getObjectManager().adapt(domainObject);
         return EntityModel.ofAdapter(commonContext, objectAdapter);
     }
 

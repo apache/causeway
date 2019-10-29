@@ -27,9 +27,9 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ManagedObjectState;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -60,9 +60,9 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
     
-    @Getter protected final ObjectAdapterProvider objectAdapterProvider;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<HomePageAction> homePageActionResolver;
+    @Getter protected final ObjectManager objectManager;
 
     // -- SINGLE ARG CONSTRUCTOR
 
@@ -72,7 +72,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.serviceInjector = mmc.getServiceInjector();
         this.serviceRegistry = mmc.getServiceRegistry();
         this.specificationLoader = mmc.getSpecificationLoader();
-        this.objectAdapterProvider = mmc.getObjectAdapterProvider();
+        this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
         this.homePageActionResolver = mmc::getHomePageAction;
     }
@@ -88,11 +88,6 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     }
 
     // -- OBJECT ADAPTER SUPPORT
-
-    @Override
-    public ObjectAdapter adapterOfPojo(Object pojo) {
-        return objectAdapterProvider.adapterFor(pojo);
-    }
 
     @Override //FIXME [2033] decouple from JDO
     public ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data) {
@@ -125,7 +120,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     @Override
     public ObjectAdapter newTransientInstance(ObjectSpecification domainTypeSpec) {
-        return objectAdapterProvider.newTransientInstance(domainTypeSpec);
+        return ps().newTransientInstance(domainTypeSpec);
     }
 
     @Override
@@ -147,6 +142,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     private final _Lazy<PersistenceSession> persistenceSession = 
             _Lazy.of(IsisContext.getPersistenceSession()::get);
+ 
 
     private PersistenceSession ps() {
         return persistenceSession.get();

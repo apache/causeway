@@ -84,7 +84,7 @@ class AuditerServiceTest {
     }
 
     @Test
-    void auditerServiceShouldBeAwareOfInventoryChanges() {
+    void auditerService_shouldBeAwareOfInventoryChanges() {
 
         // given
         val books = repository.allInstances(Book.class);
@@ -111,7 +111,7 @@ class AuditerServiceTest {
     }
 
     @Test
-    void auditerServiceShouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() 
+    void auditerService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() 
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // given

@@ -22,10 +22,10 @@ package org.apache.isis.metamodel.facets.value.password;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements
@@ -87,23 +87,23 @@ PasswordValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public boolean checkPassword(final ObjectAdapter object, final String password) {
+    public boolean checkPassword(final ManagedObject object, final String password) {
         return password(object.getPojo()).checkPassword(password);
     }
 
     @Override
-    public String getEditText(final ObjectAdapter object) {
+    public String getEditText(final ManagedObject object) {
         return object == null ? "" : password(object).getPassword();
     }
 
     @Override
-    public ObjectAdapter createValue(final String password) {
-        return getObjectAdapterProvider().adapterFor(new Password(password));
+    public ManagedObject createValue(final String password) {
+        return getObjectManager().adapt(new Password(password));
     }
 
     private Password password(final Object object) {
-        if (object instanceof ObjectAdapter) {
-            return (Password) ((ObjectAdapter) object).getPojo();
+        if (object instanceof ManagedObject) {
+            return (Password) ((ManagedObject) object).getPojo();
         } else {
             return (Password) object;
         }

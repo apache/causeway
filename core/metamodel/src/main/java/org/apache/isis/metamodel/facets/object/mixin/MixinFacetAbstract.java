@@ -24,7 +24,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleValueFacetAbstract;
@@ -33,7 +32,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import lombok.val;
 
 public abstract class MixinFacetAbstract 
-extends SingleValueFacetAbstract<String> implements MixinFacet {
+extends SingleValueFacetAbstract<String> 
+implements MixinFacet {
 
     private final Class<?> mixinType;
     private final Class<?> constructorType;
@@ -98,11 +98,11 @@ extends SingleValueFacetAbstract<String> implements MixinFacet {
     }
     
     @Override
-    public ObjectAdapter mixedIn(ManagedObject mixinAdapter, Policy policy) {
+    public ManagedObject mixedIn(ManagedObject mixinAdapter, Policy policy) {
         val mixinPojo = mixinAdapter.getPojo();
         val holderPojo = holderPojoFor(mixinPojo, policy);
         return holderPojo!=null
-                ? getObjectAdapterProvider().adapterFor(holderPojo)
+                ? getObjectManager().adapt(holderPojo)
                         : null;
     }
 

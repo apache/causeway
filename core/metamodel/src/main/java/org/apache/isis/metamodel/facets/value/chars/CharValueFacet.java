@@ -19,11 +19,12 @@
 
 package org.apache.isis.metamodel.facets.value.chars;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface CharValueFacet extends Facet {
-    Character charValue(ObjectAdapter object);
+    
+    Character charValue(ManagedObject object);
 
-    ObjectAdapter createValue(Character value);
+    ManagedObject createValue(Character value);
 }

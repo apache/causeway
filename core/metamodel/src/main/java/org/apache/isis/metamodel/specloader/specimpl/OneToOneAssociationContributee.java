@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -155,8 +154,8 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
-    private ObjectAdapter getServiceAdapter() {
-        return getObjectAdapterProvider().adapterForBean(serviceBean);
+    private ManagedObject getServiceAdapter() {
+        return getObjectManager().adapt(serviceBean);
     }
 
     // -- Contributee impl - getServiceContributedBy()

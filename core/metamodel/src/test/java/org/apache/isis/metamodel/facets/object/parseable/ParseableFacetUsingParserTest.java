@@ -60,7 +60,7 @@ public class ParseableFacetUsingParserTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
-                .objectAdapterProvider(mockAdapterManager)
+//                .objectAdapterProvider(mockAdapterManager)
                 .build();
 
 

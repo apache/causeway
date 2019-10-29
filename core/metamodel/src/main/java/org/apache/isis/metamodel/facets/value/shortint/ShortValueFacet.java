@@ -19,11 +19,12 @@
 
 package org.apache.isis.metamodel.facets.value.shortint;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface ShortValueFacet extends Facet {
-    Short shortValue(ObjectAdapter object);
+    
+    Short shortValue(ManagedObject object);
 
-    ObjectAdapter createValue(Short value);
+    ManagedObject createValue(Short value);
 }

@@ -28,7 +28,9 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-public abstract class ParseableFacetAbstract extends FacetAbstract implements ParseableFacet {
+public abstract class ParseableFacetAbstract 
+extends FacetAbstract 
+implements ParseableFacet {
 
     private final Class<?> parserClass;
 
@@ -74,7 +76,7 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     }
 
     @Override
-    public ObjectAdapter parseTextEntry(
+    public ManagedObject parseTextEntry(
             final ManagedObject original,
             final String entryText,
             final InteractionInitiatedBy interactionInitiatedBy) {

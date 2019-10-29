@@ -66,6 +66,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
             final int numberLoaded,
             final int numberObjectPropertiesModified,
             final Map<ObjectAdapter, PublishingChangeKind> changesByAdapter) {
+        
         this.transactionUuid = transactionUuid;
         this.sequence = sequence;
         this.userName = userName;

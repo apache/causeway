@@ -17,27 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.adapter.loader;
+package org.apache.isis.metamodel.objectmanager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.loader.ObjectLoader.ObjectLoaderBuilder;
+import org.apache.isis.metamodel.objectmanager.ObjectLoader.ObjectLoaderBuilder;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-class ObjectLoader_Builder implements ObjectLoaderBuilder {
+class ObjectLoader_builder implements ObjectLoaderBuilder {
     
     private final MetaModelContext metaModelContext;
 
     private final List<ObjectLoader.Handler> handlers = new ArrayList<>();
 
     @Override
-    public ObjectLoader_Builder add(ObjectLoader.Handler handler) {
+    public ObjectLoader_builder add(ObjectLoader.Handler handler) {
         handler.setMetaModelContext(metaModelContext);
         handlers.add(handler);
         return this;

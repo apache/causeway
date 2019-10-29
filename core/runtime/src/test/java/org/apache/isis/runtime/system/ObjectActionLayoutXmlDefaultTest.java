@@ -63,7 +63,7 @@ public class ObjectActionLayoutXmlDefaultTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .singleton(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .build();
 

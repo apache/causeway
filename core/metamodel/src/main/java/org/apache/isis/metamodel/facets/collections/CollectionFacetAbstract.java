@@ -24,7 +24,9 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 
-public abstract class CollectionFacetAbstract extends FacetAbstract implements CollectionFacet {
+public abstract class CollectionFacetAbstract 
+extends FacetAbstract 
+implements CollectionFacet {
 
     public CollectionFacetAbstract(final FacetHolder holder) {
         super(CollectionFacet.class, holder, Derivation.NOT_DERIVED);

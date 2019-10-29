@@ -19,12 +19,13 @@
 
 package org.apache.isis.metamodel.facets.value.string;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface StringValueFacet extends Facet {
-    String stringValue(ObjectAdapter object);
+    
+    String stringValue(ManagedObject object);
 
-    ObjectAdapter createValue(String value);
+    ManagedObject createValue(String value);
 
 }

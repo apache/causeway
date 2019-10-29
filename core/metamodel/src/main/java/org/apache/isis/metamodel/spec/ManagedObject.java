@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.spec;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,18 +32,17 @@ import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.loader.ObjectLoader;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
+import org.apache.isis.metamodel.objectmanager.ObjectLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -306,18 +306,19 @@ public interface ManagedObject {
     // -- DEPRECATIONS (in an attempt to decouple the metamodel from ObjectAdapter)
     
     @Deprecated
-    public static ObjectAdapter promote(ManagedObject managedObject) {
-        if(managedObject==null) {
-            return null;
-        }
-        return (ObjectAdapter) managedObject;
+    public static Optional<ObjectAdapter> promote(ManagedObject managedObject) {
+        return Optional.ofNullable(managedObject)
+        .filter(mo->mo instanceof ObjectAdapter) 
+        .map(ObjectAdapter.class::cast);
     }
 
     // -- DEPRECATIONS - SPECIALIZED
     
     @Deprecated
     static boolean _isDestroyed(ManagedObject adapter) {
-        return ManagedObject.promote(adapter).isDestroyed();
+        return ManagedObject.promote(adapter)
+                .map(ObjectAdapter::isDestroyed)
+                .orElseGet(()->!ManagedObject._oid(adapter).isPersistent());
     }
 
     @Deprecated
@@ -331,17 +332,32 @@ public interface ManagedObject {
     }
 
     @Deprecated
-    static boolean _whenFirstIsRepresentingPersistent_ensureSecondIsAsWell(
+    static void _whenFirstIsBookmarkable_ensureSecondIsNotTransient(
             ManagedObject first,
             ManagedObject second) {
         
-        //if(ownerAdapter.getSpecification().isEntity() && !referencedAdapter.getSpecification().isEntity()) {
-        
-        if(ManagedObject.promote(first).isRepresentingPersistent() &&
-                ManagedObject.promote(second).isTransient()) {
-            return false; 
+        if(ManagedObject.isBookmarkable(first) && second!=null) {
+            
+            val refSpec = second.getSpecification();
+            
+            if(refSpec.isParented() || !refSpec.isEntity()) {
+                return;
+            }
+            
+            val oid = ManagedObject._rootOidIfAny(second);
+            
+            if(oid.isTransient()) {
+
+                // TODO: I've never seen this exception, and in any case DataNucleus supports persistence-by-reachability; so probably not required
+                throw _Exceptions.illegalArgument(
+                        "can't set a reference to a transient object [%s] from a persistent one [%s]",
+                            second,
+                            first.titleString(null));
+            }
+            
         }
-        return true;
+        
+        
     }
     
     @Deprecated
@@ -368,8 +384,11 @@ public interface ManagedObject {
                 // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
                 return true;
             }
-            if(ManagedObject._isDestroyed(adapter)) {
-                return false;
+            val spec = adapter.getSpecification();
+            if(spec.isEntity()) {
+                if(ManagedObject._isDestroyed(adapter)) {
+                    return false;
+                }
             }
             if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { 
                 return true; 
@@ -380,16 +399,16 @@ public interface ManagedObject {
         private static boolean isVisibleForUser(ManagedObject adapter) {
             val visibilityContext = createVisibleInteractionContextForUser(adapter);
             val spec = adapter.getSpecification();
-            final InteractionResult visibleResult = InteractionUtils.isVisibleResult(spec, visibilityContext);
-            return visibleResult.isNotVetoing();
+            return InteractionUtils.isVisibleResult(spec, visibilityContext)
+                    .isNotVetoing();
         }
 
         private static VisibilityContext<?> createVisibleInteractionContextForUser(
-                ManagedObject objectAdapter) {
+                ManagedObject adapter) {
             
             return new ObjectVisibilityContext(
-                    objectAdapter,
-                    objectAdapter.getSpecification().getIdentifier(),
+                    adapter,
+                    adapter.getSpecification().getIdentifier(),
                     InteractionInitiatedBy.USER,
                     Where.OBJECT_FORMS);
         }
@@ -444,7 +463,7 @@ public interface ManagedObject {
         val objectId = rootOid.getIdentifier();
         
         val objectLoadRequest = ObjectLoader.ObjectLoadRequest.of(spec, objectId);
-        val managedObject = mmc.getObjectLoader().loadObject(objectLoadRequest);
+        val managedObject = mmc.getObjectManager().loadObject(objectLoadRequest);
         
         return managedObject;
         

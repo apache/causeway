@@ -76,7 +76,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             return ObjectExtensions.asArray(options);
         }
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(choicesClass);
-        return CollectionUtils.getCollectionAsObjectArray(options, specification, getObjectAdapterProvider());
+        return CollectionUtils.getCollectionAsObjectArray(options, specification, getObjectManager());
     }
 
     @Override

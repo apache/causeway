@@ -84,7 +84,7 @@ extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
         if (collectionOrArray == null) {
             return _Constants.emptyObjects;
         }
-        final ManagedObject collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
+        final ManagedObject collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
         final Class<?> parameterType = facetedMethodParameter.getType();
@@ -97,7 +97,7 @@ extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
                 _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
-        return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectAdapterProvider());
+        return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectManager());
     }
 
     @Override

@@ -24,10 +24,10 @@ import java.nio.file.InvalidPathException;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class LocalResourcePathValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements LocalResourcePathValueFacet {
@@ -111,13 +111,13 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public LocalResourcePath localResourcePathValue(final ObjectAdapter object) {
+    public LocalResourcePath localResourcePathValue(final ManagedObject object) {
         return object == null ? null : (LocalResourcePath) object.getPojo();
     }
 
     @Override
-    public ObjectAdapter createValue(final LocalResourcePath value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final LocalResourcePath value) {
+        return getObjectManager().adapt(value);
     }
 
     // /////// toString ///////

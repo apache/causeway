@@ -23,10 +23,10 @@ import java.util.UUID;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<UUID> implements UUIDValueFacet {
@@ -93,13 +93,13 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public UUID uuidValue(final ObjectAdapter object) {
+    public UUID uuidValue(final ManagedObject object) {
         return object == null ? null : (UUID) object.getPojo();
     }
 
     @Override
-    public ObjectAdapter createValue(final UUID value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final UUID value) {
+        return getObjectManager().adapt(value);
     }
 
     // /////// toString ///////

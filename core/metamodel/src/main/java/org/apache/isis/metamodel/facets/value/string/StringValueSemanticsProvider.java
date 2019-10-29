@@ -21,10 +21,10 @@ package org.apache.isis.metamodel.facets.value.string;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<String> implements StringValueFacet {
 
@@ -107,13 +107,13 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public String stringValue(final ObjectAdapter object) {
+    public String stringValue(final ManagedObject object) {
         return object == null ? "" : (String) object.getPojo();
     }
 
     @Override
-    public ObjectAdapter createValue(final String value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final String value) {
+        return getObjectManager().adapt(value);
     }
 
     // /////// toString ///////

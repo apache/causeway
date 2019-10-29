@@ -27,12 +27,12 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.metamodel.facets.value.floats.FloatingPointValueFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Percentage> implements FloatingPointValueFacet {
 
@@ -124,21 +124,21 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public Float floatValue(final ObjectAdapter object) {
+    public Float floatValue(final ManagedObject object) {
         final Percentage per = (Percentage) object.getPojo();
         return new Float(per.floatValue());
     }
 
     @Override
-    public ObjectAdapter createValue(final Float value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final Float value) {
+        return getObjectManager().adapt(value);
     }
 
     // //////////////////////////////////////////////////////////////////
     // PropertyDefaultFacet
     // //////////////////////////////////////////////////////////////////
 
-    public Object getDefault(final ObjectAdapter inObject) {
+    public Object getDefault(final ManagedObject inObject) {
         return Float.valueOf(0.0f);
     }
 

@@ -24,7 +24,6 @@ import java.util.IllegalFormatException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResultSet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
@@ -39,7 +38,11 @@ import org.apache.isis.metamodel.interactions.ValidityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
+import lombok.val;
+
+public class ParseableFacetUsingParser
+extends FacetAbstract
+implements ParseableFacet {
 
     private final Parser<?> parser;
 
@@ -58,7 +61,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     }
 
     @Override
-    public ObjectAdapter parseTextEntry(
+    public ManagedObject parseTextEntry(
             final ManagedObject contextAdapter,
             final String entry,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -70,7 +73,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         // check string is valid
         // (eg pick up any @RegEx on value type)
         if (getFacetHolder().containsFacet(ValueFacet.class)) {
-            final ObjectAdapter entryAdapter = getObjectAdapterProvider().adapterFor(entry);
+            val entryAdapter = getObjectManager().adapt(entry);
             final Identifier identifier = getIdentified().getIdentifier();
             final ParseValueContext parseValueContext =
                     new ParseValueContext(
@@ -91,7 +94,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
             // check resultant object is also valid
             // (eg pick up any validate() methods on it)
-            final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(parsed);
+            val adapter = getObjectManager().adapt(parsed);
             final ObjectSpecification specification = adapter.getSpecification();
             final ObjectValidityContext validateContext =
                     specification.createValidityInteractionContext(

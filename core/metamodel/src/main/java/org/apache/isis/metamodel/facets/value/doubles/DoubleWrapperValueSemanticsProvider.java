@@ -24,7 +24,8 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 
-public class DoubleWrapperValueSemanticsProvider extends DoubleValueSemanticsProviderAbstract {
+public class DoubleWrapperValueSemanticsProvider 
+extends DoubleValueSemanticsProviderAbstract {
 
     /**
      * Required because implementation of {@link Parser} and

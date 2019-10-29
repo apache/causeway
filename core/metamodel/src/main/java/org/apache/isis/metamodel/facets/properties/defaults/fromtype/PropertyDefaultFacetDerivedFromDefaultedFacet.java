@@ -47,7 +47,7 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
         if (typeFacetDefault == null) {
             return null;
         }
-        return getObjectAdapterProvider().adapterFor(typeFacetDefault);
+        return getObjectManager().adapt(typeFacetDefault);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

@@ -120,7 +120,7 @@ implements ObjectAdapterMementoSupport {
         }
 
         @Override
-        public ObjectAdapter getObjectAdapter(SpecificationLoader specificationLoader) {
+        public ManagedObject getObjectAdapter(SpecificationLoader specificationLoader) {
             return delegate.getObjectAdapter(persistenceSession(), specificationLoader);
         }
         

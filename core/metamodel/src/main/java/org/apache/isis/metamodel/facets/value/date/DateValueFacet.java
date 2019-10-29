@@ -21,13 +21,13 @@ package org.apache.isis.metamodel.facets.value.date;
 
 import java.util.Date;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface DateValueFacet extends Facet {
 
-    Date dateValue(ObjectAdapter object);
+    Date dateValue(ManagedObject object);
 
-    ObjectAdapter createValue(Date date);
+    ManagedObject createValue(Date date);
 
 }

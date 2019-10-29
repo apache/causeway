@@ -21,12 +21,13 @@ package org.apache.isis.metamodel.facets.value.uuid;
 
 import java.util.UUID;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface UUIDValueFacet extends Facet {
-    UUID uuidValue(ObjectAdapter object);
+    
+    UUID uuidValue(ManagedObject object);
 
-    ObjectAdapter createValue(UUID value);
+    ManagedObject createValue(UUID value);
 
 }

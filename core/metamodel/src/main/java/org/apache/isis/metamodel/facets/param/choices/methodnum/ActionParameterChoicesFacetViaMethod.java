@@ -76,7 +76,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
         if (choices == null) {
             return _Constants.emptyObjects;
         }
-        final ManagedObject objectAdapter = getObjectAdapterProvider().adapterFor(choices);
+        final ManagedObject objectAdapter = getObjectManager().adapt(choices);
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
         final Class<?> parameterType = facetedMethodParameter.getType();
 
@@ -88,7 +88,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
                 _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
-        return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectAdapterProvider());
+        return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectManager());
     }
 
     @Override

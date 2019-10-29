@@ -21,13 +21,13 @@ package org.apache.isis.metamodel.facets.value.datejodalocal;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface JodaLocalDateValueFacet extends Facet {
 
-    LocalDate dateValue(ObjectAdapter object);
+    LocalDate dateValue(ManagedObject object);
 
-    ObjectAdapter createValue(LocalDate date);
+    ManagedObject createValue(LocalDate date);
 
 }

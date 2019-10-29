@@ -19,15 +19,15 @@
 
 package org.apache.isis.metamodel.facets.value.password;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface PasswordValueFacet extends Facet {
 
-    boolean checkPassword(ObjectAdapter object, String password);
+    boolean checkPassword(ManagedObject object, String password);
 
-    String getEditText(ObjectAdapter object);
+    String getEditText(ManagedObject object);
 
-    ObjectAdapter createValue(String value);
+    ManagedObject createValue(String value);
 
 }

@@ -47,13 +47,12 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
@@ -67,7 +66,6 @@ import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.val;
@@ -160,7 +158,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return delegate(method, args);
         }
 
-        final ObjectAdapter targetAdapter = adapterFor(getDelegate());
+        final ManagedObject targetAdapter = adapterForPojo(getDelegate());
 
         if (isTitleMethod(method)) {
             return handleTitleMethod(targetAdapter);
@@ -239,7 +237,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val objectAction = (ObjectAction) objectMember;
 
             ObjectAction actualObjectAction;
-            ObjectAdapter actualTargetAdapter;
+            ManagedObject actualTargetAdapter;
 
             val mixinFacet = targetAdapter.getSpecification().getFacet(MixinFacet.class);
             if(mixinFacet != null) {
@@ -266,7 +264,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private static ObjectAction determineMixinAction(
-            final ObjectAdapter domainObjectAdapter,
+            final ManagedObject domainObjectAdapter,
             final ObjectAction objectAction) {
         
         if(domainObjectAdapter == null) {
@@ -362,7 +360,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // title
     // /////////////////////////////////////////////////////////////////
 
-    private Object handleTitleMethod(final ObjectAdapter targetAdapter)
+    private Object handleTitleMethod(final ManagedObject targetAdapter)
             throws IllegalAccessException, InvocationTargetException {
 
         resolveIfRequired(targetAdapter);
@@ -380,7 +378,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     private Object handleSaveMethod(
-            final ObjectAdapter targetAdapter, final ObjectSpecification targetNoSpec) {
+            final ManagedObject targetAdapter, final ObjectSpecification targetNoSpec) {
 
         runValidationTask(()->{
             val interactionResult =
@@ -388,13 +386,15 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             notifyListenersAndVetoIfRequired(interactionResult);
         });
         
-        return runExecutionTask(()->{
-            if (targetAdapter.isTransient()) {
-                val ps = IsisContext.getPersistenceSession().get();
-                ps.makePersistentInTransaction(targetAdapter);
-            }
-            return null;
-        });
+        
+        val spec = targetAdapter.getSpecification();
+        if(spec.isEntity()) {
+            return runExecutionTask(()->{
+                ManagedObject._makePersistentInTransaction(targetAdapter);
+                return null;
+            }); 
+        }
+        return null;
         
     }
 
@@ -403,7 +403,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     private Object handleGetterMethodOnProperty(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Object[] args,
             final OneToOneAssociation property) {
 
@@ -439,7 +439,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
 
     private Object handleSetterMethodOnProperty(
-            final ObjectAdapter targetAdapter, 
+            final ManagedObject targetAdapter, 
             final Object[] args,
             final OneToOneAssociation property) {
         
@@ -450,7 +450,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             checkUsability(targetAdapter, property);
         });
         
-        val argumentAdapter = adapterFor(singleArg);
+        val argumentAdapter = adapterForPojo(singleArg);
         
         resolveIfRequired(targetAdapter);
 
@@ -474,7 +474,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     private Object handleGetterMethodOnCollection(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Object[] args,
             final OneToManyAssociation collection,
             final Method method,
@@ -540,7 +540,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     private Object handleCollectionAddToMethod(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Object[] args,
             final OneToManyAssociation otma) {
 
@@ -552,7 +552,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         });
         
         resolveIfRequired(targetAdapter);
-        val argumentAdapter = adapterFor(singleArg);
+        val argumentAdapter = adapterForPojo(singleArg);
         
         runValidationTask(()->{
             val interactionResult = otma.isValidToAdd(targetAdapter, argumentAdapter,
@@ -576,7 +576,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
 
     private Object handleCollectionRemoveFromMethod(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Object[] args,
             final OneToManyAssociation collection) {
         
@@ -588,7 +588,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         });
 
         resolveIfRequired(targetAdapter);
-        val argumentAdapter = adapterFor(singleArg);
+        val argumentAdapter = adapterForPojo(singleArg);
 
         runValidationTask(()->{
             val interactionResult = collection.isValidToRemove(targetAdapter, argumentAdapter,
@@ -609,18 +609,18 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     private Object handleActionMethod(
-            final ObjectAdapter targetAdapter, 
+            final ManagedObject targetAdapter, 
             final Object[] args,
             final ObjectAction objectAction,
             final ContributeeMember contributeeMember) {
 
-        final ObjectAdapter contributeeAdapter;
+        final ManagedObject contributeeAdapter;
         final Object[] contributeeArgs;
         if(contributeeMember != null) {
             val contributeeParamPosition = contributeeMember.getContributeeParamPosition();
             val contributee = args[contributeeParamPosition];
             
-            contributeeAdapter = adapterFor(contributee);
+            contributeeAdapter = adapterForPojo(contributee);
             contributeeArgs = _Arrays.removeByIndex(args, contributeeParamPosition); 
         } else {
             contributeeAdapter = null;
@@ -651,7 +651,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return runExecutionTask(()->{
 
             val interactionInitiatedBy = getInteractionInitiatedBy();
-            val mixedInAdapter = (ObjectAdapter)null; // if a mixin action, then it will automatically fill in.
+            val mixedInAdapter = (ManagedObject)null; // if a mixin action, then it will automatically fill in.
             val returnedAdapter = objectAction.execute(
                     targetAdapter, mixedInAdapter, argAdapters,
                     interactionInitiatedBy);
@@ -671,19 +671,19 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
-    private ObjectAdapter[] asObjectAdaptersUnderlying(final Object[] args) {
+    private ManagedObject[] asObjectAdaptersUnderlying(final Object[] args) {
 
-        val argAdapters = new ObjectAdapter[args.length];
+        val argAdapters = new ManagedObject[args.length];
         int i = 0;
         for (final Object arg : args) {
-            argAdapters[i++] = adapterFor(underlying(arg));
+            argAdapters[i++] = adapterForPojo(underlying(arg));
         }
 
         return argAdapters;
     }
 
-    private ObjectAdapter adapterFor(final Object obj) {
-        return obj != null ? getObjectAdapterProvider().adapterFor(obj) : null;
+    private ManagedObject adapterForPojo(final Object pojo) {
+        return pojo != null ? getObjectManager().adapt(pojo) : null;
     }
 
     private Object underlying(final Object arg) {
@@ -887,8 +887,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return mmContext.getAuthenticationSessionProvider().getAuthenticationSession();
     }
 
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return mmContext.getObjectAdapterProvider();
+    protected ObjectManager getObjectManager() {
+        return mmContext.getObjectManager();
     }
 
     

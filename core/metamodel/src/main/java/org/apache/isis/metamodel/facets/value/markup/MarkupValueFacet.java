@@ -19,11 +19,12 @@
 
 package org.apache.isis.metamodel.facets.value.markup;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface MarkupValueFacet extends Facet {
-    String markupValue(ObjectAdapter object);
-    ObjectAdapter createValue(ObjectAdapter object, String html);
+    
+    String markupValue(ManagedObject object);
+    ManagedObject createValue(ManagedObject object, String html);
 
 }

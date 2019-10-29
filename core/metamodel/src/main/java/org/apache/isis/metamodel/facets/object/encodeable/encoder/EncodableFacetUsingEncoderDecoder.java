@@ -27,7 +27,9 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements EncodableFacet {
+public class EncodableFacetUsingEncoderDecoder
+extends FacetAbstract
+implements EncodableFacet {
 
     private final EncoderDecoder<?> encoderDecoder;
 
@@ -46,14 +48,14 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
     }
 
     @Override
-    public ObjectAdapter fromEncodedString(final String encodedData) {
+    public ManagedObject fromEncodedString(final String encodedData) {
         _Assert.assertNotNull(encodedData);
         if (ENCODED_NULL.equals(encodedData)) {
             return null;
         } else {
             getServiceInjector().injectServicesInto(encoderDecoder);
             final Object decodedObject = encoderDecoder.fromEncodedString(encodedData);
-            return getObjectAdapterProvider().adapterFor(decodedObject);
+            return getObjectManager().adapt(decodedObject);
         }
 
     }

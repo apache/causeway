@@ -19,12 +19,13 @@
 
 package org.apache.isis.metamodel.facets.value.url;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface URLValueFacet extends Facet {
-    java.net.URL urlValue(ObjectAdapter object);
+    
+    java.net.URL urlValue(ManagedObject object);
 
-    ObjectAdapter createValue(java.net.URL value);
+    ManagedObject createValue(java.net.URL value);
 
 }

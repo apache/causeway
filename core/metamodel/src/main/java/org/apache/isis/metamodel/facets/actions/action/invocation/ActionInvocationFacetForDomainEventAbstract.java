@@ -176,7 +176,7 @@ implements ImperativeFacet {
                         "Unable to persist command for action '%s'; CommandService does not support persistent commands ",
                         actionId));
             }
-            returnedAdapter = getObjectAdapterProvider().adapterFor(command);
+            returnedAdapter = getObjectManager().adapt(command);
 
         } else {
             // otherwise, go ahead and execute action in the 'foreground'
@@ -185,7 +185,7 @@ implements ImperativeFacet {
             final Object mixinElseRegularPojo = ManagedObject.unwrapPojo(mixinElseRegularAdapter);
 
             final List<ManagedObject> argumentAdapterList = Arrays.asList(argumentAdapters);
-            final List<Object> argumentPojos = ObjectAdapter.Util.unwrapPojoList(argumentAdapterList);
+            final List<Object> argumentPojos = ManagedObject.unwrapPojoListElseEmpty(argumentAdapterList);
 
             final String targetMember = targetNameFor(owningAction, mixedInAdapter);
             final String targetClass = CommandUtil.targetClassNameFor(mixinElseRegularAdapter);
@@ -300,7 +300,7 @@ implements ImperativeFacet {
 
 
             final Object returnedPojo = priorExecution.getReturned();
-            returnedAdapter = getObjectAdapterProvider().adapterFor(returnedPojo);
+            returnedAdapter = getObjectManager().adapt(returnedPojo);
 
             // sync DTO with result
             getInteractionDtoServiceInternal()
@@ -371,7 +371,7 @@ implements ImperativeFacet {
         // to remove boilerplate from the domain, we automatically clone the returned object if it is a view model.
 
         if (resultPojo != null) {
-            final ManagedObject resultAdapter = getObjectAdapterProvider().adapterFor(resultPojo);
+            final ManagedObject resultAdapter = getObjectManager().adapt(resultPojo);
             return cloneIfViewModelElse(resultAdapter, resultAdapter);
         } else {
             // if void or null, attempt to clone the original target, else return null.
@@ -388,7 +388,7 @@ implements ImperativeFacet {
         final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
         final Object clone = viewModelFacet.clone(adapter.getPojo());
 
-        final ManagedObject clonedAdapter = getObjectAdapterProvider().adapterFor(clone);
+        final ManagedObject clonedAdapter = getObjectManager().adapt(clone);
         return clonedAdapter;
     }
 
@@ -461,7 +461,7 @@ implements ImperativeFacet {
                             method.getReturnType());
 
             if (visibleObjects != null) {
-                return getObjectAdapterProvider().adapterFor(visibleObjects);
+                return getObjectManager().adapt(visibleObjects);
             }
 
             // would be null if unable to take a copy (unrecognized return type)

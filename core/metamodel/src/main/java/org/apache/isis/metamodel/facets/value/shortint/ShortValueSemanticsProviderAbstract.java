@@ -25,11 +25,11 @@ import java.text.ParseException;
 import java.util.Map;
 
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Short> implements ShortValueFacet {
@@ -91,12 +91,12 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter createValue(final Short value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final Short value) {
+        return getObjectManager().adapt(value);
     }
 
     @Override
-    public Short shortValue(final ObjectAdapter object) {
+    public Short shortValue(final ManagedObject object) {
         return (Short) (object == null ? null : object.getPojo());
     }
 

@@ -34,14 +34,16 @@ import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.metamodel.facets.value.date.DateValueFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
-public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements DateValueFacet {
+public abstract class ValueSemanticsProviderAbstractTemporal<T> 
+extends ValueSemanticsProviderAndFacetAbstract<T> 
+implements DateValueFacet {
 
     /**
      * Introduced to allow BDD tests to provide a different format string
@@ -320,13 +322,13 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public final Date dateValue(final ObjectAdapter object) {
+    public final Date dateValue(final ManagedObject object) {
         return object == null ? null : dateValue(object.getPojo());
     }
 
     @Override
-    public final ObjectAdapter createValue(final Date date) {
-        return getObjectAdapterProvider().adapterFor(setDate(date));
+    public final ManagedObject createValue(final Date date) {
+        return getObjectManager().adapt(setDate(date));
     }
 
 

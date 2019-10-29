@@ -23,10 +23,10 @@ import java.net.MalformedURLException;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<java.net.URL> implements URLValueFacet {
 
@@ -108,13 +108,13 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public java.net.URL urlValue(final ObjectAdapter object) {
+    public java.net.URL urlValue(final ManagedObject object) {
         return object == null ? null : (java.net.URL) object.getPojo();
     }
 
     @Override
-    public ObjectAdapter createValue(final java.net.URL value) {
-        return getObjectAdapterProvider().adapterFor(value);
+    public ManagedObject createValue(final java.net.URL value) {
+        return getObjectManager().adapt(value);
     }
 
     // /////// toString ///////

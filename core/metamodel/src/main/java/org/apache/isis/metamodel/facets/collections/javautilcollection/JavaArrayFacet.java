@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.facets.collections.javautilcollection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -31,6 +31,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 import static org.apache.isis.commons.internal.collections._Arrays.toArray;
+
+import lombok.val;
 
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
@@ -58,11 +60,11 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
             return Stream.of();
         }
 
-        final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
+        val objectManager = super.getObjectManager();
 
         return Stream.of(array)
-                .map(adapterProvider::adapterFor) //FIXME[ISIS-1976] we always generate an OA here
-                .map(x->(T)x);
+                .map(objectManager::adapt)
+                .map(x->_Casts.<T>uncheckedCast(x));
     }
 
     /**

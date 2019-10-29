@@ -38,10 +38,10 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -65,7 +65,8 @@ import lombok.val;
  * </p>
  */
 public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> 
-extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider {
+extends ScalarPanelAbstract2 
+implements TextFieldValueModel.ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -222,7 +223,7 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
             @Override
             public void validate(final IValidatable<T> validatable) {
                 final T proposedValue = validatable.getValue();
-                final ManagedObject proposedAdapter = adapterProvider().adapterFor(proposedValue);
+                final ManagedObject proposedAdapter = objectManager().adapt(proposedValue);
                 final String reasonIfAny = scalarModel.validate(proposedAdapter);
                 if (reasonIfAny != null) {
                     final ValidationError error = new ValidationError();
@@ -231,8 +232,9 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
                 }
             }
             
-            private ObjectAdapterProvider adapterProvider() {
-                return IsisSession.current().get().getObjectAdapterProvider();
+            private ObjectManager objectManager() {
+                return IsisSession.current().get().getMetaModelContext()
+                        .getObjectManager();
             }
             
         });

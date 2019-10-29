@@ -22,12 +22,14 @@ package org.apache.isis.metamodel.facets.value.markup;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
-public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Markup> implements MarkupValueFacet {
+public class MarkupValueSemanticsProvider 
+extends ValueSemanticsProviderAndFacetAbstract<Markup> 
+implements MarkupValueFacet {
 
     private static final int TYPICAL_LENGTH = 0;
 
@@ -73,7 +75,7 @@ public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacet
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public String markupValue(final ObjectAdapter object) {
+    public String markupValue(final ManagedObject object) {
         if (object == null) {
             return "";
         }
@@ -82,9 +84,9 @@ public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacet
     }
 
     @Override
-    public ObjectAdapter createValue(final ObjectAdapter object, final String html) {
+    public ManagedObject createValue(final ManagedObject object, final String html) {
         final Markup markup = new Markup(html);
-        return getObjectAdapterProvider().adapterFor(markup);
+        return getObjectManager().adapt(markup);
     }
 
     // //////////////////////////////////////////////////////////////////
