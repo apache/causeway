@@ -22,10 +22,12 @@ import java.util.Map;
 
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.jdo.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 
 public abstract class JdoPersistenceCapableFacetAbstract 
@@ -45,6 +47,7 @@ implements JdoPersistenceCapableFacet {
             final String tableOrTypeName,
             final IdentityType identityType,
             final FacetHolder holder) {
+        
         super(JdoPersistenceCapableFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         super.setFacetAliasType(EntityFacet.class);
         this.schema = schemaName;
@@ -61,16 +64,24 @@ implements JdoPersistenceCapableFacet {
     public String getSchema() {
         return schema;
     }
+    
     @Override
     public String getTable() {
         return table;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("schema", schema);
         attributeMap.put("table", table);
         attributeMap.put("identityType", identityType);
+    }
+    
+    protected IsisPersistenceSessionJdo getPersistenceSessionJdo() {
+        return PersistenceSession.current(IsisPersistenceSessionJdo.class)
+                .getFirst()
+                .orElse(null);
     }
     
 }

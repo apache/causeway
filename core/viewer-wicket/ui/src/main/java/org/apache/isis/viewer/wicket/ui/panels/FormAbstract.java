@@ -19,71 +19,71 @@
 
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-import lombok.Getter;
-
 public abstract class FormAbstract<T> extends Form<T>
 implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
 
     private static final long serialVersionUID = 1L;
 
+    private transient ComponentFactoryRegistry componentFactoryRegistry;
+    private transient PageClassRegistry pageClassRegistry;
+    private transient IsisWebAppCommonContext commonContext;
+    
     public FormAbstract(final String id) {
         super(id);
-        this.commonContext = IsisWebAppCommonContext.of(metaModelContext);
     }
 
     public FormAbstract(final String id, final IModel<T> model) {
         super(id, model);
-        this.commonContext = IsisWebAppCommonContext.of(metaModelContext);
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // Convenience
-    // ///////////////////////////////////////////////////////////////////
-
+    public IsisWebAppCommonContext getCommonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    }
+    
     @Override
     public ComponentFactoryRegistry getComponentFactoryRegistry() {
-        return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
+        if(componentFactoryRegistry==null) {
+            componentFactoryRegistry = ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry(); 
+        }
+        return componentFactoryRegistry;
     }
 
     @Override
     public PageClassRegistry getPageClassRegistry() {
-        return ((PageClassRegistryAccessor) getApplication()).getPageClassRegistry();
+        if(pageClassRegistry==null) {
+            pageClassRegistry = ((PageClassRegistryAccessor) getApplication()).getPageClassRegistry();
+        }
+        return pageClassRegistry;
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // Dependencies (from IsisContext)
-    // ///////////////////////////////////////////////////////////////////
-
-    protected  PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession().orElse(null);
+    protected SpecificationLoader getSpecificationLoader() {
+        return getCommonContext().getSpecificationLoader();
     }
 
-    protected  AuthenticationSession getAuthenticationSession() {
-        return commonContext.getAuthenticationSession();
+    protected ServiceRegistry getServiceRegistry() {
+        return getCommonContext().getServiceRegistry();
     }
-
-    @Inject @Getter protected transient SpecificationLoader specificationLoader;
-    @Inject @Getter protected transient ServiceRegistry serviceRegistry;
-    @Inject @Getter protected transient TranslationService translationService;
-    @Inject private transient MetaModelContext metaModelContext;
-    @Getter protected final transient IsisWebAppCommonContext commonContext;
+    
+    protected TranslationService getTranslationService() {
+        return getCommonContext().getTranslationService();
+    }
+    
+    protected AuthenticationSession getAuthenticationSession() {
+        return getCommonContext().getAuthenticationSession();
+    }
 
 }

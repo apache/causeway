@@ -71,6 +71,5 @@ implements ObjectSpecIdFacetFactory {
                 annotationTableAttribute, annotationIdentityType, processClassContext.getFacetHolder()));
         return;
     }
-
-
+    
 }

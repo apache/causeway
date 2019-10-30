@@ -86,11 +86,13 @@ public interface IsisContext {
      * TODO [2033] its unclear whether there is only one or multiple
      * @return framework's currently resolvable PersistenceSessions
      */
+    @Deprecated
     public static Optional<PersistenceSession> getPersistenceSession() {
         return PersistenceSession.current(PersistenceSession.class)
                 .getFirst();
     }
 
+    @Deprecated
     public static Function<RootOid, ObjectAdapter> rootOidToAdapter() {
         return rootOid -> {
             val ps = IsisContext.getPersistenceSession()

@@ -27,7 +27,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.val;
 
@@ -47,7 +46,7 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
         
         //TODO simplify, spec is already loaded
         
-        val persistenceSession = IsisContext.getPersistenceSession().get();
+        val persistenceSession = super.getPersistenceSessionJdo();
         val adapter = persistenceSession.getObjectAdapterByIdProvider()
                 .adapterFor(Oid.Factory.persistentOf(spec.getSpecId(), identifier)); 
         
@@ -63,7 +62,7 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
             return "?";
         }
         
-        val persistenceSession = IsisContext.getPersistenceSession().get();
+        val persistenceSession = super.getPersistenceSessionJdo();
         val isRecognized = persistenceSession.isRecognized(pojo);
         if(isRecognized) {
             final String identifier = persistenceSession.identifierFor(pojo);
@@ -76,8 +75,14 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
 
     @Override
     public void persist(ObjectSpecification spec, Object pojo) {
-        // TODO Auto-generated method stub
+
+        if(pojo==null || !isPersistableType(pojo.getClass())) {
+            return; //noop
+        }
         
+        val persistenceSession = super.getPersistenceSessionJdo();
+        //TODO don't bypass domain logic !? 
+        persistenceSession.getJdoPersistenceManager().makePersistent(pojo);
     }
 
     // -- HELPER
