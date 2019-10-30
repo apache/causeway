@@ -64,15 +64,6 @@
             <artifactId>isis-applib</artifactId>
         </dependency>
         
-        <!-- [2039] only to discover persistence capable classes, not required if every 
-        	relevant entity is annotated with @DomainObject-->
-		<dependency>
-        	<groupId>javax.jdo</groupId>
-        	<artifactId>jdo-api</artifactId>
-        	<version>${jdo-api.version}</version>
-        	<scope>provided</scope>
-        </dependency>
-        
 		<!-- IDE support (optional) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
