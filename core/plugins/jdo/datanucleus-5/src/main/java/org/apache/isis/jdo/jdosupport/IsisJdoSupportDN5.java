@@ -45,6 +45,7 @@ import org.apache.isis.jdo.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -208,7 +209,9 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     @Inject ServiceInjector serviceInjector;
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {
-        return (IsisPersistenceSessionJdo) IsisContext.getPersistenceSession().orElse(null);
+        return PersistenceSession.current(IsisPersistenceSessionJdo.class)
+                .getFirst()
+                .orElse(null);
     }
 
     @Override

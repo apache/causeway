@@ -27,8 +27,8 @@ import org.springframework.transaction.support.AbstractPlatformTransactionManage
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.internal.InitialisationSession;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
@@ -110,13 +110,10 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     }
 
     private IsisTransactionManagerJdo transactionManagerJdo() {
-        val persistenceSessionBase = (IsisPersistenceSessionJdoBase)IsisContext.getPersistenceSession().get();
-        return persistenceSessionBase.transactionManager;
+        return PersistenceSession.current(IsisPersistenceSessionJdoBase.class)
+                    .getFirst()
+                    .get()
+                    .transactionManager;
     }
-
-    //	private PersistenceManager persistenceManagerJdo() {
-    //	    val persistenceSessionBase = (PersistenceSessionBase)IsisContext.getPersistenceSession().get();
-    //	    return persistenceSessionBase.persistenceManager;
-    //	}
 
 }

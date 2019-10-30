@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.system.persistence.adaptermanager;
+package org.apache.isis.jdo.objectadapter;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.jdo.objectadapter.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -45,7 +46,6 @@ import org.apache.isis.runtime.memento.Data;
 import org.apache.isis.runtime.memento.ObjectData;
 import org.apache.isis.runtime.memento.StandaloneData;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 

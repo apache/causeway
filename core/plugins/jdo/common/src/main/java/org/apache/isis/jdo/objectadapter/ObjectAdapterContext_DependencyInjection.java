@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.system.persistence.adaptermanager;
+package org.apache.isis.jdo.objectadapter;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;

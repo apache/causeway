@@ -16,9 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.system.persistence.adaptermanager;
+package org.apache.isis.jdo.objectadapter;
 
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.jdo.objectadapter.ObjectAdapterContext.ObjectAdapterFactories;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
@@ -26,7 +27,6 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterContext.ObjectAdapterFactories;
 import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;

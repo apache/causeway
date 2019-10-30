@@ -36,7 +36,6 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
@@ -66,11 +65,6 @@ implements PersistenceSessionServiceInternal {
     public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
         return getPersistenceSession().newTransientInstance(spec);
     }
-
-    //    @Override
-    //    public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
-    //        return getPersistenceSession().recreateViewModelInstance(spec, memento);
-    //    }
 
     @Override
     public Object lookup(
@@ -141,7 +135,8 @@ implements PersistenceSessionServiceInternal {
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession()
+        return PersistenceSession.current(PersistenceSession.class)
+                .getFirst()
                 .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
     }
 

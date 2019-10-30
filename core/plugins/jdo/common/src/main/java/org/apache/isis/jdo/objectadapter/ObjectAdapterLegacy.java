@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.system.persistence.adaptermanager;
+package org.apache.isis.jdo.objectadapter;
 
 import java.util.List;
 
@@ -26,7 +26,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.schema.common.v1.CollectionDto;
 import org.apache.isis.schema.common.v1.OidDto;
@@ -35,9 +34,10 @@ import org.apache.isis.schema.common.v1.ValueType;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
 /**
- * Interim class, expected to be removed with https://issues.apache.org/jira/browse/ISIS-1976 
+ * TODO Interim class, expected to be removed, need to smoketest the CommandExecutorServiceDefault first
  */
-public class ObjectAdapterLegacy {
+@Deprecated
+class ObjectAdapterLegacy {
 
     // -- CommandExecutorServiceDefault --------------------------------------------------------
 
@@ -85,7 +85,10 @@ public class ObjectAdapterLegacy {
         }
 
         private static PersistenceSession getPersistenceSession() {
-            return IsisContext.getPersistenceSession().orElseThrow(_Exceptions::unexpectedCodeReach);
+            
+            return PersistenceSession.current(PersistenceSession.class)
+            .getFirst()
+            .orElseThrow(_Exceptions::unexpectedCodeReach);
         }
 
     }

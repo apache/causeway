@@ -56,6 +56,7 @@ import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryFindA
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
+import org.apache.isis.jdo.objectadapter.ObjectAdapterContext;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
@@ -97,7 +98,6 @@ import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplib
 import org.apache.isis.runtime.services.RequestScopedService;
 import org.apache.isis.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 import static java.util.Objects.requireNonNull;

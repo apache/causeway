@@ -45,8 +45,6 @@ import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import lombok.Getter;
@@ -282,14 +280,6 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         val txTemplate = new TransactionTemplate(txMan);
         return txTemplate.execute(status->closure.get());
     }
-
-    // -- DEPENDENCIES
-
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession().orElse(null);
-    }
-
-
 
 
 }

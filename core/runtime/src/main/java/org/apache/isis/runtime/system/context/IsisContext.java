@@ -80,7 +80,9 @@ public interface IsisContext {
     // -- DEPRECATIONS
 
     /**
-     * TODO [2033] its unclear whether there is only one or multiple
+     * FIXME[2058] generally there might be multiple persistence contexts, 
+     * so entity management must be delegated to the ObjectManager, which 
+     * handles persistence of entities individually according to their object-spec
      * @return framework's currently resolvable PersistenceSessions
      */
     @Deprecated
