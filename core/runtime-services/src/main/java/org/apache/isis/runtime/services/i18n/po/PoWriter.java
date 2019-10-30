@@ -26,7 +26,6 @@ import org.joda.time.LocalDateTime;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -46,18 +45,8 @@ class PoWriter extends PoAbstract {
         super(translationServicePo, TranslationService.Mode.WRITE);
     }
 
-    // -- shutdown
-
     @Override
-    void shutdown() {
-        if(IsisContext.getMetaModelDeficienciesIfAny() != null) {
-            // suppress logging translations
-            return;
-        }
-        logTranslations();
-    }
-
-    private void logTranslations() {
+    void logTranslations() {
         final StringBuilder buf = new StringBuilder();
 
         buf.append("\n");

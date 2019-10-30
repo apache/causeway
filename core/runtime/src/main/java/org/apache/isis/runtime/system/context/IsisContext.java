@@ -91,24 +91,6 @@ public interface IsisContext {
                 .getFirst();
     }
 
-    // likely to be extended to support multiple PlatformTransactionManagers, by selecting one by its name
-//    public static TransactionTemplate createTransactionTemplate() {
-//        val txMan = getSingletonElseFail(PlatformTransactionManager.class);
-//        return new TransactionTemplate(txMan);
-//    }
-
-//    /**
-//     * @return framework's ServiceRegistry
-//     * @throws NoSuchElementException - if ServiceRegistry not managed
-//     */
-//    public static ObjectAdapterProvider getObjectAdapterProvider() {
-//        return getSingletonElseFail(ObjectAdapterService.class);
-//    }
-
-//    public static Function<Object, ObjectAdapter> pojoToAdapter() {
-//        return getObjectAdapterProvider()::adapterFor;
-//    }
-
     public static Function<RootOid, ObjectAdapter> rootOidToAdapter() {
         return rootOid -> {
             val ps = IsisContext.getPersistenceSession()
@@ -126,14 +108,6 @@ public interface IsisContext {
         return getCurrentIsisSession()
                 .map(IsisSession::getAuthenticationSession);
     }
-
-//    public static AuthenticationManager getAuthenticationManager() {
-//        return getSingletonElseFail(AuthenticationManager.class);
-//    }
-//
-//    public static AuthorizationManager getAuthorizationManager() {
-//        return getSingletonElseFail(AuthorizationManager.class);
-//    }
 
 
 }

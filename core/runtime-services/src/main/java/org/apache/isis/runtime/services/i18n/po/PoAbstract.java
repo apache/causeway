@@ -31,15 +31,15 @@ abstract class PoAbstract {
         this.mode = mode;
     }
 
-
-    abstract void shutdown();
-
     abstract String translate(final String context, final String msgId);
-
     abstract String translate(final String context, final String msgId, final String msgIdPlural, int num);
 
     TranslationService.Mode getMode() {
         return mode;
+    }
+
+    void logTranslations() {
+        // default: do nothing
     }
 
 }

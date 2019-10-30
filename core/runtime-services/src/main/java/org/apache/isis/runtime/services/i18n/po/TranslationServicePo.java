@@ -30,10 +30,8 @@ import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 @Service
 public class TranslationServicePo implements TranslationService {
@@ -49,9 +47,6 @@ public class TranslationServicePo implements TranslationService {
     }
 
     // -- init, shutdown
-
-    @Inject
-    IsisConfiguration configuration;
 
     @PostConstruct
     public void init() {
@@ -86,12 +81,14 @@ public class TranslationServicePo implements TranslationService {
     }
 
     protected boolean isPrototypeOrTest() {
-        return isisSystemEnvironment.isPrototyping();
+        return systemEnvironment.isPrototyping() || systemEnvironment.isUnitTesting();
     }
 
     @PreDestroy
     public void shutdown() {
-        po.shutdown();
+        if(systemEnvironment.isPrototyping() && !systemEnvironment.isUnitTesting()) {
+            po.logTranslations();  
+        }
     }
 
     @Override
@@ -161,8 +158,9 @@ public class TranslationServicePo implements TranslationService {
 
     // -- DEPENDENCIES
 
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private IsisSystemEnvironment systemEnvironment;
     @Inject private ServiceRegistry serviceRegistry;
+    @Inject private IsisConfiguration configuration;
     
     private _Lazy<Can<TranslationsResolver>> translationsResolvers = _Lazy.threadSafe(()->
     serviceRegistry.select(TranslationsResolver.class) );

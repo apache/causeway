@@ -27,11 +27,6 @@ class PoDisabled extends PoAbstract {
     }
 
     @Override
-    void shutdown() {
-        // nothing to do
-    }
-
-    @Override
     String translate(String context, String msgId) {
         return msgId;
     }

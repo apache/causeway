@@ -91,11 +91,6 @@ class PoReader extends PoAbstract {
     }
 
     @Override
-    void shutdown() {
-    }
-
-
-    @Override
     public String translate(final String context, final String msgId) {
         if(translationsResolver == null) {
             // already logged as WARN (in constructor) if null.
