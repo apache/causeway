@@ -55,4 +55,6 @@ public interface IsisPersistenceSessionJdo extends PersistenceSession {
         return getJdoPersistenceManager().newQuery(cls, filter);
     }
     
+    javax.jdo.PersistenceManager getJdoPersistenceManager();
+    
 }

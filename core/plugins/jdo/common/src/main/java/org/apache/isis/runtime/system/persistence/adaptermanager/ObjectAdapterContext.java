@@ -23,6 +23,7 @@ import java.util.Objects;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.jdo.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
@@ -57,7 +58,7 @@ final public class ObjectAdapterContext {
     public static ObjectAdapterContext openContext(
             MetaModelContext mmc,
             AuthenticationSession authenticationSession, 
-            PersistenceSession persistenceSession) {
+            IsisPersistenceSessionJdo persistenceSession) {
         
         val objectAdapterContext = 
                 new ObjectAdapterContext(mmc, authenticationSession, persistenceSession);
@@ -65,7 +66,7 @@ final public class ObjectAdapterContext {
         return objectAdapterContext;
     }
 
-    private final PersistenceSession persistenceSession; 
+    private final IsisPersistenceSessionJdo persistenceSession; 
     @Getter private final SpecificationLoader specificationLoader;
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
@@ -80,7 +81,7 @@ final public class ObjectAdapterContext {
     private ObjectAdapterContext(
             MetaModelContext mmc,
             AuthenticationSession authenticationSession, 
-            PersistenceSession persistenceSession) {
+            IsisPersistenceSessionJdo persistenceSession) {
 
         val runtimeContext = new RuntimeContextBase(mmc) {};
 

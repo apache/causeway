@@ -41,10 +41,10 @@ import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.jdo.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -207,8 +207,8 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     @Inject IsisSessionFactory isisSessionFactory;
     @Inject ServiceInjector serviceInjector;
 
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession().orElse(null);
+    protected IsisPersistenceSessionJdo getPersistenceSession() {
+        return (IsisPersistenceSessionJdo) IsisContext.getPersistenceSession().orElse(null);
     }
 
     @Override

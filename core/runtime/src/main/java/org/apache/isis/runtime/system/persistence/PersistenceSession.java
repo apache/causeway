@@ -21,8 +21,6 @@ package org.apache.isis.runtime.system.persistence;
 import java.util.List;
 import java.util.Map;
 
-import javax.jdo.PersistenceManager;
-
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -105,14 +103,6 @@ SessionScopedComponent {
 
     /**@since 2.0*/
     Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
-
-
-    // -------------------------------------------------------------------------------------------------
-    // -- JDO SPECIFIC
-    // -------------------------------------------------------------------------------------------------
-
-    PersistenceManager getJdoPersistenceManager();
-
 
     // -------------------------------------------------------------------------------------------------
     // -- API NOT STABLE YET - SUBJECT TO REFACTORING
