@@ -18,9 +18,11 @@
  */
 package org.apache.isis.metamodel.specloader.validator;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,7 +33,6 @@ import lombok.val;
 
 public final class ValidationFailures implements Iterable<ValidationFailure> {
 
-    
     private final Set<ValidationFailure> failures = _Sets.newConcurrentHashSet();
 
     public void add(Identifier origin, String pattern, Object... arguments) {
@@ -53,12 +54,11 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
         return Collections.unmodifiableSet(failures);
     }
     
-    public List<String> getMessages() {
+    public ArrayList<String> getMessages() { // <-- ensure serializable
         val messages = failures.stream() // already sorted
         .map(ValidationFailure::getMessage)
-        .collect(Collectors.toList());
-        
-        return Collections.unmodifiableList(messages);
+        .collect(Collectors.toCollection(ArrayList::new));
+        return messages;
     }
 
     public int getNumberOfFailures() {
@@ -70,15 +70,26 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
         return getFailures().iterator();
     }
     
-    public boolean occurred() {
+    public boolean hasFailures() {
         return !failures.isEmpty();
     }
-
-    public MetaModelDeficiencies getDeficienciesIfAny() {
-        if (!occurred()) {
-            return null;
+    
+    public Optional<String> getAsLineNumberedString() {
+        if (!hasFailures()) {
+            return Optional.empty();
         }
-        return MetaModelDeficiencies.of(getMessages());
+        return Optional.of(toLineNumberedString(getMessages()));
+    }
+
+    // -- HELPER
+
+    private static String toLineNumberedString(Collection<String> messages) {
+        val buf = new StringBuilder();
+        int i=0;
+        for (val message : messages) {
+            buf.append(++i).append(": ").append(message).append("\n");
+        }
+        return buf.toString();
     }
 
 

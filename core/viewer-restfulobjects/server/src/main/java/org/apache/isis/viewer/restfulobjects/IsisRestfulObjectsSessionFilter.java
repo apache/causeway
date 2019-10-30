@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -44,7 +43,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.SystemConstants;
 import org.apache.isis.metamodel.commons.StringExtensions;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.webapp.IsisWebAppUtils;
 import org.apache.isis.webapp.auth.AuthenticationSessionStrategy;
@@ -150,7 +150,8 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         return Pattern.compile(".*\\." + input);
     };
 
-    @Inject private IsisSessionFactory isisSessionFactory;
+    private IsisSessionFactory isisSessionFactory;
+    private SpecificationLoader specificationLoader;
     
     private List<String> passThruList = Collections.emptyList();
 
@@ -234,6 +235,8 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     private WhenNoSession whenNotAuthenticated;
     private String redirectToOnException;
     private Collection<Pattern> ignoreExtensions;
+
+
     
 
     // /////////////////////////////////////////////////////////////////
@@ -250,6 +253,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         
         val servletContext  = config.getServletContext();
         isisSessionFactory = IsisWebAppUtils.getManagedBean(IsisSessionFactory.class, servletContext);
+        specificationLoader = IsisWebAppUtils.getManagedBean(SpecificationLoader.class, servletContext);
     }
 
     /**
@@ -337,8 +341,9 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 
         requires(isisSessionFactory, "isisSessionFactory");
+        requires(specificationLoader, "specificationLoader");
         
-        ensureMetamodelIsValid();
+        ensureMetamodelIsValid(specificationLoader);
 
         val httpServletRequest = (HttpServletRequest) request;
         val httpServletResponse = (HttpServletResponse) response;
@@ -395,16 +400,10 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     }
 
 
-    private static void ensureMetamodelIsValid() {
-        val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
-
-        if(metaModelDeficiencies != null) {
-            val validationErrors = metaModelDeficiencies.getValidationErrors();
-            val buf = new StringBuilder();
-            for (String validationError : validationErrors) {
-                buf.append(validationError).append("\n");
-            }
-            throw new IllegalStateException("Metamodel validation errors: \n" + buf.toString());
+    private static void ensureMetamodelIsValid(SpecificationLoader specificationLoader) {
+        val validationResult = specificationLoader.getValidationResult();
+        if(validationResult.hasFailures()) {
+            throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
         }
     }
 

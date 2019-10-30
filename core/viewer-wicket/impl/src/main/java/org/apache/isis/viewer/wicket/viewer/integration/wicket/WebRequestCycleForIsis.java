@@ -58,6 +58,7 @@ import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.MessageBroker;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -85,7 +86,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     
     private PageClassRegistry pageClassRegistry;
     private IsisWebAppCommonContext commonContext;
-
+    
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
 
@@ -97,10 +98,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             return;
         }
 
-        val wicketSession = AuthenticatedWebSessionForIsis.get();
-        this.commonContext = wicketSession.getCommonContext();        
+        val commonContext = getCommonContext();
+        val authenticationSession = AuthenticatedWebSessionForIsis.get().getAuthenticationSession();
         
-        val authenticationSession = wicketSession.getAuthenticationSession();
+        //fails yet _Assert.assertEquals("expected same", authenticationSession, commonContext.getAuthenticationSession());
+        
         if (authenticationSession == null) {
             log.debug("onBeginRequest out - session was not opened (because no authenticationSession)");
             return;
@@ -123,17 +125,17 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         log.debug("onRequestHandlerResolved in");
 
         if(handler instanceof RenderPageRequestHandler) {
-
-            val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
-
-            if(metaModelDeficiencies != null) {
+            
+            val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
+            
+            if(validationResult.hasFailures()) {
                 RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
                 final IRequestablePage nextPage = requestHandler.getPage();
                 if(nextPage instanceof ErrorPage || nextPage instanceof MmvErrorPage) {
                     // do nothing
                     return;
                 }
-                throw new MetaModelInvalidException(metaModelDeficiencies);
+                throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
             }
         }
 
@@ -202,11 +204,10 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
 
         log.debug("onException");
-
-        val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
-        if(metaModelDeficiencies != null) {
-            val validationErrors = metaModelDeficiencies.getValidationErrors();
-            val mmvErrorPage = new MmvErrorPage(validationErrors);
+        
+        val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
+        if(validationResult.hasFailures()) {
+            val mmvErrorPage = new MmvErrorPage(validationResult.getMessages());
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
 
@@ -227,7 +228,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
 
             // handle recognized exceptions gracefully also
-            final Stream<ExceptionRecognizer> exceptionRecognizers = commonContext.getServiceRegistry()
+            final Stream<ExceptionRecognizer> exceptionRecognizers = getCommonContext().getServiceRegistry()
                     .select(ExceptionRecognizer.class)
                     .stream();
 
@@ -287,7 +288,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         if(text == null) {
             return null;
         }
-        return commonContext.getTranslationService().translate(WebRequestCycleForIsis.class.getName(), text);
+        return getCommonContext().getTranslationService().translate(WebRequestCycleForIsis.class.getName(), text);
     }
 
     protected PageProvider errorPageProviderFor(Exception ex) {
@@ -309,21 +310,20 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         exceptionRecognizers.add(pageExpiredExceptionRecognizer);
 
         if(inIsisSession()) {
-            commonContext.getServiceRegistry()
+            getCommonContext().getServiceRegistry()
             .select(ExceptionRecognizer.class)
             .forEach(exceptionRecognizers::add);
         } else {
-            val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
-            if(metaModelDeficiencies != null) {
-                val validationErrors = metaModelDeficiencies.getValidationErrors();
-                return new MmvErrorPage(validationErrors);
+            val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
+            if(validationResult.hasFailures()) {
+                return new MmvErrorPage(validationResult.getMessages());
             }
             // not sure whether this can ever happen now...
             log.warn("Unable to obtain exceptionRecognizers (no session), "
                     + "will be treated as unrecognized exception", ex);
         }
         String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        ExceptionModel exceptionModel = ExceptionModel.create(commonContext, recognizedMessageIfAny, ex);
+        ExceptionModel exceptionModel = ExceptionModel.create(getCommonContext(), recognizedMessageIfAny, ex);
 
         return isSignedIn() ? new ErrorPage(exceptionModel) : newSignInPage(exceptionModel);
     }
@@ -380,6 +380,10 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     // -- DEPENDENCIES
+    
+    public IsisWebAppCommonContext getCommonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    }
 
     private boolean inIsisSession() {
         return IsisSession.currentOrElseNull()!=null;

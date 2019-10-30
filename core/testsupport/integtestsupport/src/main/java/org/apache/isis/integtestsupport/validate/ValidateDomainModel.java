@@ -63,7 +63,7 @@ public class ValidateDomainModel implements Runnable {
             });
         }
 
-        if (validationFailures.occurred()) {
+        if (validationFailures.hasFailures()) {
             throwFailureException(
                     validationFailures.getNumberOfFailures() + " problems found.", 
                     validationFailures.getMessages());

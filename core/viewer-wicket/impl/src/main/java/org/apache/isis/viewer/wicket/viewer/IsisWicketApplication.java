@@ -71,9 +71,8 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -283,9 +282,9 @@ IsisWebAppCommonContext.Provider {
             SharedResources sharedResources = getSharedResources();
 
             //XXX lombok issue, cannot use val when super is referenced in same method
-            MetaModelDeficiencies metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
-            if(metaModelDeficiencies != null) {
-                log(metaModelDeficiencies.getValidationErrors());
+            ValidationFailures validationResult = commonContext.getSpecificationLoader().getValidationResult();
+            if(validationResult.hasFailures()) {
+                log(validationResult.getMessages());
             }
 
             if(systemEnvironment.isPrototyping()) {

@@ -26,7 +26,6 @@ import java.util.function.Supplier;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
@@ -40,14 +39,6 @@ import lombok.val;
  * {@link MetaModelInvalidException} and {@link IsisSessionFactory}.
  */
 public interface IsisContext {
-
-    /**
-     * Populated only if the meta-model was found to be invalid.
-     * @return null, if there is none
-     */
-    public static MetaModelDeficiencies getMetaModelDeficienciesIfAny() {
-        return _Context.getIfAny(MetaModelDeficiencies.class);
-    }
 
     /**
      *
@@ -81,6 +72,17 @@ public interface IsisContext {
     public static Optional<IsisSession> getCurrentIsisSession() {
         return IsisSession.current();
     }
+    
+    /**
+     * @return framework's current AuthenticationSession (if any)
+     * @throws IllegalStateException - if IsisSessionFactory not resolvable
+     */
+    public static Optional<AuthenticationSession> getAuthenticationSession() {
+        return getCurrentIsisSession()
+                .map(IsisSession::getAuthenticationSession);
+    }
+    
+    // -- DEPRECATIONS
 
     /**
      * TODO [2033] its unclear whether there is only one or multiple
@@ -100,15 +102,6 @@ public interface IsisContext {
                             "There is no PersistenceSession on the current context.")));
             return ps.getObjectAdapterByIdProvider().adapterFor(rootOid);
         }; 
-    }
-
-    /**
-     * @return framework's current AuthenticationSession (if any)
-     * @throws IllegalStateException - if IsisSessionFactory not resolvable
-     */
-    public static Optional<AuthenticationSession> getAuthenticationSession() {
-        return getCurrentIsisSession()
-                .map(IsisSession::getAuthenticationSession);
     }
 
 
