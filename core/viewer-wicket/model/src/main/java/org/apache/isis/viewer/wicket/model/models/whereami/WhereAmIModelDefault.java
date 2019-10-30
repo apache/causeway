@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.model.models.whereami;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.util.pchain.ParentChain;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
@@ -43,13 +42,13 @@ class WhereAmIModelDefault implements WhereAmIModel {
     private boolean isWhereAmIEnabled;
     private int maxChainLength;
     
-    private static int configHash = 0;
-
     public WhereAmIModelDefault(EntityModel startOfChain) {
         this.startOfChain = startOfChain;
         this.commonContext = startOfChain.getCommonContext();
 
-        overrideFromConfigIfNew(commonContext.getConfiguration());
+        val settings = commonContext.getConfiguration().getViewer().getWicket().getWhereAmI();
+        this.isWhereAmIEnabled = settings.isEnabled();
+        this.maxChainLength = settings.getMaxParentChainLength();
 
         val adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();
@@ -66,9 +65,9 @@ class WhereAmIModelDefault implements WhereAmIModel {
 
     @Override
     public boolean isShowWhereAmI() {
-        if(!isWhereAmIEnabled)
+        if(!isWhereAmIEnabled) {
             return false; // this will prevent rendering
-
+        }
         return !reversedChainOfParents.isEmpty();
     }
 
@@ -86,28 +85,6 @@ class WhereAmIModelDefault implements WhereAmIModel {
     private EntityModel toEntityModel(Object domainObject) {
         val objectAdapter = commonContext.getObjectManager().adapt(domainObject);
         return EntityModel.ofAdapter(commonContext, objectAdapter);
-    }
-
-    private void overrideFromConfigIfNew(IsisConfiguration configuration) {
-
-        //[ahuber] without evidence that this significantly improves performance,
-        // (skipping 2 hash-table lookups) we use the smart update idiom here ...
-        //
-        // Note: Updates are expected to occur only once per application life-cycle,
-        // however this class might be loaded by a class-loader, that endures multiple
-        // application life-cycles. Chances of hash-collisions are simply neglected.
-
-        // that's the hash of the object (we don't care about the actual config values)
-        // assuming that, we get a new (immutable) config instance each app's life-cycle:
-        final int newConfigHash = System.identityHashCode(configuration);
-        if(newConfigHash == configHash) {
-            return;
-        }
-
-        configHash = newConfigHash;
-
-        isWhereAmIEnabled = configuration.getViewer().getWicket().getWhereAmI().isEnabled();
-        maxChainLength = configuration.getViewer().getWicket().getWhereAmI().getMaxParentChainLength();
     }
 
 }

@@ -32,7 +32,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacet;
@@ -228,8 +227,7 @@ public class EntityPage extends PageAbstract {
             WebMarkupContainer entityPageContainer,
             WhereAmIModel whereAmIModel) {
 
-        final WebMarkupContainer whereAmIContainer =
-                new WebMarkupContainer("whereAmI-container");
+        val whereAmIContainer = new WebMarkupContainer("whereAmI-container");
         entityPageContainer.addOrReplace(whereAmIContainer);
 
         if(!whereAmIModel.isShowWhereAmI()) {
@@ -240,8 +238,7 @@ public class EntityPage extends PageAbstract {
         final RepeatingView listItems = new RepeatingView("whereAmI-items");
 
         whereAmIModel.streamParentChainReversed().forEach(entityModel->
-        listItems.add(new EntityIconAndTitlePanel(listItems.newChildId(), entityModel))
-                );
+            listItems.add(new EntityIconAndTitlePanel(listItems.newChildId(), entityModel)));
 
         listItems.add(new Label(listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle()));
 
