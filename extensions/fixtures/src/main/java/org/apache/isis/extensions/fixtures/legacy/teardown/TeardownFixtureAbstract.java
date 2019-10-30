@@ -63,7 +63,6 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
 
     protected void postDeleteFrom(final Class<?> cls) {}
 
-    @Inject
-    private IsisJdoSupport isisJdoSupport;
+    @Inject private IsisJdoSupport isisJdoSupport;
 
 }

@@ -27,6 +27,7 @@ extends ExceptionRecognizerForType {
         super(Category.CONSTRAINT_VIOLATION,
                 ofTypeIncluding(
                         java.sql.SQLIntegrityConstraintViolationException.class,
+                        ExceptionRecognizerForType.NestedExceptionResolver.NOOP,
                         "unique constraint or index violation"),
                 prefix("Data already exists"));
     }

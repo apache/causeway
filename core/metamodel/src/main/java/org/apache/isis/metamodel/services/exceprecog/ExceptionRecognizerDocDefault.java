@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.services.exceprecog;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 

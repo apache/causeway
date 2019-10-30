@@ -148,6 +148,5 @@ public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
     protected void postDeleteFrom(Class<?> cls) {
     }
 
-    @Inject
-    protected IsisJdoSupport isisJdoSupport;
+    @Inject protected IsisJdoSupport isisJdoSupport;
 }

@@ -25,8 +25,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.jdo.annotations.NotPersistent;
-
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -200,7 +198,8 @@ public @interface Property {
      * Indicates whether the property should be included or excluded from mementos.
      *
      * <p>
-     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation {@link NotPersistent}.
+     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation 
+     *     {@link javax.jdo.annotations.NotPersistent}.
      * </p>
      */
     MementoSerialization mementoSerialization() default MementoSerialization.NOT_SPECIFIED;

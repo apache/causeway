@@ -40,9 +40,8 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -54,7 +53,6 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterLegacy;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
@@ -149,13 +147,13 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
                     for (OidDto targetOidDto : targetOidDtos) {
 
-                        final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
+                        val targetAdapter = adapterFor(targetOidDto);
                         final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
                         // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
                         // it will switch the targetAdapter to be the mixedInAdapter transparently
-                        final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
-                        final ManagedObject resultAdapter = objectAction.execute(
+                        final ManagedObject[] argAdapters = argAdaptersFor(actionDto);
+                        val resultAdapter = objectAction.execute(
                                 targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                         // flush any Isis PersistenceCommands pending
@@ -185,11 +183,11 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                         final Bookmark bookmark = Bookmark.from(targetOidDto);
                         final Object targetObject = bookmarkService.lookup(bookmark, FieldResetPolicy.RESET);
 
-                        final ObjectAdapter targetAdapter = adapterFor(targetObject);
+                        val targetAdapter = adapterFor(targetObject);
 
                         final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
 
-                        final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
+                        val newValueAdapter = newValueAdapterFor(propertyDto);
 
                         property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
 
@@ -232,7 +230,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     // //////////////////////////////////////
 
     private static ObjectAction findObjectAction(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final String actionId) throws RuntimeException {
 
         final ObjectSpecification specification = targetAdapter.getSpecification();
@@ -245,7 +243,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private static OneToOneAssociation findOneToOneAssociation(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final String propertyId) throws RuntimeException {
 
         final ObjectSpecification specification = targetAdapter.getSpecification();
@@ -257,7 +255,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return property;
     }
 
-    private ObjectAdapter newValueAdapterFor(final PropertyDto propertyDto) {
+    private ManagedObject newValueAdapterFor(final PropertyDto propertyDto) {
         final ValueWithTypeDto newValue = propertyDto.getNewValue();
         final Object arg = CommonDtoUtils.getValue(newValue);
         return adapterFor(arg);
@@ -291,17 +289,15 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     }
 
-    private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {
-        final List<ParamDto> params = paramDtosFrom(actionDto);
-        final List<ObjectAdapter> args = _Lists.newArrayList(
-                params.stream()
-                .map(paramDto -> {
-                    final Object arg = CommonDtoUtils.getValue(paramDto);
-                    return adapterFor(arg);
-                })
-                .collect(Collectors.toList())
-                );
-        return args.toArray(new ObjectAdapter[]{});
+    private ManagedObject[] argAdaptersFor(final ActionDto actionDto) {
+        
+        val paramDtos = paramDtosFrom(actionDto);
+        
+        return paramDtos
+                .stream()
+                .map(CommonDtoUtils::getValue)
+                .map(this::adapterFor)
+                .collect(_Arrays.toArray(ManagedObject.class, paramDtos.size()));
     }
 
     private static List<ParamDto> paramDtosFrom(final ActionDto actionDto) {
@@ -315,8 +311,11 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return Collections.emptyList();
     }
 
-    private ObjectAdapter adapterFor(final Object targetObject) {
-        return ObjectAdapterLegacy.__CommandExecutorServiceDefault.adapterFor(targetObject);
+    private ManagedObject adapterFor(final Object pojo) {
+        return ManagedObject.of(getSpecificationLoader()::loadSpecification, pojo);
+        
+        //legacy of
+        //return ObjectAdapterLegacy.__CommandExecutorServiceDefault.adapterFor(targetObject);
     }
 
     // //////////////////////////////////////

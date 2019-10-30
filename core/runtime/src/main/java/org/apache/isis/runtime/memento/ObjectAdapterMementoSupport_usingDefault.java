@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
@@ -125,7 +124,7 @@ implements ObjectAdapterMementoSupport {
         }
         
         private PersistenceSession persistenceSession() {
-            return IsisContext.getPersistenceSession().get();
+            return IsisContext.getPersistenceSession().orElse(null);
         }
 
     }

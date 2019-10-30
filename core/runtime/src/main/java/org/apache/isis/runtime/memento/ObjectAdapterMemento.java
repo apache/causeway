@@ -31,7 +31,6 @@ import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;

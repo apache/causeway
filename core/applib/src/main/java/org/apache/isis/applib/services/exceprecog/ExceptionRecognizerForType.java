@@ -21,13 +21,17 @@ package org.apache.isis.applib.services.exceprecog;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import javax.jdo.JDODataStoreException;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+import static org.apache.isis.commons.internal.exceptions._Exceptions.containsAnyOfTheseMessages;
+import static org.apache.isis.commons.internal.exceptions._Exceptions.getCausalChain;
+
+import lombok.val;
+
 /**
- * An specific implementation of {@link ExceptionRecognizer} that looks for an
+ * A specific implementation of {@link ExceptionRecognizer} that looks for an
  * exception of the type provided in the constructor
  * and, if found anywhere in the causal chain,
  * then returns a non-null message indicating that the exception has been recognized.
@@ -38,15 +42,36 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 
-    protected final static Predicate<Throwable> ofTypeExcluding(final Class<? extends Throwable> exceptionType, final String... messages) {
-        return ofType(exceptionType).and(excluding(messages));
+    /**
+     * Introduced in support of eg. {@link javax.jdo.JDODataStoreException}
+     * @since 2.0
+     */
+    @FunctionalInterface
+    public static interface NestedExceptionResolver {
+        Stream<Throwable> streamNestedExceptionsOf(Throwable throwable); 
+        
+        public static final NestedExceptionResolver NOOP = __->Stream.empty();
+    }
+    
+    protected final static Predicate<Throwable> ofTypeExcluding(
+            final Class<? extends Throwable> exceptionType, 
+            final NestedExceptionResolver nestedExceptionResolver,
+            final String... messages) {
+        
+        return ofType(exceptionType).and(excluding(nestedExceptionResolver, messages));
     }
 
-    protected final static Predicate<Throwable> ofTypeIncluding(final Class<? extends Throwable> exceptionType, final String... messages) {
-        return ofType(exceptionType).and(including(messages));
+    protected final static Predicate<Throwable> ofTypeIncluding(
+            final Class<? extends Throwable> exceptionType,
+            final NestedExceptionResolver nestedExceptionResolver,
+            final String... messages) {
+        
+        return ofType(exceptionType).and(including(nestedExceptionResolver, messages));
     }
 
-    protected final static Predicate<Throwable> ofType(final Class<? extends Throwable> exceptionType) {
+    protected final static Predicate<Throwable> ofType(
+            final Class<? extends Throwable> exceptionType) {
+        
         return input->exceptionType.isAssignableFrom(input.getClass());
     }
 
@@ -58,31 +83,33 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      * <p>
      * Intended to prevent too eager matching of an overly general exception type.
      */
-    protected final static Predicate<Throwable> excluding(final String... messages) {
+    protected final static Predicate<Throwable> excluding(
+            final NestedExceptionResolver nestedExceptionResolver,
+            final String... messages) {
+        
         return input->{
-            final List<Throwable> causalChain = _Exceptions.getCausalChain(input);
-            for (String message : messages) {
-                for (Throwable throwable : causalChain) {
-                    final String throwableMessage = throwable.getMessage();
-                    if(throwableMessage != null && throwableMessage.contains(message)) {
-                        return false;
-                    }
-                    if(throwable instanceof JDODataStoreException) {
-                        final JDODataStoreException jdoDataStoreException = (JDODataStoreException) throwable;
-                        final Throwable[] nestedExceptions = jdoDataStoreException.getNestedExceptions();
-                        for (Throwable nestedException : nestedExceptions) {
-                            final String nestedThrowableMessage = nestedException.getMessage();
-                            if(nestedThrowableMessage != null && nestedThrowableMessage.contains(message)) {
-                                return false;
-                            }
-                        }
-                    }
+            final List<Throwable> causalChain = getCausalChain(input);
+            
+            for (Throwable throwable : causalChain) {
+                
+                if(containsAnyOfTheseMessages(throwable, messages)) {
+                    return false; 
                 }
+                
+                val isAnyNestedRecognized = nestedExceptionResolver.streamNestedExceptionsOf(throwable)
+                .anyMatch(nested->_Exceptions.containsAnyOfTheseMessages(throwable, messages));
+                
+                if(isAnyNestedRecognized) {
+                    return false;
+                }
+
             }
+            
             return true;
         };
 
     }
+    
 
     /**
      * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if at least one of the message(s)
@@ -92,17 +119,27 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      * <p>
      * Intended to prevent more precise matching of a specific general exception type.
      */
-    protected final static Predicate<Throwable> including(final String... messages) {
+    protected final static Predicate<Throwable> including(
+            final NestedExceptionResolver nestedExceptionResolver,
+            final String... messages) {
+        
         return input->{
-            final List<Throwable> causalChain = _Exceptions.getCausalChain(input);
-            for (String message : messages) {
-                for (Throwable throwable : causalChain) {
-                    final String throwableMessage = throwable.getMessage();
-                    if(throwableMessage != null && throwableMessage.contains(message)) {
-                        return true;
-                    }
+            final List<Throwable> causalChain = getCausalChain(input);
+           
+            for (Throwable throwable : causalChain) {
+                if(containsAnyOfTheseMessages(throwable, messages)) {
+                    return true; 
                 }
+                
+                val isAnyNestedRecognized = nestedExceptionResolver.streamNestedExceptionsOf(throwable)
+                        .anyMatch(nested->_Exceptions.containsAnyOfTheseMessages(throwable, messages));
+                        
+                if(isAnyNestedRecognized) {
+                    return true;
+                }
+                
             }
+            
             return false;
         };
     }

@@ -18,20 +18,28 @@
  */
 package org.apache.isis.jdo.exceprecog;
 
+import java.util.stream.Stream;
+
 import javax.jdo.JDODataStoreException;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.commons.internal.base._NullSafe;
 
-public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
-extends ExceptionRecognizerForType {
+import lombok.val;
 
-    public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException() {
-        super(Category.CONSTRAINT_VIOLATION,
-                ofTypeIncluding(
-                        JDODataStoreException.class,
-                        JdoNestedExceptionResolver::streamNestedExceptionsOf,
-                        "integrity constraint violation: foreign key no action"),
-                prefix("Related data exists"));
+/**
+ * @since 2.0
+ */
+final class JdoNestedExceptionResolver {
+
+    static Stream<Throwable> streamNestedExceptionsOf(Throwable throwable) {
+        
+        if(throwable instanceof JDODataStoreException) {
+            val jdoDataStoreException = (JDODataStoreException) throwable;
+            return _NullSafe.stream(jdoDataStoreException.getNestedExceptions());
+            
+        }
+        return Stream.empty();
+        
     }
-
+    
 }

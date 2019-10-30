@@ -165,18 +165,10 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         }
         
         val objectManager = super.getObjectManager();
-        System.err.println("#### likely won't work");
-        return objectManager.adapt(collection);
         
-//        val objectIdentifier = ManagedObject._collectionOidIfAny(ownerAdapter).getIdentifier();
-//
-//        
-//        //val spec = objectManager.loadSpec(collection); 
-//        val objectLoadRequest = ObjectLoadRequest.ofParentedCollection(ownerAdapter, this);
-//        val collectionAdapter = objectManager.loadObject(objectLoadRequest);
-//         
-//        val newAdapter = getObjectAdapterProvider().adapterForCollection(collection, parentOid, this);
-//        return newAdapter.injectServices(getServiceInjector());
+        super.getServiceInjector().injectServicesInto(collection);
+        
+        return objectManager.adapt(collection);
     }
 
     @Override

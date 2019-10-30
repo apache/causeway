@@ -31,6 +31,8 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
 
@@ -263,6 +265,26 @@ public final class _Exceptions {
         }
         
     }
+    
+    // -- PREDICATES
+    
+    public static boolean containsAnyOfTheseMessages(@Nullable Throwable throwable, @Nullable String ... messages) {
+        if(throwable==null) {
+            return false;
+        }
+        val throwableMessage = throwable.getMessage();
+        if(throwableMessage == null || _NullSafe.isEmpty(messages)) {
+            return false;
+        }
+        for (String message : messages) {
+            if(_Strings.isNotEmpty(message) 
+                    && throwableMessage.contains(message)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     // -- FLUENT EXCEPTION
 
@@ -371,9 +393,6 @@ public final class _Exceptions {
             uncheckedConsumer(checkedConsumer).accept(obj);
         }
     }
-
-
-
 
 
 

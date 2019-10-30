@@ -57,6 +57,12 @@
 			<artifactId>isis-applib</artifactId>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-jdo-common</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

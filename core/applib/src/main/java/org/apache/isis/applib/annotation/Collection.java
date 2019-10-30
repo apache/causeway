@@ -25,8 +25,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.jdo.annotations.NotPersistent;
-
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 
 /**
@@ -93,7 +91,8 @@ public @interface Collection {
      * Indicates whether the collecion should be included or excluded from mementos.
      *
      * <p>
-     *     To ensure that the collection is actually not persisted in the objectstore, also annotate with the JDO annotation {@link NotPersistent}.
+     *     To ensure that the collection is actually not persisted in the objectstore, 
+     *     also annotate with the JDO annotation {@link javax.jdo.annotations.NotPersistent}.
      * </p>
      */
     MementoSerialization mementoSerialization() default MementoSerialization.NOT_SPECIFIED;
