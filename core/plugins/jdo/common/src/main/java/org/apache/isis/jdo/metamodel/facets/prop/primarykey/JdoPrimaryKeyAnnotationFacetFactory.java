@@ -22,7 +22,6 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 
@@ -41,8 +40,15 @@ public class JdoPrimaryKeyAnnotationFacetFactory extends FacetFactoryAbstract {
         if(!JdoMetamodelUtil.isPersistenceEnhanced(cls)) {
             return;
         }
+        
+        //val method = processMethodContext.getMethod();
 
-        final PrimaryKey annotation = Annotations.getAnnotation(processMethodContext.getMethod(), PrimaryKey.class);
+        final PrimaryKey annotation = processMethodContext.synthesizeOnMethod(PrimaryKey.class)
+                .orElse(null);
+                
+//        _Assert.assertEquals("expected same on method=" + method , annotation,
+//                Annotations.getAnnotation(method, PrimaryKey.class));
+
         if (annotation == null) {
             return;
         }

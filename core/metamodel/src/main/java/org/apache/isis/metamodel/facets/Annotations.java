@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -45,6 +46,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.metamodel.commons.ThrowableExtensions;
@@ -208,7 +210,7 @@ public final class Annotations  {
      *     WARN: this method does NOT search for meta-annotations; use {@link #getAnnotations(Class, Class)} for that.
      * </p>
      */
-    public static <T extends Annotation> T getAnnotation(
+    private static <T extends Annotation> T getAnnotation(
             final Method method,
             final Class<T> annotationClass) {
         if (method == null) {
@@ -270,7 +272,7 @@ public final class Annotations  {
      * inherited methods up from the superclass.
      * @deprecated use {@link _Annotations} instead
      */
-    public static <T extends Annotation> List<T> getAnnotations(
+    private static <T extends Annotation> List<T> getAnnotations(
             final Method method,
             final Class<T> annotationClass) {
         if (method == null) {
@@ -527,8 +529,8 @@ public final class Annotations  {
 
     }
 
-    private static List<Class<?>> fieldAnnotationClasses = 
-            _Lists.of(
+    private static Set<Class<? extends Annotation>> fieldAnnotationClasses = 
+            _Sets.of(
                     Property.class,
                     PropertyLayout.class,
                     Collection.class,
@@ -539,11 +541,14 @@ public final class Annotations  {
                     javax.annotation.Nullable.class,
                     Title.class,
                     XmlJavaTypeAdapter.class,
-                    XmlTransient.class,
-                    javax.jdo.annotations.Column.class
+                    XmlTransient.class
+                    //javax.jdo.annotations.Column.class
                     );
 
     private static boolean shouldSearchForField(final Class<?> annotationClass) {
+        if(annotationClass.getName().equals("javax.jdo.annotations.Column")) {
+            return true;
+        }
         return fieldAnnotationClasses.contains(annotationClass);
     }
 

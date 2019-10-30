@@ -235,7 +235,7 @@ public interface FacetFactory {
 
         
         /** 
-         * Annotation lookup on this context's method..
+         * Annotation lookup on this context's method. Also honors annotations on fields, if this method is a getter.
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnMethod(Class<A> annotationType) {

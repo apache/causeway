@@ -30,11 +30,11 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.TypedHolder;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
@@ -286,7 +286,14 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             if(method != null) {
                 // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
                 // ignoring stuff which is deprecated for Isis v2
-                final Collection collectionAnnot = Annotations.getAnnotation(method, Collection.class);
+                
+                final Collection collectionAnnot = 
+                        _Annotations.synthesizeInherited(method, Collection.class)
+                        .orElse(null);
+                
+//                _Assert.assertEquals("expected same", collectionAnnot,
+//                        Annotations.getAnnotation(method, Collection.class));
+                
                 if(collectionAnnot != null) {
                     final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =
                             CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
@@ -325,7 +332,14 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             if(method != null) {
                 // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
                 // ignoring stuff which is deprecated for Isis v2
-                final Property propertyAnnot = Annotations.getAnnotation(method, Property.class);
+                
+                final Property propertyAnnot = 
+                        _Annotations.synthesizeInherited(method, Property.class)
+                        .orElse(null);
+                
+//                _Assert.assertEquals("expected same", propertyAnnot,
+//                        Annotations.getAnnotation(method, Property.class));
+                
                 if(propertyAnnot != null) {
                     final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType =
                             PropertyAnnotationFacetFactory.defaultFromDomainObjectIfRequired(

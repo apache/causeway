@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.members.order.annotprop;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.members.order.MemberOrderFacet;
@@ -48,7 +47,13 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Con
     }
 
     private MemberOrderFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final MemberOrder annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class);
+        
+        final MemberOrder annotation = processMethodContext.synthesizeOnMethod(MemberOrder.class)
+                .orElse(null);
+                
+//        _Assert.assertEquals("expected same", annotation,
+//                Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class));
+        
         if (annotation != null) {
             return new MemberOrderFacetAnnotation(
                     annotation.name(),

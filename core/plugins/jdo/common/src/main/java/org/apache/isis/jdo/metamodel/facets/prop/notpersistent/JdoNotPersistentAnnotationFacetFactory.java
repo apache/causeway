@@ -23,7 +23,6 @@ import javax.jdo.annotations.NotPersistent;
 import org.apache.isis.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 
@@ -42,8 +41,15 @@ public class JdoNotPersistentAnnotationFacetFactory extends FacetFactoryAbstract
         if(!JdoMetamodelUtil.isPersistenceEnhanced(cls)) {
             return;
         }
+        
+        //val method = processMethodContext.getMethod();
 
-        final NotPersistent annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotPersistent.class);
+        final NotPersistent annotation = processMethodContext.synthesizeOnMethod(NotPersistent.class)
+                .orElse(null);
+                
+//        _Assert.assertEquals("expected same", annotation,
+//                Annotations.getAnnotation(method, NotPersistent.class));
+
         if (annotation == null) {
             return;
         }

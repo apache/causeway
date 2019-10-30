@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.actions.homepage.HomePageFacet;
@@ -55,8 +54,13 @@ implements MetaModelRefiner {
 
     @Override
     public void process(ProcessMethodContext processMethodContext) {
-        final HomePage annotation = Annotations.getAnnotation(processMethodContext.getMethod(), HomePage.class);
-        if (annotation == null) {
+        final HomePage homepageAnnot = processMethodContext.synthesizeOnMethod(HomePage.class)
+                .orElse(null);
+        
+//        _Assert.assertEquals("expected same", homepageAnnot,
+//                Annotations.getAnnotation(processMethodContext.getMethod(), HomePage.class));
+        
+        if (homepageAnnot == null) {
             return;
         }
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();

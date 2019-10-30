@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.facets.jaxb;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
@@ -115,9 +114,14 @@ implements MetaModelRefiner {
     }
 
     private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
-        final Method method = processMethodContext.getMethod();
-
-        final XmlJavaTypeAdapter annotation = Annotations.getAnnotation(method, XmlJavaTypeAdapter.class);
+        //val method = processMethodContext.getMethod();
+        
+        final XmlJavaTypeAdapter annotation = processMethodContext.synthesizeOnMethod(XmlJavaTypeAdapter.class)
+                .orElse(null);
+                
+//        _Assert.assertEquals("expected same", annotation,
+//                Annotations.getAnnotation(method, XmlJavaTypeAdapter.class));
+        
         if(annotation == null) {
             return;
         }
@@ -130,9 +134,14 @@ implements MetaModelRefiner {
     }
 
     private void processXmlTransient(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
-        final Method method = processMethodContext.getMethod();
+        //val method = processMethodContext.getMethod();
 
-        final XmlTransient annotation = Annotations.getAnnotation(method, XmlTransient.class);
+        final XmlTransient annotation = processMethodContext.synthesizeOnMethod(XmlTransient.class)
+                .orElse(null);
+                
+//        _Assert.assertEquals("expected same", annotation,
+//                Annotations.getAnnotation(method, XmlTransient.class));
+        
         if(annotation == null) {
             return;
         }
