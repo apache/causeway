@@ -67,7 +67,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -399,8 +398,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
         try {
             val rootOid = RootOid.deStringEncoded(encoded);
-            val rootOidToAdapter = IsisContext.rootOidToAdapter();
-            return rootOidToAdapter.apply(rootOid);			
+            return ManagedObject._adapterOfRootOid(super.getSpecificationLoader(), rootOid);
         } catch (final Exception e) {
             return null;
         }

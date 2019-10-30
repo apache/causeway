@@ -48,7 +48,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -233,20 +233,23 @@ class IsisToWicketTreeAdapter {
         private static final long serialVersionUID = 1L;
 
         private final Class<? extends TreeAdapter> treeAdapterClass;
+
         private transient TreeAdapter wrappedTreeAdapter;
-        
-        private final transient IsisWebAppCommonContext commonContext;
-        private final transient FactoryService factoryService;
-        private final transient Function<Object, ManagedObject> pojoToAdapter;
+        private transient IsisWebAppCommonContext commonContext;
+        private transient FactoryService factoryService;
+        private transient Function<Object, ManagedObject> pojoToAdapter;
         
 
         private TreeModelTreeAdapter(
                 IsisWebAppCommonContext commonContext, 
                 Class<? extends TreeAdapter> treeAdapterClass) {
-
-            this.commonContext = commonContext;
-            this.treeAdapterClass = treeAdapterClass;
             
+            this.treeAdapterClass = treeAdapterClass;
+            init(commonContext);
+        }
+        
+        private void init(IsisWebAppCommonContext commonContext) {
+            this.commonContext = commonContext;
             this.factoryService = commonContext.lookupServiceElseFail(FactoryService.class);
             this.pojoToAdapter = pojo ->
                 ManagedObject.of(commonContext.getSpecificationLoader()::loadSpecification, pojo);
@@ -257,6 +260,7 @@ class IsisToWicketTreeAdapter {
                 return wrappedTreeAdapter;
             }
             try {
+                ensureInit(); // in case we were de-serialzed
                 return wrappedTreeAdapter = factoryService.instantiate(treeAdapterClass);
             } catch (Exception e) {
                 throw new RuntimeException("failed to instantiate tree adapter", e);
@@ -291,6 +295,7 @@ class IsisToWicketTreeAdapter {
 
         private TreeModel wrap(Object pojo, TreePath treePath) {
             requires(pojo, "pojo");
+            ensureInit(); // in case we were de-serialzed
             val objectAdapter = pojoToAdapter.apply(pojo);
             return new TreeModel(commonContext, objectAdapter, treePath);
         }
@@ -304,7 +309,13 @@ class IsisToWicketTreeAdapter {
             return _Functions.indexAwareToFunction((indexWithinSiblings, pojo)->
             wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
         }
-
+        
+        // in case we were de-serialzed
+        private void ensureInit() {
+            if(commonContext!=null) return;
+            init(CommonContextUtils.getCommonContext());
+        }
+        
     }
 
     // -- WICKET'S TREE PROVIDER (FOR TREES OF TREE-MODEL NODES)
@@ -402,9 +413,7 @@ class IsisToWicketTreeAdapter {
         protected TreeModel load() {
 
             val rootOid = id;
-            val rootOidToAdapter = IsisContext.rootOidToAdapter();
-
-            val objAdapter = rootOidToAdapter.apply(rootOid);
+            val objAdapter = ManagedObject._adapterOfRootOid(commonContext.getSpecificationLoader(), rootOid);
             if(objAdapter==null) {
                 throw new NoSuchElementException(
                         String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id));

@@ -390,7 +390,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession().orElse(null);
+        return IsisContext.getCurrentAuthenticationSession().orElse(null);
     }
 
     private MessageBroker getMessageBroker() {

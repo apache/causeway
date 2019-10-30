@@ -76,7 +76,7 @@ class _Config_LifecycleResource {
                 _Config_Parsers::parseFont,
                 _Config_Parsers::parseList);
 
-        log.info("=== Config Finalized ===");
+        log.debug("=== Config Finalized ===");
 
         return config;
 

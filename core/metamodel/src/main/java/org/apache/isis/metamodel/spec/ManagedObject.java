@@ -461,6 +461,7 @@ public interface ManagedObject {
         return oidStr != null ? Oid.unmarshaller().splitInstanceId(oidStr): null;
     }
     
+    // move this to ObjectManager?
     static ManagedObject _adapterOfRootOid(SpecificationLoader specificationLoader, RootOid rootOid) {
         
         val mmc = ((SpecificationLoaderDefault)specificationLoader).getMetaModelContext();

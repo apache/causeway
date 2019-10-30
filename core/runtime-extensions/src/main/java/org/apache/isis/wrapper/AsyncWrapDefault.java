@@ -186,7 +186,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     private <R> Future<R> submit(Supplier<R> actionInvocation) {
         
         
-        val authenticationSession = IsisContext.getAuthenticationSession().get();
+        val authenticationSession = IsisContext.getCurrentAuthenticationSession().get();
         
         Callable<R> asyncTask = ()->{
 

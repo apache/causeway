@@ -20,19 +20,14 @@ package org.apache.isis.runtime.system.context;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
-
-import lombok.val;
 
 /**
  * Provides static access to current context's singletons
@@ -77,8 +72,8 @@ public interface IsisContext {
      * @return framework's current AuthenticationSession (if any)
      * @throws IllegalStateException - if IsisSessionFactory not resolvable
      */
-    public static Optional<AuthenticationSession> getAuthenticationSession() {
-        return getCurrentIsisSession()
+    public static Optional<AuthenticationSession> getCurrentAuthenticationSession() {
+        return IsisSession.current()
                 .map(IsisSession::getAuthenticationSession);
     }
     
@@ -92,16 +87,6 @@ public interface IsisContext {
     public static Optional<PersistenceSession> getPersistenceSession() {
         return PersistenceSession.current(PersistenceSession.class)
                 .getFirst();
-    }
-
-    @Deprecated
-    public static Function<RootOid, ObjectAdapter> rootOidToAdapter() {
-        return rootOid -> {
-            val ps = IsisContext.getPersistenceSession()
-                    .orElseThrow(()->new RuntimeException(new IllegalStateException(
-                            "There is no PersistenceSession on the current context.")));
-            return ps.getObjectAdapterByIdProvider().adapterFor(rootOid);
-        }; 
     }
 
 
