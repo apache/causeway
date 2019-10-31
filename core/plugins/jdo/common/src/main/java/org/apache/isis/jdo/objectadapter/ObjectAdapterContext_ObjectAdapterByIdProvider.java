@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
@@ -40,6 +41,7 @@ import org.apache.isis.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -118,10 +120,9 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
          */
 
         //FIXME[ISIS-1976] remove guard
-        final ObjectAdapter serviceAdapter = objectAdapterContext.lookupServiceAdapterFor(rootOid);
-        if (serviceAdapter != null) {
-            //throw _Exceptions.unexpectedCodeReach();
-            return serviceAdapter;
+        val spec = specificationLoader.loadSpecification(rootOid.getObjectSpecId());
+        if(spec.isManagedBean()) {
+            throw _Exceptions.unexpectedCodeReach();
         }
 
         final ObjectAdapter adapter;

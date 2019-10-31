@@ -70,7 +70,6 @@ final public class ObjectAdapterContext {
     @Getter private final SpecificationLoader specificationLoader;
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
-    private final ObjectAdapterContext_ServiceLookup serviceLookupMixin;
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
     private final ObjectAdapterContext_ObjectAdapterByIdProvider objectAdapterByIdProviderMixin;
     private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
@@ -87,7 +86,6 @@ final public class ObjectAdapterContext {
 
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession, runtimeContext);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
-        this.serviceLookupMixin = new ObjectAdapterContext_ServiceLookup(this, runtimeContext.getServiceRegistry());
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(persistenceSession, runtimeContext.getSpecificationLoader());
         this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, runtimeContext);
         this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(runtimeContext);
@@ -125,13 +123,6 @@ final public class ObjectAdapterContext {
 
     public RootOid createPersistentOrViewModelOid(Object pojo) {
         return newIdentifierMixin.createPersistentOid(pojo);
-    }
-
-    // -- SERVICE LOOKUP
-
-    // package private
-    ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
-        return serviceLookupMixin.lookupServiceAdapterFor(rootOid);
     }
 
     // -- BY-ID SUPPORT

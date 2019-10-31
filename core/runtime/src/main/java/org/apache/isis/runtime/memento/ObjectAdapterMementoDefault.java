@@ -262,18 +262,19 @@ public class ObjectAdapterMementoDefault implements Serializable {
                     PersistenceSession persistenceSession, 
                     SpecificationLoader specificationLoader) {
                 
-                RootOid oid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);
+                RootOid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);
                 try {
-                    final ManagedObject adapter = persistenceSession.adapterFor(oid);
-                    return adapter;
+                    
+                    return ManagedObject._adapterOfRootOid(specificationLoader, rootOid);
 
                 } finally {
+                    // possibly out-dated insight ...
                     // a side-effect of AdapterManager#adapterFor(...) is that it will update the oid
                     // with the correct version, even when there is a concurrency exception
                     // we copy this updated oid string into our memento so that, if we retry,
                     // we will succeed second time around
 
-                    memento.persistentOidStr = oid.enString();
+                    memento.persistentOidStr = rootOid.enString();
                 }
             }
 
