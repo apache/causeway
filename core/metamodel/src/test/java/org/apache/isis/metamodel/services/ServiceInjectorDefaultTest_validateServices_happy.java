@@ -33,6 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.IsisConfigModule;
+import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,7 +45,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         ServiceRegistryDefault.class,
         ServiceInjectorLegacyTest.Producers.class,
         ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithSomeId.class,
-        ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithDifferentId.class
+        ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithDifferentId.class,
+        
+        IsisBeanFactoryPostProcessorForSpring.class
+        
 },
 properties = {
         "isis.services.injector.setPrefix=true"

@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.registry.IsisBeanTypeRegistry;
+import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.actions.homepage.HomePageFacet;
@@ -49,9 +49,10 @@ import lombok.val;
 @Service
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
-    @Inject FactoryService factoryService;
-    @Inject ServiceRegistry serviceRegistry;
-    @Inject SpecificationLoader specLoader;
+    @Inject private FactoryService factoryService;
+    @Inject private ServiceRegistry serviceRegistry;
+    @Inject private SpecificationLoader specLoader;
+    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
 
     @Override
     public HomePageAction getHomePageAction() {
@@ -62,7 +63,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     private HomePageAction lookupHomePageAction() {
 
-        val viewModelTypes = IsisBeanTypeRegistry.current().getViewModelTypes();
+        val viewModelTypes = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry().getViewModelTypes();
 
         // -- 1) lookup view-models that are type annotated with @HomePage
 

@@ -22,6 +22,7 @@ package org.apache.isis.jdo.persistence;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.jdo.listener.StoreLifecycleListener;
 
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.jdo.datanucleus.DataNucleusSettings;
 import org.apache.isis.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.jdo.entities.JdoEntityTypeRegistry;
@@ -56,6 +58,8 @@ import lombok.extern.log4j.Log4j2;
 @Service @Singleton @Log4j2
 public class PersistenceSessionFactory5
 implements PersistenceSessionFactory, FixturesInstalledStateHolder {
+    
+    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
 
     private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
@@ -95,7 +99,8 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
         
         addDataNucleusPropertiesIfRequired(datanucleusProps);
         
-        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes();
+        val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
+        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(typeRegistry);
 
         return new DataNucleusApplicationComponents5(
                 configuration,
@@ -105,7 +110,8 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
 
     @Override
     public void catalogNamedQueries() {
-        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes();
+        val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
+        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(typeRegistry);
         DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, 
                 metaModelContext.getSpecificationLoader());
     }

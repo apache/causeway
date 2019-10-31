@@ -21,16 +21,14 @@ package org.apache.isis.unittestsupport;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.junit.Test;
 
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.commons.internal.plugins.beantyperegistry.BeanTypeRegistryPlugin;
 import org.apache.isis.unittestsupport.utils.IndentPrinter;
 
 /**
@@ -39,12 +37,10 @@ import org.apache.isis.unittestsupport.utils.IndentPrinter;
  */
 public abstract class AbstractApplyToAllContractTest {
 
-    protected final BeanTypeRegistryPlugin beanTypes;
     protected IndentPrinter out;
 
     protected AbstractApplyToAllContractTest(
             final String packagePrefix) {
-        beanTypes = BeanTypeRegistryPlugin.get();
         out = new IndentPrinter(_Constants.nopWriter);
     }
 
@@ -83,13 +79,13 @@ public abstract class AbstractApplyToAllContractTest {
     }
 
     /**
-     * By default, finds all entity types (ie annotated with {@link PersistenceCapable}).
+     * By default, finds nothing.
      *
      * <p>
      * Can be overridden if need be.
      */
     protected Set<Class<?>> findTypes() {
-        return beanTypes.getEntityTypes();
+        return Collections.emptySet();
     }
 
     protected abstract void applyContractTest(Class<?> entityType);

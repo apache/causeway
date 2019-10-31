@@ -41,7 +41,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.components.TransactionScopedComponent;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.beans.IsisComponentScanInterceptor;
@@ -49,7 +48,6 @@ import org.apache.isis.config.beans.IsisComponentScanInterceptor;
 import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.val;
@@ -59,12 +57,8 @@ import lombok.extern.log4j.Log4j2;
  * Holds the set of domain services, persistent entities and fixture scripts.services etc.
  * @since 2.0
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE) @Log4j2
+@NoArgsConstructor @Log4j2
 public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor, AutoCloseable {
-
-    public static IsisBeanTypeRegistry current() {
-        return _Context.computeIfAbsent(IsisBeanTypeRegistry.class, IsisBeanTypeRegistry::new);
-    }
 
     /**
      * Inbox for introspection, as used by the SpecificationLoader

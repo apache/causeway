@@ -110,7 +110,6 @@ abstract class SpecificationLoaderTestAbstract {
     protected MessageService mockMessageService;
     protected MetaModelContext metaModelContext;
 
-
     // is loaded by subclasses
     protected ObjectSpecification specification;
 

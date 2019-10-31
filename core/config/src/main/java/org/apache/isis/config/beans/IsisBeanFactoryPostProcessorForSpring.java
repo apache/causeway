@@ -46,16 +46,17 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2 @Component
-public class IsisBeanFactoryPostProcessorForSpring implements BeanFactoryPostProcessor {
+public class IsisBeanFactoryPostProcessorForSpring 
+implements BeanFactoryPostProcessor, IsisBeanTypeRegistryHolder {
 
-    @Getter(lazy=true) 
-    private final IsisComponentScanInterceptor interceptor = IsisBeanTypeRegistry.current();
+    @Getter(onMethod = @__(@Override))
+    private final IsisBeanTypeRegistry isisBeanTypeRegistry = new IsisBeanTypeRegistry();
     
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         
         val registry = (BeanDefinitionRegistry) beanFactory;
-        val interceptor = getInterceptor();
+        val interceptor = isisBeanTypeRegistry;
         
         for (String beanDefinitionName : registry.getBeanDefinitionNames()) {
             
@@ -93,10 +94,5 @@ public class IsisBeanFactoryPostProcessorForSpring implements BeanFactoryPostPro
         }
         
     }
-    
-
-
-
-
 
 }

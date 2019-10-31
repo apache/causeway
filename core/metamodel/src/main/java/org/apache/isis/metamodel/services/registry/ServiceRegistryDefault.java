@@ -36,7 +36,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
-import org.apache.isis.config.registry.IsisBeanTypeRegistry;
+import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 
 import lombok.val;
 
@@ -48,6 +48,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     
     // enforces provisioning order (this is a depends-on relationship) 
     @Inject private IsisSystemEnvironment isisSystemEnvironment; 
+    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
     
     @Override
     public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
@@ -72,7 +73,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     private Map<String, ManagedBeanAdapter> enumerateManagedBeans() {
         
-        val filter = IsisBeanTypeRegistry.current();
+        val filter = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
         val managedBeanAdapterByName = _Maps.<String, ManagedBeanAdapter>newHashMap();
 
         isisSystemEnvironment.getIocContainer().streamAllBeans()

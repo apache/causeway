@@ -36,6 +36,7 @@ import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -85,6 +86,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Inject private IsisConfiguration isisConfiguration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private ServiceRegistry serviceRegistry;
+    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
     
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
@@ -102,7 +104,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             IsisSystemEnvironment isisSystemEnvironment,
             ServiceRegistry serviceRegistry,
             ServiceInjector serviceInjector,
-            ProgrammingModel programmingModel) {
+            ProgrammingModel programmingModel,
+            IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
 
         val instance = new SpecificationLoaderDefault(); 
 
@@ -115,6 +118,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         instance.facetProcessor = new FacetProcessor(programmingModel, instance.metaModelContext);
         instance.postProcessor = new PostProcessor(programmingModel);
+        
+        instance.isisBeanTypeRegistryHolder = isisBeanTypeRegistryHolder;
         
         
         return instance;
@@ -146,7 +151,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         facetProcessor.init();
         postProcessor.init();
 
-        val typeRegistry = IsisBeanTypeRegistry.current();
+        val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
 
         val scannedSpecs = _Lists.<ObjectSpecification>newArrayList();
         val domainServiceSpecs = _Lists.<ObjectSpecification>newArrayList();
@@ -349,8 +354,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             objectSpec.setMetaModelContext(metaModelContext);
 
         } else {
+            
+            val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
 
-            val managedBeanNameIfAny = IsisBeanTypeRegistry.current().getManagedBeanNameForType(cls);
+            val managedBeanNameIfAny = typeRegistry.getManagedBeanNameForType(cls);
 
             objectSpec = new ObjectSpecificationDefault(
                     cls,

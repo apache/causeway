@@ -33,7 +33,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
-import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -100,10 +99,8 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         synchronized(registeredBeans) {
             if(registeredBeans.isEmpty()) {
 
-                val beanSortClassifier = IsisBeanTypeRegistry.current();
-
                 streamSingletons()
-                .map(s->toBeanAdapter(s, beanSortClassifier))
+                .map(s->toBeanAdapter(s))
                 .filter(_NullSafe::isPresent)
                 .forEach(registeredBeans::add);
             }    
@@ -135,7 +132,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     }
 
-    private ManagedBeanAdapter toBeanAdapter(Object singleton, IsisBeanTypeRegistry beanSortClassifier) {
+    private ManagedBeanAdapter toBeanAdapter(Object singleton) {
 
         return PojoBeanAdapter.builder()
                 .id(singleton.getClass().getName())

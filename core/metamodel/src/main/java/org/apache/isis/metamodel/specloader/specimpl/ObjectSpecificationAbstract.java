@@ -42,6 +42,7 @@ import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ToString;
@@ -805,7 +806,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
 
-        val mixinTypes = IsisBeanTypeRegistry.current().getMixinTypes();
+        val mixinTypes = getIsisBeanTypeRegistry().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
             return Collections.emptyList();
         }
@@ -912,7 +913,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
 
-        val mixinTypes = IsisBeanTypeRegistry.current().getMixinTypes();
+        val mixinTypes = getIsisBeanTypeRegistry().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
             return Collections.emptyList();
         }
@@ -1071,6 +1072,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     protected SpecificationLoader getSpecificationLoader() {
         return getMetaModelContext().getSpecificationLoader();
+    }
+    
+    protected IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
+        return getMetaModelContext().getServiceRegistry()
+                .lookupServiceElseFail(IsisBeanTypeRegistryHolder.class)
+                .getIsisBeanTypeRegistry();
     }
 
     protected BeanSort sortOf(ObjectSpecification spec) {

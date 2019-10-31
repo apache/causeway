@@ -35,6 +35,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
@@ -105,6 +107,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private TransactionService transactionService;
 
     private TransactionState transactionState;
+    
+    private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
 
     private Map<String, ObjectAdapter> serviceAdaptersById;
 
@@ -151,6 +155,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
                 getConfigurationLegacy(),
                 getConfiguration(),
                 getObjectManager(),
+                getIsisBeanTypeRegistryHolder(),
                 systemEnvironment,
                 serviceInjector,
                 serviceRegistry,
@@ -206,6 +211,21 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return serviceInjector;
     }
     
+    public IsisBeanTypeRegistryHolder getIsisBeanTypeRegistryHolder() {
+        if(isisBeanTypeRegistryHolder==null) {
+            
+            val typeRegistry = new IsisBeanTypeRegistry();
+            
+            isisBeanTypeRegistryHolder = new IsisBeanTypeRegistryHolder() {
+                @Override
+                public IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
+                    return typeRegistry;
+                }
+            };
+        }
+        return isisBeanTypeRegistryHolder;
+    }
+    
     @Override
     public SpecificationLoader getSpecificationLoader() {
         if(specificationLoader==null) {
@@ -215,13 +235,15 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             val serviceRegistry = requireNonNull(getServiceRegistry());
             val serviceInjector = requireNonNull(getServiceInjector());
             val programmingModel = requireNonNull(getProgrammingModel());
+            val isisBeanTypeRegistryHolder = requireNonNull(getIsisBeanTypeRegistryHolder());
 
             specificationLoader = SpecificationLoaderDefault.getInstance(
                     configuration, 
                     environment, 
                     serviceRegistry, 
                     serviceInjector, 
-                    programmingModel);
+                    programmingModel,
+                    isisBeanTypeRegistryHolder);
             
         }
         return specificationLoader;

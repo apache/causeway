@@ -18,13 +18,13 @@
  */
 package org.apache.isis.jdo.entities;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
@@ -32,25 +32,29 @@ import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.NoArgsConstructor;
+import lombok.Synchronized;
 import lombok.val;
 
 @NoArgsConstructor
 public class JdoEntityTypeRegistry {
 
-    private final _Lazy<Set<String>> entityTypes = _Lazy.threadSafe(this::findEntityTypes);
+    private Set<String> entityTypes;
 
-    public Set<String> getEntityTypes() {
-        return entityTypes.get();
+    @Synchronized
+    public Set<String> getEntityTypes(IsisBeanTypeRegistry isisBeanTypeRegistry) {
+        if(entityTypes==null) {
+            entityTypes = Collections.unmodifiableSet(findEntityTypes(isisBeanTypeRegistry));
+        }
+        return entityTypes;
     }
 
     // -- HELPER
 
-    private Set<String> findEntityTypes() {
+    private static Set<String> findEntityTypes(IsisBeanTypeRegistry isisBeanTypeRegistry) {
 
         val entityTypes = new LinkedHashSet<String>();
 
-        Set<Class<?>> persistenceCapableTypes = 
-                IsisBeanTypeRegistry.current().getEntityTypes();
+        Set<Class<?>> persistenceCapableTypes = isisBeanTypeRegistry.getEntityTypes();
 
         val classNamesNotEnhanced = _Lists.<String>newArrayList();
         for (Class<?> persistenceCapableType : persistenceCapableTypes) {

@@ -32,6 +32,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.MetaModelContexts;
 import org.apache.isis.testdomain.Incubating;
@@ -70,6 +71,7 @@ class AutoConfigurationTest {
     
     @Inject private ApplicationContext applicationContext;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
 
     //XXX for debugging and experimenting
     @Component
@@ -97,7 +99,7 @@ class AutoConfigurationTest {
     @Test
     void domainObjects_shouldBeDiscovered() {
 
-        val registry = IsisBeanTypeRegistry.current();
+        val registry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
         val discoveredTypes = registry.snapshotIntrospectableTypes().keySet();
         
         for(val cls : nonManaged()) {
