@@ -45,6 +45,7 @@ import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.isis.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
+import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaClearMethod;
 import org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
@@ -189,6 +190,10 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
                 allowing(mockEmployeeSpec).getMember(methodOf(Employee.class, "getEmployeeRepository"));
                 will(returnValue(null));
+                
+                allowing(mockEmployeeSpec).getFacet(EntityFacet.class);
+                will(returnValue(null));
+
 
 //                allowing(mockAdapterForStringJones).isDestroyed();
 //                will(returnValue(false));

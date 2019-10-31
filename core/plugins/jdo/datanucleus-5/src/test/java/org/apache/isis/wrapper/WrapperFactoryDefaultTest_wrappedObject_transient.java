@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.consent.Allow;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -51,6 +50,7 @@ import org.apache.isis.metamodel.consent.Veto;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
+import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
@@ -177,6 +177,9 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
                 allowing(mockEmployeeSpec).getMember(with(getPasswordMethod));
                 will(returnValue(mockPasswordMember));
+                
+                allowing(mockEmployeeSpec).getFacet(EntityFacet.class);
+                will(returnValue(null));
 
                 allowing(mockPasswordMember).getName();
                 will(returnValue("password"));
