@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  * @param <M>
  */
-public abstract class PanelAbstract<T extends IModel<?>> extends PanelBase {
+public abstract class PanelAbstract<T extends IModel<?>> extends PanelBase/*<IModel<X>>*/ {
 
     private static final long serialVersionUID = 1L;
 

@@ -27,7 +27,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
-import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 
 /**
@@ -55,7 +54,7 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
         }
 
         final Component treeComponent = createTreeComponent("scalarValueContainer");
-        final Behavior treeTheme = TreeThemeProvider.get().treeThemeFor(super.getModel());
+        final Behavior treeTheme = getTreeThemeProvider().treeThemeFor(super.getModel());
 
 
         getTextField().setLabel(Model.of(getModel().getName()));
@@ -78,7 +77,7 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
         // adds the tree-theme behavior to the tree component 
         //TODO [2088] not tested yet: if tree renders without applying the theme, behavior needs 
         // to go to a container up the hierarchy 
-        final Behavior treeTheme = TreeThemeProvider.get().treeThemeFor(super.getModel());
+        final Behavior treeTheme = getTreeThemeProvider().treeThemeFor(super.getModel());
         return tree.add(treeTheme);
     }
 
@@ -87,5 +86,6 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
     private Component createTreeComponent(String id) {
         return IsisToWicketTreeAdapter.adapt(id, getModel());
     }
+    
 
 }

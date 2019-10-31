@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
+import java.util.function.Supplier;
+
 import javax.annotation.Nullable;
 
 import org.apache.wicket.markup.html.panel.GenericPanel;
@@ -35,6 +37,8 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
+import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProviderDefault;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
@@ -55,6 +59,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     private transient IsisSessionFactory isisSessionFactory;
     private transient TranslationService translationService;
     private transient LocaleProvider localeProvider;
+    private transient TreeThemeProvider treeThemeProvider;
     
     protected PanelBase(String id) {
         this(id, null);
@@ -102,6 +107,10 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
         return localeProvider = computeIfAbsent(LocaleProvider.class, localeProvider);
     }
     
+    protected TreeThemeProvider getTreeThemeProvider() {
+        return treeThemeProvider = computeIfAbsentOrFallback(TreeThemeProvider.class, treeThemeProvider, TreeThemeProviderDefault::new);
+    }
+    
     protected MessageBroker getMessageBroker() {
         return commonContext.getAuthenticationSession().getMessageBroker(); // don't cache?
     }
@@ -117,13 +126,19 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
     }
-
+    
     // -- HELPER
     
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
                         : getCommonContext().lookupServiceElseFail(type);
+    }
+    
+    private <X> X computeIfAbsentOrFallback(Class<X> type, X existingIfAny, Supplier<X> fallback) {
+        return existingIfAny!=null
+                ? existingIfAny
+                        : getCommonContext().lookupServiceElseFallback(type, fallback);
     }
 
 }

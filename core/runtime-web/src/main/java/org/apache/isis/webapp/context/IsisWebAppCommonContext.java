@@ -19,6 +19,7 @@
 package org.apache.isis.webapp.context;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -28,7 +29,6 @@ import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -76,6 +76,11 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     
     public <T> T lookupServiceElseFail(Class<T> serviceClass) {
         return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(serviceClass);
+    }
+    
+    public <T> T lookupServiceElseFallback(Class<T> serviceClass, Supplier<T> fallback) {
+        return getMetaModelContext().getServiceRegistry().lookupService(serviceClass)
+                .orElseGet(fallback);
     }
     
     public <T> T injectServicesInto(T pojo) {
@@ -134,6 +139,8 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
         
         
     }
+
+
 
     
 
