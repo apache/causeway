@@ -34,7 +34,7 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
     // holder of ServletContext with one-shot access 
     public static class ServletContextResource {
         private ServletContext servletContext;
-        public ServletContext getServletContextTheRemoveReference() {
+        public ServletContext getServletContextOneShot() {
             try {
                 return servletContext;    
             } finally {

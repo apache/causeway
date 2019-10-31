@@ -60,10 +60,6 @@ public class WebModuleContext {
     private List<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
 
-    public ServletContext getServletContextTheRemoveReference() {
-        return servletContextResource.getServletContextTheRemoveReference();
-    }
-
     /**
      * Tell other modules that a bootstrapper is present.
      */
@@ -118,7 +114,7 @@ public class WebModuleContext {
 
     public void init() {
 
-        val event = new ServletContextEvent(getServletContextTheRemoveReference());
+        val event = new ServletContextEvent(servletContextResource.getServletContextOneShot());
 
         webModules.stream()
         .filter(module->module.isApplicable(this)) // filter those WebModules that are applicable
