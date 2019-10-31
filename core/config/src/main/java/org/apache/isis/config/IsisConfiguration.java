@@ -851,8 +851,6 @@ public class IsisConfiguration {
             //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes 
             private List<Credit> credit = _Lists.newArrayList();
             
-            //@RequiredArgsConstructor(staticName = "of") @Getter
-            
             @Data
             public static class Credit {
                 private int num;

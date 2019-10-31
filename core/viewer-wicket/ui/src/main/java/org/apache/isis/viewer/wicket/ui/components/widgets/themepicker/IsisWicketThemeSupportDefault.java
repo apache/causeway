@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,16 +26,16 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
 
-import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
-import de.agilecoders.wicket.themes.markup.html.bootstrap.BootstrapThemeTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -46,9 +44,10 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2 
 public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
-    private final _Lazy<ThemeProvider> themeProvider = _Lazy.of(this::createThemeProvider);
+    private final _Lazy<ThemeProviderComposite> themeProvider = _Lazy.of(this::createThemeProvider);
     
     @Inject private IsisConfiguration configuration;
+    @Inject private ServiceRegistry serviceRegistry;
 
     @Override
     public ThemeProvider getThemeProvider() {
@@ -57,20 +56,10 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     @Override
     public List<String> getEnabledThemeNames() {
-        final BootstrapThemeTheme bootstrapTheme = new BootstrapThemeTheme();
-        List<BootswatchTheme> bootswatchThemes = Arrays.asList(BootswatchTheme.values());
-        //        List<VegibitTheme> vegibitThemes = Arrays.asList(VegibitTheme.values());
-
-        List<String> allThemes = new ArrayList<>();
-        allThemes.add(bootstrapTheme.name());
-
-        for (ITheme theme : bootswatchThemes) {
-            allThemes.add(theme.name());
-        }
-
-        //        for (ITheme theme : vegibitThemes) {
-        //            allThemes.add(theme.name());
-        //        }
+        
+        val composite = themeProvider.get();
+        
+        List<String> allThemes = composite.availableNames();
 
         allThemes = filterThemes(allThemes);
 
@@ -80,9 +69,18 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     // -- HELPER
 
-    private ThemeProvider createThemeProvider() {
+    private ThemeProviderComposite createThemeProvider() {
 
-        final String themeName = configuration.getViewer().getWicket().getThemes().getInitial();
+        val providerBeans = serviceRegistry.select(ThemeProvider.class);
+        if(providerBeans.isEmpty()) {
+            return ThemeProviderComposite.of(Can.ofSingleton(createFallbackThemeProvider()));
+        }
+        
+        return ThemeProviderComposite.of(providerBeans);
+    }
+    
+    private ThemeProvider createFallbackThemeProvider() {
+        val themeName = configuration.getViewer().getWicket().getThemes().getInitial();
         BootswatchTheme bootswatchTheme;
         try {
             bootswatchTheme = BootswatchTheme.valueOf(themeName);
@@ -94,33 +92,8 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
         }
 
-        return new BootswatchThemeProvider(bootswatchTheme);/* {
-            @Override
-            public ITheme byName(String name) {
-                // legacy behavior
-                return getThemeByName(name);
-            }
-        };*/
+        return new BootswatchThemeProvider(bootswatchTheme);
     }
-
-    // legacy code ...    
-    //    private ITheme getThemeByName(String themeName) {
-    //        ITheme theme;
-    //        try {
-    //            if ("bootstrap-theme".equals(themeName)) {
-    //                theme = new BootstrapThemeTheme();
-    //            } else if (themeName.startsWith("veg")) {
-    //                theme = VegibitTheme.valueOf(themeName);
-    //            } else {
-    //                theme = BootswatchTheme.valueOf(themeName);
-    //            }
-    //        } catch (Exception x) {
-    //            LOG.warn("Cannot find a theme with name '{}' in all available theme providers: {}", themeName, x.getMessage());
-    //            // fallback to Bootstrap default theme if the parsing by name failed somehow
-    //            theme = new BootstrapThemeTheme();
-    //        }
-    //        return theme;
-    //    }
 
     /**
      * Filters which themes to show in the drop up by using the provided values
@@ -132,14 +105,16 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
     private List<String> filterThemes(List<String> allThemes) {
         List<String> enabledThemes;
 
-        final String[] enabledThemesArray = configuration.getViewer().getWicket().getThemes().getEnabled().toArray(new String[]{});
-        if (enabledThemesArray.length > 0) {
-            final Set<String> enabledThemesSet = _NullSafe.stream(enabledThemesArray)
-                    .collect(Collectors.toSet());
+        final Set<String> enabledThemesSet = 
+        _NullSafe.stream(configuration.getViewer().getWicket().getThemes().getEnabled())
+        .collect(Collectors.toSet());
+        
+        if (enabledThemesSet.size() > 0) {
 
-            Iterable<String> enabled = allThemes.stream().filter(enabledThemesSet::contains).collect(Collectors.toList());
-
-            enabledThemes = _Lists.newArrayList(enabled);
+            enabledThemes = allThemes.stream()
+                    .filter(enabledThemesSet::contains)
+                    .collect(Collectors.toList());
+            
         } else {
             enabledThemes = allThemes;
         }
