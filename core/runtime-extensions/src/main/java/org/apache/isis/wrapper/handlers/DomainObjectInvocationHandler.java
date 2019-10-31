@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -42,15 +41,13 @@ import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.ImperativeFacet.Intent;
+import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -96,22 +93,22 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
      */
     protected Method __isis_executionMode;
 
-    protected final Set<String> jdoMethodsProvidedByEnhancement = _Sets.newHashSet();
+    private EntityFacet entityFacet; 
 
     public DomainObjectInvocationHandler(
             final MetaModelContext metaModelContext,
-            final T delegate,
+            final T domainObject,
             final EnumSet<ExecutionMode> mode,
             final ProxyContextHandler proxy) {
         
-        super(metaModelContext.getServiceRegistry(), delegate, mode);
+        super(metaModelContext.getServiceRegistry(), domainObject, mode);
 
         this.mmContext = metaModelContext;
         this.proxy = proxy;
         this.executionMode = mode;
 
         try {
-            titleMethod = delegate.getClass().getMethod("title", new Class[]{});
+            titleMethod = domainObject.getClass().getMethod("title", new Class[]{});
         } catch (final NoSuchMethodException e) {
             // ignore
         }
@@ -119,22 +116,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             __isis_saveMethod = WrappingObject.class.getMethod("__isis_save", new Class[]{});
             __isis_wrappedMethod = WrappingObject.class.getMethod("__isis_wrapped", new Class[]{});
             __isis_executionMode = WrappingObject.class.getMethod("__isis_executionMode", new Class[]{});
-
-            _NullSafe.stream(IsisJdoMetamodelPlugin.get().getMethodsProvidedByEnhancement())
-            .map(Method::getName)
-            .forEach(jdoMethodsProvidedByEnhancement::add);
-
-            // legacy of ...
-            //            dnPersistableMethods.addAll(
-            //                    _Lists.newArrayList(
-            //                            Iterables.transform(
-            //                                    Arrays.asList(Persistable.class.getDeclaredMethods()),
-            //                                    new Function<Method, String>() {
-            //                                        @Override
-            //                                        public String apply(final Method input) {
-            //                                            return input.getName();
-            //                                        }
-            //                                    })));
+            
+            entityFacet = metaModelContext.getSpecification(domainObject.getClass())
+                    .getFacet(EntityFacet.class);
 
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
@@ -150,7 +134,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return delegate(method, args);
         }
 
-        if(isJdoMethod(method)) {
+        if(isEnhancedEntityMethod(method)) {
             return delegate(method, args);
         }
 
@@ -344,8 +328,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return null;
     }
 
-    private boolean isJdoMethod(final Method method) {
-        return methodStartsWith(method, "jdo") || jdoMethodsProvidedByEnhancement.contains(method.getName());
+    private boolean isEnhancedEntityMethod(final Method method) {
+        return entityFacet!=null 
+                ? entityFacet.isProxyEnhancement(method)
+                        : false;
     }
 
     private static boolean isInjectMethod(final Method method) {

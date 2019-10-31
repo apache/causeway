@@ -16,26 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.jdo.jdosupport;
-
-import java.lang.reflect.Method;
+package org.apache.isis.jdo.metamodel;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.metamodel.IsisJdoMetamodelPlugin;
-
-public class IsisJdoSupportPlugin5 implements IsisJdoMetamodelPlugin {
-
-    @Override
-    public boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
+public class JdoMetamodelUtil {
+    
+    public static boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
         if(cls==null) {
             return false;
         }
-        return org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls);
+        return IsisJdoMetamodelPlugin.get().isPersistenceEnhanced(cls);
     }
+    
+    
 
-    @Override
-    public Method[] getMethodsProvidedByEnhancement() {
-        return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();
-    }
 }

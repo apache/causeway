@@ -20,7 +20,7 @@ package org.apache.isis.jdo.metamodel.facets.prop.notpersistent;
 
 import javax.jdo.annotations.NotPersistent;
 
-import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;

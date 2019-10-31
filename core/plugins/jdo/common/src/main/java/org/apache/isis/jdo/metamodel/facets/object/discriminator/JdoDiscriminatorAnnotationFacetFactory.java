@@ -22,7 +22,7 @@ package org.apache.isis.jdo.metamodel.facets.object.discriminator;
 import javax.jdo.annotations.Discriminator;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;

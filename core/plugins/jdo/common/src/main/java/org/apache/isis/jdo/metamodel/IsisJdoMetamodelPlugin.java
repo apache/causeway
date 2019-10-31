@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel;
+package org.apache.isis.jdo.metamodel;
 
 import java.lang.reflect.Method;
 
@@ -36,10 +36,10 @@ public interface IsisJdoMetamodelPlugin {
     public boolean isPersistenceEnhanced(@Nullable Class<?> cls);
 
     /**
-     * Equivalent to org.datanucleus.enhancement.Persistable.class.getDeclaredMethods().
+     * Equivalent to any match with org.datanucleus.enhancement.Persistable.class.getDeclaredMethods().
      * @return
      */
-    public Method[] getMethodsProvidedByEnhancement();
+    public boolean isMethodProvidedByEnhancement(Method method);
 
     // -- LOOKUP
 

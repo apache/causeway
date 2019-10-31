@@ -18,12 +18,14 @@
  */
 package org.apache.isis.jdo.metamodel.facets.object.persistencecapable;
 
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.jdo.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -101,7 +103,10 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
         return persistable_type.get().isAssignableFrom(type);
     }
 
-
+    @Override
+    public boolean isProxyEnhancement(Method method) {
+        return IsisJdoMetamodelPlugin.get().isMethodProvidedByEnhancement(method);
+    }
 
 
 }

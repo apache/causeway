@@ -23,7 +23,7 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.Annotations;

@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facets.object.entity;
 
+import java.lang.reflect.Method;
+
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
@@ -33,5 +35,12 @@ public interface EntityFacet extends Facet {
     Object fetchByIdentifier(ObjectSpecification spec, String identifier);
     
     void persist(ObjectSpecification spec, Object pojo);
+
+    /**
+     * Whether given method originates from byte code mangling.
+     * @param method
+     * @return
+     */
+    boolean isProxyEnhancement(Method method);
 
 }

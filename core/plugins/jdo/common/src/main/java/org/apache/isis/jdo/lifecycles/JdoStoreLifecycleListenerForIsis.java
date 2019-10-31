@@ -21,7 +21,7 @@ package org.apache.isis.jdo.lifecycles;
 import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
-import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 import org.apache.isis.runtime.system.persistence.events.PersistenceEventService;
 import org.apache.isis.runtime.system.persistence.events.PostStoreEvent;
 import org.apache.isis.runtime.system.persistence.events.PreStoreEvent;

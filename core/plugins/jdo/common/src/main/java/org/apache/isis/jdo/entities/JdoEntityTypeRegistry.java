@@ -27,7 +27,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
-import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 

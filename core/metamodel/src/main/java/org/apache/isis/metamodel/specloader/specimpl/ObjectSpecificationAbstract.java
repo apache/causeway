@@ -43,7 +43,6 @@ import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
-import org.apache.isis.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
@@ -1092,10 +1091,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return BeanSort.COLLECTION;
         }
         if(containsFacet(EntityFacet.class)) {
-            return BeanSort.ENTITY;
-        }
-        val correspondingClass = getCorrespondingClass();
-        if(JdoMetamodelUtil.isPersistenceEnhanced(correspondingClass)) {
             return BeanSort.ENTITY;
         }
 

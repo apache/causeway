@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;

@@ -21,7 +21,7 @@ package org.apache.isis.jdo.metamodel.facets.object.version;
 
 import javax.jdo.annotations.Version;
 
-import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;

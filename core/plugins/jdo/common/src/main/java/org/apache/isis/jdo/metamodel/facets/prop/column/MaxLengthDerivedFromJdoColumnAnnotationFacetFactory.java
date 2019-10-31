@@ -23,9 +23,9 @@ import java.util.stream.Stream;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
-import org.apache.isis.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;

@@ -20,7 +20,7 @@ package org.apache.isis.jdo.metamodel.facets.prop.primarykey;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
