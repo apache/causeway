@@ -26,27 +26,21 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.JdoMetamodelUtil;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.val;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class JdoEntityTypeRegistry {
 
     private final _Lazy<Set<String>> entityTypes = _Lazy.threadSafe(this::findEntityTypes);
 
     public Set<String> getEntityTypes() {
         return entityTypes.get();
-    }
-
-    public static JdoEntityTypeRegistry current() {
-        return _Context.computeIfAbsent(JdoEntityTypeRegistry.class, JdoEntityTypeRegistry::new);
     }
 
     // -- HELPER

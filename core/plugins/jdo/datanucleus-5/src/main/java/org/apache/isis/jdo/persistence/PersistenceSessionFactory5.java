@@ -22,22 +22,21 @@ package org.apache.isis.jdo.persistence;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.enterprise.inject.Vetoed;
+import javax.inject.Singleton;
 import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.jdo.datanucleus.DataNucleusSettings;
 import org.apache.isis.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.jdo.entities.JdoEntityTypeRegistry;
 import org.apache.isis.jdo.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
@@ -54,9 +53,9 @@ import lombok.extern.log4j.Log4j2;
  * Factory for {@link PersistenceSession}.
  *
  */
-@Vetoed @Log4j2
+@Service @Singleton @Log4j2
 public class PersistenceSessionFactory5
-implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledStateHolder {
+implements PersistenceSessionFactory, FixturesInstalledStateHolder {
 
     private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
@@ -64,6 +63,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     private StoreLifecycleListener storeLifecycleListener;
     private MetaModelContext metaModelContext;
     private IsisConfiguration configuration;
+    private final JdoEntityTypeRegistry jdoEntityTypeRegistry = new JdoEntityTypeRegistry();
 
     @Getter(onMethod=@__({@Override})) 
     @Setter(onMethod=@__({@Override})) 
@@ -95,9 +95,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         
         addDataNucleusPropertiesIfRequired(datanucleusProps);
         
-        System.out.println("############## " + datanucleusProps);
-
-        val classesToBePersisted = JdoEntityTypeRegistry.current().getEntityTypes();
+        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes();
 
         return new DataNucleusApplicationComponents5(
                 configuration,
@@ -106,9 +104,10 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     }
 
     @Override
-    public void catalogNamedQueries(final SpecificationLoader specificationLoader) {
-        val classesToBePersisted = JdoEntityTypeRegistry.current().getEntityTypes();
-        DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, specificationLoader);
+    public void catalogNamedQueries() {
+        val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes();
+        DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, 
+                metaModelContext.getSpecificationLoader());
     }
 
     private static void addDataNucleusPropertiesIfRequired(Map<String, String> props) {

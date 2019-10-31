@@ -20,9 +20,7 @@ package org.apache.isis.jdo.datanucleus.service;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +28,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.persistence.IsisJdoRuntimePlugin;
 import org.apache.isis.runtime.system.context.session.AppLifecycleEvent;
 import org.apache.isis.runtime.system.context.session.SessionLifecycleEvent;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
@@ -45,9 +41,7 @@ import lombok.extern.log4j.Log4j2;
 public class JdoPersistenceLifecycleService {
 
     @Inject private MetaModelContext metaModelContext;
-    @Inject private SpecificationLoader specificationLoader;
-    
-    private PersistenceSessionFactory persistenceSessionFactory;
+    @Inject private PersistenceSessionFactory persistenceSessionFactory;
 
     @PostConstruct
     public void postConstr() {
@@ -106,11 +100,6 @@ public class JdoPersistenceLifecycleService {
 
     }
 
-    @Bean @Singleton //XXX note: the resulting singleton is not life-cycle managed by Spring/CDI, nor are InjectionPoints resolved by Spring/CDI
-    public PersistenceSessionFactory producePersistenceSessionFactory() {
-        return persistenceSessionFactory;
-    }
-
     // -- HELPER
 
     private void openSession(IsisSession isisSession) {
@@ -140,13 +129,11 @@ public class JdoPersistenceLifecycleService {
     //	}
 
     private void create() {
-        persistenceSessionFactory = 
-                IsisJdoRuntimePlugin.get().getPersistenceSessionFactory();
         persistenceSessionFactory.init(metaModelContext);
     }
 
     private void init() {
-        persistenceSessionFactory.catalogNamedQueries(specificationLoader);
+        persistenceSessionFactory.catalogNamedQueries();
     }
 
     private void shutdown() {

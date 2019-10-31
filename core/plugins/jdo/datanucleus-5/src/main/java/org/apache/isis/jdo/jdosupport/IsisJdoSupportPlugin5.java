@@ -22,12 +22,9 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.jdo.persistence.PersistenceSessionFactory5;
 import org.apache.isis.metamodel.IsisJdoMetamodelPlugin;
-import org.apache.isis.runtime.persistence.IsisJdoRuntimePlugin;
-import org.apache.isis.runtime.system.persistence.PersistenceSessionFactory;
 
-public class IsisJdoSupportPlugin5 implements IsisJdoMetamodelPlugin, IsisJdoRuntimePlugin {
+public class IsisJdoSupportPlugin5 implements IsisJdoMetamodelPlugin {
 
     @Override
     public boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
@@ -41,10 +38,4 @@ public class IsisJdoSupportPlugin5 implements IsisJdoMetamodelPlugin, IsisJdoRun
     public Method[] getMethodsProvidedByEnhancement() {
         return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();
     }
-
-    @Override
-    public PersistenceSessionFactory getPersistenceSessionFactory() {
-        return new PersistenceSessionFactory5();
-    }
-
 }

@@ -34,6 +34,7 @@ import org.apache.isis.jdo.jdosupport.mixins.Persistable_datanucleusIdLong;
 import org.apache.isis.jdo.metamodel.JdoProgrammingModelPlugin;
 import org.apache.isis.jdo.metrics.MetricsServiceDefault;
 import org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo;
+import org.apache.isis.jdo.persistence.PersistenceSessionFactory5;
 
 @Configuration
 @Import({
@@ -43,6 +44,7 @@ import org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo;
     MetricsServiceDefault.class,
     IsisJdoSupportDN5.class,
     IsisPlatformTransactionManagerForJdo.class,
+    PersistenceSessionFactory5.class
 })
 @ComponentScan(
         basePackageClasses= {
