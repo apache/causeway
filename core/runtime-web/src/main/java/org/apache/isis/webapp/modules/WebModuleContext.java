@@ -30,8 +30,8 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.webapp.IsisWebAppContextInitializer.ServletContextResource;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 
@@ -53,14 +53,15 @@ public class WebModuleContext {
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
 
+    @NonNull @Getter private final ServletContextResource servletContextResource;
     @NonNull @Getter private final IsisConfiguration configuration;
     @NonNull @Getter private final ServiceRegistry serviceRegistry;
     
     private List<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
 
-    public ServletContext getServletContext() {
-        return _Context.getElseFail(ServletContext.class);
+    public ServletContext getServletContextTheRemoveReference() {
+        return servletContextResource.getServletContextTheRemoveReference();
     }
 
     /**
@@ -117,7 +118,7 @@ public class WebModuleContext {
 
     public void init() {
 
-        val event = new ServletContextEvent(getServletContext());
+        val event = new ServletContextEvent(getServletContextTheRemoveReference());
 
         webModules.stream()
         .filter(module->module.isApplicable(this)) // filter those WebModules that are applicable

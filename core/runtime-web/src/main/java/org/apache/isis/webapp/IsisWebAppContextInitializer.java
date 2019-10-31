@@ -18,22 +18,41 @@
  */
 package org.apache.isis.webapp;
 
+import javax.inject.Singleton;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import org.apache.isis.commons.internal.context._Context;
 
 import lombok.extern.log4j.Log4j2;
 
 @Configuration @Log4j2
 public class IsisWebAppContextInitializer implements ServletContextInitializer {
 
+    // holder of ServletContext with one-shot access 
+    public static class ServletContextResource {
+        private ServletContext servletContext;
+        public ServletContext getServletContextTheRemoveReference() {
+            try {
+                return servletContext;    
+            } finally {
+                servletContext = null;
+            }
+        }
+    }
+    
+    @Bean @Singleton
+    public ServletContextResource getServletContextResource() {
+        return servletContextResource;
+    }
+    
+    private final ServletContextResource servletContextResource = new ServletContextResource(); 
+    
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        log.info("Storing the ServletContext on Isis' context.");
-        _Context.putSingleton(ServletContext.class, servletContext);
+        log.info("Memoizing the ServletContext.");
+        servletContextResource.servletContext = servletContext;
     }
 }
