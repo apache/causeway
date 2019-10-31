@@ -64,7 +64,6 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
         super(id, model);
     }
     
-    
     @Override
     public IsisWebAppCommonContext getCommonContext() {
         commonContext = CommonContextUtils.computeIfAbsent(commonContext);

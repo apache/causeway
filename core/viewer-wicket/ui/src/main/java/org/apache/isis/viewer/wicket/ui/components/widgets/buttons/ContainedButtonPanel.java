@@ -31,6 +31,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
  * A button contained within its own form.
@@ -62,8 +63,7 @@ public class ContainedButtonPanel extends PanelAbstract<Model<String>> {
                 ContainedButtonPanel.this.onSubmit();
                 if (target != null) {
                     for (final Component component : componentsToRerender) {
-                        //target.addComponent(component);
-                        target.add(component);
+                        Components.addToAjaxRequest(target, component);
                     }
                 }
             }

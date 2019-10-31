@@ -19,12 +19,23 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
+import java.util.Set;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.page.PartialPageUpdate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+
+import lombok.val;
 
 public final class Components {
 
@@ -84,6 +95,32 @@ public final class Components {
     private static void setVisible(final MarkupContainer container, final boolean visibility, final String wicketId) {
         final Component childComponent = container.get(wicketId);
         childComponent.setVisible(visibility);
+    }
+    
+    public static boolean isRenderedComponent(final Component component) {
+        return (component.getOutputMarkupId() && !(component instanceof Page));
+    }
+
+    public static boolean hasPage(final Component component) {
+        return component.findParent(Page.class)!=null;
+    }
+    
+    public static void addToAjaxRequest(AjaxRequestTarget target, Component component) {
+
+        if (target == null || component == null) {
+            return;
+        }
+        
+        //TODO as of Wicket-8 we (for lack of a better solution) silently ignore 
+        // java.lang.IllegalArgumentException ...
+       
+        try {
+            target.add(component);
+        } catch (IllegalArgumentException cause) {
+            FluentException.of(cause)
+            .suppressIfMessageContains("Cannot update component because its page is not the same");
+        }
+        
     }
 
 }

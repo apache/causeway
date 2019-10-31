@@ -301,9 +301,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
         if(visibility != null) {
             component.setVisible(visibility == InputFieldVisibility.VISIBLE);
-            if (target != null) {
-                target.add(component);
-            }
+            Components.addToAjaxRequest(target, component);
         }
 
 

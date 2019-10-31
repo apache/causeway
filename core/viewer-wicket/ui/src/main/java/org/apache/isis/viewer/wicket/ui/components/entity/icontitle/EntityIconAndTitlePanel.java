@@ -102,7 +102,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         final WebMarkupContainer entityLinkWrapper = addOrReplaceLinkWrapper(entityModel);
         addOrReplace(entityLinkWrapper);
     }
-
+    
     protected WebMarkupContainer addOrReplaceLinkWrapper(final ObjectAdapterModel entityModel) {
         val adapter = entityModel.getObject();
 

@@ -39,7 +39,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -54,6 +53,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFee
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 
 public abstract class PromptFormAbstract<T extends BookmarkableModel<ManagedObject>
 & ParentEntityModelProvider
@@ -247,16 +247,7 @@ implements ScalarModelSubscriber2 {
             completePrompt(target);
 
             okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
-            //TODO as of Wicket-8 we (for lack of a better solution) silently ignore java.lang.IllegalArgumentException:
-            // 'Cannot update component because its page is not the same as the one this handler has been created for.'
-
-            try {
-                target.add(form);
-            } catch (IllegalArgumentException cause) {
-                FluentException.of(cause)
-                .suppressIfMessageContains("Cannot update component because its page is not the same");
-            }
-
+            Components.addToAjaxRequest(target, form);
         }
 
     }

@@ -20,6 +20,8 @@ package domainapp.application;
 
 import javax.inject.Singleton;
 
+import org.apache.wicket.page.PartialPageUpdate;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +30,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
@@ -47,6 +50,7 @@ import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
 import domainapp.dom.DemoModule;
 import domainapp.utils.LibraryPreloadingService;
+import lombok.val;
 
 /**
  * Makes the integral parts of the 'demo' web application.
@@ -56,6 +60,7 @@ import domainapp.utils.LibraryPreloadingService;
     @PropertySource("classpath:/domainapp/application/isis-non-changing.properties"),
     @PropertySource(IsisPresets.HsqlDbInMemory),
     @PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(IsisPresets.SilenceWicket),
 })
 @Import({
     IsisBoot.class,
@@ -85,6 +90,11 @@ public class DemoAppManifest {
 
     @Bean @Singleton
     public WebAppConfigBean webAppConfigBean() {
+        
+        val logger = LoggerFactory.getLogger(PartialPageUpdate.class);
+        _Assert.assertFalse("", logger.isWarnEnabled());
+        
+        
         return WebAppConfigBean.builder()
                 .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
                 .brandLogoHeader("/images/gift_48.png")

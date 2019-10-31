@@ -45,6 +45,8 @@ public final class IsisPresets  {
     public static final String DebugMetaModel = "classpath:/presets/DebugMetaModel.properties";
     public static final String SilenceMetaModel = "classpath:/presets/SilenceMetaModel.properties";
     
+    public static final String SilenceWicket = "classpath:/presets/SilenceWicket.properties";
+    
     /**
      * @deprecated seems no longer required anyway
      */

@@ -16,32 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config;
+package org.apache.isis.testdomain.logging;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
+import org.apache.wicket.page.PartialPageUpdate;
+import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.config.IsisPresets;
 
-@Configuration
-@Import({
-    //IsisConfiguration.class // not required
-    IsisConfiguration.PatternsConverter.class,
-    IsisSystemEnvironment.class
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import lombok.val;
+
+@SpringBootTest(
+        classes = { 
+                LoggerSetupTest.Config.class, 
+        },
+        properties = {
+        })
+@TestPropertySource({
+    IsisPresets.SilenceWicket
 })
-@EnableConfigurationProperties(IsisConfiguration.class)
-public class IsisConfigModule {
-    
-    @ConfigurationProperties(prefix = "isis")
-    @Bean("isis-settings")
-    public Map<String, String> getAsMap() {
-        return new HashMap<>();
-    }
+public class LoggerSetupTest {
 
+    @Configuration
+    static class Config {
+        
+    }
+    
+    @Test
+    void slf4jLoggers_shouldBeBridgedToWorkWithLog4j2() {
+        
+        val logger = LoggerFactory.getLogger(PartialPageUpdate.class);
+        assertFalse(logger.isWarnEnabled());
+        
+    }
+    
 }

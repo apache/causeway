@@ -34,7 +34,6 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

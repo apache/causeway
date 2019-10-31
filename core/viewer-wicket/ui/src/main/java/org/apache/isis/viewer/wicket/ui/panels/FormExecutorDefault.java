@@ -18,9 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,7 +43,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet;
@@ -64,6 +65,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
@@ -364,66 +366,55 @@ implements FormExecutor {
         requestCycle.setResponsePage(entityPage);
     }
 
+    
+    private static boolean shouldRedraw(final Component component) {
+        
+        // hmm... this doesn't work, because I think that the components
+        // get removed after they've been added to target.
+        // so.. still getting WARN log messages from XmlPartialPageUpdate
+
+        //                final Page page = component.findParent(Page.class);
+        //                if(page == null) {
+        //                    // as per logic in XmlPartialPageUpdate, this has already been
+        //                    // removed from page so don't attempt to redraw it
+        //                    return false;
+        //                }
+
+        final Object defaultModel = component.getDefaultModel();
+        if (!(defaultModel instanceof ScalarModel)) {
+            return true;
+        }
+        final ScalarModel scalarModel = (ScalarModel) defaultModel;
+        final UnchangingFacet unchangingFacet = scalarModel.getFacet(UnchangingFacet.class);
+        return unchangingFacet == null || ! unchangingFacet.value() ;
+    }
 
     private void addComponentsToRedraw(final AjaxRequestTarget target) {
-        final List<Component> componentsToRedraw = _Lists.newArrayList();
-        final List<Component> componentsNotToRedraw = _Lists.newArrayList();
+        final Set<Component> componentsToRedraw = _Sets.newHashSet();
+        final Set<Component> componentsNotToRedraw = _Sets.newHashSet();
 
         final Page page = target.getPage();
-        page.visitChildren(new IVisitor<Component, Object>() {
-            @Override
-            public void component(final Component component, final IVisit<Object> visit) {
-                if (component.getOutputMarkupId() && !(component instanceof Page)) {
-                    List<Component> listToAddTo =
-                            shouldRedraw(component)
-                            ? componentsToRedraw
-                                    : componentsNotToRedraw;
-                    listToAddTo.add(component);
-                }
+        page.visitChildren((component, visit) -> {
+            if (!Components.isRenderedComponent(component)){
+                return;
             }
-
-            private boolean shouldRedraw(final Component component) {
-
-                // hmm... this doesn't work, because I think that the components
-                // get removed after they've been added to target.
-                // so.. still getting WARN log messages from XmlPartialPageUpdate
-
-                //                final Page page = component.findParent(Page.class);
-                //                if(page == null) {
-                //                    // as per logic in XmlPartialPageUpdate, this has already been
-                //                    // removed from page so don't attempt to redraw it
-                //                    return false;
-                //                }
-
-                final Object defaultModel = component.getDefaultModel();
-                if (!(defaultModel instanceof ScalarModel)) {
-                    return true;
-                }
-                final ScalarModel scalarModel = (ScalarModel) defaultModel;
-                final UnchangingFacet unchangingFacet = scalarModel.getFacet(UnchangingFacet.class);
-                return unchangingFacet == null || ! unchangingFacet.value() ;
+            if(shouldRedraw(component)) {
+                componentsToRedraw.add(component);
+            } else {
+                componentsNotToRedraw.add(component);
             }
         });
 
-        for (Component componentNotToRedraw : componentsNotToRedraw) {
-            MarkupContainer parent = componentNotToRedraw.getParent();
-            while(parent != null) {
-                parent = parent.getParent();
-            }
+        for (Component component : componentsNotToRedraw) {
 
-            componentNotToRedraw.visitParents(MarkupContainer.class, new IVisitor<MarkupContainer, Object>() {
-                @Override
-                public void component(final MarkupContainer parent, final IVisit<Object> visit) {
-                    componentsToRedraw.remove(parent); // no-op if not in that list
-                }
+            component.visitParents(MarkupContainer.class, (parent, visit) -> {
+                componentsToRedraw.remove(parent); // no-op if not in that list
             });
-            if(componentNotToRedraw instanceof MarkupContainer) {
-                final MarkupContainer containerNotToRedraw = (MarkupContainer) componentNotToRedraw;
-                containerNotToRedraw.visitChildren(new IVisitor<Component, Object>() {
-                    @Override
-                    public void component(final Component parent, final IVisit<Object> visit) {
-                        componentsToRedraw.remove(parent); // no-op if not in that list
-                    }
+            
+            if(component instanceof MarkupContainer) {
+                val containerNotToRedraw = (MarkupContainer) component;
+                containerNotToRedraw.visitChildren((child, visit) -> {
+                        componentsToRedraw.remove(child); // no-op if not in that list
                 });
             }
         }
@@ -433,18 +424,18 @@ implements FormExecutor {
         }
 
         for (Component component : componentsToRedraw) {
-            target.add(component);
+            Components.addToAjaxRequest(target, component);
         }
     }
 
     private void debug(
-            final List<Component> componentsToRedraw,
-            final List<Component> componentsNotToRedraw) {
+            final Collection<Component> componentsToRedraw,
+            final Collection<Component> componentsNotToRedraw) {
         debug("Not redrawing", componentsNotToRedraw);
         debug("Redrawing", componentsToRedraw);
     }
 
-    private void debug(final String title, final List<Component> list) {
+    private void debug(final String title, final Collection<Component> list) {
         log.debug(">>> {}:", title);
         for (Component component : list) {
             log.debug(
