@@ -18,11 +18,8 @@
  */
 package org.apache.isis.metamodel.adapter;
 
-import java.util.stream.Stream;
-
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -53,7 +50,7 @@ public interface ObjectAdapterProvider {
      */
     @Nullable ObjectAdapter adapterFor(@Nullable Object pojo);
 
-    @Nullable ObjectAdapter adapterForBean(@Nullable ManagedBeanAdapter beanAdapter);
+    //@Nullable ObjectAdapter adapterForBean(@Nullable ManagedBeanAdapter beanAdapter);
 
     /**
      * @return collection adapter.
@@ -98,14 +95,6 @@ public interface ObjectAdapterProvider {
      */
     ObjectAdapter newTransientInstance(ObjectSpecification objectSpec);
 
-    //    @Nullable ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, @Nullable final String memento);
-
-    // -- SERVICE LOOKUP 
-
-    Stream<ObjectAdapter> streamServices();
-    ObjectAdapter lookupService(String serviceId);
-
-
     // -- FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
 
     public static interface Delegating extends ObjectAdapterProvider {
@@ -115,11 +104,6 @@ public interface ObjectAdapterProvider {
         @Override
         default ObjectAdapter adapterFor(Object domainObject) {
             return getObjectAdapterProvider().adapterFor(domainObject);
-        }
-
-        @Override
-        default ObjectAdapter adapterForBean(ManagedBeanAdapter bean) {
-            return getObjectAdapterProvider().adapterForBean(bean);
         }
 
         @Override
@@ -150,23 +134,6 @@ public interface ObjectAdapterProvider {
         default ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {
             return getObjectAdapterProvider().newTransientInstance(objectSpec);
         }
-
-
-        //        default ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
-        //            return getObjectAdapterProvider().recreateViewModelInstance(objectSpec, memento);
-        //        }
-
-
-        @Override
-        default Stream<ObjectAdapter> streamServices() {
-            return getObjectAdapterProvider().streamServices();
-        }
-
-        @Override
-        default ObjectAdapter lookupService(String serviceId) {
-            return getObjectAdapterProvider().lookupService(serviceId);
-        }
-
 
     }
 

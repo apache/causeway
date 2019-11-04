@@ -209,7 +209,7 @@ implements ReprRenderer<R, T> {
 
     protected Stream<ManagedObject> streamServiceAdapters() {
         val metaModelContext = resourceContext.getMetaModelContext();
-        return metaModelContext.streamServiceAdapters2();
+        return metaModelContext.streamServiceAdapters();
     }
 
 }

@@ -37,11 +37,11 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.config.registry.types.IsisBeanTypeRegistry;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
@@ -110,7 +110,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     
     private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
 
-    private Map<String, ObjectAdapter> serviceAdaptersById;
+    private Map<String, ManagedObject> serviceAdaptersById;
 
     @Singular
     private List<Object> singletons;
@@ -126,7 +126,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     }
     
     @Override
-    public Stream<ObjectAdapter> streamServiceAdapters() {
+    public Stream<ManagedObject> streamServiceAdapters() {
 
         if(serviceAdaptersById==null) {
             return Stream.empty();
@@ -135,7 +135,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     }
 
     @Override
-    public ObjectAdapter lookupServiceAdapterById(String serviceId) {
+    public ManagedObject lookupServiceAdapterById(String serviceId) {
         if(serviceAdaptersById==null) {
             return null;
         }

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.objectmanager;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.objectmanager.ObjectLoader.ObjectLoadRequest;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -45,18 +47,25 @@ public interface ObjectManager {
         return getObjectLoader().loadObject(objectLoadRequest);
     }
     
-    public default ManagedObject adapt(Object pojo) {
+    @Nullable
+    public default ManagedObject adapt(@Nullable Object pojo) {
         if(pojo==null) {
             return null; // don't propagate null into ManagedObject, null has no type 
         }
-        return ManagedObject.of(getMetaModelContext().getSpecificationLoader()::loadSpecification, pojo);
+        return ManagedObject.of(this::loadSpecification, pojo);
     }
 
-    public default ObjectSpecification loadSpec(Object pojo) {
+    @Nullable
+    public default ObjectSpecification loadSpecification(@Nullable Object pojo) {
         if(pojo==null) {
             return null; 
         }
-        return getMetaModelContext().getSpecificationLoader().loadSpecification(pojo.getClass());
+        return loadSpecification(pojo.getClass());
+    }
+    
+    @Nullable
+    default ObjectSpecification loadSpecification(@Nullable final Class<?> domainType) {
+        return getMetaModelContext().getSpecificationLoader().loadSpecification(domainType);
     }
     
 }

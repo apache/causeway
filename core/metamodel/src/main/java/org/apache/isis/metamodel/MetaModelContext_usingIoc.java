@@ -34,14 +34,13 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.IocContainer;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.services.ServiceUtil;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
@@ -59,10 +58,6 @@ class MetaModelContext_usingIoc implements MetaModelContext {
         this.iocContainer = iocContainer;
     }
 
-//    @Getter(lazy=true) 
-//    private final IsisConfigurationLegacy configurationLegacy = 
-//    _Config.getConfiguration();
-
     @Getter(lazy=true) 
     private final IsisSystemEnvironment systemEnvironment = 
     getSingletonElseFail(IsisSystemEnvironment.class);
@@ -70,10 +65,6 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     @Getter(lazy=true) 
     private final IsisConfiguration configuration = 
     getSingletonElseFail(IsisConfiguration.class);
-
-    @Getter(lazy=true) 
-    private final ObjectAdapterProvider objectAdapterProvider =
-    getSingletonElseFail(PersistenceSessionServiceInternal.class);
 
     @Getter(lazy=true) 
     private final ServiceInjector serviceInjector =
@@ -138,12 +129,12 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     // -- SERVICE SUPPORT
 
     @Override
-    public Stream<ObjectAdapter> streamServiceAdapters() {
+    public Stream<ManagedObject> streamServiceAdapters() {
         return objectAdaptersForBeansOfKnownSort.get().values().stream();
     }
 
     @Override
-    public ObjectAdapter lookupServiceAdapterById(final String serviceId) {
+    public ManagedObject lookupServiceAdapterById(final String serviceId) {
         return objectAdaptersForBeansOfKnownSort.get().get(serviceId);
     }
 
@@ -162,29 +153,27 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     
     // -- HELPER
 
-    private final _Lazy<Map<String, ObjectAdapter>> objectAdaptersForBeansOfKnownSort = 
+    private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort = 
             _Lazy.threadSafe(this::collectBeansOfKnownSort);
 
-    private Map<String, ObjectAdapter> collectBeansOfKnownSort() {
-
-        val objectAdapterProvider = getObjectAdapterProvider();
+    private Map<String, ManagedObject> collectBeansOfKnownSort() {
 
         return getServiceRegistry()
                 .streamRegisteredBeans()
-                .map(objectAdapterProvider::adapterForBean) 
-                .peek(this::guardAgainsTransient)
+                .map(this::toManagedObject) 
                 .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
     }
-
-    private void guardAgainsTransient(ObjectAdapter objectAdapter) {
-        val oid = objectAdapter.getOid();
-        if(oid.isTransient()) {
-            val msg = "ObjectAdapter for 'Bean' is expected not to be 'transient' " + oid;
-            throw _Exceptions.unrecoverable(msg);
-        }
+    
+    private ManagedObject toManagedObject(ManagedBeanAdapter managedBeanAdapter) {
+        
+        val servicePojo = managedBeanAdapter.getInstance().getFirst()
+                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        "Cannot get service instance of type '%s'", 
+                        managedBeanAdapter.getBeanClass()));
+        
+        return ManagedObject.of(getSpecificationLoader()::loadSpecification, servicePojo);
+        
     }
-
-
 
 
 }

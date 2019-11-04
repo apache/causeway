@@ -105,8 +105,11 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Str
 
             final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("value");
             if (linkFollower.matches(linkToObject)) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap()
-                        );
+                final DomainObjectReprRenderer renderer = 
+                        new DomainObjectReprRenderer(
+                                getResourceContext(), 
+                                linkFollower, 
+                                JsonRepresentation.newMap());
                 final JsonRepresentation domainObject = renderer.with(adapter).render();
                 linkToObject.mapPut("value", domainObject);
             }            

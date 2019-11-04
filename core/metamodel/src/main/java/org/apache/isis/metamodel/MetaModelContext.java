@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -87,14 +86,9 @@ public interface MetaModelContext {
 
     HomePageAction getHomePageAction();
 
-    @Deprecated
-    Stream<ObjectAdapter> streamServiceAdapters();
-    
-    default Stream<ManagedObject> streamServiceAdapters2() {
-        return streamServiceAdapters().map(ManagedObject.class::cast);
-    }
+    Stream<ManagedObject> streamServiceAdapters();
 
-    ObjectAdapter lookupServiceAdapterById(String serviceId);
+    ManagedObject lookupServiceAdapterById(String serviceId);
     
     <T> T getSingletonElseFail(Class<T> type);
     
@@ -189,13 +183,13 @@ public interface MetaModelContext {
             return getMetaModelContext().getTransactionService();
         }
 
-        @Override @Deprecated
-        public default Stream<ObjectAdapter> streamServiceAdapters() {
+        @Override
+        public default Stream<ManagedObject> streamServiceAdapters() {
             return getMetaModelContext().streamServiceAdapters();
         }
 
-        @Override @Deprecated
-        default ObjectAdapter lookupServiceAdapterById(String serviceId) {
+        @Override
+        default ManagedObject lookupServiceAdapterById(String serviceId) {
             return getMetaModelContext().lookupServiceAdapterById(serviceId);
         }
         

@@ -61,7 +61,7 @@ extends RecreatableObjectFacetAbstract {
         }
 
         val objectManager = super.getObjectManager();
-        val spec = objectManager.loadSpec(viewModelPojo);
+        val spec = objectManager.loadSpecification(viewModelPojo);
         val viewModelAdapter = ManagedObject.of(spec, viewModelPojo); 
 
         super.getServiceInjector().injectServicesInto(viewModelPojo);
@@ -88,7 +88,7 @@ extends RecreatableObjectFacetAbstract {
         final _Mementos.Memento memento = newMemento();
 
         val objectManager = super.getObjectManager();
-        val spec = objectManager.loadSpec(viewModelPojo);
+        val spec = objectManager.loadSpecification(viewModelPojo);
         
         /*
          * ManagedObject that holds the ObjectSpecification used for 

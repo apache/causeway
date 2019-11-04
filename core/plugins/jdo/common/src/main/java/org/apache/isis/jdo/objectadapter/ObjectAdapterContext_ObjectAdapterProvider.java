@@ -18,24 +18,14 @@
  */
 package org.apache.isis.jdo.objectadapter;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
-import org.apache.isis.metamodel.services.ServiceUtil;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.persistence.adapter.ObjectAdapterForBean;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
@@ -53,7 +43,6 @@ import lombok.val;
 class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvider {
 
     private final ObjectAdapterContext objectAdapterContext;
-    private final RuntimeContext runtimeContext;
     private final SpecificationLoader specificationLoader; 
     private final OidFactory oidFactory; 
 
@@ -63,7 +52,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             RuntimeContext runtimeContext) {
 
         this.objectAdapterContext = objectAdapterContext;
-        this.runtimeContext = runtimeContext;
         this.specificationLoader = runtimeContext.getSpecificationLoader();
         this.oidFactory = OidFactory.buildDefault();
     }
@@ -79,12 +67,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         val newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
         return objectAdapterContext.injectServices(newAdapter);
     }
-
-    @Override
-    public ObjectAdapter adapterForBean(ManagedBeanAdapter bean) {
-        return ObjectAdapterForBean.of(bean, specificationLoader);
-    }
-
 
     @Override
     public ObjectAdapter adapterForCollection(Object pojo, RootOid parentOid, OneToManyAssociation collection) {
@@ -121,38 +103,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     @Override
     public ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {
         return objectAdapterContext.objectCreationMixin.newInstance(objectSpec);
-    }
-
-    //    @Override
-    //    public ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
-    //        return objectAdapterContext.objectCreationMixin.recreateInstance(objectSpec, memento);
-    //    }
-
-    // -- SERVICE SUPPORT
-
-    @Override
-    public Stream<ObjectAdapter> streamServices() {
-        return serviceAdapters.get().values().stream();
-    }
-
-    @Override
-    public ObjectAdapter lookupService(final String serviceId) {
-        return serviceAdapters.get().get(serviceId);
-    }
-
-
-    // -- HELPER
-
-    private final _Lazy<Map<String, ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
-
-    private Map<String, ObjectAdapter> initServiceAdapters() {
-
-        return runtimeContext.getServiceRegistry().streamRegisteredBeans()
-                .map(this::adapterForBean)
-                .peek(serviceAdapter->{
-                    _Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
-                })
-                .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
     }
 
 

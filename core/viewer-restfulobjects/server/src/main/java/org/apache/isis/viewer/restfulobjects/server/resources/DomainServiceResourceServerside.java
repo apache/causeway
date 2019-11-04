@@ -76,7 +76,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         val metaModelContext = super.getResourceContext().getMetaModelContext();
 
-        final Stream<ManagedObject> serviceAdapters = metaModelContext.streamServiceAdapters2()
+        final Stream<ManagedObject> serviceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(NATURE_REST_ALSO);
 
         final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());

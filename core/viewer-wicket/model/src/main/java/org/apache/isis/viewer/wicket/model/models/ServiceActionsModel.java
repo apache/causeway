@@ -63,8 +63,8 @@ public class ServiceActionsModel extends ModelAbstract<List<ManagedObject>> {
 
     private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBar) {
         return (ManagedObject adapter) -> {
-            val domainServiceLayoutFacet = adapter.getSpecification().getFacet
-                    (DomainServiceLayoutFacet.class);
+            val domainServiceLayoutFacet = adapter.getSpecification()
+                    .getFacet(DomainServiceLayoutFacet.class);
             return (domainServiceLayoutFacet != null && domainServiceLayoutFacet.getMenuBar() == menuBar) ||
                     (domainServiceLayoutFacet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
         };
