@@ -36,7 +36,6 @@ import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -50,7 +49,6 @@ public class ParseableFacetUsingParserTest {
     @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock private ServiceInjector mockServicesInjector;
     @Mock private ServiceRegistry mockServiceRegistry;
-    @Mock private ObjectAdapterService mockAdapterManager;
 
     protected MetaModelContext metaModelContext;
     private ParseableFacetUsingParser parseableFacetUsingParser;
@@ -67,7 +65,7 @@ public class ParseableFacetUsingParserTest {
         context.checking(new Expectations() {
             {
                 never(mockAuthenticationSessionProvider);
-                never(mockAdapterManager);
+                //never(mockAdapterManager);
 
                 allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));

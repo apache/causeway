@@ -37,7 +37,6 @@ import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
-import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -57,17 +56,10 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     private ObjectAssociationAbstract objectAssociation;
     private FacetedMethod facetedMethod;
 
-    @Mock
-    private ObjectSpecification mockObjectSpecification;
-    @Mock
-    private ObjectSpecification mockOnType;
-
-    @Mock
-    private ServiceInjector mockServicesInjector;
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private ObjectAdapterService mockPersistenceSessionServiceInternal;
+    @Mock private ObjectSpecification mockObjectSpecification;
+    @Mock private ObjectSpecification mockOnType;
+    @Mock private ServiceInjector mockServicesInjector;
+    @Mock private SpecificationLoader mockSpecificationLoader;
 
     public static class Customer {
         public String getFirstName() {

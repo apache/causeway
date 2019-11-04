@@ -30,8 +30,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.linking.DeepLinkService;
-import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -44,15 +44,15 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 public class DeepLinkServiceWicket implements DeepLinkService {
 
     @Inject private PageClassRegistry pageClassRegistry;
-    @Inject private ObjectAdapterService objectAdapterProvider;
+    @Inject private SpecificationLoader specificationLoader;
 
     @Override
     public URI deepLinkFor(final Object domainObject) {
 
-        final ManagedObject objectAdapter = objectAdapterProvider.adapterFor(domainObject);
+        final ManagedObject objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, domainObject); 
+                
         final PageParameters pageParameters = EntityModel.createPageParameters(objectAdapter);
 
-        //PageClassRegistry pageClassRegistry = guiceBeanProvider.lookup(PageClassRegistry.class);
         final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
 
         final RequestCycle requestCycle = RequestCycle.get();

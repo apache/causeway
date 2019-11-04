@@ -36,7 +36,6 @@ import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
-import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -51,19 +50,12 @@ public class ObjectAssociationAbstractTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
+    @Mock private ObjectSpecification objectSpecification;
+    @Mock private ServiceInjector mockServicesInjector;
+    @Mock private SpecificationLoader mockSpecificationLoader;
 
     private ObjectAssociationAbstract objectAssociation;
     private FacetedMethod facetedMethod;
-
-
-    @Mock
-    private ObjectSpecification objectSpecification;
-    @Mock
-    private ServiceInjector mockServicesInjector;
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private ObjectAdapterService mockPersistenceSessionServiceInternal;
 
 
     public static class Customer {

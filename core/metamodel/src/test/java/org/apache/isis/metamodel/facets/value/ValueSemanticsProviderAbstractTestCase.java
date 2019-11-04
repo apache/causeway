@@ -38,7 +38,6 @@ import org.apache.isis.metamodel.facets.object.encodeable.encoder.EncodableFacet
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.unittestsupport.config.internal._Config;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -57,8 +56,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock protected FacetHolder mockFacetHolder;
-    @Mock protected ObjectAdapterService mockSessionServiceInternal;
-    //@Mock protected SpecificationLoader mockSpecificationLoader;
     @Mock protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock protected ObjectAdapter mockAdapter;
     
@@ -82,7 +79,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
             {
 
                 never(mockAuthenticationSessionProvider);
-                never(mockSessionServiceInternal);
+                //never(mockSessionServiceInternal);
                 
                 allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));

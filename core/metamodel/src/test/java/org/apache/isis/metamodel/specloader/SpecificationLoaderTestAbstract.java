@@ -45,7 +45,6 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
@@ -79,10 +78,6 @@ abstract class SpecificationLoaderTestAbstract {
             return Mockito.mock(GridService.class);
         }
 
-        ObjectAdapterService mockPersistenceSessionServiceInternal() {
-            return Mockito.mock(ObjectAdapterService.class);
-        }
-
         MessageService mockMessageService() {
             return Mockito.mock(MessageService.class);
         }
@@ -112,7 +107,6 @@ abstract class SpecificationLoaderTestAbstract {
     protected SpecificationLoader specificationLoader;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected GridService mockGridService;
-    protected ObjectAdapterService mockPersistenceSessionServiceInternal;
     protected MessageService mockMessageService;
     protected MetaModelContext metaModelContext;
 
