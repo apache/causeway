@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -35,7 +34,6 @@ import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
-import org.apache.wicket.SharedResources;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
@@ -71,7 +69,6 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
@@ -220,13 +217,8 @@ IsisWebAppCommonContext.Provider {
         val springInjector = new SpringComponentInjector(this);
         Injector.get().inject(this);
         getComponentInstantiationListeners().add(springInjector);
-        
-        postConstruct();
-    }
-    
-    protected void postConstruct() {
 
-        // bootstrap everything from the metaModelContext
+        // bootstrap dependencies from the metaModelContext
         {
             
             requires(metaModelContext, "metaModelContext");
@@ -239,7 +231,11 @@ IsisWebAppCommonContext.Provider {
             systemEnvironment = commonContext.lookupServiceElseFail(IsisSystemEnvironment.class);
         }
 
-        val backgroundInitializationTasks = createBackgroundInitializationTasks();
+        val backgroundInitializationTasks = 
+                _ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
+                .addRunnable("Configure WebJars",            this::configureWebJars)
+                .addRunnable("Configure WicketBootstrap",    this::configureWicketBootstrap)
+                .addRunnable("Configure WicketSelect2",      this::configureWicketSelect2);
         
         try {
 
@@ -278,14 +274,8 @@ IsisWebAppCommonContext.Provider {
 
             mountPages();
 
-            @SuppressWarnings("unused")
-            SharedResources sharedResources = getSharedResources();
-
-            //XXX lombok issue, cannot use val when super is referenced in same method
-            ValidationFailures validationResult = commonContext.getSpecificationLoader().getValidationResult();
-            if(validationResult.hasFailures()) {
-                log(validationResult.getMessages());
-            }
+            //  side-effects?
+            //  SharedResources sharedResources = getSharedResources();
 
             if(systemEnvironment.isPrototyping()) {
                 DebugDiskDataStore.register(this);
@@ -330,14 +320,6 @@ IsisWebAppCommonContext.Provider {
             settings.setThemeProvider(themeSupport.getThemeProvider());
         });
 
-    }
-
-    protected _ConcurrentTaskList createBackgroundInitializationTasks() {
-        
-        return _ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
-               .addRunnable("Configure WebJars",            this::configureWebJars)
-               .addRunnable("Configure WicketBootstrap",    this::configureWicketBootstrap)
-               .addRunnable("Configure WicketSelect2",      this::configureWicketSelect2);
     }
     
     /*
@@ -384,20 +366,6 @@ IsisWebAppCommonContext.Provider {
         return systemEnvironment.isPrototyping()
                 ? "PrototypingEncryptionKey"
                         : UUID.randomUUID().toString();
-    }
-
-    private void log(final Collection<String> validationErrors) {
-        log("");
-        logBanner();
-        log("");
-        for (String validationError : validationErrors) {
-            logError(validationError);
-        }
-        log("");
-        log("Please inspect the above messages and correct your domain model.");
-        log("");
-        logBanner();
-        log("");
     }
 
     private void configureWicketSelect2() {
@@ -550,23 +518,7 @@ IsisWebAppCommonContext.Provider {
         mount(new MountedMapper(mountPath, pageClass));
     }
 
-
     // //////////////////////////////////////
-
-    private void logError(String validationError) {
-        log(validationError);
-    }
-
-    private static void logBanner() {
-        String msg = "################################################ ISIS METAMODEL VALIDATION ERRORS ################################################################";
-        log(msg);
-    }
-
-    private static void log(String msg) {
-        System.err.println(msg);
-        log.error(msg);
-    }
-
 
     @Override
     protected void onDestroy() {

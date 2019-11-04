@@ -17,11 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.system;
+package org.apache.isis.config.registry.messages;
 
-import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.SystemConstants;
 
 public class MessageRegistry {
@@ -29,7 +29,10 @@ public class MessageRegistry {
     public MessageRegistry(){}
 
     public List<String> listMessages() {
-        return Arrays.asList(SystemConstants.MSG_ARE_YOU_SURE, SystemConstants.MSG_CONFIRM, SystemConstants.MSG_CANCEL);
+        return _Lists.of(
+                SystemConstants.MSG_ARE_YOU_SURE, 
+                SystemConstants.MSG_CONFIRM, 
+                SystemConstants.MSG_CANCEL);
     }
 
 

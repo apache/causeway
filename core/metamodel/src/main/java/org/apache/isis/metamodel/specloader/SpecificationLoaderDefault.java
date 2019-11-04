@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.config.registry.IsisBeanTypeRegistry;
+import org.apache.isis.config.registry.types.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
@@ -281,10 +281,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             return null;
         }
 
-//        if(type.getName().equals("com.fasterxml.jackson.core.Version")) {
-//            System.out.println("####");
-//        }
-        
         requires(upTo, "upTo");
 
         val substitutedType = classSubstitutor.getClass(type);

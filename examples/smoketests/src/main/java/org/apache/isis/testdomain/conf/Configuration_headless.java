@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.config.IsisPresets;
+import org.apache.isis.extensions.incubator.IsisBootIncubator;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.IsisBootSecurityBypass;
 
@@ -44,6 +45,7 @@ import org.apache.isis.security.IsisBootSecurityBypass;
 @Import({
     IsisBoot.class,
     IsisBootSecurityBypass.class,
+    IsisBootIncubator.class // @Model support
 })
 @PropertySources({
     @PropertySource("classpath:/org/apache/isis/testdomain/conf/isis-non-changing.properties"),

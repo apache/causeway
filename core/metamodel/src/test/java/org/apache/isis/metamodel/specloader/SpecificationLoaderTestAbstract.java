@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationService.Mode;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
@@ -86,6 +87,11 @@ abstract class SpecificationLoaderTestAbstract {
             return Mockito.mock(MessageService.class);
         }
 
+        TitleService mockTitleService() {
+            val mock = Mockito.mock(TitleService.class);
+            return mock;
+        }
+        
         TranslationService mockTranslationService() {
             val mock = Mockito.mock(TranslationService.class);
             when(mock.getMode()).thenReturn(Mode.DISABLED);
@@ -126,6 +132,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .configuration(isisConfiguration = producers.newConfiguration())
                 .programmingModel(programmingModel)
                 .translationService(producers.mockTranslationService())
+                .titleService(producers.mockTitleService())
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
                 .authenticationSessionProvider(mockAuthenticationSessionProvider = producers.mockAuthenticationSessionProvider())
                 .singleton(mockMessageService = producers.mockMessageService())

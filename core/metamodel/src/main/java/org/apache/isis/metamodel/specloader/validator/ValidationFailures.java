@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 
 import lombok.val;
@@ -54,10 +55,23 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
         return Collections.unmodifiableSet(failures);
     }
     
-    public ArrayList<String> getMessages() { // <-- ensure serializable
+    public ArrayList<String> getMessages() { // <-- ensure serializable result
         val messages = failures.stream() // already sorted
         .map(ValidationFailure::getMessage)
         .collect(Collectors.toCollection(ArrayList::new));
+        return messages;
+    }
+    
+    /**
+     * @param messageFormat to include {@code %d} for the message-index and {@code %s} for the message-string
+     * @return
+     */
+    public ArrayList<String> getMessages(String messageFormat) { // <-- ensure serializable result
+        val messages = _Lists.<String>newArrayList();
+        failures.stream() // already sorted
+        .map(ValidationFailure::getMessage)
+        .map(msg->String.format(messageFormat, messages.size()+1, msg))
+        .forEach(messages::add);
         return messages;
     }
 
@@ -91,6 +105,8 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
         }
         return buf.toString();
     }
+
+
 
 
 }

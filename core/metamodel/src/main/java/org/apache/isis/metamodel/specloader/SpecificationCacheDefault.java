@@ -38,8 +38,9 @@ import lombok.val;
 
 class SpecificationCacheDefault<T extends ObjectSpecification> {
 
-    private final Map<String, T> specByClassName = _Maps.newHashMap();
     private final Map<ObjectSpecId, String> classNameBySpecId = _Maps.newHashMap();
+    private final Map<String, T> specByClassName = _Maps.newHashMap();
+    
     
     // optimization: specialized list to keep track of any additions to the cache fast
     @Getter(value = AccessLevel.PACKAGE)
@@ -107,6 +108,10 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
 
     public T remove(String typeName) {
         final T removed = specByClassName.remove(typeName);
+        if(removed!=null) {
+            vList.clear(); // invalidate
+            vList.addAll(specByClassName.values());
+        }
         if(hasUsableSpecId(removed)) {
             val specId = removed.getSpecId();
             classNameBySpecId.remove(specId);

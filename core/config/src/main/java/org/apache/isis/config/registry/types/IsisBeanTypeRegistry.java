@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.registry;
+package org.apache.isis.config.registry.types;
 
 import java.io.Serializable;
 import java.util.Collection;

@@ -23,7 +23,6 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
@@ -33,7 +32,6 @@ import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
@@ -58,16 +56,16 @@ import lombok.val;
                 "isis.reflector.introspector.mode=FULL"
         })
 @TestPropertySource({
-    IsisPresets.DebugMetaModel,
+    //IsisPresets.DebugMetaModel,
     IsisPresets.DebugProgrammingModel,
 })
-@Incubating("does not work, when executed in sequence with other smoketests")
+//@Incubating("does not work, when executed in sequence with other smoketests")
 class DomainModelTest_usingBadDomain {
     
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
-    @Inject private ApplicationContext applicationContext;
+    //@Inject private ApplicationContext applicationContext;
     
     
     @Test

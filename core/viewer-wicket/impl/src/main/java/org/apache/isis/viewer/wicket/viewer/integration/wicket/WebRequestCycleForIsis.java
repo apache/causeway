@@ -207,7 +207,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         
         val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
         if(validationResult.hasFailures()) {
-            val mmvErrorPage = new MmvErrorPage(validationResult.getMessages());
+            val mmvErrorPage = new MmvErrorPage(validationResult.getMessages("[%d] %s"));
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
 
@@ -316,7 +316,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         } else {
             val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
             if(validationResult.hasFailures()) {
-                return new MmvErrorPage(validationResult.getMessages());
+                return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
             }
             // not sure whether this can ever happen now...
             log.warn("Unable to obtain exceptionRecognizers (no session), "

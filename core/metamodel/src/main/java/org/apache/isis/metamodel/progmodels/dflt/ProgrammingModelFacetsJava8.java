@@ -147,13 +147,13 @@ import org.apache.isis.metamodel.facets.value.url.URLValueFacetUsingSemanticsPro
 import org.apache.isis.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.metamodel.services.title.TitlesAndTranslationsValidator;
 
+@SuppressWarnings("deprecation")
 public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
-
+    
     public ProgrammingModelFacetsJava8() {
         
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
-
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, FallbackFacetFactory.class);
@@ -359,7 +359,9 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.Z1_FINALLY, TranslationFacetFactory.class);
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, ViewModelSemanticCheckingFacetFactory.class);
-       
+        
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
+        addValidator(new TitlesAndTranslationsValidator());
         
     }
 

@@ -100,6 +100,5 @@ public interface IsisSessionFactory {
      */
     public <R> R doInSession(final Callable<R> callable, final AuthenticationSession authenticationSession);
 
-    // -- component accessors
 
 }

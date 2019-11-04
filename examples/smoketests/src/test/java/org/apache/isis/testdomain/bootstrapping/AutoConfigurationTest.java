@@ -33,9 +33,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.MetaModelContexts;
-import org.apache.isis.testdomain.Incubating;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingStereotypes;
@@ -66,7 +64,7 @@ import lombok.val;
 @TestPropertySource({
     IsisPresets.DebugDiscovery
 })
-@Incubating("under construction, not tested with surefire yet")
+//@Incubating("under construction, not tested with surefire yet")
 class AutoConfigurationTest {
     
     @Inject private ApplicationContext applicationContext;

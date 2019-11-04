@@ -20,7 +20,7 @@ package org.apache.isis.config.beans;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.config.registry.TypeMetaData;
+import org.apache.isis.config.registry.types.TypeMetaData;
 
 /**
  * @apiNote implementing classes must not rely on IsisConfiguration or other provisioned 

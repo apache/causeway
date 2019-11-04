@@ -27,8 +27,8 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.ViewModel;
-import org.apache.isis.config.registry.IsisBeanTypeRegistry;
-import org.apache.isis.config.registry.TypeMetaData;
+import org.apache.isis.config.registry.types.IsisBeanTypeRegistry;
+import org.apache.isis.config.registry.types.TypeMetaData;
 
 import lombok.Getter;
 import lombok.val;

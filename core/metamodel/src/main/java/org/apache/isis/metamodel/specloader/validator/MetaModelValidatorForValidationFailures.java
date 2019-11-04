@@ -20,21 +20,4 @@ package org.apache.isis.metamodel.specloader.validator;
 
 public class MetaModelValidatorForValidationFailures extends MetaModelValidatorAbstract {
 
-//    public void addFailure(Identifier identifier, String pattern, Object... arguments) {
-//        failures.add(identifier, pattern, arguments);
-//    }
-
-//    public Facet addFailure(Facet facet, String message) {
-//        if(facet != null) {
-//            val holder = (IdentifiedHolder) facet.getFacetHolder();
-//            val identifier = holder.getIdentifier();
-//            failures.add(identifier, message + " " + identifier.toFullIdentityString());
-//        }
-//        return facet;
-//    }
-
-//    public void addFacet(Facet facet, String message) {
-//        FacetUtil.addFacet(addFailure(facet, message));
-//    }
-
 }

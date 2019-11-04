@@ -20,7 +20,11 @@ package org.apache.isis.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Method;
 
+import org.mockito.Mockito;
+
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.TranslationService.Mode;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -33,6 +37,9 @@ import org.apache.isis.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
+import org.apache.isis.metamodel.services.title.TitleServiceDefault;
+
+import static org.mockito.Mockito.when;
 
 import lombok.val;
 
@@ -45,10 +52,16 @@ abstract class MixinIntendedAs {
 
         programmingModel = new ProgrammingModelFacetsJava8();
         
+        val mockTranslationService = Mockito.mock(TranslationService.class);
+        when(mockTranslationService.getMode()).thenReturn(Mode.DISABLED);
+        
+        
         // PRODUCTION
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .programmingModel(programmingModel)
+                .translationService(mockTranslationService)
+                .titleService(new TitleServiceDefault())
                 .build();
         
         ((ProgrammingModelAbstract)programmingModel)

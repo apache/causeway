@@ -77,7 +77,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
         
         val serviceId = getServiceId(facetHolder);
         val isService = serviceId!=null;
-        
+
         if (isService) {
             return new ObjectSpecIdFacetDerivedFromIoCNamingStrategy(serviceId, facetHolder);
         }

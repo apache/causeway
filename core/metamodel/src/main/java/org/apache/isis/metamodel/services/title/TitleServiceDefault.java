@@ -20,24 +20,28 @@
 package org.apache.isis.metamodel.services.title;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 
 @Service
 public class TitleServiceDefault implements TitleService {
 
+    @Inject private WrapperFactory wrapperFactory;
+    @Inject private SpecificationLoader specificationLoader;
+    
     @Override
     public String titleOf(final Object domainObject) {
-        val objectAdapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
-        val destroyed = objectAdapter.isDestroyed();
+        
+        val pojo = unwrapped(domainObject);
+        val objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, pojo);
+        val destroyed = ManagedObject._isDestroyed(objectAdapter);
         if(!destroyed) {
             return objectAdapter.getSpecification().getTitle(null, objectAdapter);
         } else {
@@ -47,23 +51,15 @@ public class TitleServiceDefault implements TitleService {
 
     @Override
     public String iconNameOf(final Object domainObject) {
-        val objectAdapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
+        val pojo = unwrapped(domainObject);
+        val objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, pojo);
         return objectAdapter.getSpecification().getIconName(objectAdapter);
     }
 
-    // //////////////////////////////////////
+    //-- HELPER
 
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
-
-    // //////////////////////////////////////
-
-    private ObjectAdapterProvider getObjectAdapterProvider() {
-        return objectAdapterProvider;
-    }
-
-    @Inject ObjectAdapterService objectAdapterProvider;
-    @Inject WrapperFactory wrapperFactory;
 
 }

@@ -20,10 +20,8 @@ package org.apache.isis.runtime.sessiontemplate;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -32,7 +30,7 @@ public abstract class AbstractIsisSessionTemplate {
     
     @Inject protected TransactionService transactionService;
     @Inject protected IsisSessionFactory isisSessionFactory;
-    @Inject protected SpecificationLoader specificationLoader;
+    @Inject protected ServiceInjector serviceInjector;
 
     /**
      * Sets up an {@link IsisSession} then passes along any calling framework's context.
@@ -40,8 +38,7 @@ public abstract class AbstractIsisSessionTemplate {
     public void execute(final AuthenticationSession authSession, final Object context) {
         try {
             isisSessionFactory.openSession(authSession);
-            PersistenceSession persistenceSession = getPersistenceSession();
-            persistenceSession.getServiceInjector().injectServicesInto(this);
+            serviceInjector.injectServicesInto(this);
             doExecute(context);
         } finally {
             isisSessionFactory.closeSession();
@@ -77,13 +74,6 @@ public abstract class AbstractIsisSessionTemplate {
      * implementation of {@link #doExecute(Object)}.
      */
     protected void doExecuteWithTransaction(final Object context) {}
-
-    // //////////////////////////////////////
-
-
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession().orElse(null);
-    }
 
 
 }
