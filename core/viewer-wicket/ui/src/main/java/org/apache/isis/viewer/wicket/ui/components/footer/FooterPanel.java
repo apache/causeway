@@ -27,10 +27,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.config.IsisConfiguration.Viewer.Wicket.Credit;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
@@ -38,7 +40,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChoo
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+
+import lombok.val;
 
 /**
  * A panel for the default page footer
@@ -73,47 +76,50 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     }
 
     private void addCredits() {
-        boolean hasAnyCredits = false;
-        hasAnyCredits = addCredit(1) || hasAnyCredits;
-        hasAnyCredits = addCredit(2) || hasAnyCredits;
-        hasAnyCredits = addCredit(3) || hasAnyCredits;
-        final Label creditsLabel = new Label("creditsLabel", "Credits: ");
+        
+        val credits = super.getConfiguration().getViewer().getWicket().getCredit();
+        val hasAnyCredits = !_NullSafe.isEmpty(credits);
+        
+        val creditItems = new RepeatingView("creditItems");
+        add(creditItems);
+        
+        _NullSafe.stream(credits)
+        .forEach(credit->{
+            
+            val listItem = new WebMarkupContainer(creditItems.newChildId());
+            creditItems.add(listItem);
+            
+            val creditLink = newCreditLinkComponent(credit);
+            listItem.add(creditLink);   
+            
+            creditLink.add(new CreditImage("creditImage", credit.getImage()));
+            creditLink.add(new CreditName("creditName", credit.getName()));
+            
+        });
+        
+        val creditsLabel = new Label("creditsLabel", "Credits: ");
         add(creditsLabel);
         creditsLabel.setVisibilityAllowed(hasAnyCredits);
     }
 
-    private boolean addCredit(final int num) {
-        final Credit credit = super.getConfiguration().getViewer().getWicket().getCredit(num); 
-        final WebMarkupContainer creditLink = newLink(credit);
-        if(credit.isDefined()) {
-            creditLink.add(new CreditImage(credit.getImageId(), credit.getImage()));
-            creditLink.add(new CreditName(credit.getNameId(), credit.getName()));
-
-            add(creditLink);
-        } else {
-            Components.permanentlyHide(this, credit.getId());
-        }
-        return credit.isDefined();
-    }
-
-    private WebMarkupContainer newLink(final Credit credit) {
-        final WebMarkupContainer creditLink;
-        final String url = credit.getUrl();
-        final String creditId = credit.getId();
-        if(url != null) {
-            creditLink = new ExternalLink(creditId, url) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected void onComponentTag(ComponentTag tag)
-                {
-                    super.onComponentTag(tag);
-                    tag.put("target", "_blank");
-                }
-            }   ;
-        } else {
-            creditLink = new BookmarkablePageLink<>(creditId, HomePage.class);
-        }
+    private WebMarkupContainer newCreditLinkComponent(Credit credit) {
+        
+        val creditLinkId = "creditLink";
+        
+        val creditLink = (credit.getUrl() != null)
+                
+                ? new ExternalLink(creditLinkId, credit.getUrl()) {
+                        private static final long serialVersionUID = 1L;
+        
+                        @Override
+                        protected void onComponentTag(ComponentTag tag) {
+                            super.onComponentTag(tag);
+                            tag.put("target", "_blank");
+                        }
+                    }
+        
+                : new BookmarkablePageLink<>(creditLinkId, HomePage.class);
+        
         return creditLink;
     }
 

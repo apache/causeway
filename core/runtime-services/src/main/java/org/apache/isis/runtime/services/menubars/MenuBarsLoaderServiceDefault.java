@@ -31,7 +31,6 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.beans.WebAppConfigBean;
 
@@ -41,6 +40,10 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private JaxbService jaxbService;
+    @Autowired(required = false) private WebAppConfigBean webAppConfigBean;
+    
     @Override
     public boolean supportsReloading() {
         return isisSystemEnvironment.isPrototyping();
@@ -109,9 +112,8 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
                 cause);
     }
 
-    @Inject JaxbService jaxbService;
-    @Autowired(required = false) WebAppConfigBean webAppConfigBean;
+    
 
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    
 }
 

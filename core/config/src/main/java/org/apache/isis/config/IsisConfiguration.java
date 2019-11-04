@@ -57,7 +57,6 @@ import org.apache.isis.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.viewer.wicket.ui.DialogMode;
 
 import lombok.Data;
-import lombok.val;
 
 
 /**
@@ -853,30 +852,11 @@ public class IsisConfiguration {
             
             @Data
             public static class Credit {
-                private int num;
                 private String url;
                 private String name;
                 private String image;
                 
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
-                public String getId() { return idFor(""); }
-                public String getUrlId() { return idFor("Url"); }
-                public String getNameId() { return idFor("Name"); }
-                public String getImageId() { return idFor("Image"); }
-                
-                private String idFor(final String component) {
-                    return "credit" + getNum() + component;
-                }
-            }
-            
-            public Credit getCredit(int indexOneBased) {
-                int indexZeroBased = indexOneBased - 1;
-                int maxIndex = credit.size() - 1;
-                val credit = (indexZeroBased<0 || indexZeroBased>maxIndex)
-                        ? new Credit()
-                                : Wicket.this.credit.get(indexZeroBased);
-                credit.setNum(indexOneBased);
-                return credit;
             }
             
             private final DatePicker datePicker = new DatePicker();
