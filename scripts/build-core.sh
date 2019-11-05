@@ -13,7 +13,7 @@ echo ""
 echo ""
 echo ""
 
-cd core
+cd ../core
 
 mvn -s ../.m2/settings.xml \
     --batch-mode \

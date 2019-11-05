@@ -15,7 +15,7 @@ echo ""
 echo ""
 echo ""
 
-cd examples
+cd ../examples
 
 mvn --batch-mode \
     -Dexample-apps \

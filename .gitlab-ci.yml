@@ -34,6 +34,7 @@ services:
   - docker:dind
 
 variables:
+  GIT_SUBMODULE_STRATEGY: recursive
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
   ORG_NAME: "apacheisis"
@@ -44,10 +45,9 @@ stages:
 build-package-push:
   stage: build-package-push
   script:
-    - sh build-mixins.sh
-    - sh build-core.sh
-    - sh build-example-apps.sh
-
+    - sh scripts/build-mixins.sh
+    - sh scripts/build-core.sh
+    - sh scripts/build-example-apps.sh
 
 #
 # Previously this script also uploaded to a Sonatype Nexus.

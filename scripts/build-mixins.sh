@@ -14,7 +14,7 @@ echo ""
 echo ""
 
 
-cd mixins
+cd ../mixins
 
 # can't use flatten pom, so have to edit directly instead...
 mvn versions:set -DnewVersion=$REVISION
