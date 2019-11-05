@@ -1,8 +1,8 @@
 package org.ro.ui
 
 import org.ro.core.event.LogEntry
+import org.ro.org.ro.ui.kv.RoDialog
 import org.ro.to.ResultValue
-import org.ro.ui.kv.RoDialog
 import org.ro.ui.uicomp.FormItem
 
 class FileAlert(val logEntry: LogEntry) : Command {
@@ -16,7 +16,7 @@ class FileAlert(val logEntry: LogEntry) : Command {
         formItems.add(FormItem("URL", "Text", logEntry.url))
         formItems.add(FormItem("Blob", "TextArea", list[2], 20))
         val label = list[0] + "/" + list[1]
-        RoDialog(label = label, items = formItems, command = this).show()
+        RoDialog(caption = label, items = formItems, command = this).show()
     }
 
     override fun execute() {

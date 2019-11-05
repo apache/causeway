@@ -4,7 +4,7 @@ import org.ro.layout.Layout
 import org.ro.to.Extensions
 import org.ro.to.Property
 import org.ro.to.TObject
-import pl.treksoft.kvision.utils.observableListOf
+import pl.treksoft.kvision.state.observableListOf
 
 class DisplayList(override val title: String) : BaseDisplayable() {
     var data = observableListOf<Exposer>()

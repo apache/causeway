@@ -4,8 +4,9 @@ import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.PopoverOptions
 import pl.treksoft.kvision.core.TooltipOptions
 import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.html.Image.Companion.image
+import pl.treksoft.kvision.html.image
 import pl.treksoft.kvision.panel.VPanel
+import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.require
 import pl.treksoft.kvision.utils.px
 

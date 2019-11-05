@@ -1,6 +1,7 @@
 package org.ro.ui.kv
 
 import org.ro.core.Session
+import org.ro.org.ro.ui.kv.RoDialog
 import org.ro.to.Link
 import org.ro.ui.Command
 import org.ro.ui.uicomp.FormItem
@@ -21,8 +22,8 @@ class LoginPrompt() : Command {
         formItems.add(FormItem("Url", "Text", url))
         formItems.add(FormItem("User", "Text", username))
         formItems.add(FormItem("Password", "Password", password))
-        form = RoDialog(label = "Connect", items = formItems, command = this)
-        form.show()
+        form = RoDialog(caption = "Connect", items = formItems, command = this)
+        UiManager.openDialog(form)
     }
 
     override fun execute() {
@@ -36,7 +37,7 @@ class LoginPrompt() : Command {
         //TODO function has a sideeffect, ie. changes variable values
         var key: String?
         val formPanel = form.panel
-        val kids = formPanel!!.getChildren()
+        val kids = formPanel.getChildren()
         //iterate over FormItems (0,1,2) but not Buttons(3,4)
         for (i in kids) {
             when (i) {

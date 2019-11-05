@@ -3,28 +3,31 @@ package org.ro.ui
 import org.ro.core.Utils
 
 object IconManager {
-    val DEFAULT_ICON = "fa-cube"
+    val PREFIX = "fas fa-"
+    val DEFAULT_ICON = PREFIX + "cube"
 
     /* Recreate from configuration value*/
     val word2Icon = mapOf<String, String>(
-            "Create" to "fa-plus",
-            "Edit" to "fa-pencil",
-            "Delete" to "fa-trash",
-            "Find" to "fa-search",
-            "List" to "fa-list",
-            "Download" to "fa-download",
-            "Open" to "fa-book",
-            "Run" to "fa-rocket",
-            "Simple" to "fa-cubes",
-            "Configuration" to "fa-wrench",
-            "Manager" to "fa-manager",
-            "Switch" to "fa-power-off",
-            "Hsql" to "fa-database",
-            "Prototyping" to "fa-object-group",
-            "Objects" to "fa-cubes",
-            "Log" to "fa-history",
-            "Connect" to "fa-plug",
-            "Close" to "fa-times")
+            "Actions" to "ellipsis-h",
+            "Create" to "plus",
+            "Edit" to "pencil",
+            "Delete" to "trash",
+            "Find" to "search",
+            "List" to "list",
+            "Download" to "download",
+            "Open" to "book",
+            "Run" to "rocket",
+            "Simple" to "cubes",
+            "Configuration" to "wrench",
+            "Manager" to "manager",
+            "Switch" to "power-off",
+            "Hsql" to "database",
+            "Prototyping" to "object-group",
+            "Objects" to "cubes",
+            "Log" to "history",
+            "Connect" to "plug",
+            "Close" to "times",
+            "Burger" to "bars")
 
     fun find(query: String): String {
         val actionTitle = Utils.deCamel(query)
@@ -32,7 +35,7 @@ object IconManager {
         for (w in mixedCaseList) {
             val hit = word2Icon.get(w)
             if (hit != null) {
-                return hit
+                return PREFIX + hit
             }
         }
         return DEFAULT_ICON

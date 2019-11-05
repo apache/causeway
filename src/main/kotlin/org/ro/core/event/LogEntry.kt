@@ -13,13 +13,13 @@ import kotlin.js.Date
 
 //Eventually color codes from css instead
 enum class EventState(val id: String, val iconName: String, val color: Col) {
-    INITIAL("INITIAL", "fa-power-off", Col.GRAY),
-    RUNNING("RUNNING", "fa-play-circle", Col.YELLOW),
-    ERROR("ERROR", "fa-exclamation-circle", Col.RED),
-    SUCCESS("SUCCESS", "fa-check-circle", Col.GREEN),
-    VIEW("VIEW", "fa-info-circle", Col.BLUE),
-    CACHE_USED("CACHE_USED", "fa-caret-circle-left", Col.VIOLET),
-    CLOSED("CLOSED", "fa-times-circle", Col.LIGHTBLUE)
+    INITIAL("INITIAL", "fas fa-power-off", Col.GRAY),
+    RUNNING("RUNNING", "fas fa-play-circle", Col.YELLOW),
+    ERROR("ERROR", "fas fa-exclamation-circle", Col.RED),
+    SUCCESS("SUCCESS", "fas fa-check-circle", Col.GREEN),
+    VIEW("VIEW", "fas fa-info-circle", Col.BLUE),
+    CACHE_USED("CACHE_USED", "fas fa-caret-circle-left", Col.VIOLET),
+    CLOSED("CLOSED", "fas fa-times-circle", Col.LIGHTBLUE)
 }
 
 @Serializable

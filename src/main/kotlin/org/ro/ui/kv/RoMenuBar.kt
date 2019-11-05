@@ -5,56 +5,55 @@ import org.ro.core.MenuEntry
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
 import org.ro.ui.IconManager
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
+import pl.treksoft.kvision.dropdown.ddLink
+import pl.treksoft.kvision.dropdown.dropDown
 import pl.treksoft.kvision.html.Link
 import pl.treksoft.kvision.i18n.I18n.tr
-import pl.treksoft.kvision.navbar.Nav
-import pl.treksoft.kvision.navbar.Navbar
-import pl.treksoft.kvision.navbar.NavbarType
+import pl.treksoft.kvision.navbar.*
+import pl.treksoft.kvision.panel.SimplePanel
+import pl.treksoft.kvision.panel.vPanel
 
-object RoMenuBar {
-    var navbar: Navbar
-    private val nav = Nav()
+object RoMenuBar : SimplePanel() {
+    lateinit var navbar: Navbar
+    lateinit var nav: Nav
 
     init {
-        navbar = Navbar(type = NavbarType.FIXEDTOP) {
-            marginLeft = CssSize(-12, UNIT.px)
-            add(nav)
-            val mainEntry = buildMainEntry()
-            nav.add(mainEntry)
+        vPanel() {
+            val label = "" //IMPROVE use for branding
+            navbar = navbar(label, NavbarType.FIXEDTOP) {
+                nav = nav()
+                val mainEntry = buildMainEntry()
+                nav.add(mainEntry)
+            }
         }
     }
 
     private fun buildMainEntry(): DropDown {
-        val mainMenu = MenuFactory.buildMenuEntry("", iconName = "fa-bars")
-
-        val link = createLink("Connect ...").onClick {
-            LoginPrompt().open()
+        val iconName = IconManager.find("Burger") //IMPROVE use for branding
+        val dd = dropDown("", icon = iconName, forNavbar = true)
+        {
+            ddLink("Connect ...", icon = IconManager.find("Connect"))
+                    .onClick { LoginPrompt().open() }
+            val logTitle = "Log Entries"
+            ddLink(logTitle, icon = IconManager.find(logTitle))
+                    .onClick {
+                        val model = EventStore.log
+                        UiManager.add(logTitle, EventLogTable(model))
+                    }
+            val sampleTitle = "Image Sample"
+            ddLink(sampleTitle, icon = IconManager.find(sampleTitle))
+                    .onClick {
+                        val panel = ImagePanel()
+                        UiManager.add(sampleTitle, panel)
+                    }
         }
-        mainMenu.add(link)
-
-        val title = "Log Entries"
-        val log = createLink(title).onClick {
-            val model = EventStore.log
-            UiManager.add(title, EventLogTable(model))
-        }
-        mainMenu.add(log)
-
-        val sample = "Image Sample"
-        val dynTable = createLink(sample).onClick {
-            val panel = ImagePanel()
-            UiManager.add(sample, panel)
-        }
-        mainMenu.add(dynTable)
-
-        return mainMenu
+        return dd
     }
 
-    private fun createLink(title: String): Link {
+    private fun addItem(title: String): Link {
         val icon = IconManager.find(title)
-        val link = Link(tr(title), icon = icon)
+        val link = nav.navLink(tr(title), icon = icon)
         return link
     }
 

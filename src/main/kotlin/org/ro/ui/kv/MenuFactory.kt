@@ -5,53 +5,36 @@ import org.ro.to.TObject
 import org.ro.ui.IconManager
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.dropdown.DropDown
-import pl.treksoft.kvision.dropdown.Header.Companion.header
+import pl.treksoft.kvision.dropdown.cmLink
+import pl.treksoft.kvision.dropdown.header
 import pl.treksoft.kvision.html.Link
-import pl.treksoft.kvision.html.Link.Companion.link
-import pl.treksoft.kvision.i18n.I18n
+import pl.treksoft.kvision.i18n.tr
 import pl.treksoft.kvision.utils.ESC_KEY
 
 object MenuFactory {
 
-    fun buildDdFor(tObject: TObject): DropDown {
-        val type = tObject.domainType
-        val actions = tObject.getActions()
-        val label =  "Actions for $type"
-        val iconName = "fa-ellipsis-v"
-        val dd = buildMenuEntry(label, iconName = iconName, forNavbar = false)
-        actions.forEach {
-            val menuLink = buildMenuAction(it.id)
-            dd.add(menuLink)
-            val l = it.getInvokeLink()!!
-            menuLink.onClick {
-                ActionAggregator().invoke(l)
-            }
-        }
-        return dd
-    }
-
-     fun buildMenuEntry(title: String, iconName: String? = null, forNavbar:Boolean = true): DropDown {
-        val label = I18n.tr(title)
+    fun buildMenuEntry(title: String, iconName: String? = null): DropDown {
+        val label = tr(title)
         val icon = iconName ?: IconManager.find(title)
-        return DropDown(label, icon = icon, forNavbar = forNavbar)
+        return DropDown(label, icon = icon, forNavbar = true)
     }
 
-     fun buildMenuAction(action: String, iconName: String? = null): Link {
-        val label = I18n.tr(action)
+    fun buildMenuAction(action: String, iconName: String? = null): Link {
+        val label = tr(action)
         val icon = iconName ?: IconManager.find(action)
-        return Link(label, icon = icon)
+        return Link(label, icon = icon, classes = setOf("dropdown-toggle"))
     }
 
     fun buildFor(tObject: TObject): ContextMenu {
         val type = tObject.domainType
         val actions = tObject.getActions()
-        val contextMenu = ContextMenu {
-            header(I18n.tr("Actions for $type"))
+        return ContextMenu {
+            header(tr("Actions for $type"))
             actions.forEach {
                 val title = it.id
                 val iconName = IconManager.find(title)
                 val link = it.getInvokeLink()!!
-                link(I18n.tr(title), icon = iconName) {
+                cmLink(tr(title), icon = iconName) {
                     setEventListener {
                         click = { e ->
                             e.stopPropagation()
@@ -68,7 +51,24 @@ object MenuFactory {
                 }
             }
         }
-        return contextMenu
+    }
+
+    // tr("Separator") to DD.SEPARATOR.option,
+    fun buildDdFor(tObject: TObject): DropDown {
+        val type = tObject.domainType
+        val actions = tObject.getActions()
+        val label = "Actions for $type"
+        val iconName = IconManager.find(label)
+        val dd = buildMenuEntry(label, iconName = iconName)
+        actions.forEach {
+            val menuLink = buildMenuAction(it.id)
+            dd.add(menuLink)
+            val l = it.getInvokeLink()!!
+            menuLink.onClick {
+                ActionAggregator().invoke(l)
+            }
+        }
+        return dd
     }
 
 }

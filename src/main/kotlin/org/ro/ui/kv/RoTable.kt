@@ -8,8 +8,8 @@ import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.tabulator.Layout
 import pl.treksoft.kvision.tabulator.Tabulator
-import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
 import pl.treksoft.kvision.tabulator.TabulatorOptions
+import pl.treksoft.kvision.tabulator.tabulator
 import pl.treksoft.kvision.utils.px
 
 /**

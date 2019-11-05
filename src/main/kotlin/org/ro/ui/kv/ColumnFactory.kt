@@ -86,7 +86,7 @@ class ColumnFactory {
                 field = "result",
                 headerFilter = Editor.INPUT,
                 formatterComponentFunction = { _, _, data ->
-                    Button(text = data["object"].title, icon = "fa-star-o", style = ButtonStyle.LINK).onClick {
+                    Button(text = data["object"].title, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
                         console.log(data)
                     }
                 })

@@ -8,10 +8,9 @@ import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
-import pl.treksoft.kvision.panel.HPanel.Companion.hPanel
 import pl.treksoft.kvision.panel.VPanel
+import pl.treksoft.kvision.panel.hPanel
 import pl.treksoft.kvision.tabulator.*
-import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
 import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 

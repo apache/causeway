@@ -7,6 +7,7 @@ import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
+import org.ro.org.ro.ui.kv.RoDialog
 import org.ro.ui.RoStatusBar
 import pl.treksoft.kvision.panel.VPanel
 
@@ -74,6 +75,10 @@ object UiManager {
         val panel = RoDisplay(displayable as DisplayObject)
         add(title, panel, aggregator)
         displayable.isRendered = true
+    }
+
+    fun openDialog(panel: RoDialog) {
+           RoView.display(panel)
     }
 
 }

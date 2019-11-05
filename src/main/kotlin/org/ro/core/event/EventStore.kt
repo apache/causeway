@@ -4,7 +4,7 @@ import org.ro.core.Utils
 import org.ro.core.aggregator.IAggregator
 import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.panel.VPanel
-import pl.treksoft.kvision.utils.observableListOf
+import pl.treksoft.kvision.state.observableListOf
 
 /**
  * Keeps a log of remote invocations and the responses.

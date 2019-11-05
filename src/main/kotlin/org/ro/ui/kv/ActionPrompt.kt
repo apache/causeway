@@ -1,6 +1,7 @@
 package org.ro.ui.kv
 
 import org.ro.core.Utils
+import org.ro.org.ro.ui.kv.RoDialog
 import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Parameter
@@ -17,7 +18,7 @@ class ActionPrompt(val action: Action) : Command {
     fun open() {
         val formItems = buildFormItems()
         form = RoDialog(
-                label = buildLabel(),
+                caption = buildLabel(),
                 items = formItems,
                 command = this)
         form.show()
