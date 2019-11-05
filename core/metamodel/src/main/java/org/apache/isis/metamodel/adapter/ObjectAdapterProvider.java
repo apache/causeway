@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
@@ -60,23 +59,6 @@ public interface ObjectAdapterProvider {
             RootOid parentOid,
             OneToManyAssociation collection);
 
-    /**
-     * Returns an ObjectAdapter that holds the ObjectSpecification used for 
-     * interrogating the domain object's metadata. 
-     * <p>
-     * Does _not_ perform dependency injection on the domain object. Also bypasses 
-     * caching (if any), that is each call to this method creates a new unique instance.
-     * </p>
-     * 
-     * @param viewModelPojo domain object
-     * @return  
-     */
-    ManagedObject disposableAdapterForViewModel(Object viewModelPojo);
-
-    ObjectSpecification specificationForViewModel(Object viewModelPojo);
-
-    ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoStr);
-
 
     // -- DOMAIN OBJECT CREATION SUPPORT
 
@@ -113,22 +95,6 @@ public interface ObjectAdapterProvider {
                 OneToManyAssociation collection) {
             return getObjectAdapterProvider().adapterForCollection(pojo, parentOid, collection);
         }
-
-        @Override
-        default ManagedObject disposableAdapterForViewModel(Object viewModelPojo) {
-            return getObjectAdapterProvider().disposableAdapterForViewModel(viewModelPojo);
-        }
-
-        @Override
-        default ObjectSpecification specificationForViewModel(Object viewModelPojo) {
-            return getObjectAdapterProvider().specificationForViewModel(viewModelPojo);
-        }
-
-        @Override
-        default ObjectAdapter adapterForViewModel(final Object viewModelPojo, final String mementoString) {
-            return getObjectAdapterProvider().adapterForViewModel(viewModelPojo, mementoString);
-        }
-
 
         @Override
         default ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {

@@ -81,23 +81,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         return objectAdapterContext.injectServices(newAdapter);
     }
 
-    @Override
-    public ObjectSpecification specificationForViewModel(Object viewModelPojo) {
-        final ObjectSpecification objectSpecification = 
-                specificationLoader.loadSpecification(viewModelPojo.getClass());
-        return objectSpecification;
-    }
-
-    @Override
-    public ManagedObject disposableAdapterForViewModel(final Object viewModelPojo) {
-        return ManagedObject.of(specificationLoader::loadSpecification, viewModelPojo);
-    }
-
-    @Override
-    public ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoString) {
-        return objectAdapterContext.adapterForViewModel(viewModelPojo, mementoString);
-    }
-
     // -- DOMAIN OBJECT CREATION SUPPORT
 
     @Override

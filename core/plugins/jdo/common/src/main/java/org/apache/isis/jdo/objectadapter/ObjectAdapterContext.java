@@ -244,18 +244,6 @@ final public class ObjectAdapterContext {
 
     // ------------------------------------------------------------------------------------------------
 
-    // package private
-    ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoString) {
-
-        final ObjectSpecification objectSpecification = 
-                specificationLoader.loadSpecification(viewModelPojo.getClass());
-        final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-        final RootOid newRootOid = Oid.Factory.viewmodelOf(objectSpecId, mementoString);
-
-        final ObjectAdapter viewModelAdapter = recreatePojo(newRootOid, viewModelPojo);
-        return viewModelAdapter;
-    }
-
     /**
      * Note that there is no management of {@link Version}s here. That is
      * because the {@link PersistenceSession} is expected to manage this.
