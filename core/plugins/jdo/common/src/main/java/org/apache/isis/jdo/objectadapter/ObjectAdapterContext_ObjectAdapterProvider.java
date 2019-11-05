@@ -20,16 +20,12 @@ package org.apache.isis.jdo.objectadapter;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -68,18 +64,18 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         return objectAdapterContext.injectServices(newAdapter);
     }
 
-    @Override
-    public ObjectAdapter adapterForCollection(Object pojo, RootOid parentOid, OneToManyAssociation collection) {
-
-        requires(parentOid, "parentOid");
-        requires(collection, "collection");
-
-        // the List, Set etc. instance gets wrapped in its own adapter
-        final ObjectAdapter newAdapter = objectAdapterContext.getFactories()
-                .createCollectionAdapter(pojo, parentOid, collection);
-
-        return objectAdapterContext.injectServices(newAdapter);
-    }
+//    @Override
+//    public ObjectAdapter adapterForCollection(Object pojo, RootOid parentOid, OneToManyAssociation collection) {
+//
+//        requires(parentOid, "parentOid");
+//        requires(collection, "collection");
+//
+//        // the List, Set etc. instance gets wrapped in its own adapter
+//        final ObjectAdapter newAdapter = objectAdapterContext.getFactories()
+//                .createCollectionAdapter(pojo, parentOid, collection);
+//
+//        return objectAdapterContext.injectServices(newAdapter);
+//    }
 
     // -- DOMAIN OBJECT CREATION SUPPORT
 

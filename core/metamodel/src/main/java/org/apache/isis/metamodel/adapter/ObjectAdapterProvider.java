@@ -21,9 +21,7 @@ package org.apache.isis.metamodel.adapter;
 import javax.annotation.Nullable;
 
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
@@ -49,15 +47,13 @@ public interface ObjectAdapterProvider {
      */
     @Nullable ObjectAdapter adapterFor(@Nullable Object pojo);
 
-    //@Nullable ObjectAdapter adapterForBean(@Nullable ManagedBeanAdapter beanAdapter);
-
-    /**
-     * @return collection adapter.
-     */
-    ObjectAdapter adapterForCollection(
-            Object domainObject,
-            RootOid parentOid,
-            OneToManyAssociation collection);
+//    /**
+//     * @return collection adapter.
+//     */
+//    ObjectAdapter adapterForCollection(
+//            Object domainObject,
+//            RootOid parentOid,
+//            OneToManyAssociation collection);
 
 
     // -- DOMAIN OBJECT CREATION SUPPORT
@@ -88,13 +84,13 @@ public interface ObjectAdapterProvider {
             return getObjectAdapterProvider().adapterFor(domainObject);
         }
 
-        @Override
-        default ObjectAdapter adapterForCollection(
-                final Object pojo,
-                final RootOid parentOid,
-                OneToManyAssociation collection) {
-            return getObjectAdapterProvider().adapterForCollection(pojo, parentOid, collection);
-        }
+//        @Override
+//        default ObjectAdapter adapterForCollection(
+//                final Object pojo,
+//                final RootOid parentOid,
+//                OneToManyAssociation collection) {
+//            return getObjectAdapterProvider().adapterForCollection(pojo, parentOid, collection);
+//        }
 
         @Override
         default ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {

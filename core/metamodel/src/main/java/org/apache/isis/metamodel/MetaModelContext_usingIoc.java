@@ -41,7 +41,6 @@ import org.apache.isis.metamodel.services.ServiceUtil;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
@@ -109,12 +108,6 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     @Getter(lazy=true) 
     private final HomePageResolverService homePageResolverService =
     getSingletonElseFail(HomePageResolverService.class);
-
-
-    @Override
-    public final ObjectSpecification getSpecification(final Class<?> type) {
-        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
-    }
 
     @Override
     public final TransactionState getTransactionState() {

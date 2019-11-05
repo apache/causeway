@@ -65,6 +65,10 @@ public interface MetaModelContext {
     ServiceRegistry getServiceRegistry();
 
     SpecificationLoader getSpecificationLoader();
+    
+    public default ObjectSpecification getSpecification(final Class<?> type) {
+        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
+    }
 
     AuthenticationSessionProvider getAuthenticationSessionProvider();
 
@@ -75,8 +79,6 @@ public interface MetaModelContext {
     AuthenticationManager getAuthenticationManager();
 
     TitleService getTitleService();
-
-    ObjectSpecification getSpecification(Class<?> type);
 
     RepositoryService getRepositoryService();
 

@@ -42,7 +42,6 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -114,11 +113,6 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     @Singular
     private List<Object> singletons;
-
-    @Override
-    public ObjectSpecification getSpecification(Class<?> type) {
-        return specificationLoader.loadSpecification(type);
-    }
 
     //@Override
     public IsisConfigurationLegacy getConfigurationLegacy() {
