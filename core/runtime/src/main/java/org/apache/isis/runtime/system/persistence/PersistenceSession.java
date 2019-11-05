@@ -83,7 +83,7 @@ SessionScopedComponent {
      * @since 2.0
      */
     String identifierFor(Object pojo);
-
+    
     /**
      * @since 2.0
      */

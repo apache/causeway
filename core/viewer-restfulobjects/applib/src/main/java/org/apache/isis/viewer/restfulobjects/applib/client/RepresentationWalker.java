@@ -31,28 +31,22 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 
+import lombok.AllArgsConstructor;
+
 public class RepresentationWalker {
 
+    @AllArgsConstructor
     static class Step {
         private final String key;
         private final LinkRepresentation link;
-        private final JsonRepresentation body;
         private final RestfulResponse<? extends JsonRepresentation> response;
         private String error;
         private final Exception exception;
 
-        public Step(final String key, final LinkRepresentation link, final JsonRepresentation body, final RestfulResponse<? extends JsonRepresentation> response, final String error, final Exception exception) {
-            this.key = key;
-            this.link = link;
-            this.body = body;
-            this.response = response;
-            this.error = error;
-            this.exception = exception;
-        }
-
         @Override
         public String toString() {
-            return "Step [key=" + key + ", link=" + (link != null ? link.getHref() : "(null)") + ", error=" + error + "]";
+            return "Step [key=" + key + ", link=" + (link != null ? link.getHref() : "(null)")
+                    + ", error=" + error + "]";
         }
 
     }
@@ -67,8 +61,15 @@ public class RepresentationWalker {
         addStep(null, null, null, jsonResp, null, null);
     }
 
-    private Step addStep(final String key, final LinkRepresentation link, final JsonRepresentation body, final RestfulResponse<JsonRepresentation> jsonResp, final String error, final Exception ex) {
-        final Step step = new Step(key, link, body, jsonResp, error, ex);
+    private Step addStep(
+            final String key, 
+            final LinkRepresentation link, 
+            final JsonRepresentation body, 
+            final RestfulResponse<JsonRepresentation> jsonResp, 
+            final String error, 
+            final Exception ex) {
+        
+        final Step step = new Step(key, link, jsonResp, error, ex);
         steps.add(0, step);
         if (error != null) {
             if (jsonResp.getStatus().getFamily() != Family.SUCCESSFUL) {
@@ -177,4 +178,5 @@ public class RepresentationWalker {
         return steps.get(0);
     }
 
+    
 }

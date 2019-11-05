@@ -56,7 +56,9 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
         .forEach(managedBeanAdapter->{
 
             val serviceInstanceIfAny = managedBeanAdapter.getInstance().getFirst();
-            if(!serviceInstanceIfAny.isPresent()) {
+            val domainService = serviceInstanceIfAny.orElse(null);
+            
+            if(domainService == null) {
                 
                 val deficiencyOrigin = Identifier.classIdentifier(managedBeanAdapter.getBeanClass());
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
@@ -68,8 +70,6 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                         managedBeanAdapter.getId());
                 return; // next
             }
-
-            val domainService = serviceInstanceIfAny.get();
 
             try {
 

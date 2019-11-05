@@ -76,7 +76,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     @Override
     protected Percentage doParse(final Object context, final String text) {
         try {
-            return new Percentage(new Float(format.parse(text).floatValue()));
+            return new Percentage(Float.valueOf(format.parse(text).floatValue()));
         } catch (final ParseException e) {
             try {
                 return new Percentage(asFloat(text));
@@ -87,7 +87,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     private Float asFloat(final String text) throws ParseException {
-        return new Float(DECIMAL_FORMAT.parse(text).floatValue());
+        return Float.valueOf(DECIMAL_FORMAT.parse(text).floatValue());
     }
 
     @Override
@@ -126,7 +126,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     @Override
     public Float floatValue(final ManagedObject object) {
         final Percentage per = (Percentage) object.getPojo();
-        return new Float(per.floatValue());
+        return Float.valueOf(per.floatValue());
     }
 
     @Override

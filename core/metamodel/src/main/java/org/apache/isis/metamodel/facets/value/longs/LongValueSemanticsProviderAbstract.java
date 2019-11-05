@@ -83,7 +83,7 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
 
     @Override
     protected Long doRestore(final String data) {
-        return new Long(data);
+        return Long.parseLong(data);
     }
 
     // //////////////////////////////////////////////////////////////////

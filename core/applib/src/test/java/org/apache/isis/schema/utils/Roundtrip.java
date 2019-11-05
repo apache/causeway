@@ -156,7 +156,7 @@ public class Roundtrip {
         final CharArrayWriter caw = new CharArrayWriter();
         InteractionDtoUtils.toXml(interactionDto, caw);
 
-        InteractionDtoUtils.dump(interactionDto, System.out);
+        //InteractionDtoUtils.dump(interactionDto, System.out);
 
         final CharArrayReader reader = new CharArrayReader(caw.toCharArray());
         final InteractionDto recreated = InteractionDtoUtils.fromXml(reader);

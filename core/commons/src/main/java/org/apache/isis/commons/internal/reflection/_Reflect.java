@@ -366,7 +366,7 @@ public final class _Reflect {
     // -- METHOD/FIELD HANDLES
 
     public static MethodHandle handleOf(Method method) throws IllegalAccessException {
-        if(!method.isAccessible()) {
+        if(!method.isAccessible()) { // java9+ to replace by canAccess 
             method.setAccessible(true);
             MethodHandle mh = MethodHandles.publicLookup().unreflect(method);
             method.setAccessible(false);
@@ -376,7 +376,7 @@ public final class _Reflect {
     }
 
     public static MethodHandle handleOfGetterOn(Field field) throws IllegalAccessException {
-        if(!field.isAccessible()) {
+        if(!field.isAccessible()) { // java9+ to replace by canAccess
             field.setAccessible(true);
             MethodHandle mh = MethodHandles.lookup().unreflectGetter(field);
             field.setAccessible(false);

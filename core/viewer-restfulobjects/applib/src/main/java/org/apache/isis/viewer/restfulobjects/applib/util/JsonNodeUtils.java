@@ -69,7 +69,7 @@ public class JsonNodeUtils {
             JsonNode jsonNode = node.get(key);
             if (jsonNode == null) {
                 jsonNode = new ObjectNode(JsonNodeFactory.instance);
-                node.put(key, jsonNode);
+                node.set(key, jsonNode);
             } else {
                 if (!jsonNode.isObject()) {
                     throw new IllegalArgumentException(String.format("walking path: '%s', existing key '%s' is not a map", keys, key));

@@ -19,22 +19,18 @@
 
 package org.apache.isis.applib.services.title;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 public interface TitleService {
 
     /**
      * Return the title of the object, as rendered in the UI by the
      * Isis viewers.
      */
-    @Programmatic
     String titleOf(Object domainObject);
 
     /**
      * Return the icon name of the object, as rendered in the UI by the
      * Isis viewers.
      */
-    @Programmatic
     String iconNameOf(Object domainObject);
 
 

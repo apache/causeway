@@ -64,7 +64,6 @@ public class BS3MenuBars_roundtrip_Test {
 
         // when
         String xml = jaxbService.toXml(menuBars);
-        System.out.println(xml);
 
         // when
         BS3MenuBars menuBars2 =

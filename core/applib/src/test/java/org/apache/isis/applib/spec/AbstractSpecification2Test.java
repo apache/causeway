@@ -64,7 +64,7 @@ public class AbstractSpecification2Test {
                 return null;
             }
         };
-        assertThat(specAbstractSomeDomainObject.satisfiesTranslatable(new Integer(1)), is(nullValue()));
+        assertThat(specAbstractSomeDomainObject.satisfiesTranslatable(Integer.valueOf(1)), is(nullValue()));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class AbstractSpecification2Test {
                 return null;
             }
         };
-        assertThat(specAbstractSomeDomainObject.satisfiesTranslatable(new Integer(1)), is(not(nullValue())));
+        assertThat(specAbstractSomeDomainObject.satisfiesTranslatable(Integer.valueOf(1)), is(not(nullValue())));
     }
 
     @Test

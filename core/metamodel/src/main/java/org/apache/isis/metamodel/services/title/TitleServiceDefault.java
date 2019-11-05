@@ -39,6 +39,10 @@ public class TitleServiceDefault implements TitleService {
     @Override
     public String titleOf(final Object domainObject) {
         
+        if(specificationLoader == null) { // simplified JUnit test support
+            return "" + domainObject;
+        }
+        
         val pojo = unwrapped(domainObject);
         val objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, pojo);
         val destroyed = ManagedObject._isDestroyed(objectAdapter);
@@ -51,6 +55,11 @@ public class TitleServiceDefault implements TitleService {
 
     @Override
     public String iconNameOf(final Object domainObject) {
+        
+        if(specificationLoader == null) { // simplified JUnit test support 
+            return domainObject!=null ? domainObject.getClass().getSimpleName() : "null";
+        }
+        
         val pojo = unwrapped(domainObject);
         val objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, pojo);
         return objectAdapter.getSpecification().getIconName(objectAdapter);

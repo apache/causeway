@@ -151,6 +151,7 @@ public final class RestfulRequest {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> RestfulRequest withHeader(final Header<List<T>> header, final T... ts) {
         header.setHeader(clientRequestConfigurer, Arrays.asList(ts));
         return this;

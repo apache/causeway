@@ -71,13 +71,13 @@ public class XmlSnapshotServiceAbstractTest {
                 assertThat(
                         xmlSnapshotService.getChildElementValue(rootEl, "app:someBigInteger", BigInteger.class), is(new BigInteger("12345678901234567890123456789012345678")));
                 assertThat(
-                        xmlSnapshotService.getChildElementValue(rootEl, "app:someInteger", Integer.class), is(new Integer(123456789)));
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someInteger", Integer.class), is(Integer.valueOf(123456789)));
                 assertThat(
-                        xmlSnapshotService.getChildElementValue(rootEl, "app:someLong", Long.class), is(new Long(1234567890123456789L)));
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someLong", Long.class), is(Long.valueOf(1234567890123456789L)));
                 assertThat(
-                        xmlSnapshotService.getChildElementValue(rootEl, "app:someShort", Short.class), is(new Short((short)12345)));
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someShort", Short.class), is(Short.valueOf((short)12345)));
                 assertThat(
-                        xmlSnapshotService.getChildElementValue(rootEl, "app:someByte", Byte.class), is(new Byte((byte)123)));
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someByte", Byte.class), is(Byte.valueOf((byte)123)));
                 assertThat(
                         xmlSnapshotService.getChildElementValue(rootEl, "app:someBoolean", Boolean.class), is(Boolean.TRUE));
                 assertThat(

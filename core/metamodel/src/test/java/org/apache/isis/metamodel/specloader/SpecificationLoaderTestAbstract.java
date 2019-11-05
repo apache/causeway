@@ -31,7 +31,6 @@ import org.apache.isis.applib.services.i18n.TranslationService.Mode;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.title.TitleService;
-import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
@@ -137,7 +136,7 @@ abstract class SpecificationLoaderTestAbstract {
         
         ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault(), metaModelContext);
 
-        _Timing.runVerbose("specificationLoader.createMetaModel()", specificationLoader::createMetaModel);
+        specificationLoader.createMetaModel();
 
         specification = loadSpecification(specificationLoader);
 

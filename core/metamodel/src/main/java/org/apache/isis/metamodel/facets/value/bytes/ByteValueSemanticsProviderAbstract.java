@@ -79,7 +79,7 @@ implements ByteValueFacet {
 
     @Override
     protected Byte doRestore(final String data) {
-        return new Byte(data);
+        return Byte.parseByte(data);
     }
 
     @Override

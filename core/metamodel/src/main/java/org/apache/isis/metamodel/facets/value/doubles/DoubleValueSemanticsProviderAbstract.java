@@ -40,7 +40,7 @@ implements DoubleFloatingPointValueFacet {
         return DoubleFloatingPointValueFacet.class;
     }
 
-    private static final Double DEFAULT_VALUE = new Double(0.0d);
+    private static final Double DEFAULT_VALUE = Double.valueOf(0.0d);
     private static final int MAX_LENGTH = 25;
     private static final int TYPICAL_LENGTH = 10;
 
@@ -58,7 +58,7 @@ implements DoubleFloatingPointValueFacet {
     @Override
     protected Double doParse(final Object context, final String entry) {
         try {
-            return new Double(format.parse(entry).doubleValue());
+            return Double.valueOf(format.parse(entry).doubleValue());
         } catch (final ParseException e) {
             throw new TextEntryParseException("Not floating point number " + entry, e);
         }
@@ -89,7 +89,7 @@ implements DoubleFloatingPointValueFacet {
 
     @Override
     protected Double doRestore(final String data) {
-        return new Double(data);
+        return Double.valueOf(data);
     }
 
     // //////////////////////////////////////////////////////////////////

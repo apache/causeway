@@ -83,7 +83,7 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
 
     @Override
     protected Integer doRestore(final String data) {
-        return new Integer(data);
+        return Integer.parseInt(data);
     }
 
     // //////////////////////////////////////////////////////////////////

@@ -80,27 +80,27 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
         }
         if("isis:Byte".equals(dataType)) {
             final String str = getChildTextValue(chldEl);
-            return (T)new Byte(str);
+            return (T)Byte.valueOf(str);
         }
         if("isis:Short".equals(dataType)) {
             final String str = getChildTextValue(chldEl);
-            return (T)new Short(str);
+            return (T)Short.valueOf(str);
         }
         if("isis:Integer".equals(dataType)) {
             final String str = getChildTextValue(chldEl);
-            return (T)new Integer(str);
+            return (T)Integer.valueOf(str);
         }
         if("isis:Long".equals(dataType)) {
             final String str = getChildTextValue(chldEl);
-            return (T)new Long(str);
+            return (T)Long.valueOf(str);
         }
         if("isis:Float".equals(dataType)) {
             final String str = getChildTextValue(chldEl);
-            return (T)new Float(str);
+            return (T)Float.valueOf(str);
         }
         if("isis:Double".equals(dataType)) {
             final String str = getChildTextValue(chldEl);
-            return (T)new Double(str);
+            return (T)Double.valueOf(str);
         }
         if("isis:BigDecimal".equals(dataType)) {
             final String str = getChildTextValue(chldEl);
@@ -112,7 +112,7 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
         }
         if("isis:Boolean".equals(dataType)) {
             final String str = getChildTextValue(chldEl);
-            return (T) new Boolean(str);
+            return (T) Boolean.valueOf(str);
         }
         throw new IllegalArgumentException(
                 "Datatype of '" + dataType + "' for element '" + tagname + "' not recognized");

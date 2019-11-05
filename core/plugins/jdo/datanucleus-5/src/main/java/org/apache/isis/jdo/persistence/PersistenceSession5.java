@@ -904,17 +904,17 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     // -- HELPER
-
+    
     private void debugLogNotPersistentIgnoring(Object domainObject) {
         if (log.isDebugEnabled() && domainObject!=null) {
-            final Oid oid = oidFor(domainObject);
+            val oid = oidFor(domainObject);
             log.debug("; oid={} not persistent - ignoring", oid.enString());
         }     
     }
 
     private void debugLogRefreshImmediately(Object domainObject) {
         if (log.isDebugEnabled()) {
-            final Oid oid = oidFor(domainObject);
+            val oid = oidFor(domainObject);
             log.debug("refresh immediately; oid={}", oid.enString());
         }
     }

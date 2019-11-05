@@ -44,7 +44,7 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
         _Config.put("isis.value.format.float", null);
 
-        float1 = new Float(32.5f);
+        float1 = Float.valueOf(32.5f);
         allowMockAdapterToReturn(float1);
 
         holder = new FacetHolderImpl();

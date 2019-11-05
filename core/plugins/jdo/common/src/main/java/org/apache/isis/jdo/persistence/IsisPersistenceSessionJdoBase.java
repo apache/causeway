@@ -20,6 +20,7 @@ package org.apache.isis.jdo.persistence;
 
 import java.util.Map;
 
+import javax.annotation.Nullable;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
@@ -36,7 +37,9 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.ToString;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.system.persistence.PersistenceQueryFactory;
@@ -44,6 +47,7 @@ import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -219,6 +223,18 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         if (transaction.isActive()) {
             transaction.rollback();
         }
+    }
+    
+    // -- OID
+    
+    /**
+     * @param pojo
+     * @return oid for the given domain object 
+     */
+    protected @Nullable Oid oidFor(@Nullable Object pojo) {
+        val adapter = ManagedObject.of(getSpecificationLoader().loadSpecification(pojo.getClass()), pojo);
+        val oid = ManagedObject._oid(adapter);
+        return oid;
     }
 
     // -- HELPERS - SERVICE LOOKUP

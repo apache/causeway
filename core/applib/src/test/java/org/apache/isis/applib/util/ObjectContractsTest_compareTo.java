@@ -58,17 +58,17 @@ public class ObjectContractsTest_compareTo extends ComparableContractTest_compar
                         )
                 ,listOf(
                         // ..., quantity asc nullsLast,...
-                        InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), null)
-                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(2), null)
-                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(2), null)
+                        InvoiceItem.newInvoiceItem(inv123, "A", Integer.valueOf(1), null)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", Integer.valueOf(2), null)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", Integer.valueOf(2), null)
                         ,InvoiceItem.newInvoiceItem(inv123, "A", null, null)
                         )
                 ,listOf(
                         // ..., rush desc nullsLast
-                        InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), true)
-                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), false)
-                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), false)
-                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), null)
+                        InvoiceItem.newInvoiceItem(inv123, "A", Integer.valueOf(1), true)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", Integer.valueOf(1), false)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", Integer.valueOf(1), false)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", Integer.valueOf(1), null)
                         )
                 );
     }

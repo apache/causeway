@@ -241,7 +241,6 @@ public enum RepresentationType {
         return RepresentationType.GENERIC;
     }
 
-    @Deprecated
     public static RepresentationType lookup(final MediaType mediaType) {
         if(mediaType != null) {
             for (final RepresentationType representationType : values()) {
@@ -307,6 +306,7 @@ public enum RepresentationType {
      */
     public MediaType matchesJsonProfileWithParameter(
             final List<MediaType> mediaTypes, final String parameterKey) {
+        
         for (MediaType mediaType : mediaTypes) {
             if(this.matchesJsonProfile(mediaType)) {
                 final String paramValue = mediaType.getParameters().get(parameterKey);
@@ -319,19 +319,20 @@ public enum RepresentationType {
         return null;
     }
 
+    private final static Parser<RepresentationType> PARSER = new Parser<RepresentationType>() {
+        @Override
+        public RepresentationType valueOf(final String str) {
+            return RepresentationType.lookup(str);
+        }
 
+        @Override
+        public String asString(final RepresentationType t) {
+            return t.getName();
+        }
+    }; 
+    
     public static Parser<RepresentationType> parser() {
-        return new Parser<RepresentationType>() {
-            @Override
-            public RepresentationType valueOf(final String str) {
-                return RepresentationType.lookup(str);
-            }
-
-            @Override
-            public String asString(final RepresentationType t) {
-                return t.getName();
-            }
-        };
+        return PARSER;
     }
 
 

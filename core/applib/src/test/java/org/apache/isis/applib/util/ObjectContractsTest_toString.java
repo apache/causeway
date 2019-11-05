@@ -44,8 +44,8 @@ public class ObjectContractsTest_toString {
         assertThat(InvoiceItem.newInvoiceItem(null, null, null, null).toString(), is("InvoiceItem{invoice=null, productCode=null, quantity=null, rush=null}"));
         assertThat(InvoiceItem.newInvoiceItem(inv, null, null, null).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=null, quantity=null, rush=null}"));
         assertThat(InvoiceItem.newInvoiceItem(inv, "A", null, null).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=null, rush=null}"));
-        assertThat(InvoiceItem.newInvoiceItem(inv, "A", new Integer(1), null).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=1, rush=null}"));
-        assertThat(InvoiceItem.newInvoiceItem(inv, "A", new Integer(1), true).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=1, rush=true}"));
+        assertThat(InvoiceItem.newInvoiceItem(inv, "A", Integer.valueOf(1), null).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=1, rush=null}"));
+        assertThat(InvoiceItem.newInvoiceItem(inv, "A", Integer.valueOf(1), true).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=1, rush=true}"));
     }
 
     @Test
@@ -53,8 +53,8 @@ public class ObjectContractsTest_toString {
         assertThat(InvoiceItem2.newInvoiceItem(null, null, null, null).toString(), is("InvoiceItem2{invoice=null, productCode=null, quantity=null, rush=null}"));
         assertThat(InvoiceItem2.newInvoiceItem(inv2, null, null, null).toString(), is("InvoiceItem2{invoice=123, productCode=null, quantity=null, rush=null}"));
         assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", null, null).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=null, rush=null}"));
-        assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", new Integer(1), null).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=1, rush=null}"));
-        assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", new Integer(1), false).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=1, rush=false}"));
+        assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", Integer.valueOf(1), null).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=1, rush=null}"));
+        assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", Integer.valueOf(1), false).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=1, rush=false}"));
     }
 
 }

@@ -83,7 +83,7 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     @Override
     protected Short doRestore(final String data) {
-        return new Short(data);
+        return Short.parseShort(data);
     }
 
     // //////////////////////////////////////////////////////////////////

@@ -64,19 +64,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         return objectAdapterContext.injectServices(newAdapter);
     }
 
-//    @Override
-//    public ObjectAdapter adapterForCollection(Object pojo, RootOid parentOid, OneToManyAssociation collection) {
-//
-//        requires(parentOid, "parentOid");
-//        requires(collection, "collection");
-//
-//        // the List, Set etc. instance gets wrapped in its own adapter
-//        final ObjectAdapter newAdapter = objectAdapterContext.getFactories()
-//                .createCollectionAdapter(pojo, parentOid, collection);
-//
-//        return objectAdapterContext.injectServices(newAdapter);
-//    }
-
     // -- DOMAIN OBJECT CREATION SUPPORT
 
     @Override

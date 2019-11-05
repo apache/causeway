@@ -38,6 +38,7 @@ import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Smoketest
 @SpringBootTest(
@@ -55,6 +56,7 @@ import lombok.val;
     //IsisPresets.DebugProgrammingModel,
 })
 @Incubating("not a real test, just for performance tuning")
+@Log4j2
 class SpecloaderPerformanceTest {
     
     @Inject private IsisConfiguration config;
@@ -90,7 +92,7 @@ class SpecloaderPerformanceTest {
             
         };
         
-        _Timing.runVerbose("Repeated Concurrent Specloading", repeatedRun);
+        _Timing.runVerbose(log, "Repeated Concurrent Specloading", repeatedRun);
     }
 
 

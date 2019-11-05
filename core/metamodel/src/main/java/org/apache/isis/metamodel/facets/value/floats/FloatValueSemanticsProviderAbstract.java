@@ -40,7 +40,7 @@ implements FloatingPointValueFacet {
         return FloatingPointValueFacet.class;
     }
 
-    private static final Float DEFAULT_VALUE = new Float(0.0f);
+    private static final Float DEFAULT_VALUE = Float.valueOf(0.0f);
     private static final int MAX_LENGTH = 20;
     private static final int TYPICAL_LENGTH = 12;
 
@@ -58,7 +58,7 @@ implements FloatingPointValueFacet {
     @Override
     protected Float doParse(final Object context, final String entry) {
         try {
-            return new Float(format.parse(entry).floatValue());
+            return Float.valueOf(format.parse(entry).floatValue());
         } catch (final ParseException e) {
             throw new TextEntryParseException("Not a floating point number " + entry, e);
         }

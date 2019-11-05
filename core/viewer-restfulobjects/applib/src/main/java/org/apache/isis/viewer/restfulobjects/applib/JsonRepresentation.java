@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -896,7 +897,7 @@ public class JsonRepresentation {
                 if(bigDecimal.compareTo(maxAllowed) > 0) {
                     throw new IllegalArgumentException(String.format("Value '%s' larger than that allowed by format '%s'", bigDecimal, format));
                 }
-                return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+                return bigDecimal.setScale(scale, RoundingMode.HALF_EVEN);
             }
         }
         return bigDecimal;
@@ -1375,7 +1376,7 @@ public class JsonRepresentation {
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value != null ? new POJONode(value) : NullNode.getInstance());
+        node.set(path.getTail(), value != null ? new POJONode(value) : NullNode.getInstance());
         return this;
     }
 
@@ -1388,7 +1389,7 @@ public class JsonRepresentation {
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value.asJsonNode());
+        node.set(path.getTail(), value.asJsonNode());
         return this;
     }
 
@@ -1414,7 +1415,7 @@ public class JsonRepresentation {
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        node.set(path.getTail(), value);
         return this;
     }
 
@@ -1521,7 +1522,7 @@ public class JsonRepresentation {
         if (value != null) {
             node.put(path.getTail(), value.toString());
         } else {
-            node.put(path.getTail(), NullNode.getInstance());
+            node.set(path.getTail(), NullNode.getInstance());
         }
         return this;
     }
@@ -1547,7 +1548,7 @@ public class JsonRepresentation {
         if (value != null) {
             node.put(path.getTail(), value.toString());
         } else {
-            node.put(path.getTail(), NullNode.getInstance());
+            node.set(path.getTail(), NullNode.getInstance());
         }
         return this;
     }

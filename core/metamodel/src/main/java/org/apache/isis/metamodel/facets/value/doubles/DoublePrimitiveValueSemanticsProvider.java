@@ -48,7 +48,7 @@ implements PropertyDefaultFacet {
 
     @Override
     public ManagedObject getDefault(final ManagedObject inObject) {
-        return createAdapter(double.class, new Double(0.0));
+        return createAdapter(double.class, Double.valueOf(0.0));
     }
 
 }

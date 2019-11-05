@@ -47,7 +47,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
         setValue(new DoubleWrapperValueSemanticsProvider(holder));
 
-        doubleObj = new Double(32.5d);
+        doubleObj = Double.valueOf(32.5d);
         allowMockAdapterToReturn(doubleObj);
     }
 

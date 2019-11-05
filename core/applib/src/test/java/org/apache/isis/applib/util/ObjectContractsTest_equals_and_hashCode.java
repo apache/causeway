@@ -40,19 +40,19 @@ public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTe
     @Override
     protected List<InvoiceItem3> getObjectsWithSameValue() {
         return _Lists.of(
-                InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1)),
-                InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1))
+                InvoiceItem3.newInvoiceItem(inv123, "A", Integer.valueOf(1)),
+                InvoiceItem3.newInvoiceItem(inv123, "A", Integer.valueOf(1))
                 );
     }
 
     @Override
     protected List<InvoiceItem3> getObjectsWithDifferentValue() {
         return _Lists.of(
-                InvoiceItem3.newInvoiceItem(null, "A", new Integer(2)),
-                InvoiceItem3.newInvoiceItem(inv456, "A", new Integer(2)),
-                InvoiceItem3.newInvoiceItem(inv123, null, new Integer(1)),
-                InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(2)),
-                InvoiceItem3.newInvoiceItem(inv123, "B", new Integer(1)),
+                InvoiceItem3.newInvoiceItem(null, "A", Integer.valueOf(2)),
+                InvoiceItem3.newInvoiceItem(inv456, "A", Integer.valueOf(2)),
+                InvoiceItem3.newInvoiceItem(inv123, null, Integer.valueOf(1)),
+                InvoiceItem3.newInvoiceItem(inv123, "A", Integer.valueOf(2)),
+                InvoiceItem3.newInvoiceItem(inv123, "B", Integer.valueOf(1)),
                 InvoiceItem3.newInvoiceItem(inv123, "A", null)
                 );
     }

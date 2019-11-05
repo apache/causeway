@@ -20,10 +20,7 @@ package org.apache.isis.metamodel.adapter;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 /**
  * 
@@ -35,25 +32,9 @@ public interface ObjectAdapterProvider {
     // -- INTERFACE
 
     /**
-     * @param pojo
-     * @return oid for the given domain object 
-     */
-    default @Nullable Oid oidFor(@Nullable Object pojo) {
-        return mapIfPresentElse(adapterFor(pojo), ObjectAdapter::getOid, null);
-    }
-
-    /**
      * @return standalone (value) or root adapter
      */
     @Nullable ObjectAdapter adapterFor(@Nullable Object pojo);
-
-//    /**
-//     * @return collection adapter.
-//     */
-//    ObjectAdapter adapterForCollection(
-//            Object domainObject,
-//            RootOid parentOid,
-//            OneToManyAssociation collection);
 
 
     // -- DOMAIN OBJECT CREATION SUPPORT
@@ -83,14 +64,6 @@ public interface ObjectAdapterProvider {
         default ObjectAdapter adapterFor(Object domainObject) {
             return getObjectAdapterProvider().adapterFor(domainObject);
         }
-
-//        @Override
-//        default ObjectAdapter adapterForCollection(
-//                final Object pojo,
-//                final RootOid parentOid,
-//                OneToManyAssociation collection) {
-//            return getObjectAdapterProvider().adapterForCollection(pojo, parentOid, collection);
-//        }
 
         @Override
         default ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {
