@@ -50,9 +50,10 @@ import lombok.val;
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
 @DomainObject(auditing = Auditing.ENABLED)
 @DomainObjectLayout()  // causes UI events to be triggered
-//@lombok.RequiredArgsConstructor XXX lombok+JDOQ issue
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class SimpleObject implements Comparable<SimpleObject> {
+
+    private SimpleObject() {}
 
     public String title() {
         return "Object: " + getName();
