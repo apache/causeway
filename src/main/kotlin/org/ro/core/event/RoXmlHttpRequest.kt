@@ -14,7 +14,6 @@ import org.w3c.xhr.XMLHttpRequest
 class RoXmlHttpRequest {
 
     fun invoke(link: Link, aggregator: IAggregator?) {
-        //@kotlinx.coroutines.InternalCoroutinesApi cancel()
         val url = link.href
         if (EventStore.isCached(url)) {
             processCached(url)
@@ -25,6 +24,8 @@ class RoXmlHttpRequest {
 
     private fun processCached(url: String) {
         val le = EventStore.find(url)!!
+        console.log("[RoXHR.processCached]")
+        console.log(le)
         if (le.isRoot) {
             le.aggregator?.reset()
         }

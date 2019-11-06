@@ -19,7 +19,10 @@ enum class EventState(val id: String, val iconName: String, val color: Col) {
     SUCCESS("SUCCESS", "fa-check-circle", Col.GREEN),
     VIEW("VIEW", "fa-info-circle", Col.BLUE),
     CACHE_USED("CACHE_USED", "fa-caret-circle-left", Col.VIOLET),
-    CLOSED("CLOSED", "fa-times-circle", Col.LIGHTBLUE)
+    CLOSED("CLOSED", "fa-times-circle", Col.LIGHTBLUE),
+    OBSOLETE("OBSOLETE", "fa-times-circle", Col.LIGHTBLUE)
+    //TODO list* need to be skipped, are never cached
+    // here are multiple aspects intermangled: req/resp, view, as well as cache
 }
 
 @Serializable

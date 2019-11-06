@@ -141,11 +141,12 @@ object EventStore {
     fun isCached(url: String): Boolean {
         var answer = false
         val le = this.find(url)
-        when {
-            le == null -> answer = false
-            le.hasResponse() -> answer = true
-            le.isView() -> answer = true
-            le.isRoot -> answer = false
+        if (le != null) {
+            when {
+                le.hasResponse() -> answer = true
+                le.isView() -> answer = true
+                le.isRoot -> answer = false
+            }
         }
         return answer
     }
