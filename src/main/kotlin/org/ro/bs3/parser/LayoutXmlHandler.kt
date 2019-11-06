@@ -1,5 +1,8 @@
 package org.ro.bs3.parser
 
+import org.ro.bs3.to.Bs3Object
+import org.ro.bs3.parser.LayoutParser
+
 /**
  * Delegates responses to handlers, acts as Facade.
  * @See: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
@@ -7,6 +10,7 @@ package org.ro.bs3.parser
 object LayoutXmlHandler {
     private var delegate: IXmlHandler;
 
+    private var _0 = LayoutParser()
     private var _1 = TabHandler()
     private var _2 = RowHandler()
     private var _3 = TabGroupHandler()
@@ -34,6 +38,7 @@ object LayoutXmlHandler {
     private var last = DefaultXmlHandler()
 
     init {
+        _0.successor = _1
         _1.successor = _2
         _2.successor = _3
         _3.successor = _4
@@ -46,8 +51,8 @@ object LayoutXmlHandler {
         delegate = _1
     }
 
-    fun handle(xmlStr: String) {
-        delegate.handle(xmlStr)
+    fun parse(xmlStr: String): Bs3Object? {
+        return delegate.parse(xmlStr)
     }
 
 }
