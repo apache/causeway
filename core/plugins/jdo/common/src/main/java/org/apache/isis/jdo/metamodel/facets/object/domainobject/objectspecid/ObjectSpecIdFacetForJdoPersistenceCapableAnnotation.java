@@ -29,7 +29,7 @@ import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbs
 
 public class ObjectSpecIdFacetForJdoPersistenceCapableAnnotation extends ObjectSpecIdFacetAbstract {
 
-    public static ObjectSpecIdFacet create1(
+    public static ObjectSpecIdFacet create(
             final JdoPersistenceCapableFacet persistenceCapableFacet,
             final FacetHolder holder) {
 

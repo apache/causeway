@@ -278,15 +278,6 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         val facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
 
-        //FIXME [2033] removed here (module 'metamodel'), should be re-implemented in 'jdo-common'         
-        // else check for @PersistenceCapable(schema=...)
-        //        if(facet == null) {
-        //            final JdoPersistenceCapableFacet jdoPersistenceCapableFacet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
-        //            if(jdoPersistenceCapableFacet != null) {
-        //                facet = ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder);
-        //            }
-        //        }
-
         // then add
         super.addFacet(facet);
     }

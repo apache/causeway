@@ -136,7 +136,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
                                         + "Use @Discriminator, @DomainObject(objectType=...) or "
                                         + "@PersistenceCapable(schema=...) to specify explicitly.",
                                         objectSpec.getFullIdentifier(),
-                                "'isis.reflector.validator.explicitObjectType'");
+                                "isis.reflector.validator.explicit-object-type");
                     }
                 }
     

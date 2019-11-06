@@ -19,11 +19,15 @@
 package org.apache.isis.jdo.metamodel.facets.object.persistencecapable;
 
 
+import lombok.val;
+
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.jdo.metamodel.JdoMetamodelUtil;
+import org.apache.isis.jdo.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.Annotations;
@@ -66,9 +70,14 @@ implements ObjectSpecIdFacetFactory {
 
         final IdentityType annotationIdentityType = annotation.identityType();
 
-        FacetUtil.addFacet(new JdoPersistenceCapableFacetAnnotation(
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
                 annotationSchemaAttribute,
-                annotationTableAttribute, annotationIdentityType, processClassContext.getFacetHolder()));
+                annotationTableAttribute, annotationIdentityType, facetHolder);
+        FacetUtil.addFacet(jdoPersistenceCapableFacet);
+
+        FacetUtil.addFacet(ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
+
         return;
     }
     
