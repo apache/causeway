@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.webapp.modules.h2console.H2ManagerMenu;
 import org.apache.isis.webapp.modules.h2console.WebModuleH2Console;
 import org.apache.isis.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
-import org.apache.isis.webapp.modules.resources.WebModuleStaticResources;
 
 @Configuration
 @Import({
@@ -33,7 +32,6 @@ import org.apache.isis.webapp.modules.resources.WebModuleStaticResources;
 
     // default modules
     WebModuleLogOnExceptionLogger.class,
-    WebModuleStaticResources.class,
 
     // h2 console
     WebModuleH2Console.class,

@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.restfulobjects;
 
+import lombok.val;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,12 +31,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,11 +46,8 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.webapp.IsisWebAppUtils;
 import org.apache.isis.webapp.auth.AuthenticationSessionStrategy;
 import org.apache.isis.webapp.auth.AuthenticationSessionStrategyDefault;
-import org.apache.isis.webapp.modules.resources.ResourceCachingFilter;
 
 import static org.apache.isis.commons.internal.base._With.requires;
-
-import lombok.val;
 
 /**
  * Filter for RestfulObjects.
@@ -135,11 +129,6 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     /**
      * Init parameter key for which extensions should be ignored (typically,
      * mappings for other viewers within the webapp context).
-     *
-     * <p>
-     * It can also be used to specify ignored static resources (though putting
-     * the {@link ResourceCachingFilter} first in the <tt>web.xml</tt>
-     * accomplishes the same thing).
      *
      * <p>
      * The value is expected as a comma separated list.
@@ -357,8 +346,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
                 return;
             }
 
-            if (requestIsIgnoreExtension(this, httpServletRequest) ||
-                    ResourceCachingFilter.isCachedResource(httpServletRequest)) {
+            if (requestIsIgnoreExtension(this, httpServletRequest)) {
                 chain.doFilter(request, response);
                 return;
             }
