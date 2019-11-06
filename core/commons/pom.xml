@@ -88,7 +88,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
-			<version>${spring-boot.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.validation</groupId>
@@ -109,7 +108,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
-			<version>${spring-boot.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
