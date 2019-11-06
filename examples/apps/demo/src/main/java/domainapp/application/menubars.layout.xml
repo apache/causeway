@@ -4,11 +4,14 @@
         <mb3:menu>
             <mb3:named>Featured Types</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="temporals">
-                    <cpt:named>Temporal Types</cpt:named>
-                </mb3:serviceAction>
                 <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="text">
                     <cpt:named>Text</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="primitives">
+                    <cpt:named>Primitives</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="temporals">
+                    <cpt:named>Temporal Types</cpt:named>
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="blobs">
                     <cpt:named>Blob Type</cpt:named>

@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
 import domainapp.dom.types.blob.BlobDemo;
+import domainapp.dom.types.primitive.PrimitivesDemo;
 import domainapp.dom.types.text.TextDemo;
 import domainapp.dom.types.time.TemporalDemo;
 import lombok.val;
@@ -42,6 +43,14 @@ public class FeaturedTypesMenu {
     @ActionLayout(cssClassFa="fa-font")
     public TextDemo text(){
         val demo = factoryService.instantiate(TextDemo.class);
+        demo.initDefaults();  
+        return demo;
+    }
+    
+    @Action
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public PrimitivesDemo primitives(){
+        val demo = factoryService.instantiate(PrimitivesDemo.class);
         demo.initDefaults();  
         return demo;
     }
