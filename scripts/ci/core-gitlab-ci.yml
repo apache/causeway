@@ -1,0 +1,57 @@
+#
+# This script:
+#
+# - builds snapshot of isis
+#   - pushes to repo.incode.work
+#   - pushes to repo.incode.cloud
+# - builds Docker image of simpleapp
+#   -  pushes to hub.docker.com
+#
+# It requires the following gitlab secret variables
+#
+# - GCPAPPENGINEREPO_USERNAME
+# - GCPAPPENGINEREPO_PASSWORD
+# - GCPAPPENGINEREPO_URL
+#
+# - DOCKER_REGISTRY_USERNAME    # eg "apacheisiscommitters"  (needs to be in the ORG_NAME)
+# - DOCKER_REGISTRY_EMAIL
+# - DOCKER_REGISTRY_PASSWORD
+# - DOCKER_REGISTRY_URL         # eg "https://index.docker.io/v1/"
+#
+# NB: if deploying to docker hub, then the image is named apacheisis/$APPNAME,
+#     where 'apacheisis' is an org that the user can write to
+#
+#     Use $DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_PASSWORD credentials to upload
+#
+
+build all:
+  stage: build-package-push
+  variables:
+     MVN_STAGES: deploy
+  script:
+    - sh $CI_SCRIPTS_DIR/build-mixins.sh
+    - sh $CI_SCRIPTS_DIR/build-core.sh
+    - sh $CI_SCRIPTS_DIR/build-demo-app.sh
+    - sh $CI_SCRIPTS_DIR/build-example-apps.sh
+        
+
+#
+# Previously this script also uploaded to a Sonatype Nexus.
+# Here's the stuff that did it.
+#
+# It requires the following gitlab secret variables
+#
+# - NEXUS_USERNAME
+# - NEXUS_PASSWORD
+# - NEXUS_REPO_URL
+#
+#    - cd core
+#    - >
+#      mvn -s .m2/settings.xml \
+#          --batch-mode \
+#          clean deploy \
+#          -Drevision=$REVISION \
+#          -Dnexus-deploy \
+#          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
+#          $CORE_ADDITIONAL_OPTS
+#    - cd ..

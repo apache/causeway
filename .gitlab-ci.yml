@@ -1,71 +1,18 @@
-#
-# This script:
-#
-# - builds snapshot of isis
-#   - pushes to repo.incode.work
-#   - pushes to repo.incode.cloud
-# - builds Docker image of simpleapp
-#   -  pushes to hub.docker.com
-#
-# It requires the following gitlab secret variables
-#
-# - GCPAPPENGINEREPO_USERNAME
-# - GCPAPPENGINEREPO_PASSWORD
-# - GCPAPPENGINEREPO_URL
-#
-# - DOCKER_REGISTRY_USERNAME    # eg "apacheisiscommitters"  (needs to be in the ORG_NAME)
-# - DOCKER_REGISTRY_EMAIL
-# - DOCKER_REGISTRY_PASSWORD
-# - DOCKER_REGISTRY_URL         # eg "https://index.docker.io/v1/"
-#
-# NB: if deploying to docker hub, then the image is named apacheisis/$APPNAME,
-#     where 'apacheisis' is an org that the user can write to
-#
-#     Use $DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_PASSWORD credentials to upload
-#
-
-image: maven:3.5.3-jdk-8
-
-before_script:
-  - export BASELINE=2.0.0-M2
-  - export REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)
-
-services:
-  - docker:dind
-
-variables:
-  GIT_SUBMODULE_STRATEGY: recursive
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_DRIVER: overlay2
-  ORG_NAME: "apacheisis"
+image: maven:3.6.2-jdk-11
 
 stages:
   - build-package-push
 
-build-package-push:
-  stage: build-package-push
-  script:
-    - sh scripts/build-mixins.sh
-    - sh scripts/build-core.sh
-    - sh scripts/build-example-apps.sh
+variables:
+  BASELINE: 2.0.0-M2
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  ORG_NAME: "apacheisis"
+  
+include:
+  - local: scripts/ci/core-gitlab-ci.yml
 
-#
-# Previously this script also uploaded to a Sonatype Nexus.
-# Here's the stuff that did it.
-#
-# It requires the following gitlab secret variables
-#
-# - NEXUS_USERNAME
-# - NEXUS_PASSWORD
-# - NEXUS_REPO_URL
-#
-#    - cd core
-#    - >
-#      mvn -s .m2/settings.xml \
-#          --batch-mode \
-#          clean deploy \
-#          -Drevision=$REVISION \
-#          -Dnexus-deploy \
-#          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
-#          $CORE_ADDITIONAL_OPTS
-#    - cd ..
+before_script:
+  - export PROJECT_ROOT_DIR=$CI_PROJECT_DIR
+  - export CI_SCRIPTS_DIR=$PROJECT_ROOT_DIR/scripts/ci
+  - export REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)

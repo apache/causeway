@@ -50,3 +50,5 @@
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
+# Git will always convert line endings to `LF` on checkout. You should use this for files that must keep LF endings, even on Windows.
+*.sh text eol=lf

@@ -14,7 +14,7 @@ echo ""
 echo ""
 
 
-cd ../mixins
+cd $PROJECT_ROOT_DIR/mixins
 
 # can't use flatten pom, so have to edit directly instead...
 mvn versions:set -DnewVersion=$REVISION
@@ -22,9 +22,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-mvn -s ../.m2/settings.xml \
+mvn -s $PROJECT_ROOT_DIR/.m2/settings.xml \
     --batch-mode \
-    clean deploy \
+    $MVN_STAGES \
     -Dgcpappenginerepo-deploy \
     -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
     -Drevision=$REVISION \
@@ -37,11 +37,15 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-cd ..
+cd $PROJECT_ROOT_DIR
 
-# revert the edits from earlier
-git checkout $(git status --porcelain | awk '{ print $2 }')
-if [ $? -ne 0 ]; then
-  exit 1
+if [ -z "$CI_DRY_RUN" ]; then
+  	
+  	# revert the edits from earlier ...
+	git checkout $(git status --porcelain | awk '{ print $2 }')
+	if [ $? -ne 0 ]; then
+	  exit 1
+	fi
+
 fi
 

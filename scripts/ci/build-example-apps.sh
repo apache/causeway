@@ -15,7 +15,7 @@ echo ""
 echo ""
 echo ""
 
-cd ../examples
+cd $PROJECT_ROOT_DIR/examples
 
 mvn --batch-mode \
     -Dexample-apps \
@@ -25,7 +25,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-cd ..
+cd $PROJECT_ROOT_DIR
 
 
 #export APP_NAME=helloworld
@@ -90,3 +90,4 @@ cd ..
 #fi
 #
 #cd ../../..
+

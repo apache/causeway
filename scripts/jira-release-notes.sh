@@ -198,4 +198,3 @@ for type in "${types[@]}"; do
     jira_by_type "$type"
 done
 
-

@@ -1,3 +1,5 @@
+# ls-tags-remote
+
 REMOTE=$1
 
 if [ "$REMOTE" == "" ]

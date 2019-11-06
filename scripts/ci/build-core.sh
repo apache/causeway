@@ -13,11 +13,11 @@ echo ""
 echo ""
 echo ""
 
-cd ../core
+cd $PROJECT_ROOT_DIR/core
 
-mvn -s ../.m2/settings.xml \
+mvn -s $PROJECT_ROOT_DIR/.m2/settings.xml \
     --batch-mode \
-    clean deploy \
+    $MVN_STAGES \
     -Dgcpappenginerepo-deploy \
     -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
     -Drevision=$REVISION \
@@ -28,5 +28,5 @@ if [ $? -ne 0 ]; then
 fi
 
 
-cd ..
+cd $PROJECT_ROOT_DIR
 

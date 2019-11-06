@@ -1,3 +1,5 @@
+# clean-up-tags-local
+
 for a in `git tag --list | grep origin`
 do
     git tag -d $a

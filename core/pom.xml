@@ -131,7 +131,7 @@
 		<com-sun-mail.version>1.5.2</com-sun-mail.version>
 		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
-		<jackson.version>2.9.8</jackson.version>
+		<jackson.version>2.10.0</jackson.version>
 		<gson.version>2.7</gson.version>
 		<swagger-core.version>1.5.21</swagger-core.version>
 
@@ -376,13 +376,13 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>Spring Milestones</id>
-			<url>https://repo.spring.io/milestone/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
+<!-- 		<repository> -->
+<!-- 			<id>Spring Milestones</id> -->
+<!-- 			<url>https://repo.spring.io/milestone/</url> -->
+<!-- 			<snapshots> -->
+<!-- 				<enabled>false</enabled> -->
+<!-- 			</snapshots> -->
+<!-- 		</repository> -->
 		<repository>
 			<id>JBoss Public Release</id>
 			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>

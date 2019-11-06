@@ -87,3 +87,4 @@ git commit -m "$JIRA: recreating $ISISCPN archetype"
 echo "building the newly created archetype ..."
 cd ../../archetype/$ISISCPN
 mvn -Drevision=$ISISREL clean install
+

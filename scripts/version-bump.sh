@@ -17,3 +17,4 @@ sed -i -E "s|<revision>[^<]+<|<revision>${REL}<|g" core/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${REL}<|g" example/application/simpleapp/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${REL}<|g" example/application/helloworld/pom.xml
 git commit -am "${JIRA}: bumps revision property across all pom.xml's to ${REL}"
+

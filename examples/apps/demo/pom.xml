@@ -35,12 +35,6 @@
 		<!-- this can be overridden using -Dflavor=... -->
 		<flavor>payara</flavor>
 
-		<docker-plugin.imageName>apacheisis/isis-2-demo</docker-plugin.imageName>
-		<docker-plugin.imageTag>${flavor}</docker-plugin.imageTag>
-		<docker-plugin.resource.include>${maven-war-plugin.warName}.war</docker-plugin.resource.include>
-		<docker-plugin.serverId>docker-hub</docker-plugin.serverId>
-		<docker-plugin.registryUrl>https://index.docker.io/v1/</docker-plugin.registryUrl>
-
 	</properties>
 
 	<dependencies>
@@ -76,7 +70,7 @@
 		</dependency>
 
 		<!-- ISIS EXTENSIONS -->
-		
+
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-incubator</artifactId>
@@ -195,6 +189,23 @@
 			<dependencies>
 				<!-- add flavor specific here -->
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<configuration>
+							<to>
+								<image>docker.io/apacheisis/isis-2-demo</image>
+								<auth>
+									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
+      								<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
+								</auth>
+							</to>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 
 		<profile>
@@ -215,6 +226,16 @@
 		</profile>
 
 	</profiles>
+
+	<!-- <repositories> -->
+	<!-- <repository> -->
+	<!-- <id>Apache Isis Snapshots</id> -->
+	<!-- <url>https://repo.incode.cloud/</url> -->
+	<!-- <snapshots> -->
+	<!-- <enabled>true</enabled> -->
+	<!-- </snapshots> -->
+	<!-- </repository> -->
+	<!-- </repositories> -->
 
 	<build>
 		<plugins>
@@ -237,10 +258,6 @@
 						<mixin>
 							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-surefire</artifactId>
-						</mixin>
-						<mixin>
-							<groupId>org.apache.isis.mixins</groupId>
-							<artifactId>isis-mixin-docker</artifactId>
 						</mixin>
 					</mixins>
 				</configuration>
