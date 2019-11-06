@@ -52,10 +52,6 @@
                             <groupId>org.apache.isis.mixins</groupId>
                             <artifactId>isis-mixin-standard</artifactId>
                         </mixin>
-                        <mixin>
-                            <groupId>org.apache.isis.mixins</groupId>
-                            <artifactId>isis-mixin-docker</artifactId>
-                        </mixin>
                     </mixins>
                 </configuration>
             </plugin>

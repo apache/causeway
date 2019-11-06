@@ -16,6 +16,8 @@ export CI_SCRIPTS_DIR=$PROJECT_ROOT_DIR/scripts/ci
 export CI_DRY_RUN=true
 export MVN_STAGES="install"
 
+SECRETS_FILE=~/ci-secrets.sh
+
 echo "=================  DRY RUN  =================="
 echo "\$REVISION             = ${REVISION}"
 echo "\$CI_BUILDS_DIR        = ${CI_BUILDS_DIR}"
@@ -23,7 +25,15 @@ echo "=============================================="
 
 cd $PROJECT_ROOT_DIR
 
-#sh $CI_SCRIPTS_DIR/build-mixins.sh
-#sh $CI_SCRIPTS_DIR/build-core.sh
-#sh $CI_SCRIPTS_DIR/build-example-apps.sh
+if [ -f "$SECRETS_FILE" ]; then
+    sh $SECRETS_FILE
+else
+    echo "creating a template secrets file at your home: $SECRETS_FILE"
+    printf '#!/bin/sh\nexport DOCKER_REGISTRY_USERNAME=apacheisiscommitters\nexport DOCKER_REGISTRY_PASSWORD=\n' > $SECRETS_FILE
+    exit 0
+fi
+
+sh $CI_SCRIPTS_DIR/build-mixins.sh
+sh $CI_SCRIPTS_DIR/build-core.sh
 sh $CI_SCRIPTS_DIR/build-demo-app.sh
+sh $CI_SCRIPTS_DIR/build-example-apps.sh

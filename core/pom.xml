@@ -2512,8 +2512,6 @@
 			own modules -->
 		<module>detached-tests</module>
 
-		<module>webdocker</module>
-		
 		<module>../mavendeps</module>
 		<module>../extensions</module>
 	</modules>
