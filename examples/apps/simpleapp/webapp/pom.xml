@@ -31,7 +31,7 @@
 
     <description>This assemblies and runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
 
-    <packaging>${packaging.type}</packaging>
+    <packaging>jar</packaging>
 
     <properties>
 
@@ -89,18 +89,15 @@
     </dependencies>
 
     <profiles>
-    
-    	<!-- running: mvn spring-boot:run -->
+
+        <!-- running: mvn spring-boot:run -->
 		<profile>
 			<id>package-as-jar</id>
 			<activation>
 				<property>
-					<name>!package-as-war</name>
+					<name>!skip.package-as-jar</name>
 				</property>
 			</activation>
-			<properties>
-				<packaging.type>jar</packaging.type>
-			</properties>
 
 			<build>
 				<plugins>
