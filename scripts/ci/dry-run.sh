@@ -16,7 +16,7 @@ export CI_SCRIPTS_DIR=$PROJECT_ROOT_DIR/scripts/ci
 export CI_DRY_RUN=true
 export MVN_STAGES="install"
 
-SECRETS_FILE=~/ci-secrets.sh
+SECRETS_FILE=~/ci-secrets.txt
 
 echo "=================  DRY RUN  =================="
 echo "\$REVISION             = ${REVISION}"
@@ -26,10 +26,11 @@ echo "=============================================="
 cd $PROJECT_ROOT_DIR
 
 if [ -f "$SECRETS_FILE" ]; then
-    sh $SECRETS_FILE
+	source $SECRETS_FILE
+	export $(cut -d= -f1 $SECRETS_FILE)
 else
     echo "creating a template secrets file at your home: $SECRETS_FILE"
-    printf '#!/bin/sh\nexport DOCKER_REGISTRY_USERNAME=apacheisiscommitters\nexport DOCKER_REGISTRY_PASSWORD=\n' > $SECRETS_FILE
+    printf 'DOCKER_REGISTRY_USERNAME=apacheisiscommitters\nDOCKER_REGISTRY_PASSWORD=\n' > $SECRETS_FILE
     exit 0
 fi
 
