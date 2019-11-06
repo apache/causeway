@@ -91,6 +91,7 @@
 			<artifactId>isis-security-shiro</artifactId>
 		</dependency>
 
+
 		<!-- OTHER DEPENDENCIES -->
 		
 		<dependency>
@@ -106,6 +107,14 @@
 			<artifactId>isis-mavendeps-testing</artifactId>
 			<scope>test</scope>
 			<type>pom</type>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.approvaltests</groupId>
+			<artifactId>approvaltests</artifactId>
+			<version>2.0.0</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
@@ -135,6 +144,44 @@
 								<goals>
 									<goal>repackage</goal>
 								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>lockdown</id>
+			<activation>
+				<property>
+					<name>lockdown</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>list</id>
+								<phase>generate-test-resources</phase>
+								<goals>
+									<goal>list</goal>
+								</goals>
+								<configuration>
+									<outputFile>${project.build.directory}/test-classes/domainapp/dom/impl/lockdown/LockDownMavenDeps_Test.list.actual.txt</outputFile>
+								</configuration>
+							</execution>
+							<execution>
+								<id>tree</id>
+								<phase>generate-test-resources</phase>
+								<goals>
+									<goal>tree</goal>
+								</goals>
+								<configuration>
+									<outputFile>${project.build.directory}/test-classes/domainapp/dom/impl/lockdown/LockDownMavenDeps_Test.tree.actual.txt</outputFile>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>

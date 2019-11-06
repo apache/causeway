@@ -77,6 +77,15 @@
             <artifactId>h2</artifactId>
         </dependency>
 
+        <!-- test -->
+
+        <dependency>
+            <groupId>com.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+            <version>2.0.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <profiles>
@@ -130,6 +139,44 @@
                     </exclusions>
                 </dependency>
             </dependencies>
+        </profile>
+
+        <profile>
+            <id>lockdown</id>
+            <activation>
+                <property>
+                    <name>lockdown</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>list</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>list</goal>
+                                </goals>
+                                <configuration>
+                                    <outputFile>${project.build.directory}/test-classes/domain/application/lockdown/LockDownMavenDeps_Test.list.actual.txt</outputFile>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>tree</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>tree</goal>
+                                </goals>
+                                <configuration>
+                                    <outputFile>${project.build.directory}/test-classes/domain/application/lockdown/LockDownMavenDeps_Test.tree.actual.txt</outputFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
     </profiles>
