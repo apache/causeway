@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.JDOHelper;
+import javax.jdo.JDOUserException;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.datanucleus.PersistenceNucleusContext;
@@ -50,9 +51,11 @@ import org.apache.isis.runtime.system.context.IsisContext;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Vetoed
+@Log4j2
 public class DataNucleusApplicationComponents5 implements ApplicationScopedComponent {
 
     private final Set<String> persistableClassNameSet;
@@ -89,7 +92,14 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
     }
 
     static PersistenceManagerFactory newPersistenceManagerFactory(Map<String, String> datanucleusProps) {
-        return JDOHelper.getPersistenceManagerFactory(datanucleusProps, IsisContext.getClassLoader());
+        try {
+            // this is where DN will throw an exception if we pass it any config props it doesn't like the look of.
+            // we want to fail, but let's make sure that the error is visible to help the developer
+            return JDOHelper.getPersistenceManagerFactory(datanucleusProps, IsisContext.getClassLoader());
+        } catch(JDOUserException ex) {
+            log.fatal(ex);
+            throw ex;
+        }
     }
 
     // REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
