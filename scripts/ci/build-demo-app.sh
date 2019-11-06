@@ -25,6 +25,7 @@ export ISIS_VERSION=$REVISION
 #printf '#!/bin/sh\nset -e\nmvn -s $CI_BUILDS_DIR/examples/apps/demo/.m2/settings.xml docker:push@push-image-tagged -Dflavor=$FLAVOR -Drevision=$REVISION -Disis.version=$ISIS_VERSION -DskipTests -Dskip.isis-swagger -Ddocker.registryUrl=$DOCKER_REGISTRY_URL\n' > ./push_flavor.sh
 
 export FLAVOR=tomcat
+mvn install -Dflavor=$FLAVOR -Dskip.git -Dskip.arch -DskipTests -Drevision=$REVISION -Disis.version=$ISIS_VERSION --batch-mode
 mvn compile jib:build -Dflavor=$FLAVOR -Dskip.git -Dskip.arch -DskipTests -Drevision=$REVISION -Disis.version=$ISIS_VERSION --batch-mode
 
 #sh ./push_latest.sh

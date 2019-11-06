@@ -195,11 +195,17 @@
 						<groupId>com.google.cloud.tools</groupId>
 						<artifactId>jib-maven-plugin</artifactId>
 						<configuration>
+							<from>
+								<image>tomcat:9-jdk11-openjdk</image>
+							</from>
+							<container>
+								<appRoot>/usr/local/tomcat/webapps/demo</appRoot>
+							</container>
 							<to>
-								<image>docker.io/apacheisis/isis-2-demo</image>
+								<image>docker.io/apacheisis/isis-2-demo:tomcat</image>
 								<auth>
 									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
-      								<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
+									<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
 								</auth>
 							</to>
 						</configuration>
