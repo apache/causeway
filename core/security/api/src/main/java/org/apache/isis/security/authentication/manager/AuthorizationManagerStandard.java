@@ -49,6 +49,9 @@ public class AuthorizationManagerStandard implements AuthorizationManager {
     @PreDestroy
     @Override
     public void shutdown() {
+        if(authorizor == null) {
+            return;
+        }
         authorizor.shutdown();
     }
 
