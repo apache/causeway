@@ -59,18 +59,12 @@ public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
             EntityModel entityModel = (EntityModel) model;
             val objectAdapter = entityModel.getObject();
             if(objectAdapter != null) {
-                
-                if(ManagedObject.isValue(objectAdapter)) {
-                    //FIXME[ISIS-1976] should be properly intercepted by another Panel and not fall through to the unknowns                     
-                    buf.append("FIXME[ISIS-1976] VALUE '" + objectAdapter.getPojo()+"'");
-                } else {
-                    buf.append("??? objectAdapter oid: " + ManagedObject._oid(objectAdapter));    
-                }
+                buf.append("??? objectAdapter oid: " + ManagedObject._oid(objectAdapter));    
             } else {
                 buf.append("??? objectAdapter is NULL");
             }
         }
-
+        
     }
 
 }

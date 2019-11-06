@@ -27,8 +27,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
@@ -69,12 +69,23 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
 
     private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
         val adapter = rowModel.getObject();
-        final EntityModel model = EntityModel.ofAdapter(super.getCommonContext(), adapter);
-        model.setRenderingHint(parentAdapterMementoIfAny != null? RenderingHint.PARENTED_TITLE_COLUMN: RenderingHint.STANDALONE_TITLE_COLUMN);
-        model.setContextAdapterIfAny(parentAdapterMementoIfAny);
+        
+        if(ManagedObject.isValue(adapter)) {
+            val valueModel = new ValueModel(super.getCommonContext(), adapter);
+            
+            val componentFactory = findComponentFactory(ComponentType.VALUE, valueModel);
+            return componentFactory.createComponent(id, valueModel);
+        }
+        
+        val entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
+        entityModel.setRenderingHint(parentAdapterMementoIfAny != null
+                ? RenderingHint.PARENTED_TITLE_COLUMN
+                        : RenderingHint.STANDALONE_TITLE_COLUMN);
+        entityModel.setContextAdapterIfAny(parentAdapterMementoIfAny);
+        
         // will use EntityLinkSimplePanelFactory as model is an EntityModel
-        final ComponentFactory componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, model);
-        return componentFactory.createComponent(id, model);
+        val componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, entityModel);
+        return componentFactory.createComponent(id, entityModel);
     }
 
 

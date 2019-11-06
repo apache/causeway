@@ -144,22 +144,22 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
 
     @Override
     public List<ComponentFactory> findComponentFactories(final ComponentType componentType, final IModel<?> model) {
-        final Collection<ComponentFactory> componentFactoryList = componentFactoriesByType.get(componentType);
-        final List<ComponentFactory> matching = _Lists.newArrayList();
-        for (final ComponentFactory componentFactory : componentFactoryList) {
+        val componentFactoryList = componentFactoriesByType.get(componentType);
+        val matchingFactories = _Lists.<ComponentFactory>newArrayList();
+        for (val componentFactory : componentFactoryList) {
             final ApplicationAdvice appliesTo = componentFactory.appliesTo(componentType, model);
             if (appliesTo.applies()) {
-                matching.add(componentFactory);
+                matchingFactories.add(componentFactory);
             }
             if (appliesTo.exclusively()) {
                 break;
             }
         }
-        if (matching.isEmpty()) {
+        if (matchingFactories.isEmpty()) {
             // will just be one
-            matching.addAll(componentFactoriesByType.get(ComponentType.UNKNOWN));
+            matchingFactories.addAll(componentFactoriesByType.get(ComponentType.UNKNOWN));
         }
-        return matching;
+        return matchingFactories;
     }
 
     @Override

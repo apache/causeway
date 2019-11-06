@@ -54,7 +54,7 @@ public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
         this(commonContext, Model.of(columnName), null);
     }
 
-    public ColumnAbstract(IsisWebAppCommonContext commonContext, final IModel<String> columnNameModel, final String sortColumn) {
+    public ColumnAbstract(IsisWebAppCommonContext commonContext, IModel<String> columnNameModel, String sortColumn) {
         super(columnNameModel, sortColumn);
         this.commonContext = commonContext;
     }
@@ -63,7 +63,7 @@ public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     
-    protected ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {
+    protected ComponentFactory findComponentFactory(ComponentType componentType, IModel<?> model) {
         return getComponentRegistry().findComponentFactory(componentType, model);
     }
 
