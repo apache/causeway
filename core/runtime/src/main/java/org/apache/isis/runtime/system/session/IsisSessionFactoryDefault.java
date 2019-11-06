@@ -64,6 +64,7 @@ import lombok.extern.log4j.Log4j2;
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     @Inject private AuthenticationManager authenticationManager;
+    @Inject private AuthorizationManager authorizationManager;
     @Inject private RuntimeEventService runtimeEventService;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private MetaModelContext metaModelContext;
@@ -92,8 +93,12 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
         .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
         .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
+
+        // TODO: REVIEW - why not use @PostConstruct, same as AuthorizationManager below?
         .addRunnable("AuthenticationManager::init", authenticationManager::init)
-        .addRunnable("AuthorizationManager::init", getAuthorizationManager()::init);
+        // TODO: REVIEW - have commented this out, because is a @PostConstruct anyway.
+        // .addRunnable("AuthorizationManager::init", authorizationManager::init)
+        ;
 
         taskList.submit(_ConcurrentContext.forkJoin());
         taskList.await();
@@ -180,8 +185,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     }
 
     private AuthorizationManager getAuthorizationManager() {
-        return metaModelContext.getServiceRegistry()
-                .lookupServiceElseFail(AuthorizationManager.class);
+        return authorizationManager;
     }
 
 
