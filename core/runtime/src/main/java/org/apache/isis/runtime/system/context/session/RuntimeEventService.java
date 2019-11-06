@@ -18,8 +18,11 @@
  */
 package org.apache.isis.runtime.system.context.session;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.BeanCreationNotAllowedException;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -32,6 +35,7 @@ import org.apache.isis.runtime.system.session.IsisSession;
  * post-construct phase has finished!
  */
 @Service
+@Log4j2
 public class RuntimeEventService {
     
     @Inject private EventBusService eventBusService;  
@@ -47,7 +51,11 @@ public class RuntimeEventService {
     }
 
     public void fireAppPreDestroy() {
-        eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
+        try {
+            eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
+        } catch(BeanCreationNotAllowedException ex) {
+           log.warn("Unable to post event - ignoring", ex);
+        }
     }
 
     // -- SESSION
