@@ -24,8 +24,4 @@
 
     <display-name>Simple App</display-name>
 
-    <welcome-file-list>
-        <welcome-file>about/index.html</welcome-file>
-    </welcome-file-list>
-
 </web-app>

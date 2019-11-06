@@ -20,12 +20,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>Apache Isis&trade; SimpleApp</title>
+        <title>Apache Isis&trade; HelloWorld</title>
         
         <style type="text/css">
 body {
     background-color: #1A467B;
-    font-family: Verdana, Helvetica, Arial;
+    font-family: Verdana, Helvetica, Arial, serif;
     font-size: 90%;
 }
 
@@ -54,21 +54,12 @@ th, td {
     </head>
     <body>
         <div id="wrapper">
-            <img alt="Isis Logo" src="about/images/isis-logo.png" />
+            <img alt="Isis Logo" src="images/apache-isis/logo.png" />
              
             <p>
                 This app has been generated using Apache Isis'
-                <a href="http://isis.apache.org/arch/simlpe%61pp/about.html" target="_blank">SimpleApp</a> archetype,
-                to create a purposefully minimal application that nevertheless includes fixture data, integration tests and BDD specs.
+                <a href="http://isis.apache.org/guides/ugfun/ugfun.html#_ugfun_getting-started_hellow%6Frld-archetype" target="_blank">Hello World</a> archetype.  Hello World is a tiny application, intended to make it easy to start learning how to write apps on top of the framework.
                 <br/>
-                <br/>
-                The application's business logic resides in a single (maven) module, <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/module-simple"  target="_blank">module-simple</a>, that in turn contains a single domain entity, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/module-simple/src/main/java/domainapp/modules/simple/dom/impl/SimpleObject.java"  target="_blank">SimpleObject</a>.  The module has its own <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/module-simple/src/main/java/domainapp/modules/simple/fixture" target="_blank">fixtures</a>, <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/module-simple/src/test/java/domainapp/modules/simple/dom/impl" target="_blank">unit tests</a> and <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/module-simple/src/test/java/domainapp/modules/simple/integtests/tests" target="_blank">integration tests</a>.  New modules can be created by copying this first simple module.
-                <br/>
-                <br/>
-                The app also defines the <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/application"  target="_blank">application</a> (maven) module; this holds <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/application/src/main/java/domainapp/application/fixture"  target="_blank">fixtures</a>, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/test/java/domainapp/application/integtests" target="_blank">integration/smoke tests</a> and <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/test/java/domainapp/application/bdd" target="_blank">BDD specs</a> to exercise the entire application.  It also holds the <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/main/java/domainapp/application/manifest/DomainAppAppManifest.java" target="_blank">AppManifest</a> used to bootstrap the entire application, as well as application-scoped <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/main/java/domainapp/application/services" target="_blank">domain services</a> (eg a home page service).
-                <br/>
-                <br/>
-                The app's <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/webapp"  target="_blank">webapp</a> (maven) module is used to assemble the application into a WAR file.
             </p>
 
             <p>To access the app:</p>
@@ -108,8 +99,7 @@ th, td {
             </ul>
 
             <p>
-            The default user/password is <b><i>sven/pass</i></b> (as configured in the
-            <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/webapp/src/main/webapp/WEB-INF/shiro.ini" target="_blank">shiro.ini</a> file).
+            The default user/password is <b><i>sven/pass</i></b>.
             </p>
             
         </div>
