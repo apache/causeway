@@ -8,7 +8,6 @@ echo ""
 
 echo "\$REVISION             = ${REVISION}"
 echo "\$GCPAPPENGINEREPO_URL = ${GCPAPPENGINEREPO_URL}"
-echo "\$DOCKER_REGISTRY_USERNAME = ${DOCKER_REGISTRY_USERNAME}"
 
 echo ""
 echo ""

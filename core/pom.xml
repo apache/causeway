@@ -173,7 +173,6 @@
 		<jmock.version>2.11.0</jmock.version>
 		<easymock.version>2.5.2</easymock.version>
 
-		<validation-api.version>1.1.0.Final</validation-api.version>
 		<transaction-api.version>1.2</transaction-api.version>
 
 		<javax-mail.version>1.4.7</javax-mail.version>
@@ -2074,13 +2073,7 @@
 			</dependency>
 
 
-			<!-- VALIDATION API -->
-			<dependency>
-				<groupId>javax.validation</groupId>
-				<artifactId>validation-api</artifactId>
-				<version>${validation-api.version}</version>
-			</dependency>
-
+			<!-- SWAGGER -->
 			<dependency>
 				<groupId>io.swagger</groupId>
 				<artifactId>swagger-core</artifactId>
