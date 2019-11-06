@@ -169,7 +169,7 @@ public class IsisSystemEnvironment {
 
         final DeploymentType deploymentType =
                 isPrototyping
-                ? DeploymentType.PROTOTYPING
+                        ? DeploymentType.PROTOTYPING
                         : DeploymentType.PRODUCTION;
 
         return deploymentType;
