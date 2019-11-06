@@ -53,10 +53,6 @@
 							<groupId>org.apache.isis.mixins</groupId>
 							<artifactId>isis-mixin-surefire</artifactId>
 						</mixin>
-						<mixin>
-							<groupId>org.apache.isis.mixins</groupId>
-							<artifactId>isis-mixin-docker</artifactId>
-						</mixin>
 					</mixins>
 				</configuration>
 			</plugin>
