@@ -41,6 +41,10 @@ public class PostProcessor {
     }
     
     public void shutdown() {
+        // in case initialization never happened.
+        if(postProcessors == null) {
+            return;
+        }
         postProcessors.clear();
     }
     
