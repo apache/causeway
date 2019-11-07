@@ -33,14 +33,25 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 
+import lombok.Getter;
+
 public class AbstractUserAndRolesFixtureScript extends FixtureScript {
 
+    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    
     private final String username;
     private final String password;
     private final String emailAddress;
     private final String tenancyPath;
     private final AccountType accountType;
     private final List<String> roleNames;
+    
+    /**
+     * The {@link org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser} 
+     * updated/created by the fixture.
+     */
+    @Getter private ApplicationUser applicationUser;
 
     public AbstractUserAndRolesFixtureScript(
             final String username,
@@ -57,6 +68,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
             final String tenancyPath,
             final AccountType accountType,
             final List<String> roleNames) {
+        
         this.username = username;
         this.password = password;
         this.emailAddress = emailAddress;
@@ -91,8 +103,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
                     applicationUser.addRole(securityRole);    
                 } else {
 
-                    System.err.println("role not found by name: "+roleName);
-                    throw _Exceptions.unexpectedCodeReach();
+                    throw _Exceptions.unrecoverable("role not found by name: "+roleName);
 
                 }
 
@@ -101,20 +112,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
         }
     }
 
-    private ApplicationUser applicationUser;
 
-    /**
-     * The {@link org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser} updated/created by the fixture.
-     */
-    public ApplicationUser getApplicationUser() {
-        return applicationUser;
-    }
-
-    //region  >  (injected)
-    @Inject
-    ApplicationUserRepository applicationUserRepository;
-    @Inject
-    ApplicationRoleRepository applicationRoleRepository;
 
 
 }

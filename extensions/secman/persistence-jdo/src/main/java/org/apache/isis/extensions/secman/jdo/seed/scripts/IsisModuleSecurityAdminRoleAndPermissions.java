@@ -18,19 +18,19 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
-import java.util.Objects;
-
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
 public class IsisModuleSecurityAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    private String[] adminStickyPackagePermissions;
+    private String[] adminInitialPackagePermissions;
 
     public IsisModuleSecurityAdminRoleAndPermissions(SecurityModuleConfig configBean) {
         super(configBean.getAdminRoleName(), "Administer security");
-        this.adminStickyPackagePermissions = configBean.getAdminStickyPackagePermissions();
+        this.adminInitialPackagePermissions = configBean.streamAdminPackagePermissions()
+                .collect(_Arrays.toArray(String.class));
     }
 
     @Override
@@ -38,15 +38,7 @@ public class IsisModuleSecurityAdminRoleAndPermissions extends AbstractRoleAndPe
         newPackagePermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                adminStickyPackagePermissions);
+                adminInitialPackagePermissions);
     }
-
-    public static boolean oneOf(SecurityModuleConfig configBean, String featureFqn) {
-        for(String stickyPackage : configBean.getAdminStickyPackagePermissions()) {
-            if(Objects.equals(featureFqn, stickyPackage)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    
 }

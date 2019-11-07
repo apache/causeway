@@ -18,9 +18,15 @@
  */
 package org.apache.isis.extensions.secman.api;
 
+import java.util.Set;
+import java.util.stream.Stream;
+
+import org.apache.isis.commons.internal.base._NullSafe;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Singular;
 
 @Builder
 public class SecurityModuleConfig {
@@ -44,12 +50,31 @@ public class SecurityModuleConfig {
     @Getter @Builder.Default @NonNull
     final String adminPassword = "pass";
 
+    /**
+     * cannot be removed via user interface
+     */
     @Getter @Builder.Default @NonNull
     final String[] adminStickyPackagePermissions = new String[]{
             "org.apache.isis.extensions.secman.api",
             "org.apache.isis.extensions.secman.model",
             "org.apache.isis.extensions.secman.jdo.dom",
     };
+    
+    @Getter @Singular 
+    final Set<String> adminAdditionalPackagePermissions;
+
+    // -- UTILITIES
+    
+    public Stream<String> streamAdminPackagePermissions() {
+        return Stream.concat(
+                _NullSafe.stream(adminStickyPackagePermissions),
+                _NullSafe.stream(adminAdditionalPackagePermissions));
+    }
+    
+    public boolean isStickyAdminPackage(String featureFqn) {
+        return _NullSafe.stream(adminStickyPackagePermissions)
+        .anyMatch(stickyPackage->stickyPackage.equals(featureFqn));
+    }
 
 
 }

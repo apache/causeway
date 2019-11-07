@@ -23,8 +23,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.config.IsisPresets;
-
 /**
  * Bootstrap the application.
  */

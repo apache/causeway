@@ -62,7 +62,6 @@ import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissio
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 
@@ -533,7 +532,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
             final ApplicationFeatureType type,
             @ParameterLayout(named="Feature", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
             final String featureFqn) {
-        if(isAdminRole() && IsisModuleSecurityAdminRoleAndPermissions.oneOf(configBean, featureFqn)) {
+        if(isAdminRole() && configBean.isStickyAdminPackage(featureFqn)) {
             return "Cannot remove top-level package permissions for the admin role.";
         }
         return null;

@@ -101,6 +101,8 @@ public class DemoAppManifest {
     public SecurityModuleConfig securityModuleConfigBean() {
         return SecurityModuleConfig.builder()
                 .adminUserName("sven")
+                .adminAdditionalPackagePermission("demoapp.dom")
+                .adminAdditionalPackagePermission("org.apache.isis")
                 .build();
     }
 
