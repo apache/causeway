@@ -108,13 +108,12 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     @PreDestroy
     public void shutdown() {
-        // call might originate from a different thread than main
+        // call might originate from a different thread than 'main'
 
-        // just in case we still have an open session, must also work if called from a different thread than 'main'
+        // just in case we still have an open session, 
+        // must also work if called from a different thread than 'main'
         openSessions.forEach(IsisSession::close);
         openSessions.clear();
-
-        runtimeEventService.fireAppPreDestroy();
     }
 
     // -- 

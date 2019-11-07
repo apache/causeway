@@ -31,6 +31,4 @@ public interface PersistenceSessionFactory {
 
     boolean isInitialized();
 
-    void shutdown();
-
 }

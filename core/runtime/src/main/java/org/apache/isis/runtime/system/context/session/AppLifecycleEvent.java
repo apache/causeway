@@ -27,7 +27,7 @@ public class AppLifecycleEvent {
     public static enum EventType {
         appPreMetamodel,
         appPostMetamodel,
-        appPreDestroy,
+//        appPreDestroy,
     }
 
     @Getter AppLifecycleEvent.EventType eventType;

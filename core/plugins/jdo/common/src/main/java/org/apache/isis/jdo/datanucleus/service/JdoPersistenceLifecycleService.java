@@ -66,9 +66,6 @@ public class JdoPersistenceLifecycleService {
         case appPostMetamodel:
             init();
             break;
-        case appPreDestroy:
-            shutdown();
-            break;
 
         default:
             throw _Exceptions.unmatchedCase(eventType);
@@ -138,10 +135,5 @@ public class JdoPersistenceLifecycleService {
         persistenceSessionFactory.catalogNamedQueries();
     }
 
-    private void shutdown() {
-        if(persistenceSessionFactory!=null) {
-            persistenceSessionFactory.shutdown();	
-        }
-    }
 
 }

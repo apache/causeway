@@ -18,11 +18,8 @@
  */
 package org.apache.isis.runtime.system.context.session;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Inject;
 
-import org.springframework.beans.factory.BeanCreationNotAllowedException;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -32,10 +29,10 @@ import org.apache.isis.runtime.system.session.IsisSession;
  * 
  * @since 2.0
  * @implNote Listeners to runtime events can only reliably receive these after the 
- * post-construct phase has finished!
+ * post-construct phase has finished and before the pre-destroy phase has begin.
  */
 @Service
-@Log4j2
+//@Log4j2
 public class RuntimeEventService {
     
     @Inject private EventBusService eventBusService;  
@@ -50,13 +47,13 @@ public class RuntimeEventService {
         eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
     }
 
-    public void fireAppPreDestroy() {
-        try {
-            eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
-        } catch(BeanCreationNotAllowedException ex) {
-           log.warn("Unable to post event - ignoring", ex);
-        }
-    }
+//    public void fireAppPreDestroy() {
+//        try {
+//            eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
+//        } catch(BeanCreationNotAllowedException ex) {
+//           log.warn("Unable to post event - ignoring", ex);
+//        }
+//    }
 
     // -- SESSION
 

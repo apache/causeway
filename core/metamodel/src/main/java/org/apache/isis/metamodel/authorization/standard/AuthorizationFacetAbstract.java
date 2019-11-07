@@ -44,12 +44,16 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        return authorizationManager.isVisible(getAuthenticationSession(), ic.getIdentifier()) ? null : "Not authorized to view";
+        return authorizationManager.isVisible(getAuthenticationSession(), ic.getIdentifier()) 
+                ? null 
+                        : "Not authorized to view";
     }
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        return authorizationManager.isUsable(getAuthenticationSession(), ic.getIdentifier()) ? null : "Not authorized to edit";
+        return authorizationManager.isUsable(getAuthenticationSession(), ic.getIdentifier()) 
+                ? null 
+                        : "Not authorized to edit";
     }
 
 

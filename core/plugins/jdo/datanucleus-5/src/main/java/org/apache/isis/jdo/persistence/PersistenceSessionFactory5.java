@@ -22,6 +22,8 @@ package org.apache.isis.jdo.persistence;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.jdo.listener.StoreLifecycleListener;
@@ -179,7 +181,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     }
 
 
-    @Override
+    @PreDestroy
     public final void shutdown() {
         if(!isInitialized()) {
             return;

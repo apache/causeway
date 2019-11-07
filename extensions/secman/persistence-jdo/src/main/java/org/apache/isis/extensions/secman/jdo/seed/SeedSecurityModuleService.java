@@ -59,9 +59,6 @@ public class SeedSecurityModuleService {
         case appPostMetamodel:
             init();
             break;
-        case appPreDestroy:
-            //shutdown();
-            break;
 
         default:
             throw _Exceptions.unmatchedCase(eventType);
