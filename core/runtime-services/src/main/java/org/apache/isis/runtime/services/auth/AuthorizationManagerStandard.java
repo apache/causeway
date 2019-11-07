@@ -117,13 +117,4 @@ public class AuthorizationManagerStandard implements AuthorizationManager, MetaM
         programmingModel.addFactory(FacetProcessingOrder.Z0_BEFORE_FINALLY, authorizationFacetFactory);
     }
 
-    //[2112]    
-    //    @EventListener(ProgrammingModel.class)
-    //    public static void refineProgrammingModel(@Observes ProgrammingModel baseProgrammingModel) {
-    //        final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory();
-    //        baseProgrammingModel.addFactory(facetFactory);
-    //    }
-
-    
-
 }

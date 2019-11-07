@@ -40,11 +40,10 @@ import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityRegu
  */
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
-    @Inject SecurityModuleConfig configBean;
-    @Inject ApplicationRoleRepository applicationRoleRepository;
-    @Inject ApplicationUserRepository applicationUserRepository;
+    @Inject private SecurityModuleConfig configBean;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
 
-    //@Override
     @Override
     protected void execute(ExecutionContext executionContext) {
 

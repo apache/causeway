@@ -47,6 +47,7 @@ public class SecurityModuleConfig {
     @Getter @Builder.Default @NonNull
     final String[] adminStickyPackagePermissions = new String[]{
             "org.apache.isis.extensions.secman.api",
+            "org.apache.isis.extensions.secman.model",
             "org.apache.isis.extensions.secman.jdo.dom",
     };
 

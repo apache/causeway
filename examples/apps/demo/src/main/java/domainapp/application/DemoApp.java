@@ -40,8 +40,11 @@ public class DemoApp extends SpringBootServletInitializer {
      */
     public static void main(String[] args) {
         //IsisPresets.prototyping();
-        //Presets.logging(IsisBeanScanInterceptorForSpring.class, "DEBUG");
-        //Presets.logging(IsisBeanTypeRegistry.class, "DEBUG");
+        //IsisPresets.logging(IsisBeanScanInterceptorForSpring.class, "DEBUG");
+        //IsisPresets.logging(IsisBeanTypeRegistry.class, "DEBUG");
+        //IsisPresets.logging(org.apache.shiro.realm.AuthorizingRealm.class, "TRACE");
+        //IsisPresets.logging(org.apache.isis.metamodel.authorization.standard.AuthorizationFacetAbstract.class, "DEBUG");
+        
         SpringApplication.run(new Class[] { DemoApp.class }, args);
     }
 }

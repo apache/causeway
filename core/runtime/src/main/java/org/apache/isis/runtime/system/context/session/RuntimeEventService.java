@@ -29,7 +29,7 @@ import org.apache.isis.runtime.system.session.IsisSession;
  * 
  * @since 2.0
  * @implNote Listeners to runtime events can only reliably receive these after the 
- * post-construct phase has finished and before the pre-destroy phase has begin.
+ * post-construct phase has finished and before the pre-destroy phase has begun.
  */
 @Service
 //@Log4j2
@@ -46,14 +46,6 @@ public class RuntimeEventService {
     public void fireAppPostMetamodel() {
         eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
     }
-
-//    public void fireAppPreDestroy() {
-//        try {
-//            eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
-//        } catch(BeanCreationNotAllowedException ex) {
-//           log.warn("Unable to post event - ignoring", ex);
-//        }
-//    }
 
     // -- SESSION
 

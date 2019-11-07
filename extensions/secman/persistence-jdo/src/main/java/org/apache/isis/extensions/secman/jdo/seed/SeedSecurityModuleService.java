@@ -54,7 +54,6 @@ public class SeedSecurityModuleService {
 
         switch (eventType) {
         case appPreMetamodel:
-            //create();
             break;
         case appPostMetamodel:
             init();

@@ -28,6 +28,10 @@ import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.security.authorization.manager.AuthorizationManager;
 
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public abstract class AuthorizationFacetAbstract extends FacetAbstract implements AuthorizationFacet {
 
     public static Class<? extends Facet> type() {
@@ -43,17 +47,31 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     }
 
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        return authorizationManager.isVisible(getAuthenticationSession(), ic.getIdentifier()) 
+    public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
+        
+        val hides = authorizationManager.isVisible(getAuthenticationSession(), ic.getIdentifier()) 
                 ? null 
                         : "Not authorized to view";
+        
+        if(hides!=null && log.isDebugEnabled()) {
+            log.debug("hides[{}] -> {}", ic.getIdentifier(), hides);
+        }
+        
+        return hides;
     }
 
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        return authorizationManager.isUsable(getAuthenticationSession(), ic.getIdentifier()) 
+    public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
+        
+        val disables = authorizationManager.isUsable(getAuthenticationSession(), ic.getIdentifier()) 
                 ? null 
                         : "Not authorized to edit";
+        
+        if(disables!=null && log.isDebugEnabled()) {
+            log.debug("disables[{}] -> {}", ic.getIdentifier(), disables);
+        }
+        
+        return disables;
     }
 
 
