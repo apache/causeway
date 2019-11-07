@@ -90,6 +90,21 @@
 
     <profiles>
 
+        <profile>
+            <id>actuator</id>
+            <activation>
+                <property>
+                    <name>!skip.actuator</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-actuator-autoconfigure</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
         <!-- running: mvn spring-boot:run -->
 		<profile>
 			<id>package-as-jar</id>
