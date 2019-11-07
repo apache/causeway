@@ -20,7 +20,7 @@ public class LockDownMavenDeps_Test {
 
     @Before
     public void setUp() throws Exception {
-        //assumeThat(System.getProperty("lockdown"), is(not(nullValue())));
+        assumeThat(System.getProperty("lockdown"), is(not(nullValue())));
     }
 
     @UseReporter(DiffReporter.class)
