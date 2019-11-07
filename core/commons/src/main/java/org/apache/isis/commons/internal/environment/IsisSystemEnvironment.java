@@ -60,7 +60,7 @@ public class IsisSystemEnvironment {
         
         this.iocContainer = IocContainerSpring.of(springContext);
         
-        System.err.println("####### IsisSystemEnvironment postconst " + this.hashCode());    
+        log.info("postConstruct (hashCode = {})", this.hashCode());
         
         // when NOT bootstrapped with Spring, postConstruct() never gets called
         
@@ -79,13 +79,13 @@ public class IsisSystemEnvironment {
     
     @PreDestroy
     public void preDestroy() {
-        System.err.println("####### IsisSystemEnvironment destroy " + this.hashCode());
+        log.info("preDestroy (hashCode = {})", this.hashCode());
     }
     
     @EventListener(ContextRefreshedEvent.class)
     public void onContextRefreshed(ContextRefreshedEvent event) {
         // happens after all @PostConstruct
-        log.info("Context was refreshed.");
+        log.info("onContextRefreshed");
     }
     
     @EventListener(ContextClosedEvent.class)
