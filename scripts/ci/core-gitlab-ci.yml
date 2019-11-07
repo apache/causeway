@@ -29,6 +29,7 @@ build all:
   variables:
      MVN_STAGES: deploy
   script:
+    # mixins are built first because core (which includes extensions) depend upon them.
     - sh $CI_SCRIPTS_DIR/build-mixins.sh
     - sh $CI_SCRIPTS_DIR/build-core.sh
     - sh $CI_SCRIPTS_DIR/build-demo-app.sh
