@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -178,6 +180,21 @@ public final class _Lists {
         return _NullSafe.stream(input)
                 .filter(filter)
                 .collect(Collectors.toList());
+    }
+    
+    // -- COLLECTORS
+
+    public static <T> 
+    Collector<T, ?, List<T>> toUnmodifiable(Supplier<List<T>> collectionFactory) {
+        
+        return Collectors.collectingAndThen(
+                Collectors.toCollection(collectionFactory), 
+                Collections::unmodifiableList);
+    }
+    
+    public static <T> 
+    Collector<T, ?, List<T>> toUnmodifiable() {
+        return toUnmodifiable(ArrayList::new);
     }
 
 }

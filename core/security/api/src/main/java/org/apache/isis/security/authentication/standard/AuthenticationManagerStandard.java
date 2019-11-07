@@ -31,6 +31,7 @@ import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -147,7 +148,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return getAuthenticators().stream()
                 .map(Registrar.AS_REGISTRAR_ELSE_NULL)
                 .filter(_NullSafe::isPresent)
-                .collect(Collectors.toList());
+                .collect(_Lists.toUnmodifiable());
     }
 
     // -- RANDOM CODE GENERATOR

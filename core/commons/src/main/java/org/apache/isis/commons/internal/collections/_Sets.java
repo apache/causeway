@@ -31,6 +31,8 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -90,12 +92,8 @@ public final class _Sets {
         if(elements.length==0) {
             return Collections.emptySet();
         }
-        final Set<T> setPreservingOrder = newLinkedHashSet();
-
-        Stream.of(elements)
-        .forEach(setPreservingOrder::add);
-
-        return Collections.unmodifiableSet(setPreservingOrder);
+        return Stream.of(elements)
+                .collect(toUnmodifiable(LinkedHashSet::new)); // preserve order
     }
 
     /**
@@ -103,13 +101,12 @@ public final class _Sets {
      * @param iterable
      * @return non null
      */
-    public static <T> Set<T> unmodifiable(Iterable<T> iterable) {
+    public static <T> Set<T> unmodifiable(@Nullable Iterable<T> iterable) {
         if(iterable==null) {
             return Collections.emptySet();
         }
-        return Collections.unmodifiableSet(
-                _NullSafe.stream(iterable)
-                .collect(Collectors.toSet()));
+        return _NullSafe.stream(iterable)
+                .collect(toUnmodifiable());
     }
 
     // -- TREE SET
@@ -223,11 +220,10 @@ public final class _Sets {
         if(a==null || b==null) {
             return Collections.emptySet();
         }
-        return Collections.unmodifiableSet(
-                a.stream()
+        return a.stream()
                 .filter(Objects::nonNull)
                 .filter(b::contains)
-                .collect(Collectors.toSet()) );
+                .collect(toUnmodifiable());
     }
 
     /**
@@ -245,11 +241,10 @@ public final class _Sets {
         if(a==null || b==null) {
             return Collections.emptySortedSet();
         }
-        return Collections.unmodifiableSortedSet(
-                a.stream()
+        return a.stream()
                 .filter(Objects::nonNull)
                 .filter(b::contains)
-                .collect(Collectors.toCollection(TreeSet::new)));
+                .collect(toUnmodifiableSorted());
     }
 
     /**
@@ -268,11 +263,10 @@ public final class _Sets {
         if(b==null || b.isEmpty()) {
             return Collections.unmodifiableSet(new HashSet<>(a));
         }
-        return Collections.unmodifiableSet(
-                a.stream()
+        return a.stream()
                 .filter(Objects::nonNull)
                 .filter(not(b::contains))
-                .collect(Collectors.toSet()) );
+                .collect(toUnmodifiable());
     }
     
     /**
@@ -291,11 +285,36 @@ public final class _Sets {
         if(b==null || b.isEmpty()) {
             return Collections.unmodifiableSortedSet(new TreeSet<>(a));
         }
-        return Collections.unmodifiableSortedSet(
-                a.stream()
+        return a.stream()
                 .filter(Objects::nonNull)
                 .filter(not(b::contains))
-                .collect(Collectors.toCollection(TreeSet::new)));
+                .collect(toUnmodifiableSorted());
+    }
+    
+    // -- COLLECTORS
+
+    public static <T> 
+    Collector<T, ?, Set<T>> toUnmodifiable(Supplier<Set<T>> collectionFactory) {
+        return Collectors.collectingAndThen(
+                Collectors.toCollection(collectionFactory),
+                Collections::unmodifiableSet);
+    }
+    
+    public static <T> 
+    Collector<T, ?, Set<T>> toUnmodifiable() {
+        return toUnmodifiable(HashSet::new);
+    }
+    
+    public static <T> 
+    Collector<T, ?, SortedSet<T>> toUnmodifiableSorted(Supplier<SortedSet<T>> collectionFactory) {
+        return Collectors.collectingAndThen(
+                Collectors.toCollection(collectionFactory), 
+                Collections::unmodifiableSortedSet);
     }
 
+    public static <T> 
+    Collector<T, ?, SortedSet<T>> toUnmodifiableSorted() {
+        return toUnmodifiableSorted(TreeSet::new);
+    }
+    
 }
