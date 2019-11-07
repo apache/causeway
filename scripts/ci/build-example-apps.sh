@@ -7,9 +7,10 @@ echo ""
 echo ""
 
 echo "\$REVISION             = ${REVISION}"
-echo "\$GCPAPPENGINEREPO_URL = ${GCPAPPENGINEREPO_URL}"
-echo "\$ORG_NAME             = ${ORG_NAME}"
-echo "\$DOCKER_REGISTRY_URL  = ${DOCKER_REGISTRY_URL}"
+echo "\$PROJECT_ROOT_DIR     = ${PROJECT_ROOT_DIR}"
+#echo "\$GCPAPPENGINEREPO_URL = ${GCPAPPENGINEREPO_URL}"
+#echo "\$ORG_NAME             = ${ORG_NAME}"
+#echo "\$DOCKER_REGISTRY_URL  = ${DOCKER_REGISTRY_URL}"
 
 echo ""
 echo ""

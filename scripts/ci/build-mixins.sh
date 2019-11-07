@@ -6,8 +6,12 @@ echo ""
 echo ""
 echo ""
 
+echo "\$PROJECT_ROOT_DIR     = ${PROJECT_ROOT_DIR}"
+echo "\$MVN_STAGES           = ${MVN_STAGES}"
 echo "\$REVISION             = ${REVISION}"
 echo "\$GCPAPPENGINEREPO_URL = ${GCPAPPENGINEREPO_URL}"
+echo "\$CORE_ADDITIONAL_OPTS = ${CORE_ADDITIONAL_OPTS}"
+echo "\$CI_DRY_RUN           = ${CI_DRY_RUN}"
 
 echo ""
 echo ""
@@ -29,7 +33,6 @@ mvn -s $PROJECT_ROOT_DIR/.m2/settings.xml \
     -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
     -Drevision=$REVISION \
     -Dskip.mavenmixin-standard \
-    -Dskip.mavenmixin-docker \
     -Dskip.mavenmixin-surefire \
     -Dskip.mavenmixin-datanucleus-enhance \
     $CORE_ADDITIONAL_OPTS

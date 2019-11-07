@@ -7,7 +7,10 @@ echo ""
 echo ""
 
 echo "\$REVISION             = ${REVISION}"
+echo "\$MVN_STAGES           = ${MVN_STAGES}"
+echo "\$PROJECT_ROOT_DIR     = ${PROJECT_ROOT_DIR}"
 echo "\$GCPAPPENGINEREPO_URL = ${GCPAPPENGINEREPO_URL}"
+echo "\$CORE_ADDITIONAL_OPTS = ${CORE_ADDITIONAL_OPTS}"
 
 echo ""
 echo ""
