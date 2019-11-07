@@ -35,15 +35,16 @@ final class BeanAdapterSpring implements ManagedBeanAdapter {
 
     @Override
     public Can<?> getInstance() {
-        val allMatchingBeans = beanProvider.stream(); 
-        return Can.ofStream(allMatchingBeans);
+        val allMatchingBeans = beanProvider.stream()
+                .collect(Can.toCan());
+        return allMatchingBeans;
     }
 
     @Override
     public boolean isCandidateFor(Class<?> requiredType) {
         return beanProvider.stream()
                 .map(Object::getClass)
-                .anyMatch(type->requiredType.isAssignableFrom(type));
+                .anyMatch(requiredType::isAssignableFrom);
     }
 
 

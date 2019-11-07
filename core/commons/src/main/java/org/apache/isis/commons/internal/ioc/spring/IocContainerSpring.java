@@ -20,7 +20,6 @@ package org.apache.isis.commons.internal.ioc.spring;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -78,8 +77,11 @@ public class IocContainerSpring implements IocContainer {
     public <T> Can<T> select(final Class<T> requiredType) {
         requires(requiredType, "requiredType");
 
-        val allMatchingBeans = springContext.getBeanProvider(requiredType).orderedStream();
-        return Can.ofStream(allMatchingBeans);
+        val allMatchingBeans = springContext.getBeanProvider(requiredType)
+                .orderedStream()
+                .collect(Can.toCan());
+        
+        return allMatchingBeans;
     }
 
     @Override
@@ -89,22 +91,25 @@ public class IocContainerSpring implements IocContainer {
 
         requires(requiredType, "requiredType");
 
-        val allMatchingBeans = springContext.getBeanProvider(requiredType)
-                .orderedStream();
-
         if(_NullSafe.isEmpty(qualifiersRequired)) {
-            return Can.ofStream(allMatchingBeans);
+            
+            val allMatchingBeans = springContext.getBeanProvider(requiredType)
+                    .orderedStream()
+                    .collect(Can.toCan());
+            
+            return allMatchingBeans;
         }
 
-        final Predicate<T> hasAllQualifiers = t -> {
-            val qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
-            return qualifiersPresent.containsAll(qualifiersRequired);
-        };
-
-        return Can.ofStream(allMatchingBeans
-                .filter(hasAllQualifiers));
+        val allMatchingBeans = springContext.getBeanProvider(requiredType)
+                .orderedStream()
+                .filter(t->{
+                    val qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
+                    return qualifiersPresent.containsAll(qualifiersRequired);
+                })
+                .collect(Can.toCan());
+        
+        return allMatchingBeans;
+        
     }
-    
-    
 
 }

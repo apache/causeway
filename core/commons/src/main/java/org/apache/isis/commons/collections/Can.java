@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -352,7 +353,15 @@ public interface Can<T> extends Iterable<T> {
         return getCardinality().isMultiple();
     }
 
+    // -- COLLECTORS
 
+    public static <T> 
+    Collector<T, ?, Can<T>> toCan() {
+        
+        return Collectors.collectingAndThen(
+                Collectors.toList(), 
+                Can::ofCollection);
+    }
 
 
 }
