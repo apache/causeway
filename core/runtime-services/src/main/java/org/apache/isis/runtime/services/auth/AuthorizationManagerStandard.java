@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.security.authentication.manager;
+package org.apache.isis.runtime.services.auth;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -27,12 +27,18 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.metamodel.authorization.standard.AuthorizationFacetFactory;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel.FacetProcessingOrder;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.security.authorization.standard.Authorizor;
 
+import lombok.val;
+
 @Service
-public class AuthorizationManagerStandard implements AuthorizationManager {
+public class AuthorizationManagerStandard implements AuthorizationManager, MetaModelRefiner {
 
     @Inject protected Authorizor authorizor;
 
@@ -103,6 +109,12 @@ public class AuthorizationManagerStandard implements AuthorizationManager {
 
     private boolean isPerspectiveMember(final Identifier identifier) {
         return (identifier.getClassName().equals(""));
+    }
+
+    @Override
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        val authorizationFacetFactory = new AuthorizationFacetFactory();
+        programmingModel.addFactory(FacetProcessingOrder.Z0_BEFORE_FINALLY, authorizationFacetFactory);
     }
 
     //[2112]    

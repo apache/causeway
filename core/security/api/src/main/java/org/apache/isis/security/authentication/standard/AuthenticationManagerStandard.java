@@ -32,7 +32,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
@@ -55,10 +54,10 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     @Getter private Can<Authenticator> authenticators;
 
     @PostConstruct
-    public void preInit() {
+    public void init() {
         authenticators = serviceRegistry.select(Authenticator.class);
         if (authenticators.isEmpty()) {
-            throw _Exceptions.unrecoverable("No authenticators specified");
+            throw new NoAuthenticatorException("No authenticators specified");
         }
     }
 
@@ -177,10 +176,11 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      * @param mockAuthenticator
      * @return
      */
-    public static AuthenticationManagerStandard getInstance(Authenticator authenticator) {
+    public static AuthenticationManagerStandard instanceForTesting(Authenticator authenticator) {
         val manager = new AuthenticationManagerStandard();
         manager.authenticators = Can.ofSingleton(authenticator);
         return manager;
     }
+
 
 }

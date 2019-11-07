@@ -54,7 +54,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
         mockAuthenticator = mockery.mock(Authenticator.class);
         mockAuthSession = mockery.mock(AuthenticationSession.class);
 
-        authenticationManager = AuthenticationManagerStandard.getInstance(mockAuthenticator);
+        authenticationManager = AuthenticationManagerStandard.instanceForTesting(mockAuthenticator);
         authenticationManager.setRandomCodeGenerator(mockRandomCodeGenerator);
 
         mockery.checking(new Expectations() {

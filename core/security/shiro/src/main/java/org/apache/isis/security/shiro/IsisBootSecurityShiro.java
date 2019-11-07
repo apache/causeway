@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.security.authentication.manager.AuthorizationManagerStandard;
+import org.apache.isis.runtime.services.auth.AuthorizationManagerStandard;
 import org.apache.isis.security.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.security.authentication.standard.Authenticator;
 import org.apache.isis.security.authorization.standard.Authorizor;

@@ -28,7 +28,7 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
@@ -42,30 +42,35 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
     @Before
     public void setUp() throws Exception {
         mockAuthenticator = mockery.mock(Authenticator.class);
-        authenticationManager = new AuthenticationManagerStandard();
     }
 
-    @Test
-    public void shouldInitiallyHaveNoAuthenticators() throws Exception {
-        assertThat(authenticationManager.getAuthenticators().size(), is(0));
-    }
+    //    @Test
+    //    public void shouldInitiallyHaveNoAuthenticators() throws Exception {
+    //        authenticationManager = new AuthenticationManagerStandard();
+    //        assertThat(authenticationManager.getAuthenticators().size(), is(0));
+    //    }
 
     @Test(expected = NoAuthenticatorException.class)
     public void shouldNotBeAbleToAuthenticateWithNoAuthenticators() throws Exception {
+        
+        authenticationManager = new AuthenticationManagerStandard();
+        
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
 
-//    @Test
-//    public void shouldBeAbleToAddAuthenticators() throws Exception {
-//        authenticationManager.addAuthenticator(mockAuthenticator);
-//        assertThat(authenticationManager.getAuthenticators().size(), is(1));
-//        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(mockAuthenticator)));
-//    }
-//
-//    @Test(expected = UnsupportedOperationException.class)
-//    public void shouldNotBeAbleToModifyReturnedAuthenticators() throws Exception {
-//        val authenticators = authenticationManager.getAuthenticators();
-//        authenticators.add(mockAuthenticator);
-//    }
+    @Test
+    public void shouldBeAbleToUseAuthenticators() throws Exception {
+        
+        authenticationManager = AuthenticationManagerStandard.instanceForTesting(mockAuthenticator);
+        
+        assertThat(authenticationManager.getAuthenticators().size(), is(1));
+        assertThat(authenticationManager.getAuthenticators().getFirst().get(), is(sameInstance(mockAuthenticator)));
+    }
+
+    //    @Test(expected = UnsupportedOperationException.class)
+    //    public void shouldNotBeAbleToModifyReturnedAuthenticators() throws Exception {
+    //        val authenticators = authenticationManager.getAuthenticators();
+    //        authenticators.add(mockAuthenticator);
+    //    }
 
 }

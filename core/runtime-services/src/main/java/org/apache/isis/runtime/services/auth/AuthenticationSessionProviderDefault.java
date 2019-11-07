@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.services.authsess;
+package org.apache.isis.runtime.services.auth;
 
 import java.util.List;
 
