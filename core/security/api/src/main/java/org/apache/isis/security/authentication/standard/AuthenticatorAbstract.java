@@ -24,20 +24,6 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 
 public abstract class AuthenticatorAbstract implements Authenticator {
 
-    // -- init, shutdown
-
-    @Override
-    public void init() {
-        // does nothing.
-    }
-
-    @Override
-    public void shutdown() {
-        // does nothing.
-    }
-
-    // -- API
-
     /**
      * Default implementation returns a {@link SimpleSession}; can be overridden
      * if required.
@@ -61,6 +47,5 @@ public abstract class AuthenticatorAbstract implements Authenticator {
     public void logout(final AuthenticationSession session) {
         // no-op
     }
-
 
 }

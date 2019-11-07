@@ -19,8 +19,6 @@
 
 package org.apache.isis.security.authentication.standard;
 
-import java.util.List;
-
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -31,7 +29,6 @@ import org.junit.runner.RunWith;
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
@@ -58,17 +55,17 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
 
-    @Test
-    public void shouldBeAbleToAddAuthenticators() throws Exception {
-        authenticationManager.addAuthenticator(mockAuthenticator);
-        assertThat(authenticationManager.getAuthenticators().size(), is(1));
-        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(mockAuthenticator)));
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void shouldNotBeAbleToModifyReturnedAuthenticators() throws Exception {
-        final List<Authenticator> authenticators = authenticationManager.getAuthenticators();
-        authenticators.add(mockAuthenticator);
-    }
+//    @Test
+//    public void shouldBeAbleToAddAuthenticators() throws Exception {
+//        authenticationManager.addAuthenticator(mockAuthenticator);
+//        assertThat(authenticationManager.getAuthenticators().size(), is(1));
+//        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(mockAuthenticator)));
+//    }
+//
+//    @Test(expected = UnsupportedOperationException.class)
+//    public void shouldNotBeAbleToModifyReturnedAuthenticators() throws Exception {
+//        val authenticators = authenticationManager.getAuthenticators();
+//        authenticators.add(mockAuthenticator);
+//    }
 
 }

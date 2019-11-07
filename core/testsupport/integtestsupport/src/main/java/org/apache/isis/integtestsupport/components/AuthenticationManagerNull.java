@@ -27,14 +27,6 @@ import org.apache.isis.security.authentication.manager.RegistrationDetails;
 public class AuthenticationManagerNull implements AuthenticationManager, Noop {
 
     @Override
-    public void init() {
-    }
-
-    @Override
-    public void shutdown() {
-    }
-
-    @Override
     public AuthenticationSession authenticate(final AuthenticationRequest request) {
         return null;
     }

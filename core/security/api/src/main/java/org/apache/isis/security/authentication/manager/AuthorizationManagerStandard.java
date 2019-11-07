@@ -22,7 +22,6 @@ package org.apache.isis.security.authentication.manager;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 
@@ -35,19 +34,16 @@ import org.apache.isis.security.authorization.standard.Authorizor;
 @Service
 public class AuthorizationManagerStandard implements AuthorizationManager {
 
+    @Inject protected Authorizor authorizor;
 
-    // /////////////////////////////////////////////////////////
-    // init, shutddown
-    // /////////////////////////////////////////////////////////
+    // -- LIFECYCLE
 
     @PostConstruct
-    @Override
     public void init() {
         authorizor.init();
     }
 
     @PreDestroy
-    @Override
     public void shutdown() {
         if(authorizor == null) {
             return;
@@ -55,9 +51,7 @@ public class AuthorizationManagerStandard implements AuthorizationManager {
         authorizor.shutdown();
     }
 
-    // /////////////////////////////////////////////////////////
-    // API
-    // /////////////////////////////////////////////////////////
+    // -- API
 
     @Override
     public boolean isUsable(final AuthenticationSession session, final Identifier identifier) {
@@ -118,6 +112,6 @@ public class AuthorizationManagerStandard implements AuthorizationManager {
     //        baseProgrammingModel.addFactory(facetFactory);
     //    }
 
-    @Inject protected Authorizor authorizor;
+    
 
 }

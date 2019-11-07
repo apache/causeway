@@ -19,19 +19,10 @@
 
 package org.apache.isis.security.authentication.manager;
 
-import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
-/**
- * Implementing class is added to {@link ServicesInjector} as an (internal) domain service; 
- */
-public interface AuthenticationManager extends ApplicationScopedComponent {
-
-
-    void init();
-
-    void shutdown();
+public interface AuthenticationManager {
 
     /**
      * Caches and returns an authentication {@link AuthenticationSession} if the

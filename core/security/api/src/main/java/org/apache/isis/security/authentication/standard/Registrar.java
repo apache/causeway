@@ -20,15 +20,11 @@
 package org.apache.isis.security.authentication.standard;
 
 import java.util.function.Function;
-import java.util.function.Predicate;
 
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.security.authentication.manager.RegistrationDetails;
 
 public interface Registrar extends Authenticator, ApplicationScopedComponent {
-
-    static Predicate<Registrar> NON_NULL = _NullSafe::isPresent; 
 
     static Function<Authenticator, Registrar> AS_REGISTRAR_ELSE_NULL = (final Authenticator input) -> {
         if (input instanceof Registrar) {

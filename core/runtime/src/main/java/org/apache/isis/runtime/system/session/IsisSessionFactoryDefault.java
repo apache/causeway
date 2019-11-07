@@ -47,6 +47,8 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.authorization.manager.AuthorizationManager;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -76,6 +78,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     //@PostConstruct .. too early, needs services to be provisioned first
     @EventListener
     public void init(ContextRefreshedEvent event) {
+        
+        requires(authenticationManager, "authenticationManager");
+        
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
 
@@ -84,20 +89,14 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         localeInitializer.initLocale(configuration);
         timeZoneInitializer.initTimeZone(configuration);
-
+        
         runtimeEventService.fireAppPreMetamodel();
         
         val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Init")
-        
         .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
         .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
         .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
         .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
-
-        // TODO: REVIEW - why not use @PostConstruct, same as AuthorizationManager below?
-        .addRunnable("AuthenticationManager::init", authenticationManager::init)
-        // TODO: REVIEW - have commented this out, because is a @PostConstruct anyway.
-        // .addRunnable("AuthorizationManager::init", authorizationManager::init)
         ;
 
         taskList.submit(_ConcurrentContext.forkJoin());
@@ -116,9 +115,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         openSessions.clear();
 
         runtimeEventService.fireAppPreDestroy();
-        authenticationManager.shutdown();
-        getAuthorizationManager().shutdown();
-        //specificationLoader.shutdown(); // lifecycle is managed by IoC
     }
 
     // -- 

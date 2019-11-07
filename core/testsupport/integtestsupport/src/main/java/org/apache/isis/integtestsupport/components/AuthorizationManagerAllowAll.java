@@ -25,14 +25,6 @@ import org.apache.isis.security.authorization.manager.AuthorizationManager;
 public class AuthorizationManagerAllowAll implements AuthorizationManager {
 
     @Override
-    public void init() {
-    }
-
-    @Override
-    public void shutdown() {
-    }
-
-    @Override
     public boolean isUsable(final AuthenticationSession session, final Identifier identifier) {
         return true;
     }

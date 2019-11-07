@@ -19,7 +19,6 @@
 
 package org.apache.isis.security.authentication.standard;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,17 +28,16 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.authentication.manager.RegistrationDetails;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
@@ -47,65 +45,27 @@ import lombok.val;
 
 public class AuthenticationManagerStandard implements AuthenticationManager {
 
+    @Inject private ServiceRegistry serviceRegistry;
+
     private final Map<String, String> userByValidationCode = _Maps.newHashMap();
-    private final List<Authenticator> authenticators = _Lists.newArrayList();
-    private _Lazy<RandomCodeGenerator> randomCodeGenerator =
+    private final _Lazy<RandomCodeGenerator> randomCodeGenerator =
             _Lazy.threadSafe(this::getDefaultRandomCodeGenerator);
     
-    @Getter
-    private RandomCodeGenerator defaultRandomCodeGenerator = new RandomCodeGenerator10Chars();
-
-    @Inject
-    private ServiceRegistry serviceRegistry;
+    @Getter private RandomCodeGenerator defaultRandomCodeGenerator = new RandomCodeGenerator10Chars();
+    @Getter private Can<Authenticator> authenticators;
 
     @PostConstruct
     public void preInit() {
-        serviceRegistry.select(Authenticator.class).forEach(authenticators::add);
-    }
-
-
-    // //////////////////////////////////////////////////////////
-    // init
-    // //////////////////////////////////////////////////////////
-
-    /**
-     * Will default the {@link #setRandomCodeGenerator(RandomCodeGenerator)
-     * RandomCodeGenerator}, but {@link Authenticator}(s) must have been
-     * {@link #addAuthenticator(Authenticator) added}.
-     * @param deploymentCategory
-     */
-    @Override
-    public final void init() {
-        addDefaultAuthenticators();
-        if (authenticators.size() == 0) {
-            throw new IsisException("No authenticators specified");
-        }
-        for (final Authenticator authenticator : authenticators) {
-            authenticator.init();
+        authenticators = serviceRegistry.select(Authenticator.class);
+        if (authenticators.isEmpty()) {
+            throw _Exceptions.unrecoverable("No authenticators specified");
         }
     }
 
-
-    /**
-     * optional hook method
-     */
-    protected void addDefaultAuthenticators() {
-    }
+    // -- SESSION MANAGEMENT (including authenticate)
 
     @Override
-    public void shutdown() {
-        for (final Authenticator authenticator : authenticators) {
-            authenticator.shutdown();
-        }
-    }
-
-    // //////////////////////////////////////////////////////////
-    // Session Management (including authenticate)
-    // //////////////////////////////////////////////////////////
-
-
-    @Override
-    public synchronized final AuthenticationSession authenticate(final AuthenticationRequest request) {
+    public synchronized final AuthenticationSession authenticate(AuthenticationRequest request) {
         
         if (request == null) {
             return null;
@@ -141,45 +101,25 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
 
 
     @Override
-    public final boolean isSessionValid(final AuthenticationSession session) {
+    public final boolean isSessionValid(AuthenticationSession session) {
         final String userName = userByValidationCode.get(session.getValidationCode());
         return session.hasUserNameOf(userName);
     }
 
 
     @Override
-    public void closeSession(final AuthenticationSession session) {
-        List<Authenticator> authenticators = getAuthenticators();
+    public void closeSession(AuthenticationSession session) {
         for (Authenticator authenticator : authenticators) {
             authenticator.logout(session);
         }
         userByValidationCode.remove(session.getValidationCode());
     }
 
-    // //////////////////////////////////////////////////////////
-    // Authenticators
-    // //////////////////////////////////////////////////////////
-
-
-    public final void addAuthenticator(final Authenticator authenticator) {
-        authenticators.add(authenticator);
-    }
-
-
-    public void addAuthenticatorToStart(final Authenticator authenticator) {
-        authenticators.add(0, authenticator);
-    }
-
-
-    public List<Authenticator> getAuthenticators() {
-        return Collections.unmodifiableList(authenticators);
-    }
-
-
+    // -- AUTHENTICATORS
 
     @Override
-    public boolean register(final RegistrationDetails registrationDetails) {
-        for (final Registrar registrar : getRegistrars()) {
+    public boolean register(RegistrationDetails registrationDetails) {
+        for (val registrar : getRegistrars()) {
             if (registrar.canRegister(registrationDetails.getClass())) {
                 return registrar.register(registrationDetails);
             }
@@ -189,8 +129,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
 
 
     @Override
-    public boolean supportsRegistration(final Class<? extends RegistrationDetails> registrationDetailsClass) {
-        for (final Registrar registrar : getRegistrars()) {
+    public boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass) {
+        for (val registrar : getRegistrars()) {
             if (registrar.canRegister(registrationDetailsClass)) {
                 return true;
             }
@@ -198,32 +138,29 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return false;
     }
 
-
+    private final _Lazy<List<Registrar>> registrars = _Lazy.threadSafe(this::toRegistrars);
+    
     public List<Registrar> getRegistrars() {
-        return asAuthenticators(getAuthenticators());
+        return registrars.get();
     }
 
-    private static List<Registrar> asAuthenticators(final List<Authenticator> authenticators2) {
-        return stream(authenticators2)
+    private List<Registrar> toRegistrars() {
+        return getAuthenticators().stream()
                 .map(Registrar.AS_REGISTRAR_ELSE_NULL)
-                .filter(Registrar.NON_NULL)
+                .filter(_NullSafe::isPresent)
                 .collect(Collectors.toList());
     }
 
-    // //////////////////////////////////////////////////////////
-    // RandomCodeGenerator
-    // //////////////////////////////////////////////////////////
-
-    public void setRandomCodeGenerator(final RandomCodeGenerator randomCodeGenerator) {
+    // -- RANDOM CODE GENERATOR
+ 
+    public void setRandomCodeGenerator(RandomCodeGenerator randomCodeGenerator) {
         requires(randomCodeGenerator, "randomCodeGenerator");
         this.defaultRandomCodeGenerator = randomCodeGenerator;
         this.randomCodeGenerator.clear(); // invalidate
     }
 
-    // //////////////////////////////////////////////////////////
-    // Debugging
-    // //////////////////////////////////////////////////////////
-
+    // -- DEBUGGING
+ 
     private final static ToString<AuthenticationManagerStandard> toString =
             ToString.<AuthenticationManagerStandard>toString("class", obj->obj.getClass().getSimpleName())
             .thenToString("authenticators", obj->""+obj.authenticators.size())
@@ -242,7 +179,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      */
     public static AuthenticationManagerStandard getInstance(Authenticator authenticator) {
         val manager = new AuthenticationManagerStandard();
-        manager.authenticators.add(authenticator);
+        manager.authenticators = Can.ofSingleton(authenticator);
         return manager;
     }
 

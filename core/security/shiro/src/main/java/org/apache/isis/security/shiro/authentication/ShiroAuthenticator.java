@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
@@ -68,24 +69,21 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 @NoArgsConstructor
 public class ShiroAuthenticator implements Authenticator {
 
-    // -- constructor and fields
+    @Inject private IsisConfiguration configuration;
+
     private boolean autoLogout;
 
-    @Inject private IsisConfiguration configuration;
-    
-    
+    // -- LIFECYCLE
 
-    // -- init, shutdown
-
-    @Override
+    @PostConstruct
     public void init() {
         autoLogout = configuration.getAuthentication().getShiro().isAutoLogoutIfAlreadyAuthenticated();
     }
 
 
-    @Override
-    public void shutdown() {
-    }
+//    @Override
+//    public void shutdown() {
+//    }
 
     // -- Authenticator API
 

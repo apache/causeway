@@ -25,9 +25,6 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 
 public interface Authenticator extends ApplicationScopedComponent {
 
-    void init();
-    void shutdown();
-
     /**
      * Whether the provided {@link AuthenticationRequest} is recognized by this
      * {@link Authenticator}.
