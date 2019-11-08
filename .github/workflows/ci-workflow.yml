@@ -9,8 +9,8 @@ jobs:
     env:
       # to be shared amoung all steps
       BASELINE: 2.0.0-M2
-      PROJECT_ROOT_PATH: ${{GITHUB_WORKSPACE}}
-      CI_SCRIPTS_PATH: ${{PROJECT_ROOT_PATH}}/scripts/ci
+      #PROJECT_ROOT_PATH: ${{GITHUB_WORKSPACE}}
+      #CI_SCRIPTS_PATH: ${{PROJECT_ROOT_PATH}}/scripts/ci
       MVN_STAGES: deploy
 
     steps:
@@ -24,10 +24,10 @@ jobs:
     - name: Setup Script Environment
       shell: bash
       run: | 
-        echo REVISION=$BASELINE.$(date +%Y%m%d) >> ~/.env 
+        echo REVISION=$BASELINE.$(date +%Y%m%d) > ~/.env 
         echo ==============  ENV  =================
         echo BASELINE\: $BASELINE
-        echo REVISION\: $REVISION
+        #echo REVISION\: $REVISION
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
         echo CI_SCRIPTS_PATH\: $CI_SCRIPTS_PATH
         echo MVN_STAGES\: $MVN_STAGES
