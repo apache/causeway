@@ -7,7 +7,7 @@ export BASELINE=2.0.0-M2
 export GCPAPPENGINEREPO_URL=https://repo.incode.work
 export SHARED_VARS_FILE=~/ci-env.txt
 
-echo "REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)" > $SHARED_VARS_FILE 
+echo "REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-dryrun" > $SHARED_VARS_FILE 
 
 ## for the consumers to import shared vars (non secret!)
 ## source $SHARED_VARS_FILE && export $(cut -d= -f1 $SHARED_VARS_FILE)
