@@ -1,4 +1,5 @@
-name: Build Package Push All
+#name: Build Package Push All
+name: Build and Test Core
 
 on: [push]
 
