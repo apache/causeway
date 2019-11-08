@@ -1,24 +1,11 @@
 #!/bin/bash
-#set -x
-#trap read debug
+set -e
 
-echo ""
-echo ""
-echo ""
+sh $CI_SCRIPTS_PATH/print-environment.sh
 
-echo "\$REVISION             = ${REVISION}"
-echo "\$MVN_STAGES           = ${MVN_STAGES}"
-echo "\$PROJECT_ROOT_DIR     = ${PROJECT_ROOT_DIR}"
-echo "\$GCPAPPENGINEREPO_URL = ${GCPAPPENGINEREPO_URL}"
-echo "\$CORE_ADDITIONAL_OPTS = ${CORE_ADDITIONAL_OPTS}"
+cd $PROJECT_ROOT_PATH/core
 
-echo ""
-echo ""
-echo ""
-
-cd $PROJECT_ROOT_DIR/core
-
-mvn -s $PROJECT_ROOT_DIR/.m2/settings.xml \
+mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     --batch-mode \
     $MVN_STAGES \
     -Dgcpappenginerepo-deploy \
@@ -26,10 +13,6 @@ mvn -s $PROJECT_ROOT_DIR/.m2/settings.xml \
     -Drevision=$REVISION \
     -Dskip.assemble-zip \
     $CORE_ADDITIONAL_OPTS
-if [ $? -ne 0 ]; then
-  exit 1
-fi
 
-
-cd $PROJECT_ROOT_DIR
+cd $PROJECT_ROOT_PATH
 

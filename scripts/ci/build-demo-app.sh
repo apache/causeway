@@ -1,24 +1,15 @@
 #!/bin/bash
-#set -x
-#trap read debug
 set -e
 
+sh $CI_SCRIPTS_PATH/print-environment.sh
+
+DOCKER_IMAGE_FLAVOR=$1
 echo ""
-echo ""
+echo "\$DOCKER_IMAGE_FLAVOR           = ${DOCKER_IMAGE_FLAVOR}"
 echo ""
 
-echo "\$REVISION                 = ${REVISION}"
-echo "\$PROJECT_ROOT_DIR         = ${PROJECT_ROOT_DIR}"
-echo "\$DOCKER_REGISTRY_USERNAME = ${DOCKER_REGISTRY_USERNAME}"
-echo "\$DOCKER_REGISTRY_PASSWORD = (suppressed)"
+cd $PROJECT_ROOT_PATH/examples/apps/demo
 
-echo ""
-echo ""
-echo ""
-
-cd $PROJECT_ROOT_DIR/examples/apps/demo
-
-export FLAVOR=springboot
 export ISIS_VERSION=$REVISION
 
 mvn install \
@@ -39,6 +30,6 @@ mvn compile jib:build \
     -Drevision=$REVISION \
     -Disis.version=$ISIS_VERSION
 
-cd $PROJECT_ROOT_DIR
+cd $PROJECT_ROOT_PATH
 
 

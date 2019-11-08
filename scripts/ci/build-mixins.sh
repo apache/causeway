@@ -1,32 +1,16 @@
 #!/bin/bash
-#set -x
-#trap read debug
+set -e
 
-echo ""
-echo ""
-echo ""
+sh $CI_SCRIPTS_PATH/print-environment.sh
 
-echo "\$PROJECT_ROOT_DIR     = ${PROJECT_ROOT_DIR}"
-echo "\$MVN_STAGES           = ${MVN_STAGES}"
-echo "\$REVISION             = ${REVISION}"
-echo "\$GCPAPPENGINEREPO_URL = ${GCPAPPENGINEREPO_URL}"
-echo "\$CORE_ADDITIONAL_OPTS = ${CORE_ADDITIONAL_OPTS}"
-echo "\$CI_DRY_RUN           = ${CI_DRY_RUN}"
+cd $PROJECT_ROOT_PATH/mixins
 
-echo ""
-echo ""
-echo ""
-
-
-cd $PROJECT_ROOT_DIR/mixins
+cp pom.xml pom.xml~
 
 # can't use flatten pom, so have to edit directly instead...
 mvn versions:set -DnewVersion=$REVISION
-if [ $? -ne 0 ]; then
-  exit 1
-fi
 
-mvn -s $PROJECT_ROOT_DIR/.m2/settings.xml \
+mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     --batch-mode \
     $MVN_STAGES \
     -Dgcpappenginerepo-deploy \
@@ -36,19 +20,10 @@ mvn -s $PROJECT_ROOT_DIR/.m2/settings.xml \
     -Dskip.mavenmixin-surefire \
     -Dskip.mavenmixin-datanucleus-enhance \
     $CORE_ADDITIONAL_OPTS
-if [ $? -ne 0 ]; then
-  exit 1
-fi
 
-cd $PROJECT_ROOT_DIR
+# revert the edits from earlier ...
+mv pom.xml~ pom.xml
 
-if [ -z "$CI_DRY_RUN" ]; then
-  	
-  	# revert the edits from earlier ...
-	git checkout $(git status --porcelain | awk '{ print $2 }')
-	if [ $? -ne 0 ]; then
-	  exit 1
-	fi
+cd $PROJECT_ROOT_PATH
 
-fi
 

@@ -5,14 +5,11 @@ stages:
 
 variables:
   BASELINE: 2.0.0-M2
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_DRIVER: overlay2
-  ORG_NAME: "apacheisis"
   
 include:
   - local: scripts/ci/core-gitlab-ci.yml
 
 before_script:
-  - export PROJECT_ROOT_DIR=$CI_PROJECT_DIR
-  - export CI_SCRIPTS_DIR=$PROJECT_ROOT_DIR/scripts/ci
+  - export PROJECT_ROOT_PATH=$CI_PROJECT_DIR
+  - export CI_SCRIPTS_PATH=$PROJECT_ROOT_PATH/scripts/ci
   - export REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)
