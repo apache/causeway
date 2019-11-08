@@ -6,6 +6,12 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
+    env:
+      # to be shared amoung all steps
+      BASELINE: 2.0.0-M2
+      PROJECT_ROOT_PATH: ${{GITHUB_WORKSPACE}}
+      CI_SCRIPTS_PATH: ${{PROJECT_ROOT_PATH}}/scripts/ci
+      MVN_STAGES: deploy
 
     steps:
     - uses: actions/checkout@v1
@@ -16,15 +22,16 @@ jobs:
     - name: Print Maven Version
       run: mvn --version
     - name: Setup Script Environment
-      run: |
-         echo BASELINE\: $BASELINE
-         echo REVISION\: $REVISION
-         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
-         echo CI_SCRIPTS_DIR\: $CI_SCRIPTS_DIR
-         echo MVN_STAGES\: $MVN_STAGES
-      env:
-           BASELINE: 2.0.0-M2
-           REVISION: $BASELINE.$(date +%Y%m%d)
-           PROJECT_ROOT_PATH: $GITHUB_WORKSPACE
-           CI_SCRIPTS_DIR: $PROJECT_ROOT_PATH/scripts/ci
-           MVN_STAGES: deploy 
+      shell: bash
+      run: | 
+        echo REVISION=$BASELINE.$(date +%Y%m%d) >> ~/.env 
+        echo ==============  ENV  =================
+        echo BASELINE\: $BASELINE
+        echo REVISION\: $REVISION
+        echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
+        echo CI_SCRIPTS_PATH\: $CI_SCRIPTS_PATH
+        echo MVN_STAGES\: $MVN_STAGES
+        echo ======================================
+        cat ~/.env
+           
+           
