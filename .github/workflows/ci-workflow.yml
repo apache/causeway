@@ -12,7 +12,8 @@ jobs:
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
-      MVN_STAGES: deploy
+      #MVN_STAGES: deploy
+      MVN_STAGES: install
       SHARED_VARS_FILE: /home/runner/.env
 
     steps:
@@ -38,6 +39,9 @@ jobs:
     - name: Build Mixins
       shell: bash
       run: bash $CI_SCRIPTS_PATH/build-mixins.sh
+    - name: Build Core
+      shell: bash
+      run: bash $CI_SCRIPTS_PATH/build-core.sh
         
  
 # FOR DEBUG USE
