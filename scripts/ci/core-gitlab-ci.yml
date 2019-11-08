@@ -20,7 +20,7 @@
 build all:
   stage: build-package-push
   variables:
-     SHARED_VARS_FILE: ~/ci-env.txt
+     SHARED_VARS_FILE: /builds/apache-isis-committers/apache-isis/ci-env.txt
      MVN_STAGES: deploy
   script:
     # mixins are built first because core (which includes extensions) depend upon them.
