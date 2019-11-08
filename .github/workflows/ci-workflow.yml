@@ -24,7 +24,7 @@ jobs:
     - name: Setup Script Environment
       shell: bash
       run: | 
-        echo REVISION=$BASELINE.$(date +%Y%m%d) > ~/.env 
+        echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8) > ~/.env
         echo ==============  ENV  =================
         echo BASELINE\: $BASELINE
         #echo REVISION\: $REVISION
@@ -33,5 +33,6 @@ jobs:
         echo MVN_STAGES\: $MVN_STAGES
         echo ======================================
         cat ~/.env
+        set
            
            
