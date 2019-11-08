@@ -13,7 +13,7 @@ jobs:
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
       MVN_STAGES: deploy
-      SHARED_VARS_FILE: ~/ci-env.txt
+      SHARED_VARS_FILE: ~/.env
 
     steps:
     - uses: actions/checkout@v1
@@ -26,14 +26,14 @@ jobs:
     - name: Setup Script Environment
       shell: bash
       run: |
-        echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > $SHARED_VARS_FILE 
+        echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > ~/.env 
         echo ==============  ENV  =================
         echo BASELINE\: $BASELINE
         echo TIMESTAMP\: $TIMESTAMP
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
         echo CI_SCRIPTS_PATH\: $CI_SCRIPTS_PATH
         echo MVN_STAGES\: $MVN_STAGES
-        cat $SHARED_VARS_FILE
+        cat ~/.env
         echo ======================================
  
 # FOR DEBUG USE
