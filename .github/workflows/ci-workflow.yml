@@ -14,8 +14,7 @@ jobs:
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
       #MVN_STAGES: deploy
       MVN_STAGES: install
-      SHARED_VARS_FILE: "${{ '~/.env' }}"
-      GCPAPPENGINEREPO_URL: "${{ 'https://repo.incode.work' }}"
+      SHARED_VARS_FILE: /home/runner/.env
 
     steps:
     - uses: actions/checkout@v1
@@ -28,7 +27,8 @@ jobs:
     - name: Setup Script Environment
       shell: bash
       run: |
-        echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > $SHARED_VARS_FILE 
+        echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > $SHARED_VARS_FILE
+        echo GCPAPPENGINEREPO_URL=https\://repo.incode.work >> $SHARED_VARS_FILE
         echo ==============  ENV  =================
         echo BASELINE\: $BASELINE
         echo TIMESTAMP\: $TIMESTAMP
