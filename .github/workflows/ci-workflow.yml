@@ -26,7 +26,7 @@ jobs:
     - name: Setup Script Environment
       shell: bash
       run: |
-        echo "REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8)" > $SHARED_VARS_FILE 
+        echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > $SHARED_VARS_FILE 
         echo ==============  ENV  =================
         echo BASELINE\: $BASELINE
         echo TIMESTAMP\: $TIMESTAMP
