@@ -20,9 +20,11 @@
 build all:
   stage: build-package-push
   variables:
+     SHARED_VARS_FILE: ~/ci-env.txt
      MVN_STAGES: deploy
   script:
     # mixins are built first because core (which includes extensions) depend upon them.
+    - echo "REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)" > $SHARED_VARS_FILE
     - sh $CI_SCRIPTS_PATH/build-mixins.sh
     - sh $CI_SCRIPTS_PATH/build-core.sh
     - sh $CI_SCRIPTS_PATH/build-demo-app.sh springboot

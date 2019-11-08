@@ -12,4 +12,4 @@ include:
 before_script:
   - export PROJECT_ROOT_PATH=$CI_PROJECT_DIR
   - export CI_SCRIPTS_PATH=$PROJECT_ROOT_PATH/scripts/ci
-  - export REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)
+ 

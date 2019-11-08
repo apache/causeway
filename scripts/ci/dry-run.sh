@@ -5,22 +5,25 @@ set -e
 
 export BASELINE=2.0.0-M2
 export GCPAPPENGINEREPO_URL=https://repo.incode.work
+export SHARED_VARS_FILE=~/ci-env.txt
 
-export REVISION=$BASELINE.$(date +%Y%m%d)
+echo "REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)" > $SHARED_VARS_FILE 
+
+## for the consumers to import shared vars (non secret!)
+## source $SHARED_VARS_FILE && export $(cut -d= -f1 $SHARED_VARS_FILE)
 
 export PROJECT_ROOT_PATH=$PWD
 export CI_SCRIPTS_PATH=$PROJECT_ROOT_PATH/scripts/ci
 export MVN_STAGES="install"
 
-SECRETS_FILE=~/ci-secrets.txt
-
 echo "=================  DRY RUN  =================="
-echo "\$REVISION             = ${REVISION}"
-echo "\$CI_BUILDS_DIR        = ${CI_BUILDS_DIR}"
+echo "Shared Vars File: ${SHARED_VARS_FILE}"
+cat $SHARED_VARS_FILE
 echo "=============================================="
 
 cd $PROJECT_ROOT_PATH
 
+SECRETS_FILE=~/ci-secrets.txt
 if [ -f "$SECRETS_FILE" ]; then
 	source $SECRETS_FILE
 	export $(cut -d= -f1 $SECRETS_FILE)
@@ -30,7 +33,7 @@ else
     exit 0
 fi
 
-sh $CI_SCRIPTS_PATH/build-mixins.sh
-sh $CI_SCRIPTS_PATH/build-core.sh
-sh $CI_SCRIPTS_PATH/build-demo-app.sh dryrun
-sh $CI_SCRIPTS_PATH/build-example-apps.sh
+bash $CI_SCRIPTS_PATH/build-mixins.sh
+bash $CI_SCRIPTS_PATH/build-core.sh
+bash $CI_SCRIPTS_PATH/build-demo-app.sh dryrun
+bash $CI_SCRIPTS_PATH/build-example-apps.sh

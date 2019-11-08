@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+echo "Shared Vars File: ${SHARED_VARS_FILE}"
+
+# import shared vars (non secret!)
+source $SHARED_VARS_FILE && export $(cut -d= -f1 $SHARED_VARS_FILE)
+
 sh $CI_SCRIPTS_PATH/print-environment.sh "build-mixins"
 
 cd $PROJECT_ROOT_PATH/mixins

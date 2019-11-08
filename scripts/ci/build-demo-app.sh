@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# import shared vars (non secret!)
+source $SHARED_VARS_FILE && export $(cut -d= -f1 $SHARED_VARS_FILE)
+
 sh $CI_SCRIPTS_PATH/print-environment.sh "build-demo-app"
 
 export FLAVOR=$1
