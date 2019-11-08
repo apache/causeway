@@ -31,7 +31,7 @@ import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 @Service
-public class FixturesLifecyleService {
+public class FixturesLifecycleService {
 
     @Inject IsisSessionFactory isisSessionFactory; // depends on  
     @Inject IsisSystemEnvironment isisSystemEnvironment;
