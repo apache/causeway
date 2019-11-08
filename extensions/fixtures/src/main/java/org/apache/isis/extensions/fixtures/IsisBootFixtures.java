@@ -18,19 +18,20 @@
  */
 package org.apache.isis.extensions.fixtures;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
 import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService;
 import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlInternal;
+import org.apache.isis.extensions.fixtures.module.ModuleDependencyGraphService;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
     FixturesLifecycleService.class,
     FixtureScriptsDefault.class,
     ExecutionParametersService.class,
-    QueryResultsCacheControlInternal.class
+    QueryResultsCacheControlInternal.class,
+    ModuleDependencyGraphService.class
 })
 public class IsisBootFixtures {
 
