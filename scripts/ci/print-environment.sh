@@ -3,6 +3,7 @@
 echo "\n\n"
 
 echo "=================  ISIS CI SCRIPT  ====================="
+echo "Name:                  $1"
 echo "\$PROJECT_ROOT_PATH    = ${PROJECT_ROOT_PATH}"
 echo "\$MVN_STAGES           = ${MVN_STAGES}"
 echo "\$REVISION             = ${REVISION}"

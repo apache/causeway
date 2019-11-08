@@ -1,16 +1,16 @@
 #!/bin/bash
 set -e
 
-sh $CI_SCRIPTS_PATH/print-environment.sh
+sh $CI_SCRIPTS_PATH/print-environment.sh "build-demo-app"
 
-DOCKER_IMAGE_FLAVOR=$1
+export FLAVOR=$1
+export ISIS_VERSION=$REVISION
 echo ""
-echo "\$DOCKER_IMAGE_FLAVOR           = ${DOCKER_IMAGE_FLAVOR}"
+echo "\$Docker Image Flavor: ${FLAVOR}"
+echo "\$Isis Version: ${ISIS_VERSION}"
 echo ""
 
 cd $PROJECT_ROOT_PATH/examples/apps/demo
-
-export ISIS_VERSION=$REVISION
 
 mvn install \
     --batch-mode \

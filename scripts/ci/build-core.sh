@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-sh $CI_SCRIPTS_PATH/print-environment.sh
+sh $CI_SCRIPTS_PATH/print-environment.sh "build-core"
 
 cd $PROJECT_ROOT_PATH/core
 
