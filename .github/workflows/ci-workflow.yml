@@ -14,8 +14,8 @@ jobs:
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
       #MVN_STAGES: deploy
       MVN_STAGES: install
-      SHARED_VARS_FILE: ${{ '~/.env' }}
-      GCPAPPENGINEREPO_URL: ${{ 'https://repo.incode.work' }}
+      SHARED_VARS_FILE: "${{ '~/.env' }}"
+      GCPAPPENGINEREPO_URL: "${{ 'https://repo.incode.work' }}"
 
     steps:
     - uses: actions/checkout@v1
