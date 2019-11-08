@@ -9,7 +9,7 @@ jobs:
     env:
       # to be shared amoung all steps
       BASELINE: 2.0.0-M2
-      PROJECT_ROOT_PATH: ${{ env.GITHUB_WORKSPACE }}
+      PROJECT_ROOT_PATH: ${{ process.env.GITHUB_WORKSPACE }}
       #CI_SCRIPTS_PATH: ${{ PROJECT_ROOT_PATH }}/scripts/ci
       MVN_STAGES: deploy
 
