@@ -13,6 +13,7 @@ jobs:
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
       MVN_STAGES: deploy
+      SHARED_VARS_FILE: ~/ci-env.txt
 
     steps:
     - uses: actions/checkout@v1
@@ -24,23 +25,22 @@ jobs:
       run: mvn --version
     - name: Setup Script Environment
       shell: bash
-      run: | 
-        echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > ~/.env
+      run: |
+        echo "REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8)" > $SHARED_VARS_FILE 
         echo ==============  ENV  =================
         echo BASELINE\: $BASELINE
         echo TIMESTAMP\: $TIMESTAMP
-        #echo REVISION\: $REVISION
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
         echo CI_SCRIPTS_PATH\: $CI_SCRIPTS_PATH
         echo MVN_STAGES\: $MVN_STAGES
+        cat $SHARED_VARS_FILE
         echo ======================================
-        cat ~/.env
-    - name: Dump GitHub context 
-      env:
-        ENV_CONTEXT: ${{ toJson(env) }}
-      run: echo "$ENV_CONTEXT"
  
 # FOR DEBUG USE
+#   - name: Dump GitHub context 
+#     env:
+#       ENV_CONTEXT: ${{ toJson(env) }}
+#     run: echo "$ENV_CONTEXT"
 #   - name: Dump GitHub context 
 #     env:
 #       GITHUB_CONTEXT: ${{ toJson(github) }}
