@@ -10,8 +10,6 @@ sh $CI_SCRIPTS_PATH/print-environment.sh "build-mixins"
 
 cd $PROJECT_ROOT_PATH/mixins
 
-cp pom.xml pom.xml~
-
 # can't use flatten pom, so have to edit directly instead...
 mvn versions:set -DnewVersion=$REVISION
 
@@ -27,7 +25,7 @@ mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     $CORE_ADDITIONAL_OPTS
 
 # revert the edits from earlier ...
-mv pom.xml~ pom.xml
+mvn versions:revert
 
 cd $PROJECT_ROOT_PATH
 
