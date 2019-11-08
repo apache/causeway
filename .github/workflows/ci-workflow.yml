@@ -33,11 +33,11 @@ jobs:
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
         echo CI_SCRIPTS_PATH\: $CI_SCRIPTS_PATH
         echo MVN_STAGES\: $MVN_STAGES
-        cat ~/.env
+        cat $SHARED_VARS_FILE
         echo ======================================
-    - name: Build Mixins
-      shell: bash
-      run: bash $CI_SCRIPTS_PATH/build-mixins.sh
+#    - name: Build Mixins
+#      shell: bash
+#      run: bash $CI_SCRIPTS_PATH/build-mixins.sh
         
  
 # FOR DEBUG USE
