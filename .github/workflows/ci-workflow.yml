@@ -35,6 +35,10 @@ jobs:
         echo MVN_STAGES\: $MVN_STAGES
         cat ~/.env
         echo ======================================
+    - name: Build Mixins
+      shell: bash
+      run: bash $CI_SCRIPTS_PATH/build-mixins.sh
+        
  
 # FOR DEBUG USE
 #   - name: Dump GitHub context 
