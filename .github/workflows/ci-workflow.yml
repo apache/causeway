@@ -35,9 +35,9 @@ jobs:
         echo MVN_STAGES\: $MVN_STAGES
         cat $SHARED_VARS_FILE
         echo ======================================
-#    - name: Build Mixins
-#      shell: bash
-#      run: bash $CI_SCRIPTS_PATH/build-mixins.sh
+    - name: Build Mixins
+      shell: bash
+      run: bash $CI_SCRIPTS_PATH/build-mixins.sh
         
  
 # FOR DEBUG USE
