@@ -33,9 +33,10 @@ jobs:
         echo MVN_STAGES\: $MVN_STAGES
         echo ======================================
         cat ~/.env
-    - name: Dump GitHub context
+    
  
-# FOR DEBUG USE 
+# FOR DEBUG USE
+#   - name: Dump GitHub context 
 #     env:
 #       GITHUB_CONTEXT: ${{ toJson(github) }}
 #     run: echo "$GITHUB_CONTEXT"
