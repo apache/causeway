@@ -58,16 +58,19 @@ import domainapp.modules.simple.SimpleModule;
     IsisBootWebRestfulObjects.class,
     IsisBootWebWicket.class,
     IsisBootFixtures.class,
-    
+
+    DomainAppApplicationModule.class,
+
     DomainAppDemo.class // register this fixture
 })
-@ComponentScan(
-        basePackageClasses= {
-                DomainAppApplicationModule.class,
-                SimpleModule.class
-        })
-public class SimpleAppConfiguration {
+//@ComponentScan(
+//        basePackageClasses= {
+//                DomainAppApplicationModule.class,
+//                SimpleModule.class
+//        })
+public class SimpleAppConfiguration {   // this is somewhat akin to the old AppManifest
 
+    // TODO: why?
     @Bean @Singleton
     public WebAppConfigBean webAppConfigBean() {
         return WebAppConfigBean.builder()

@@ -1,11 +1,21 @@
 package org.apache.isis.extensions.fixtures.module;
 
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
- * Classes annotated with {@link org.springframework.context.annotation.Configuration @Configuration}
- * can define a hierarchy by {@link org.springframework.context.annotation.Import @Import}ing other configurations.
+ * A module is a class that implements this {@link Module} interface, but in addition is expected to be annotated with
+ * {@link Configuration @Configuration} and which defines a dependency other modules by {@link Import @Import}ing them,
+ * and conversely may be a dependency of other modules if they import it.
+ *
+ * <p>
+ * Modules are therefore classes that define a module hierarchy using these Spring annotations.
+ * </p>
+ *
+ * <p>
  * These are, in effect, a module hierarchy, declared using types.
+ * </p>
  *
  * <p>
  *     Optionally, the <code>@Configuration</code> class can implements this {@link Module} interface.

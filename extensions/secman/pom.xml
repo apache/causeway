@@ -38,6 +38,36 @@
         <git-plugin.propertiesDir>org/apache/isis/extensions/secman</git-plugin.propertiesDir>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-api</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-encryption-model</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-encryption-persistence-jdo</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.extensions</groupId>
+                <artifactId>isis-extensions-secman-encryption-realm-shiro</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
 	
 		<dependency>

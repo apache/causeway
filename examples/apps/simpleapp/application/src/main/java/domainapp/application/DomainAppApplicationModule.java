@@ -20,12 +20,16 @@ package domainapp.application;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.isis.extensions.fixtures.module.Module;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import domainapp.modules.simple.SimpleModule;
 
-@XmlRootElement(name = "module")
+@Configuration
 @Import(SimpleModule.class)
-public class DomainAppApplicationModule {
+@ComponentScan
+public class DomainAppApplicationModule implements Module {
 
 }

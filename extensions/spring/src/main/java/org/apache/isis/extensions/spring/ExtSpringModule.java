@@ -16,25 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures;
+package org.apache.isis.extensions.spring;
 
-import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService;
-import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsDefault;
-import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlInternal;
-import org.apache.isis.extensions.fixtures.module.ModuleService;
-import org.apache.isis.extensions.spring.ExtSpringModule;
+import org.apache.isis.extensions.spring.service.SpringBeansService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    ExtSpringModule.class,
-    FixturesLifecycleService.class,
-    FixtureScriptsDefault.class,
-    ExecutionParametersService.class,
-    QueryResultsCacheControlInternal.class,
-    ModuleService.class
+    SpringBeansService.class
 })
-public class IsisBootFixtures {
+public class ExtSpringModule {
 
 }
