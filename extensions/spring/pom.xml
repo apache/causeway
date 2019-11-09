@@ -21,52 +21,21 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-fixtures</artifactId>
-	<name>Apache Isis Extensions - Fixtures</name>
-	<description></description>
+	<artifactId>isis-extensions-spring</artifactId>
+	<name>Apache Isis Extensions - Spring</name>
+	<description>Utility services for interacting with the Spring application context</description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.fixtures</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/fixtures</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.spring</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/spring</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
-
-		<!-- JDO API (non transient, provided by plugin) -->
-		<dependency>
-			<groupId>javax.jdo</groupId>
-			<artifactId>jdo-api</artifactId>
-			<version>${jdo-api.version}</version>
-			<!-- provided by plugins -->
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jdo-common</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-spring</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-integtestsupport</artifactId>
-			<scope>provided</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-runtime</artifactId>
 			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
 		</dependency>
 
 	</dependencies>

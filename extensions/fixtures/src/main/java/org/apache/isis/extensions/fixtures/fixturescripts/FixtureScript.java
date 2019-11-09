@@ -63,6 +63,12 @@ import org.apache.isis.runtime.system.context.IsisContext;
 public abstract class FixtureScript
 extends AbstractViewModel {
 
+    public static final FixtureScript NOOP = new FixtureScript() {
+        @Override
+        protected void execute(ExecutionContext executionContext) {
+        }
+    };
+
     protected static final String PATH_SEPARATOR = "/";
 
     // -- constructors

@@ -189,6 +189,58 @@
 				<scope>import</scope>
 			</dependency>
 
+			<!-- extensions -->
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-asciidoc</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-fixtures</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-incubator</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-legacy</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-markdown</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-restclient</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-specsupport</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-spring</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-sse</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+
 			<!-- LOMBOK -->
 			<dependency>
 				<groupId>org.projectlombok</groupId>
@@ -217,6 +269,7 @@
 	<modules>
 		<module>asciidoc</module>
 		<module>fixtures</module>
+		<module>spring</module>
 		<module>markdown</module>
 		<module>restclient</module>
 		<module>secman</module>

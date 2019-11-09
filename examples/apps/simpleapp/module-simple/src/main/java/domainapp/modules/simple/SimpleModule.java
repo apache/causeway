@@ -18,19 +18,27 @@
  */
 package domainapp.modules.simple;
 
-//@XmlRootElement(name = "module")
-public class SimpleModule /*extends ModuleAbstract*/ {
+import domainapp.modules.simple.dom.impl.SimpleObject;
 
-    //XXX migrated from
-    //    @Override
-    //    public FixtureScript getTeardownFixture() {
-    //        return new TeardownFixtureAbstract2() {
-    //            @Override
-    //            protected void execute(ExecutionContext executionContext) {
-    //                deleteFrom(SimpleObject.class);
-    //            }
-    //        };
-    //    }
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.legacy.teardown.TeardownFixtureAbstract2;
+import org.apache.isis.extensions.fixtures.module.Module;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan
+public class SimpleModule implements Module {
+
+    @Override
+    public FixtureScript getTeardownFixture() {
+        return new TeardownFixtureAbstract2() {
+            @Override
+            protected void execute(ExecutionContext executionContext) {
+                deleteFrom(SimpleObject.class);
+            }
+        };
+    }
 
     public static class PropertyDomainEvent<S,T>
     extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}

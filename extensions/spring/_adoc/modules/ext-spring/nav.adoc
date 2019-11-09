@@ -1,0 +1,2 @@
+include::extensions:ext-spring:partial$component-nav.adoc[]
+
