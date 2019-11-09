@@ -124,7 +124,7 @@ h6 {
 
 #header {
   padding: 20px 0;
-  height: auto; /*84px;*/
+  height: 84px;
   transition: all 0.5s;
   z-index: 997;
   background: #fff;
@@ -188,9 +188,9 @@ h6 {
   align-items: center;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   text-align: center;
 }
 
@@ -1085,7 +1085,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 
   #header {
     padding: 20px 0;
-    /*height: 74px;*/
+    height: 74px;
   }
 
   #header #logo h1 {
