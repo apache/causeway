@@ -67,22 +67,6 @@ public class ModuleService {
                     final Object annotatedWithConfiguration = configurationBeansByBeanName.get(beanName);
                     final Object annotatedWithImport = beansAnnotatedWithImportByBeanName.get(beanName);
 
-                    final List<Module> importedModules;
-                    if(annotatedWithConfiguration != null && annotatedWithImport != null) {
-
-                        final Import importAnnot = Annotations.getAnnotation(annotatedWithImport.getClass(), Import.class);
-                        final Class<?>[] importedClasses = importAnnot.value();
-
-                        importedModules = Arrays.stream(importedClasses)
-                                .map(importedClass -> context.getBeansOfType(importedClass).values())
-                                .flatMap(Collection::stream)
-                                .filter(Module.class::isInstance)
-                                .map(Module.class::cast)
-                                .collect(Collectors.toList());
-                    } else {
-                        importedModules = Collections.emptyList();
-                    }
-
                     final Map<String, Module> importedModulesByBeanName = new LinkedHashMap<>();
                     if(annotatedWithConfiguration != null && annotatedWithImport != null) {
 
@@ -107,7 +91,7 @@ public class ModuleService {
                                 });
                     }
 
-                    final ModuleDescriptor moduleDescriptor = new ModuleDescriptor(contextId, beanName, module, importedModules, importedModulesByBeanName);
+                    final ModuleDescriptor moduleDescriptor = new ModuleDescriptor(contextId, beanName, module, importedModulesByBeanName);
                     moduleDescriptors.add(moduleDescriptor);
                 }
             }
@@ -129,7 +113,6 @@ public class ModuleService {
         private final String contextId;
         private final String beanName;
         private final Module module;
-        private final List<Module> moduleDependencies;
         private final Map<String,Module> dependenciesByName;
 
         @Override
