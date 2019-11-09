@@ -124,12 +124,11 @@ h6 {
 
 #header {
   padding: 20px 0;
-  height: 84px;
+  height: auto; /*84px;*/
   transition: all 0.5s;
   z-index: 997;
   background: #fff;
-  /* disabled because it renders over top menu when medium display width
-  box-shadow: 0px 6px 9px 0px rgba(0, 0, 0, 0.06); */  
+  box-shadow: 0px 6px 9px 0px rgba(0, 0, 0, 0.06);  
 }
 
 #header #logo h1 {
@@ -166,7 +165,6 @@ h6 {
   position: relative;
   background: url("../../img/home/intro-carousel/carousel-1.jpg") no-repeat;
   background-size: cover;
-  z-index: -1; /* guarantees to not hide overlapping menu buttons */
 }
 
 #intro .intro-content {
@@ -1087,7 +1085,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 
   #header {
     padding: 20px 0;
-    height: 74px;
+    /*height: 74px;*/
   }
 
   #header #logo h1 {
