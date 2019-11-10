@@ -40,7 +40,7 @@ jobs:
       # then we simply print all the (non-secret) variables as used by the build scripts to the console
       run: |
         echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > $SHARED_VARS_FILE
-        echo GCPAPPENGINEREPO_URL=https\://repo.incode.work >> $SHARED_VARS_FILE
+        #echo GCPAPPENGINEREPO_URL=https\://repo.incode.work >> $SHARED_VARS_FILE
         echo ==============  ENV  =================
         echo BASELINE\: $BASELINE
         echo TIMESTAMP\: $TIMESTAMP
