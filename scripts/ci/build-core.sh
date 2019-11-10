@@ -11,8 +11,8 @@ cd $PROJECT_ROOT_PATH/core
 mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     --batch-mode \
     $MVN_STAGES \
-    -Dgcpappenginerepo-deploy \
-    -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
+    -Dgithub-deploy \
+    -Dgithub-deploy-repo-owner=$GH_DEPLOY_REPO_OWNER \
     -Drevision=$REVISION \
     -Dskip.assemble-zip \
     $CORE_ADDITIONAL_OPTS

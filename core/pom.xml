@@ -2323,6 +2323,23 @@
 		</profile>
 
 		<profile>
+			<id>github-deploy</id>
+			<activation>
+				<property>
+					<name>github-deploy</name>
+				</property>
+			</activation>
+			<distributionManagement>
+				<repository>
+					<id>github-deploy.serverId</id>
+					<name>GitHub ${github-deploy-repo-owner} Apache Maven Packages</name>
+					<url>https://maven.pkg.github.com/${github-deploy-repo-owner}/isis</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	
+		<!-- to be decommissioned soon -->
+		<profile>
 			<id>gcpappenginerepo-deploy</id>
 			<activation>
 				<property>
