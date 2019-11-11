@@ -23,21 +23,22 @@ class LoginPrompt() : Command {
         formItems.add(FormItem("User", "Text", username))
         formItems.add(FormItem("Password", "Password", password))
         form = RoDialog(caption = "Connect", items = formItems, command = this)
-        UiManager.openDialog(form)
+        form.show()
     }
 
     override fun execute() {
         extractUserInput()
         Session.login(url, username, password)
-        val link = Link(href = "http://localhost:8080/restful/services/")
+        val link = Link(href = url + "restful/services/")
         invoke(link)
+        UiManager.closeDialog(form)
     }
 
     fun extractUserInput() {
         //TODO function has a sideeffect, ie. changes variable values
         var key: String?
         val formPanel = form.panel
-        val kids = formPanel.getChildren()
+        val kids = formPanel!!.getChildren()
         //iterate over FormItems (0,1,2) but not Buttons(3,4)
         for (i in kids) {
             when (i) {

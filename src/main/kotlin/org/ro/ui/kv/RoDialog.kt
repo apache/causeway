@@ -2,9 +2,11 @@ package org.ro.org.ro.ui.kv
 
 import org.ro.ui.Command
 import org.ro.ui.IconManager
+import org.ro.ui.kv.UiManager
 import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.core.VerticalAlign
+import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.formPanel
 import pl.treksoft.kvision.form.select.Select
@@ -24,6 +26,7 @@ class RoDialog(
         val command: Command) :
         Window(caption, 600.px, 300.px, closeButton = true) {
 
+    //  loginButton.focus
     private val loginButton = Button("OK", "fas fa-check", ButtonStyle.SUCCESS).onClick {
         execute()
     }
@@ -31,7 +34,7 @@ class RoDialog(
         close()
     }
 
-    var panel: FormPanel<String>
+    var panel: FormPanel<String>?
     init {
         init?.invoke(this)
         icon = IconManager.find(caption)
@@ -77,15 +80,14 @@ class RoDialog(
         add(cancelButton)
     }
 
-    //IMPROVE: focus default button
- /*   override fun focus() {
-        super.focus()
-        captionInput.focus()
-    } */
-
     private fun execute() {
         command.execute()
         close()
+    }
+
+    override fun show(): Widget {
+        UiManager.openDialog(this)
+        return super.show()
     }
 
     override fun close() {
@@ -93,6 +95,7 @@ class RoDialog(
         super.remove(this)
         clearParent()
         dispose()
+        panel = null
     }
 
 }

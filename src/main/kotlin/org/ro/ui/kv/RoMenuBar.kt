@@ -5,11 +5,12 @@ import org.ro.core.MenuEntry
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
 import org.ro.ui.IconManager
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.dropdown.ddLink
 import pl.treksoft.kvision.dropdown.dropDown
-import pl.treksoft.kvision.html.Link
-import pl.treksoft.kvision.i18n.I18n.tr
+import pl.treksoft.kvision.i18n.tr
 import pl.treksoft.kvision.navbar.*
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.vPanel
@@ -22,6 +23,7 @@ object RoMenuBar : SimplePanel() {
         vPanel() {
             val label = "" //IMPROVE use for branding
             navbar = navbar(label, NavbarType.FIXEDTOP) {
+                height = CssSize(40, UNIT.px)
                 nav = nav()
                 val mainEntry = buildMainEntry()
                 nav.add(mainEntry)
@@ -29,6 +31,7 @@ object RoMenuBar : SimplePanel() {
         }
     }
 
+    //TODO extract invocationsof ddLink to MenuFactory ?
     private fun buildMainEntry(): DropDown {
         val iconName = IconManager.find("Burger") //IMPROVE use for branding
         val dd = dropDown("", icon = iconName, forNavbar = true)
@@ -51,25 +54,24 @@ object RoMenuBar : SimplePanel() {
         return dd
     }
 
-    private fun addItem(title: String): Link {
-        val icon = IconManager.find(title)
-        val link = nav.navLink(tr(title), icon = icon)
-        return link
-    }
-
+    // tr("Separator") to DD.SEPARATOR.option,
     fun amendMenu() {
         for (title: String in Menu.filterUniqueMenuTitles()) {
-            val dd = MenuFactory.buildMenuEntry(title)
-            nav.add(dd)
-            for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
-                val menuLink = MenuFactory.buildMenuAction(me.action.id)
-                dd.add(menuLink)
-                val l = me.action.getInvokeLink()!!
-                menuLink.onClick {
-                    ActionAggregator().invoke(l)
+            val label = tr(title)
+            val icon = IconManager.find(title)
+            val dd = dropDown(label, icon = icon, forNavbar = true) {
+                for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
+                    val l = me.action.getInvokeLink()!!
+                    val actionLabel = me.action.id
+                    val actionIcon = IconManager.find(actionLabel)
+                    ddLink(actionLabel, icon = actionIcon).onClick {
+                        ActionAggregator().invoke(l)
+                    }
                 }
             }
+            nav.add(dd)
         }
     }
+
 
 }

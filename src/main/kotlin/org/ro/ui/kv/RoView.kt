@@ -62,5 +62,8 @@ object RoView {
         dialog.verticalAlign = VerticalAlign.MIDDLE
         dialog.focus()
     }
+    fun remove(dialog: RoDialog) {
+        tabPanel.remove(dialog)
+    }
 
 }

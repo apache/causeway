@@ -7,6 +7,7 @@ import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
+import org.ro.org.ro.ui.kv.RoApp
 import org.ro.org.ro.ui.kv.RoDialog
 import org.ro.ui.RoStatusBar
 import pl.treksoft.kvision.panel.VPanel
@@ -78,7 +79,11 @@ object UiManager {
     }
 
     fun openDialog(panel: RoDialog) {
-           RoView.display(panel)
+        RoApp.add(panel)
+    }
+
+    fun closeDialog(panel: RoDialog) {
+        RoApp.remove(panel)
     }
 
 }
