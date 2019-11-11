@@ -41,16 +41,19 @@
 
 ** Mailing Lists
 *** xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[How to subscribe]
+*** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
 
-** Releases
+* Releases
 
-*** xref:toc:ROOT:downloads/how-to.adoc[Downloads]
-*** xref:relnotes:ROOT:about.adoc[Release Notes]
-*** xref:mignotes:ROOT:about.adoc[Migration Notes]
+** xref:toc:ROOT:downloads/how-to.adoc[Downloads]
+** xref:relnotes:ROOT:about.adoc[Release Notes]
+** xref:mignotes:ROOT:about.adoc[Migration Notes]
 
 ** Other Resources
-*** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
-_for bug reports & feature requests_
+
+*** link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
+*** link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
+*** link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
 
 
 * Internal
@@ -105,6 +108,4 @@ _for bug reports & feature requests_
 //** https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
 
 
-* Acknowledgements
-
-** xref:more-thanks/more-thanks.adoc[With thanks]
+** xref:more-thanks/more-thanks.adoc[Acknowledgements]
