@@ -12,7 +12,7 @@ jobs:
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       
-      # not used 
+      # used for printing 
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
       
     steps:
@@ -22,9 +22,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    
-    - name: Print Maven Version
-      run: mvn --version
     
     - name: Setup Script Environment
       shell: bash
@@ -62,35 +59,3 @@ jobs:
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
       run: bash $CI_SCRIPTS_PATH/build-site.sh site.yml
- 
-# FOR DEBUG USE
-#   - name: Dump GitHub context 
-#     env:
-#       ENV_CONTEXT: ${{ toJson(env) }}
-#     run: echo "$ENV_CONTEXT"
-#   - name: Dump GitHub context 
-#     env:
-#       GITHUB_CONTEXT: ${{ toJson(github) }}
-#     run: echo "$GITHUB_CONTEXT"
-#   - name: Dump job context
-#     env:
-#       JOB_CONTEXT: ${{ toJson(job) }}
-#     run: echo "$JOB_CONTEXT"
-#   - name: Dump steps context
-#     env:
-#       STEPS_CONTEXT: ${{ toJson(steps) }}
-#     run: echo "$STEPS_CONTEXT"
-#   - name: Dump runner context
-#     env:
-#       RUNNER_CONTEXT: ${{ toJson(runner) }}
-#     run: echo "$RUNNER_CONTEXT"
-#   - name: Dump strategy context
-#     env:
-#       STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-#     run: echo "$STRATEGY_CONTEXT"
-#   - name: Dump matrix context
-#     env:
-#       MATRIX_CONTEXT: ${{ toJson(matrix) }}
-#     run: echo "$MATRIX_CONTEXT"
-           
-           
