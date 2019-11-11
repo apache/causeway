@@ -1,6 +1,7 @@
 = Apache Isis
 
-image:https://github.com/apache/isis/workflows/Build%20and%20Test%20Core/badge.svg[]
+image:https://github.com/apache/isis/workflows/Build%20Core/badge.svg[]
+image:https://github.com/apache/isis/workflows/Build%20Site/badge.svg[]
 image:https://builds.apache.org/buildStatus/icon?job=Isis master jdk8[]
 
 _http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._

@@ -1,9 +1,10 @@
-name: Build Core (no push)
+name: Build Core
 
 on: [push]
 
 jobs:
   build:
+    name: build-local-no-push
     runs-on: ubuntu-latest
     env:
       # to be shared amoung all steps of this job

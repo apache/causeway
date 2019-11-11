@@ -1,9 +1,10 @@
-name: Build Site (no push)
+name: Build Site
 
 on: [push]
 
 jobs:
   build:
+    name: build-local-no-push
     runs-on: ubuntu-latest
     env:
       # to be shared amoung all steps of this job ...
@@ -59,7 +60,8 @@ jobs:
     
     - name: Build Site
       shell: bash
-      run: bash $CI_SCRIPTS_PATH/build-site.sh
+      working-directory: ${{ env.PROJECT_ROOT_PATH }}
+      run: bash $CI_SCRIPTS_PATH/build-site.sh site.yml
  
 # FOR DEBUG USE
 #   - name: Dump GitHub context 
