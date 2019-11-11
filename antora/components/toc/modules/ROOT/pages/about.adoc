@@ -40,7 +40,7 @@ _Demos & Tutorials:_
 * xref:vro:ROOT:about.adoc[Restful Objects Viewer]
 * xref:odn:ROOT:about.adoc[DataNucleus Object Store]
 * xref:security:ROOT:about.adoc[Security Guide]
-** xref:ext-secman:ROOT:about.adoc[SecMan (extension)]
+** xref:secman:ROOT:about.adoc[SecMan (extension)]
 
 
 

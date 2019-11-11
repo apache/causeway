@@ -32,7 +32,7 @@ The xref:helloworld:ROOT:about.adoc[HelloWorld] and xref:simpleapp:ROOT:about.ad
 Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
 Apache Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
 
-In addition, the xref:ext-secman:ROOT:about.adoc[SecMan extension] provides an implementation of the Shiro `Realm` API.
+In addition, the xref:secman:ROOT:about.adoc[SecMan extension] provides an implementation of the Shiro `Realm` API.
 This extension also represents users, roles and permissions as domain objects, allowing them to be administered through Apache Isis itself.
 Moreover, it can also optionally delegate password management to a subsidiary (delegate) realm (usually LDAP as discussed above).
 

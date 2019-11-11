@@ -1,1 +1,1 @@
-* xref:ext-secman:realm-shiro:about.adoc[Realm (for Shiro)]
+* xref:secman:realm-shiro:about.adoc[Realm (for Shiro)]

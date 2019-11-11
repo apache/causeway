@@ -5,4 +5,4 @@ include::security:shiro:partial$module-nav.adoc[]
 include::security:ROOT:partial$module-nav2.adoc[]
 
 * Extensions
-** xref:ext-secman:ROOT:about.adoc[SecMan]
+** xref:secman:ROOT:about.adoc[SecMan]

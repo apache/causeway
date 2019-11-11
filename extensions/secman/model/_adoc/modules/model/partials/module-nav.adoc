@@ -1,1 +1,1 @@
-* xref:ext-secman:model:about.adoc[Model]
+* xref:secman:model:about.adoc[Model]

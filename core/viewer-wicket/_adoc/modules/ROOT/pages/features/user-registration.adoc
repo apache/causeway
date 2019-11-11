@@ -20,7 +20,7 @@ To support this the framework requires three services to be registered and confi
 * the xref:refguide:applib-svc:integration-api/EmailService.adoc[email service], that is used by the email notification service to actually send the email.
 
 The Apache Isis core framework provides a default implementation of both the email notification service and the email service.
-The xref:ext-secman:ROOT:about.adoc[Security Manager] extension provides a partial implementation of xref:refguide:applib-svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service] that you can complete for your own applications.
+The xref:secman:ROOT:about.adoc[Security Manager] extension provides a partial implementation of xref:refguide:applib-svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service] that you can complete for your own applications.
 
 
 
@@ -65,7 +65,7 @@ image::user-registration/sign-up-after-registration.png[width="800px",link="{ima
 
 There are two prerequisites:
 
-* register an implementation of the xref:refguide:applib-svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service] (eg by using the xref:ext-secman:ROOT:about.adoc[SecMan extension])
+* register an implementation of the xref:refguide:applib-svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service] (eg by using the xref:secman:ROOT:about.adoc[SecMan extension])
 
 * configure the xref:refguide:applib-svc:integration-api/EmailService.adoc[email service]
 

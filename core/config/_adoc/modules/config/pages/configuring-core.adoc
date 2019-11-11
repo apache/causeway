@@ -695,7 +695,7 @@ If an parent object has a (scalar) reference some other object to which the user
 +
 If an object is returned in a list of choices or within an auto-complete list, and the user does not have access, then it is excluded from the rendered list.
 
-The original motivation for this feature was to transparently support such features as multi-tenancy (as per the xref:ext-secman:ROOT:about.adoc[SecMan extension]).
+The original motivation for this feature was to transparently support such features as multi-tenancy (as per the xref:secman:ROOT:about.adoc[SecMan extension]).
 That is, if an entity is logically "owned" by a user, then the multi-tenancy support can be arranged to prevent some other user from viewing that object.
 
 By default this configuration property is enabled.  To disable the visibility filtering, set the appropriate configuration property to `false`:

@@ -1,1 +1,1 @@
-* xref:ext-secman:encryption-jbcrypt:about.adoc[JBCrypt Encryption]
+* xref:secman:encryption-jbcrypt:about.adoc[JBCrypt Encryption]
