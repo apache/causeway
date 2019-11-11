@@ -828,11 +828,9 @@ And use the following body:
 
 [source,bash,subs="attributes+"]
 ----
-I've cut a release for Apache Isis Core and the two archetypes:
+I've cut a release for Apache Isis Framework (Core, Extensions, Mavendeps + Mixins):
 
-* Core {isisnext}
-* HelloWorld Archetype {isisnext}
-* SimpleApp Archetype {isisnext}
+* Framework {isisnext}
 
 The source code artifacts have been uploaded to staging repositories on repository.apache.org.
 For each zip there is a corresponding signature file (append .asc to the zip's url).

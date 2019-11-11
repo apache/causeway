@@ -1,0 +1,195 @@
+[[domainEvent]]
+= domainEvent()
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+Whenever a domain object (or list of domain objects) is to be rendered, the framework fires off multiple domain events for every property, collection and action of the domain object.
+In the cases of the domain object's actions, the events that are fired are:
+
+* hide phase: to check that the action is visible (has not been hidden)
+* disable phase: to check that the action is usable (has not been disabled)
+* validate phase: to check that the action's arguments are valid
+* pre-execute phase: before the invocation of the action
+* post-execute: after the invocation of the action
+
+Subscribers subscribe through the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
+
+By default the event raised is `ActionDomainEvent.Default`.
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    @Action()
+    public ToDoItem completed() { /* ... */ }
+    ...
+}
+----
+
+
+The `domainEvent()` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those
+subclasses) to be defined instead.
+
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { }  // <1>
+    @Action(domainEvent=CompletedEvent.class)
+    public ToDoItem completed() { /* ... */ }
+}
+----
+
+The benefit is that subscribers can be more targeted as to the events that they subscribe to.
+
+
+[NOTE]
+====
+The framework provides no-arg constructor and will initialize the domain event using (non-API) setters rather than through the constructor.
+This substantially reduces the boilerplate required in subclasses because no explicit constructor is required.
+====
+
+
+
+== Subscribers
+
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
+
+Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
+
+[source,java]
+----
+import org.springframework.context.event.EventListener;
+
+@DomainService(nature=NatureOfService.DOMAIN)
+public class SomeSubscriber extends AbstractSubscriber {
+    @EventListener(ActionDomainEvent.class)
+    public void on(ActionDomainEvent ev) {
+        // ...
+    }
+}
+----
+
+or can be fine-grained (by subscribing to specific event subtypes):
+
+[source,java]
+----
+import org.springframework.context.event.EventListener;
+
+@DomainService(nature=NatureOfService.DOMAIN)
+public class SomeSubscriber extends AbstractSubscriber {
+    @EventListener(ToDoItem.CompletedEvent.class)
+    public void on(ToDoItem.CompletedEvent ev) {
+        // ...
+    }
+}
+----
+
+
+
+The subscriber's method is called (up to) 5 times:
+
+* whether to veto visibility (hide)
+* whether to veto usability (disable)
+* whether to veto execution (validate)
+* steps to perform prior to the action being invoked
+* steps to perform after the action has been invoked
+
+The subscriber can distinguish these by calling `ev.getEventPhase()`.
+Thus the general form is:
+
+[source,java]
+----
+ import org.springframework.context.event.EventListener;
+
+@DomainService(nature=NatureOfService.DOMAIN)
+public class SomeSubscriber extends AbstractSubscriber {
+
+    @EventListener(ActionDomainEvent.class)
+    public void on(ActionDomainEvent ev) {
+        switch(ev.getEventPhase()) {
+            case HIDE:
+                // call ev.hide() or ev.veto("") to hide the action
+                break;
+            case DISABLE:
+                // call ev.disable("...") or ev.veto("...") to disable the action
+                break;
+            case VALIDATE:
+                // call ev.invalidate("...") or ev.veto("...")
+                // if action arguments are invalid
+                break;
+            case EXECUTING:
+                break;
+            case EXECUTED:
+                break;
+        }
+    }
+}
+----
+
+It is also possible to abort the transaction during the executing or executed phases by throwing an exception. If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
+
+
+
+
+== Default, Doop and Noop events
+
+If the `domainEvent` attribute is not explicitly specified (is left as its default value, `ActionDomainEvent.Default`), then the framework will, by default, post an event.
+
+If this is not required, then the `isis.reflector.facet.actionAnnotation.domainEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
+
+On the other hand, if the `domainEvent` has been explicitly specified to some subclass, then an event will be posted.
+The framework provides `ActionDomainEvent.Doop` as such a subclass, so setting the `domainEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
+
+And, conversely, the framework also provides `ActionDomainEvent.Noop`; if `domainEvent` attribute is set to this class, then no event will be posted.
+
+
+
+=== Class-level default
+
+Sometimes a subscriber is interested in all of the actions of a given class, though not any individual action.
+A common use case is to hide or disable all actions for some particular object for some particular user group.
+
+For this use, the default action domain event can be annotated using `@DomainObject`:
+
+[source,java]
+----
+@DomainObject(
+    actionDomainEvent=ToDoItem.ActionDomainEventDefault.class
+)
+public class ToDoItem {
+    public static class ActionDomainEventDefault
+        extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> { }
+    ...
+
+    public void updateDescription(final String description) {
+        this.description = description;
+    }
+
+}
+----
+
+
+== Raising events programmatically
+
+Normally events are only raised for interactions through the UI.
+However, events can be raised programmatically either by calling the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] API directly, or by emulating the UI by wrapping the target object using the xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service.
+
+
+== See also
+
+This attribute is also supported for:
+
+* xref:refguide:applib-ant:Collection.adoc#domainEvent[collections] and
+* xref:refguide:applib-ant:Property.adoc#domainEvent[properties].
+
+
+
+
+
+
+

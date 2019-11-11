@@ -1,0 +1,49 @@
+[[editing]]
+= `editing()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `editing()` attribute can be used to prevent a property from being modified or cleared, ie to make it read-only.
+
+The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the property cannot be modified directly.
+
+Whether a property is enabled or disabled depends upon these factors:
+
+* whether the domain object has been configured as immutable through the xref:refguide:DomainObject/editing.adoc[`@DomainObject#editing()`] attribute
+
+* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:refguide:config:configuring-core.adoc[configuration property] `isis.objects.editing`.  If set to `false`, then the object's properties (and collections) are __not__ editable
+
+* else, then the value of the `@Property(editing=...)` attribute itself
+
+* else, the result of invoking any supporting xref:refguide:applib-cm:rgcms.adoc#\_rgcms_methods_prefixes_disable[`disable...()`] supporting methods
+
+
+Thus, to make a property read-only even if the object would otherwise be editable, use:
+
+[source,java]
+----
+public class Customer {
+    @Property(
+        editing=Editing.DISABLED,
+        editingDisabledReason="The credit rating is derived from multiple factors"
+    )
+    public int getInitialCreditRating(){ /* ... */ }
+    public void setInitialCreditRating(int initialCreditRating) { /* ... */ }
+}
+----
+
+[NOTE]
+====
+To reiterate, it is _not_ possible to enable editing for a property if editing has been disabled at the object-level.
+====
+
+
+
+== See also
+
+This attribute can also be specified for:
+
+* xref:refguide:applib-ant:Collection.adoc#editing[collections]
+* xref:refguide:applib-ant:DomainObject.adoc#editing[domain object].

@@ -1,0 +1,201 @@
+= Presentation Layer SPI
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+Domain service SPIs for the presentation layer influence how the Apache Isis viewers behave.
+
+The table below summarizes the presentation layer SPIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules.
+
+
+.Presentation Layer SPI
+[cols="2,4a,1,1", options="header"]
+|===
+
+|SPI
+|Description
+|Implementation
+|Notes
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/ContentMappingService.adoc[`o.a.i.applb.` +
+`services.conmap` +
+`ContentMappingService`]
+|(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
+|
+|Replaces (and simplifies) the earlier `ContentMappingService` that defined an SPI using classes internal to the
+framework. +
++
+No default implementation.
+
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/EmailNotificationService.adoc[`o.a.i.applib.` +
+`services.userreg` +
+`EmailNotificationService`]
+|Notify a user during xref:refguide:applib-svc:persistence-layer-spi/UserRegistrationService.adoc[self-registration] of users.
+|`EmailNotificationService-` +
+`Default` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|depends on: +
+a configured `EmailService`
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/ErrorReportingService.adoc[`o.a.i.applib.` +
+`services.error` +
+`ErrorReportingService`]
+|Record details of an error occurring in the system (eg in an external incident recording system such as JIRA), and return a more friendly (jargon-free) message to display to the end user, with optional reference (eg `XXX-1234`).
+|(none)
+|
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/ExceptionRecognizer.adoc[`o.a.i.applib.` +
+`services.exceprecog` +
+`ExceptionRecognizer`]
+|Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
+|`ExceptionRecognizer-` +
+`CompositeFor-` +
+`JdoObjectStore` +
+``o.a.i.core`` +
+``isis-core-applib``
+|Extensible using composite pattern if required
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/GridSystemService.adoc[`o.a.i.applib.` +
+`services.grid` +
+`GridSystemService`]
+|Validates and normalizes the grid layout for a domain class (with respect to a particular grid
+system such as Bootstrap3), also providing a default grid (for those domain classes where there is no grid layout).
+|`GridSystemServiceBS3` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/GridLoaderService.adoc[`o.a.i.applib.` +
+`services.grid` +
+`GridLoaderService`]
+|Responsible for loading a grid layout for a domain class, eg from a `layout.xml` file.
+|`GridLoaderServiceDefault` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/GridService.adoc[`o.a.i.applib.` +
+`services.grid` +
+`GridService`]
+|A facade on top of both xref:refguide:applib-svc:presentation-layer-spi/GridLoaderService.adoc[`GridLoaderService`] and
+xref:refguide:applib-svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`], thus being able to return normalized
+grids for any domain class.
+|`GridServiceDefault` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/HintStore.adoc[`o.a.i.applib.` +
+`services.hint` +
+`HintStore`]
+|Stores UI hints on a per-object basis. For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
+|`HintStoreUsingWicketSession` +
+``o.a.i.viewer`` +
+``isis-viewer-wicket-impl``
+|
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/LocaleProvider.adoc[`o.a.i.applib.` +
+`services.i18n` +
+`LocaleProvider`]
+|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib-svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`].
+|`LocaleProviderWicket` +
+``o.a.i.viewer`` +
+``isis-viewer-wicket-impl``
+|
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/RoutingService.adoc[`o.a.i.applib.` +
+`services.routing` +
+`RoutingService`]
+|Return an alternative object than that returned by an action.
+|`RoutingServiceDefault` +
+``o.a.i.core`` +
+``isis-core-applib``
+|The default implementation will return the home page (per xref:refguide:applib-svc:application-layer-spi/HomePageProviderService.adoc[`HomePageProviderService`]) if a void or null is returned. +
+Used by the xref:vw:ROOT:about.adoc[Wicket viewer] only.
+
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/TableColumnOrderService.adoc[`o.a.i.applib.` +
+`services.tablecol` +
+`TableColumn-` +
+`OrderService`]
+|Allows the columns of a parented or standalone table to be reordered, based upon the parent object, collection id and type of object in the collection..
+|`TableColumn-` +
+`OrderService.Default` +
+``o.a.i.core`` +
+``isis-core-applib``
+|
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/TranslationService.adoc[`o.a.i.applib.` +
+`services.i18n` +
+`TranslationService`]
+|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:refguide:applib-svc:presentation-layer-spi/LocaleProvider.adoc[`LocalProvider`].
+|`TranslationServicePo` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|related services: `TranslationServicePoMenu` +
+depends on: +
+`TranslationsResolver`, `LocaleProvider`
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/TranslationsResolver.adoc[`o.a.i.applib.` +
+`services.i18n` +
+`TranslationsResolver`]
+|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib-svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`]
+|`TranslationsResolverWicket` +
+``o.a.i.viewer`` +
+``isis-viewer-wicket-impl``
+|
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/UrlEncodingService.adoc[`o.a.i.applib.` +
+`services.urlencoding` +
+`UrlEncodingService`]
+|Converts strings into a form safe for use within a URL.  Used to convert view models mementos into usable URL form.
+
+|`UrlEncodingService` +
+`UsingBaseEncoding` +
+``o.a.i.applib`` +
+``isis-core-applib``
+|
+
+
+|xref:refguide:applib-svc:presentation-layer-spi/UserProfileService.adoc[`o.a.i.applib.` +
+`services.userprof` +
+`UserProfileService`]
+|Obtain an alternative (usually enriched/customized) name for the current user, to render in the UI.
+|
+|
+
+
+|===
+
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
+
+
+
+
+
+
+

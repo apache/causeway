@@ -9,8 +9,8 @@
 
 ** Starter Apps
 
-*** xref:helloworld:ROOT:about.adoc[HelloWorld archetype]
-*** xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]
+*** xref:helloworld:ROOT:about.adoc[HelloWorld]
+*** xref:simpleapp:ROOT:about.adoc[SimpleApp]
 
 ** Demos & Tutorials
 

@@ -1,0 +1,104 @@
+[[ClockService]]
+= `ClockService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+
+Most applications deal with dates and times in one way or another.
+For example, if an `Order` is placed, then the `Customer` may have 30 days to pay the `Invoice`, otherwise a penalty may be levied.
+
+However, such date/time related functionality can quickly complicate automated testing: "today+30" will be a different value every time the test is run.
+
+Even disregarding testing, there may be a requirement to ensure that date/times are obtained from an NNTP server (rather than the system PC).
+While instantiating a `java.util.Date` to current the current time is painless enough, we would not want complex technical logic for querying an NNTP server spread around domain logic code.
+
+Therefore it's common to provide a domain service whose responsibility is to provide the current time.
+This service can be injected into any domain object (and can be mocked out for unit testing).
+Apache Isis provides such a facade through the `ClockService`.
+
+
+
+== API & Implementation
+
+The API defined by `ClockService` is:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class ClockService {
+    @Programmatic
+    public LocalDate now() { /* ... */ }
+    @Programmatic
+    public LocalDateTime nowAsLocalDateTime() { /* ... */ }
+    @Programmatic
+    public DateTime nowAsDateTime() { /* ... */ }
+    @Programmatic
+    public Timestamp nowAsJavaSqlTimestamp() { /* ... */ }
+    @Programmatic
+    public long nowAsMillis() { /* ... */ }
+}
+----
+
+This class (`o.a.i.applib.services.clock.ClockService`) is also the default implementation.  The time provided by this default implementation is based on the system clock.
+
+
+
+
+== Testing Support
+
+The default `ClockService` implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.clock.Clock`, an abstract singleton class.
+It is not recommended that your code use the `Clock` directly, but it's worth understanding how this all works.
+
+If running in xref:refguide:config:deployment-types.adoc[production] (server) mode, then the framework will (lazily) instantiate the ``SystemClock` when first required.
+This is a read-only clock that reads from the system time.
+The instance registers itself as the singleton and cannot be replaced.
+
+If running in xref:refguide:config:deployment-types.adoc[prototype] mode, though, then the framework will instead instantiate `FixtureClock`.
+This is a read-write clock that will behave as the system clock, unless it is explicitly set using eg, `FixtureClock#setDate(...)` or `FixtureClock#setTime(...)` etc.
+
+Moreover, `FixtureClock` singleton can be replaced with another implementation.
+And, it is sometimes useful to replace it using `TickingFixtureClock`, a subclass that is very similar to `FixtureClock` (in that the time can be changed) but which will continue to tick once set.
+
+To use `TickingFixtureClock` instead of `FixtureClock`, use the `TickingClockFixture` fixture script.
+
+
+
+
+=== Alternative Implementations
+
+Suppose you want (as discussed in the introduction to this service) to use a clock that delegates to NNTP.
+For most domain services this would amount to implementing the appropriate service and registering the owning module so that it is used in preference to any implementations provided by default by the framework.
+
+In the case of the `ClockService`, though, this approach (unfortunately) will not work, because parts of Apache Isis (still) delegate to the `Clock` singleton rather than using the `ClockService` domain service.
+
+The workaround, therefore, is to implement your functionality as a subclass of `Clock`.
+You can write a domain service that will ensure that your implementation is used ahead of any implementations provided by the framework.
+
+For example:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class NntpClockServiceInitializer  {
+    @Programmatic
+    @PostConstruct
+    public void postConstruct(Map<String,String> properties) {
+        new NntpClock(properties);                       // <1>
+    }
+    private static class NntpClock extends Clock {
+        NntpClock(Map<String,String> properties) { /* ... */ } // <2>
+        protected long time() { /* ... */ }                    // <3>
+            ... NNTP stuff here ...
+        }
+    }
+}
+----
+<1> enough to simply instantiate the `Clock`; it will register itself as singleton
+<2> connect to NNTP service using configuration properties from `isis.properties`
+<3> call to NNTP service here
+
+
+

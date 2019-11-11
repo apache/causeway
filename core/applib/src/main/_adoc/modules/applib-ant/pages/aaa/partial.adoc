@@ -1,0 +1,66 @@
+[[partial]]
+= Incomplete/partial support
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+These annotations have only incomplete/partial support, primarily relating to the management of value types.  We recommend that you do not use them for now.  Future versions of Apache Isis may either formally deprecate/retire them, or we may go the other way and properly support them.  This will depend in part on the interactions between the Apache Isis runtime, its two viewer implementations, and DataNucleus persistence.
+
+
+.Annotations with incomplete/partial support
+[cols="2,4a,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+
+
+|`@Defaulted`
+|Indicates that a (value) class has a default value. +
+
+The concept of "defaulted" means being able to provide a default value for the type by way of the `o.a.i.applib.adapters.DefaultsProvider` interface. Generally this only applies to value types, where the `@Value` annotation implies encodability through the `ValueSemanticsProvider` interface. +
+
+For these reasons the `@Defaulted` annotation is generally never applied directly, but can be thought of as a placeholder for future enhancements whereby non-value types might also have a default value provided for them.|Domain
+
+|`@Encodable`
+|Indicates that a (value) class can be serialized/encoded. +
+
+Encodability means the ability to convert an object to-and-from a string, by way of the `o.a.i.applib.adapters.EncoderDecoder` interface. Generally this only applies to value types, where the `@Value` annotation implies encodability through the `ValueSemanticsProvider` interface.
+
+For these reasons the `@Encodable` annotation is generally never applied directly, but can be thought of as a placeholder for future enhancements whereby non-value types might also be directly encoded.
+
+Currently neither the Wicket viewer nor the RO viewer use this API.  The Wicket viewer uses Wicket APIs, while RO viewer has its own mechanisms (parsing data from input JSON representations, etc.)
+|Persistence
+
+
+|`@Parseable`
+|Indicates that a (value) class can be reconstructed from a string. +
+
+Parseability means being able to parse a string representation into an object by way of the `o.a.i.applib.adapters.Parser` interface. Generally this only applies to value types, where the `@Value` annotation implies encodability through the `ValueSemanticsProvider` interface. +
+
+For these reasons the `@Parser` annotation is generally never applied directly, but can be thought of as a placeholder for future enhancements whereby non-value types might also have be able to be parsed. +
+
+Note that the Wicket viewer uses Apache Wicket's Converter API instead.
+|UI, Domain
+
+|`@Value`
+|Specify that a class has value-semantics. +
+
+The `@Value` annotation indicates that a class should be treated as a value type rather than as a reference (or entity) type. It does this providing an implementation of a `o.a.i.applib.adapters.ValueSemanticsProvider`. +
+
+For example: +
+
+[source,java]
+----
+@Value(semanticsProviderClass=
+    ComplexNumberValueSemanticsProvider.class)
+public class ComplexNumber {
+    ...
+}
+----
+
+The `ValueSemanticsProvider` allows the framework to interact with the value, parsing strings and displaying as text, and encoding/decoding (for serialization).
+|Domain
+
+|===

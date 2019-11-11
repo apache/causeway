@@ -1,0 +1,150 @@
+[[ExceptionRecognizer]]
+= `ExceptionRecognizer`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `ExceptionRecognizer` service provides the mechanism for both the domain programmer and also for components to be able to recognize and handle certain exceptions that may be thrown by the system.
+Rather than display an obscure error to the end-user, the application can instead display a user-friendly message.
+
+For example, the JDO/DataNucleus Objectstore provides a set of recognizers to recognize and handle SQL constraint exceptions such as uniqueness violations.
+These can then be rendered back to the user as expected errors, rather than fatal stacktraces.
+
+It is also possible to provide additional implementations, registered in `isis.properties`.
+Unlike other services, where any service registered in `isis.properties` replaces any default implementations, in the case of this service all implementations registered are "consulted" to see if they recognize an exception (the chain-of-responsibility pattern).
+
+
+
+
+== SPI
+
+The SPI defined by this service is:
+
+[source,java]
+----
+public interface ExceptionRecognizer ... {
+    public enum Category {                          // <1>
+        ...
+    }
+    public static class Recognition {               // <2>
+        private Category category;
+        private String reason;
+        ...
+    }
+    @Programmatic
+    public Recognition recognize2(Throwable ex);    // <3>
+
+    @Deprecated
+    @Programmatic
+    public String recognize(Throwable ex);          // <4>
+
+}
+----
+<1> an enumeration of varies categories of exceptions that are recognised
+<2> represents the fact that an exception has been recognized as has been converted into a user-friendy message, and has been categorized
+<3> the main API, to attempt to recognize an exception
+<4> deprecated API which converted exceptions into strings (reasons), ie without any categorization.
+This is no longer called.
+
+
+The categories are:
+
+[source,java]
+----
+public interface ExceptionRecognizer ... {
+    public enum Category {
+        CONSTRAINT_VIOLATION,           // <1>
+        NOT_FOUND,                      // <2>
+        CONCURRENCY,                    // <3>
+        CLIENT_ERROR,                   // <4>
+        SERVER_ERROR,                   // <5>
+        OTHER                           // <6>
+    }
+    ...
+}
+
+----
+<1> a violation of some declarative constraint (eg uniqueness or referential integrity) was detected.
+<2> the object to be acted upon cannot be found (404)
+<3> a concurrency exception, in other words some other user has changed this object.
+<4> recognized, but for some other reason... 40x error
+<5> 50x error
+<6> recognized, but uncategorized (typically: a recognizer of the original `ExceptionRecognizer` API).
+
+
+In essence, if an exception is recognized then it is also categorized.
+This lets the viewer act accordingly.
+For example, if an exception is raised from the loading of an individual object, then this is passed by the registered ``ExceptionRecognizer``s.
+If any of these recognize the exception as representing a not-found exception, then an Apache Isis `ObjectNotFoundException` is raised.
+Both the viewers interprets this correctly (the xref:vw:ROOT:about.adoc[Wicket viewer] as a suitable error page, the xref:vro:ROOT:about.adoc[Restful Objects viewer] as a 404 status return code).
+
+
+If the implementation recognizes the exception then it returns a user-friendly message to be rendered (by the viewer) back to the user; otherwise it returns `null`.
+There is no need for the implementation to check for exception causes; the casual chain is unwrapped by Apache Isis core and each exception in the chain will also be passed through to the recognizer (from most specific to least).
+The recognizer implementation can therefore be as fine-grained or as coarse-grained as it wishes.
+
+
+
+
+== Implementation
+
+The framework provides two default implementations:
+
+* `o.a.i.core.metamodel.services.exceprecog.ExceptionRecognizerDocDefault` provided by Apache Isis core is itself an `ExceptionRecognizer`, and will handle ``ConcurrencyException``s.
++
+It will also handle any application exceptions raised by the system (subclasses of `o.a.i.applib.RecoverableException`).
+
+* `o.a.i.applib.services.exceprecog.jdo.ExceptionRecognizerCompositeForJdoObjectStore`
++
+which bundles up a number of more fine-grained implementations:
++
+** `ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException`
+** `ExceptionRecognizerForJDOObjectNotFoundException`
+** `ExceptionRecognizerForJDODataStoreException`
+
+
+If you want to recognize and handle additional exceptions (for example to capture error messages specific to the JDBC driver you might be using), then create a fine-grained implementation of `ExceptionRecognizer` for the particular error message (there are some convenience implementations of the interface that you can subclass from if required) and annotated with `@DomainService` in the usual way.
+Make sure that the service resides under a module registered in `AppManifest`.
+
+
+
+=== Configuration Properties
+
+The following configuration properties are relevant:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+| `isis.services.` +
+`exceprecog.` +
+`logRecognized` +
+`Exceptions` +
+|`true`,`false` +
+(`false`)
+|whether recognized exceptions should also be logged. +
+
+Generally a recognized exception is one that is expected (for example a uniqueness constraint violated in the database) and which does not represent an error condition.
+This property logs the exception anyway, useful for debugging.
+
+This is recognised by all implementations that subclass `ExceptionRecognizerAbstract`.
+
+| `isis.services.` +
+`ExceptionRecognizer` +
+`CompositeFor` +
+`JdoObjectStore.` +
+`disable` +
+|`true`,`false` +
+(`false`)
+|whether to disable the default recognizers registered by `ExceptionRecognizerCompositeForJdoObjectStore`. +
+
+This implementation provides a default set of recognizers to convert RDBMS constraints into user-friendly messages.
+In the (probably remote) chance that this functionality isn't required, they can be disabled through this flag.
+
+
+|===
+

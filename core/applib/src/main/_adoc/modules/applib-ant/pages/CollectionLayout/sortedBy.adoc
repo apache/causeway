@@ -1,0 +1,50 @@
+[[sortedBy]]
+= `sortedBy()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `sortedBy()` attribute specifies that the collection be ordered using the specified comparator, rather than the natural ordering of the entity (as would usually be the case).
+
+For example:
+
+[source,java]
+----
+public class ToDoItem implements Comparable<ToDoItem> {      // <1>
+    public static class DependenciesComparator               // <2>
+            implements Comparator<ToDoItem> {
+        @Override
+        public int compare(ToDoItem p, ToDoItem q) {
+            return ORDERING_BY_DESCRIPTION                   // <3>
+                    .compound(Ordering.<ToDoItem>natural())
+                    .compare(p, q);
+        }
+    }
+    @CollectionLayout(sortedBy=DependenciesComparator.class) // <4>
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
+    ...
+}
+----
+<1> the class has a natural ordering (implementation not shown)
+<2> declaration of the comparator class
+<3> ordering defined as being by the object's `description` property (not shown), and then by the natural ordering of the class
+<4> specify the comparator to use
+
+When the `dependencies` collection is rendered, the elements are sorted by the `description` property first:
+
+image::reference-annotations/CollectionLayout/sortedby-dependencies.png[width="720px",link="{imagesdir}/reference-annotations/CollectionLayout/sortedby-dependencies.png"]
+
+[NOTE]
+====
+Note that this screenshot shows an earlier version of the xref:vw:ROOT:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+
+Without this annotation, the order would have been inverted (because the natural ordering places items not completed before those items that have been completed.
+
+
+
+== Alternatives
+
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.

@@ -1,0 +1,113 @@
+[[jdo]]
+= JDO Annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+Apache Isis uses JDO/DataNucleus as its ORM, and infers some of its own metadata from the JDO annotations.
+
+[WARNING]
+====
+Isis (currently) builds up metadata by parsing the JDO annotations from source, _not_ by querying the JDO metamodel.  The upshot is that, for the annotations documented here at least, your domain entities must use JDO annotations rather than XML.
+
+Furthermore, note that although JDO (the property-related) annotations to be placed on either the field or on the getter, Apache Isis requires that annotations are placed on the getter.
+====
+
+The table below lists the JDO annotations currently recognized by Apache Isis.
+
+
+.JDO Annotations
+[cols="2,4a,1,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+|Applies to
+
+
+|xref:refguide:applib-ant:Column.adoc[`@javax.jdo.annotations.` +
+`Column`]
+|Used to determine whether a property is mandatory or optional.  For `String` and `BigDecimal` properties, used to determine length/precision/scale.
+
+|Domain / persistence
+|Property
+
+
+|xref:refguide:applib-ant:Discriminator.adoc[`@javax.jdo.annotations.` +
+`Discriminator`]
+|Override for the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere. +
+
+Note that the discriminator overrides the object type that may otherwise be inferred from the xref:refguide:applib-ant:PersistenceCapable.adoc[`@PersistenceCapable`] annotation.
+|Domain / persistence
+|Class
+
+
+|xref:refguide:applib-ant:NotPersistent.adoc[`@javax.jdo.annotations.` +
+`NotPersistent`]
+|Used to determine whether to enforce or skip some xref:userguide:btb:about.adoc#custom-validator[metamodel validation] for `@Column` versus equivalent Isis annotations.
+
+|Domain / persistence
+|Property
+
+
+
+|xref:refguide:applib-ant:PersistenceCapable.adoc[`@javax.jdo.annotations.` +
+`PersistenceCapable`]
+|Used to build Apache Isis' own internal identifier for objects. +
+
+If the `schema()` attribute is specified (and if xref:refguide:applib-ant:Discriminator.adoc[`@Discriminator`] __hasn't__ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere.
+
+|Domain / persistence
+|Class
+
+
+|xref:refguide:applib-ant:PrimaryKey.adoc[`@javax.jdo.annotations.` +
+`PrimaryKey`]
+|Used to ensure Apache Isis does not overwrite application-defined primary keys, and to ensure is read-only in the UI.
+
+|Domain / persistence
+|Property
+
+
+
+|===
+
+
+
+Isis also parses the following JDO annotations, but the metadata is currently unused.
+
+.JDO Annotations (unused within Apache Isis)
+[cols="2,4a,1,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+|Applies to
+
+
+|`@javax.jdo.annotations.` +
+`DataStoreIdentity`
+|Unused
+|Persistence
+|Class
+
+
+|`@javax.jdo.annotations.` +
+`EmbeddedOnly`
+|Unused
+|Persistence
+|Class
+
+
+|`@javax.jdo.annotations.` +
+`Query`
+|Unused
+|Persistence
+|Class
+
+
+|===
+
+
+

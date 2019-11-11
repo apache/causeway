@@ -1,0 +1,52 @@
+= Reserved Methods
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The table below lists the reserved methods that are recognized as part of Apache Isis' default programming model.
+
+.Reserved Methods
+[cols="1,4a", options="header"]
+|===
+
+|Method
+|Description
+
+|xref:refguide:applib-cm:methods.adoc#cssClass[`cssClass()`]
+|Provides a CSS class for this object instance.
+In conjunction with xref:refguide:config:application-specific/application-css.adoc[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered.
+
+|xref:refguide:applib-cm:methods.adoc#disable[`disable(...)`]
+|Disable all or some of an object's properties
+
+|xref:refguide:applib-cm:methods.adoc#getId[`getId()`]
+|Provides an optional unique identifier of a service.
+
+If not provided, the service's fully-qualified class name is used.
+
+|xref:refguide:applib-cm:methods.adoc#reserved-hide[`hide(...)`]
+|Hide all or some of an object's properties
+
+|xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`]
+|Provides the name of the image to render, usually alongside the title, to represent the object.
+If not provided, then the class name is used to locate an image.
+
+|xref:refguide:applib-cm:methods.adoc#title[`title()`]
+|Provides a title for the object. +
+
+|xref:refguide:applib-cm:methods.adoc#reserved-validate[`validate()`]
+|Validate the object's state prior to persisting.
+
+|===
+
+
+
+
+include::reserved/cssClass.adoc[leveloffset=+1]
+include::reserved/disable.adoc[leveloffset=+1]
+include::reserved/getId.adoc[leveloffset=+1]
+include::reserved/hide.adoc[leveloffset=+1]
+include::reserved/iconName.adoc[leveloffset=+1]
+include::reserved/title.adoc[leveloffset=+1]
+include::reserved/validate.adoc[leveloffset=+1]
