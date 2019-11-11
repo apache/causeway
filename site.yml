@@ -6,129 +6,168 @@ site:
 content:
   sources:
     - url: .
-      start_path: examples/apps/helloworld/_adoc
+      start_path: antora/components/core
       branches: HEAD
     - url: .
-      start_path: examples/apps/simpleapp/_adoc
+      start_path: antora/components/extensions
       branches: HEAD
-
     - url: .
-      branches: HEAD
-      start_path: antora/components/toc
-    - url: .
-      branches: HEAD
       start_path: antora/components/mignotes
-    - url: .
       branches: HEAD
+    - url: .
       start_path: antora/components/refguide
-    - url: .
       branches: HEAD
+    - url: .
       start_path: antora/components/relnotes
-    - url: .
-      branches: HEAD
-      start_path: antora/components/archdesign
-
-    - url: .
-      start_path: antora/components/userguide
       branches: HEAD
     - url: .
+      start_path: antora/components/security
       branches: HEAD
-      start_path: examples/apps/demo/_adoc
-    - url: .
-      branches: HEAD
-      start_path: mavendeps/_adoc
-
-
-    - url: .
-      start_path: core/applib/_adoc
-      branches: HEAD
-    - url: .
-      start_path: core/config/_adoc
-      branches: HEAD
-    - url: .
-      start_path: core/schema/_adoc
-      branches: HEAD
-
-    - url: .
-      start_path: core/runtime-services/_adoc
-      branches: HEAD
-
     - url: .
       start_path: antora/components/testing
       branches: HEAD
     - url: .
-      start_path: core/testsupport/unittestsupport/_adoc
+      start_path: antora/components/toc
       branches: HEAD
     - url: .
-      start_path: core/testsupport/integtestsupport/_adoc
+      start_path: antora/components/userguide
+      branches: HEAD
+
+    - url: .
+      start_path: core/applib/_adoc # refguide
+      branches: HEAD
+    - url: .
+      start_path: core/commons/_adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/config/_adoc # refguide
+      branches: HEAD
+    - url: .
+      start_path: core/detached-tests/_adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/metamodel/_adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/plugins/codegen-bytebuddy/_adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/plugins/jaxrs-resteasy-4/_adoc # vro
+      branches: HEAD
+    - url: .
+      start_path: core/plugins/jdo/_adoc # userguide
+      branches: HEAD
+    - url: .
+      start_path: core/runtime/_adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/runtime-extensions/_adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/runtime-services/_adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/runtime-web/_adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/schema/_adoc # refguide
+      branches: HEAD
+    - url: .
+      start_path: core/security/api/_adoc # security
+      branches: HEAD
+    - url: .
+      start_path: core/security/bypass/_adoc # security
+      branches: HEAD
+    - url: .
+      start_path: core/security/shiro/_adoc # security
+      branches: HEAD
+    - url: .
+      start_path: core/testsupport/unittestsupport/_adoc # testing
+      branches: HEAD
+    - url: .
+      start_path: core/testsupport/integtestsupport/_adoc # testing
       branches: HEAD
     # to be resurrected somehow.
     #- url: .
     #  start_path: core/testsupport/mvnplugin/_adoc
     #  branches: HEAD
     - url: .
-      branches: HEAD
-      start_path: extensions/fixtures/_adoc
-    - url: .
-      branches: HEAD
-      start_path: extensions/specsupport/_adoc
-
-    - url: .
-      start_path: core/viewer-wicket/_adoc
+      start_path: core/viewer-restfulobjects/_adoc # vro
       branches: HEAD
     - url: .
-      branches: HEAD
-      start_path: extensions/viewer-wicket-excel/_adoc
-    - url: .
-      branches: HEAD
-      start_path: extensions/asciidoc/_adoc
-    - url: .
-      branches: HEAD
-      start_path: extensions/markdown/_adoc
-
-    - url: .
-      start_path: core/viewer-restfulobjects/_adoc
+      start_path: core/viewer-wicket/_adoc # vw
       branches: HEAD
 
     - url: .
-      start_path: core/plugins/jdo/_adoc
+      start_path: examples/apps/demo/_adoc # demoapp
+      branches: HEAD
+    - url: .
+      start_path: examples/apps/helloworld/_adoc # helloworld
+      branches: HEAD
+    - url: .
+      start_path: examples/apps/simpleapp/_adoc # simpleapp
+      branches: HEAD
+    - url: .
+      start_path: examples/smoketests/_adoc # core
       branches: HEAD
 
     - url: .
-      start_path: antora/components/security
+      start_path: extensions/asciidoc/_adoc # vw
       branches: HEAD
     - url: .
-      start_path: core/security/api/_adoc
+      start_path: extensions/fixtures/_adoc # testing
       branches: HEAD
     - url: .
-      start_path: core/security/bypass/_adoc
+      start_path: extensions/incubator/_adoc # extensions
       branches: HEAD
     - url: .
-      start_path: core/security/shiro/_adoc
+      start_path: extensions/legacy/_adoc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/markdown/_adoc # vw
+      branches: HEAD
+    - url: .
+      start_path: extensions/restclient/_adoc # vro
+      branches: HEAD
+    - url: .
+      start_path: extensions/secman/_adoc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/secman/api/_adoc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/secman/encryption-jbcrypt/_adoc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/secman/model/_adoc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/secman/persistence-jdo/_adoc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/secman/realm-shiro/_adoc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/specsupport/_adoc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/spring/_adoc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/sse/_adoc # vw
+      branches: HEAD
+    - url: .
+      start_path: extensions/viewer-wicket-excel/_adoc # vw
       branches: HEAD
 
     - url: .
+      start_path: mavendeps/_adoc
       branches: HEAD
-      start_path: extensions/secman/_adoc
-    - url: .
-      branches: HEAD
-      start_path: extensions/secman/api/_adoc
-    - url: .
-      branches: HEAD
-      start_path: extensions/secman/encryption-jbcrypt/_adoc
-    - url: .
-      branches: HEAD
-      start_path: extensions/secman/model/_adoc
-    - url: .
-      branches: HEAD
-      start_path: extensions/secman/persistence-jdo/_adoc
-    - url: .
-      branches: HEAD
-      start_path: extensions/secman/realm-shiro/_adoc
 
     - url: .
+      start_path: mixins/_adoc
       branches: HEAD
-      start_path: examples/smoketests/_adoc
+
 
 ui:
   bundle:

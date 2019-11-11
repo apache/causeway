@@ -1,0 +1,183 @@
+= `@Property`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `@Property` annotation applies to properties collecting together all domain semantics within a single annotation.
+
+It is also possible to apply the annotation to actions of domain services that are acting as contributed properties.
+
+
+
+.`@Property` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:refguide:applib-ant:Property.adoc#command[`command()`]
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether the property edit should be reified into a `o.a.i.applib.` +
+`services.command.Command` object through the xref:refguide:applib-svc:application-layer-api/CommandContext.adoc[`CommandContext`] service.
+
+
+|`commandExecuteIn()`
+|`FOREGROUND`,`BACKGROUND` +
+(`FOREGROUND`)
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+
+
+|`commandPersistence()`
+|`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
+(`PERSISTED`)
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured).
+
+
+
+|`commandDtoProcessor()`
+|Implementation of `CommandDtoProcessor` interface +
+(null)
+|If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
+
+
+
+|xref:refguide:applib-ant:Property.adoc#domainEvent[`domainEvent()`]
+|subtype of `PropertyDomainEvent` +
+(`PropertyDomainEvent.Default`)
+|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
+
+
+|xref:refguide:applib-ant:Property.adoc#editing[`editing()`]
+|`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
+(`AS_CONFIGURED`)
+|whether a property can be modified or cleared from within the UI
+
+
+|xref:refguide:applib-ant:Property.adoc#fileAccept[`fileAccept()`]
+|Media type or file extension
+|Hints the files to be uploaded to a xref:refguide:applib-cm:classes/value-types.adoc#Blob[`Blob`]
+ or xref:refguide:applib-cm:classes/value-types.adoc#Clob[`Clob`]. +
+ +
+Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
+
+
+|xref:refguide:applib-ant:Property.adoc#hidden[`hidden()`]
+|`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the property should be hidden from the user.
+
+
+|xref:refguide:applib-ant:Property.adoc#maxLength[`maxLength()`]
+|
+|maximum number of characters for string parameters; ignored otherwise +
+
+In many/most cases you should however use xref:refguide:applib-ant:Column.adoc[`@Column#length()`]
+
+
+|xref:refguide:applib-ant:Property.adoc#mustSatisfy[`mustSatisfy()`]
+|implementation of `o.a.i.applib.spec.Specification`
+|allows arbitrary validation to be applied
+
+
+|xref:refguide:applib-ant:Property.adoc#notPersisted[`notPersisted()`]
+|`true`, `false` +
+(`false`)
+|whether to exclude from snapshots. +
+
+[WARNING]
+====
+Property must also be annotated with `@javax.jdo.annotations.NotPersistent` in order to not be persisted.
+====
+
+
+|xref:refguide:applib-ant:Property.adoc#optionality[`optionality()`]
+|
+|specifies a property is optional rather than mandatory +
+
+In many/most cases you should however use xref:refguide:applib-ant:Column.adoc[`@Column#allowsNull()`]
+
+
+
+|xref:refguide:applib-ant:Property.adoc#projecting[`projecting()`]
+|
+|indicates that owning object is a view model that is acting as a projection of the underlying entity referenced by this property.
+
+
+
+|xref:refguide:applib-ant:Property.adoc#publishing[`publishing()`]
+|
+|determines whether the editing of a property should be published.
+
+
+
+
+|xref:refguide:applib-ant:Property.adoc#regexPattern[`regexPattern()`]
+|regular expression
+|validates the contents of a string parameter against the regular expression pattern
+
+
+|`regexPatternFlags()`
+|value of flags as normally passed to `java.util.regex.` +
+`Pattern#compile(...)`
+|modifies the compilation of the regular expression
+
+
+|===
+
+
+For example:
+
+[source,java]
+----
+@DomainObject
+public class Customer {
+    public static class EmailSpecification extends AbstractSpecification<String> {
+        public String satisfiesSafely(String proposed) {
+            return EmailUtil.ensureValidEmail(proposed);    // <1>
+        }
+    }
+    @javax.jdo.annotations.Column(allowsNull="true")                // <2>
+    @Property(
+        maxLength=30,
+        mustSatisfy=EmailSpecification.class,
+        regexPattern = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+",
+        regexPatternFlags=Pattern.CASE_INSENSITIVE
+    )
+    public String getEmailAddress() { /* ... */ }
+    public void setEmailAddress(String emailAddress) { /* ... */ }
+    ...
+}
+----
+<1> the (fictitious) `EmailUtil.ensureValid(...)` (omitted for brevity) returns a string explaining if an email is invalid
+<2> generally use instead of the `@Property#optionality()` attribute
+
+
+
+
+
+[TIP]
+====
+The annotation is one of a handful (others including xref:refguide:applib-ant:Collection.adoc[`@Collection`], xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
+so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
+====
+
+
+
+
+
+include:Property/command.adoc[leveloffset=+1]
+include:Property/domainEvent.adoc[leveloffset=+1]
+include:Property/editing.adoc[leveloffset=+1]
+include:Property/fileAccept.adoc[leveloffset=+1]
+include:Property/hidden.adoc[leveloffset=+1]
+include:Property/maxLength.adoc[leveloffset=+1]
+include:Property/mustSatisfy.adoc[leveloffset=+1]
+include:Property/notPersisted.adoc[leveloffset=+1]
+include:Property/optionality.adoc[leveloffset=+1]
+include:Property/projecting.adoc[leveloffset=+1]
+include:Property/publishing.adoc[leveloffset=+1]
+include:Property/regexPattern.adoc[leveloffset=+1]

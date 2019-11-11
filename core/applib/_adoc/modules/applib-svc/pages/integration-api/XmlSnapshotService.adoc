@@ -1,0 +1,208 @@
+[[XmlSnapshotService]]
+= `XmlSnapshotService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+The `XmlSnapshotService` provides the capability to generate XML snapshots (and if required corresponding XSD schemas) based on graphs of domain objects.
+
+Typical use cases include creating mementos for business-focused auditing, such that a report could be generated as to which end-user performed a business action (perhaps for legal reasons).  For one system that we know of, a digest of this snapshot of data is signed with the public encryption key so as to enforce non-repudiation.
+
+Another use case is to grab raw data such that it could be merged into a report template or communication.
+
+The service offers a basic API to create a snapshot of a single object, and an more flexible API that allows the size of the graph to be customized.
+
+
+
+
+== Standard API
+
+The (basic) API of `XmlSnapshotService` is:
+
+[source]
+----
+public interface XmlSnapshotService {
+    public interface Snapshot {
+        Document getXmlDocument();
+        Document getXsdDocument();
+        String getXmlDocumentAsString();
+        String getXsdDocumentAsString();
+    }
+    @Programmatic
+    public XmlSnapshotService.Snapshot snapshotFor(Object domainObject);
+    ...
+}
+----
+
+
+The most straight-forward usage of this service is simply:
+
+[source,java]
+----
+XmlSnapshot snapshot = xmlsnapshotService.snapshotFor(customer);
+Element customerAsXml = snapshot.getXmlElement();
+----
+
+This will return an XML (document) element that contains the names and values of each of the customer's value properties, along with the titles of reference properties, and also the number of items in collections.
+
+
+As well as obtaining the XML snapshot, it is also possible to obtain an XSD schema that the XML snapshot conforms to.
+
+[source]
+----
+XmlSnapshot snapshot = ...;
+Element customerAsXml = snapshot.getXmlElement();
+Element customerXsd = snapshot.getXsdElement();
+----
+
+This can be useful for some tools.  For example, link:http://www.altova.com/stylevision.html[Altova Stylevision] can use the XML and XSD to transform into reports.  Please note that this link does not imply endorsement (nor even a recommendation that this is a good design).
+
+
+
+
+
+== Builder API
+
+The contents of the snapshot can be adjusted by including "paths" to other references or collections. To do this, the
+builder is used.  The API for this is:
+
+[source,java]
+----
+public interface XmlSnapshotService {
+    ...
+    public interface Builder {
+        void includePath(final String path);
+        void includePathAndAnnotation(String path, String annotation);
+        XmlSnapshotService.Snapshot build();
+    }
+    @Programmatic
+    public XmlSnapshotService.Builder builderFor(Object domainObject);
+}
+----
+
+We start by obtaining a builder:
+
+[source,java]
+----
+XmlSnapshot.Builder builder = xmlsnapshotService.builderFor(customer);
+----
+
+Suppose now that we want the snapshot to also include details of the customer's address, where `address` in this case is a reference property to an instance of the `Address` class. We can "walk-the-graph" by including these references within the builder.
+
+[source,java]
+----
+builder.includePath("address");
+----
+
+We could then go further and include details of every order in the customer's `orders` collection, and details of every
+product of every order:
+
+[source,java]
+----
+builder.includePath("orders/product");
+----
+
+When all paths are included, then the builder can build the snapshot:
+
+[source,java]
+----
+XmlSnapshot snapshot = builder.build();
+Element customerAsXml = snapshot.getXmlElement();
+----
+
+All of this can be strung together in a fluent API:
+
+[source,java]
+----
+Element customerAsXml = xmlsnapshotService.builderFor(customer)
+                        .includePath("address")
+                        .includePath("orders/product")
+                        .build()
+                        .getXmlElement();
+----
+
+
+As you might imagine, the resultant XML document can get quite large very quickly with only a few "include"s.
+
+
+[NOTE]
+====
+If an XSD schema is beng generated (using `snapshot.getXsdElement()` then note that for the XSD to be correct, the object being snapshotted must have non-null values for the paths that are `include()`'d. If this isn't done then the XSD will not be correct reflect for another snapshotted object that does have non-null values.
+====
+
+
+
+
+== Automatic inclusions
+
+If the domain object being snapshotted implements the `SnapshottableWithInclusions` interace, then this moves the
+responsibility for determining what is included within the snapshot from the caller to the snapshottable object itself:
+
+[source]
+----
+public interface SnapshottableWithInclusions extends Snapshottable {
+    List<String> snapshotInclusions();
+}
+----
+
+If necessary, both approaches can be combined.
+
+
+[TIP]
+====
+As an alternative to using `include()`, you might consider building a view model domain object which can reference only the relevant information required for the snapshot. For example, if only the 5 most recent Orders for a Customer were required, a `CustomerAndRecentOrders` view model could hold a collection of just those 5 ``Order``s. Typically such view models would implement `SnapshottableWithInclusions`.
+
+One reason for doing this is to provide a stable API between the domain model and whatever it is that might be consuming the XML. With a view model you can refactor the domain entities but still preserve a view model such that the XML is the same.
+====
+
+
+
+== Convenience API
+
+The `XmlSnapshotService` also provides some API for simply manipulating XML:
+
+[source]
+----
+public interface XmlSnapshotService {
+    ...
+    @Programmatic
+    public Document asDocument(String xmlStr);                          // <1>
+    @Programmatic
+    public <T> T getChildElementValue(                                  // <2>
+                    Element el, String tagname, Class<T> expectedCls);
+    @Programmatic
+    public Element getChildElement(                                     // <3>
+                    Element el, String tagname);
+    @Programmatic
+    public String getChildTextValue(Element el);                        // <4>
+}
+----
+<1> is a convenience method to convert xml string back into a W3C Document
+<2> is a convenience method to extract the value of an XML element, based on its type.
+<3> is a convenience method to walk XML document.
+<4> is a convenience method to obtain value of child text node.
+
+
+
+
+
+== Implementation
+
+The core framework provides an implementation of this service (`o.a.i.core.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault`).
+
+
+== Related Services
+
+The xref:refguide:applib-svc:integration-api/BookmarkService.adoc[`BookmarkService`] provides a mechanism for obtaining a string representations of a single domain object.
+
+The xref:refguide:applib-svc:integration-api/MementoService.adoc[`MementoService`] also provides a mechanism for generating string representations of domain objects.
+
+The xref:refguide:applib-svc:integration-api/JaxbService.adoc[`JaxbService`] is a simple wrapper around
+standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.  Note that there is built-in support for JAXB classes (ie annotated with
+xref:refguide:applib-ant:XmlRootElement.adoc[`@XmlRootElement`]) to be used as view models.
+
+
+
+

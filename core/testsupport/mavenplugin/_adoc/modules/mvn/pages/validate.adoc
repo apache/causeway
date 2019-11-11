@@ -28,7 +28,7 @@ This goal was also released for `1.9.0`, but with a slightly different configura
 
 == `dom` submodule
 
-Update the `pom.xml` (we recommend in your project's `dom` module, and with a xref:rg:mvn:intro/app-manifest.adoc[minimal AppManifest]):
+Update the `pom.xml` (we recommend in your project's `dom` module, and with a xref:refguide:mvn:intro/app-manifest.adoc[minimal AppManifest]):
 
 [source,xml]
 ----
@@ -76,7 +76,7 @@ Update the `pom.xml` (we recommend in your project's `dom` module, and with a xr
 ----
 <1> the profile is active by default, though can be disabled using `-Dskip.isis-validate`
 <2> set to `1.10.0` (or any later version)
-<3> the manifest discussed xref:rg:mvn:intro/app-manifest.adoc[previously]; adjust as required
+<3> the manifest discussed xref:refguide:mvn:intro/app-manifest.adoc[previously]; adjust as required
 <4> the `dom` module for the project; adjust as required
 <5> binds the plugin's `validate` goal to the Maven `test` lifecycle phase (ie the goal will be called when `mvn test` is run).
 
@@ -158,7 +158,7 @@ If one were to attempt to run the application, the same error would appear in th
 
 == Custom validation rules
 
-It is also possible to customize the validation, explained xref:ug:btb:about.adoc#custom-validator[here].
+It is also possible to customize the validation, explained xref:userguide:btb:about.adoc#custom-validator[here].
 For example, you could enforce project-specific conventions by implementing a custom `MetaModelValidator`, and registering using a configuration property.
 
 To support this using `AppManifest`s, override its `getConfigurationProperties()` method:

@@ -15,7 +15,7 @@ They include guides for day-to-day operations, as well as notes on the design/im
 
 == Implementation
 
-*  xref:archdesign:ROOT:about.adoc[Architecture & Design]
+*  xref:core:archdesign:about.adoc[Architecture & Design]
 *  xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
 *  xref:smoketests:ROOT:about.adoc[SmokeTest App]
 

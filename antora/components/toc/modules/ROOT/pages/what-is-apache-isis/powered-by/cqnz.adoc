@@ -1,0 +1,41 @@
+= CQNZ (Sequence)
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
+
+
+CQNZ(TM) (pronounced "sequence") is a thematic social network that:
+
+[quote]
+____
+enables people like you and me to express our lives and experiences in the form of stories, streams or CQNZs, sharing the most exciting, thrilling and contemplative moments using photographs as the core element of interaction with others.
+____
+
+image::powered-by/cqnz/cqnz-advert.png[width="900px",link="{imagesdir}/powered-by/cqnz/cqnz-advert.png"]
+
+
+== Underlying Technology
+
+With regard to the underlying technology, CQNZ(TM) is a mobile application served by a web application using RESTful web services.
+The core, the CQNZ application server, is built on Apache Isis framework, which is hosted on a cloud service provider, configured for high availability, load balancing and fail-over with highly elastic scalability, prepared to scale from 1 server to tens, hundreds or even thousands of application servers running on Apache Isis.
+The client is a cross-platform mobile application now available on Apple Store and Google Play in the US, Mexico and Europe.
+
+== Benefits
+
+The main benefits we have got from leveraging the Apache Isis framework are the automated RESTful web services generation and automated user interface, which allowed us to cut development work by 4 to 6 times vs traditional frameworks.
+Also, we were able to focus on our domain model instead of UI or application layers.
+Multi-tenancy add-ons allowed us a high degree of control over access control, and security and monitoring add ons provided us with out-of-the-box auditing.
+The fact that Apache Isis also automates the persistence layer using JDO allow us to combine SQL with NoSQL, which is a critical next feature we will implement for a very high scalability distributed environment.
+A great feature is the Apache Isis `x-ro-follow-links` feature, which allowed to cut the mobile client code by 70% in many cases, because it allows you to combine multiple RESTful calls into a single one, similar to what a SQL statement provides to a database, but at the web services level, improving http requests response time by two, three and up to four times.
+
+== Support
+
+We'd like to thank the Apache Isis support team who provides great support, which includes multiple tutorials, detailed documentation and screencasts, so most of the learning was very straightforward.
+The quick, detailed and clear response on support helped us a great deal when facing issues and while learning.
+This is also one of the many reasons we choose Apache Isis over Spring Framework, Oracle ADF, and other frameworks we also evaluated when making our decision.
+
+== For more info
+
+For further information, please see our link:https://www.facebook.com/pg/mycqnz/about/?ref=page_internal[facebook page] or visit link:http://cqnz.rocks/[cqnz.rocks].  All images and trademarks property of their respective owners.
+
+_Case study provided by Cesar Lugo, Research and Development Director, Vortech IT._

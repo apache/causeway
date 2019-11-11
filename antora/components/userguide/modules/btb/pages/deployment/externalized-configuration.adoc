@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-As described xref:rg:cfg:configuration-files.adoc[here], by default Apache Isis itself bootstraps from the
+As described xref:refguide:config:configuration-files.adoc[here], by default Apache Isis itself bootstraps from the
 `isis.properties` configuration file.
 It will also read configuration from the (optional) component/implementation-specific configuration files (such as `persistor_datanucleus.properties` or `viewer_wicket.properties`), and also (optional) component-specific configuration files (such as `persistor.properties` or `viewer.properties`).
 
@@ -15,7 +15,7 @@ It's generally not good practice to have the same configuration property in more
 [TIP]
 ====
 In addition the framework will also load the `overrides.properties` file.
-This is intended to support deployment through Docker, as discussed xref:ug:btb:about.adoc#docker[next].
+This is intended to support deployment through Docker, as discussed xref:userguide:btb:about.adoc#docker[next].
 ====
 
 All of these files are read from the `WEB-INF` directory.
@@ -36,7 +36,7 @@ Each of these frameworks has its own way of externalizing its configuration.
 
 [TIP]
 ====
-Subsequent sections explain how to externalize configuration for xref:ug:btb:about.adoc#docker[Docker].
+Subsequent sections explain how to externalize configuration for xref:userguide:btb:about.adoc#docker[Docker].
 ====
 
 
@@ -244,7 +244,7 @@ take a look at link:http://stackoverflow.com/a/10041835/56880[this SO answer] on
 
 == JVM Args
 
-The xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] uses link:http://www.javassist.org[Javassist] to create on-the-fly classes acting as a proxy.
+The xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] uses link:http://www.javassist.org[Javassist] to create on-the-fly classes acting as a proxy.
 The cost of these proxies can be mitigated using:
 
 [source,ini]

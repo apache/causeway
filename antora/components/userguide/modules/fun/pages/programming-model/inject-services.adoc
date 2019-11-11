@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-Apache Isis runs on top of SpringBoot, and uses SpringBoot for dependency injection, both of the applications own domain services and als of the very many additional services defined by the framework (such as xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]).
+Apache Isis runs on top of SpringBoot, and uses SpringBoot for dependency injection, both of the applications own domain services and als of the very many additional services defined by the framework (such as xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]).
 
 However, not only does it autowire domain services into other services, it also ensures that services are injected into any domain object (eg entity, view model, fixture script, specification etc).
 

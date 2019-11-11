@@ -49,7 +49,7 @@ In fact, the only hard dependency that the domain model classes have on Apache I
 So, if you have used Apache Isis for prototyping (discussed above), then note that it's quite feasible to take your domain model a the basis of your actual development effort; Apache Isis' annotations and programming conventions will help ensure that any subtle semantics you might have captured in your prototyping are not lost.
 
 If you go this route, your deployment platform will of course need to provide similar capabilities to Apache Isis.
-In particular, you'll need to figure out a way to inject domain services into domain entities (eg using a JPA listener), and you'll also need to reimplement any domain services you have used that Apache Isis provides "out-of-the-box" (eg xref:rg:svc:persistence-layer-api/QueryResultsCache.adoc[`QueryResultsCache`] domain service).
+In particular, you'll need to figure out a way to inject domain services into domain entities (eg using a JPA listener), and you'll also need to reimplement any domain services you have used that Apache Isis provides "out-of-the-box" (eg xref:refguide:applib-svc:persistence-layer-api/QueryResultsCache.adoc[`QueryResultsCache`] domain service).
 
 
 

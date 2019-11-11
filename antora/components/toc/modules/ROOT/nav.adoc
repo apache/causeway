@@ -20,25 +20,24 @@
 
 * Guides
 
-** *xref:ug:ROOT:about.adoc[User Guide]*
-** xref:rg:ROOT:about.adoc[Reference Guide]
+** *xref:userguide:ROOT:about.adoc[User Guide]*
+** xref:refguide:ROOT:about.adoc[Reference Guide]
+** xref:security:ROOT:about.adoc[Security Guide]
+*** xref:secman:ROOT:about.adoc[SecMan (extension)]
 ** *xref:testing:ROOT:about.adoc[Testing]*
 
 * Components
 
 ** xref:vw:ROOT:about.adoc[Wicket Viewer]
 ** xref:vro:ROOT:about.adoc[Restful Objects]
-**  xref:odn:ROOT:about.adoc[DataNucleus Object Store]
-**  xref:security:ROOT:about.adoc[Security Guide]
-*** xref:ext-secman:ROOT:about.adoc[SecMan (extension)]
+** xref:odn:ROOT:about.adoc[DataNucleus Object Store]
 
 
 * Support
 
-** Resources
-
-*** xref:toc:devguide:about.adoc[Developers' Guide]
-*** xref:mavendeps:ROOT:about.adoc[Maven mixins]
+** xref:toc:devguide:about.adoc[Developers' Guide]
+*** xref:mavendeps:ROOT:about.adoc[Maven Dependencies]
+*** xref:mixins:ROOT:about.adoc[Maven Mixins]
 
 ** Mailing Lists
 *** xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[How to subscribe]
@@ -56,18 +55,13 @@ _for bug reports & feature requests_
 
 * Internal
 
-** Committers
-
-***  xref:toc:comguide:about.adoc[Committers' Guide]
-**** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
-**** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
+**  xref:toc:comguide:about.adoc[Committers' Guide]
+*** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
+*** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
 
 
-** Implementation
-
-***  xref:archdesign:ROOT:about.adoc[Architecture & Design]
-***  xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
-***  xref:smoketests:ROOT:about.adoc[SmokeTest App]
+**  xref:core:ROOT:about.adoc[Core Framework]
+**  xref:extensions:ROOT:about.adoc[Extensions]
 
 
 

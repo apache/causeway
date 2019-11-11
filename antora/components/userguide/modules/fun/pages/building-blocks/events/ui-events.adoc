@@ -4,18 +4,18 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-As explained xref:ug:fun:building-blocks.adoc#title-and-icon-and-css-class[earlier], to allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
+As explained xref:userguide:fun:building-blocks.adoc#title-and-icon-and-css-class[earlier], to allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
 
-xref:ug:fun:ui-hints/object-titles-and-icons.adoc[Normally] the code to return title and icon of an object is part of the domain object's implementation.
+xref:userguide:fun:ui-hints/object-titles-and-icons.adoc[Normally] the code to return title and icon of an object is part of the domain object's implementation.
 However, UI events allow this title and icon to be provided instead by a subscriber.
 UI events have higher precedence than the other mechanisms of supplying a title.
 
-If annotated with xref:rg:ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
- Similarly for xref:rg:ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent()`] and xref:rg:ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`].
+If annotated with xref:refguide:applib-ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
+ Similarly for xref:refguide:applib-ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent()`] and xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`].
 
-This can be particularly useful for xref:ug:fun:programming-model.adoc#jaxb[JAXB-style view models] which are code generated from XSDs and so cannot have any dependencies on the rest of the Apache Isis framework.
+This can be particularly useful for xref:userguide:fun:programming-model.adoc#jaxb[JAXB-style view models] which are code generated from XSDs and so cannot have any dependencies on the rest of the Apache Isis framework.
 Here a subscriber on the default events can provide a title and icon for such an object.
-Behaviour on such DTOs can also be provided using xref:ug:fun:building-blocks.adoc#mixins[mixins].
+Behaviour on such DTOs can also be provided using xref:userguide:fun:building-blocks.adoc#mixins[mixins].
 
 Events also allow one module to influence/fine-tune the title of entities provided by some other module.
 One such case is when reusing library modules, eg as provided by (non-ASF) link:https://platform.incode.org[Incode Platform^].

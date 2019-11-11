@@ -13,23 +13,23 @@ This section explains how.
 
 == `@MemberOrder`
 
-The xref:rg:ant:MemberOrder.adoc[`@MemberOrder`]  annotation is used to specify the relative order of domain class properties, collections and actions.
+The xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`]  annotation is used to specify the relative order of domain class properties, collections and actions.
 
-The annotation defines two attributes, xref:rg:ant:MemberOrder.adoc#name[`name()`] and xref:rg:ant:MemberOrder.adoc#sequence[`sequence()`].
+The annotation defines two attributes, xref:refguide:applib-ant:MemberOrder.adoc#name[`name()`] and xref:refguide:applib-ant:MemberOrder.adoc#sequence[`sequence()`].
 Their usage depends on the member type:
 
 * for properties, the `name()` is used to group properties together into a member group (also called a property group or a fieldset.
 The `sequence()` then orders properties within these groups.
 If no `name()` is specified then the property is placed in a fallback "General" group, called "General".
 +
-The name of these member groups/fieldsets are then referenced by xref:rg:ant:MemberGroupLayout.adoc[`@MemberGroupLayout`].
+The name of these member groups/fieldsets are then referenced by xref:refguide:applib-ant:MemberGroupLayout.adoc[`@MemberGroupLayout`].
 
 * for collections, the `name()` attribute is (currently) unused.
 The `sequence()` orders collections relative to one another
 
 * for actions, the `name()` attribute associates an action with either a property or with a collection.
 
-** If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:rg:ant:ActionLayout.adoc#position[`@ActionLayout#position()`] attribute.
+** If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:refguide:applib-ant:ActionLayout.adoc#position[`@ActionLayout#position()`] attribute.
 
 ** On the other hand if the `name() attribute matches a collection name, then the action's button is rendered on the collection's header.
 
@@ -66,7 +66,7 @@ This defines three property (or member) groups, "General", "Detail" and "Misc"; 
 Properties in the same member group are rendered together, as a fieldset.
 
 In addition, actions can optionally be associated (rendered close to) either properties or actions.
-This is done by overloading the ``@MemberOrder``'s xref:rg:ant:MemberOrder.adoc#name[`name()`] attribute, holding the value of the property or collection.
+This is done by overloading the ``@MemberOrder``'s xref:refguide:applib-ant:MemberOrder.adoc#name[`name()`] attribute, holding the value of the property or collection.
 
 For example:
 
@@ -93,7 +93,7 @@ public class ToDoItem {
 will associate the `completed()` and `notYetCompleted()` actions with the `complete` property, and will associate the `add()` and `remove()` actions with the `dependencies` collection.
 
 
-The value of xref:rg:ant:MemberOrder.adoc#sequence[`sequence()`] is a string.
+The value of xref:refguide:applib-ant:MemberOrder.adoc#sequence[`sequence()`] is a string.
 The simplest convention (as shown in the example above) is to use numbers -- 1, 2, 3 -- though it is a better idea to leave gaps in the numbers -- 10, 20, 30 perhaps -- such that a new member may be added without having to edit existing numbers.
 
 Even better is to adopt the 'dewey-decimal' notation -- 1, 1.1, 1.2, 2, 3, 5.1.1, 5.2.2, 5.2, 5.3 -- which allows for an indefinite amount of future insertion.
@@ -104,7 +104,7 @@ It also allows subclasses to insert their class members as required.
 
 == `@MemberGroupLayout`
 
-The xref:rg:ant:MemberGroupLayout.adoc[`@MemberGroupLayout`] annotation specifies the relative positioning of property groups/fieldsets as being either in a left column, a middle column or in a right column.
+The xref:refguide:applib-ant:MemberGroupLayout.adoc[`@MemberGroupLayout`] annotation specifies the relative positioning of property groups/fieldsets as being either in a left column, a middle column or in a right column.
 The annotation also specifies the relative width of the columns.
 
 The property groups/fieldsets in this case are those that are inferred from the `@MemberOrder#name()` attribute.
@@ -115,7 +115,7 @@ It is also possible to combine `@MemberOrder` with a xref:vw:ROOT:layout/file-ba
 The layout file defines only the regions of a grid structure (fieldsets/columns etc), but does __not__ specify the properties/collections/actions within those grid regions.
 The `@MemberOrder` annotation in effect "binds" the properties or collections to those regions of the grid.
 
-When file-based layouts are used this way, the xref:rg:ant:MemberGroupLayout.adoc[`@MemberGroupLayout`] annotation is essentially ignored, but the metadata from the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] annotation (and the other layout annotations, xref:rg:ant:ActionLayout.adoc[`@ActionLayout`], xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] and xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`]) are all still honoured.
+When file-based layouts are used this way, the xref:refguide:applib-ant:MemberGroupLayout.adoc[`@MemberGroupLayout`] annotation is essentially ignored, but the metadata from the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotation (and the other layout annotations, xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`], xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] and xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`]) are all still honoured.
 ====
 
 For example:
@@ -183,8 +183,8 @@ image::reference-layout/4-0-8-0.png[width="720px",link="{imagesdir}/reference-la
 
 Layout semantics can also be specified using the various `XxxLayout` annotations:
 
-* for domain services: xref:rg:ant:DomainServiceLayout.adoc[`@DomainServiceLayout`]
-* for domain objects: xref:rg:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] and xref:rg:ant:ViewModelLayout.adoc[`@ViewModelLayout`]
-* for actions: xref:rg:ant:ActionLayout.adoc[`@ActionLayout`] and xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`]
-* for properties: xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`]
-* for collections: xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`]
+* for domain services: xref:refguide:applib-ant:DomainServiceLayout.adoc[`@DomainServiceLayout`]
+* for domain objects: xref:refguide:applib-ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] and xref:refguide:applib-ant:ViewModelLayout.adoc[`@ViewModelLayout`]
+* for actions: xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`] and xref:refguide:applib-ant:ParameterLayout.adoc[`@ParameterLayout`]
+* for properties: xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`]
+* for collections: xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`]

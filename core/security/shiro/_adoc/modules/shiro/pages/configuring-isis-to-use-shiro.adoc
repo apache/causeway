@@ -16,7 +16,7 @@ Both the xref:helloworld:ROOT:about.adoc[HelloWorld] and xref:simpleapp:ROOT:abo
 
 == Telling Apache Isis to use Shiro
 
-To tell Apache Isis to use Shiro when using an xref:rg:cms:rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[`AppManifestAbstract.BUILDER`], simply specify the "authMechanism" as "shiro".
+To tell Apache Isis to use Shiro when using an xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[`AppManifestAbstract.BUILDER`], simply specify the "authMechanism" as "shiro".
 
 For example, the xref:helloworld:ROOT:about.adoc[HelloWorld archetype] bootstraps using:
 

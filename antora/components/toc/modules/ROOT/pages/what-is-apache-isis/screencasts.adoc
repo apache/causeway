@@ -36,7 +36,7 @@ Finally, you can also find some screencasts for earlier versions of the framewor
 
 12+| [big]#*Archetype, IDE, layouts*#
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |https://www.youtube.com/watch?v=RQ_FFYd7npU[000^] +
@@ -59,7 +59,7 @@ Importing the generated app into an xref:toc:devguide:ide.adoc[IDE] +
 
 
 |link:https://www.youtube.com/watch?v=xVTjtiJM8XM[003^] +
-Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel` xref:ug:fun:view-models.adoc[view model] and `SimpleObjects` domain service (repository).
+Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel` xref:userguide:fun:view-models.adoc[view model] and `SimpleObjects` domain service (repository).
 ||||x|||||||
 
 
@@ -75,7 +75,7 @@ Using the optional `Xxx.layout.xml` file to provide xref:vw:ROOT:layout/file-bas
 
 12+| [big]#*Fixture scripts, rules, tests*#
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=pH02g0l2GKY[005^] +
@@ -86,7 +86,7 @@ Using xref:ext-fixtures:ROOT:about.adoc[fixture scripts] to initialize the datab
 
 
 |link:https://www.youtube.com/watch?v=dXtmxmYxa30[006^] +
-Implementing xref:ug:fun:business-rules.adoc[business rules]for domain object members, using supporting methods ("see it, use it, do it")
+Implementing xref:userguide:fun:business-rules.adoc[business rules]for domain object members, using supporting methods ("see it, use it, do it")
 |x||||||||||
 
 |link:https://www.youtube.com/watch?v=imHfxQGUgV8[007^] +
@@ -105,7 +105,7 @@ Writing end-to-end xref:testing:integ-test-support:about.adoc[integration tests]
 
 12+| [big]#*Swagger UI*#
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=lkZxRSS0Zwg[009^] +
 Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatically exposed for domain services, entities, and/or view models
@@ -115,7 +115,7 @@ Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatica
 
 // FIXME: currently removed in v2, may reinstate
 //|link:https://www.youtube.com/watch?v=yOh3WphhR1E[010^].
-//Using the xref:rg:mvn:about.adoc[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime).
+//Using the xref:refguide:mvn:about.adoc[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime).
 //||||||||x|||
 
 
@@ -126,7 +126,7 @@ Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatica
 
 
 |link:https://www.youtube.com/watch?v=1sNiR3Y84c0[011^] +
-How the framework uses the xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] is used to bootstrap the application
+How the framework uses the xref:refguide:applib-cm:classes/AppManifest-bootstrapping.adoc[`AppManifest`] is used to bootstrap the application
 ||||||||||x|
 
 
@@ -135,17 +135,17 @@ How the framework uses the xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`A
 12+| [big]#*Actions*#
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] annotations or using xref:vw:ROOT:layout/file-based.adoc[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotations or using xref:vw:ROOT:layout/file-based.adoc[dynamic (XML) layouts].
 |x||||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=0naoVsWppuQ[013^] +
-Invoking (no-arg) action on multiple objects at once (using xref:rg:ant:Action.adoc#invokeOn[`@Action#invokeOn()`], and using the xref:rg:svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`] domain service for a smoother end-user experience.
+Invoking (no-arg) action on multiple objects at once (using xref:refguide:applib-ant:Action.adoc#invokeOn[`@Action#invokeOn()`], and using the xref:refguide:applib-svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`] domain service for a smoother end-user experience.
 |||x||||||x||
 
 
@@ -155,17 +155,17 @@ Invoking (no-arg) action on multiple objects at once (using xref:rg:ant:Action.a
 12+| [big]#*Titles and icons, UI event subscribers*#
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=CwM430UH5WE[014^] +
-Using the xref:rg:cms:methods.adoc#title[`title()`], xref:rg:cms:methods.adoc#iconName[`iconName()`] and xref:rg:cms:methods.adoc#cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI.
+Using the xref:refguide:applib-cm:methods.adoc#title[`title()`], xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`] and xref:refguide:applib-cm:methods.adoc#cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI.
 |x||x||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=7ToRKBOeemM[015^] +
-Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rg:cms:classes/uievent.adoc#IconUiEvent[`IconUiEvent`] as per the xref:rg:ant:DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation
+Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:refguide:applib-cm:classes/uievent.adoc#IconUiEvent[`IconUiEvent`] as per the xref:refguide:applib-ant:DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation
 ||||||x|||||
 
 
@@ -209,11 +209,11 @@ Using xref:vw:ROOT:layout/file-based.adoc[dynamic (XML) layouts] to specify the 
 12+| [big]#*Hints and end-user features*#
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
 Demonstrates how Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
- application can clear these UI hints using the (framework-provided) xref:rg:cms:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action.
+ application can clear these UI hints using the (framework-provided) xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action.
 |||x||||||||
 
 
@@ -225,7 +225,7 @@ Demonstrates how the end-user can copy and share URLs for domain objects - inclu
 
 
 |link:https://www.youtube.com/watch?v=a0QQLT_16To[021^] +
-Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer], and how the developer can ensure that xref:rg:ant:DomainObjectLayout.adoc#bookmarking[domain objects] and (xref:rg:ant:Action.adoc#semantics[query-only]) xref:rg:ant:ActionLayout.adoc#bookmarking[actions] can be bookmarked.
+Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer], and how the developer can ensure that xref:refguide:applib-ant:DomainObjectLayout.adoc#bookmarking[domain objects] and (xref:refguide:applib-ant:Action.adoc#semantics[query-only]) xref:refguide:applib-ant:ActionLayout.adoc#bookmarking[actions] can be bookmarked.
 |||x||||||||
 
 
@@ -236,30 +236,30 @@ Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Is
 12+| [big]#*Decoupling (mixins & subscribers)*#
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Wn5215K7_Jg[022^] +
-Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:ug:fun:building-blocks.adoc#mixins[mixin] (useful for decoupling).
+Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:userguide:fun:building-blocks.adoc#mixins[mixin] (useful for decoupling).
 |x|||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=m633OEBpWqQ[023^] +
-Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:ug:fun:building-blocks.adoc#mixins[mixin].
+Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:userguide:fun:building-blocks.adoc#mixins[mixin].
 ||||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=-AQJb9GtIqI[024^] +
-Using a domain event xref:rg:cms:classes/super.adoc#AbstractSubscriber[subscriber] to xref:ug:fun:building-blocks.adoc#domain-events[decouple] and abstract business rules (xref:rg:cms:methods.adoc#validate[validation]).
+Using a domain event xref:refguide:applib-cm:classes/super.adoc#AbstractSubscriber[subscriber] to xref:userguide:fun:building-blocks.adoc#domain-events[decouple] and abstract business rules (xref:refguide:applib-cm:methods.adoc#validate[validation]).
 ||||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=6GjLW0hlrm4[025^] +
-Using a domain event xref:rg:cms:classes/super.adoc#AbstractSubscriber[subscriber] to hide functionality, in this
-  case the xref:rg:cms:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework.
+Using a domain event xref:refguide:applib-cm:classes/super.adoc#AbstractSubscriber[subscriber] to hide functionality, in this
+  case the xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework.
 ||||||||||x|
 
 
@@ -271,7 +271,7 @@ Using a domain event xref:rg:cms:classes/super.adoc#AbstractSubscriber[subscribe
 
 
 |link:https://www.youtube.com/watch?v=qj4bMkQRBUY[026^] +
-Using the xref:rg:ant:Title.adoc[`@Title`] annotation (instead of the xref:rg:cms:methods.adoc#title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
+Using the xref:refguide:applib-ant:Title.adoc[`@Title`] annotation (instead of the xref:refguide:applib-cm:methods.adoc#title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
 |x||||||||x||
 
 
@@ -284,7 +284,7 @@ Using the xref:rg:ant:Title.adoc[`@Title`] annotation (instead of the xref:rg:cm
 
 
 |link:https://www.youtube.com/watch?v=yi52Gbd3lmY[027^] +
-How to write an xref:testing:integ-test-support:about.adoc[integration test] for an xref:rg:ant:Mixin.adoc[mixin].
+How to write an xref:testing:integ-test-support:about.adoc[integration test] for an xref:refguide:applib-ant:Mixin.adoc[mixin].
 ||x|||||||||
 
 
@@ -296,7 +296,7 @@ How to write an xref:testing:integ-test-support:about.adoc[integration test] for
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=SLJPBruFMKY[028^] +
@@ -307,7 +307,7 @@ Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from
 
 
 |link:https://www.youtube.com/watch?v=AXuxULuRtm0[029^] +
-Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension to remove boilerplate from your domain object (xref:rg:ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`] annotation attribute on action parameters).
+Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension to remove boilerplate from your domain object (xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`] annotation attribute on action parameters).
 |||||x|||x|||
 
 
@@ -318,17 +318,17 @@ Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s paranam
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=ORoEYlg6XFM[030^] +
-How to validate action parameters using a supporting xref:rg:cms:methods.adoc#validate[`validateNXxx()`] method.
+How to validate action parameters using a supporting xref:refguide:applib-cm:methods.adoc#validate[`validateNXxx()`] method.
 |x||||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=1Vlzob89pYI[031^] +
-How to validate action parameters using the xref:rg:ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface.
+How to validate action parameters using the xref:refguide:applib-ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface.
 |||||||||x||
 
 
@@ -341,7 +341,7 @@ How to validate action parameters using the xref:rg:ant:Parameter.adoc#mustSatis
 
 
 |link:https://www.youtube.com/watch?v=fYJjXAepWAs[032^] +
-How to instantiate/initialize objects using xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`].
+How to instantiate/initialize objects using xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:refguide:applib-svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryService`].
 |x||||||||x||
 
 
@@ -351,23 +351,23 @@ How to instantiate/initialize objects using xref:rg:svc:persistence-layer-api/Re
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=cQ06PoMNDPw[033^] +
-How to provide a set of xref:rg:cms:methods.adoc#choices[choices] (a drop-down list) when editing a property.
+How to provide a set of xref:refguide:applib-cm:methods.adoc#choices[choices] (a drop-down list) when editing a property.
 |x||||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=afEnYKljBQs[034^] +
-How to provide a set of xref:rg:cms:methods.adoc#choices[choices] (a drop-down list) when invoking an action.
+How to provide a set of xref:refguide:applib-cm:methods.adoc#choices[choices] (a drop-down list) when invoking an action.
 |||||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=fKo6aTPK-gk[035^] +
-How to use the xref:rg:cms:methods.adoc#choices[choices] supporting methods as a source for default values within a xref:ext-fixtures:ROOT:about.adoc[fixture script].
+How to use the xref:refguide:applib-cm:methods.adoc#choices[choices] supporting methods as a source for default values within a xref:ext-fixtures:ROOT:about.adoc[fixture script].
 ||x|||||||x||
 
 
@@ -383,11 +383,11 @@ How to use an enum for choices (drop down list) for both a property or an action
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=1SCyBlMM2Bo[037^] +
-How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:rg:ant:PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`]).
+How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:refguide:applib-ant:PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`]).
 ||||x|||||||
 
 
@@ -402,11 +402,11 @@ How to hide properties as columns in tables, using CSS.
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=NKaR7ZedI8E[039^] +
-Using the xref:rg:cms:classes/super.adoc#FixtureScript[`FixtureScript`] `defaultParam(...)` method to reflectively default parameters to fixture scripts that have not been set by the caller.
+Using the xref:refguide:applib-cm:classes/super.adoc#FixtureScript[`FixtureScript`] `defaultParam(...)` method to reflectively default parameters to fixture scripts that have not been set by the caller.
 ||x|||||||||
 
 
@@ -421,7 +421,7 @@ Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fakedat
 12+| [big]#*BigDecimals*#
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=esujf_DFeWA[041^] +
@@ -432,7 +432,7 @@ Using BigDecimal as a property within a domain object, also demonstrating the "s
 
 
 |link:https://www.youtube.com/watch?v=n9Oy0m2bplw[042^] +
-How to use the xref:rg:ant:Digits.adoc[`@Digits`] annotation for action parameters of type ``java.math.BigDecimal``.
+How to use the xref:refguide:applib-ant:Digits.adoc[`@Digits`] annotation for action parameters of type ``java.math.BigDecimal``.
 |||||||||x||
 
 
@@ -442,26 +442,26 @@ How to use the xref:rg:ant:Digits.adoc[`@Digits`] annotation for action paramete
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Rt4JoV4ssVY[043^] +
-How to use the supporting xref:rg:cms:methods.adoc#default[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters.
+How to use the supporting xref:refguide:applib-cm:methods.adoc#default[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters.
 |x||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=qAJDGxztWIQ[044^] +
-How to use xref:rg:ant:DomainObject.adoc#bounding[`@DomainObject#bounding()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
+How to use xref:refguide:applib-ant:DomainObject.adoc#bounding[`@DomainObject#bounding()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
 |||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=0ro_YhXOpJU[045^] +
-How to use the xref:rg:cms:methods.adoc#choices[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+How to use the xref:refguide:applib-cm:methods.adoc#choices[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
 |||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=K36IJQ_hDfs[046^] +
-How to use the xref:rg:cms:methods.adoc#autoComplete[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+How to use the xref:refguide:applib-cm:methods.adoc#autoComplete[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
 |||||||||x||
 
 
@@ -471,7 +471,7 @@ How to use the xref:rg:cms:methods.adoc#autoComplete[`autoCompleteXxx(...)`] sup
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=SoREp-8MQz0[047^] +
@@ -487,7 +487,7 @@ component.
 
 
 |link:https://www.youtube.com/watch?v=0YoFa44Xr6M[049^] +
-Using the xref:rg:ant:Programmatic.adoc[`@Programmatic`] annotation to exclude methods from a domain object
+Using the xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`] annotation to exclude methods from a domain object
 (eg implementing methods of an interface as defined by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fullcalendar2 wicket component) that would
 otherwise be part of the Apache Isis metamodel (and thus show up in the UI).
 ||||||||||x|
@@ -510,26 +510,26 @@ Using derived properties to persist value types (such as gmap3's Location value 
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=puG-pzxRSd0[052^] +
-How to write a xref:ug:fun:programming-model.adoc#jaxb[(JAXB) view model], holding references to two domain objects.
+How to write a xref:userguide:fun:programming-model.adoc#jaxb[(JAXB) view model], holding references to two domain objects.
 |x||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=tdBkmA2CCZY[053^] +
-Updating the title, icon and layout of a xref:ug:fun:programming-model.adoc#jaxb[(JAXB) view model].
+Updating the title, icon and layout of a xref:userguide:fun:programming-model.adoc#jaxb[(JAXB) view model].
 ||||x|||||||
 
 
 |link:https://www.youtube.com/watch?v=TKF0FB_od00[054^] +
-How to expose information from underlying domain entities referenced by a xref:ug:fun:programming-model.adoc#jaxb[(JAXB) view model] using derived properties
+How to expose information from underlying domain entities referenced by a xref:userguide:fun:programming-model.adoc#jaxb[(JAXB) view model] using derived properties
 ||||||||||x|
 
 
 |link:https://www.youtube.com/watch?v=TMMeVhRNi8A[055^] +
-Adding an action to a xref:ug:fun:programming-model.adoc#jaxb[(JAXB) view model], and adjusting the layout using custom CSS.
+Adding an action to a xref:userguide:fun:programming-model.adoc#jaxb[(JAXB) view model], and adjusting the layout using custom CSS.
 ||||x|||||||
 
 
@@ -539,7 +539,7 @@ Adding an action to a xref:ug:fun:programming-model.adoc#jaxb[(JAXB) view model]
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=BYmSlgJP5KY[056^] +
@@ -554,7 +554,7 @@ How to rename a menu (on the top-level menubar) as rendered in the  xref:vw:ROOT
 
 
 |link:https://www.youtube.com/watch?v=mgHqRxQrp28[058^] +
-How to rename various elements (collections, title) of the xref:rg:ant:HomePage.adoc[home page] view model,
+How to rename various elements (collections, title) of the xref:refguide:applib-ant:HomePage.adoc[home page] view model,
 for an improved initial page.
 ||||||||||x|
 
@@ -576,7 +576,7 @@ Updating the logo for the application as it appears in the header.
 12+| [big]#*Decoupling*#
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=vntv_5Z8Ros[061^] +
@@ -596,7 +596,7 @@ Separating out the responsibilities of the persistent domain entities from those
 
 
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=9PgOSqf7rYE[063^] +
 How to implement a bidirectional 1-to-many association between two domain entities.
@@ -623,7 +623,7 @@ How deleting one persistent entity can, if required, automatically delete anothe
 
 12+| [big]#*Metadata fieldset*#
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=kdhwMc0f7_k[067^] +
@@ -633,7 +633,7 @@ Improving the layout of domain entities by adding a metadata fieldset.
 
 12+| [big]#*for Contributors and Committers*#
 
-include::partial$_screencasts-playlists.adoc[]
+include::screencasts/playlists.adoc[]
 
 
 |https://www.youtube.com/watch?v=RQ_FFYd7npU[068^] +

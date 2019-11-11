@@ -31,6 +31,6 @@ This isn't a hard-n-fast rule, but it is a good rule of thumb.
 [TIP]
 ====
 Details on how to actually write a domain entity (the programming model for domain entities) is
-xref:ug:fun:programming-model.adoc#domain-entities[here].
+xref:userguide:fun:programming-model.adoc#domain-entities[here].
 ====
 

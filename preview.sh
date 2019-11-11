@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 rm -rf antora/target/site \
-&& rm -rf core/config/_adoc/modules/cfg/examples/generated \
-&& groovy scripts/generateConfigDocs -f "./core/config/target/classes/META-INF/spring-configuration-metadata.json" -o ./core/config/_adoc/modules/cfg/examples/generated \
-&& antora site.yml $@ \
+&& rm -rf core/config/_adoc/modules/config/examples/generated \
+&& groovy scripts/generateConfigDocs -f "./core/config/target/classes/META-INF/spring-configuration-metadata.json" -o ./core/config/_adoc/modules/config/examples/generated \
+&& antora  $@ \
 && serve antora/target/site

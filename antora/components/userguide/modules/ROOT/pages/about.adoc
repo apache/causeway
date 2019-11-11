@@ -3,8 +3,8 @@ include::_attributes.adoc[]
 
 The user guides available are:
 
-* xref:ug:fun:about.adoc[Fundamentals]
-* xref:ug:btb:about.adoc[Beyond the Basics]
+* xref:userguide:fun:about.adoc[Fundamentals]
+* xref:userguide:btb:about.adoc[Beyond the Basics]
 
 There are also guides for testing & prototyping:
 

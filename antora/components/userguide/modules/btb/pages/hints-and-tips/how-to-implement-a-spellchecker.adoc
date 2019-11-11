@@ -11,13 +11,13 @@ From this link:http://isis.markmail.org/thread/dduarjscrbnodfsi[thread] on the A
 * _What is the easiest way to add a spell checker to the text written in a field in
    a domain object, for instance to check English syntax?_
 
-One way to implement is to use the xref:rg:svc:core-domain-api/EventBusService.adoc[event bus]:
+One way to implement is to use the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[event bus]:
 
-* Set up a xref:rg:cms:classes/domainevent.adoc[domain event] xref:rg:cms:classes/super.adoc#AbstractSubscriber[subscriber] that can veto the changes.
+* Set up a xref:refguide:applib-cm:classes/domainevent.adoc[domain event] xref:refguide:applib-cm:classes/super.adoc#AbstractSubscriber[subscriber] that can veto the changes.
 
-* if the change is made through an action, you can use xref:rg:ant:Action.adoc#domainEvent[`@Action#domainEvent()`].
+* if the change is made through an action, you can use xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`].
 
-if if the change is made through an edit, you can use xref:rg:ant:Property.adoc#domainEvent[`@Property#domainEvent()`].
+if if the change is made through an edit, you can use xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent()`].
 
 You'll need some way to know which fields should be spell checked.  Two ways spring to mind:
 

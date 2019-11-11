@@ -28,8 +28,8 @@ _Demos & Tutorials:_
 
 | *Guides*
 
-* *xref:ug:ROOT:about.adoc[User Guide]*
-* *xref:rg:ROOT:about.adoc[Reference Guide]*
+* *xref:userguide:ROOT:about.adoc[User Guide]*
+* *xref:refguide:ROOT:about.adoc[Reference Guide]*
 * *xref:testing:ROOT:about.adoc[Testing]*
 
 
@@ -103,7 +103,7 @@ _nb: not ASF_
 
 _Implementation_
 
-*  xref:archdesign:ROOT:about.adoc[Architecture & Design]
+*  xref:core:archdesign:about.adoc[Architecture & Design]
 *  xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
 *  xref:smoketests:ROOT:about.adoc[SmokeTest App]
 

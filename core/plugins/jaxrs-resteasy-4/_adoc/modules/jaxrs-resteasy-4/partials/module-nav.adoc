@@ -1,0 +1,1 @@
+* xref:core:jaxrs-resteasy-4:about.adoc[Core: JAX-RS: RestEasy v4]

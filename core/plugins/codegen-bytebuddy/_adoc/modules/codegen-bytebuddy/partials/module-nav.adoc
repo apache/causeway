@@ -1,0 +1,1 @@
+* xref:core:codegen-bytebuddy:about.adoc[Core: Byte Buddy Proxy Factory]

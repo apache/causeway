@@ -40,7 +40,7 @@ If using DataNucleus against an RDBMS (as you probably are) then we strongly rec
 
 * second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer). +
 +
-The xref:rg:cms:classes/utility.adoc#ObjectContracts[`ObjectContracts`]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
+The xref:refguide:applib-cm:classes/utility.adoc#ObjectContracts[`ObjectContracts`]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
 
 * third, if the relationship is bidirectional then JDO/Objectstore will automatically maintain the relationship.
 
@@ -63,11 +63,11 @@ public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
 == Bidirectional
 
-This contract test automatically checks that bidirectional 1:m or 1:1 associations are being maintained correctly (assuming that they follow the xref:ug:fun:how-tos/entity-relationships/managed-1-to-m-bidirectional-relationships.adoc[mutual registration pattern]
+This contract test automatically checks that bidirectional 1:m or 1:1 associations are being maintained correctly (assuming that they follow the xref:userguide:fun:how-tos/entity-relationships/managed-1-to-m-bidirectional-relationships.adoc[mutual registration pattern]
 
 [TIP]
 ====
-(If using the JDO objectstore, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors). For more details, see xref:ug:fun:how-tos/entity-relationships/managed-1-to-m-bidirectional-relationships.adoc[here].  Also check out the templates in the developers' guide (xref:toc:devguide:about.adoc#live-templates[live templates for IntelliJ] / xref:toc:devguide:about.adoc#editor-templates[editor templates for Eclipse]) for further guidance.
+(If using the JDO objectstore, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors). For more details, see xref:userguide:fun:how-tos/entity-relationships/managed-1-to-m-bidirectional-relationships.adoc[here].  Also check out the templates in the developers' guide (xref:toc:devguide:about.adoc#live-templates[live templates for IntelliJ] / xref:toc:devguide:about.adoc#editor-templates[editor templates for Eclipse]) for further guidance.
 ====
 
 For example, suppose that `ParentDomainObject` and `ChildDomainObject` have a 1:m relationship (`ParentDomainObject#children` / `ChildDomainObject#parent`), and also `PeerDomainObject` has a 1:1 relationship with itself (`PeerDomainObject#next` / `PeerDomainObject#previous`).

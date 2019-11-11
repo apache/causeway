@@ -1,0 +1,131 @@
+= (Object) Layout
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `org.apache.isis.applib.layout.grid` and `org.apache.isis.applib.layout.component` packages together define a number of classes that allow the layout of domain objects (entities and view models) to be customized.
+These classes fall into two main categories:
+
+* grid classes, that define a grid structure of rows, columns, tab groups and tabs, and;
+
+* common component classes, that capture the layout metadata for an object's properties, collections and actions.
+These are bound (or associated) to the regions of the grid
+
+The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap 3], along with xref:vw:ROOT:about.adoc[Wicket viewer] components capable of rendering that grid system.
+In principle it is also possible to extend the layout architecture for other grid systems.
+The component classes, though, are intended to be reusable across all grid systems.
+
+The component classes, meanwhile, are broadly equivalent to the "layout" annotations (xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`], xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`], xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`] and xref:refguide:applib-ant:DomainObjectLayout.adoc[`@DomainObjectLayout`]
+
+All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (the `component` classes in the `http://isis.apache.org/applib/layout/component` XSD namespace, the bootstrap 3 grid classes in the `http://isis.apache.org/applib/layout/grid/bootstrap3` XSD namespace).
+This ability to serialize to/from XML is used by the xref:refguide:applib-svc:presentation-layer-spi/GridLoaderService.adoc[`GridLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
+It also allows the grid to be exposed through the REST API provided by the xref:vro:ROOT:about.adoc[Restful Objects viewer], as either XML or JSON.
+
+The various components (properties, collections, actions and domain object) also allow a link to be associated with each.
+These links are populated by the framework automatically when exposing the object layout grid through the REST API, pointing back to the standard Restful Objects resources.
+This design greatly assists in the implementation of generic REST clients.
+
+
+== Component
+
+The component classes reside in the `org.apache.isis.applib.layout.component` package, and consist of:
+
+* `FieldSet` +
++
+A fieldset (sometimes also called a property group or member group) of a number of the domain object's properties (along with any associationed actions of those properties).
+
+* layout data classes, which correspond to the similarly named annotations:
+
+** `PropertyLayoutData`, corresponding to the xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] annotation;
+
+** `CollectionLayoutData`, corresponding to the xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`] annotation;
+
+** `ActionLayoutData`, corresponding to the xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`] annotation;
+
+** `DomainObjectLayoutData`, corresponding to the xref:refguide:applib-ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] annotation.
+
+In addition, the component package includes `Grid`, representing the top level container for a custom layout for a domain object.
+`Grid` itself is merely an interface, but it also defines the visitor pattern to make it easy for validate and normalize the grid layouts.
+The `GridAbstract` convenience superclass provides a partial implementation of this visitor pattern.
+
+The XSD for these classes is available at link:http://isis.apache.org/applib/layout/component/component.xsd[].
+
+
+== Bootstrap3 Grid
+
+The bootstrap3 grid classes are modelled closely on link:http://getbootstrap.com[Bootstrap 3].
+Bootstrap's link:http://getbootstrap.com/css/#grid[grid system] divides the page width equally into 12 columns, and so each column spans 1 or more of these widths.
+Thus, a column with a span of 12 is the full width, one with a span of 6 is half the width, one with a span of 4 is a third of the width, and so on.
+
+When specifying the span of a column, Bootstrap also allows a size to be specified (`XS`, `SM`, `MD`, `LG`).
+The size determines the rules for responsive design.
+Apache Isis defaults to `MD` but this can be overridden.
+It is also possible to specify multiple size/spans for a given column.
+
+The grid classes provided by Apache Isis reside in the `org.apache.isis.applib.layout.grid.bootstrap3` package, and consist of:
+
+* `BS3Grid` +
++
+Consists of a number of ``BS3Row``s.
++
+This class is the concrete implementation of `Grid` interface, discussed previously.
+As such, it extends the `Grid.Visitor` to iterate over all of the ``Row``s of the grid.
+
+* `BS3Row` +
++
+A container of ``BS3Col``s.
+This element is rendered as `<div class="row">`.
+
+* `BS3Col` +
++
+A container of almost everything else.
+A column most commonly contains properties (grouped into ``FieldSet``s, described above) or collections (specified by ``CollectionLayoutData``, also above).
+However, a `Col` might instead contain a ``BS3TabGroup`` (described below) in order that the object members is arranged into tabs.
++
+It is also possible for a ``Col`` to contain the object's title/icon (using ``DomainObjectLayoutData``) or indeed arbitrary actions (using ``ActionLayoutData`).
++
+Finally, a ``BS3Col`` can also contain other ``BS3Row``s, allowing arbitrarily deep hierarchies of containers as required.
++
+This element is rendered as, for example, `<div class="col-md-4">` (for a size `MD`, span of 4).
+
+* `BS3TabGroup` +
++
+A container of ``BS3Tab``s.
+
+* `BS3Tab` +
++
+A container of ``BS3Row``s, which will in turn contain ``BS3Col``s and thence ultimately the object's members.
+
+There are also two close cousins of `Col`, namely `ClearFixVisible` and `ClearFixHidden`.
+These map to Bootstrap's link:http://getbootstrap.com/css/#responsive-utilities[responsive utility class]es, and provide greater control for responsive designs.
+
+As you can probably guess, the `BS3Grid` is the top-level object (that is, it is JAXB `@XmlRootElement`); this is the object that is serialized to/from XML.
+
+All of these classes also allow custom CSS to be specified; these are added to the CSS classes for the corresponding `<div`> in the rendered page.
+The xref:vw:ROOT:customisation/tweaking-css-classes.adoc[`application.css`] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
+
+The XSD for these classes is available at link:http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd[].
+
+
+== Link
+
+The link classes reside in the `org.apache.isis.applib.layout.links` package, and consist of just the `Link` class:
+
+[source,java]
+----
+public class Link  {
+    public String getRel() { /* ... */ }      // <1>
+    public String getMethod() { /* ... */ }   // <2>
+    public String getHref() { /* ... */ }     // <3>
+    public String getType() { /* ... */ }     // <4>
+    ...
+}
+----
+<1> a "rel" (as defined by section 2.7.1.2 of the RO spec v1.0), identifying the nature of the link.
+<2> the HTTP method to access the link.
+This is always "GET".
+<3> The (absolute) URL to access the Restful Objects resource.
+<4> The media type (`Accept` header) that will be returned by the URL.
+
+The XSD for these classes is available at link:http://isis.apache.org/applib/layout/links/links.xsd[].

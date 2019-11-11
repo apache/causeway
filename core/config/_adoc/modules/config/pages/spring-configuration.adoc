@@ -1,0 +1,206 @@
+= Spring Configuration
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+
+== Shiro Authentication
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+
+include::refguide:config:example$generated/isis.authentication.shiro.adoc[]
+
+|===
+
+
+== Persistors (in general)
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.persistor.adoc[]
+
+|===
+
+
+== DataNucleus Persistor
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.persistor.datanucleus.adoc[]
+
+
+|===
+
+
+
+== DataNucleus Persistor Pass-thru Settings
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.persistor.datanucleus.impl.adoc[]
+
+|===
+
+
+
+== Metamodel Reflector
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.reflector.adoc[]
+
+|===
+
+
+
+
+== MetaModel Facets
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.reflector.facet.adoc[]
+
+|===
+
+
+
+
+== Metamodel Validation
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.reflector.validator.adoc[]
+
+|===
+
+
+
+== Individual Domain Services
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.service.email.adoc[]
+
+|===
+
+
+
+== Domain Services (in general)
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.services.adoc[]
+
+|===
+
+
+
+== Restful Objects Viewer
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.viewer.restfulobjects.adoc[]
+
+|===
+
+
+
+== Wicket Viewer
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.viewer.wicket.adoc[]
+
+|===
+
+
+
+== Viewers (in general)
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.viewers.adoc[]
+
+|===
+
+
+== Other
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/Other.adoc[]
+
+|===
+
+
+include::refguide:config:example$generated/Other.adoc[]
+
+
+

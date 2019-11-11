@@ -388,7 +388,7 @@ This filter reads one context parameter:
     <param-value>deployment</param-value>   <!--1-->
 </context-param>
 ----
-<1> alternatively set to "development"; see xref:rg:cfg:deployment-types.adoc[deployment types] for further discussion.
+<1> alternatively set to "development"; see xref:refguide:config:deployment-types.adoc[deployment types] for further discussion.
 
 
 === `IsisSessionFilter`
@@ -435,7 +435,7 @@ Discussed in more detail below.
 Originally introduced to allow the `SwaggerSpec` resource (which does not require a session) to be invoked.
 <4> A comma separated list of paths that are allowed through even if not authenticated.
 The servlets mapped to these paths are expected to be able to deal with there being no session.
-Typically they will be logon pages, or for health checks (as per xref:rg:svc:application-layer-spi/HealthCheckService.adoc[`HealthCheckService`] SPI.
+Typically they will be logon pages, or for health checks (as per xref:refguide:applib-svc:application-layer-spi/HealthCheckService.adoc[`HealthCheckService`] SPI.
 See below for further details.
 <5> where to redirect to if an exception occurs.
 

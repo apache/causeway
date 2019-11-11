@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 
 Normally the title of an object is not persisted to the database, rather it is recomputed automatically from underlying properties.  On occasion though you might want the title to also be persisted; either to make things easier for the DBA, or for an integration scenario, or some other purpose.
 
-We can implement this feature by leveraging the xref:rg:cms:methods.adoc#jdo-api[JDO lifecycle].  In the design we discuss here we make it a responsibility of the entities to persist the title as a property, by implementing a `ObjectWithPersistedTitle` interface:
+We can implement this feature by leveraging the xref:refguide:applib-cm:methods.adoc#jdo-api[JDO lifecycle].  In the design we discuss here we make it a responsibility of the entities to persist the title as a property, by implementing a `ObjectWithPersistedTitle` interface:
 
 [source,java]
 ----

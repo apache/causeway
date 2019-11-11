@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 This guide covers some of the more advanced topics when developing more substantial applications.
 
-Later chapters discuss how to xref:ug:btb:deployment.adoc[deploy] your app, and discuss other ways in which you can xref:ug:btb:programming-model.adoc[extend] or adapt the framework itself to your particular needs.
+Later chapters discuss how to xref:userguide:btb:deployment.adoc[deploy] your app, and discuss other ways in which you can xref:userguide:btb:programming-model.adoc[extend] or adapt the framework itself to your particular needs.
 
 
 

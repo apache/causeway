@@ -60,7 +60,7 @@ To include/exclude more than one `FacetFactory`, specify as a comma-separated li
 
 [TIP]
 ====
-This http://isis.markmail.org/thread/472c3mrvcgnripst[thread] from the users mailing list (in Apr 2014) shows a typical customization (to enable per-instance security) (though note that xref:ug:btb:about.adoc#multi-tenancy[Multi-Tenancy] is now a better solution to that particular use-case.
+This http://isis.markmail.org/thread/472c3mrvcgnripst[thread] from the users mailing list (in Apr 2014) shows a typical customization (to enable per-instance security) (though note that xref:userguide:btb:about.adoc#multi-tenancy[Multi-Tenancy] is now a better solution to that particular use-case.
 ====
 
 

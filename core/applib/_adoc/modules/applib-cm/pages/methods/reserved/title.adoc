@@ -1,0 +1,65 @@
+[[title]]
+= `title()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+Every object is represented by a title.
+This appears both as a main header for the object when viewed as well as being used as a hyperlink within properties and collections.
+It therefore must contain enough information for the end-user to distinguish the object from any others.
+
+This is most commonly done by including some unique key within the title, for example a customer's SSN, or an order number, and so forth.
+However note that Apache Isis itself does _not_ require the title to be unique; it is merely recommended in most cases.
+
+An object's title can be constructed in various ways, but the most flexible is to use the `title()` method.
+The signature of this method is usually:
+
+[source,java]
+----
+public String title() { /* ... */ }
+----
+
+Note that Apache Isis' xref:userguide:btb:i18n.adoc[i18n support] extends this so that titles can also be internationalized.
+
+For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add an overlay for todo items that have been completed:
+
+[source,java]
+----
+public String title() {
+    final TitleBuffer buf = new TitleBuffer();                              // <1>
+    buf.append(getDescription());
+    if (isComplete()) {                                                     // <2>
+        buf.append("- Completed!");
+    } else {
+        try {
+            final LocalDate dueBy = wrapperFactory.wrap(this).getDueBy();   // <3>
+            if (dueBy != null) {
+                buf.append(" due by", dueBy);
+            }
+        } catch(final HiddenException ignored) {                            // <4>
+        }
+    }
+    return buf.toString();
+}
+----
+<1> simple xref:refguide:applib-cm:classes.adoc#TitleBuffer[utility class] to help construct the title string
+<2> imperative conditional logic
+<3> using the xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
+<4> ... but ignore if not
+
+As the example above shows, the implementation can be as complex as you like.
+
+In many cases, though, you may be able to use the xref:refguide:applib-ant:Title.adoc[`@Title`] annotation.
+
+
+
+
+== See also
+
+See also:
+
+* xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`]
+* xref:refguide:applib-cm:methods.adoc#cssClass[`cssClass()`]
+* xref:refguide:applib-cm:methods.adoc#layout[`layout()`]
+

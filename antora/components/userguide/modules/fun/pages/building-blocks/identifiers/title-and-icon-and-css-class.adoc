@@ -30,6 +30,6 @@ In conjunction with xref:vw:ROOT:customisation/tweaking-css-classes.adoc[customi
 [TIP]
 ====
 Details on how to actually write titles, icons and CSS classes can be found
-xref:ug:fun:ui-hints/object-titles-and-icons.adoc[here].
+xref:userguide:fun:ui-hints/object-titles-and-icons.adoc[here].
 ====
 

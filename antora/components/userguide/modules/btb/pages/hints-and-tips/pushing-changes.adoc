@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 [NOTE]
 ====
-This technique is much less powerful than using xref:ug:fun/building-blocks.adoc#domain-events[the event bus] or an SPI service.
+This technique is much less powerful than using xref:userguide:fun/building-blocks.adoc#domain-events[the event bus] or an SPI service.
 We present it mostly for completeness.
 ====
 
@@ -134,7 +134,7 @@ public class Department {
 --
 <1> maintain a count of the number of male ...
 <2> ... and female employees (getters and setters omitted)
-<3> the xref:rg:cms:methods.adoc#addTo[`addTo...()`] method increments the derived properties
-<4> the xref:rg:cms:methods.adoc#removeFrom[`removeFrom...()`] method similarly decrements the derived properties
+<3> the xref:refguide:applib-cm:methods.adoc#addTo[`addTo...()`] method increments the derived properties
+<4> the xref:refguide:applib-cm:methods.adoc#removeFrom[`removeFrom...()`] method similarly decrements the derived properties
 
 

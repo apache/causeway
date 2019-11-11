@@ -67,12 +67,12 @@ public ExceptionRecognizerTranslate exceptionRecognizerTranslations =    // <4>
 <1> ensures an Apache Isis session/transaction running for each test
 <2> sets up a JMock context (using Apache Isis' extension to JMock as described in xref:testing:unit-test-support:about.adoc#jmock-extensions[JMock Extensions].
 <3> standard JUnit rule for writing tests that throw exceptions
-<4> to capture messages that require translation, as described in xref:ug:btb:i18n.adoc[i18 support].
+<4> to capture messages that require translation, as described in xref:userguide:btb:i18n.adoc[i18 support].
 
 All of these rules could be inlined in your own base class; as we say, they are a convenience.
 
 The class also provides a number of injected domain services,  notably
-xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`], xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry2`], xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] (to wrap objects simulating interaction through the user interface), xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`] (most commonly used to commit changes after the fixture setup) and xref:rg:svc:application-layer-api/SessionManagementService.adoc[`SessionManagementService`] (for tests that check interactions over multiple separate sessions).
+xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryService`], xref:refguide:applib-svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry2`], xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] (to wrap objects simulating interaction through the user interface), xref:refguide:applib-svc:application-layer-api/TransactionService.adoc[`TransactionService`] (most commonly used to commit changes after the fixture setup) and xref:refguide:applib-svc:application-layer-api/SessionManagementService.adoc[`SessionManagementService`] (for tests that check interactions over multiple separate sessions).
 
 
 

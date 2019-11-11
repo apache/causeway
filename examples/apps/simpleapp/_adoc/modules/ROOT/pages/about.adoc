@@ -442,7 +442,7 @@ Integration tests include the name "IntegTest", while unit tests contain merely 
 
 // FIXME: currently removed in v2, may reinstate
 //The module also defines its own manifest, `SimpleModuleManifest`.
-//This is used to run Isis' own xref:rg:mvn:about.adoc[maven plugin] to xref:rg:mvn:validate.adoc[validate] the domain object model (eg to detect orphaned supported methods).
+//This is used to run Isis' own xref:refguide:mvn:about.adoc[maven plugin] to xref:refguide:mvn:validate.adoc[validate] the domain object model (eg to detect orphaned supported methods).
 
 
 
@@ -531,7 +531,7 @@ The files in `src/main/jettyconsole` provide a splash image (if not run in headl
 This uses the Dockerfile residing in `docker/Dockerfile` (under `src/main/resources`).
 
 // FIXME: currently removed in v2, may reinstate
-//* also, the xref:rg:mvn:about.adoc[Apache Isis Maven plugin] is also configured to generate a xref:rg:mvn:swagger.adoc[swagger] spec file for the entire application, in the `xxx-webapp` module
+//* also, the xref:refguide:mvn:about.adoc[Apache Isis Maven plugin] is also configured to generate a xref:refguide:mvn:swagger.adoc[swagger] spec file for the entire application, in the `xxx-webapp` module
 
 Under `src/main/resources` there is:
 
@@ -676,7 +676,7 @@ If you are running the app from an IDE, then you can specify the fixture script 
 
 image::simpleapp-webapp-with-fixtures.png[width="600px",link="{imagesdir}/simpleapp-webapp-with-fixtures.png"]
 
-Alternatively, you can run with a different xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] using the `--appManifest` (or `-m`) flag.
+Alternatively, you can run with a different xref:refguide:applib-cm:classes/AppManifest-bootstrapping.adoc[`AppManifest`] using the `--appManifest` (or `-m`) flag.
 The archetype provides
 `domainapp.app.DomainAppAppManifestWithFixtures` which specifies the aforementioned `RecreateSimpleObjects` fixture.
 

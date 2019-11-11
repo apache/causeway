@@ -30,9 +30,9 @@ public class DocumentHolder_documents {
 ----
 
 
-The examples above (for xref:ug:fun:programming-model.adoc#contributed-action[action]) demonstrate this.
+The examples above (for xref:userguide:fun:programming-model.adoc#contributed-action[action]) demonstrate this.
 
 
 The character "$" is also recognized as a separator between the mixin type and mixin name.
-This is useful for mixins implemented as nested static types, discussed xref:ug:fun:programming-model.adoc#nested-static-classes[below].
+This is useful for mixins implemented as nested static types, discussed xref:userguide:fun:programming-model.adoc#nested-static-classes[below].
 

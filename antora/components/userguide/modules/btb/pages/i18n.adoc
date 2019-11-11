@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 Apache Isis' support for internationlization (i18n) allows every element of the domain model (the class names, property names, action names, parameter names and so forth) to be translated.
 
-It also supports translations of messages raised imperatively, by which we mean as the result of a call to `title()` to obtain an object's title, or messages resulting from any business rule violations (eg xref:rg:cms:methods.adoc#disable[`disable...()`] or xref:rg:cms:methods.adoc#validate[`validate...()`], and so on.
+It also supports translations of messages raised imperatively, by which we mean as the result of a call to `title()` to obtain an object's title, or messages resulting from any business rule violations (eg xref:refguide:applib-cm:methods.adoc#disable[`disable...()`] or xref:refguide:applib-cm:methods.adoc#validate[`validate...()`], and so on.
 
 The xref:vw:ROOT:about.adoc[Wicket viewer] (that is, its labels and messages) is also internationalized using the same mechanism.
 If no translations are available, then the Wicket viewer falls back to using Wicket resource bundles.
@@ -105,9 +105,9 @@ All requested translations are written into the `.pot` file.
 
 To make the service as convenient as possible to use, the service configures itself as follows:
 
-* if running in prototype mode xref:rg:cfg:deployment-types.adoc[deployment type] or during integration tests, then the service runs in *write* mode, in which case it records all translations into the `.pot` file.
+* if running in prototype mode xref:refguide:config:deployment-types.adoc[deployment type] or during integration tests, then the service runs in *write* mode, in which case it records all translations into the `.pot` file.
 The `.pot` file is written out when the system is shutdown.
-* if running in server (production) mode xref:rg:cfg:deployment-types.adoc[deployment type], then the service runs in *read* mode.
+* if running in server (production) mode xref:refguide:config:deployment-types.adoc[deployment type], then the service runs in *read* mode.
 It is also possible to set a configuration setting in `isis.properties` to force read mode even if running in prototype mode (useful to manually test/demo the translations).
 
 When running in write mode the original text is returned to the caller untranslated.
@@ -194,7 +194,7 @@ msgstr "Ich heisse {firstName} {lastName}."
 then the translation would be: "Ich heisse James Bond".
 
 
-The same class is used in xref:rg:svc:core-domain-api/MessageService.adoc[`MessageService`] so that you can raise translatable info, warning and error messages; each of the relevant methods are overloaded.
+The same class is used in xref:refguide:applib-svc:core-domain-api/MessageService.adoc[`MessageService`] so that you can raise translatable info, warning and error messages; each of the relevant methods are overloaded.
 
 For example:
 
@@ -214,7 +214,7 @@ public interface MessageService {
 
 === `TranslatableException`
 
-Another mechanism by which messages can be rendered to the user are as the result of exception messages thrown and recognized by an xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`].
+Another mechanism by which messages can be rendered to the user are as the result of exception messages thrown and recognized by an xref:refguide:applib-svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`].
 
 In this case, if the exception implements `TranslatableException`, then the message will automatically be translated before being rendered.
 The `TranslatableException` itself takes the form:
@@ -535,7 +535,7 @@ To ensure your app is fully internationalized app, you must therefore:
 We make no apologies for this requirement: one of the reasons that we decided to implement Apache Isis' i18n support in this way is because it encourages/requires the app to be properly tested.
 
 Behind the scenes Apache Isis uses a JUnit rule (`ExceptionRecognizerTranslate`) to intercept any exceptions that are thrown.
-These are simply passed through to the registered xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`]s so that any messages are recorded as requiring translation.
+These are simply passed through to the registered xref:refguide:applib-svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`]s so that any messages are recorded as requiring translation.
 ====
 
 
@@ -552,7 +552,7 @@ msgid "<i>Quantity</i>"
 msgstr "<i>Quantité</i>"
 ----
 
-For this to work, the `namedEscaped()` attribute must be specified using either the xref:vw:ROOT:layout/file-based.adoc[layout file], or using an annotation such as xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`].
+For this to work, the `namedEscaped()` attribute must be specified using either the xref:vw:ROOT:layout/file-based.adoc[layout file], or using an annotation such as xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:refguide:applib-ant:ParameterLayout.adoc[`@ParameterLayout`].
 
 For example:
 
@@ -619,7 +619,7 @@ The basename for translation files is always `translations`; this cannot be alte
 === Externalized translation files
 
 Normally Apache Isis configuration files are read from the `WEB-INF` file.
-However, Apache Isis can be configured to read config files from an xref:ug:btb:about.adoc#externalized-configuration[external directory]; this is also supported for translations.
+However, Apache Isis can be configured to read config files from an xref:userguide:btb:about.adoc#externalized-configuration[external directory]; this is also supported for translations.
 
 Thus, if in `web.xml` the external configuration directory has been set:
 

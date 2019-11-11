@@ -1,4 +1,4 @@
 include::vw:ROOT:partial$module-nav.adoc[]
-include::vw:ext-asciidoc:partial$module-nav.adoc[]
-include::vw:ext-markdown:partial$module-nav.adoc[]
+include::vw:asciidoc:partial$module-nav.adoc[]
+include::vw:markdown:partial$module-nav.adoc[]
 include::vw:ext-viewer-wicket-excel:partial$module-nav.adoc[]

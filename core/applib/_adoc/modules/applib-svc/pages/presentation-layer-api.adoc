@@ -1,0 +1,76 @@
+= Presentation Layer API
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+Domain service APIs for the presentation layer allow the domain objects to control aspects of the user interface.
+The implementations are specific to the particular viewer (xref:vw:ROOT:about.adoc[Wicket viewer] or xref:vro:ROOT:about.adoc[Restful Objects viewer]) so the domain code must guard against them being unavailable in some cases.
+
+
+The table below summarizes the presentation layer APIs defined by Apache Isis.
+It also lists their corresponding implementation.
+
+.Presentation Layer API
+[cols="2,4a,1,1", options="header"]
+|===
+
+|API
+|Description
+|Implementation
+|Notes
+
+|xref:refguide:applib-svc:presentation-layer-api/AcceptHeaderService.adoc[`o.a.i.applib.` +
+`services.acceptheader` +
+`AcceptHeaderService`]
+|Request-scoped access to HTTP Accept headers.
+|`AcceptHeaderServiceDefault` +
+``o.a.i.core`` +
+``isis-core-viewer-restfulobjects-rendering``
+|Implementation only usable within the xref:vro:ROOT:about.adoc[Restful Objects viewer].
+
+
+|xref:refguide:applib-svc:presentation-layer-api/BookmarkUiService.adoc[`o.a.i.applib.` +
+`services.bookmarkui` +
+`BookmarkUiService`]
+|Manage bookmarks and breadcrumbs in the (Wicket) UI.
+|`BookmarkUiServiceWicket` +
+``o.a.i.core`` +
+``isis-core-viewer-wicket-impl``
+|(Implementation only usable within the xref:vw:ROOT:about.adoc[Wicket viewer].
+
+
+|xref:refguide:applib-svc:presentation-api/DeepLinkService.adoc[`o.a.i.applib` +
+`services.deeplink` +
+`DeepLinkService`]
+|Obtain a URL to a domain object (eg for use within an email or report)
+|`DeepLinkServiceWicket` +
+``o.a.i.viewer`` +
+``isis-core-viewer-wicket-impl``
+|Implementation only usable within the xref:vw:ROOT:about.adoc[Wicket viewer].
+
+
+|xref:refguide:applib-svc:presentation-api/GuiceBeanProvider.adoc[`o.a.i.applib.` +
+`services.guice` +
+`GuiceBeanProvider`]
+|Access to internal framework services initialized using Guice DI.
+|`GuiceBeanProviderWicket` +
+``o.a.i.core`` +
+``isis-core-viewer-wicket-impl``
+|Implementation only usable within the xref:vw:ROOT:about.adoc[Wicket viewer].
+
+
+
+
+|===
+
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
+
+
+

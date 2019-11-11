@@ -10,7 +10,7 @@ In such a case it's probably a good idea for the UI to require that the end-user
 
 == Using action semantics
 
-One way to meet this requirement is using the framework's built-in xref:rg:ant:Action.adoc#semantics[`@Action#semantics()`] attribute:
+One way to meet this requirement is using the framework's built-in xref:refguide:applib-ant:Action.adoc#semantics[`@Action#semantics()`] attribute:
 
 [source,java]
 ----
@@ -72,4 +72,4 @@ public String validateDelete(boolean areYouSure) {
 ----
 <1> invalid to return `this` (cannot render a deleted object)
 
-Note that the action itself does not use the boolean parameter, it is only used by the supporting xref:rg:cms:methods.adoc#validate[`validate...()`] method.
+Note that the action itself does not use the boolean parameter, it is only used by the supporting xref:refguide:applib-cm:methods.adoc#validate[`validate...()`] method.

@@ -1,0 +1,98 @@
+[[hide]]
+= `hide...()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `hide...()` supporting method is called for properties, collections, actions and action parameters.
+It allows the property/collection to be completely hidden from view.
+
+It's comparatively rare for properties or collections to be imperatively hidden from view, but actions are sometimes hidden or shown visible (as opposed to being just xref:refguide:applib-cm:methods.adoc#disable[disabled], ie greyed out).
+
+
+The signature of the supporting method is simply:
+
+[source,java]
+----
+public boolean hideXxx() { /* ... */ }
+----
+
+Returning `true` will hide the property, collection or action, returning `false` leaves it visible.
+
+
+For example, to hide a property:
+
+[source,java]
+----
+public class Customer {
+    public boolean isBlacklisted() { /* ... */ }
+
+    public BigDecimal getCreditLimit() { /* ... */ }
+    public void setCreditLimit(BigDecimal creditLimit) { /* ... */ }
+    public boolean hideCreditLimit() {
+        return isBlacklisted();
+    }
+    ...
+}
+----
+
+
+Or, to hide an action:
+
+[source,java]
+----
+public class Customer {
+    public boolean isBlacklisted() { /* ... */ }
+
+    public Order placeOrder(
+            final Product product,
+            final int quantity) {
+        // ...
+    }
+    public boolean hidePlaceOrder() {
+        return isBlacklisted();
+    }
+    // ...
+}
+----
+
+
+It is also possible to hide an action parameter, based on the value of some other earlier parameter:
+Each `hideNXxx()` method can declare parameters for the previous N-1 parameters, though it need not declare them all.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    public Order shipTo(
+            boolean sameAsBillingAddress,
+            String addressLine1,
+            String addressLine2,
+            String addressCity,
+            String addressPostalCode,
+            String addressCountry
+    ) { /* ... */ }
+    public boolean hide1ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
+    public boolean hide2ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
+    public boolean hide3ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
+    public boolean hide4ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
+    public boolean hide5ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
+}
+----
+
+In this case, the user can use the `shipTo(...)` action to specify where to ship the `Order` to.
+However, if they check the first boolean parameter (ie, to ship the `Order` to the billing address already held on file), then the remaining parameters will all be hidden.
+
+
+
+[NOTE]
+====
+In the case of actions, the framework will also search for supporting method that has the exact same parameter types as the action itself.
+Enabling `isis.reflector.validator.noParamsOnly` configuration property switches this off, so that the framework will only search for supporting method with no parameters.
+
+Note that enabling this configuration property in effect means that xref:userguide:fun:building-blocks.adoc#mixins[mixins] must be used instead of xref:userguide:fun:programming-model.adoc#contributions[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
+====
+
+

@@ -3,7 +3,7 @@
 
 ** xref:core-concepts.adoc[Core Concepts]
 
-** xref:ug:fun:building-blocks.adoc[Building Blocks]
+** xref:userguide:fun:building-blocks.adoc[Building Blocks]
 
 ** xref:programming-model.adoc[Programming Model]
 

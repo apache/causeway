@@ -191,7 +191,7 @@ public class DomainAppSystemInitializer {
 
 == web.xml
 
-In the xref:ug:btb:web-xml.adoc[web.xml], the "isis.viewers" context-param is now ignored.
+In the xref:userguide:btb:web-xml.adoc[web.xml], the "isis.viewers" context-param is now ignored.
 Instead the `viewer_wicket.properties` and `viewer_restfulobjects.properties` will both be loaded if present (but neither need be present).
 
 

@@ -9,7 +9,7 @@ include::_attributes.adoc[]
 Applications built with Apache Isis often (should) consist of multiple modules.
 For example, there are the various modules that make up the (non-ASF) link:https://platform.incode.org[Incode Platform^] that provide various technical/cross-cutting concerns and generic business functionality.
 
-In addition, your own application may well be structured as a number of distinct modules (probably with the entities in each module being mapped to a different schema), and using such techniques as the xref:ug:fun:building-blocks.adoc#domain-events[event bus] and xref:ug:fun:building-blocks.adoc#mixins[mixins] so that these modules are decoupled from each other.
+In addition, your own application may well be structured as a number of distinct modules (probably with the entities in each module being mapped to a different schema), and using such techniques as the xref:userguide:fun:building-blocks.adoc#domain-events[event bus] and xref:userguide:fun:building-blocks.adoc#mixins[mixins] so that these modules are decoupled from each other.
 
 All of which is a preamble to say that you will likely have multiple directories on your local development computer, for each such git repository that you contribute to.
 

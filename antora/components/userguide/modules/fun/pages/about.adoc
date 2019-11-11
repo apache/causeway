@@ -3,9 +3,9 @@
 include::_attributes.adoc[]
 :page-partial:
 
-This guide introduces the xref:ug:fun:core-concepts.adoc[core concepts] and the xref:ug:fun:building-blocks.adoc[building blocks] of Apache Isis, and tells you how to xref:helloworld:ROOT:about.adoc[get started] with a Maven archetype.
+This guide introduces the xref:userguide:fun:core-concepts.adoc[core concepts] and the xref:userguide:fun:building-blocks.adoc[building blocks] of Apache Isis, and tells you how to xref:helloworld:ROOT:about.adoc[get started] with a Maven archetype.
 
-It describes in some detail the conventions of Apache Isis' xref:ug:fun:programming-model.adoc[programming model]s, describes how to influence the xref:vw:ROOT:layout.adoc[UI layout] of your domain objects , and it catalogues various xref:toc:devguide:hints-and-tips.adoc.adoc[FAQ]s.
+It describes in some detail the conventions of Apache Isis' xref:userguide:fun:programming-model.adoc[programming model]s, describes how to influence the xref:vw:ROOT:layout.adoc[UI layout] of your domain objects , and it catalogues various xref:toc:devguide:hints-and-tips.adoc.adoc[FAQ]s.
 
 
 

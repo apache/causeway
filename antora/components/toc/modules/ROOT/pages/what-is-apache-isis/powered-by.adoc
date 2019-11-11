@@ -16,12 +16,12 @@ If you have written an app in Apache Isis that you'd like to share, please menti
 ====
 
 
-include::partial$_powered-by_estatio.adoc[leveloffset=+1]
-include::partial$_powered-by_gesconsultor-grc.adoc[leveloffset=+1]
-include::partial$_powered-by_contactapp.adoc[leveloffset=+1]
-include::partial$_powered-by_cqnz.adoc[leveloffset=+1]
-//include::partial$_powered-by_commapp.adoc[leveloffset=+1]
-include::partial$_powered-by_transport-planner.adoc[leveloffset=+1]
+include::powered-by/estatio.adoc[leveloffset=+1]
+include::powered-by/gesconsultor-grc.adoc[leveloffset=+1]
+include::powered-by/contactapp.adoc[leveloffset=+1]
+include::powered-by/cqnz.adoc[leveloffset=+1]
+//include::powered-by/commapp.adoc[leveloffset=+1]
+include::powered-by/transport-planner.adoc[leveloffset=+1]
 
 
 

@@ -1,0 +1,124 @@
+[[MementoService]]
+= `MementoService` (deprecated)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+// TODO: v2: remove this service.
+
+The `MementoService` was originally introduced to simplify the implementation of xref:userguide:fun:building-blocks.adoc#view-models[ViewModel]s which are required by the framework to return string representation of all of their backing state, moreover which is safe for use within a URL.
+This usage is deprecated; use xref:userguide:fun:programming-model.adoc#jaxb[JAXB view models] instead.
+
+The service can also be used to create a memento of arbitrary objects, however this usage is also deprecated.
+
+
+[WARNING]
+====
+This service is deprecated, with replaced by internal domain services (not public API).
+====
+
+
+
+
+== API & Implementation
+
+The API defined by `MementoService` is:
+
+[source,java]
+----
+@Deprecated
+public interface MementoService {
+    @Deprecated
+    public static interface Memento {
+        public Memento set(String name, Object value);
+        public <T> T get(String name, Class<T> cls);
+        public String asString();
+        public Set<String> keySet();
+    }
+    public Memento create();
+    public Memento parse(final String str);
+    public boolean canSet(Object input);
+}
+----
+
+The core framework provides a default implementation of this API, namely
+`o.a.i.c.r.services.memento.MementoServiceDefault`.  The string returned (from `Memento#asString()`) is a base-64 URL
+encoded representation of the underlying format (an XML string).
+
+[NOTE]
+====
+In fact, the `MementoServiceDefault` implementation does provide a mechanism to disable the URL encoding, but this is
+not part of the `MementoService` public API. Note also that the encoding method is not pluggable.
+====
+
+To use an alternative implementation, implement `MementoService` interface and use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+
+The types of objects that are supported by the `MementoService` are implementation-specific, but would typically
+include all the usual value types as well as Apache Isis' `Bookmark` class (to represent references to arbitrary
+entities). Nulls can also be set.
+
+In the case of the default implementation provided by the core framework, the types supported are:
+
+* `java.lang.String`
+* `java.lang.Boolean`, `boolean`
+* `java.lang.Byte`, `byte`
+* `java.lang.Short`, `short`
+* `java.lang.Integer`, `int`
+* `java.lang.Long`, `long`
+* `java.lang.Float`, `float`
+* `java.lang.Double`, `double`
+* `java.lang.Character`, `char`
+* `java.math.BigDecimal`
+* `java.math.BigInteger`
+* `org.joda.time.LocalDate`
+* `org.apache.isis.applib.services.bookmark.Bookmark`
+
+If using another implementation, the `canSet(...)` method can be used to check if the candidate object's type is supported.
+
+
+
+== Usage
+
+As noted in the introduction, a common use case for this service is in the implementation of the xref:refguide:applib-cm:classes/super.adoc#AbstractViewModel[`ViewModel`] interface.
+
+[TIP]
+====
+Rather than implementing `ViewModel`, it's usually easier to annotate your view models with xref:refguide:applib-ant:ViewModel.adoc[`@ViewModel`] (or equivalently xref:refguide:applib-ant:DomainObject.adoc#nature[`@DomainObject#nature=EXTERNAL_ENTITY`] or xref:refguide:applib-ant:DomainObject.adoc#nature[`@DomainObject#nature=INMEMORY_ENTITY`].
+====
+
+For example, suppose you were implementing a view model that represents an external entity in a SOAP web service.  To access this service the view model needs to store (say) the hostname, port number and an id to the object.
+
+Using an injected `MementoService` the view model can roundtrip to and from this string, thus implementing the `ViewModel` API:
+
+[source,java]
+----
+public class ExternalEntity implements ViewModel {
+    private String hostname;
+    private int port;
+    private String id;
+    public String viewModelMemento() {                      // <1>
+        return mementoService.create()
+                .set("hostname", hostname)
+                .set("port", port)
+                .set("id", id)
+                .asString();
+    }
+    public void viewModelInit(String mementoStr) {          // <2>
+        Memento memento = mementoService.parse(mementoStr);
+        hostname = memento.get("hostname", String.class);
+        port = memento.get("port", int.class);
+        id = memento.get("id", String.class);
+    ...
+    @Inject
+    MementoService mementoService;
+}
+----
+<1> part of the `ViewModel` API
+<2> part of the `ViewModel` API
+
+
+
+
+

@@ -1,6 +1,0 @@
-* xref:about.adoc[About]
-
-** xref:maven-modules.adoc[Maven Modules]
-** xref:metamodel.adoc[MetaModel]
-
-

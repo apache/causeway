@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-Some pointers on how to xref:ug:btb:about.adoc#externalized-configuration[externalize configuration] when deploying to Tomcat.
+Some pointers on how to xref:userguide:btb:about.adoc#externalized-configuration[externalize configuration] when deploying to Tomcat.
 Other servlet containers have similar mechanisms.
 
 

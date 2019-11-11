@@ -62,7 +62,7 @@ However, if they check the first boolean parameter (ie, to ship the `Order` to t
 
 == For more information
 
-For more information, see the xref:rg:cms:methods.adoc#hide[`hide...()`] section in the appropriate reference guide.
+For more information, see the xref:refguide:applib-cm:methods.adoc#hide[`hide...()`] section in the appropriate reference guide.
 
 
 

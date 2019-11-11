@@ -1,0 +1,138 @@
+[[validate]]
+= `validate...()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `validate...()` supporting method is called for properties, actions and action parameters.
+It allows the proposed new value for a property to be rejected, or the proposed argument of an action parameter to be rejected, or to reject a whole set of action arguments for an actio invocation.
+
+
+The reason for vetoing a modification/invocation is normally returned as a string.
+However, Apache Isis' xref:userguide:btb:i18n.adoc[i18n support] extends this so that reasons can be internationalized if required.
+
+
+
+== Action Parameter
+
+For an action parameter in (0-based) position _N_, and of type `T`, the signature is:
+
+[source,java]
+----
+public String validateNXxx(T proposed) { /* ... */ }
+----
+
+where the returned string is the reason why the argument is rejected (or `null` if not vetoed).
+
+
+For i18n, the supporting method returns a `TranslatableString`:
+
+[source,java]
+----
+public TranslatableString validateNXxx(T proposed) { /* ... */ }
+----
+
+The returned string is then automatically translated to the locale of the current user.
+
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    public Order placeOrder(
+            final Product product,
+            @ParameterLayout(named="Quantity")
+            final int quantity) {
+        ...
+    }
+    public String validate0PlaceOrder(
+            final Product product) {
+        return product.isDiscontinued()
+                    ? "Product has been discontinued"
+                    : null;
+    }
+    ...
+}
+----
+
+
+== Action Parameter Set
+
+In addition to validating a single single action argument, it is also possible to validate a complete set of action arguments.
+The signature is:
+
+[source,java]
+----
+public String validateXxx(...) { /* ... */ }
+----
+
+where the returned string is the reason why the argument is rejected (or `null` if not vetoed), and the supporting method takes the same parameter types as the action itself.
+
+
+For i18n, the supporting method returns a `TranslatableString`:
+
+[source,java]
+----
+public TranslatableString validateXxx(...) { /* ... */ }
+----
+
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    public Order placeOrder(
+            final Product product,
+            @ParameterLayout(named="Quantity")
+            final int quantity) {
+        ...
+    }
+    public String validatePlaceOrder(
+            final Product product,
+            final int quantity) {
+        return quantity > product.getOrderLimit()
+                    ? "May not order more than " + product.getOrderLimit() + " items for this product"
+                    : null;
+    }
+    ...
+}
+----
+
+
+
+== Properties
+
+For properties of type `T` the signature of the supporting method is:
+
+[source,java]
+----
+public String validateXxx(T proposed) { /* ... */ }
+----
+
+where the returned string is the reason the modification is vetoed (or `null` if not vetoed).
+
+For i18n, the supporting method returns a `TranslatableString`:
+
+[source,java]
+----
+public TranslatableString validateXxx(T proposed) { /* ... */ }
+----
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    public BigDecimal getCreditLimit() { /* ... */ }
+    public void setCreditLimit(BigDecimal creditLimit) { /* ... */ }
+    public validateCreditLimit(BigDecimal creditLimit) {
+        return creditLimit.compareTo(BigDecimal.ZERO) < 0
+                    ? "Credit limit cannot be negative"
+                    : null;
+    }
+    ...
+}
+----

@@ -27,7 +27,7 @@ We explore these use cases in more detail below.
 [TIP]
 ====
 Details on how to actually write a view model (the programming model for view models) is
-xref:ug:fun:programming-model.adoc#view-models[here].
+xref:userguide:fun:programming-model.adoc#view-models[here].
 ====
 
 
@@ -109,17 +109,17 @@ In such cases, exposing domain entities over xref:vro:ROOT:about.adoc[RestfulObj
 
 To support this use case, a view model can be defined such that it can act as a DTO.
 This is done by annotating the class using JAXB annotations; this allows the consumer to obtain the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.
-A discussion of how that might be done using an ESB such as link:http://camel.apache.org[Apache Camel(TM)] follows xref:ug:fun:building-blocks.adoc#view-models#dtos_consumers[below].
+A discussion of how that might be done using an ESB such as link:http://camel.apache.org[Apache Camel(TM)] follows xref:userguide:fun:building-blocks.adoc#view-models#dtos_consumers[below].
 
 In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:vw:ROOT:about.adoc[Wicket viewer] just like any other.
-In fact (as the xref:ug:fun:programming-model.adoc#jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
+In fact (as the xref:userguide:fun:programming-model.adoc#jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
-The view model simply needs to implement the xref:rg:cms:classes/mixins.adoc#Dto[`Dto`] marker interface; the framework has xref:rg:cms:classes/mixins.adoc#Dto[mixins] that contribute the download actions to the view model.
+The view model simply needs to implement the xref:refguide:applib-cm:classes/mixins.adoc#Dto[`Dto`] marker interface; the framework has xref:refguide:applib-cm:classes/mixins.adoc#Dto[mixins] that contribute the download actions to the view model.
 
 [TIP]
 ====
-Details of how to consume such DTOs can be found xref:ug:fun:programming-model.adoc#dto-consumers[here].
+Details of how to consume such DTOs can be found xref:userguide:fun:programming-model.adoc#dto-consumers[here].
 ====
 
 

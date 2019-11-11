@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 
 
-In the section xref:ug:fun:programming-model.adoc#referencing-domain-entities[above] it was explained how a view model DTO can transparently reference any "backing" entities; these references are converted to internal object identifiers.
+In the section xref:userguide:fun:programming-model.adoc#referencing-domain-entities[above] it was explained how a view model DTO can transparently reference any "backing" entities; these references are converted to internal object identifiers.
 
 However, if the consumer of the XML is another Java process (eg running within an Apache Camel route), then you might be tempted/expect to be able to use the same DTO within that Java process.
 But of course you cannot; the consumer runs in a different process space, and will not have references to the entity types themselves.
@@ -51,7 +51,7 @@ In the todoapp it can be found in the `todoapp-xsd` Maven module, whose `pom.xml
 </project>
 ----
 
-The `isis-xsd` profile generates the XSD using the xref:rg:mvn:xsd.adoc[`xsd` goal] of Isis' maven plugin:
+The `isis-xsd` profile generates the XSD using the xref:refguide:mvn:xsd.adoc[`xsd` goal] of Isis' maven plugin:
 
 [source,xml]
 ----

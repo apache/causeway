@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 A collection is an instance variable of a domain object, of a collection type that holds references to other domain objects.
 For example, a `Customer` may have a collection of ``Order``s).
 
-It's ok for a xref:ug:fun:programming-model.adoc#view-models[view model] to reference both view model and domain entities.
+It's ok for a xref:userguide:fun:programming-model.adoc#view-models[view model] to reference both view model and domain entities.
 However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
 
 Formally speaking, a collection is simply a regular JavaBean getter, returning a collection type (subtype of `java.util.Collection`).
@@ -24,8 +24,8 @@ This and other annotations can be used to specify if the association is bidirect
 
 Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
-Unlike xref:ug:fun:programming-model.adoc#properties[properties], the framework does not allow collections to be "edited".
-Instead, xref:ug:fun:programming-model.adoc#actions[action]s can be written that will modify the contents of the collection as a side-effect.
+Unlike xref:userguide:fun:programming-model.adoc#properties[properties], the framework does not allow collections to be "edited".
+Instead, xref:userguide:fun:programming-model.adoc#actions[action]s can be written that will modify the contents of the collection as a side-effect.
 For example, a `placeOrder(...)` action will likely add an `Order` to the `Customer#orders` collection.
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
@@ -94,7 +94,7 @@ If you do wish to use this collection type, then annotate the getter with `@Prog
 Apache Isis can (currently) only provide a UI for collections of references.
 While you can use DataNucleus to persist collections/arrays of value types, such properties must be annotated as `@Programmatic` so that they are ignored by Apache Isis.
 
-If you want to visualize an array of value types in Apache Isis, then one option is to wrap value in a view model, as explained xref:ug:btb:about.adoc#simulating-collections-of-values[elsewhere].
+If you want to visualize an array of value types in Apache Isis, then one option is to wrap value in a view model, as explained xref:userguide:btb:about.adoc#simulating-collections-of-values[elsewhere].
 
 
 

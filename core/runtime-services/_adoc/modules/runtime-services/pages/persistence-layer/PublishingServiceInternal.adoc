@@ -1,0 +1,49 @@
+= `PublishingServiceInternal`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The (internal) `PublishingServiceInternal` domain service acts as an internal facade to any configured xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] domain service(s).
+
+For published action invocations/ property edits, it provides an API for those member executions to call.
+
+For published objects, it provides an API for the framework to call at the end of the interaction; it obtains details of the changed objects (from the xref:core:runtime-services:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`]) and filters them to just those objects that are to be published; these are then passed through to any configured `PublisherService` implementations.
+
+
+== SPI and Implementation
+
+The SPI of the service is:
+
+[source,java]
+----
+public class PublishingServiceInternal {
+    void publishAction(                             // <1>
+            Interaction.Execution execution);
+    void publishProperty(                           // <2>
+            Interaction.Execution execution);
+    void publishObjects();                          // <3>
+}
+----
+<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Action.adoc#publishing[`@Action#publishing()`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+The `Execution` object will be an instance of `ActionInvocation` (see xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] for details).
+<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Property.adoc#publishing[`@Property#publishing()`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+The `Execution` object will be an instance of `PropertyEdit` (see xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] for details).
+<3> to publish all changed objects that are to be published (with the xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] annotation attribute or equivalent).
+
+
+The service implementation is `o.a.i.c.m.s.publishing.PublishingServiceInternal`.
+
+
+
+== Registering the Service
+
+Apache Isis' default implementation of `PublishingServiceInternal` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
+
+To use an alternative implementation, use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+
+
+== Related Classes
+
+The service delegates between the (internal) xref:core:runtime-services:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service to the configured xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+
+The (internal) xref:core:runtime-services:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] performs a similar function for the xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.

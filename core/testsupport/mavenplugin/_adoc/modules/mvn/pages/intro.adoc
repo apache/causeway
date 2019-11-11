@@ -12,26 +12,26 @@ This runs the `MetaModelValidator` that is also run when the application is star
 
 * `swagger` +
 +
-Uses the xref:rg:svc:metadata-api/SwaggerService.adoc[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
+Uses the xref:refguide:applib-svc:metadata-api/SwaggerService.adoc[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
 
 * `xsd` +
 +
-Uses the xref:rg:svc:integration-api/JaxbService.adoc[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
+Uses the xref:refguide:applib-svc:integration-api/JaxbService.adoc[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
 +
-This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:rg:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:rg:schema:common.adoc[common schema]).
+This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:refguide:schema:common.adoc[common schema]).
 
 The `validate` goal is by default bound to the `test` phase, and the `swagger` goal is by default bound to the `package` phase; both are typically of your application's `dom` sub-module.
 The `xsd` goal meanwhile defaults to the `generate-resources` phase, and this is generally used in a completely separate sub-module.
 An example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app; the separate submodule that uses the `xsd` goal is (also) called `todoapp-xsd`.
 
-All of these goals require an xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
+All of these goals require an xref:refguide:applib-cm:classes/AppManifest-bootstrapping.adoc[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
 This is discussed below, followed by sections on configuring the two goals.
 
 
 
 == `AppManifest`
 
-As noted in the introduction, all the goals require an xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
+As noted in the introduction, all the goals require an xref:refguide:applib-cm:classes/AppManifest-bootstrapping.adoc[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
 
 This can be extremely minimal; it isn't necessary to use the main `AppManifest` (in the `app` module) used to bootstrap the application, you can instead use a cut-down one.
 This then allows the plugins to be run during the build of the `dom` module, rather than having to run in the context of the `integtest` module.

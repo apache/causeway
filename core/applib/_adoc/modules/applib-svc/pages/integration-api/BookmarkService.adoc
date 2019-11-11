@@ -1,0 +1,114 @@
+[[BookmarkService]]
+= `BookmarkService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `BookmarkService2` domain service (and its various supertypes) provides the ability to obtain a serializable ``o.a.i.applib.bookmarks.Bookmark`` for any (persisted) domain object, and to lookup domain objects given a ``Bookmark``.  This can then in turn be converted to and from a string.
+
+For example, a `Customer` object with:
+
+* an object type of "custmgmt.Customer" (as per xref:refguide:applib-ant:DomainObject.adoc#objectType[`DomainObject#objectType()`] or equivalent) , and
+* an id=123
+
+could correspond to a `Bookmark` with a string representation of `custmgmt.Customer|123`.
+
+[NOTE]
+====
+A `Bookmark` is little more than an API equivalent of Apache Isis' internal `Oid` (object identifier).  Nevertheless, the ability to uniquely address _any_ domain object within an Apache Isis system -- to in effect provide a URN -- is immensely useful.
+
+For example, a `Bookmark` could be converted into a barcode, and then this used for automated scanning of correspondence from a customer.
+====
+
+``Bookmark``s are used by several other domain services as a means of storing a reference to an arbitrary object
+(a polymorphic relationship).  For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:refguide:applib-svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`] uses bookmarks to capture the object that is being audited.
+
+[TIP]
+====
+One downside of using ``Bookmark``s is that there is no way for the JDO/DataNucleus objectstore to enforce any kind of referental integrity.
+However, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s poly module describes and supports a design pattern to address this requirement.
+====
+
+
+
+
+== API & Implementation
+
+The API defined by `BookmarkService` is:
+
+[source,java]
+----
+public interface BookmarkService {
+    enum FieldResetPolicy {                                                     // <1>
+        RESET,
+        DONT_RESET
+    }
+    Object lookup(BookmarkHolder bookmarkHolder, FieldResetPolicy policy);
+    Object lookup(Bookmark bookmark, FieldResetPolicy policy);
+    <T> T lookup(Bookmark bookmark, FieldResetPolicy policy, Class<T> cls);     // <2>
+    Bookmark bookmarkFor(Object domainObject);
+    Bookmark bookmarkFor(Class<?> cls, String identifier);
+}
+----
+<1> if the object has already been loaded from the database, then whether to reset its fields.  The default it to `RESET`.
+<2> same as `lookup(Bookmark bookmark)`, but downcasts to the specified type.
+
+
+The core framework provides a default implementation of this API, namely `o.a.i.core.metamodel.services.bookmarks.BookmarkServiceInternalDefault`
+
+To use an alternative implementation, implement `BookmarkService` interface and use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+
+
+
+
+== `BookmarkHolder`
+
+The `BookmarkHolder` interface is intended to be implemented by domain objects that use a `Bookmark` to reference a (single) domain object; an example might be a class such as the audit entry, mentioned above.  The interface is simply:
+
+
+[source,java]
+----
+public interface BookmarkHolder {
+    @Programmatic
+    Bookmark bookmark();
+}
+
+----
+
+There are two services that will contribute to this interface:
+
+* `BookmarkHolderActionContributions` will provide a `lookup(...)` action
+* `BookmarkHolderAssociationContributions` provides an `object` property.
+
+Either of these can be suppressed, if required, using a vetoing subscriber.  For example, to suppress the `object` property (so that only the `lookup(...)` action is ever shown for implementations of `BookmarkHolder`, define:
+
+[source,java]
+----
+import org.springframework.context.event.EventListener;
+
+@DomainService(nature=NatureOfService.DOMAIN)
+public class AlwaysHideBookmarkHolderAssociationsObjectProperty
+                                            extends AbstractSubscriber{
+    @EventListener(BookmarkHolderAssociationContributions.ObjectDomainEvent.class)
+    public void on(BookmarkHolderAssociationContributions.ObjectDomainEvent ev) {
+        ev.hide();
+    }
+}
+----
+
+A more sophisticated implementation could look inside the passed `ev` argument and selectively hide or not based on the contributee.
+
+
+
+
+== Usage by other services
+
+Bookmarks are used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
+
+Bookmarks are also used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s auditing module's implementation of
+xref:refguide:applib-svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`].
+
+
+
+

@@ -26,28 +26,28 @@ The table below summarizes the annotations available:
 
 
 | Class
-| xref:rg:ant:DomainObjectLayout.adoc#named[`@DomainObjectLayout#named()`]
-| xref:rg:ant:DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs()`]
+| xref:refguide:applib-ant:DomainObjectLayout.adoc#named[`@DomainObjectLayout#named()`]
+| xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs()`]
 
 
 | Property
-| xref:rg:ant:PropertyLayout.adoc#named[`@PropertyLayout#named()`]
-| xref:rg:ant:PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs()`]
+| xref:refguide:applib-ant:PropertyLayout.adoc#named[`@PropertyLayout#named()`]
+| xref:refguide:applib-ant:PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs()`]
 
 | Collection
-| xref:rg:ant:CollectionLayout.adoc#named[`@CollectionLayout#named()`]
-| xref:rg:ant:CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs()`]
+| xref:refguide:applib-ant:CollectionLayout.adoc#named[`@CollectionLayout#named()`]
+| xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs()`]
 
 | Action
-| xref:rg:ant:ActionLayout.adoc#named[`@ActionLayout#named()`]
-| xref:rg:ant:ActionLayout.adoc#describedAs[`@ActionLayout#describedAs()`]
+| xref:refguide:applib-ant:ActionLayout.adoc#named[`@ActionLayout#named()`]
+| xref:refguide:applib-ant:ActionLayout.adoc#describedAs[`@ActionLayout#describedAs()`]
 
 | Action Parameters
-| xref:rg:ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`]
-| xref:rg:ant:ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs()`]
+| xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`]
+| xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs()`]
 
 |===
 
 
 The framework also supports i18n: locale-specific names and descriptions.
-For more information, see the xref:ug:btb:i18n.adoc[beyond-the-basics] guide.
+For more information, see the xref:userguide:btb:i18n.adoc[beyond-the-basics] guide.

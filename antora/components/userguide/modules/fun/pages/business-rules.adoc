@@ -30,7 +30,7 @@ One way to remember this is: *"see it, use it, do it"*
 
 
 The framework provides a multitude of ways to implement these business rules.
-One decoupled approach is using xref:ug:fun:building-blocks.adoc#domain-events[domain events]; the checks above correspond to the phases of the domain event.
+One decoupled approach is using xref:userguide:fun:building-blocks.adoc#domain-events[domain events]; the checks above correspond to the phases of the domain event.
 A simpler approach is to just implement the business rules imperatively in the domain object, or in a mixin for the object.
 
 

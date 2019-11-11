@@ -7,16 +7,16 @@ This page lists the user and reference guides available for developers to create
 
 == User Guides
 
-* xref:ug:ROOT:about.adoc[Fundamentals & Beyond]
+* xref:userguide:ROOT:about.adoc[Fundamentals & Beyond]
 * xref:demoapp:ROOT:about.adoc[Demo App]
 
-== xref:rg:ROOT:about.adoc[Reference Guide]
+== xref:refguide:ROOT:about.adoc[Reference Guide]
 
-* xref:rg:ant:about.adoc[Annotations]
-* xref:rg:svc:about.adoc[Domain Services]
-* xref:rg:cms:about.adoc[Classes & Methods]
-* xref:rg:schema:about.adoc[Schemas]
-* xref:rg:cfg:about.adoc[Configuration]
+* xref:refguide:applib-ant:about.adoc[Annotations]
+* xref:refguide:applib-svc:about.adoc[Domain Services]
+* xref:refguide:applib-cm:about.adoc[Classes & Methods]
+* xref:refguide:schema:about.adoc[Schemas]
+* xref:refguide:config:about.adoc[Configuration]
 
 == Testing & Prototyping
 

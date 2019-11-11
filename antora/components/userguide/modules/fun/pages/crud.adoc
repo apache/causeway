@@ -4,10 +4,10 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-This chapter shows the idioms for creating, reading, updating and deleting xref:ug:fun:building-blocks.adoc#domain-entities[domain entities].
-The main domain services used for this are xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] and xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`].
+This chapter shows the idioms for creating, reading, updating and deleting xref:userguide:fun:building-blocks.adoc#domain-entities[domain entities].
+The main domain services used for this are xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] and xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryService`].
 
-It also shows how to instantiate xref:ug:fun:building-blocks.adoc#view-models[view models] and how to programmatically instantiate xref:ug:fun:building-blocks.adoc#mixins[mixins] (useful primarily for xref:testing:integ-test-support:about.adoc[integration testing]).
+It also shows how to instantiate xref:userguide:fun:building-blocks.adoc#view-models[view models] and how to programmatically instantiate xref:userguide:fun:building-blocks.adoc#mixins[mixins] (useful primarily for xref:testing:integ-test-support:about.adoc[integration testing]).
 
 
 

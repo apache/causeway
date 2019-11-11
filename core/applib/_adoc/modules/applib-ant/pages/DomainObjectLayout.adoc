@@ -1,0 +1,135 @@
+= `@DomainObjectLayout`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `@DomainObjectLayout` annotation applies to domain classes, collecting together all UI hints within a single annotation.
+
+
+[NOTE]
+====
+For view models that have been annotated with `@ViewModel` the equivalent xref:refguide:applib-ant:ViewModelLayout.adoc[`@ViewModelLayout`] can be used.
+====
+
+
+The table below summarizes the annotation's attributes.
+
+.`@DomainObjectLayout` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#bookmarking[`bookmarking()`]
+|`AS_ROOT`, `AS_CHILD`, `NEVER` +
+(`NEVER`)
+|whether (and how) this domain object should be automatically bookmarked
+
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#cssclass[`cssClass()`]
+|Any string valid as a CSS class
+|the css class that a domain class (type) should have, to allow more targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]
+
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassFa[`cssClassFa()`]
+|Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
+|specify a font awesome icon for the action's menu link or icon. +
+
+
+|`cssClassFaPosition()`
+|`LEFT`, `RIGHT` +
+(`LEFT`)
+|Currently unused.
+
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`]
+|subtype of `CssClassUiEvent` +
+(`CssClassUiEvent.Default`)
+|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`describedAs()`]
+|String.
+|description of this class, eg to be rendered in a tooltip.
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent()`]
+|subtype of `IconUiEvent` +
+(`IconUiEvent.Default`)
+|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the icon (name) for the domain object.
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#layoutUiEvent[`layoutUiEvent()`]
+|subtype of `LayoutUiEvent` +
+(`LayoutUiEvent.Default`)
+|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the layout (name) for the domain object.
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#named[`named()`]
+|String.
+|to override the name inferred from the action's name in code. +
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#paged[`paged()`]
+|Positive integer
+|the page size for instances of this class when rendered within a table (as returned from an action invocation)
+
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#plural[`plural()`]
+|String.
+|the plural name of the class
+
+
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#titleUiEvent[`titleUiEvent()`]
+|subtype of `TitleUiEvent` +
+(`TitleUiEvent.Default`)
+|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the title for the domain object.
+
+|===
+
+
+
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+    cssClass="x-key",
+    cssClassFa="fa-checklist",
+    describedAs="Capture a task that you need to do",
+    named="ToDo",
+    paged=30,
+    plural="ToDo List")
+)
+public class ToDoItem {
+    ...
+}
+----
+
+
+
+[NOTE]
+====
+Note that there is (currently) no support for specifying UI hints for domain objects through the dynamic xref:vw:ROOT:layout/file-based.adoc[`.layout.xml`] file (only for properties, collections and actions are supported).
+====
+
+
+
+
+
+
+
+
+include:DomainObjectLayout/bookmarking.adoc[leveloffset=+1]
+include:DomainObjectLayout/cssClass.adoc[leveloffset=+1]
+include:DomainObjectLayout/cssClassFa.adoc[leveloffset=+1]
+include:DomainObjectLayout/cssClassUiEvent.adoc[leveloffset=+1]
+include:DomainObjectLayout/describedAs.adoc[leveloffset=+1]
+include:DomainObjectLayout/iconUiEvent.adoc[leveloffset=+1]
+include:DomainObjectLayout/layoutUiEvent.adoc[leveloffset=+1]
+include:DomainObjectLayout/named.adoc[leveloffset=+1]
+include:DomainObjectLayout/paged.adoc[leveloffset=+1]
+include:DomainObjectLayout/plural.adoc[leveloffset=+1]
+include:DomainObjectLayout/titleUiEvent.adoc[leveloffset=+1]

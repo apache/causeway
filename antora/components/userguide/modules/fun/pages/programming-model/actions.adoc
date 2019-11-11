@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-While xref:ug:fun:programming-model.adoc#collections[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
+While xref:userguide:fun:programming-model.adoc#collections[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
 
 An application whose domain objects have only/mostly "know-what" responsibilities is pretty dumb: it requires that the end-user know the business rules and doesn't modify the state of the domain objects such that they are invalid (for example, an "end date" being before a "start date").
 Such applications are often called CRUD applications (create/read/update/delete).
@@ -23,7 +23,7 @@ But if the state change is more complex, then most likely an action should be us
 
 == Defining actions
 
-If the xref:rg:cfg:configuring-core.adoc#policy[`isis.reflector.explicitAnnotations.action`] configuration property is set (recommended), then actions are `public` methods with the xref:rg:ant:Action.adoc[`@Action`] annotation.
+If the xref:refguide:config:configuring-core.adoc#policy[`isis.reflector.explicitAnnotations.action`] configuration property is set (recommended), then actions are `public` methods with the xref:refguide:applib-ant:Action.adoc[`@Action`] annotation.
 This annotation can also specify additional domain semantics, for example regarding idempotency.
 
 For example:
@@ -46,7 +46,7 @@ public ShoppingBasket addToBasket(
 For the `product` parameter this is reasonable, but not so for the `quantity` parameter (which would by default show up with a name of "int".
 The `@ParameterLayout` annotation provides a UI hint to the framework.
 
-If the xref:rg:cfg:configuring-core.adoc#policy[`isis.reflector.explicitAnnotations.action`] configuration property is _not_ set, then the rules are a little more involved: an action is a public method that is not getters or setters which represent properties or collections, and does not have one of the various method prefixes (such as `hide` or `validate`) used for represent xref:ug:fun:business-rules.adoc[business rules]), and is not annotated with xref:rg:ant:Programmatic.adoc[`@Programmatic`].
+If the xref:refguide:config:configuring-core.adoc#policy[`isis.reflector.explicitAnnotations.action`] configuration property is _not_ set, then the rules are a little more involved: an action is a public method that is not getters or setters which represent properties or collections, and does not have one of the various method prefixes (such as `hide` or `validate`) used for represent xref:userguide:fun:business-rules.adoc[business rules]), and is not annotated with xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`].
 
 
 
@@ -56,7 +56,7 @@ If the xref:rg:cfg:configuring-core.adoc#policy[`isis.reflector.explicitAnnotati
 Parameter types can be value types or reference types.
 In the case of primitive types, the end-user can just enter the value directly through the parameter field.
 In the case of reference types however (such as `Product`), a drop-down must be provided from which the end-user to select.
-This is done using either a supporting xref:rg:cms:methods.adoc#choices[`choices`] or xref:rg:cms:methods.adoc#autoComplete[`autoComplete`] method.
+This is done using either a supporting xref:refguide:applib-cm:methods.adoc#choices[`choices`] or xref:refguide:applib-cm:methods.adoc#autoComplete[`autoComplete`] method.
 The "choices" is used when there is a limited set of options, while "autoComplete" is used when there are large set of options such that the end-user must provide some characters to use for a search.
 
 For example, the `addToBasket(...)` action shown above might well have an autocomplete supporting method :
@@ -83,7 +83,7 @@ ProductRepository productRepository;
 <1> Supporting `autoComplete` method.
 The "0" in the name means that this corresponds to parameter 0 of the "addToBasket" action (ie `Product`).
 It is also required to return a Collection of that type.
-<2> The xref:rg:ant:MinLength.adoc[`@MinLength`] annotation defines how many characters the end-user must enter before performing a search.
+<2> The xref:refguide:applib-ant:MinLength.adoc[`@MinLength`] annotation defines how many characters the end-user must enter before performing a search.
 <3> The implementation delegates to an injected repository service.  This is typical.
 
 Note that it is also valid to define "choices" and "autoComplete" for value types (such as `quantity`, above); it just isn't as common to do so.
@@ -154,13 +154,13 @@ public List<Product> autoComplete0AddToBasket(@MinLength(3) String searchTerm) {
 }
 ----
 
-As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:rg:ant:DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:ug:fun:programming-model.adoc#actions#reference-parameter-types[above]).
+As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:userguide:fun:programming-model.adoc#actions#reference-parameter-types[above]).
 
 
 == Optional Parameters
 
-Whereas the xref:ug:fun:programming-model.adoc#properties.adoc#optional-properties[optionality of properties] is defined using xref:rg:ant:Column#allowsNull[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
-Instead, either the xref:rg:ant:Nullable.adoc[`@Nullable`] annotation or the xref:rg:ant:Parameter.adoc#optionality[`@Parameter#optionality()`]  annotation/attribute is used.
+Whereas the xref:userguide:fun:programming-model.adoc#properties.adoc#optional-properties[optionality of properties] is defined using xref:refguide:applib-ant:Column#allowsNull[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
+Instead, either the xref:refguide:applib-ant:Nullable.adoc[`@Nullable`] annotation or the xref:refguide:applib-ant:Parameter.adoc#optionality[`@Parameter#optionality()`]  annotation/attribute is used.
 
 For example:
 
@@ -184,12 +184,12 @@ public Order invoice(
 <1> Specifies the property is optional.
 <2> Specifies the corresponding parameter is optional.
 
-See also xref:ug:fun:programming-model.adoc#properties-vs-parameters[properties vs parameters].
+See also xref:userguide:fun:programming-model.adoc#properties-vs-parameters[properties vs parameters].
 
 == ``String`` Parameters (Length)
 
-Whereas the length of string properties is defined using xref:rg:ant:Column#length-for-strings.adoc[`@javax.jdo.annotations.Column#length()`], that JDO annotation cannot be applied to parameter types.
-Instead, the xref:rg:ant:Parameter.adoc#maxLength[`@Parameter#maxLength()`] annotation/attribute is used.
+Whereas the length of string properties is defined using xref:refguide:applib-ant:Column#length-for-strings.adoc[`@javax.jdo.annotations.Column#length()`], that JDO annotation cannot be applied to parameter types.
+Instead, the xref:refguide:applib-ant:Parameter.adoc#maxLength[`@Parameter#maxLength()`] annotation/attribute is used.
 
 For example:
 
@@ -215,8 +215,8 @@ public Customer updateName(
     return this;
 }
 ----
-<1> Specifies the property length using the JDO xref:rg:ant:Column#length.adoc[`@Column#length()`] annotation
-<2> Specifies the parameter length using the (Apache Isis) xref:rg:ant:Parameter.adoc#maxLength[`@Parameter#maxLength()`] annotation
+<1> Specifies the property length using the JDO xref:refguide:applib-ant:Column#length.adoc[`@Column#length()`] annotation
+<2> Specifies the parameter length using the (Apache Isis) xref:refguide:applib-ant:Parameter.adoc#maxLength[`@Parameter#maxLength()`] annotation
 
 [IMPORTANT]
 ====
@@ -224,12 +224,12 @@ Incidentally, note in the above example that the new value is assigned to the pr
 This is important, because it allows JDO/DataNucleus to keep track that this instance variable is "dirty" and so needs flushing to the database table before the transaction completes.
 ====
 
-See also xref:ug:fun:programming-model.adoc#properties-vs-parameters[properties vs parameters].
+See also xref:userguide:fun:programming-model.adoc#properties-vs-parameters[properties vs parameters].
 
 == ``BigDecimal``s (Precision)
 
-Whereas the precision of `BigDecimal` properties is defined using xref:rg:ant:Column#scale.adoc[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.
-Instead, the xref:rg:ant:Digits.adoc[`@javax.validation.constraints.Digits#fraction()`] annotation/attribute is used.
+Whereas the precision of `BigDecimal` properties is defined using xref:refguide:applib-ant:Column#scale.adoc[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.
+Instead, the xref:refguide:applib-ant:Digits.adoc[`@javax.validation.constraints.Digits#fraction()`] annotation/attribute is used.
 
 For example:
 
@@ -247,10 +247,10 @@ public Order updateDiscount(
     return this;
 }
 ----
-<1> Specifies the property precision using xref:rg:ant:Column#scale.adoc[`@Column#scale()`]
-<2> Specifies the corresponding parameter precision using xref:rg:ant:Digits.adoc[`@Digits#fraction()`].
+<1> Specifies the property precision using xref:refguide:applib-ant:Column#scale.adoc[`@Column#scale()`]
+<2> Specifies the corresponding parameter precision using xref:refguide:applib-ant:Digits.adoc[`@Digits#fraction()`].
 
-See also xref:ug:fun:programming-model.adoc#properties-vs-parameters[properties vs parameters].
+See also xref:userguide:fun:programming-model.adoc#properties-vs-parameters[properties vs parameters].
 
 
 
