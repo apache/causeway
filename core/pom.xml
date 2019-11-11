@@ -2326,14 +2326,14 @@
 			<id>github-deploy</id>
 			<activation>
 				<property>
-					<name>github-deploy</name>
+					<name>github-deploy.repositoryUrl</name>
 				</property>
 			</activation>
 			<distributionManagement>
 				<repository>
 					<id>github-deploy.serverId</id>
-					<name>GitHub ${github-deploy-repo-owner} Apache Maven Packages</name>
-					<url>https://maven.pkg.github.com/${github-deploy-repo-owner}/isis</url>
+					<name>GitHub Apache Isis Maven Packages (Nightly)</name>
+					<url>${github-deploy.repositoryUrl}</url>
 				</repository>
 			</distributionManagement>
 		</profile>
