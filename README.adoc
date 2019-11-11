@@ -3,7 +3,7 @@
 image:https://github.com/apache/isis/workflows/Build%20Core/badge.svg[link="https://github.com/apache/isis/actions?query=workflow%3A%22Build+Core%22"]
 image:https://github.com/apache/isis/workflows/Build%20Site/badge.svg[link="https://github.com/apache/isis/actions?query=workflow%3A%22Build+Site%22"]
 image:https://builds.apache.org/buildStatus/icon?job=Isis master jdk8[link="https://builds.apache.org/blue/organizations/jenkins/Isis%20master%20jdk8/activity"]
-image:https://github.com/apache-isis-committers/isis-nightly/workflows/Nightly%20Build%20Package%20Push%20All/badge.svg[link="https://github.com/apache-isis-committers/isis-nightly/actions?query=workflow%3A%22Nightly+Build+Package+Push+All%22"]
+image:https://github.com/apache-isis-committers/isis-nightly/workflows/Nightly%20Build%20Site/badge.svg[link="https://github.com/apache-isis-committers/isis-nightly/actions?query=workflow%3A%22Nightly+Build+Site%22"]
 
 _http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
 
