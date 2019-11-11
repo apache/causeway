@@ -1,5 +1,5 @@
 name: toc
-title: Table of Contents
+title: "Table of Contents"
 version: master
 start_page: ROOT:about.adoc
 nav:

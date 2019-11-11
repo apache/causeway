@@ -12,7 +12,7 @@ This page provides user/config guides for each of the main components of the fra
 
 _Extensions:_
 
-* xref:vw:ext-viewer-wicket-excel:about.adoc[Excel Download]
+* xref:vw:excel-download:about.adoc[Excel Download]
 * xref:vw:asciidoc:about.adoc[Asciidoc value type ]
 * xref:vw:markdown:about.adoc[Markdown value type]
 * xref:ext-sse:ROOT:about.adoc[Server Sent Events]

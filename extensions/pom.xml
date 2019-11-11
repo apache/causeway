@@ -267,18 +267,17 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>asciidoc</module>
-		<module>fixtures</module>
-		<module>spring</module>
-		<module>markdown</module>
-		<module>restclient</module>
-		<module>secman</module>
-		<module>specsupport</module>
-		<module>sse</module>
-		<module>viewer-wicket-excel</module>
-
-		<module>incubator</module>
-		<module>legacy</module>
+		<module>core/incubator</module>
+		<module>core/legacy</module>
+		<module>core/spring</module>
+		<module>security/secman</module>
+		<module>testing/fixtures</module>
+		<module>testing/specsupport</module>
+		<module>vro/restclient</module>
+		<module>vw/asciidoc</module>
+		<module>vw/exceldownload</module>
+		<module>vw/markdown</module>
+		<module>vw/sse</module>
 	</modules>
 
 </project>

@@ -1,2 +1,0 @@
-* xref:vw:ext-viewer-wicket-excel:about.adoc[Excel Download (extension)]
-

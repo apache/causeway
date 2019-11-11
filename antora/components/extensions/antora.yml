@@ -1,5 +1,5 @@
 name: extensions
-title: Extensions
+title: "Internals - Extensions"
 version: master
 start_page: ROOT:about.adoc
 nav:

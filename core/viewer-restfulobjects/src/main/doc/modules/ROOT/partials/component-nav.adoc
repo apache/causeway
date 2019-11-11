@@ -1,1 +1,5 @@
-include::vw:ROOT:partial$module-nav.adoc[]
+include::vro:ROOT:partial$module-nav.adoc[]
+include::vro:jaxrs-resteasy-4:partial$module-nav.adoc[]
+
+* Extensions
+** xref:vro:restclient:about.adoc[REST Client]

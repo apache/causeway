@@ -1,0 +1,1 @@
+include::secman:ROOT:partial$component-nav.adoc[]

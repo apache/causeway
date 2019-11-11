@@ -1,5 +1,5 @@
 name: core
-title: Core
+title: "Internals - Core"
 version: master
 start_page: ROOT:about.adoc
 nav:

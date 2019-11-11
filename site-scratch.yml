@@ -157,7 +157,7 @@ content:
 #      start_path: extensions/sse/_adoc # vw
 #      branches: HEAD
 #    - url: .
-#      start_path: extensions/viewer-wicket-excel/_adoc # vw
+#      start_path: extensions/exceldownload/_adoc # vw
 #      branches: HEAD
 
 #    - url: .

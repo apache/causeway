@@ -1,6 +1,0 @@
-name: vw
-title: "Server Sent Events"
-version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/sse/nav.adoc
