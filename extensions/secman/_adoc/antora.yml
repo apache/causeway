@@ -1,6 +1,6 @@
 name: ext-secman
 title: "Extensions - SecMan"
 version: master
-start_page: ROOT:about.adoc
+start_page: secman:about.adoc
 nav:
-- modules/ROOT/nav.adoc
+- modules/secman/nav.adoc
