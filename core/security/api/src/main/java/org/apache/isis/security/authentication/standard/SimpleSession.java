@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
@@ -63,6 +64,10 @@ public class SimpleSession extends AuthenticationSessionAbstract {
 
     public SimpleSession(final String name, final String[] roles, final String code) {
         this(name, stream(roles), code);
+    }
+
+    public SimpleSession(final String name, final List<String> roles, final String code) {
+        this(name, roles.stream(), code);
     }
 
     public SimpleSession(final String name, final Stream<String> roles, final String code) {

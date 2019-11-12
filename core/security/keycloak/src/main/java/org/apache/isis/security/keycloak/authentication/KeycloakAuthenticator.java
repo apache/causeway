@@ -37,12 +37,10 @@ public class KeycloakAuthenticator implements Authenticator {
 
     // -- init, shutdown
 
-    @Override
     public void init() {
     }
 
 
-    @Override
     public void shutdown() {
     }
 

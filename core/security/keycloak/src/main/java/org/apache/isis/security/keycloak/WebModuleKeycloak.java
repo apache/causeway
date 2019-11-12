@@ -39,7 +39,8 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 /**
  * WebModule to enable support for Keycloak.
  */
-@Service @Order(Ordered.HIGHEST_PRECEDENCE)
+@Service
+@Order(Ordered.HIGHEST_PRECEDENCE + 100)
 public final class WebModuleKeycloak implements WebModule  {
 
     public final static ThreadLocal<AuthenticationSession> sessionByThread = new ThreadLocal<>();

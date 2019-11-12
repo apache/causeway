@@ -82,6 +82,9 @@ content:
       start_path: core/security/shiro/src/main/doc # security
       branches: HEAD
     - url: .
+      start_path: core/security/keycloak/src/main/doc # security
+      branches: HEAD
+    - url: .
       start_path: core/testsupport/unittestsupport/src/main/doc # testing
       branches: HEAD
     - url: .

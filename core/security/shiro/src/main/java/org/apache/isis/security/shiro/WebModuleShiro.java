@@ -58,7 +58,7 @@ import lombok.val;
  * Can be customized via static {@link WebModuleShiro#setShiroEnvironmentClass(Class)}
  * @since 2.0
  */
-@Service @Order(Ordered.HIGHEST_PRECEDENCE)
+@Service @Order(Ordered.HIGHEST_PRECEDENCE + 100)
 public final class WebModuleShiro implements WebModule  {
     
     private final static String SHIRO_LISTENER_CLASS_NAME = 
