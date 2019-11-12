@@ -32,8 +32,8 @@
     <description></description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.viewer-wicket-excel</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/viewer-wicket-excel</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.exceldownload</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/exceldownload</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
