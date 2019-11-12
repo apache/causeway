@@ -29,8 +29,8 @@ import java.lang.annotation.Target;
  * Indicates that a method is a supporting-method, one that contributes (hide, validate, ...) 
  * to an <em>Action/</em>.
  * <p>
- * By placing the {@link Model} annotation on a method, a contract with the metamodel is enforced, 
- * such that this method must be recognized and can not be be ignored.
+ * By placing the {@link Model} annotation on a method, a contract with the meta-model is enforced, 
+ * such that this method must be recognized and cannot be ignored.
  *
  * @since 2.0
  */

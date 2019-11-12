@@ -23,7 +23,9 @@
 
 	<artifactId>isis-extensions-incubator</artifactId>
 	<name>Apache Isis Extensions - Incubator</name>
-	<description></description>
+	<description>
+		Provides experimental features.
+	</description>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.extensions.incubator</jar-plugin.automaticModuleName>
