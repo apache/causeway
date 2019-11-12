@@ -20,7 +20,7 @@ mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     -Dskip.mavenmixin-standard \
     -Dskip.mavenmixin-surefire \
     -Dskip.mavenmixin-datanucleus-enhance \
-    $CORE_ADDITIONAL_OPTS
+    $MVN_ADDITIONAL_OPTS
 
 # revert the edits from earlier ...
 mvn versions:revert

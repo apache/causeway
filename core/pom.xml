@@ -2338,17 +2338,13 @@
 			</distributionManagement>
 		</profile>
 	
-		<!-- to be decommissioned soon -->
 		<profile>
 			<id>gcpappenginerepo-deploy</id>
 			<activation>
 				<property>
-					<name>gcpappenginerepo-deploy</name>
+					<name>gcpappenginerepo-deploy.repositoryUrl</name>
 				</property>
 			</activation>
-			<properties>
-				<gcpappenginerepo-deploy.repositoryUrl>https://my-gcp-project-id.appspot.com</gcpappenginerepo-deploy.repositoryUrl>
-			</properties>
 			<distributionManagement>
 				<repository>
 					<id>gcpappenginerepo-deploy.serverId</id>
