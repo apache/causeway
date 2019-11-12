@@ -13,7 +13,7 @@ different users of the system.
 
 [NOTE]
 ====
-This service is deprecated; use xref:ext-fixtures:ROOT:about.adoc[fixture scripts] and the
+This service is deprecated; use xref:fixtures:ROOT:about.adoc[fixture scripts] and the
 xref:refguide:applib-svc:testing/SudoService.adoc[`SudoService`] instead.
 ====
 

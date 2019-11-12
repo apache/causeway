@@ -79,7 +79,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=pH02g0l2GKY[005^] +
-Using xref:ext-fixtures:ROOT:about.adoc[fixture scripts] to initialize the database, eg while prototyping and for demos
+Using xref:fixtures:ROOT:about.adoc[fixture scripts] to initialize the database, eg while prototyping and for demos
 ||x|||||||||
 
 
@@ -187,7 +187,7 @@ How to implement a derived collection on a domain object.
 
 
 |link:https://www.youtube.com/watch?v=l_oZymgb65I[017^] +
-Extending a xref:ext-fixtures:ROOT:about.adoc[fixture script] to more easily demonstrate new functionality.
+Extending a xref:fixtures:ROOT:about.adoc[fixture script] to more easily demonstrate new functionality.
 ||x|||||||||
 
 
@@ -367,7 +367,7 @@ How to provide a set of xref:refguide:applib-cm:methods.adoc#choices[choices] (a
 
 
 |link:https://www.youtube.com/watch?v=fKo6aTPK-gk[035^] +
-How to use the xref:refguide:applib-cm:methods.adoc#choices[choices] supporting methods as a source for default values within a xref:ext-fixtures:ROOT:about.adoc[fixture script].
+How to use the xref:refguide:applib-cm:methods.adoc#choices[choices] supporting methods as a source for default values within a xref:fixtures:ROOT:about.adoc[fixture script].
 ||x|||||||x||
 
 

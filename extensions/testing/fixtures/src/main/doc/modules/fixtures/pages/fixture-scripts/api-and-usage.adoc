@@ -39,7 +39,7 @@ public class DomainAppFixtureScriptsSpecificationProvider
 }
 ----
 <1> search for all fixture scripts under the package containing this class
-<2> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:testing:ext-fixtures:about/api-and-usage.adoc#organizing[Organizing Fixture scripts], below.
+<2> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:testing:fixtures:about/api-and-usage.adoc#organizing[Organizing Fixture scripts], below.
 <3> specify the fixture script class to provide as the default for the service's "run fixture script" action
 <4> whether the service's "run fixture script" action should display other fixture scripts using a choices drop down or (if there are very many of them) using an auto-complete
 <5> if present, enables a "recreate objects and return first" action to be displayed in the UI

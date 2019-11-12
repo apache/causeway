@@ -3,7 +3,7 @@
 include::testing:ROOT:partial$module-nav.adoc[]
 include::testing:unit-test-support:partial$module-nav.adoc[]
 include::testing:integ-test-support:partial$module-nav.adoc[]
-include::testing:ext-specsupport:partial$module-nav.adoc[]
-include::testing:ext-fixtures:partial$module-nav.adoc[]
+include::testing:specsupport:partial$module-nav.adoc[]
+include::testing:fixtures:partial$module-nav.adoc[]
 
 

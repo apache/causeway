@@ -1,2 +1,2 @@
-include::extensions:ext-spring:partial$component-nav.adoc[]
+include::extensions:spring:partial$component-nav.adoc[]
 
