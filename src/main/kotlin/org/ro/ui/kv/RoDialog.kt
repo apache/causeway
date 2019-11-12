@@ -15,6 +15,7 @@ import pl.treksoft.kvision.form.text.Text
 import pl.treksoft.kvision.form.text.TextArea
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
+import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.utils.ENTER_KEY
 import pl.treksoft.kvision.utils.px
 import pl.treksoft.kvision.window.Window
@@ -26,11 +27,12 @@ class RoDialog(
         val command: Command) :
         Window(caption, 600.px, 300.px, closeButton = true) {
 
+    // set Button.text to something specific like Connect, Back, etc.
     //  loginButton.focus
     private val loginButton = Button("OK", "fas fa-check", ButtonStyle.SUCCESS).onClick {
         execute()
     }
-    private val cancelButton = Button("Cancel", "fas fa-times", ButtonStyle.INFO).onClick {
+    private val cancelButton = Button("Cancel", "fas fa-times", ButtonStyle.OUTLINEINFO).onClick {
         close()
     }
 
@@ -75,9 +77,13 @@ class RoDialog(
                 }
             }
         }
-        add(loginButton)
+        val buttonBar = HPanel(spacing = 10) {
+            margin = 10.px
+        }
+        buttonBar.add(loginButton)
         //IMPROVE: put int hpanel with offset
-        add(cancelButton)
+        buttonBar.add(cancelButton)
+        add(buttonBar)
     }
 
     private fun execute() {

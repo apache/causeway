@@ -3,33 +3,26 @@ package org.ro.ui
 import org.ro.core.event.LogEntry
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.html.Span
+import pl.treksoft.kvision.navbar.Nav
 import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
-import pl.treksoft.kvision.panel.FlexJustify
-import pl.treksoft.kvision.panel.HPanel
+import pl.treksoft.kvision.navbar.navLink
 
 object RoStatusBar {
+    val navbar: Navbar
+    private val nav = Nav()
+    private val urlLink = nav.navLink("", icon = "fab fa-windows")
+    private var userLink = nav.navLink("", icon = "far fa-user")
 
-    private var powerLabel = Span()
-    private var urlLabel = Span()
-    private var userLabel = Span()
-    private var bar = HPanel(justify = FlexJustify.SPACEBETWEEN) {
-        add(urlLabel)
-        add(powerLabel)
-        add(userLabel)
-    }
-    var navbar: Navbar
 
     init {
         navbar = Navbar(type = NavbarType.FIXEDBOTTOM) {
             height = CssSize(8, UNIT.mm)
             minHeight = CssSize(8, UNIT.mm)
-            add(bar)
-            powerLabel.content = ""
-            urlLabel.content = ""
-            userLabel.content = ""
         }
+        navbar.add(nav)
+        nav.add(urlLink)
+        nav.add(userLink)
     }
 
     fun brand(colorCode: String) {
@@ -37,13 +30,13 @@ object RoStatusBar {
     }
 
     fun updateUser(user: String) {
-        userLabel.content = user
+        userLink.setAttribute(name = "title", value = user)
     }
 
     fun update(le: LogEntry?) {
-        urlLabel.content = le?.title
-        urlLabel.title = le?.url
-        navbar.enableTooltip()
+        val url = le?.title!!
+        urlLink.setAttribute(name = "title", value = url)
+        urlLink.setAttribute(name = "content", value = url)
     }
 
 }
