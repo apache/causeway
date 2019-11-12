@@ -18,7 +18,7 @@
 		<groupId>org.apache.isis.extensions</groupId>
 		<artifactId>isis-extensions</artifactId>
 		<version>${revision}</version>
-		<relativePath>../pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>isis-extensions-sse</artifactId>
