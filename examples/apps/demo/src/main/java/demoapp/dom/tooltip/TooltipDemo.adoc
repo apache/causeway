@@ -42,4 +42,4 @@ public String disableAnAction() {
 ----
 
 See the sources for this demo here:
-link:${SOURCES_DEMO}/domainapp/dom/tooltip[sources]
+link:${SOURCES_DEMO}/demoapp/dom/tooltip[sources]

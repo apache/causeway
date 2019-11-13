@@ -3,4 +3,4 @@
 TODO
 
 See the sources for this demo here:
-link:${SOURCES_DEMO}/domainapp/dom/homepage[sources]
+link:${SOURCES_DEMO}/demoapp/dom/homepage[sources]

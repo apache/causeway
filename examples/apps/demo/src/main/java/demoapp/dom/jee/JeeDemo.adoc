@@ -39,7 +39,7 @@ public class JeeDemo {
 ----
 
 See the sources for this demo here:
-link:${SOURCES_DEMO}/domainapp/dom/jee[sources].
+link:${SOURCES_DEMO}/demoapp/dom/jee[sources].
 
 == Container Managed Connection Pool (advanced JEE usage):
 

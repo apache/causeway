@@ -38,5 +38,5 @@ public String disableAnAction() {
     editingDisabledReason="tooltip text goes here")
 ```
 
-See the sources for this demo here: [sources](${SOURCES_DEMO}/domainapp/dom/tooltip)
+See the sources for this demo here: [sources](${SOURCES_DEMO}/demoapp/dom/tooltip)
 

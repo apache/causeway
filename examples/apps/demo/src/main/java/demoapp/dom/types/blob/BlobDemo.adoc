@@ -25,4 +25,4 @@ public class BlobDemo {
 <1> we use this BlobAdapter only for demo purposes here
 <2> renders as image, according to its MIME type
 
-See the blob demo link:${SOURCES_DEMO}/domainapp/dom/types/blob[sources].
+See the blob demo link:${SOURCES_DEMO}/demoapp/dom/types/blob[sources].

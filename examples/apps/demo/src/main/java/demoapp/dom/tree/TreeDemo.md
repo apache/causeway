@@ -25,6 +25,6 @@ public TreeNode<FileNode> createTree() {
 }
 ```
 					
-See the tree demo [sources](${SOURCES_DEMO}/domainapp/dom/tree).
+See the tree demo [sources](${SOURCES_DEMO}/demoapp/dom/tree).
 
 Also see [open issues](${ISSUES_DEMO}?utf8=✓&q=is%3Aissue+is%3Aopen+tree) with trees.

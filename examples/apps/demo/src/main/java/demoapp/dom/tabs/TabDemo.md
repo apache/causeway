@@ -2,5 +2,5 @@
 
 //TODO
 
-See the sources for this demo here: [sources](${SOURCES_DEMO}/domainapp/dom/tabs)
+See the sources for this demo here: [sources](${SOURCES_DEMO}/demoapp/dom/tabs)
 

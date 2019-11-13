@@ -10,4 +10,4 @@ TODO
 ----
 
 See the associated action demo
-link:${SOURCES_DEMO}/domainapp/dom/actions/async[sources].
+link:${SOURCES_DEMO}/demoapp/dom/actions/async[sources].

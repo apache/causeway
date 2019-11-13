@@ -67,4 +67,4 @@ public class TemporalDemo extends DemoStub {
 }
 ```
 					
-See the temporal demo [sources](${SOURCES_DEMO}/domainapp/dom/scalars).
+See the temporal demo [sources](${SOURCES_DEMO}/demoapp/dom/scalars).

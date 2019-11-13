@@ -33,4 +33,4 @@ public class DemoErrorReportingService implements ErrorReportingService {
 }
 ```
 					
-See the ErrorReportingService implemented for this demo here: [sources](${SOURCES_DEMO}/domainapp/dom/error/service).
+See the ErrorReportingService implemented for this demo here: [sources](${SOURCES_DEMO}/demoapp/dom/error/service).

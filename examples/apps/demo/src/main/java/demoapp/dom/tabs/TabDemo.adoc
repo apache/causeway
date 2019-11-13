@@ -3,4 +3,4 @@
 //TODO
 
 See the sources for this demo here:
-link:${SOURCES_DEMO}/domainapp/dom/tabs[sources]
+link:${SOURCES_DEMO}/demoapp/dom/tabs[sources]

@@ -33,7 +33,7 @@ public class JeeDemo {
 }
 ```
 
-See the sources for this demo here: [sources](${SOURCES_DEMO}/domainapp/dom/jee).
+See the sources for this demo here: [sources](${SOURCES_DEMO}/demoapp/dom/jee).
 
 ## Container Managed Connection Pool (advanced JEE usage):
 

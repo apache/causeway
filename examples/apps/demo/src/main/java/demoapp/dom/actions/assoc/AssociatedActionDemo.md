@@ -39,4 +39,4 @@ public class AssociatedActionDemo extends DemoStub {
 }
 ```
 					
-See the associated action demo [sources](${SOURCES_DEMO}/domainapp/dom/actions/assoc).
+See the associated action demo [sources](${SOURCES_DEMO}/demoapp/dom/actions/assoc).

@@ -19,4 +19,4 @@ public class TextDemo {
 }
 ```
 					
-See the text demo [sources](${SOURCES_DEMO}/domainapp/dom/scalars).
+See the text demo [sources](${SOURCES_DEMO}/demoapp/dom/scalars).

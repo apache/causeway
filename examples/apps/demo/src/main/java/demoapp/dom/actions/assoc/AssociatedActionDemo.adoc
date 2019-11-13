@@ -48,4 +48,4 @@ public class AssociatedActionDemo extends DemoStub {
 ----
 
 See the associated action demo
-link:${SOURCES_DEMO}/domainapp/dom/actions/assoc[sources].
+link:${SOURCES_DEMO}/demoapp/dom/actions/assoc[sources].

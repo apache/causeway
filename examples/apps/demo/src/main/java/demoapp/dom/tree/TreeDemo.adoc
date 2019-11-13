@@ -30,7 +30,7 @@ public TreeNode<FileNode> createTree() {
 }
 ----
 
-See the tree demo link:${SOURCES_DEMO}/domainapp/dom/tree[sources].
+See the tree demo link:${SOURCES_DEMO}/demoapp/dom/tree[sources].
 
 Also see link:${ISSUES_DEMO}?utf8=✓&q=is%3Aissue+is%3Aopen+tree[open
 issues] with trees.

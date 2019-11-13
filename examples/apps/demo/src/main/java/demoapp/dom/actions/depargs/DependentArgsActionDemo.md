@@ -8,4 +8,4 @@ TODO
 
 ```
 					
-See the associated action demo [sources](${SOURCES_DEMO}/domainapp/dom/actions/depargs).
+See the associated action demo [sources](${SOURCES_DEMO}/demoapp/dom/actions/depargs).
