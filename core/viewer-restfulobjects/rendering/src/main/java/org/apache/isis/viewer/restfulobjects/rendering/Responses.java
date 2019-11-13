@@ -23,12 +23,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.metamodel.adapter.version.Version;
@@ -101,7 +97,8 @@ public final class Responses {
                 .type(mediaType)
                 .cacheControl(caching.getCacheControl())
                 .entity(JsonWriterUtil.jsonFor(entityRepresentation, inferPrettyPrinting(renderer)));
-        return addLastModifiedAndETagIfAvailable(response, version);
+        
+        return response;
     }
 
     private static Date now(ReprRenderer<?, ?> renderer) {
@@ -123,22 +120,6 @@ public final class Responses {
         return responseBuilder;
     }
 
-    public static Response.ResponseBuilder addLastModifiedAndETagIfAvailable(
-            final Response.ResponseBuilder responseBuilder,
-            final Version version) {
-        if (version != null && version.getTime() != null) {
-            final Date time = version.getTime();
-            responseBuilder.lastModified(time);
-            responseBuilder.tag(asETag(time));
-        }
-        return responseBuilder;
-    }
-
-    private static EntityTag asETag(final Date time) {
-        final String utcTime = ISODateTimeFormat.basicDateTime().print(new DateTime(time));
-        return new EntityTag(utcTime, true);
-    }
-    
     public static JsonMapper.PrettyPrinting inferPrettyPrinting(ReprRenderer<?, ?> renderer) {
 
         if(renderer instanceof ReprRendererAbstract) {

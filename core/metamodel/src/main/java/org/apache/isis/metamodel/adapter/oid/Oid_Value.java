@@ -23,7 +23,6 @@ import java.io.IOException;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.OidDto;
 
@@ -40,11 +39,6 @@ final class Oid_Value implements RootOid {
 
     @Override
     public String enStringNoVersion() {
-        return null;
-    }
-
-    @Override
-    public Version getVersion() {
         return null;
     }
 

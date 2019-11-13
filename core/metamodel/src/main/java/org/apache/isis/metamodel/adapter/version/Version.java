@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.DateExtensions;
@@ -49,6 +50,7 @@ import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
  * The user's name and a timestamp should also be kept so that when an message
  * is passed to the user it can be of the form "user has change object at time"
  */
+@Deprecated
 public class Version implements Serializable, Encodable {
 
     private static final long serialVersionUID = 1L;
@@ -153,7 +155,7 @@ public class Version implements Serializable, Encodable {
     // -- enString
 
     public String enString() {
-        return OID_MARSHALLER.marshal(this);
+        throw _Exceptions.notImplemented();
     }
 
     // -- equals, hashCode

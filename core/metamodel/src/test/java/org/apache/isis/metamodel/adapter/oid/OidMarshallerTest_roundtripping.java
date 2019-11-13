@@ -38,15 +38,15 @@ public class OidMarshallerTest_roundtripping {
         assertThat(deString, is(oid));
     }
 
-    @Test
-    public void rootOid_withVersion() {
-        RootOid oid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123", 90807L);
-
-        final String enString = oid.enString();
-        final RootOid deString = RootOid.deString(enString);
-        assertThat(deString, is(oid));
-        assertThat(deString.getVersion(), is(oid.getVersion())); // assert separately because not part of equality check
-    }
+//    @Test
+//    public void rootOid_withVersion() {
+//        RootOid oid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123", 90807L);
+//
+//        final String enString = oid.enString();
+//        final RootOid deString = RootOid.deString(enString);
+//        assertThat(deString, is(oid));
+//        assertThat(deString.getVersion(), is(oid.getVersion())); // assert separately because not part of equality check
+//    }
 
 
 
@@ -60,15 +60,15 @@ public class OidMarshallerTest_roundtripping {
         assertThat(deString, is(oid));
     }
 
-    @Test
-    public void collectionOid_withVersion() {
-        RootOid parentOid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123", 90807L);
-        ParentedOid oid = Factory.parentedOfName(parentOid, "items");
-
-        final String enString = oid.enString();
-        final ParentedOid deString = Oid.unmarshaller().unmarshal(enString, ParentedOid.class);
-        assertThat(deString, is(oid));
-        assertThat(deString.getParentOid().getVersion(), is(parentOid.getVersion())); // assert separately because not part of equality check
-    }
+//    @Test
+//    public void collectionOid_withVersion() {
+//        RootOid parentOid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123", 90807L);
+//        ParentedOid oid = Factory.parentedOfName(parentOid, "items");
+//
+//        final String enString = oid.enString();
+//        final ParentedOid deString = Oid.unmarshaller().unmarshal(enString, ParentedOid.class);
+//        assertThat(deString, is(oid));
+//        assertThat(deString.getParentOid().getVersion(), is(parentOid.getVersion())); // assert separately because not part of equality check
+//    }
 
 }

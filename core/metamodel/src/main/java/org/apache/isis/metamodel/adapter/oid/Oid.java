@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.adapter.oid;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.encoding.Encodable;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
@@ -40,12 +39,13 @@ public interface Oid extends Encodable {
      * A string representation of this {@link Oid}.
      */
     String enString();
+    
+    @Deprecated
+    default String enStringNoVersion() {
+        return enString();
+    }
 
-    String enStringNoVersion();
-
-    Version getVersion();
-
-    //void setVersion(Version version);
+    //Version getVersion();
 
     /**
      * Flags whether this OID is for a transient (not-yet-persisted) object,
@@ -69,17 +69,21 @@ public interface Oid extends Encodable {
 
     public static interface Marshaller {
 
-        String marshal(Version version);
-
-        String marshalNoVersion(ParentedOid parentedOid);
-
         String marshal(ParentedOid parentedOid);
-
-        String marshalNoVersion(RootOid rootOid);
 
         String marshal(RootOid rootOid);
 
         String joinAsOid(String domainType, String instanceId);
+        
+        @Deprecated
+        default String marshalNoVersion(RootOid rootOid) {
+            return marshal(rootOid);
+        }
+        
+        @Deprecated
+        default String marshalNoVersion(ParentedOid parentedOid) {
+            return marshal(parentedOid);
+        }
 
     }
 
@@ -114,36 +118,39 @@ public interface Oid extends Encodable {
 
         public static RootOid ofBookmark(final Bookmark bookmark) {
             return Oid_Root.of(ObjectSpecId.of(bookmark.getObjectType()), 
-                    bookmark.getIdentifier(), Oid_State.from(bookmark), Version.empty());
+                    bookmark.getIdentifier(), Oid_State.from(bookmark));
         }
 
         public static RootOid viewmodelOf(ObjectSpecId objectSpecId, String mementoStr) {
-            return Oid_Root.of(objectSpecId, mementoStr, Oid_State.VIEWMODEL, Version.empty());
+            return Oid_Root.of(objectSpecId, mementoStr, Oid_State.VIEWMODEL);
         }
 
         public static RootOid transientOf(final ObjectSpecId objectSpecId, final String identifier) {
-            return Oid_Root.of(objectSpecId, identifier, Oid_State.TRANSIENT, Version.empty());
+            return Oid_Root.of(objectSpecId, identifier, Oid_State.TRANSIENT);
         }
 
         public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier) {
             return Factory.persistentOf(objectSpecId, identifier, null);
         }
 
+        @Deprecated
         public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence) {
             return Factory.persistentOf(objectSpecId, identifier, versionSequence, null, null);
         }
 
+        @Deprecated
         public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser) {
             return Factory.persistentOf(objectSpecId, identifier, versionSequence, versionUser, null);
         }
 
+        @Deprecated
         public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final Long versionUtcTimestamp) {
             return Factory.persistentOf(objectSpecId, identifier, versionSequence, null, versionUtcTimestamp);
         }
 
+        @Deprecated
         public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
-            return Oid_Root.of(objectSpecId, identifier, Oid_State.PERSISTENT, 
-                    Version.Factory.ifPresent(versionSequence, versionUser, versionUtcTimestamp));
+            return Oid_Root.of(objectSpecId, identifier, Oid_State.PERSISTENT);
         }
 
         // -- PARENTED COLLECTIONS

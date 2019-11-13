@@ -39,7 +39,7 @@ import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.transaction.AuditingServiceInternal;
 import org.apache.isis.runtime.system.transaction.IsisTransactionFlushException;
 import org.apache.isis.runtime.system.transaction.IsisTransactionManagerException;
@@ -338,7 +338,12 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
 
             if(!pc_snapshot.isEmpty()) {
                 try {
-                    IsisContext.getPersistenceSession().get().execute(pc_snapshot);
+                    
+                    PersistenceSession.current(IsisPersistenceSessionJdo.class)
+                    .getFirst()
+                    .get()
+                    .execute(pc_snapshot);
+                    
                 } catch (final RuntimeException ex) {
                     // if there's an exception, we want to make sure that
                     // all commands are cleared and propagate

@@ -24,7 +24,6 @@ import java.util.Objects;
 
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.adapter.version.Version;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -52,11 +51,6 @@ final class Oid_Parented implements ParentedOid {
     @Override
     public RootOid getParentOid() {
         return parentRootOid;
-    }
-
-    @Override
-    public Version getVersion() {
-        return parentRootOid.getVersion();
     }
 
     @Override

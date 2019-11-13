@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +33,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -112,22 +109,14 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
 
-        if(true) {
+        {
             final RepresentationService.Intent intent = resourceContext.getIntent();
             if(intent == RepresentationService.Intent.JUST_CREATED) {
                 responseBuilder.status(Response.Status.CREATED);
             }
         }
-
-        final Version version = ManagedObject._version(objectAdapter);
-        if (version != null && version.getTime() != null) {
-            responseBuilder.tag(etagFormat().format(version.getTime()));
-        }
+        
         return responseBuilder;
-    }
-
-    private DateFormat etagFormat() {
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     }
 
     @Override
@@ -348,7 +337,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         .using(resourceContext.getObjectAdapterLinkTo());
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
-        Responses.addLastModifiedAndETagIfAvailable(responseBuilder, ManagedObject._version(objectAndActionInvocation.getObjectAdapter()));
+        
         return responseBuilder;
     }
 

@@ -24,7 +24,6 @@ import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class RootOidTest_create {
@@ -36,7 +35,6 @@ public class RootOidTest_create {
         RootOid oid = Factory.persistentOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
-        assertThat(oid.getVersion(), is(nullValue()));
 
         assertThat(oid.isTransient(), is(false));
     }
@@ -47,19 +45,17 @@ public class RootOidTest_create {
         RootOid oid = Factory.transientOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
-        assertThat(oid.getVersion(), is(nullValue()));
 
         assertThat(oid.isTransient(), is(true));
     }
 
 
     @Test
-    public void createWithVersion() throws Exception {
+    public void createPersistent() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = Factory.persistentOf(objectSpecId, "123", 456L);
+        RootOid oid = Factory.persistentOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
-        assertThat(oid.getVersion().getSequence(), is(456L));
 
         assertThat(oid.isTransient(), is(false));
     }
@@ -70,7 +66,6 @@ public class RootOidTest_create {
         RootOid oid = Factory.transientOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
-        assertThat(oid.getVersion(), is(nullValue()));
 
         assertThat(oid.isTransient(), is(true));
     }
