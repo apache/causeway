@@ -27,7 +27,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
@@ -50,7 +49,7 @@ public final class Responses {
     public static Response.ResponseBuilder ofOk(
             final ReprRenderer<?, ?> renderer,
             final Caching caching) {
-        return ofOk(renderer, caching, null, null);
+        return ofOk(renderer, caching, null);
     }
 
     /**
@@ -59,24 +58,6 @@ public final class Responses {
     public static Response.ResponseBuilder ofOk(
             final ReprRenderer<?, ?> renderer,
             final Caching caching,
-            final JsonRepresentation rootRepresentationIfAny) {
-        return ofOk(renderer, caching, null, rootRepresentationIfAny);
-    }
-
-    public static Response.ResponseBuilder ofOk(
-            final ReprRenderer<?, ?> renderer,
-            final Caching caching,
-            final Version version) {
-        return ofOk(renderer, caching, version, null);
-    }
-
-    /**
-     * @param rootRepresentationIfAny - if specified, is used for entity; otherwise the renderer is used.  The idea is that the renderer will be set up to render to some sub-node of root representation
-     */
-    public static Response.ResponseBuilder ofOk(
-            final ReprRenderer<?, ?> renderer,
-            final Caching caching,
-            final Version version,
             final JsonRepresentation rootRepresentationIfAny) {
 
         final JsonRepresentation representation = renderer.render();

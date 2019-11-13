@@ -26,7 +26,6 @@ import org.apache.isis.jdo.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -56,8 +55,6 @@ public class PojoAdapterBuilder {
     private Persistence persistence = Persistence.PERSISTENT;
 
     private String titleString;
-
-    private Version version;
 
     private AuthenticationSession authenticationSession;
 
@@ -176,11 +173,6 @@ public class PojoAdapterBuilder {
 
     public PojoAdapterBuilder with(AuthenticationSession authenticationSession) {
         this.authenticationSession = authenticationSession;
-        return this;
-    }
-
-    public PojoAdapterBuilder with(Version version) {
-        this.version = version;
         return this;
     }
 

@@ -29,7 +29,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.version.Version;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
@@ -143,7 +143,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
         final Matcher matcher = OIDSTR_PATTERN.matcher(oidStr);
         if (!matcher.matches()) {
-            throw new IllegalArgumentException("Could not parse OID '" + oidStr + "'; should match pattern: " + OIDSTR_PATTERN.pattern());
+            throw _Exceptions.illegalArgument("Could not parse OID '" + oidStr + "'; should match pattern: " + OIDSTR_PATTERN.pattern());
         }
 
         final String isTransientOrViewModelStr = getGroup(matcher, 3);
@@ -161,8 +161,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
         final String aggregateOidPart = getGroup(matcher, 6);
         final List<AggregateOidPart> aggregateOidParts = _Lists.newArrayList();
-        //        final Splitter nestingSplitter = Splitter.on(SEPARATOR_NESTING);
-        //        final Splitter partsSplitter = Splitter.on(SEPARATOR);
+        
         if(aggregateOidPart != null) {
             final Stream<String> tildaSplitted = splitThenStream(aggregateOidPart, SEPARATOR_NESTING); 
 
@@ -186,7 +185,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
                 return _Casts.uncheckedCast(
                         Oid_Root.of(ObjectSpecId.of(rootObjectType), rootIdentifier, state));
             } else {
-                throw new RuntimeException("Aggregated Oids are no longer supported");
+                throw _Exceptions.illegalArgument("Aggregated Oids are no longer supported");
             }
         } else {
             final String oidStrWithoutCollectionName = getGroup(matcher, 1);

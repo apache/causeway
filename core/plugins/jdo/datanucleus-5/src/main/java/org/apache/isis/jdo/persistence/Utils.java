@@ -18,14 +18,9 @@
  */
 package org.apache.isis.jdo.persistence;
 
-import java.sql.Timestamp;
-
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
-
-import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.security.authentication.AuthenticationSession;
 
 final class Utils {
 
@@ -38,20 +33,6 @@ final class Utils {
 
     static Persistable persistenceCapableFor(InstanceLifecycleEvent event) {
         return (Persistable)event.getSource();
-    }
-
-    static Version getVersionIfAny(final Persistable pojo, final AuthenticationSession authenticationSession) {
-        Object jdoVersion = pojo.dnGetVersion();
-        if(jdoVersion instanceof Long) {
-            final Long longVersion = (Long) jdoVersion;
-            return Version.Factory.ifPresent(longVersion, authenticationSession.getUserName());
-        }
-        if(jdoVersion instanceof java.sql.Timestamp) {
-            final Timestamp timestampVersion = (Timestamp) jdoVersion;
-            return Version.of(timestampVersion.getTime(), authenticationSession.getUserName());
-        }
-        return null;
-
     }
 
 }

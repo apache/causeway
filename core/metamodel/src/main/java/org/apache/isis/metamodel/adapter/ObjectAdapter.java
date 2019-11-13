@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.MethodExtensions;
