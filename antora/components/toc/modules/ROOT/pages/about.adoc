@@ -1,14 +1,15 @@
 = Menu
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 include::_attributes.adoc[]
-:page-role: -toc
+:page-role: -toc -title
 
+[.nogrid]
 [cols="1a,1a,1a",frame="none", grid="none", stripes="none"]
 |===
 
-
-
-| *What is Apache Isis?*
+|
+[discrete]
+== What is Apache Isis?
 
 * *xref:what-is-apache-isis/isis-in-pictures.adoc[Apache Isis in pictures]*
 * xref:what-is-apache-isis/common-use-cases.adoc[Common Use Cases]
@@ -16,17 +17,23 @@ include::_attributes.adoc[]
 * xref:what-is-apache-isis/screencasts.adoc[Screencasts]
 * xref:what-is-apache-isis/powered-by.adoc[Powered By]
 
-| *Quick Start*
+|
+[discrete]
+== Starter Apps
 
 * xref:helloworld:ROOT:about.adoc[Hello World]
 * xref:simpleapp:ROOT:about.adoc[SimpleApp]
 
-_Demos & Tutorials:_
+|
+[discrete]
+== Demos & Tutorials
 
 * xref:demoapp:ROOT:about.adoc[Demo App]
 * link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic]
 
-| *Guides*
+|
+[discrete]
+== Guides
 
 * *xref:userguide:ROOT:about.adoc[User Guide]*
 * *xref:refguide:ROOT:about.adoc[Reference Guide]*
@@ -35,7 +42,9 @@ _Demos & Tutorials:_
 * *xref:testing:ROOT:about.adoc[Testing]*
 
 
-| *Components*
+|
+[discrete]
+== Components
 
 * xref:vw:ROOT:about.adoc[Wicket Viewer]
 * xref:vro:ROOT:about.adoc[Restful Objects Viewer]
@@ -43,7 +52,9 @@ _Demos & Tutorials:_
 
 
 
-| *Support*
+|
+[discrete]
+== Support
 
 * xref:toc:devguide:about.adoc[Developers' Guide]
 * xref:mavendeps:ROOT:about.adoc[Maven dependencies]
@@ -55,7 +66,9 @@ _Mailing Lists_
 * link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
 
 
-| *Releases*
+|
+[discrete]
+== Releases
 
 * xref:toc:ROOT:downloads/how-to.adoc[Downloads]
 * xref:relnotes:ROOT:about.adoc[Release Notes]
@@ -68,7 +81,9 @@ _Other Resources_
 * link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
 
 
-|*Internal*
+|
+[discrete]
+== Internal
 
 *  xref:toc:comguide:about.adoc[Committers' Guide]
 ** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
@@ -78,21 +93,15 @@ _Other Resources_
 
 * xref:more-thanks/more-thanks.adoc[Acknowledgements]
 
-|*3rd party*
-
-* link:https://github.com/sebastianslutzky/AngularViewerCLI[AngularViewer]
-* link:https://github.com/joerg-rade/kroviz[Kroviz]
-* link:https://platform.incode.org[Incode Platform]
-
-_nb: not ASF_
-
-| *Real-world Apps*
+|
+[discrete]
+== Real-world Apps
 
 * https://github.com/estatio/estatio[Estatio]
 * https://github.com/incodehq/contactapp[ContactApp]
 * https://github.com/incodehq/ecpcrm[ECP CRM]
 
-*Example Apps*
+_Example Apps_
 
 * https://github.com/isisaddons/isis-app-todoapp[TodoApp]
 * https://github.com/isisaddons/isis-app-kitchensink[Kitchensink]
@@ -100,20 +109,34 @@ _nb: not ASF_
 
 
 
-| *Further reading:*
+|
+[discrete]
+== 3rd party
+
+* link:https://github.com/sebastianslutzky/AngularViewerCLI[AngularViewer]
+* link:https://github.com/joerg-rade/kroviz[Kroviz]
+* link:https://platform.incode.org[Incode Platform]
+
+_nb: not ASF_
+
+|
+[discrete]
+== Further reading:
 
 * xref:going-deeper/articles-and-presentations.adoc[Articles & Presentations]
 * xref:going-deeper/books.adoc[Books]
 
 
 
-| *Academia*
+|
+[discrete]
+== Academia
 
 * link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD] (Pawson)
 * https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Bachelors dissertation, Ginn)
 * https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
 
-| *Experiments*
+_Experiments_
 
 * https://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
 * https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
