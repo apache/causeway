@@ -49,7 +49,7 @@ public abstract class DemoStub {
     private static Map<String, String> createConstants() {
         val map = new HashMap<String, String>();
         map.put("SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java");
-        map.put("SOURCES_DEMO", "https://github.com/apache/isis/blob/master/examples/apps/demo/src/main/java");
+        map.put("SOURCES_DEMO", "https://github.com/apache/isis/tree/master/examples/apps/demo/src/main/java");
         map.put("ISSUES_DEMO", "https://issues.apache.org/jira/"); 
         return map;
     }
