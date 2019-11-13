@@ -1,27 +1,24 @@
-* xref:about.adoc[About]
+* xref:configuring.adoc[Configuring]
+** xref:configuring/properties.adoc[Properties]
+** xref:configuring/bulk-load.adoc[Bulk Load]
+** xref:configuring/disabling-persistence-by-reachability.adoc[Disabling Persistence by Reachability]
+** xref:configuring/persistence-xml.adoc[Persistence XML]
+** xref:configuring/using-jndi-data-source.adoc[Using JNDI Data Source]
 
 
-** xref:configuring.adoc[Configuring]
-*** xref:configuring/properties.adoc[Properties]
-*** xref:configuring/bulk-load.adoc[Bulk Load]
-*** xref:configuring/disabling-persistence-by-reachability.adoc[Disabling Persistence by Reachability]
-*** xref:configuring/persistence-xml.adoc[Persistence XML]
-*** xref:configuring/using-jndi-data-source.adoc[Using JNDI Data Source]
+* xref:jdo-mappings.adoc[JDO Mappings]
+** xref:jdo-mappings/1-to-m-bidirectional-relationships.adoc[1-to-m bidirectional relationships]
+** xref:jdo-mappings/mandatory-properties-in-subtypes.adoc[Mandatory properties in subtypes]
+** xref:jdo-mappings/mapping-to-a-view.adoc[Mapping to a View]
 
 
-** xref:jdo-mappings.adoc[JDO Mappings]
-*** xref:jdo-mappings/1-to-m-bidirectional-relationships.adoc[1-to-m bidirectional relationships]
-*** xref:jdo-mappings/mandatory-properties-in-subtypes.adoc[Mandatory properties in subtypes]
-*** xref:jdo-mappings/mapping-to-a-view.adoc[Mapping to a View]
+* xref:db-schemas.adoc[DB Schemas]
 
 
-** xref:db-schemas.adoc[DB Schemas]
-
-
-** xref:hints-and-tips.adoc[Hints-n-Tips]
-*** xref:hints-and-tips/overriding-jdo-annotations.adoc[Overriding JDO Annotations]
-*** xref:hints-and-tips/subtype-entity-not-fully-populated.adoc[Subtype entity not fully populated]
-*** xref:hints-and-tips/java8.adoc[Java 8]
-*** xref:hints-and-tips/diagnosing-n-plus-1.adoc[Diagnosing n-plus-1]
-*** xref:hints-and-tips/typesafe-queries-and-fetchgroups.adoc[Typesafe Queries and Fetchgroups]
-*** xref:hints-and-tips/jdoql-and-timestamps.adoc[JDOQL and Timestamps]
+* xref:hints-and-tips.adoc[Hints-n-Tips]
+** xref:hints-and-tips/overriding-jdo-annotations.adoc[Overriding JDO Annotations]
+** xref:hints-and-tips/subtype-entity-not-fully-populated.adoc[Subtype entity not fully populated]
+** xref:hints-and-tips/java8.adoc[Java 8]
+** xref:hints-and-tips/diagnosing-n-plus-1.adoc[Diagnosing n-plus-1]
+** xref:hints-and-tips/typesafe-queries-and-fetchgroups.adoc[Typesafe Queries and Fetchgroups]
+** xref:hints-and-tips/jdoql-and-timestamps.adoc[JDOQL and Timestamps]

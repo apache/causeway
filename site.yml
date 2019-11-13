@@ -82,6 +82,9 @@ content:
       start_path: core/security/shiro/src/main/doc # security
       branches: HEAD
     - url: .
+      start_path: core/security/keycloak/src/main/doc # security
+      branches: HEAD
+    - url: .
       start_path: core/testsupport/unittestsupport/src/main/doc # testing
       branches: HEAD
     - url: .
@@ -188,7 +191,6 @@ asciidoc:
     idprefix: ""
     idseparator: "-"
     plantuml-server-url: "http://www.plantuml.com/plantuml"
-    page-toc: ""
     isiscurr: "2.0.0-M2"
     isisnext: "2.0.0-M3"
     isisnextafter: "2.0.0-M4"

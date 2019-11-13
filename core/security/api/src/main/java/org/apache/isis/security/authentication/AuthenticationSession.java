@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.commons.internal.encoding.Encodable;
+import org.apache.isis.security.authentication.standard.AuthenticationManagerStandard;
 
 /**
  * The representation within the system of an authenticated user.
@@ -88,4 +89,23 @@ public interface AuthenticationSession extends Encodable, Serializable {
     MessageBroker getMessageBroker();
 
     UserMemento createUserMemento();
+
+    /**
+     * To support external security mechanisms such as keycloak, where the validity of the session is defined by
+     * headers in the request.
+     */
+    default Type getType() {
+        return Type.DEFAULT;
+    }
+
+    public enum Type {
+        DEFAULT,
+        /**
+         * Instructs the {@link AuthenticationManagerStandard} to not cache this session in its internal map of
+         * sessions by validation code, and therefore to ignore this aspect when considering if an
+         * {@link org.apache.isis.security.authentication.AuthenticationSession} is
+         * {@link org.apache.isis.security.authentication.manager.AuthenticationManager#isSessionValid(AuthenticationSession) valid} or not.
+         */
+        EXTERNAL
+    }
 }

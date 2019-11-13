@@ -87,12 +87,6 @@
 					<artifactId>isis-security</artifactId>
 				</dependency>
 
-				<!-- FIXME[ISIS-1976] plugins are optional -->
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-security-shiro</artifactId>
-				</dependency>
-				
 				<dependency>
 					<groupId>com.google.guava</groupId>
 					<artifactId>guava</artifactId>

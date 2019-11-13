@@ -1,3 +1,6 @@
 name: odn
 title: "DataNucleus ObjectStore"
 version: master
+start_page: ROOT:about.adoc
+nav:
+  - modules/ROOT/nav.adoc

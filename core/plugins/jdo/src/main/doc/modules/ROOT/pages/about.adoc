@@ -1,6 +1,6 @@
 = DataNucleus Object Store
 include::_attributes.adoc[]
-
+:page-toc: ~
 
 The DataNucleus Object Store enables domain objects to be persisted to relational as well as NoSQL databases.
 The object store is implemented using link:http://datanucleus.org[DataNucleus].

@@ -10,7 +10,7 @@ Both the business logic and supporting bootstrapping classes are in a single Mav
 [TIP]
 ====
 We don't recommend that you use the helloworld archetype as the basis for your own applications.
-Instead, use the xref:simpleapp:ROOT:about.adoc[simpleapp archetype].
+Instead, use the xref:simpleapp:ROOT:about.adoc[SimpleApp starter app].
 This also creates a minimal application, but provides more structure and example tests, useful as you build out your own app.
 ====
 

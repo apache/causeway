@@ -29,43 +29,16 @@
 
     <artifactId>isis-security-shiro</artifactId>
 
-    <name>Apache Isis Plugin for Security (Shiro)</name>
+    <name>Apache Isis Core - Security (Shiro)</name>
 	<description>
         Authentication and Authorization using Apache Shiro.
     </description>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.plugins.security.shiro</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/plugins/security/shiro</git-plugin.propertiesDir>
+        <git-plugin.propertiesDir>org/apache/isis/security/shiro</git-plugin.propertiesDir>
     </properties>
 
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <!-- Apache Release Audit Tool -->
-                <plugin>
-                    <groupId>org.apache.rat</groupId>
-                    <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.10</version>
-	                <configuration>
-	                    <excludes>
-	                    	<!-- 
-	                    	overriding inherited excludes from oia.core:isis 
-	                    	with a more specific set for this component
-	                    	 -->
-	                        <exclude>**/target/**</exclude>
-	                        <exclude>**/target-ide/**</exclude>
-
-	                        <exclude>**/*.project</exclude>
-	                        <exclude>**/.classpath</exclude>
-	                        <exclude>**/.settings/**</exclude>
-	                    </excludes>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
     <dependencyManagement>
     	<!-- for benefit of application developers, using scope=import -->
@@ -84,17 +57,17 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-security</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-runtime-services</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-runtime-web</artifactId>
         </dependency>
-	
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-runtime</artifactId>

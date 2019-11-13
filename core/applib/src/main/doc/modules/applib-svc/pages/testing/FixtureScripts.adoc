@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-The `FixtureScripts` service provides the ability to execute xref:ext-fixtures:ROOT:about.adoc#api-and-usage[fixture scripts].
+The `FixtureScripts` service provides the ability to execute xref:fixtures:ROOT:about.adoc#api-and-usage[fixture scripts].
 
 The default implementation of this service, `FixtureScriptsDefault`, uses the associated xref:refguide:applib-svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] to obtain a `FixtureScriptsSpecification`.
 This configures this service, for example telling it which package to search for `FixtureScript` classes, how to execute those classes, and hints that influence the UI.

@@ -87,11 +87,6 @@
             <artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-security-shiro</artifactId>
-        </dependency>
-        
         <!-- PERSISTENCE -->
 
         <dependency>
@@ -138,7 +133,39 @@
             <scope>test</scope>
         </dependency>
 
-
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>shiro</id>
+            <activation>
+                <property>
+                    <name>!keycloak</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.isis.core</groupId>
+                    <artifactId>isis-security-shiro</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>keycloak</id>
+            <activation>
+                <property>
+                    <name>keycloak</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.isis.core</groupId>
+                    <artifactId>isis-security-keycloak</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+    </profiles>
 
 </project>

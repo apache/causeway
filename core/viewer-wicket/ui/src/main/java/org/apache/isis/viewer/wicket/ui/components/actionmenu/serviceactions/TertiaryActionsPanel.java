@@ -22,8 +22,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.isis.core.runtime.web.AuthenticationSessionWormhole;
+import org.apache.isis.metamodel.commons.Wormhole;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
@@ -92,6 +99,7 @@ public class TertiaryActionsPanel extends PanelBase {
     }
 
     private void addLogoutLink(MarkupContainer themeDiv) {
+
         Link<Void> logoutLink = new Link<Void>("logoutLink") {
 
             private static final long serialVersionUID = 1L;
@@ -104,6 +112,16 @@ public class TertiaryActionsPanel extends PanelBase {
 
         };
         themeDiv.add(logoutLink);
+
+        // this is hacky, would rather ask AuthenticatedWebSessionForIsis, but that type isn't visible here.
+        final AuthenticationSession authenticationSession = AuthenticationSessionWormhole.sessionByThread.get();
+        if(authenticationSession != null && authenticationSession.getType() == AuthenticationSession.Type.EXTERNAL) {
+            logoutLink.setEnabled(false);
+            // TODO: need to improve the styling, show as grayed out.
+            logoutLink.add(new CssClassAppender("disabled"));
+            Tooltips.addTooltip(logoutLink, "External");
+        }
+
     }
 
     private Class<? extends Page> getSignInPage() {

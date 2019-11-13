@@ -1,3 +1,0 @@
-* xref:testing:ext-specsupport:about.adoc[BDD Spec Support (extension)]
-
-
