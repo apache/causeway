@@ -83,11 +83,6 @@ final class Oid_Parented implements ParentedOid {
         return Oid.marshaller().marshal(this);
     }
 
-    @Override
-    public String enStringNoVersion() {
-        return Oid.marshaller().marshalNoVersion(this);
-    }
-
 
     // /////////////////////////////////////////////////////////
     // encodeable

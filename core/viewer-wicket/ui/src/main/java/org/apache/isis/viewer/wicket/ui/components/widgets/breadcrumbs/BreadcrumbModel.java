@@ -105,7 +105,7 @@ public class BreadcrumbModel implements Serializable {
         }
         try {
             final RootOid unmarshal = Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
-            return unmarshal.enStringNoVersion();
+            return unmarshal.enString();
         } catch(Exception ex) {
             return null;
         }

@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.adapter.version;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 
+@Deprecated
 public class ConcurrencyException extends IsisException {
 
     private static final long serialVersionUID = 1L;
@@ -30,7 +31,7 @@ public class ConcurrencyException extends IsisException {
 
         final StringBuilder buf = new StringBuilder();
         buf.append(currentUser != null? currentUser + " " : "");
-        buf.append(" attempted to update ").append(oid.enStringNoVersion());
+        buf.append(" attempted to update ").append(oid.enString());
         buf.append(", however this object has since been modified");
         if(datastoreVersion.getUser() != null) {
             buf.append(" by ").append(datastoreVersion.getUser());

@@ -107,12 +107,6 @@ final class Oid_Root implements RootOid {
         return Oid.marshaller().marshal(this);
     }
 
-    @Override
-    public String enStringNoVersion() {
-        return Oid.marshaller().marshalNoVersion(this);
-    }
-
-
     // -- Properties
     @Override
     public ObjectSpecId getObjectSpecId() {

@@ -36,6 +36,7 @@ import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
+import lombok.Getter;
 import lombok.val;
 
 public class BookmarkTreeNode implements Serializable {
@@ -45,8 +46,8 @@ public class BookmarkTreeNode implements Serializable {
     private final List<BookmarkTreeNode> children = _Lists.newArrayList();
     private final int depth;
 
-    private final RootOid oidNoVer;
-    private final String oidNoVerStr;
+    @Getter private final RootOid oidNoVer; //TODO rename field, versions have been removed
+    @Getter private final String oidNoVerStr; //TODO rename field, versions have been removed
     private final PageType pageType;
 
     private String title;
@@ -62,7 +63,7 @@ public class BookmarkTreeNode implements Serializable {
             final int depth) {
         pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
         RootOid oid = oidFrom(pageParameters);
-        this.oidNoVerStr = Oid.marshaller().marshalNoVersion(oid);
+        this.oidNoVerStr = Oid.marshaller().marshal(oid);
         this.oidNoVer = Oid.unmarshaller().unmarshal(oidNoVerStr, RootOid.class);
 
         // replace oid with the noVer equivalent.
@@ -73,14 +74,6 @@ public class BookmarkTreeNode implements Serializable {
         this.pageType = bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION_PROMPT;
         this.depth = depth;
 
-    }
-
-    public RootOid getOidNoVer() {
-        return oidNoVer;
-    }
-
-    public String getOidNoVerStr() {
-        return oidNoVerStr;
     }
 
     public String getTitle() {
@@ -220,7 +213,7 @@ public class BookmarkTreeNode implements Serializable {
             })
             .filter(_NullSafe::isPresent)
             .map(parentOid->{
-                final String parentOidStr = parentOid.enStringNoVersion();
+                final String parentOidStr = parentOid.enString();
                 return parentOidStr;
             })
             .forEach(parentOidStr->{
@@ -267,7 +260,7 @@ public class BookmarkTreeNode implements Serializable {
 
     public static String oidStrFrom(BookmarkableModel<?> candidateBookmarkableModel) {
         final RootOid oid = oidFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
-        return oid != null? Oid.marshaller().marshalNoVersion(oid): null;
+        return oid != null? Oid.marshaller().marshal(oid): null;
     }
 
 }

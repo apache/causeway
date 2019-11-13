@@ -38,11 +38,6 @@ final class Oid_Value implements RootOid {
     }
 
     @Override
-    public String enStringNoVersion() {
-        return null;
-    }
-
-    @Override
     public boolean isValue() { 
         return true; 
     }

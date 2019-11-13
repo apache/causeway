@@ -39,13 +39,6 @@ public interface Oid extends Encodable {
      * A string representation of this {@link Oid}.
      */
     String enString();
-    
-    @Deprecated
-    default String enStringNoVersion() {
-        return enString();
-    }
-
-    //Version getVersion();
 
     /**
      * Flags whether this OID is for a transient (not-yet-persisted) object,
@@ -74,16 +67,6 @@ public interface Oid extends Encodable {
         String marshal(RootOid rootOid);
 
         String joinAsOid(String domainType, String instanceId);
-        
-        @Deprecated
-        default String marshalNoVersion(RootOid rootOid) {
-            return marshal(rootOid);
-        }
-        
-        @Deprecated
-        default String marshalNoVersion(ParentedOid parentedOid) {
-            return marshal(parentedOid);
-        }
 
     }
 
@@ -116,7 +99,7 @@ public interface Oid extends Encodable {
 
         // -- LEGACY
 
-        public static RootOid ofBookmark(final Bookmark bookmark) {
+        public static RootOid ofBookmark(Bookmark bookmark) {
             return Oid_Root.of(ObjectSpecId.of(bookmark.getObjectType()), 
                     bookmark.getIdentifier(), Oid_State.from(bookmark));
         }
@@ -125,31 +108,11 @@ public interface Oid extends Encodable {
             return Oid_Root.of(objectSpecId, mementoStr, Oid_State.VIEWMODEL);
         }
 
-        public static RootOid transientOf(final ObjectSpecId objectSpecId, final String identifier) {
+        public static RootOid transientOf(ObjectSpecId objectSpecId, String identifier) {
             return Oid_Root.of(objectSpecId, identifier, Oid_State.TRANSIENT);
         }
 
-        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier) {
-            return Factory.persistentOf(objectSpecId, identifier, null);
-        }
-
-        @Deprecated
-        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence) {
-            return Factory.persistentOf(objectSpecId, identifier, versionSequence, null, null);
-        }
-
-        @Deprecated
-        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser) {
-            return Factory.persistentOf(objectSpecId, identifier, versionSequence, versionUser, null);
-        }
-
-        @Deprecated
-        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final Long versionUtcTimestamp) {
-            return Factory.persistentOf(objectSpecId, identifier, versionSequence, null, versionUtcTimestamp);
-        }
-
-        @Deprecated
-        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
+        public static RootOid persistentOf(ObjectSpecId objectSpecId, String identifier) {
             return Oid_Root.of(objectSpecId, identifier, Oid_State.PERSISTENT);
         }
 
