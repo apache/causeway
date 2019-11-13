@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,8 +29,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -43,7 +40,6 @@ import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
@@ -161,7 +157,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         final ActionModel actionModel = getActionModel();
 
         final int paramNumberUpdated = scalarPanelUpdated.getModel().getParameterMemento().getNumber();
-        try {
+        
+        {
             final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
 
             final int numParams = action.getParameterCount();
@@ -186,21 +183,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
                     throw new IllegalStateException("Unknown: " + repaint);
                 }
             }
-        } catch (ConcurrencyException ex) {
-
-            // second attempt should succeed, because the Oid would have
-            // been updated in the attempt
-            val targetAdapter = getActionModel().getTargetAdapter();
-
-            // forward onto the target page with the concurrency exception
-            final EntityPage entityPage = new EntityPage(getActionModel().getCommonContext(), targetAdapter, ex);
-
-            setResponsePage(entityPage);
-
-            final MessageService messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
-            messageService.warnUser(ex.getMessage());
-            return;
-        }
+        } 
 
         // previously this method was also doing:
         // target.add(this);

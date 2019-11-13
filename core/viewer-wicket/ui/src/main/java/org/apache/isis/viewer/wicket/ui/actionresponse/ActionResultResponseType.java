@@ -28,7 +28,6 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -50,12 +49,12 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
             val commonContext = model.getCommonContext();
             val actualAdapter = determineActualAdapter(commonContext, resultAdapter); // intercepts collections
-            return toEntityPage(model, actualAdapter, null);
+            return toEntityPage(model, actualAdapter);
         }
 
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, ManagedObject targetAdapter, ConcurrencyException ex) {
-            final ActionResultResponse actionResultResponse = toEntityPage(model, targetAdapter, ex);
+        public ActionResultResponse interpretResult(ActionModel model, ManagedObject targetAdapter) {
+            final ActionResultResponse actionResultResponse = toEntityPage(model, targetAdapter);
             return actionResultResponse;
         }
     },
@@ -128,7 +127,7 @@ public enum ActionResultResponseType {
     /**
      * Only overridden for {@link ActionResultResponseType#OBJECT object}
      */
-    public ActionResultResponse interpretResult(ActionModel model, ManagedObject targetAdapter, ConcurrencyException ex) {
+    public ActionResultResponse interpretResult(ActionModel model, ManagedObject targetAdapter) {
         throw new UnsupportedOperationException("Cannot render concurrency exception for any result type other than OBJECT");
     }
 
@@ -152,12 +151,11 @@ public enum ActionResultResponseType {
 
     private static ActionResultResponse toEntityPage(
             final ActionModel model, 
-            final ManagedObject actualAdapter, 
-            final ConcurrencyException exIfAny) {
+            final ManagedObject actualAdapter) {
 
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage = new EntityPage(model.getCommonContext(), actualAdapter, exIfAny);
+        final EntityPage entityPage = new EntityPage(model.getCommonContext(), actualAdapter);
 
         return ActionResultResponse.toPage(entityPage);
     }

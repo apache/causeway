@@ -29,7 +29,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.common.OnConcurrencyExceptionHandler;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
@@ -56,7 +55,6 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
         
         super(commonContext, "");
         this.onSelectionHandler = onSelectionHandler;
-        this.onConcurrencyExceptionHandler = onConcurrencyExceptionHandler;
     }
 
     // -- OnSelectionHandler
@@ -68,19 +66,6 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
     public void setOnSelectionHandler(OnSelectionHandler onSelectionHandler) {
         this.onSelectionHandler = onSelectionHandler;
     }
-
-
-    // -- OnConcurrencyExceptionHandler
-
-    private OnConcurrencyExceptionHandler onConcurrencyExceptionHandler;
-    public OnConcurrencyExceptionHandler getOnConcurrencyExceptionHandler() {
-        return onConcurrencyExceptionHandler;
-    }
-
-    public void setOnConcurrencyExceptionHandler(OnConcurrencyExceptionHandler onConcurrencyExceptionHandler) {
-        this.onConcurrencyExceptionHandler = onConcurrencyExceptionHandler;
-    }
-
 
 
     @Override
@@ -112,11 +97,6 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
 
         final MarkupContainer row = cellItem.getParent().getParent();
         row.setOutputMarkupId(true);
-        val entityModel = (EntityModel) rowModel;
-        String concurrencyExceptionIfAny = entityModel.getAndClearConcurrencyExceptionIfAny();
-        if(concurrencyExceptionIfAny != null) {
-            row.add(new CssClassAppender("reloaded-after-concurrency-exception"));
-        }
 
         final ContainedToggleboxPanel toggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
@@ -124,20 +104,11 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
             public void onSubmit(AjaxRequestTarget target) {
                 val entityModel = (EntityModel) rowModel;
                 ManagedObject selectedAdapter = null;
-                try {
+                {
                     selectedAdapter = entityModel.load();
                     if(onSelectionHandler != null) {
                         onSelectionHandler.onSelected(this, selectedAdapter, target);
                     }
-                } catch(ConcurrencyException ex) {
-
-                    // should work second time, because the previous attempt will have updated the OAM's OIDs version.
-                    selectedAdapter = entityModel.load();
-                    if(onConcurrencyExceptionHandler != null) {
-                        onConcurrencyExceptionHandler.onConcurrencyException(this, selectedAdapter, ex, target);
-                    }
-
-                    entityModel.setException(ex);
                 }
             }
         };

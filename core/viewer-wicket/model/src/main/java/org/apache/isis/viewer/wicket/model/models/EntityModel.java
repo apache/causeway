@@ -34,7 +34,6 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -146,12 +145,6 @@ implements ObjectAdapterModel, UiHintContainer {
     private Mode mode;
     private RenderingHint renderingHint;
     private final PendingModel pendingModel;
-
-
-    /**
-     * {@link ConcurrencyException}, if any, that might have occurred previously
-     */
-    private ConcurrencyException concurrencyException;
 
 
     // -- FACTORIES
@@ -472,23 +465,6 @@ implements ObjectAdapterModel, UiHintContainer {
         }
         // we no longer clear these, because we want to call resetPropertyModels(...) after an object has been updated.
         //propertyScalarModels.clear();
-    }
-
-    // //////////////////////////////////////////////////////////
-    // concurrency exceptions
-    // //////////////////////////////////////////////////////////
-
-    public void setException(ConcurrencyException ex) {
-        this.concurrencyException = ex;
-    }
-
-    public String getAndClearConcurrencyExceptionIfAny() {
-        if(concurrencyException == null) {
-            return null;
-        }
-        final String message = concurrencyException.getMessage();
-        concurrencyException = null;
-        return message;
     }
 
 

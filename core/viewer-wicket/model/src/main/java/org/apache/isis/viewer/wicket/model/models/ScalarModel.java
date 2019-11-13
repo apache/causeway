@@ -30,8 +30,6 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -148,10 +146,10 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                     final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
                             InteractionInitiatedBy.USER);
                     return valid.isAllowed() ? null : valid.getReason();
-                } catch (final ConcurrencyException ex) {
-                    // disregard concurrency exceptions because will pick up at the IFormValidator level rather
-                    // than each individual property.
-                    return null;
+//                } catch (final ConcurrencyException ex) {
+//                    // disregard concurrency exceptions because will pick up at the IFormValidator level rather
+//                    // than each individual property.
+//                    return null;
                 } catch (final Exception ex) {
                     return ex.getLocalizedMessage();
                 }

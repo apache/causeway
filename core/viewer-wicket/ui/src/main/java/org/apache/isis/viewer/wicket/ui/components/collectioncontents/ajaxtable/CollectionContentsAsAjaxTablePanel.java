@@ -27,7 +27,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.Model;
@@ -38,8 +37,6 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.WhereValueFacet;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -51,7 +48,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.common.OnConcurrencyExceptionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
@@ -122,32 +118,6 @@ implements CollectionCountProvider {
         addOrReplace(dataTable);
         dataTable.honourHints();
 
-        if(toggleboxColumn != null) {
-            final OnConcurrencyExceptionHandler handler2 = new OnConcurrencyExceptionHandler() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void onConcurrencyException(
-                        final Component context,
-                        final ManagedObject selectedAdapter,
-                        final ConcurrencyException ex,
-                        final AjaxRequestTarget ajaxRequestTarget) {
-
-                    // this causes the row to be repainted
-                    // but it isn't possible (yet) to raise any warning
-                    // because that only gets flushed on page refresh.
-                    //
-
-                    // perhaps something to tackle in a separate ticket....
-                    ajaxRequestTarget.add(dataTable);
-
-                    // hmm... just reading this;
-                    // could perhaps use ajaxRequestTarget.addJavaScript(JGrowlUtils....)
-                }
-            };
-            toggleboxColumn.setOnConcurrencyExceptionHandler(handler2);
-        }
     }
 
     private BulkActionsProvider getBulkActionsProvider() {

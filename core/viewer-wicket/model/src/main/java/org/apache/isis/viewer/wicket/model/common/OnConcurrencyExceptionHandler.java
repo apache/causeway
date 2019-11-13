@@ -24,7 +24,6 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
@@ -36,7 +35,6 @@ public interface OnConcurrencyExceptionHandler extends Serializable {
     void onConcurrencyException(
             Component context, 
             ManagedObject selectedAdapter,
-            ConcurrencyException ex,
             AjaxRequestTarget ajaxRequestTarget);
 
 }

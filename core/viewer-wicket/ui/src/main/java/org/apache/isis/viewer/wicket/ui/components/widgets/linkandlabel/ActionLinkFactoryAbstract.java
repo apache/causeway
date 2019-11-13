@@ -261,7 +261,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     // an error page, but is probably 'good enough').
                     val targetAdapter = actionModel.getTargetAdapter();
 
-                    final EntityPage entityPage = new EntityPage(getCommonContext(), targetAdapter, null);
+                    final EntityPage entityPage = new EntityPage(getCommonContext(), targetAdapter);
 
                     getCommonContext().getTransactionService().flushTransaction();
 

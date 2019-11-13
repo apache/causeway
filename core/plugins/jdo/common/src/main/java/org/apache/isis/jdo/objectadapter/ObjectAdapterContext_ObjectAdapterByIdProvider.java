@@ -32,8 +32,6 @@ import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.PojoRecreationException;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;

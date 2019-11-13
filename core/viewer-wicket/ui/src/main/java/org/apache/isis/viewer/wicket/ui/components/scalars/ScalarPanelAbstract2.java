@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -43,7 +42,6 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
@@ -73,7 +71,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPane
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -304,19 +301,7 @@ implements ScalarModelSubscriber2 {
 
         val commonContext = super.getCommonContext();
         
-        try {
-            buildGui();
-        } catch (ConcurrencyException ex) {
-            //
-            // this has to be here because it's the first method called when editing a property
-            // on a potentially stale model.
-            //
-            // there is similar code for invoking actions (ActionLink)
-            //
-            commonContext.getAuthenticationSession().getMessageBroker().addMessage(ex.getMessage());
-            val parentAdapter = getModel().getParentEntityModel().load();
-            throw new RestartResponseException(new EntityPage(commonContext, parentAdapter));
-        }
+        buildGui();
 
         final ScalarModel scalarModel = getModel();
 
