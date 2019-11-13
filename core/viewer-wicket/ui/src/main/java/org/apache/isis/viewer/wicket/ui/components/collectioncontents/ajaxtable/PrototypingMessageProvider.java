@@ -20,9 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import java.util.Locale;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.base._Timing.StopWatch;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -38,18 +35,10 @@ import org.apache.isis.runtime.system.context.IsisContext;
  */
 class PrototypingMessageProvider {
 
-    public static IModel<String> getTookTimingMessageModel() {
-        
-        return new Model<String>() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getObject() {
-                return getTookTimingMessage();
-            }
-
-        };
+    public static String getTookTimingMessageModel(boolean isPrototyping) {
+        return isPrototyping
+                ? getTookTimingMessage()
+                        : "";
     }
 
     // -- HELPER

@@ -84,9 +84,7 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
             }
         }));
         container.add(new Label("navigatorLabel", messageModel));
-        if(systemEnvironment.isPrototyping()) {
-            container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel()));
-        }
+        container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel(systemEnvironment.isPrototyping())));
     }
 
     /**

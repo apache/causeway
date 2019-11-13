@@ -91,11 +91,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             }
         });
 
-        if(systemEnvironment.isPrototyping()) {
-            container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel()));    
-        }
-        
-         
+        container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel(systemEnvironment.isPrototyping())));    
 
     }
 
