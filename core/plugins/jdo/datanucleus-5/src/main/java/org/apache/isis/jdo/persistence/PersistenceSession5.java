@@ -719,7 +719,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
 
         final ObjectAdapter adapter = objectAdapterContext.recreatePojo(originalOid, pojo);
-        adapter.setVersion(datastoreVersion);
 
         CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
         objectAdapterContext.postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
@@ -797,7 +796,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
 
         Version versionIfAny = getVersionIfAny(pojo);
-        adapter.setVersion(versionIfAny);
     }
 
     @Override

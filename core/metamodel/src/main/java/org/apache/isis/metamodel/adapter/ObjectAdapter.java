@@ -70,8 +70,6 @@ public interface ObjectAdapter extends ManagedObject {
     ObjectAdapter getAggregateRoot(); //XXX[2033] not referenced by 'metamodel'
 
     Version getVersion(); //XXX[2033] not referenced by 'metamodel'
-    void setVersion(Version version); //XXX[2033] not referenced by 'metamodel'
-
 
     /**
      * Whether this instance belongs to another object (meaning its

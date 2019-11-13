@@ -68,10 +68,6 @@ public class ObjectAdapterForBean implements ObjectAdapter {
     }
 
     @Override
-    public void setVersion(Version version) {
-    }
-
-    @Override
     public boolean isTransient() {
         return false;
     }

@@ -194,9 +194,6 @@ public class PojoAdapterBuilder {
         final Oid oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
         final PojoAdapter pojoAdapter = PojoAdapter.of(pojo, oid,
                 specificationLoader, persistenceSession);
-        if(persistence == Persistence.PERSISTENT && version != null) {
-            pojoAdapter.setVersion(version);
-        }
         return pojoAdapter;
     }
 

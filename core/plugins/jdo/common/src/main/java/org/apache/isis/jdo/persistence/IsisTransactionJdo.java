@@ -339,12 +339,6 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
             if(!pc_snapshot.isEmpty()) {
                 try {
                     IsisContext.getPersistenceSession().get().execute(pc_snapshot);
-                    for (PersistenceCommand persistenceCommand : pc_snapshot) {
-                        if (persistenceCommand instanceof DestroyObjectCommand) {
-                            final ObjectAdapter adapter = persistenceCommand.onAdapter();
-                            adapter.setVersion(null);
-                        }
-                    }
                 } catch (final RuntimeException ex) {
                     // if there's an exception, we want to make sure that
                     // all commands are cleared and propagate

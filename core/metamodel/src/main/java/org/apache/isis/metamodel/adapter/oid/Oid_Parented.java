@@ -60,11 +60,6 @@ final class Oid_Parented implements ParentedOid {
     }
 
     @Override
-    public void setVersion(Version version) {
-        parentRootOid.setVersion(version);
-    }
-
-    @Override
     public boolean isTransient() {
         return getParentOid().isTransient();
     }

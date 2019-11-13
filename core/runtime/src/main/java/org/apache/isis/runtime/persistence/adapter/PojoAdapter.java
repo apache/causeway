@@ -207,23 +207,6 @@ public final class PojoAdapter implements ObjectAdapter {
     }
 
     @Override
-    public void setVersion(final Version version) {
-        if(isParentedCollection()) {
-            // ignored
-            return;
-        }
-        if (shouldSetVersion(version)) {
-            RootOid rootOid = (RootOid) getOid(); // since not parented
-            rootOid.setVersion(version);
-        }
-    }
-
-    private boolean shouldSetVersion(final Version otherVersion) {
-        final Version version = getOid().getVersion();
-        return version == null || otherVersion == null || otherVersion.different(version);
-    }
-
-    @Override
     public String toString() {
         final ToString str = new ToString(this);
         toString(str);

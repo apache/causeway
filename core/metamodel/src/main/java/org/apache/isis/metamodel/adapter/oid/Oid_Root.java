@@ -158,11 +158,6 @@ final class Oid_Root implements RootOid {
     }
 
     @Override
-    public void setVersion(final Version version) {
-        this.version = version;
-    }
-
-    @Override
     public Bookmark asBookmark() {
         return state.bookmarkOf(this);
     }

@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtime.persistence.adapterfactory.pojo;
 
-import java.util.Date;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -30,7 +28,6 @@ import org.junit.Test;
 import org.apache.isis.jdo.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
@@ -39,7 +36,6 @@ import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 public class PojoAdapterTest {
 
@@ -49,16 +45,9 @@ public class PojoAdapterTest {
     private ObjectAdapter adapter;
     private RuntimeTestPojo domainObject;
 
-    @Mock
-    private Version mockVersion;
-    @Mock
-    private Version mockVersion2;
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private AuthenticationSession mockAuthenticationSession;
-    @Mock
-    private PersistenceSession5 mockPersistenceSession;
+    @Mock private SpecificationLoader mockSpecificationLoader;
+    @Mock private AuthenticationSession mockAuthenticationSession;
+    @Mock private PersistenceSession5 mockPersistenceSession;
 
     @Before
     public void setUp() throws Exception {
@@ -70,24 +59,12 @@ public class PojoAdapterTest {
                 mockSpecificationLoader, 
                 mockPersistenceSession);
 
-        adapter.setVersion(mockVersion);
-
-        allowUnimportantMethodCallsOn(mockVersion);
-        allowUnimportantMethodCallsOn(mockVersion2);
+        allowUnimportantMethodCallsOn();
     }
 
-    private void allowUnimportantMethodCallsOn(final Version version) {
+    private void allowUnimportantMethodCallsOn() {
         context.checking(new Expectations() {
             {
-                allowing(version).getSequence();
-                allowing(version).getUtcTimestamp();
-                allowing(version).sequence();
-                allowing(version).getUser();
-                allowing(version).hasTimestamp();
-
-                allowing(version).getTime();
-                will(returnValue(new Date()));
-
                 allowing(mockAuthenticationSession).getUserName();
                 will(returnValue("fredbloggs"));
             }
@@ -103,44 +80,5 @@ public class PojoAdapterTest {
     public void getObject_initially() {
         assertEquals(domainObject, adapter.getPojo());
     }
-
-    @Test
-    public void getVersion_initially() throws Exception {
-        assertSame(mockVersion, adapter.getVersion());
-    }
-
-    //TODO[2154] remove    
-    //    @Test
-    //    public void checkLock_whenVersionsSame() throws Exception {
-    //
-    //        context.checking(new Expectations() {
-    //            {
-    //                oneOf(mockVersion).different(mockVersion2);
-    //                will(returnValue(false));
-    //            }
-    //        });
-    //        
-    //        adapter.checkLock(mockVersion2);
-    //    }
-    //
-    //    @Test(expected=ConcurrencyException.class)
-    //    public void checkLock_whenVersionsDifferent() throws Exception {
-    //
-    //        adapter = PojoAdapterBuilder.create()
-    //                .with(mockSpecificationLoader)
-    //                .withTitleString("some pojo")
-    //                .with(mockVersion)
-    //                .with(mockAuthenticationSession)
-    //                .build();
-    //        
-    //        context.checking(new Expectations() {
-    //            {
-    //                oneOf(mockVersion).different(mockVersion2);
-    //                will(returnValue(true));
-    //            }
-    //        });
-    //        
-    //        adapter.checkLock(mockVersion2);
-    //    }
 
 }

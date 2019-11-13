@@ -45,7 +45,7 @@ public interface Oid extends Encodable {
 
     Version getVersion();
 
-    void setVersion(Version version);
+    //void setVersion(Version version);
 
     /**
      * Flags whether this OID is for a transient (not-yet-persisted) object,

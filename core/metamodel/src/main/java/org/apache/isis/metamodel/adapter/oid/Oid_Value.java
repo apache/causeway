@@ -49,10 +49,6 @@ final class Oid_Value implements RootOid {
     }
 
     @Override
-    public void setVersion(Version version) {
-    }
-
-    @Override
     public boolean isValue() { 
         return true; 
     }
