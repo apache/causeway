@@ -1,2 +1,2 @@
-* xref:about.adoc[Hello World Archetype]
+* xref:about.adoc[Hello World Starter App]
 

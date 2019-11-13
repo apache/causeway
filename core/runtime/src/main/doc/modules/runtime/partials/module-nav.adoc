@@ -1,1 +1,1 @@
-* xref:core:runtime:about.adoc[Core: Runtime]
+* xref:core:runtime:about.adoc[Runtime]

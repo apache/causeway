@@ -1,2 +1,2 @@
-* xref:about.adoc[Simple App Archetype]
+* xref:about.adoc[Simple App starter app]
 

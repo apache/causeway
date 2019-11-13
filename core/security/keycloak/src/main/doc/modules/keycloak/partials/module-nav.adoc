@@ -1,1 +1,1 @@
-* xref:security:keycloak:about.adoc[Keycloak]
+* xref:security:keycloak:about.adoc[Keycloak Implementation]
