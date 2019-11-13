@@ -30,7 +30,7 @@ import static org.junit.Assert.assertThat;
 public class OidMarshallerTest_roundtripping {
 
     @Test
-    public void rootOid_withNoVersion() {
+    public void rootOid() {
         RootOid oid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123");
 
         final String enString = oid.enString();
@@ -38,20 +38,8 @@ public class OidMarshallerTest_roundtripping {
         assertThat(deString, is(oid));
     }
 
-//    @Test
-//    public void rootOid_withVersion() {
-//        RootOid oid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123", 90807L);
-//
-//        final String enString = oid.enString();
-//        final RootOid deString = RootOid.deString(enString);
-//        assertThat(deString, is(oid));
-//        assertThat(deString.getVersion(), is(oid.getVersion())); // assert separately because not part of equality check
-//    }
-
-
-
     @Test
-    public void collectionOid_withNoVersion() {
+    public void collectionOid() {
         RootOid parentOid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123");
         ParentedOid oid = Factory.parentedOfName(parentOid, "items");
 
@@ -59,16 +47,5 @@ public class OidMarshallerTest_roundtripping {
         final ParentedOid deString = ParentedOid.deString(enString);
         assertThat(deString, is(oid));
     }
-
-//    @Test
-//    public void collectionOid_withVersion() {
-//        RootOid parentOid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123", 90807L);
-//        ParentedOid oid = Factory.parentedOfName(parentOid, "items");
-//
-//        final String enString = oid.enString();
-//        final ParentedOid deString = Oid.unmarshaller().unmarshal(enString, ParentedOid.class);
-//        assertThat(deString, is(oid));
-//        assertThat(deString.getParentOid().getVersion(), is(parentOid.getVersion())); // assert separately because not part of equality check
-//    }
-
+    
 }

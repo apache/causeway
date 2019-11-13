@@ -60,14 +60,4 @@ public class RootOidTest_create {
         assertThat(oid.isTransient(), is(false));
     }
 
-    @Test
-    public void createTransientNoVersion() throws Exception {
-        ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = Factory.transientOf(objectSpecId, "123");
-        assertThat(oid.getObjectSpecId(), is(objectSpecId));
-        assertThat(oid.getIdentifier(), is("123"));
-
-        assertThat(oid.isTransient(), is(true));
-    }
-
 }

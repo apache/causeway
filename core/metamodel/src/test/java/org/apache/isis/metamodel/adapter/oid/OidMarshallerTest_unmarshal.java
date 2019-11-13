@@ -90,48 +90,6 @@ public class OidMarshallerTest_unmarshal {
         assertThat(oid, equalTo((Oid)rootOid));
     }
 
-//    @Test
-//    public void persistentRootWithVersion() {
-//        final String oidStr = "CUS:123^90809::";
-//
-//        final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-//        assertThat(rootOid.isTransient(), is(false));
-//        assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
-//        assertThat(rootOid.getIdentifier(), is("123"));
-//        assertThat(rootOid.getVersion().getSequence(), is(90809L));
-//
-//        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-//        assertThat(oid, equalTo((Oid)rootOid));
-//    }
-
-//    @Test
-//    public void persistentRootWithVersionAndUserAndTimestamp() {
-//        final String oidStr = "CUS:123^90809:fredbloggs:1231231232";
-//
-//        final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-//        assertThat(rootOid.isTransient(), is(false));
-//        assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
-//        assertThat(rootOid.getIdentifier(), is("123"));
-//        assertThat(rootOid.getVersion().getSequence(), is(90809L));
-//        assertThat(rootOid.getVersion().getUser(), is("fredbloggs"));
-//        assertThat(rootOid.getVersion().getUtcTimestamp(), is(1231231232L));
-//
-//        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-//        assertThat(oid, equalTo((Oid)rootOid));
-//    }
-
-//    @Test
-//    public void persistentRootWithVersionAndUserWithAtSymbol() {
-//        final String oidStr = "CUS:123^90809:fredbloggs@foo.bar:";
-//
-//        final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-//        assertThat(rootOid.getVersion().getUser(), is("fredbloggs@foo.bar"));
-//
-//        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-//        assertThat(oid, equalTo((Oid)rootOid));
-//    }
-
-
     @Test(expected=IllegalArgumentException.class)
     public void persistentRootWithNonNumericVersion() {
         final String oidStr = "CUS:123^d0809";
@@ -178,7 +136,6 @@ public class OidMarshallerTest_unmarshal {
         final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid, equalTo((Oid)collectionOid));
     }
-
 
 
     @Test(expected=IllegalArgumentException.class)

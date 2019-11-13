@@ -48,37 +48,4 @@ public class OidMarshallerTest_marshall {
         assertThat(marshal, equalTo("!CUS:123"));
     }
 
-//    @Test
-//    public void rootOid_versionSequence() {
-//        final String marshal = oidMarshaller.marshal(Factory.persistentOf(ObjectSpecId.of("CUS"),  "123", 90807L));
-//        assertThat(marshal, equalTo("CUS:123^90807::"));
-//    }
-//
-//    @Test
-//    public void rootOid_versionSequenceAndUser() {
-//        final String marshal = oidMarshaller.marshal(Factory.persistentOf(ObjectSpecId.of("CUS"),  "123", 90807L, "joebloggs"));
-//        assertThat(marshal, equalTo("CUS:123^90807:joebloggs:"));
-//    }
-//
-//    @Test
-//    public void rootOid_versionSequenceAndUserThatHasAnAtSymbol() {
-//        final ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-//        final RootOid oid = Factory.persistentOf(objectSpecId,  "123", 90807L, "joebloggs@foo.bar");
-//        final String marshal = oidMarshaller.marshal(oid);
-//        assertThat(marshal, equalTo("CUS:123^90807:joebloggs@foo.bar:"));
-//    }
-//
-//    @Test
-//    public void rootOid_versionSequenceAndUtc() {
-//        final String marshal = oidMarshaller.marshal(Factory.persistentOf(ObjectSpecId.of("CUS"),  "123", 90807L, 3453452141L));
-//        assertThat(marshal, equalTo("CUS:123^90807::3453452141"));
-//    }
-//
-//    @Test
-//    public void rootOid_versionSequenceAndUserAndUtc() {
-//        final String marshal = oidMarshaller.marshal(Factory.persistentOf(ObjectSpecId.of("CUS"),  "123", 90807L, "joebloggs", 3453452141L));
-//        assertThat(marshal, equalTo("CUS:123^90807:joebloggs:3453452141"));
-//    }
-
-
 }

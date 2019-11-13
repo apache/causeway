@@ -48,12 +48,6 @@ public class ExceptionRecognizerDocDefault_recognizes_Test {
         excepRecognizer = new ExceptionRecognizerDocDefault();
     }
 
-//    @Test
-//    public void whenConcurrencyException_is_recognized() throws Exception {
-//        ex = new ConcurrencyException("foo", Factory.persistentOf(ObjectSpecId.of("CUS"), "123"));
-//        assertThat(excepRecognizer.recognize(ex), is(not(nullValue())));
-//    }
-
     @Test
     public void whenSomeRandomException_is_not_recognized() throws Exception {
         ex = new SomeRandomException();
