@@ -20,8 +20,6 @@ package org.apache.isis.metamodel.adapter;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-
 /**
  * 
  * @since 2.0
@@ -37,25 +35,9 @@ public interface ObjectAdapterProvider {
     @Nullable ObjectAdapter adapterFor(@Nullable Object pojo);
 
 
-    // -- DOMAIN OBJECT CREATION SUPPORT
-
-    /**
-     * <p>
-     * Creates a new instance of the specified type and returns it.
-     *
-     * <p>
-     * The returned object will be initialized (had the relevant callback
-     * lifecycle methods invoked).
-     *
-     * <p>
-     * While creating the object it will be initialized with default values and
-     * its created lifecycle method (its logical constructor) will be invoked.
-     *
-     */
-    ObjectAdapter newTransientInstance(ObjectSpecification objectSpec);
-
     // -- FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
 
+    @Deprecated
     public static interface Delegating extends ObjectAdapterProvider {
 
         ObjectAdapterProvider getObjectAdapterProvider();
@@ -63,11 +45,6 @@ public interface ObjectAdapterProvider {
         @Override
         default ObjectAdapter adapterFor(Object domainObject) {
             return getObjectAdapterProvider().adapterFor(domainObject);
-        }
-
-        @Override
-        default ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {
-            return getObjectAdapterProvider().newTransientInstance(objectSpec);
         }
 
     }

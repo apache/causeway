@@ -30,12 +30,10 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
@@ -45,23 +43,18 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import lombok.val;
 
 @Service 
-public class FactoryServiceInternalDefault implements FactoryService {
+public class FactoryServiceDefault implements FactoryService {
+    
+    @Inject IsisSessionFactory isisSessionFactory; // dependsOn
+    @Inject private SpecificationLoader specificationLoader;
+    @Inject private ServiceInjector serviceInjector;
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T instantiate(final Class<T> domainClass) {
         final ObjectSpecification spec = specificationLoader.loadSpecification(domainClass);
-        final ObjectAdapter adapter = doCreateTransientInstance(spec);
-        return (T) adapter.getPojo();
+        final ManagedObject adapter = ManagedObject._newTransientInstance(spec); 
+        return _Casts.uncheckedCast(adapter.getPojo());
     }
-
-    /**
-     * Factored out as a potential hook method for subclasses.
-     */
-    protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
-        return persistenceSessionServiceInternal.createTransientInstance(spec);
-    }
-
 
     @Override
     public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
@@ -116,11 +109,7 @@ public class FactoryServiceInternalDefault implements FactoryService {
     }
 
 
-    @Inject IsisSessionFactory isisSessionFactory; // dependsOn
-    @Inject SpecificationLoader specificationLoader;
-    @Inject ServiceRegistry serviceRegistry;
-    @Inject ServiceInjector serviceInjector;
-    @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+
 
 
 

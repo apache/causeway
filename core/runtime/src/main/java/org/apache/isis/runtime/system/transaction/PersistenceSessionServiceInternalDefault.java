@@ -62,11 +62,6 @@ implements PersistenceSessionServiceInternal {
     }
 
     @Override
-    public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
-        return getPersistenceSession().newTransientInstance(spec);
-    }
-
-    @Override
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {

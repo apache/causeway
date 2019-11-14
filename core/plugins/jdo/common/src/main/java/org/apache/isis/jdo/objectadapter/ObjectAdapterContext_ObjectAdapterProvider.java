@@ -22,7 +22,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
@@ -62,13 +61,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         val rootOid = oidFactory.oidFor(ManagedObject.of(specificationLoader::loadSpecification, pojo));
         val newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
         return objectAdapterContext.injectServices(newAdapter);
-    }
-
-    // -- DOMAIN OBJECT CREATION SUPPORT
-
-    @Override
-    public ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {
-        return objectAdapterContext.objectCreationMixin.newInstance(objectSpec);
     }
 
 

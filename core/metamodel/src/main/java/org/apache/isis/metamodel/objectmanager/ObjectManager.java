@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.objectmanager;
 import javax.annotation.Nullable;
 
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.objectmanager.ObjectLoader.ObjectLoadRequest;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
@@ -35,15 +34,21 @@ import lombok.val;
 public interface ObjectManager {
 
     MetaModelContext getMetaModelContext();
+    ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
 
     public static ObjectManager of(MetaModelContext metaModelContext) {
-        val objectLoader = ObjectLoader.buildDefault(metaModelContext);
-        val objectManager = new ObjectManager_default(metaModelContext, objectLoader);
+        val objectCreator = ObjectCreator.createDefault(metaModelContext);
+        val objectLoader = ObjectLoader.createDefault(metaModelContext);
+        val objectManager = new ObjectManager_default(metaModelContext, objectLoader, objectCreator);
         return objectManager;
     }
 
-    public default ManagedObject loadObject(ObjectLoadRequest objectLoadRequest) {
+    public default ManagedObject createObject(ObjectCreator.Request objectCreateRequest) {
+        return getObjectCreator().createObject(objectCreateRequest);
+    }
+    
+    public default ManagedObject loadObject(ObjectLoader.Request objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
     }
     

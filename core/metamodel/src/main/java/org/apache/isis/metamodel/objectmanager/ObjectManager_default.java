@@ -29,5 +29,6 @@ class ObjectManager_default implements ObjectManager {
 
     @Getter(onMethod = @__(@Override)) private final MetaModelContext metaModelContext;
     @Getter(onMethod = @__(@Override)) private final ObjectLoader objectLoader;
+    @Getter(onMethod = @__(@Override)) private final ObjectCreator objectCreator;
     
 }

@@ -42,6 +42,7 @@ import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
+import org.apache.isis.metamodel.objectmanager.ObjectCreator;
 import org.apache.isis.metamodel.objectmanager.ObjectLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
@@ -98,8 +99,6 @@ public interface ManagedObject {
         }
 
     }
-    
-    //Function<Class<?>, ObjectSpecification> specLoader
     
     // -- TITLE
 
@@ -304,9 +303,8 @@ public interface ManagedObject {
     }
     
     // -- DEPRECATIONS (in an attempt to decouple the metamodel from ObjectAdapter)
-    
     @Deprecated
-    public static Optional<ObjectAdapter> promote(ManagedObject managedObject) {
+    static Optional<ObjectAdapter> promote(ManagedObject managedObject) {
         return Optional.ofNullable(managedObject)
         .filter(mo->mo instanceof ObjectAdapter) 
         .map(ObjectAdapter.class::cast);
@@ -460,8 +458,23 @@ public interface ManagedObject {
         val spec = specificationLoader.loadSpecification(rootOid.getObjectSpecId());
         val objectId = rootOid.getIdentifier();
         
-        val objectLoadRequest = ObjectLoader.ObjectLoadRequest.of(spec, objectId);
+        val objectLoadRequest = ObjectLoader.Request.of(spec, objectId);
         val managedObject = mmc.getObjectManager().loadObject(objectLoadRequest);
+        
+        return managedObject;
+        
+    }
+    
+    static ManagedObject _newTransientInstance(ObjectSpecification spec) {
+        
+        if(spec == null) {
+            return null;
+        }
+        
+        val mmc = spec.getMetaModelContext();
+        
+        val objectCreateRequest = ObjectCreator.Request.of(spec);
+        val managedObject = mmc.getObjectManager().createObject(objectCreateRequest);
         
         return managedObject;
         
@@ -511,6 +524,8 @@ public interface ManagedObject {
 //                .filter(_NullSafe::isPresent)
 //                .map(ManagedObject.class::cast);
     }
+
+
 
     
  }
