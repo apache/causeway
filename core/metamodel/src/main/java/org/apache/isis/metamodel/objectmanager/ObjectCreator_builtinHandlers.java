@@ -24,7 +24,8 @@ import java.lang.reflect.Modifier;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.callbacks.CallbackFacet;
@@ -63,9 +64,9 @@ final class ObjectCreator_builtinHandlers {
             
             val spec = objectCreateRequest.getObjectSpecification();
             
-            if (log.isDebugEnabled()) {
-                log.debug("creating instance of {}", spec);
-            }
+            //if (log.isDebugEnabled()) {
+                log.info("creating instance of {}", spec);
+            //}
             
             val pojo = instantiateAndInjectServices(spec);
 
@@ -75,14 +76,40 @@ final class ObjectCreator_builtinHandlers {
         
         //  -- HELPER
         
-        private ManagedObject initializePropertiesAndDoCallback(final ManagedObject adapter) {
+        private Object instantiateAndInjectServices(ObjectSpecification spec) {
+
+            val type = spec.getCorrespondingClass();
+            if (type.isArray()) {
+                return Array.newInstance(type.getComponentType(), 0);
+            }
+
+            if (Modifier.isAbstract(type.getModifiers())) {
+                throw _Exceptions.unrecoverable("Cannot create an instance of an abstract class: " + type);
+            }
+
+            try {
+                
+                val newInstance = type.newInstance();
+                metaModelContext.getServiceInjector().injectServicesInto(newInstance);
+                return newInstance;    
+                
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw _Exceptions.unrecoverable(
+                        "Failed to create instance of type " + spec.getFullIdentifier(), e);
+            }
+
+        }
+        
+        private ManagedObject initializePropertiesAndDoCallback(ManagedObject adapter) {
 
             // initialize new object
             adapter.getSpecification().streamAssociations(Contributed.EXCLUDED)
             .forEach(field->field.toDefault(adapter));
 
-            val pojo = adapter.getPojo();
-            metaModelContext.getServiceInjector().injectServicesInto(pojo);
+             val pojo = adapter.getPojo();
+            
+            //XXX pojo already got everything injected above
+            //metaModelContext.getServiceInjector().injectServicesInto(pojo);
 
             CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
 
@@ -113,51 +140,30 @@ final class ObjectCreator_builtinHandlers {
             return adapter;
         }
         
-        private Object instantiateAndInjectServices(final ObjectSpecification objectSpec) {
-
-            final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-            if (correspondingClass.isArray()) {
-                return Array.newInstance(correspondingClass.getComponentType(), 0);
-            }
-
-            final Class<?> cls = correspondingClass;
-            if (Modifier.isAbstract(cls.getModifiers())) {
-                throw new IsisException("Cannot create an instance of an abstract class: " + cls);
-            }
-
-            final Object newInstance;
-            try {
-                newInstance = cls.newInstance();
-            } catch (final IllegalAccessException | InstantiationException e) {
-                throw new IsisException("Failed to create instance of type " + objectSpec.getFullIdentifier(), e);
-            }
-
-            metaModelContext.getServiceInjector().injectServicesInto(newInstance);
-            return newInstance;
-
-        }
-        
-        @SuppressWarnings({ "unchecked", "rawtypes" })
         private void postLifecycleEventIfRequired(
                 ManagedObject adapter,
                 Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
             
             val lifecycleEventFacet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
-            if(lifecycleEventFacet != null) {
-                final Class<? extends AbstractLifecycleEvent<?>> eventType = lifecycleEventFacet.getEventType();
-                val instance = (AbstractLifecycleEvent) InstanceUtil.createInstance(eventType);
-                val pojo = adapter.getPojo();
-                postEvent(instance, pojo);
+            if(lifecycleEventFacet == null) {
+                return;
             }
+            
+            val eventType = lifecycleEventFacet.getEventType();
+            val instance = InstanceUtil.createInstance(eventType);
+            val pojo = adapter.getPojo();
+            postEvent(_Casts.uncheckedCast(instance), pojo);
+            
         }
 
-        private void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {
-            val eventBusService = metaModelContext.getServiceRegistry()
-                    .lookupServiceElseFail(EventBusService.class);
-            if(eventBusService!=null) {
-                event.initSource(pojo);
-                eventBusService.post(event);
-            }
+        private <T> void postEvent(AbstractLifecycleEvent<T> event, T pojo) {
+            
+            metaModelContext.getServiceRegistry()
+                .lookupService(EventBusService.class)
+                .ifPresent(eventBusService->{
+                    event.initSource(pojo);
+                    eventBusService.post(event);
+                });
         }
         
 

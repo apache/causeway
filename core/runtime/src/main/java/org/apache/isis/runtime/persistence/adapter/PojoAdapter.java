@@ -148,7 +148,7 @@ public final class PojoAdapter implements ObjectAdapter {
             return false;
         }
 
-        val state = persistenceSession.stateOf(pojo);
+        val state = persistenceSession.getEntityState(pojo);
         return state.isDetached();
     }
 
@@ -162,7 +162,7 @@ public final class PojoAdapter implements ObjectAdapter {
         if(persistenceSession==null) {
             return false;
         }
-        val state = persistenceSession.stateOf(pojo);
+        val state = persistenceSession.getEntityState(pojo);
         val isRepresentingPersistent = state.isAttached() || state.isDestroyed();
         return isRepresentingPersistent;
     }
@@ -177,7 +177,7 @@ public final class PojoAdapter implements ObjectAdapter {
         if(persistenceSession==null) {
             return false;
         }
-        val state = persistenceSession.stateOf(pojo);
+        val state = persistenceSession.getEntityState(pojo);
         return state.isDestroyed();
     }
 

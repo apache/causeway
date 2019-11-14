@@ -32,7 +32,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ManagedObjectState;
+import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.Data;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
@@ -87,7 +87,7 @@ SessionScopedComponent {
     /**
      * @since 2.0
      */
-    ManagedObjectState stateOf(Object pojo);
+    EntityState getEntityState(Object pojo);
 
     /** whether pojo is recognized by the persistence layer, that is, it has an ObjectId
      * @since 2.0*/

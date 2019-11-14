@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.spec;
 /**
  * @since 2.0
  */
-public enum ManagedObjectState {
+public enum EntityState {
 
     not_Persistable,
     persistable_Attached,

@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.spec;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -302,31 +301,33 @@ public interface ManagedObject {
         return adapter.getPojo()==null;
     }
     
-    // -- DEPRECATIONS (in an attempt to decouple the metamodel from ObjectAdapter)
-    @Deprecated
-    static Optional<ObjectAdapter> promote(ManagedObject managedObject) {
-        return Optional.ofNullable(managedObject)
-        .filter(mo->mo instanceof ObjectAdapter) 
-        .map(ObjectAdapter.class::cast);
-    }
-
-    // -- DEPRECATIONS - SPECIALIZED
+    // -- DEPRECATIONS (REFACTORING)
     
     @Deprecated
     static boolean _isDestroyed(ManagedObject adapter) {
-        return ManagedObject.promote(adapter)
-                .map(ObjectAdapter::isDestroyed)
-                .orElseGet(()->!ManagedObject._oid(adapter).isPersistent());
+        
+        if(adapter==null || adapter.getPojo()==null) {
+            return false;
+        }
+        
+        val spec = adapter.getSpecification();
+        if(!spec.isEntity()) {
+            // services and view models are treated as persistent objects
+            return false;
+        }
+        
+        val entityFacet = spec.getFacet(EntityFacet.class);
+        if(entityFacet==null) {
+            return false;
+        }
+        
+        val entityState = entityFacet.getEntityState(adapter.getPojo());
+        return entityState == EntityState.persistable_Destroyed;
     }
 
     @Deprecated
     static RootOid _collectionOidIfAny(ManagedObject adapter) {
         return _rootOidIfAny(adapter);
-//        val oid = ManagedObject.promote(adapter).getOid();
-//        if(!(oid instanceof RootOid)) {
-//            return null;
-//        }
-//        return (RootOid) oid;
     }
 
     @Deprecated
