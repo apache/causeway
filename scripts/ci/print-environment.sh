@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "\n\n"
+echo ""
 
 echo "===========  ISIS CI SCRIPT [$1]  ================="
 echo "\$REVISION                  = ${REVISION}"
@@ -20,5 +20,5 @@ echo "\$DOCKER_REGISTRY_USERNAME  = ${DOCKER_REGISTRY_USERNAME}"
 echo "\$DOCKER_REGISTRY_PASSWORD  = (suppressed)"
 echo "========================================================"
 
-echo "\n\n"
+echo ""
 
