@@ -27,10 +27,8 @@ import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.val;
 
@@ -123,8 +121,6 @@ public class PojoAdapterBuilder {
         withObjectType(iterator.next());
         if(!iterator.hasNext()) { return this; }
         withIdentifier(iterator.next());
-        if(!iterator.hasNext()) { return this; }
-        withTitleString(iterator.next());
         return this;
     }
 
@@ -150,10 +146,6 @@ public class PojoAdapterBuilder {
         return this;
     }
 
-    public PojoAdapterBuilder with(ObjectSpecification objectSpec) {
-        return this;
-    }
-
     public PojoAdapterBuilder with(PersistenceSession5 persistenceSession) {
         this.persistenceSession = persistenceSession;
         return this;
@@ -161,14 +153,6 @@ public class PojoAdapterBuilder {
 
     public PojoAdapterBuilder with(SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
-        return this;
-    }
-
-    public PojoAdapterBuilder with(AuthenticationSession authenticationSession) {
-        return this;
-    }
-
-    public PojoAdapterBuilder withTitleString(String titleString) {
         return this;
     }
 

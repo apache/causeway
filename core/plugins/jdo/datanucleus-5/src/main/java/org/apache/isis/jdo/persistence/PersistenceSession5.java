@@ -107,9 +107,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * A wrapper around the JDO {@link PersistenceManager}, which also manages concurrency
- * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
- * identities} for each and every POJO that is being used by the framework.
+ * A wrapper around the JDO {@link PersistenceManager}.
  */
 @Vetoed @Log4j2
 public class PersistenceSession5 extends IsisPersistenceSessionJdoBase
@@ -572,7 +570,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         // possibly redundant because also called in the post-load event
         // listener, but (with JPA impl) found it was required if we were ever to
         // get an eager left-outer-join as the result of a refresh (sounds possible).
-        initializeMapAndCheckConcurrency((Persistable) domainObject);
+        initializeEntity((Persistable) domainObject);
     }
 
     // -- makePersistent
@@ -707,7 +705,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public ObjectAdapter initializeMapAndCheckConcurrency(final Persistable pojo) {
+    public ObjectAdapter initializeEntity(final Persistable pojo) {
 
         // need to do eagerly, because (if a viewModel then) a
         // viewModel's #viewModelMemento might need to use services
