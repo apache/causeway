@@ -82,7 +82,7 @@ import org.apache.isis.metamodel.facets.object.callbacks.UpdatingLifecycleEventF
 import org.apache.isis.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ManagedObjectState;
+import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.Data;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
@@ -550,7 +550,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public void refreshRoot(final Object domainObject) {
 
-        val state = stateOf(domainObject);
+        val state = getEntityState(domainObject);
         val isRepresentingPersistent = state.isAttached() || state.isDestroyed();  
 
         if(!isRepresentingPersistent) {
@@ -740,7 +740,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
-        if (stateOf(pojo).isDetached()) {
+        if (getEntityState(pojo).isDetached()) {
             val managedObject = ManagedObject.of(specificationLoader::loadSpecification, pojo);
 
             // persisting
@@ -835,7 +835,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public ManagedObjectState stateOf(@Nullable Object pojo) {
+    public EntityState getEntityState(@Nullable Object pojo) {
 
         // guard against misuse
         if(pojo instanceof ObjectAdapter) {
@@ -846,15 +846,15 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             val persistable = (Persistable) pojo;
             val isDeleted = persistable.dnIsDeleted();
             if(isDeleted) {
-                return ManagedObjectState.persistable_Destroyed;
+                return EntityState.persistable_Destroyed;
             }
             val isPersistent = persistable.dnIsPersistent();
             if(isPersistent) {
-                return ManagedObjectState.persistable_Attached;
+                return EntityState.persistable_Attached;
             }
-            return ManagedObjectState.persistable_Detached;
+            return EntityState.persistable_Detached;
         }
-        return ManagedObjectState.not_Persistable;
+        return EntityState.not_Persistable;
     }
 
     @Override

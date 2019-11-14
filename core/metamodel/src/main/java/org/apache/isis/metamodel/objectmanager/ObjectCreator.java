@@ -33,16 +33,15 @@ import lombok.val;
 /**
  * @since 2.0
  */
-public interface ObjectLoader {
+public interface ObjectCreator {
 
-    ManagedObject loadObject(Request objectLoadRequest);
+    ManagedObject createObject(Request objectLoadRequest);
     
     // -- REQUEST (VALUE) TYPE
     
     @Value(staticConstructor = "of")
     public static class Request {
         ObjectSpecification objectSpecification;
-        String objectIdentifier;
     }
     
     // -- HANDLER
@@ -50,21 +49,24 @@ public interface ObjectLoader {
     static interface Handler 
     extends 
         MetaModelContextAware, 
-        ChainOfResponsibility.Handler<ObjectLoader.Request, ManagedObject> {
+        ChainOfResponsibility.Handler<ObjectCreator.Request, ManagedObject> {
         
     }
 
     // -- FACTORY
     
-    public static ObjectLoader createDefault(MetaModelContext metaModelContext) {
+    public static ObjectCreator createDefault(MetaModelContext metaModelContext) {
         
         val chainOfHandlers = _Lists.of(
-                new ObjectLoader_builtinHandlers.GuardAgainstNull(),
-                new ObjectLoader_builtinHandlers.LoadService(),
-                new ObjectLoader_builtinHandlers.LoadValue(),
-                new ObjectLoader_builtinHandlers.LoadViewModel(),
-                new ObjectLoader_builtinHandlers.LoadEntity(),
-                new ObjectLoader_builtinHandlers.LoadOther());
+                new ObjectCreator_builtinHandlers.LegacyCreationHandler()
+                
+//                new ObjectCreator_builtinHandlers.GuardAgainstNull(),
+//                new ObjectCreator_builtinHandlers.LoadService(),
+//                new ObjectCreator_builtinHandlers.CreateValueDefault(),
+//                new ObjectCreator_builtinHandlers.CreateViewModel(),
+//                new ObjectCreator_builtinHandlers.CreateEntity(),
+//                new ObjectCreator_builtinHandlers.CreateOther()
+                );
         
         chainOfHandlers.forEach(h->h.setMetaModelContext(metaModelContext));
         

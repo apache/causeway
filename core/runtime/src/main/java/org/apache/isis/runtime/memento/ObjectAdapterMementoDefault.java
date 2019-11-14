@@ -560,6 +560,10 @@ public class ObjectAdapterMementoDefault implements Serializable {
             SpecificationLoader specificationLoader) {
         
         val spec = specificationLoader.loadSpecification(objectSpecId);
+        if(spec==null) {
+            // eg. ill-formed request
+            return null;
+        }
         
         // intercept when trivial
         if(spec.getBeanSort().isManagedBean()) {

@@ -88,7 +88,7 @@ final public class ObjectAdapterContext {
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(persistenceSession, runtimeContext.getSpecificationLoader());
         this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, runtimeContext);
         this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(runtimeContext);
-        this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, persistenceSession, runtimeContext);
+        this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, runtimeContext);
         this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(runtimeContext);
 
         this.persistenceSession = persistenceSession;

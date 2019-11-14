@@ -22,15 +22,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
-import org.apache.isis.metamodel.spec.ManagedObjectState;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.Data;
-import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 /**
@@ -49,16 +42,6 @@ public interface RuntimeContext {
     ServiceInjector getServiceInjector();
     ServiceRegistry getServiceRegistry();
     HomePageAction getHomePageAction();
-
-    ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data);
-
-    ObjectAdapter newTransientInstance(ObjectSpecification domainTypeSpec);
-
-    void makePersistentInTransaction(ObjectAdapter objectAdapter);
-    Object fetchPersistentPojoInTransaction(RootOid rootOid);
-
-    ManagedObjectState stateOf(Object domainObject);
-    FixturesInstalledState getFixturesInstalledState();
 
     void logoutAuthenticationSession();
 

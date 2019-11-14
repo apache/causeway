@@ -32,9 +32,7 @@ import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -49,21 +47,15 @@ import lombok.extern.log4j.Log4j2;
 class ObjectAdapterContext_ObjectCreation {
 
     private final ObjectAdapterContext objectAdapterContext;
-    @SuppressWarnings("unused")
-    private final PersistenceSession persistenceSession;
-    @SuppressWarnings("unused")
-    private final SpecificationLoader specificationLoader;
+    
     private ServiceInjector serviceInjector;
 
     ObjectAdapterContext_ObjectCreation(
             ObjectAdapterContext objectAdapterContext,
-            PersistenceSession persistenceSession,
             RuntimeContext runtimeContext) {
 
         this.objectAdapterContext = objectAdapterContext;
-        this.persistenceSession = persistenceSession;
         this.serviceInjector = runtimeContext.getServiceInjector();
-        this.specificationLoader = runtimeContext.getSpecificationLoader();
     }
 
     public ObjectAdapter newInstance(ObjectSpecification objectSpec) {
