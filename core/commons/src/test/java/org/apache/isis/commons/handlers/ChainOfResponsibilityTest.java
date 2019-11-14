@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import lombok.val;
 
@@ -82,6 +83,38 @@ class ChainOfResponsibilityTest {
         assertEquals("ASTRING", chainOfResponsibility.handle("aString").orElse(null)); // handled by first handler
         assertEquals("BSTRING", chainOfResponsibility.handle("bString").orElse(null)); // handled by second handler
         assertEquals("cString", chainOfResponsibility.handle("cString").orElse(null)); // handled by third handler
+        
+    }
+    
+    // sample extension
+    static interface StringHandler extends ChainOfResponsibility.Handler<String, String>{
+        
+    }
+    
+    
+    @Test
+    void whenExtended_shouldWorkAsWell() {
+    
+        val aToUpperCase = new StringHandler() {
+
+            @Override
+            public boolean isHandling(String request) {
+                return request.startsWith("a");
+            }
+
+            @Override
+            public String handle(String request) {
+                return request.toUpperCase();
+            }
+            
+        };
+        
+        val handlers = Arrays.asList(aToUpperCase);
+        
+        val chainOfResponsibility = ChainOfResponsibility.of(handlers);
+        
+        assertEquals("ASTRING", chainOfResponsibility.handle("aString").orElse(null)); // handled by first handler
+        assertFalse(chainOfResponsibility.handle("xxx").isPresent()); // not handled
         
     }
 

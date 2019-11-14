@@ -67,7 +67,7 @@ public interface ChainOfResponsibility<X, R> {
      */
     static <X, R> ChainOfResponsibility<X, R> 
     of(
-            final List<ChainOfResponsibility.Handler<? super X, R>> chainOfHandlers) {
+            final List<? extends ChainOfResponsibility.Handler<? super X, R>> chainOfHandlers) {
     
         return request -> {
 
