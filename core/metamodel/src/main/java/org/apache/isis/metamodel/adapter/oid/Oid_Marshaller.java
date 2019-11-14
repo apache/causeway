@@ -100,7 +100,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
     private static final String SEPARATOR = ":";
     private static final String SEPARATOR_NESTING = "~";
     private static final String SEPARATOR_PARENTED = "$";
-    private static final String SEPARATOR_VERSION = "^";
+    private static final String SEPARATOR_VERSION = "^"; // legacy
 
     private static final String WORD = "[^" + SEPARATOR + SEPARATOR_NESTING + SEPARATOR_PARENTED + "\\" + SEPARATOR_VERSION + "#" + "]+";
 
@@ -118,6 +118,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
                             ")" +
                             ")" +
                             "(" + "[" + SEPARATOR_PARENTED + "]" + WORD + ")?"  + // optional collection name
+                            "([\\" + SEPARATOR_VERSION + "].*)?" + // to be compatible with previous patterns, that optionally included version information
                     "$");
 
 

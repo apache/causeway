@@ -48,4 +48,13 @@ public class OidMarshallerTest_roundtripping {
         assertThat(deString, is(oid));
     }
     
+    @Test
+    public void rootOid_withLegacyVersionIgnored() {
+        RootOid oid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123");
+
+        final String enString = oid.enString();
+        final RootOid deString = RootOid.deString(enString + "^" + 90807L);
+        assertThat(deString, is(oid));
+    }
+    
 }

@@ -90,12 +90,13 @@ public class OidMarshallerTest_unmarshal {
         assertThat(oid, equalTo((Oid)rootOid));
     }
 
-    @Test(expected=IllegalArgumentException.class)
-    public void persistentRootWithNonNumericVersion() {
-        final String oidStr = "CUS:123^d0809";
-
-        oidMarshaller.unmarshal(oidStr, RootOid.class);
-    }
+// we simply ignore this since 2.0.0    
+//    @Test(expected=IllegalArgumentException.class)
+//    public void persistentRootWithNonNumericVersion() {
+//        final String oidStr = "CUS:123^d0809";
+//
+//        oidMarshaller.unmarshal(oidStr, RootOid.class);
+//    }
 
 
     @Test
