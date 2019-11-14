@@ -55,7 +55,7 @@ content:
       start_path: core/plugins/jaxrs-resteasy-4/src/main/doc # vro
       branches: HEAD
     - url: .
-      start_path: core/plugins/jdo/src/main/doc # userguide
+      start_path: core/plugins/jdo/src/main/doc # odn
       branches: HEAD
     - url: .
       start_path: core/runtime/src/main/doc # core
@@ -174,9 +174,8 @@ content:
 
 ui:
   bundle:
-    #url: ../isis-antora/build/ui-bundle.zip
-    #url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable 
-    url: ./antora/theme/ui-bundle.zip
+    url: https://github.com/apache/isis-antora/blob/master/build/ui-bundle.zip?raw=true
+    #url: ./antora/theme/ui-bundle.zip
     snapshot: true
   supplemental_files: antora/supplemental-ui
 

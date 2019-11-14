@@ -20,22 +20,22 @@ content:
 #    - url: .
 #      start_path: antora/components/relnotes
 #      branches: HEAD
-    - url: .
-      start_path: antora/components/security
-      branches: HEAD
+#    - url: .
+#      start_path: antora/components/security
+#      branches: HEAD
 #    - url: .
 #      start_path: antora/components/testing
 #      branches: HEAD
     - url: .
       start_path: antora/components/toc
       branches: HEAD
-#    - url: .
-#      start_path: antora/components/userguide
-#      branches: HEAD
-
     - url: .
-      start_path: core/applib/src/main/doc # refguide
+      start_path: antora/components/userguide
       branches: HEAD
+#
+#    - url: .
+#      start_path: core/applib/src/main/doc # refguide
+#      branches: HEAD
 #    - url: .
 #      start_path: core/commons/src/main/doc # core
 #      branches: HEAD
@@ -55,7 +55,7 @@ content:
 #      start_path: core/plugins/jaxrs-resteasy-4/src/main/doc # vro
 #      branches: HEAD
 #    - url: .
-#      start_path: core/plugins/jdo/src/main/doc # userguide
+#      start_path: core/plugins/jdo/src/main/doc # odn
 #      branches: HEAD
 #    - url: .
 #      start_path: core/runtime/src/main/doc # core
@@ -72,18 +72,18 @@ content:
 #    - url: .
 #      start_path: core/schema/src/main/doc # refguide
 #      branches: HEAD
-    - url: .
-      start_path: core/security/api/src/main/doc # security
-      branches: HEAD
-    - url: .
-      start_path: core/security/bypass/src/main/doc # security
-      branches: HEAD
-    - url: .
-      start_path: core/security/shiro/src/main/doc # security
-      branches: HEAD
-    - url: .
-      start_path: core/security/keycloak/src/main/doc # security
-      branches: HEAD
+#    - url: .
+#      start_path: core/security/api/src/main/doc # security
+#      branches: HEAD
+#    - url: .
+#      start_path: core/security/bypass/src/main/doc # security
+#      branches: HEAD
+#    - url: .
+#      start_path: core/security/shiro/src/main/doc # security
+#      branches: HEAD
+#    - url: .
+#      start_path: core/security/keycloak/src/main/doc # security
+#      branches: HEAD
 #    - url: .
 #      start_path: core/testsupport/unittestsupport/src/main/doc # testing
 #      branches: HEAD
@@ -174,8 +174,8 @@ content:
 
 ui:
   bundle:
-    url: ../isis-antora/build/ui-bundle.zip
-    #url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
+    #url: ../isis-antora/build/ui-bundle.zip
+    url: https://github.com/apache/isis-antora/blob/master/build/ui-bundle.zip?raw=true
     #url: ./antora/theme/ui-bundle.zip
     snapshot: true
   supplemental_files: antora/supplemental-ui
