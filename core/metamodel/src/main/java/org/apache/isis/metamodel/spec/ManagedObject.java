@@ -36,7 +36,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
@@ -361,15 +360,6 @@ public interface ManagedObject {
         
     }
     
-    @Deprecated
-    static Version _version(ManagedObject adapter) {
-        if(adapter instanceof ObjectAdapter) {
-            return ((ObjectAdapter)adapter).getVersion();
-        }
-        System.err.println("version support is not fully implemented yet");
-        return null;
-    }
-    
     // -- VISIBILITY UTILITIES
     
     static final class Visibility {
@@ -456,8 +446,9 @@ public interface ManagedObject {
     }
     
     static String _instanceIdIfAny(ManagedObject adapter) {
-        String oidStr = ManagedObject._rootOidElseThrow(adapter).enStringNoVersion();
+        String oidStr = ManagedObject._rootOidElseThrow(adapter).enString();
         // REVIEW: it's a bit hokey to join these together just to split them out again.
+        // TODO inline this then refactor!
         return oidStr != null ? Oid.unmarshaller().splitInstanceId(oidStr): null;
     }
     

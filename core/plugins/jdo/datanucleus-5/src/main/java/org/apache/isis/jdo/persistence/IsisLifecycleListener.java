@@ -45,7 +45,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     interface PersistenceSessionLifecycleManagement {
 
         void ensureRootObject(Persistable pojo);
-        ObjectAdapter initializeMapAndCheckConcurrency(Persistable pojo);
+        ObjectAdapter initializeEntity(Persistable pojo);
 
         void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(Persistable pojo);
         void invokeIsisPersistingCallback(Persistable pojo);
@@ -84,7 +84,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
-        persistenceSession.initializeMapAndCheckConcurrency(pojo);
+        persistenceSession.initializeEntity(pojo);
     }
 
     @Override

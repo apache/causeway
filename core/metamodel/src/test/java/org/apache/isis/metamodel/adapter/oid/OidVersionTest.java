@@ -36,39 +36,7 @@ public class OidVersionTest  {
     private RootOid oid1, oid2;
 
     @Test
-    public void whenEquivalentAndSameVersion() throws Exception {
-        oid1 = Factory.persistentOf(cusObjectSpecId, "123", 90807L);
-        oid2 = Factory.persistentOf(cusObjectSpecId, "123", 90807L);
-
-        assertThat(oid1, is(equalTo(oid2)));
-    }
-
-    @Test
-    public void whenEquivalentAndDifferentVersions() throws Exception {
-        oid1 = Factory.persistentOf(cusObjectSpecId, "123", 90807L);
-        oid2 = Factory.persistentOf(cusObjectSpecId, "123", 90808L);
-
-        assertThat(oid1, is(equalTo(oid2)));
-    }
-
-    @Test
-    public void whenEquivalentAndNoVersionInfoForLeftHand() throws Exception {
-        oid1 = Factory.persistentOf(cusObjectSpecId, "123");
-        oid2 = Factory.persistentOf(cusObjectSpecId, "123", 90808L);
-
-        assertThat(oid1, is(equalTo(oid2)));
-    }
-
-    @Test
-    public void whenEquivalentAndNoVersionInfoForRightHand() throws Exception {
-        oid1 = Factory.persistentOf(cusObjectSpecId, "123", 90807L);
-        oid2 = Factory.persistentOf(cusObjectSpecId, "123");
-
-        assertThat(oid1, is(equalTo(oid2)));
-    }
-
-    @Test
-    public void whenEquivalentAndNoVersionInfoForEither() throws Exception {
+    public void whenEquivalent() throws Exception {
         oid1 = Factory.persistentOf(cusObjectSpecId, "123");
         oid2 = Factory.persistentOf(cusObjectSpecId, "123");
 

@@ -26,12 +26,11 @@ import org.apache.isis.jdo.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.security.authentication.AuthenticationSession;
+
+import lombok.val;
 
 public class PojoAdapterBuilder {
 
@@ -42,9 +41,6 @@ public class PojoAdapterBuilder {
 
     private Object pojo = new Object();
 
-    // override; else will delegate to SpecificationLoader
-    private ObjectSpecification objectSpec;
-
     private SpecificationLoader specificationLoader;
 
     private ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
@@ -54,13 +50,6 @@ public class PojoAdapterBuilder {
 
     private Type type = Type.ROOT;
     private Persistence persistence = Persistence.PERSISTENT;
-
-    private String titleString;
-
-    private Version version;
-
-    private AuthenticationSession authenticationSession;
-
 
     public enum Persistence {
         TRANSIENT {
@@ -132,8 +121,6 @@ public class PojoAdapterBuilder {
         withObjectType(iterator.next());
         if(!iterator.hasNext()) { return this; }
         withIdentifier(iterator.next());
-        if(!iterator.hasNext()) { return this; }
-        withTitleString(iterator.next());
         return this;
     }
 
@@ -159,11 +146,6 @@ public class PojoAdapterBuilder {
         return this;
     }
 
-    public PojoAdapterBuilder with(ObjectSpecification objectSpec) {
-        this.objectSpec = objectSpec;
-        return this;
-    }
-
     public PojoAdapterBuilder with(PersistenceSession5 persistenceSession) {
         this.persistenceSession = persistenceSession;
         return this;
@@ -174,29 +156,11 @@ public class PojoAdapterBuilder {
         return this;
     }
 
-    public PojoAdapterBuilder with(AuthenticationSession authenticationSession) {
-        this.authenticationSession = authenticationSession;
-        return this;
-    }
-
-    public PojoAdapterBuilder with(Version version) {
-        this.version = version;
-        return this;
-    }
-
-    public PojoAdapterBuilder withTitleString(String titleString) {
-        this.titleString = titleString;
-        return this;
-    }
-
     public PojoAdapter build() {
-        final RootOid rootOid = persistence.createOid(objectSpecId, identifier);
-        final Oid oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
-        final PojoAdapter pojoAdapter = PojoAdapter.of(pojo, oid,
+        val rootOid = persistence.createOid(objectSpecId, identifier);
+        val oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
+        val pojoAdapter = PojoAdapter.of(pojo, oid,
                 specificationLoader, persistenceSession);
-        if(persistence == Persistence.PERSISTENT && version != null) {
-            pojoAdapter.setVersion(version);
-        }
         return pojoAdapter;
     }
 

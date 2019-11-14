@@ -26,20 +26,17 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 
 @Service
 public class ExceptionRecognizerDocDefault
 implements ExceptionRecognizer {
+    
+    @Inject private ServiceInjector serviceInjector;
 
-    // -- init, shutdown
-
-    @Programmatic
     @PostConstruct
     @Override
     public void init() {
@@ -47,19 +44,12 @@ implements ExceptionRecognizer {
         recognizer.init();
     }
 
-    @Programmatic
     @PreDestroy
     @Override
     public void shutdown() {
         recognizer.shutdown();
     }
 
-    static class ExceptionRecognizerForConcurrencyException
-    extends ExceptionRecognizerForType {
-        public ExceptionRecognizerForConcurrencyException() {
-            super(Category.CONCURRENCY, ConcurrencyException.class, prefix("Another user has just changed this data"));
-        }
-    }
     static class ExceptionRecognizerForRecoverableException
     extends ExceptionRecognizerForType {
         public ExceptionRecognizerForRecoverableException() {
@@ -67,10 +57,8 @@ implements ExceptionRecognizer {
         }
     }
 
-
     private final ExceptionRecognizer recognizer =
             new ExceptionRecognizerComposite(
-                    new ExceptionRecognizerForConcurrencyException(),
                     new ExceptionRecognizerForRecoverableException()
                     );
 
@@ -79,18 +67,15 @@ implements ExceptionRecognizer {
      * which will automatically recognize any {@link org.apache.isis.applib.RecoverableException}s or
      * any {@link ConcurrencyException}s.
      */
-    @Programmatic
     @Override
     public String recognize(Throwable ex) {
         return recognizer.recognize(ex);
     }
 
-    @Programmatic
     @Override
     public Recognition recognize2(final Throwable ex) {
         return recognizer.recognize2(ex);
     }
 
-    @Inject ServiceInjector serviceInjector;
 
 }

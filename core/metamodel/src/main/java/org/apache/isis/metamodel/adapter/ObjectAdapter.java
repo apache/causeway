@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.MethodExtensions;
@@ -68,10 +67,6 @@ public interface ObjectAdapter extends ManagedObject {
      * adapter corresponding to their {@link ParentedOid#getParentOid() root oid}.
      */
     ObjectAdapter getAggregateRoot(); //XXX[2033] not referenced by 'metamodel'
-
-    Version getVersion(); //XXX[2033] not referenced by 'metamodel'
-    void setVersion(Version version); //XXX[2033] not referenced by 'metamodel'
-
 
     /**
      * Whether this instance belongs to another object (meaning its

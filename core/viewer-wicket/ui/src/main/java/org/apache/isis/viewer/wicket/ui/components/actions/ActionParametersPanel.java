@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -98,7 +97,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
         addOrReplace(header);
 
         ManagedObject targetAdapter = null;
-        try {
+        {
             targetAdapter = actionModel.getTargetAdapter();
 
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
@@ -108,22 +107,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             final String actionName = getActionModel().getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
             header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
 
-        } catch (final ConcurrencyException ex) {
-
-            // second attempt should succeed, because the Oid would have
-            // been updated in the attempt
-            if (targetAdapter == null) {
-                targetAdapter = getModel().getTargetAdapter();
-            }
-
-            // forward onto the target page with the concurrency exception
-            ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-            resultResponse.getHandlingStrategy()
-            .handleResults(super.getCommonContext(), resultResponse);
-
-            val messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
-            messageService.warnUser(ex.getMessage());
-        }
+        } 
     }
 
 

@@ -65,7 +65,6 @@ import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.PojoRefreshException;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.LoadedCallbackFacet;
@@ -108,9 +107,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * A wrapper around the JDO {@link PersistenceManager}, which also manages concurrency
- * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
- * identities} for each and every POJO that is being used by the framework.
+ * A wrapper around the JDO {@link PersistenceManager}.
  */
 @Vetoed @Log4j2
 public class PersistenceSession5 extends IsisPersistenceSessionJdoBase
@@ -573,7 +570,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         // possibly redundant because also called in the post-load event
         // listener, but (with JPA impl) found it was required if we were ever to
         // get an eager left-outer-join as the result of a refresh (sounds possible).
-        initializeMapAndCheckConcurrency((Persistable) domainObject);
+        initializeEntity((Persistable) domainObject);
     }
 
     // -- makePersistent
@@ -708,18 +705,14 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public ObjectAdapter initializeMapAndCheckConcurrency(final Persistable pojo) {
-        final Persistable pc = pojo;
+    public ObjectAdapter initializeEntity(final Persistable pojo) {
 
         // need to do eagerly, because (if a viewModel then) a
         // viewModel's #viewModelMemento might need to use services
         serviceInjector.injectServicesInto(pojo);
 
-        final Version datastoreVersion = getVersionIfAny(pc);
         final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
-
         final ObjectAdapter adapter = objectAdapterContext.recreatePojo(originalOid, pojo);
-        adapter.setVersion(datastoreVersion);
 
         CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
         objectAdapterContext.postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
@@ -795,9 +788,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
             objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatedLifecycleEventFacet.class);
         }
-
-        Version versionIfAny = getVersionIfAny(pojo);
-        adapter.setVersion(versionIfAny);
+        
     }
 
     @Override
@@ -841,10 +832,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (!(oid instanceof RootOid)) {
             throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
         }
-    }
-
-    private Version getVersionIfAny(final Persistable pojo) {
-        return Utils.getVersionIfAny(pojo, authenticationSession);
     }
 
     @Override

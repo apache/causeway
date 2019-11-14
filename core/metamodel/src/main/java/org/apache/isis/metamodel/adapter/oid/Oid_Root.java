@@ -27,7 +27,6 @@ import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.OidDto;
 
@@ -45,19 +44,11 @@ final class Oid_Root implements RootOid {
     private final Oid_State state;
     private final int hashCode;
 
-    // not part of equality check
-    private Version version;
-
-
     public static Oid_Root of(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state) {
-        return of(objectSpecId, identifier, state, Version.empty());
+        return new Oid_Root(objectSpecId, identifier, state);
     }
 
-    public static Oid_Root of(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state, final Version version) {
-        return new Oid_Root(objectSpecId, identifier, state, version);
-    }
-
-    private Oid_Root(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state, final Version version) {
+    private Oid_Root(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state) {
 
         requires(objectSpecId, "objectSpecId");
         requires(identifier, "identifier");
@@ -70,7 +61,6 @@ final class Oid_Root implements RootOid {
         this.objectSpecId = objectSpecId;
         this.identifier = identifier;
         this.state = state;
-        this.version = version;
         this.hashCode = calculateHash();
 
 
@@ -94,7 +84,6 @@ final class Oid_Root implements RootOid {
         requires(identifier, "identifier");
         requires(state, "state");
 
-        this.version = oid.version;
         this.hashCode = calculateHash();
     }
 
@@ -117,12 +106,6 @@ final class Oid_Root implements RootOid {
     public String enString() {
         return Oid.marshaller().marshal(this);
     }
-
-    @Override
-    public String enStringNoVersion() {
-        return Oid.marshaller().marshalNoVersion(this);
-    }
-
 
     // -- Properties
     @Override
@@ -148,18 +131,6 @@ final class Oid_Root implements RootOid {
     @Override
     public boolean isPersistent() {
         return state.isPersistent();
-    }
-
-    // -- Version
-
-    @Override
-    public Version getVersion() {
-        return version;
-    }
-
-    @Override
-    public void setVersion(final Version version) {
-        this.version = version;
     }
 
     @Override
@@ -212,7 +183,7 @@ final class Oid_Root implements RootOid {
     @Override
     public Oid copy() {
         // these are all immutable ...
-        return of(objectSpecId, identifier, state, version);
+        return of(objectSpecId, identifier, state);
     }
 
 }

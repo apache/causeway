@@ -76,7 +76,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
             final ManagedObject resultAdapter,
             final AjaxRequestTarget target) {
 
-        final EntityPage entityPage = new EntityPage(model.getCommonContext(), resultAdapter, null);
+        final EntityPage entityPage = new EntityPage(model.getCommonContext(), resultAdapter);
         final RequestCycle requestCycle = RequestCycle.get();
         requestCycle.setResponsePage(entityPage);
     }

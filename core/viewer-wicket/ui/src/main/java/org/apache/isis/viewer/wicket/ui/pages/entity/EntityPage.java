@@ -32,7 +32,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
@@ -100,29 +99,22 @@ public class EntityPage extends PageAbstract {
         this(pageParameters, entityModel, null);
     }
 
-    public EntityPage(IsisWebAppCommonContext commonContext, ManagedObject adapter) {
-        this(commonContext, adapter, null);
-    }
-
     /**
      * Ensure that any {@link ConcurrencyException} that might have occurred already
      * (eg from an action invocation) is show.
      */
     public EntityPage(
             IsisWebAppCommonContext commonContext, 
-            ManagedObject adapter, 
-            ConcurrencyException exIfAny) {
+            ManagedObject adapter) {
         
-        this(PageParametersUtils.newPageParameters(), newEntityModel(commonContext, adapter, exIfAny));
+        this(PageParametersUtils.newPageParameters(), newEntityModel(commonContext, adapter));
     }
 
     private static EntityModel newEntityModel(
             IsisWebAppCommonContext commonContext,
-            ManagedObject adapter,
-            ConcurrencyException exIfAny) {
+            ManagedObject adapter) {
         
         val entityModel = EntityModel.ofAdapter(commonContext, adapter);
-        entityModel.setException(exIfAny);
         return entityModel;
     }
 

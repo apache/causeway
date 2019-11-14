@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtime.persistence.adapter;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,14 +28,14 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -195,34 +193,6 @@ public final class PojoAdapter implements ObjectAdapter {
         return rootAdapter;
     }
 
-    // -- getVersion, setVersion, checkLock
-
-    @Override
-    public Version getVersion() {
-        if(isParentedCollection()) {
-            return getAggregateRoot().getVersion();
-        } else {
-            return getOid().getVersion();
-        }
-    }
-
-    @Override
-    public void setVersion(final Version version) {
-        if(isParentedCollection()) {
-            // ignored
-            return;
-        }
-        if (shouldSetVersion(version)) {
-            RootOid rootOid = (RootOid) getOid(); // since not parented
-            rootOid.setVersion(version);
-        }
-    }
-
-    private boolean shouldSetVersion(final Version otherVersion) {
-        final Version version = getOid().getVersion();
-        return version == null || otherVersion == null || otherVersion.different(version);
-    }
-
     @Override
     public String toString() {
         final ToString str = new ToString(this);
@@ -251,10 +221,6 @@ public final class PojoAdapter implements ObjectAdapter {
             str.append("class", getPojo().getClass().getName());
         } else {
             str.append("specification", getSpecification().getShortIdentifier());
-        }
-        if(getOid() != null) {
-            final Version version = getOid().getVersion();
-            str.append("version", version != null ? version.sequence() : null);
         }
     }
 

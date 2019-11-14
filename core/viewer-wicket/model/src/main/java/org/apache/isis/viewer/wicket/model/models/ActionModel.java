@@ -121,11 +121,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
         val pageParameters = PageParametersUtils.newPageParameters();
 
-        //        final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
-        //                adapter.getOid().enString():
-        //                    adapter.getOid().enStringNoVersion();
-
-        val oidStr = ManagedObject._oid(adapter).enStringNoVersion();
+        val oidStr = ManagedObject._oid(adapter).enString();
 
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
 
@@ -383,7 +379,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
             return encodeable.toEncodedString(adapter);
         }
 
-        return ManagedObject._oid(adapter).enStringNoVersion();
+        return ManagedObject._oid(adapter).enString();
     }
 
     private ManagedObject decodeArg(final ObjectSpecification objSpec, final String encoded) {

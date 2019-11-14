@@ -31,7 +31,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
@@ -245,9 +244,6 @@ final public class ObjectAdapterContext {
     // ------------------------------------------------------------------------------------------------
 
     /**
-     * Note that there is no management of {@link Version}s here. That is
-     * because the {@link PersistenceSession} is expected to manage this.
-     *
      * @param newRootOid - allow a different persistent root oid to be provided.
      * @param session 
      */

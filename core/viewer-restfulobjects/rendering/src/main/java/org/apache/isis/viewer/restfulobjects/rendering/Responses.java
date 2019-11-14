@@ -23,15 +23,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
-
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
@@ -54,7 +49,7 @@ public final class Responses {
     public static Response.ResponseBuilder ofOk(
             final ReprRenderer<?, ?> renderer,
             final Caching caching) {
-        return ofOk(renderer, caching, null, null);
+        return ofOk(renderer, caching, null);
     }
 
     /**
@@ -63,24 +58,6 @@ public final class Responses {
     public static Response.ResponseBuilder ofOk(
             final ReprRenderer<?, ?> renderer,
             final Caching caching,
-            final JsonRepresentation rootRepresentationIfAny) {
-        return ofOk(renderer, caching, null, rootRepresentationIfAny);
-    }
-
-    public static Response.ResponseBuilder ofOk(
-            final ReprRenderer<?, ?> renderer,
-            final Caching caching,
-            final Version version) {
-        return ofOk(renderer, caching, version, null);
-    }
-
-    /**
-     * @param rootRepresentationIfAny - if specified, is used for entity; otherwise the renderer is used.  The idea is that the renderer will be set up to render to some sub-node of root representation
-     */
-    public static Response.ResponseBuilder ofOk(
-            final ReprRenderer<?, ?> renderer,
-            final Caching caching,
-            final Version version,
             final JsonRepresentation rootRepresentationIfAny) {
 
         final JsonRepresentation representation = renderer.render();
@@ -101,7 +78,8 @@ public final class Responses {
                 .type(mediaType)
                 .cacheControl(caching.getCacheControl())
                 .entity(JsonWriterUtil.jsonFor(entityRepresentation, inferPrettyPrinting(renderer)));
-        return addLastModifiedAndETagIfAvailable(response, version);
+        
+        return response;
     }
 
     private static Date now(ReprRenderer<?, ?> renderer) {
@@ -123,22 +101,6 @@ public final class Responses {
         return responseBuilder;
     }
 
-    public static Response.ResponseBuilder addLastModifiedAndETagIfAvailable(
-            final Response.ResponseBuilder responseBuilder,
-            final Version version) {
-        if (version != null && version.getTime() != null) {
-            final Date time = version.getTime();
-            responseBuilder.lastModified(time);
-            responseBuilder.tag(asETag(time));
-        }
-        return responseBuilder;
-    }
-
-    private static EntityTag asETag(final Date time) {
-        final String utcTime = ISODateTimeFormat.basicDateTime().print(new DateTime(time));
-        return new EntityTag(utcTime, true);
-    }
-    
     public static JsonMapper.PrettyPrinting inferPrettyPrinting(ReprRenderer<?, ?> renderer) {
 
         if(renderer instanceof ReprRendererAbstract) {

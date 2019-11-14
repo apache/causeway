@@ -45,7 +45,6 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -193,19 +192,19 @@ implements FormExecutor {
 
             return true;
 
-        } catch (ConcurrencyException ex) {
-
-            // second attempt should succeed, because the Oid would have
-            // been updated in the attempt
-            if (targetAdapter == null) {
-                targetAdapter = obtainTargetAdapter();
-            }
-
-            forwardOnConcurrencyException(targetAdapter, ex);
-
-            getMessageService().warnUser(ex.getMessage());
-
-            return false;
+//        } catch (ConcurrencyException ex) {
+//
+//            // second attempt should succeed, because the Oid would have
+//            // been updated in the attempt
+//            if (targetAdapter == null) {
+//                targetAdapter = obtainTargetAdapter();
+//            }
+//
+//            forwardOnConcurrencyException(targetAdapter, ex);
+//
+//            getMessageService().warnUser(ex.getMessage());
+//
+//            return false;
 
         } catch (RuntimeException ex) {
 
@@ -349,12 +348,11 @@ implements FormExecutor {
     }
 
     private void forwardOnConcurrencyException(
-            final ManagedObject targetAdapter,
-            final ConcurrencyException ex) {
+            final ManagedObject targetAdapter) {
 
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        val entityPage = new EntityPage(model.getCommonContext() , targetAdapter, ex);
+        val entityPage = new EntityPage(model.getCommonContext() , targetAdapter);
         
         // force any changes in state etc to happen now prior to the redirect;
         // in the case of an object being returned, this should cause our page mementos

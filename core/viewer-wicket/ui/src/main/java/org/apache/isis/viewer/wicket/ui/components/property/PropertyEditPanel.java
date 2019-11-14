@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -84,7 +83,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
         WebMarkupContainer header = addHeader();
 
-        try {
+        {
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
             getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentEntityModel());
 
@@ -99,17 +98,6 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
             header.add(label);
 
-        } catch (final ConcurrencyException ex) {
-
-            // should succeed, because the Oid would have
-            // been updated in the attempt
-            val targetAdapter = scalarModel.getParentEntityModel().load();
-
-            // page redirect/handling
-            final EntityPage entityPage = new EntityPage(super.getCommonContext(), targetAdapter, null);
-            setResponsePage(entityPage);
-
-            getMessageBroker().addWarning(ex.getMessage());
         }
     }
 

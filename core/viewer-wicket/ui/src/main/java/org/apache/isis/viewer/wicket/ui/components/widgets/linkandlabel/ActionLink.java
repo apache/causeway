@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -33,13 +32,11 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
@@ -171,19 +168,8 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     }
 
     private boolean determineIfEnabled() {
-        try {
-            final String reasonDisabledIfAny = getReasonDisabledIfAny();
-            return reasonDisabledIfAny == null;
-        } catch (ConcurrencyException ex) {
-            //
-            // this has to be here because it's the first method called by an action link listener
-            // on a potentially stale model.
-            //
-            // there is similar code for editing properties (ScalarPanelAbstract2)
-            //
-            commonContext.getAuthenticationSession().getMessageBroker().addMessage(ex.getMessage());
-            throw new RestartResponseException(new EntityPage(commonContext, getActionModel().getTargetAdapter()));
-        }
+        val reasonDisabledIfAny = getReasonDisabledIfAny();
+        return reasonDisabledIfAny == null;
     }
 
     @Override

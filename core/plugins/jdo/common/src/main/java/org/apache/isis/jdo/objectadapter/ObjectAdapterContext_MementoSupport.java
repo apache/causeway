@@ -157,7 +157,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
 
         if (!dataIsTransient) {
             updateFields(objectAdapter, data);
-            objectAdapter.getOid().setVersion(data.getOid().getVersion());
+            
         } else if (objectAdapter.isTransient() && dataIsTransient) {
             updateFields(objectAdapter, data);
 

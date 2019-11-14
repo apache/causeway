@@ -32,8 +32,6 @@ import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.PojoRecreationException;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -143,9 +141,6 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             }
         }
 
-        // sync versions of original, with concurrency checking if required
-        syncVersion(adapter, rootOid);
-
         return adapter;
 
     }
@@ -164,7 +159,6 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             if (rootOid.isTransient() || rootOid.isViewModel()) {
                 final Object pojo = recreatePojoTransientOrViewModel(rootOid);
                 adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
-                syncVersion(adapter, rootOid);
             }
             if (adapter != null) {
                 adapterByOid.put(rootOid, adapter);
@@ -189,7 +183,6 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
                 } catch(RuntimeException ex) {
                     throw new PojoRecreationException(rootOid, ex);
                 }
-                syncVersion(adapter, rootOid);
             } else {
                 // null indicates it couldn't be loaded
                 // do nothing here...
@@ -231,49 +224,6 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             viewModelPojo = facet.instantiate(spec.getCorrespondingClass(), memento);
         }
         return viewModelPojo;
-    }
-
-    @Deprecated // no-op
-    private void syncVersion(final ObjectAdapter adapter, final RootOid rootOid) {
-        // sync versions of original, with concurrency checking if required
-        Oid adapterOid = adapter.getOid();
-        if(adapterOid instanceof RootOid) {
-            final RootOid recreatedOid = (RootOid) adapterOid;
-            final RootOid originalOid = rootOid;
-
-            try {
-                //                if(concurrencyChecking.isChecking()) {
-                //
-                //                    // check for exception, but don't throw if suppressed through thread-local
-                //                    final Version otherVersion = originalOid.getVersion();
-                //                    final Version thisVersion = recreatedOid.getVersion();
-                //                    if( thisVersion != null &&
-                //                            otherVersion != null &&
-                //                            thisVersion.different(otherVersion)) {
-                //
-                //                        if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
-                //                            log.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
-                //                            final String currentUser = authenticationSession.getUserName();
-                //                            throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
-                //                        } else {
-                //                            log.info("concurrency conflict detected but suppressed, on {} ({})", recreatedOid, otherVersion);
-                //                        }
-                //                    }
-                //                }
-            } finally {
-                final Version originalVersion = originalOid.getVersion();
-                final Version recreatedVersion = recreatedOid.getVersion();
-                if(recreatedVersion != null && (
-                        originalVersion == null ||
-                        recreatedVersion.different(originalVersion))
-                        ) {
-                    if(log.isDebugEnabled()) {
-                        log.debug("updating version in oid, on {} ({}) to ({})", originalOid, originalVersion, recreatedVersion);
-                    }
-                    originalOid.setVersion(recreatedVersion);
-                }
-            }
-        }
     }
 
 

@@ -281,7 +281,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private String getOidStr() {
-        return ManagedObject._rootOidElseThrow(objectAdapter).enStringNoVersion();
+        return ManagedObject._rootOidElseThrow(objectAdapter).enString();
     }
 
     private DomainObjectReprRenderer withMembers(final ManagedObject objectAdapter) {

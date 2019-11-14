@@ -22,7 +22,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
@@ -60,15 +59,6 @@ public class ObjectAdapterForBean implements ObjectAdapter {
     @Override
     public ObjectAdapter getAggregateRoot() {
         return this;
-    }
-
-    @Override
-    public Version getVersion() {
-        return null;
-    }
-
-    @Override
-    public void setVersion(Version version) {
     }
 
     @Override
