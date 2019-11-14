@@ -200,7 +200,3 @@ include::refguide:config:example$generated/Other.adoc[]
 |===
 
 
-include::refguide:config:example$generated/Other.adoc[]
-
-
-
