@@ -59,7 +59,7 @@ public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
             EntityModel entityModel = (EntityModel) model;
             val objectAdapter = entityModel.getObject();
             if(objectAdapter != null) {
-                buf.append("??? objectAdapter oid: " + ManagedObject._oid(objectAdapter));    
+                buf.append("??? objectAdapter oid: " + ManagedObject._identify(objectAdapter));    
             } else {
                 buf.append("??? objectAdapter is NULL");
             }

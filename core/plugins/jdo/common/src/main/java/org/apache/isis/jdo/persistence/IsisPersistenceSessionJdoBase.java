@@ -233,7 +233,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
      */
     protected @Nullable Oid oidFor(@Nullable Object pojo) {
         val adapter = ManagedObject.of(getSpecificationLoader().loadSpecification(pojo.getClass()), pojo);
-        val oid = ManagedObject._oid(adapter);
+        val oid = ManagedObject._identify(adapter);
         return oid;
     }
 

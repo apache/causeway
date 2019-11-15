@@ -52,7 +52,7 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public String convertToString(final ManagedObject adapter, final Locale locale) {
-        final Oid oid = ManagedObject._oid(adapter);
+        final Oid oid = ManagedObject._identify(adapter);
         if (oid == null) {
             // values don't have an Oid
             return null;

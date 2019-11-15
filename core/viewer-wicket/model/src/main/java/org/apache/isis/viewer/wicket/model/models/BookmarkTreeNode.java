@@ -208,7 +208,7 @@ public class BookmarkTreeNode implements Serializable {
             })
             .filter(_NullSafe::isPresent)
             .map(parentAdapter->{
-                final Oid parentOid = ManagedObject._oid(parentAdapter);
+                final Oid parentOid = ManagedObject._identify(parentAdapter);
                 return parentOid;
             })
             .filter(_NullSafe::isPresent)

@@ -231,7 +231,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         .filter(original::contains)
         .forEach(elementAdapter->{
             if (log.isDebugEnabled()) {
-                log.debug("  association {} changed, added {}", otma, ManagedObject._oid(elementAdapter));
+                log.debug("  association {} changed, added {}", otma, ManagedObject._identify(elementAdapter));
             }
             otma.addElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
         });
@@ -240,7 +240,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         .filter(not(incoming::contains))
         .forEach(elementAdapter->{
             if (log.isDebugEnabled()) {
-                log.debug("  association {} changed, removed {}", otma, ManagedObject._oid(elementAdapter));
+                log.debug("  association {} changed, removed {}", otma, ManagedObject._identify(elementAdapter));
             }
             otma.removeElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
         });
@@ -258,7 +258,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             final ManagedObject ref = recreateReference(assocData);
             if (otoa.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK) != ref) {
                 if (log.isDebugEnabled()) {
-                    log.debug("  association {} changed to {}", otoa, ManagedObject._oid(ref));
+                    log.debug("  association {} changed to {}", otoa, ManagedObject._identify(ref));
                 }
                 otoa.initAssociation(objectAdapter, ref);
             }

@@ -79,7 +79,7 @@ public class CommandUtil {
     }
 
     public static Bookmark bookmarkFor(final ManagedObject adapter) {
-        val rootOid = ManagedObject._rootOidIfAny(adapter);
+        val rootOid = ManagedObject._identify(adapter);
         return rootOid!=null ? rootOid.asBookmark() : null;
     }
 

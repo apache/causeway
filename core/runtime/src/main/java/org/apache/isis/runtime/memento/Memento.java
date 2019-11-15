@@ -99,14 +99,14 @@ public class Memento implements Serializable {
                 .map(this::createReferencedData)
                 .collect(_Arrays.toArray(Data.class, CollectionFacet.Utils.size(adapter)));
 
-        val elementOid = ManagedObject._oid(adapter);
+        val elementOid = ManagedObject._identify(adapter);
         val elementSpec = adapter.getSpecification();
         
         return new CollectionData(elementOid, elementSpec.getFullIdentifier(), collData);
     }
 
     private ObjectData createObjectData(ManagedObject adapter) {
-        val oid = ManagedObject._oid(adapter);
+        val oid = ManagedObject._identify(adapter);
         oids.add(oid);
         val spec = adapter.getSpecification();
         val data = new ObjectData(oid, spec.getFullIdentifier());
@@ -155,7 +155,7 @@ public class Memento implements Serializable {
             return null;
         }
 
-        val refOid = ManagedObject._oid(referencedAdapter);
+        val refOid = ManagedObject._identify(referencedAdapter);
 
         if (refOid == null || refOid.isValue()) {
             return createStandaloneData(referencedAdapter);
