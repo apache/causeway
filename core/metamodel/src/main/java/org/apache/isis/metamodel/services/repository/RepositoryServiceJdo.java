@@ -82,11 +82,13 @@ public class RepositoryServiceJdo implements RepositoryService {
         val spec = adapter.getSpecification();
         if(spec.isManagedBean() || spec.isViewModel()) {
             // services and view models are treated as persistent objects
-            return true;
+            //FIXME bad design: this method should instead throw an IllegalArgEx. when called with non entity types!
+            return true; 
         }
         
         val entityState = ManagedObject._entityState(adapter);
-        val isRepresentingPersistent = entityState.isAttached() || entityState.isDestroyed();
+        val isRepresentingPersistent = entityState!=null 
+                && (entityState.isAttached() || entityState.isDestroyed());
         return isRepresentingPersistent;
     }
 
