@@ -29,9 +29,8 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -41,7 +40,6 @@ import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
-import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
@@ -408,23 +406,12 @@ public interface ManagedObject {
         }
     }
     
-    // -- OID UTILITIES
-    
-    static final class Oids {
-        static final ObjectIdentifier oidFactory = ObjectIdentifier.createDefault();
-        
-        static final <T extends Oid> T copy(T oid) {
-            if(oid == null) { return null; }
-            return _Casts.uncheckedCast(oid.copy()); 
-        }
+    static MetaModelContext _mmc(ManagedObject adapter) {
+        return adapter.getSpecification().getMetaModelContext();
     }
-
+    
     static Oid _oid(ManagedObject adapter) {
-        if(adapter instanceof ObjectAdapter) {
-            return Oids.copy(((ObjectAdapter)adapter).getOid());
-        }
-        
-        return Oids.oidFactory.identifyObject(adapter);
+        return _mmc(adapter).getObjectManager().identifyObject(adapter); 
     }
 
     static RootOid _rootOidIfAny(ManagedObject adapter) {

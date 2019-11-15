@@ -83,7 +83,7 @@ final public class ObjectAdapterContext {
 
         val runtimeContext = new RuntimeContextBase(mmc) {};
 
-        this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession, runtimeContext);
+        this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, runtimeContext);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(persistenceSession, runtimeContext.getSpecificationLoader());
         this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, runtimeContext);
