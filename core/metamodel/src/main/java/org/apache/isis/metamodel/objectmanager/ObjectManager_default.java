@@ -19,6 +19,8 @@
 package org.apache.isis.metamodel.objectmanager;
 
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 
 import lombok.AccessLevel;
 import lombok.Getter;

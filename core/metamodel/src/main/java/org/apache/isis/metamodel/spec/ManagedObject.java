@@ -34,15 +34,15 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
-import org.apache.isis.metamodel.objectmanager.ObjectCreator;
-import org.apache.isis.metamodel.objectmanager.ObjectLoader;
+import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
+import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -411,7 +411,7 @@ public interface ManagedObject {
     // -- OID UTILITIES
     
     static final class Oids {
-        static final OidFactory oidFactory = OidFactory.createDefault();
+        static final ObjectIdentifier oidFactory = ObjectIdentifier.createDefault();
         
         static final <T extends Oid> T copy(T oid) {
             if(oid == null) { return null; }
@@ -424,7 +424,7 @@ public interface ManagedObject {
             return Oids.copy(((ObjectAdapter)adapter).getOid());
         }
         
-        return Oids.oidFactory.oidFor(adapter);
+        return Oids.oidFactory.identifyObject(adapter);
     }
 
     static RootOid _rootOidIfAny(ManagedObject adapter) {

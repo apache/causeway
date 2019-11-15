@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.objectmanager;
+package org.apache.isis.metamodel.objectmanager.create;
 
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;

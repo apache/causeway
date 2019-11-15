@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.adapter.oid.factory;
+package org.apache.isis.metamodel.objectmanager.identify;
 
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -30,9 +30,9 @@ import lombok.val;
 /**
  * @since 2.0
  */
-public interface OidFactory {
+public interface ObjectIdentifier {
 
-    RootOid oidFor(ManagedObject managedObject);
+    RootOid identifyObject(ManagedObject managedObject);
 
     // -- HANDLER
     
@@ -40,22 +40,22 @@ public interface OidFactory {
 
     // -- FACTORY
     
-    public static OidFactory createDefault() {
+    public static ObjectIdentifier createDefault() {
         
         val chainOfHandlers = _Lists.of(
-                new OidFactory_builtinHandlers.GuardAgainstRootOid(),
-                new OidFactory_builtinHandlers.OidForServices(),
-                new OidFactory_builtinHandlers.OidForValues(),
-                new OidFactory_builtinHandlers.OidForViewModels(),
-                new OidFactory_builtinHandlers.OidForEntities(),
-                new OidFactory_builtinHandlers.OidForOthers());
+                new ObjectIdentifier_builtinHandlers.GuardAgainstRootOid(),
+                new ObjectIdentifier_builtinHandlers.OidForServices(),
+                new ObjectIdentifier_builtinHandlers.OidForValues(),
+                new ObjectIdentifier_builtinHandlers.OidForViewModels(),
+                new ObjectIdentifier_builtinHandlers.OidForEntities(),
+                new ObjectIdentifier_builtinHandlers.OidForOthers());
         
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
         
         return managedObject -> chainOfRespo
                 .handle(managedObject)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "Could not create an Oid for managedObject: %s", managedObject));
+                        "Could not identify ManagedObject: %s", managedObject));
         
         
     }

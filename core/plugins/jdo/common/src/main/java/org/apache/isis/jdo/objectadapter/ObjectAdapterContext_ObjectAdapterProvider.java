@@ -20,7 +20,7 @@ package org.apache.isis.jdo.objectadapter;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
+import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
@@ -39,7 +39,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
 
     private final ObjectAdapterContext objectAdapterContext;
     private final SpecificationLoader specificationLoader; 
-    private final OidFactory oidFactory; 
+    private final ObjectIdentifier oidFactory; 
 
     ObjectAdapterContext_ObjectAdapterProvider(
             ObjectAdapterContext objectAdapterContext,
@@ -48,7 +48,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
 
         this.objectAdapterContext = objectAdapterContext;
         this.specificationLoader = runtimeContext.getSpecificationLoader();
-        this.oidFactory = OidFactory.createDefault();
+        this.oidFactory = ObjectIdentifier.createDefault();
     }
 
     @Override
@@ -58,7 +58,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             return null;
         }
 
-        val rootOid = oidFactory.oidFor(ManagedObject.of(specificationLoader::loadSpecification, pojo));
+        val rootOid = oidFactory.identifyObject(ManagedObject.of(specificationLoader::loadSpecification, pojo));
         val newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
         return objectAdapterContext.injectServices(newAdapter);
     }
