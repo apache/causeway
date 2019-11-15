@@ -35,19 +35,4 @@ public interface ObjectAdapterProvider {
     @Nullable ObjectAdapter adapterFor(@Nullable Object pojo);
 
 
-    // -- FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
-
-    @Deprecated
-    public static interface Delegating extends ObjectAdapterProvider {
-
-        ObjectAdapterProvider getObjectAdapterProvider();
-
-        @Override
-        default ObjectAdapter adapterFor(Object domainObject) {
-            return getObjectAdapterProvider().adapterFor(domainObject);
-        }
-
-    }
-
-
 }

@@ -303,7 +303,6 @@ public interface ManagedObject {
     
     // -- DEPRECATIONS (REFACTORING)
     
-    @Deprecated
     static boolean _isDestroyed(ManagedObject adapter) {
         
         if(adapter==null || adapter.getPojo()==null) {

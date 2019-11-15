@@ -35,14 +35,12 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.Data;
-import org.apache.isis.runtime.persistence.FixturesInstalledState;
-import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.TransactionalResource;
 
 public interface PersistenceSession 
 extends 
-ObjectAdapterProvider.Delegating,
+ObjectAdapterProvider,
 ObjectAdapterByIdProvider.Delegating,
 TransactionalResource, 
 SessionScopedComponent {
@@ -107,28 +105,6 @@ SessionScopedComponent {
     // -------------------------------------------------------------------------------------------------
     // -- API NOT STABLE YET - SUBJECT TO REFACTORING
     // -------------------------------------------------------------------------------------------------
-
-    // -- FIXTURE SUPPORT
-
-    /**
-     * Determine if the object store has been initialized with its set of start
-     * up objects.
-     *
-     * <p>
-     * This method is called only once after the init has been called. If this flag
-     * returns <code>not_Installed</code> the framework will run the fixtures to
-     * initialise the persistor.
-     *
-     * <p>
-     * Returns whether fixtures are installed.
-     * <p>
-     * This caching is important because if we've determined, for a given run,
-     * that fixtures are not installed, then we don't want to change our mind by
-     * asking the object store again in another session.
-     *
-     * @see FixturesInstalledStateHolder
-     */
-    FixturesInstalledState getFixturesInstalledState();
 
     // -- MEMENTO SUPPORT
 

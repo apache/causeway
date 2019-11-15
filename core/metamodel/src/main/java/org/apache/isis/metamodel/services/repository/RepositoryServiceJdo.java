@@ -40,7 +40,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 import lombok.val;
@@ -69,14 +68,14 @@ public class RepositoryServiceJdo implements RepositoryService {
 
     @Override
     public boolean isPersistent(final Object domainObject) {
-        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
         return adapter.isRepresentingPersistent();
     }
 
 
     @Override
     public boolean isDeleted(final Object domainObject) {
-        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
         return adapter.isDestroyed();
     }
 
@@ -86,7 +85,7 @@ public class RepositoryServiceJdo implements RepositoryService {
         if (isPersistent(object)) {
             return object;
         }
-        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(object));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
 
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
@@ -123,7 +122,7 @@ public class RepositoryServiceJdo implements RepositoryService {
         if (object == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(object));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
         if (!isPersistent(object)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
@@ -206,10 +205,6 @@ public class RepositoryServiceJdo implements RepositoryService {
 
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
-    }
-
-    private ObjectAdapterProvider getObjectAdapterProvider() {
-        return persistenceSessionServiceInternal;
     }
 
     @Inject FactoryService factoryService;

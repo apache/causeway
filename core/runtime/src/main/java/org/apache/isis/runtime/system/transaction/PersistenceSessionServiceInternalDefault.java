@@ -29,7 +29,6 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -47,10 +46,10 @@ public class PersistenceSessionServiceInternalDefault
 implements PersistenceSessionServiceInternal {
 
     @Override
-    public ObjectAdapterProvider getObjectAdapterProvider() {
-        return getPersistenceSession();
+    public ObjectAdapter adapterFor(Object pojo) {
+        return getPersistenceSession().adapterFor(pojo);
     }
-
+    
     @Override
     public void makePersistent(final ObjectAdapter adapter) {
         getPersistenceSession().makePersistentInTransaction(adapter);
@@ -137,5 +136,6 @@ implements PersistenceSessionServiceInternal {
 
     @Inject IsisSessionFactory isisSessionFactory;
     @Inject SpecificationLoader specificationLoader;
+
 
 }

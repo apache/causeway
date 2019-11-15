@@ -137,7 +137,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
 
         // sub-components
         this.persistenceQueryFactory = PersistenceQueryFactory.of(
-                obj->this.getObjectAdapterProvider().adapterFor(obj), 
+                obj->this.adapterFor(obj), 
                 this.specificationLoader);
         this.transactionManager = new IsisTransactionManagerJdo(serviceRegistry, this);
 
