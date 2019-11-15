@@ -411,7 +411,7 @@ public interface ManagedObject {
     // -- OID UTILITIES
     
     static final class Oids {
-        static final OidFactory oidFactory = OidFactory.buildDefault();
+        static final OidFactory oidFactory = OidFactory.createDefault();
         
         static final <T extends Oid> T copy(T oid) {
             if(oid == null) { return null; }

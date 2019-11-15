@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.facets.object.choices;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.query.QueryFindAllInstances;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * 
@@ -33,15 +33,15 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
  */
 class QueryFindAllChoices<T> 
 extends QueryFindAllInstances<T> 
-implements Predicate<ObjectAdapter> {
+implements Predicate<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
-    private final Predicate<ObjectAdapter> visibilityFilter;
+    private final Predicate<ManagedObject> visibilityFilter;
 
     public QueryFindAllChoices(
             final String string, 
-            final Predicate<ObjectAdapter> visibilityFilter, 
+            final Predicate<ManagedObject> visibilityFilter, 
             final long ... range) {
 
         super(string, range);
@@ -49,7 +49,7 @@ implements Predicate<ObjectAdapter> {
     }
 
     @Override
-    public boolean test(ObjectAdapter objectAdapter) {
+    public boolean test(ManagedObject objectAdapter) {
         return visibilityFilter.test(objectAdapter);
     }
 

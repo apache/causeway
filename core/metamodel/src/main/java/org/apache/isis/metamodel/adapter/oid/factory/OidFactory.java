@@ -19,6 +19,9 @@
 
 package org.apache.isis.metamodel.adapter.oid.factory;
 
+import org.apache.isis.commons.handler.ChainOfResponsibility;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
@@ -33,32 +36,28 @@ public interface OidFactory {
 
     // -- HANDLER
     
-    public interface Handler {
-        boolean isHandling(ManagedObject managedObject);
-        RootOid oidFor(ManagedObject managedObject);
-    }
+    public interface Handler extends ChainOfResponsibility.Handler<ManagedObject, RootOid> {}
 
-    // -- BUILDER
+    // -- FACTORY
     
-    public interface OidFactoryBuilder {
-        OidFactoryBuilder add(Handler handler);
-        OidFactory build();
-    }
-
-    public static OidFactoryBuilder builder() {
-        return new OidFactory_Builder();
-    }
-
-    public static OidFactory buildDefault() {
-        val oidFactory = OidFactory.builder()
-                .add(new OidFactory_builtinHandlers.GuardAgainstRootOid())
-                .add(new OidFactory_builtinHandlers.OidForServices())
-                .add(new OidFactory_builtinHandlers.OidForValues())
-                .add(new OidFactory_builtinHandlers.OidForViewModels())
-                .add(new OidFactory_builtinHandlers.OidForEntities())
-                .add(new OidFactory_builtinHandlers.OidForOthers())
-                .build();
-        return oidFactory;
+    public static OidFactory createDefault() {
+        
+        val chainOfHandlers = _Lists.of(
+                new OidFactory_builtinHandlers.GuardAgainstRootOid(),
+                new OidFactory_builtinHandlers.OidForServices(),
+                new OidFactory_builtinHandlers.OidForValues(),
+                new OidFactory_builtinHandlers.OidForViewModels(),
+                new OidFactory_builtinHandlers.OidForEntities(),
+                new OidFactory_builtinHandlers.OidForOthers());
+        
+        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
+        
+        return managedObject -> chainOfRespo
+                .handle(managedObject)
+                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        "Could not create an Oid for managedObject: %s", managedObject));
+        
+        
     }
     
 }

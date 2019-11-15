@@ -48,7 +48,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
 
         this.objectAdapterContext = objectAdapterContext;
         this.specificationLoader = runtimeContext.getSpecificationLoader();
-        this.oidFactory = OidFactory.buildDefault();
+        this.oidFactory = OidFactory.createDefault();
     }
 
     @Override

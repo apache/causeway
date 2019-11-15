@@ -43,7 +43,7 @@ class OidFactory_builtinHandlers {
         }
 
         @Override
-        public RootOid oidFor(ManagedObject managedObject) {
+        public RootOid handle(ManagedObject managedObject) {
             throw new IllegalArgumentException("Cannot create a RootOid for pojo, "
                     + "when pojo is instance of RootOid. You might want to ask "
                     + "ObjectAdapterByIdProvider for an ObjectAdapter instead.");
@@ -59,7 +59,7 @@ class OidFactory_builtinHandlers {
         }
 
         @Override
-        public RootOid oidFor(ManagedObject managedObject) {
+        public RootOid handle(ManagedObject managedObject) {
             final String identifier = SystemConstants.SERVICE_IDENTIFIER;
             return Oid.Factory.persistentOf(managedObject.getSpecification().getSpecId(), identifier);
         }
@@ -74,7 +74,7 @@ class OidFactory_builtinHandlers {
         }
 
         @Override
-        public RootOid oidFor(ManagedObject managedObject) {
+        public RootOid handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val pojo = managedObject.getPojo();
             val entityFacet = spec.getFacet(EntityFacet.class);
@@ -96,7 +96,7 @@ class OidFactory_builtinHandlers {
         }
 
         @Override
-        public RootOid oidFor(ManagedObject managedObject) {
+        public RootOid handle(ManagedObject managedObject) {
             return Oid.Factory.value();
         }
 
@@ -110,7 +110,7 @@ class OidFactory_builtinHandlers {
         }
 
         @Override
-        public RootOid oidFor(ManagedObject managedObject) {
+        public RootOid handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             val identifier = recreatableObjectFacet.memento(managedObject.getPojo());
@@ -127,7 +127,7 @@ class OidFactory_builtinHandlers {
         }
 
         @Override
-        public RootOid oidFor(ManagedObject managedObject) {
+        public RootOid handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val identifier = UUID.randomUUID().toString();
             return Oid.Factory.transientOf(spec.getSpecId(), identifier);
