@@ -39,14 +39,23 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
 @Service
 public class RepositoryServiceJdo implements RepositoryService {
 
+    @Inject private FactoryService factoryService;
+    @Inject private WrapperFactory wrapperFactory;
+    @Inject private TransactionService transactionService;
+    @Inject private MetaModelContext metaModelContext;
+    @Inject private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+    @Inject private IsisConfiguration isisConfiguration;
+    
     private boolean autoFlush;
 
     @PostConstruct
@@ -65,18 +74,26 @@ public class RepositoryServiceJdo implements RepositoryService {
 
     // //////////////////////////////////////
 
-
     @Override
     public boolean isPersistent(final Object domainObject) {
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
-        return adapter.isRepresentingPersistent();
+        
+        val adapter = metaModelContext.getObjectManager().adapt(unwrapped(domainObject));
+        
+        val spec = adapter.getSpecification();
+        if(spec.isManagedBean() || spec.isViewModel()) {
+            // services and view models are treated as persistent objects
+            return true;
+        }
+        
+        val entityState = ManagedObject._entityState(adapter);
+        val isRepresentingPersistent = entityState.isAttached() || entityState.isDestroyed();
+        return isRepresentingPersistent;
     }
-
 
     @Override
     public boolean isDeleted(final Object domainObject) {
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
-        return adapter.isDestroyed();
+        val adapter = metaModelContext.getObjectManager().adapt(unwrapped(domainObject));
+        return ManagedObject._isDestroyed(adapter);
     }
 
 
@@ -206,13 +223,6 @@ public class RepositoryServiceJdo implements RepositoryService {
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
-
-    @Inject FactoryService factoryService;
-    @Inject WrapperFactory wrapperFactory;
-    @Inject TransactionService transactionService;
-    @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-    @Inject IsisConfiguration isisConfiguration;
-
 
 
 }

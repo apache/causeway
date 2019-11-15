@@ -509,9 +509,9 @@ implements FormExecutor {
         return getCommonContext().getAuthenticationSession();
     }
 
-    private MessageService getMessageService() {
-        return getCommonContext().lookupServiceElseFail(MessageService.class);
-    }
+//    private MessageService getMessageService() {
+//        return getCommonContext().lookupServiceElseFail(MessageService.class);
+//    }
 
     protected WicketViewerSettings getSettings() {
         return getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);

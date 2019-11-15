@@ -29,10 +29,8 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
@@ -372,26 +370,34 @@ public interface ManagedObject {
         }
         throw new IllegalArgumentException("ManagedObject must represent an identifiable object: " + adapter);
     }
-
-    static boolean _isDestroyed(ManagedObject adapter) {
+    
+    static String _instanceId(ManagedObject adapter) {
+        val identifier = ManagedObject._identifyElseThrow(adapter).getIdentifier();
+        return identifier; 
+    }
+    
+    static EntityState _entityState(ManagedObject adapter) {
 
         if(adapter==null || adapter.getPojo()==null) {
-            return false;
+            return null;
         }
 
         val spec = adapter.getSpecification();
         if(!spec.isEntity()) {
             // services and view models are treated as persistent objects
-            return false;
+            return EntityState.not_Persistable;
         }
 
         val entityFacet = spec.getFacet(EntityFacet.class);
         if(entityFacet==null) {
-            return false;
+            throw _Exceptions.unrecoverable("Entity types must have an EntityFacet");
         }
 
-        val entityState = entityFacet.getEntityState(adapter.getPojo());
-        return entityState == EntityState.persistable_Destroyed;
+        return entityFacet.getEntityState(adapter.getPojo());
+    }
+
+    static boolean _isDestroyed(ManagedObject adapter) {
+        return _entityState(adapter) == EntityState.persistable_Destroyed;
     }
 
     @Deprecated
@@ -420,25 +426,6 @@ public interface ManagedObject {
 
         }
 
-    }
-
-    @Deprecated
-    static String _instanceIdIfAny(ManagedObject adapter) {
-        
-        val identifier = ManagedObject._identifyElseThrow(adapter).getIdentifier();
-         
-        { //TODO remove once tested
-        
-            val oidStr = ManagedObject._identifyElseThrow(adapter).enString();
-            // REVIEW: it's a bit hokey to join these together just to split them out again.
-            val idLegacy = oidStr != null ? Oid.unmarshaller().splitInstanceId(oidStr): null;
-
-            _Assert.assertEquals("expected same", identifier, idLegacy);
-            
-        }
-        
-        return identifier; 
-        
     }
 
     // move this to ObjectManager?
@@ -515,6 +502,8 @@ public interface ManagedObject {
         //                .filter(_NullSafe::isPresent)
         //                .map(ManagedObject.class::cast);
     }
+
+
 
 
 

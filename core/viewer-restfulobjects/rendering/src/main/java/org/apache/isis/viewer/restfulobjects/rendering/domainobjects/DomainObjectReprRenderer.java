@@ -56,7 +56,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final ManagedObject objectAdapter) {
         
         String domainType = ManagedObject.getDomainType(objectAdapter);
-        String instanceId = ManagedObject._instanceIdIfAny(objectAdapter);
+        String instanceId = ManagedObject._instanceId(objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
     }
@@ -67,7 +67,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         
         final Rel rel = Rel.OBJECT_LAYOUT;
         String domainType = ManagedObject.getDomainType(objectAdapter);
-        String instanceId = ManagedObject._instanceIdIfAny(objectAdapter);
+        String instanceId = ManagedObject._instanceId(objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId + "/object-layout";
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.OBJECT_LAYOUT, url);
     }
@@ -78,7 +78,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         
         final Rel rel = Rel.OBJECT_ICON;
         String domainType = ManagedObject.getDomainType(objectAdapter);
-        String instanceId = ManagedObject._instanceIdIfAny(objectAdapter);
+        String instanceId = ManagedObject._instanceId(objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId + "/image";
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.OBJECT_IMAGE, url);
     }
@@ -277,7 +277,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private String getInstanceId() {
-        return ManagedObject._instanceIdIfAny(objectAdapter);
+        return ManagedObject._instanceId(objectAdapter);
     }
 
     private String getOidStr() {

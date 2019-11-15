@@ -59,7 +59,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
      */
     protected StringBuilder linkRef(StringBuilder buf) {
         String domainType = ManagedObject.getDomainType(objectAdapter);
-        String instanceId = ManagedObject._instanceIdIfAny(objectAdapter);
+        String instanceId = ManagedObject._instanceId(objectAdapter);
         return buf.append("objects/").append(domainType).append("/").append(instanceId);
     }
 
