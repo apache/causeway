@@ -22,7 +22,6 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterPredicate;
 
 /**
  * 
@@ -32,7 +31,9 @@ import org.apache.isis.metamodel.adapter.ObjectAdapterPredicate;
  *
  * @param <T>
  */
-class QueryFindAllChoices<T> extends QueryFindAllInstances<T> implements ObjectAdapterPredicate {
+class QueryFindAllChoices<T> 
+extends QueryFindAllInstances<T> 
+implements Predicate<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
 
