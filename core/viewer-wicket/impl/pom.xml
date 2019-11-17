@@ -127,6 +127,7 @@
         <dependency>
         	<groupId>org.jmock</groupId>
         	<artifactId>jmock-junit4</artifactId>
+            <scope>test</scope>
         	<exclusions>
         		<exclusion>
         			<groupId>org.ow2.asm</groupId>
