@@ -52,12 +52,11 @@ import domainapp.dom.HelloWorldModule;
 })
 @Import({
     IsisBoot.class,
-//    IsisBootSecurityShiro.class,
-    IsisBootSecurityKeycloak.class,
+    IsisBootSecurityShiro.class,
+//    IsisBootSecurityKeycloak.class,
     IsisBootDataNucleus.class,
     IsisBootWebRestfulObjects.class,
-    IsisBootWebWicket.class,
-    //IsisBootFixtures.class
+    IsisBootWebWicket.class
 })
 @ComponentScan(
         basePackageClasses= {
