@@ -21,6 +21,7 @@ package org.apache.isis.runtime.services.homepage;
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.Action;
@@ -68,7 +69,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         // -- 1) lookup view-models that are type annotated with @HomePage
 
         HomePageAction homePageAction = viewModelTypes.stream()
-                .map(viewModelType->homePageViewModelIfUsable(viewModelType))
+                .map(this::homePageViewModelIfUsable)
                 .filter(_NullSafe::isPresent)
                 .findFirst()
                 .orElse(null);
@@ -83,7 +84,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
         homePageAction = 
                 serviceRegistry.streamRegisteredBeans()
-                .map(bean->bean.getBeanClass())
+                .map(ManagedBeanAdapter::getBeanClass)
                 .map(specLoader::loadSpecification)
                 .filter(_NullSafe::isPresent)
                 .peek(spec->specRef[0]=spec)
@@ -164,7 +165,8 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
             adapterForHomePageActionDeclaringPojo = 
                     serviceRegistry.streamRegisteredBeansOfType(spec.getCorrespondingClass())
-                    .map(bean->ManagedObject.of(spec, bean.getInstance().getFirst()))
+                    .filter(bean->bean.getInstance().getFirst().isPresent())
+                    .map(bean->ManagedObject.of(spec, bean.getInstance().getFirst().get()))
                     .findFirst()
                     .orElseThrow(_Exceptions::unexpectedCodeReach);
 
