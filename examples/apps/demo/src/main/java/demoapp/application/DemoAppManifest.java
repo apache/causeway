@@ -53,7 +53,7 @@ import demoapp.utils.LibraryPreloadingService;
  */
 @Configuration
 @PropertySources({
-    @PropertySource("classpath:/demoapp/application/isis-non-changing.properties"),
+    @PropertySource("classpath:/isis-non-changing.properties"),
     @PropertySource(IsisPresets.HsqlDbInMemory),
     @PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.SilenceWicket),
