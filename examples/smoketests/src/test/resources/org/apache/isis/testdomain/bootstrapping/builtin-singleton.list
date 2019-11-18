@@ -1,6 +1,6 @@
-org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto
-org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto$CopyOverFromCommand
-org.apache.isis.applib.conmap.ContentMappingServiceForCommandsDto
+org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto
+org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto$CopyOverFromCommand
+org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandsDto
 org.apache.isis.applib.mixins.dto.DtoMappingHelper
 org.apache.isis.applib.services.audit.AuditerServiceLogging
 org.apache.isis.applib.services.clock.ClockService

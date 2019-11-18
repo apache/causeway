@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.conmap;
+package org.apache.isis.applib.services.conmap.command;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -28,12 +28,12 @@ import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.conmap.spi.CommandDtoProcessorService;
+import org.apache.isis.applib.services.conmap.ContentMappingService;
+import org.apache.isis.applib.services.conmap.command.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
-import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.common.v1.PeriodDto;

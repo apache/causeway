@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.conmap.spi;
+package org.apache.isis.applib.services.conmap.command.spi;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto;
+import org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.schema.cmd.v1.CommandDto;
