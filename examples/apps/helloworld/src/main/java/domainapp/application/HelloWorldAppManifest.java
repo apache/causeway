@@ -38,8 +38,6 @@ import org.apache.isis.viewer.wicket.viewer.IsisBootViewerWicket;
 
 import domainapp.dom.HelloWorldModule;
 
-//import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-
 /**
  * Makes the integral parts of the 'hello world' web application.
  */

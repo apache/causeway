@@ -38,6 +38,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 @EnableConfigurationProperties(IsisConfiguration.class)
 public class IsisConfigModule {
     
+    @SuppressWarnings("ConfigurationProperties") // think this is not really an issue...
     @ConfigurationProperties(prefix = "isis")
     @Bean("isis-settings")
     public Map<String, String> getAsMap() {

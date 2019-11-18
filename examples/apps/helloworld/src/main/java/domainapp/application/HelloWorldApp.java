@@ -31,8 +31,7 @@ import org.springframework.context.annotation.Import;
 @Import({
     HelloWorldAppManifest.class,
 })
-@ServletComponentScan(basePackageClasses = {
-})
+@ServletComponentScan()
 public class HelloWorldApp extends SpringBootServletInitializer {
 
     /**

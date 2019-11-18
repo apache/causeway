@@ -183,7 +183,6 @@
 	<profiles>
 
 		<profile>
-			<!-- Adds 'javax' packages, that were removed with JDK-11 -->
 			<id>jdk11</id>
 			<activation>
 				<jdk>[11,)</jdk>

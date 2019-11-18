@@ -78,6 +78,10 @@
 			</modules>
 		</profile>
 
+		<!--
+		REMOVED BECAUSE THE PARENT PROFILE IS FLATTENED INTO CHILD ...
+		IF BUILT ON JDK11, THEN ADDS DEPENDENCIES ALWAYS
+
 		<profile>
 			<id>jdk11</id>
 			<activation>
@@ -105,6 +109,7 @@
 			</dependencies>
 
 		</profile>
+		-->
 
 		<!-- ECLIPSE SPECIFIC -->
 

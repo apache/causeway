@@ -79,11 +79,11 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
         this.notes = notes;
     }
 
-    @Action(
-            semantics = SemanticsOf.IDEMPOTENT,
-            command = CommandReification.ENABLED, publishing = Publishing.ENABLED,
-            associateWith = "name"
-            )
+//    @Action(
+//            semantics = SemanticsOf.IDEMPOTENT,
+//            command = CommandReification.ENABLED, publishing = Publishing.ENABLED,
+//            associateWith = "name"
+//            )
     public HelloWorldObject updateName(
             @Name final String name) {
         setName(name);

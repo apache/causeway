@@ -66,6 +66,7 @@ import lombok.Data;
  * 
  * @since 2.0
  */
+@SuppressWarnings("ConfigurationProperties") // think this is not really an issue...
 @ConfigurationProperties(ConfigurationConstants.ROOT_PREFIX)
 @Data
 public class IsisConfiguration {
