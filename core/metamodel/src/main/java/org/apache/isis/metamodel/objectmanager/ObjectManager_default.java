@@ -19,6 +19,9 @@
 package org.apache.isis.metamodel.objectmanager;
 
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
+import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,5 +33,6 @@ class ObjectManager_default implements ObjectManager {
     @Getter(onMethod = @__(@Override)) private final MetaModelContext metaModelContext;
     @Getter(onMethod = @__(@Override)) private final ObjectLoader objectLoader;
     @Getter(onMethod = @__(@Override)) private final ObjectCreator objectCreator;
+    @Getter(onMethod = @__(@Override)) private final ObjectIdentifier objectIdentifier;
     
 }

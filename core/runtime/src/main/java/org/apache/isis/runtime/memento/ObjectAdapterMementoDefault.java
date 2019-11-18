@@ -287,7 +287,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
                 //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
                 final ManagedObject adapter = recreateAdapter(
                         memento, persistenceSession, specificationLoader);
-                Oid oid = ManagedObject._oid(adapter);
+                Oid oid = ManagedObject._identify(adapter);
                 memento.persistentOidStr = oid.enString();
             }
 
@@ -498,7 +498,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
             return;
         }
 
-        val rootOid = (RootOid) ManagedObject._oid(adapter);
+        val rootOid = (RootOid) ManagedObject._identify(adapter);
         if (rootOid.isTransient()) {
             transientMemento = new Memento(adapter);
             recreateStrategy = RecreateStrategy.TRANSIENT;

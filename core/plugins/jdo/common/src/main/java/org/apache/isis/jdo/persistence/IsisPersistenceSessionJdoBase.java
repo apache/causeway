@@ -137,7 +137,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
 
         // sub-components
         this.persistenceQueryFactory = PersistenceQueryFactory.of(
-                obj->this.getObjectAdapterProvider().adapterFor(obj), 
+                obj->this.adapterFor(obj), 
                 this.specificationLoader);
         this.transactionManager = new IsisTransactionManagerJdo(serviceRegistry, this);
 
@@ -233,7 +233,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
      */
     protected @Nullable Oid oidFor(@Nullable Object pojo) {
         val adapter = ManagedObject.of(getSpecificationLoader().loadSpecification(pojo.getClass()), pojo);
-        val oid = ManagedObject._oid(adapter);
+        val oid = ManagedObject._identify(adapter);
         return oid;
     }
 

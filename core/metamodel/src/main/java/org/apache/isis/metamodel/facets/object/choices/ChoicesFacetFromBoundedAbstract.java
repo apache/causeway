@@ -23,7 +23,6 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
@@ -113,8 +112,8 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
         final Predicate<ManagedObject> visibilityFilter = 
                 objectAdapter -> ManagedObject.Visibility.isVisible(objectAdapter, interactionInitiatedBy); 
 
-                val query = new QueryFindAllChoices(getObjectSpecification().getFullIdentifier(), visibilityFilter);
-                return repository.allMatches(query).toArray();
+        val query = new QueryFindAllChoices(getObjectSpecification().getFullIdentifier(), visibilityFilter);
+        return repository.allMatches(query).toArray();
     }
 
 }

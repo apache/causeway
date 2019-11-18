@@ -401,7 +401,7 @@ class IsisToWicketTreeAdapter {
         public LoadableDetachableTreeModel(TreeModel tModel) {
             super(tModel);
             this.treePath = tModel.getTreePath();
-            this.id = (RootOid) ManagedObject._oid(tModel.getObject());
+            this.id = (RootOid) ManagedObject._identify(tModel.getObject());
             this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
             this.commonContext = tModel.getCommonContext();
         }

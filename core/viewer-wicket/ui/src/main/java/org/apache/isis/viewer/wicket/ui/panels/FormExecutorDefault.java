@@ -30,7 +30,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
@@ -63,7 +62,6 @@ import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
@@ -347,22 +345,22 @@ implements FormExecutor {
                         : bookmark.toString();
     }
 
-    private void forwardOnConcurrencyException(
-            final ManagedObject targetAdapter) {
-
-        // this will not preserve the URL (because pageParameters are not copied over)
-        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        val entityPage = new EntityPage(model.getCommonContext() , targetAdapter);
-        
-        // force any changes in state etc to happen now prior to the redirect;
-        // in the case of an object being returned, this should cause our page mementos
-        // (eg EntityModel) to hold the correct state.  I hope.
-        getCommonContext().getTransactionService().flushTransaction();
-
-        // "redirect-after-post"
-        val requestCycle = RequestCycle.get();
-        requestCycle.setResponsePage(entityPage);
-    }
+//    private void forwardOnConcurrencyException(
+//            final ManagedObject targetAdapter) {
+//
+//        // this will not preserve the URL (because pageParameters are not copied over)
+//        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
+//        val entityPage = new EntityPage(model.getCommonContext() , targetAdapter);
+//        
+//        // force any changes in state etc to happen now prior to the redirect;
+//        // in the case of an object being returned, this should cause our page mementos
+//        // (eg EntityModel) to hold the correct state.  I hope.
+//        getCommonContext().getTransactionService().flushTransaction();
+//
+//        // "redirect-after-post"
+//        val requestCycle = RequestCycle.get();
+//        requestCycle.setResponsePage(entityPage);
+//    }
 
     
     private static boolean shouldRedraw(final Component component) {
@@ -509,9 +507,9 @@ implements FormExecutor {
         return getCommonContext().getAuthenticationSession();
     }
 
-    private MessageService getMessageService() {
-        return getCommonContext().lookupServiceElseFail(MessageService.class);
-    }
+//    private MessageService getMessageService() {
+//        return getCommonContext().lookupServiceElseFail(MessageService.class);
+//    }
 
     protected WicketViewerSettings getSettings() {
         return getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);

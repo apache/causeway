@@ -21,28 +21,42 @@ package org.apache.isis.metamodel.objectmanager;
 import javax.annotation.Nullable;
 
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
+import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
 /**
- * 
+ * Bundles all domain object state related responsibilities:<br>
+ * - object creation ... init defaults <br>
+ * - object loading ... given a specific object identifier (id) <br>
+ * - object identification ... given a domain object (pojo) <br>
+ *  
  * @since 2.0
- *
  */
 public interface ObjectManager {
 
     MetaModelContext getMetaModelContext();
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
+    ObjectIdentifier getObjectIdentifier();
 
+    // -- FACTORY
+    
     public static ObjectManager of(MetaModelContext metaModelContext) {
         val objectCreator = ObjectCreator.createDefault(metaModelContext);
         val objectLoader = ObjectLoader.createDefault(metaModelContext);
-        val objectManager = new ObjectManager_default(metaModelContext, objectLoader, objectCreator);
+        val objectIdentifier = ObjectIdentifier.createDefault();
+        val objectManager = new ObjectManager_default(
+                metaModelContext, objectLoader, objectCreator, objectIdentifier);
         return objectManager;
     }
+    
+    // -- SHORTCUTS
 
     public default ManagedObject createObject(ObjectCreator.Request objectCreateRequest) {
         return getObjectCreator().createObject(objectCreateRequest);
@@ -50,6 +64,10 @@ public interface ObjectManager {
     
     public default ManagedObject loadObject(ObjectLoader.Request objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
+    }
+    
+    public default RootOid identifyObject(ManagedObject managedObject) {
+        return getObjectIdentifier().identifyObject(managedObject);
     }
     
     @Nullable

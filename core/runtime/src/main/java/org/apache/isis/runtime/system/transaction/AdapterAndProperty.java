@@ -43,6 +43,8 @@ public class AdapterAndProperty {
         this.property = property;
 
         final RootOid oid = (RootOid) adapter.getOid();
+        
+        oid.asBookmark();
 
         final String objectType = oid.getObjectSpecId().asString();
         final String identifier = oid.getIdentifier();

@@ -26,19 +26,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 
-public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider.Delegating {
-
-    // -- instantiate
-
-//    /**
-//     * Provided by the <tt>PersistenceSession</tt> when used by framework.
-//     *
-//     * <p>
-//     * Called by <tt>DomainObjectContainerDefault</tt>.
-//     */
-//    ObjectAdapter createTransientInstance(ObjectSpecification spec);
-
-    //ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
+public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider {
 
     // -- retrieve
 

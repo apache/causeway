@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -44,6 +43,12 @@ import lombok.val;
  */
 @Service
 public class AuditingServiceInternal {
+    
+    @Inject private List<AuditerService> auditerServices;
+    @Inject private ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    @Inject private UserService userService;
+    @Inject private ClockService clockService;
+    @Inject private TransactionService transactionService;
 
     Boolean whetherCanAudit;
 
@@ -55,7 +60,7 @@ public class AuditingServiceInternal {
     }
 
     private boolean determineWhetherCanAudit() {
-        for (final AuditerService auditerService : auditerServices) {
+        for (val auditerService : auditerServices) {
             if (auditerService.isEnabled()) {
                 return true;
             }
@@ -106,7 +111,7 @@ public class AuditingServiceInternal {
         final UUID transactionId = txId.getUniqueId();
         final int sequence = txId.getSequence();
 
-        for (AuditerService auditerService : auditerServices) {
+        for (val auditerService : auditerServices) {
             if (auditerService.isEnabled()) {
                 auditerService
                 .audit(transactionId, sequence, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
@@ -114,11 +119,6 @@ public class AuditingServiceInternal {
         }
     }
 
-    @Inject List<AuditerService> auditerServices;
-    @Inject ChangedObjectsServiceInternal changedObjectsServiceInternal;
-    @Inject UserService userService;
-    @Inject ClockService clockService;
-    @Inject InteractionContext interactionContext;
-    @Inject TransactionService transactionService;
+
 
 }

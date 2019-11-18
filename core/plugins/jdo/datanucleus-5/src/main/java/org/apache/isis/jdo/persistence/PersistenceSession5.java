@@ -49,7 +49,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
@@ -60,7 +59,6 @@ import org.apache.isis.jdo.objectadapter.ObjectAdapterContext;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.PojoRefreshException;
@@ -80,12 +78,11 @@ import org.apache.isis.metamodel.facets.object.callbacks.UpdatedLifecycleEventFa
 import org.apache.isis.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.metamodel.services.container.query.QueryCardinality;
+import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.Data;
-import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtime.persistence.UnsupportedFindException;
@@ -403,42 +400,42 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     // -- fixture installation
 
-    @Override
-    public FixturesInstalledState getFixturesInstalledState() {
-        if (fixturesInstalledStateHolder.getFixturesInstalledState() == null) {
-            val initialStateFromConfig = initialStateFromConfig();
-            fixturesInstalledStateHolder.setFixturesInstalledState(initialStateFromConfig);
-        }
-        return fixturesInstalledStateHolder.getFixturesInstalledState();
-    }
-
-    /**
-     * Determine if the object store has been initialized with its set of start
-     * up objects.
-     *
-     * <p>
-     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
-     * framework will run the fixtures to initialise the object store.
-     *
-     * <p>
-     * Implementation looks for the {@link IsisConfiguration.Persistor.Datanucleus#isInstallFixtures()} property
-     * in the injected {@link #configuration configuration}.
-     *
-     * <p>
-     * By default this is not expected to be there, but utilities can add in on
-     * the fly during bootstrapping if required.
-     */
-    private FixturesInstalledState initialStateFromConfig() {
-        val installFixtures = configuration.getPersistor().getDatanucleus().isInstallFixtures();
-        log.info("isFixturesInstalled: {} = {}", "'isis.persistor.datanucleus.install-fixtures'", installFixtures);
-
-        val objectStoreIsFixturesInstalled = !installFixtures;
-        val initialStateFromConfig = objectStoreIsFixturesInstalled
-                ? FixturesInstalledState.Installed
-                        : FixturesInstalledState.not_Installed;
-
-        return initialStateFromConfig;
-    }
+//    @Override
+//    public FixturesInstalledState getFixturesInstalledState() {
+//        if (fixturesInstalledStateHolder.getFixturesInstalledState() == null) {
+//            val initialStateFromConfig = initialStateFromConfig();
+//            fixturesInstalledStateHolder.setFixturesInstalledState(initialStateFromConfig);
+//        }
+//        return fixturesInstalledStateHolder.getFixturesInstalledState();
+//    }
+//
+//    /**
+//     * Determine if the object store has been initialized with its set of start
+//     * up objects.
+//     *
+//     * <p>
+//     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
+//     * framework will run the fixtures to initialise the object store.
+//     *
+//     * <p>
+//     * Implementation looks for the {@link IsisConfiguration.Persistor.Datanucleus#isInstallFixtures()} property
+//     * in the injected {@link #configuration configuration}.
+//     *
+//     * <p>
+//     * By default this is not expected to be there, but utilities can add in on
+//     * the fly during bootstrapping if required.
+//     */
+//    private FixturesInstalledState initialStateFromConfig() {
+//        val installFixtures = configuration.getPersistor().getDatanucleus().isInstallFixtures();
+//        log.info("isFixturesInstalled: {} = {}", "'isis.persistor.datanucleus.install-fixtures'", installFixtures);
+//
+//        val objectStoreIsFixturesInstalled = !installFixtures;
+//        val initialStateFromConfig = objectStoreIsFixturesInstalled
+//                ? FixturesInstalledState.Installed
+//                        : FixturesInstalledState.not_Installed;
+//
+//        return initialStateFromConfig;
+//    }
 
     // -- FETCHING
 
@@ -881,8 +878,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public ObjectAdapterProvider getObjectAdapterProvider() {
-        return objectAdapterContext.getObjectAdapterProvider();
+    public ObjectAdapter adapterFor(Object pojo) {
+        return objectAdapterContext.getObjectAdapterProvider().adapterFor(pojo);
     }
 
     @Override
@@ -905,6 +902,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             log.debug("refresh immediately; oid={}", oid.enString());
         }
     }
+
+
 
 
 }

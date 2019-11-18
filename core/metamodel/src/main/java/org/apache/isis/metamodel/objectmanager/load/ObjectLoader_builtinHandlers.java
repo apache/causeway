@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.objectmanager;
+package org.apache.isis.metamodel.objectmanager.load;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.metamodel.objectmanager.ObjectLoader.Request;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader.Request;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 

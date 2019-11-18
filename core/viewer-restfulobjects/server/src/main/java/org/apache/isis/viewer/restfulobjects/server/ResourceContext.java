@@ -216,7 +216,7 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
     private Set<Oid> rendered = _Sets.newHashSet();
     @Override
     public boolean canEagerlyRender(ManagedObject objectAdapter) {
-        final Oid oid = ManagedObject._oid(objectAdapter);
+        final Oid oid = ManagedObject._identify(objectAdapter);
         return rendered.add(oid);
     }
 

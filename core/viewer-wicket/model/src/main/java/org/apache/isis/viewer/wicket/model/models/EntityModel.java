@@ -79,7 +79,7 @@ implements ObjectAdapterModel, UiHintContainer {
         val isEntity = ManagedObject.isBookmarkable(adapter);
 
         if (isEntity) {
-            val oidStr = ManagedObject._oid(adapter).enString();
+            val oidStr = ManagedObject._identify(adapter).enString();
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         } else {
             // don't do anything; instead the page should be redirected back to

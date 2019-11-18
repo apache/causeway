@@ -20,12 +20,16 @@ package org.apache.isis.applib.services.bookmark;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
+
+import lombok.Getter;
+import lombok.val;
 
 /**
  * String representation of any persistent object managed by the framework.
@@ -39,44 +43,17 @@ public class Bookmark implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected static final String SEPARATOR = ":";
-
-    public static Bookmark create(final String str) {
-        return str != null? new Bookmark(str): null;
-    }
-
-    public OidDto toOidDto() {
-        final OidDto oidDto = new OidDto();
-
-        oidDto.setType(getObjectType());
-        oidDto.setId(getIdentifier());
-
-        // persistent is assumed if not specified...
-        final BookmarkObjectState bookmarkState = getObjectState().toBookmarkState();
-        oidDto.setObjectState(bookmarkState != BookmarkObjectState.PERSISTENT ? bookmarkState : null);
-
-        return oidDto;
-    }
-
-    public static Bookmark from(final OidDto oidDto) {
-        final BookmarkObjectState bookmarkObjectState = oidDto.getObjectState();
-        final ObjectState objectState = ObjectState.from(bookmarkObjectState);
-        final String objectType = coalesce(oidDto.getType(), oidDto.getObjectType());
-        final String objectId = coalesce(oidDto.getId(), oidDto.getObjectIdentifier());
-        final Bookmark bookmark = new Bookmark(objectState.getCode() + objectType, objectId);
-        return bookmark;
-    }
-
-    private static String coalesce(final String first, final String second) {
-        return first != null? first: second;
-    }
-
-
+    
+    @Getter private final String objectType;
+    @Getter private final String identifier;
+    @Getter private final ObjectState objectState;
+    
     public enum ObjectState {
         PERSISTENT("", BookmarkObjectState.PERSISTENT),
         TRANSIENT("!", BookmarkObjectState.TRANSIENT), // same as OidMarshaller
         VIEW_MODEL("*", BookmarkObjectState.VIEW_MODEL); // same as OidMarshaller
 
-        private final String code;
+        @Getter private final String code;
         private final BookmarkObjectState bookmarkObjectState;
 
         ObjectState(
@@ -94,10 +71,6 @@ public class Bookmark implements Serializable {
         }
         public boolean isPersistent() {
             return this == PERSISTENT;
-        }
-
-        public String getCode() {
-            return code;
         }
 
         public static ObjectState from(final String objectType) {
@@ -128,10 +101,31 @@ public class Bookmark implements Serializable {
         }
     }
 
-    protected final String objectType;
-    private final String identifier;
-    protected final ObjectState state;
+    public static Bookmark create(String str) {
+        return str != null? new Bookmark(str): null;
+    }
 
+    public OidDto toOidDto() {
+        final OidDto oidDto = new OidDto();
+
+        oidDto.setType(getObjectType());
+        oidDto.setId(getIdentifier());
+
+        // persistent is assumed if not specified...
+        final BookmarkObjectState bookmarkState = getObjectState().toBookmarkState();
+        oidDto.setObjectState(bookmarkState != BookmarkObjectState.PERSISTENT ? bookmarkState : null);
+
+        return oidDto;
+    }
+
+    public static Bookmark from(OidDto oidDto) {
+        val bookmarkObjectState = oidDto.getObjectState();
+        val objectState = ObjectState.from(bookmarkObjectState);
+        val objectType = coalesce(oidDto.getType(), oidDto.getObjectType());
+        val objectId = coalesce(oidDto.getId(), oidDto.getObjectIdentifier());
+        val bookmark = new Bookmark(objectState.getCode() + objectType, objectId);
+        return bookmark;
+    }
 
     /**
      * Round-trip with {@link #toString()} representation.
@@ -145,53 +139,31 @@ public class Bookmark implements Serializable {
     }
 
     public Bookmark(final String objectType, final String identifier) {
-        this.state = ObjectState.from(objectType);
-        this.objectType = state != ObjectState.PERSISTENT ? objectType.substring(1): objectType;
+        this.objectState = ObjectState.from(objectType);
+        this.objectType = objectState != ObjectState.PERSISTENT ? objectType.substring(1): objectType;
         this.identifier = identifier;
     }
 
-    public ObjectState getObjectState() {
-        return state;
-    }
-
-    public String getObjectType() {
-        return objectType;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-
-
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
-        result = prime * result + ((objectType == null) ? 0 : objectType.hashCode());
-        return result;
+        return Objects.hash(this.getIdentifier(), this.getObjectType());
     }
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        
+        val other = (Bookmark) obj;
+        
+        if(! Objects.equals(this.identifier, other.identifier)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if(! Objects.equals(this.objectType, other.objectType)) {
             return false;
-        final Bookmark other = (Bookmark) obj;
-        if (identifier == null) {
-            if (other.identifier != null)
-                return false;
-        } else if (!identifier.equals(other.identifier))
-            return false;
-        if (objectType == null) {
-            if (other.objectType != null)
-                return false;
-        } else if (!objectType.equals(other.objectType))
-            return false;
+        }
+        
         return true;
     }
 
@@ -203,25 +175,15 @@ public class Bookmark implements Serializable {
      */
     @Override
     public String toString() {
-        return state.getCode() + objectType + SEPARATOR + identifier;
+        return objectState.getCode() + objectType + SEPARATOR + identifier;
     }
 
-
-    public static class AsStringType {
-
-        private AsStringType() {}
-
-        public static class Meta {
-
-            /**
-             * Is based on the defacto limit of a request URL in web browsers such as IE8
-             */
-            public static final int MAX_LEN = 2000;
-
-            private Meta() {}
-
-        }
-
+    // -- HELPER
+    
+    private static String coalesce(final String first, final String second) {
+        return first != null? first: second;
     }
+
+    
 
 }

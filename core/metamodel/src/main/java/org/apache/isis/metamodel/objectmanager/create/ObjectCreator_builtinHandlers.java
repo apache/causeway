@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.objectmanager;
+package org.apache.isis.metamodel.objectmanager.create;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;

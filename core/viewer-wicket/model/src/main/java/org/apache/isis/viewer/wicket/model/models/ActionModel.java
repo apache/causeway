@@ -121,7 +121,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
         val pageParameters = PageParametersUtils.newPageParameters();
 
-        val oidStr = ManagedObject._oid(adapter).enString();
+        val oidStr = ManagedObject._identify(adapter).enString();
 
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
 
@@ -379,7 +379,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
             return encodeable.toEncodedString(adapter);
         }
 
-        return ManagedObject._oid(adapter).enString();
+        return ManagedObject._identify(adapter).enString();
     }
 
     private ManagedObject decodeArg(final ObjectSpecification objSpec, final String encoded) {

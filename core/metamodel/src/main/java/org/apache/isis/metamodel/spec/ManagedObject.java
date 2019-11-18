@@ -29,20 +29,17 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.oid.factory.OidFactory;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
-import org.apache.isis.metamodel.objectmanager.ObjectCreator;
-import org.apache.isis.metamodel.objectmanager.ObjectLoader;
+import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -81,14 +78,14 @@ public interface ManagedObject {
     }
 
     // -- LAZY
-    
+
     @ToString(of = {"specification", "pojo"}) @EqualsAndHashCode(of = "pojo")
     final static class LazyManagedObject implements ManagedObject {
 
         @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;  
-        
+
         @Getter @NonNull private final Object pojo;
-        
+
         @Getter(lazy=true) 
         private final ObjectSpecification specification = specLoader.apply(pojo.getClass());
 
@@ -98,7 +95,7 @@ public interface ManagedObject {
         }
 
     }
-    
+
     // -- TITLE
 
     public default String titleString() {
@@ -223,16 +220,16 @@ public interface ManagedObject {
     public static ManagedObject of(
             Function<Class<?>, ObjectSpecification> specLoader, 
             Object pojo) {
-        
+
         return new LazyManagedObject(specLoader, pojo);
     }
-    
+
     // -- UNWRAPPING
-    
+
     public static Object unwrapPojo(final ManagedObject adapter) {
         return adapter != null ? adapter.getPojo() : null;
     }
-    
+
     public static Object[] unwrapPojoArray(final ManagedObject[] adapters) {
         if (adapters == null) {
             return null;
@@ -244,7 +241,7 @@ public interface ManagedObject {
         }
         return unwrappedObjects;
     }
-    
+
     public static String unwrapPojoStringElse(final ManagedObject adapter, String orElse) {
         final Object obj = ManagedObject.unwrapPojo(adapter);
         if (obj == null) {
@@ -255,25 +252,25 @@ public interface ManagedObject {
         }
         return (String) obj;
     }
-    
+
     public static List<Object> unwrapPojoListElseEmpty(Collection<ManagedObject> adapters) {
         if (adapters == null) {
             return Collections.emptyList();
         }
         return adapters.stream()
-            .map(ManagedObject::unwrapPojo)
-            .collect(Collectors.toList());
+                .map(ManagedObject::unwrapPojo)
+                .collect(Collectors.toList());
     }
-    
+
     // -- SHORTCUTS
-    
+
     public static String getDomainType(ManagedObject objectAdapter) {
         if (objectAdapter == null) {
             return null;
         }
         return objectAdapter.getSpecification().getSpecId().asString();
     }
-    
+
     // -- BASIC PREDICATES
 
     static boolean isEntity(ManagedObject adapter) {
@@ -308,73 +305,15 @@ public interface ManagedObject {
         }
         return adapter.getPojo()==null;
     }
-    
-    // -- DEPRECATIONS (REFACTORING)
-    
-    @Deprecated
-    static boolean _isDestroyed(ManagedObject adapter) {
-        
-        if(adapter==null || adapter.getPojo()==null) {
-            return false;
-        }
-        
-        val spec = adapter.getSpecification();
-        if(!spec.isEntity()) {
-            // services and view models are treated as persistent objects
-            return false;
-        }
-        
-        val entityFacet = spec.getFacet(EntityFacet.class);
-        if(entityFacet==null) {
-            return false;
-        }
-        
-        val entityState = entityFacet.getEntityState(adapter.getPojo());
-        return entityState == EntityState.persistable_Destroyed;
-    }
 
-    @Deprecated
-    static RootOid _collectionOidIfAny(ManagedObject adapter) {
-        return _rootOidIfAny(adapter);
-    }
-
-    @Deprecated
-    static void _whenFirstIsBookmarkable_ensureSecondIsNotTransient(
-            ManagedObject first,
-            ManagedObject second) {
-        
-        if(ManagedObject.isBookmarkable(first) && second!=null) {
-            
-            val refSpec = second.getSpecification();
-            
-            if(refSpec.isParented() || !refSpec.isEntity()) {
-                return;
-            }
-            
-            val oid = ManagedObject._rootOidIfAny(second);
-            
-            if(oid.isTransient()) {
-
-                // TODO: I've never seen this exception, and in any case DataNucleus supports persistence-by-reachability; so probably not required
-                throw _Exceptions.illegalArgument(
-                        "can't set a reference to a transient object [%s] from a persistent one [%s]",
-                            second,
-                            first.titleString(null));
-            }
-            
-        }
-        
-        
-    }
-    
     // -- VISIBILITY UTILITIES
-    
+
     static final class Visibility {
-        
+
         public static Predicate<? super ManagedObject> filterOn(InteractionInitiatedBy interactionInitiatedBy) {
             return $->ManagedObject.Visibility.isVisible($, interactionInitiatedBy);
         }
-        
+
         /**
          * @param adapter - an adapter around the domain object whose visibility is being checked
          * @param interactionInitiatedBy
@@ -382,7 +321,7 @@ public interface ManagedObject {
         public static boolean isVisible(
                 ManagedObject adapter,
                 InteractionInitiatedBy interactionInitiatedBy) {
-            
+
             if(adapter == null) {
                 // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
                 return true;
@@ -408,7 +347,7 @@ public interface ManagedObject {
 
         private static VisibilityContext<?> createVisibleInteractionContextForUser(
                 ManagedObject adapter) {
-            
+
             return new ObjectVisibilityContext(
                     adapter,
                     adapter.getSpecification().getIdentifier(),
@@ -416,99 +355,137 @@ public interface ManagedObject {
                     Where.OBJECT_FORMS);
         }
     }
-    
-    // -- OID UTILITIES
-    
-    static final class Oids {
-        static final OidFactory oidFactory = OidFactory.buildDefault();
-        
-        static final <T extends Oid> T copy(T oid) {
-            if(oid == null) { return null; }
-            return _Casts.uncheckedCast(oid.copy()); 
-        }
+
+    // -- DEPRECATIONS (REFACTORING)
+
+    static MetaModelContext _mmc(ManagedObject adapter) {
+        return adapter.getSpecification().getMetaModelContext();
     }
 
-    static Oid _oid(ManagedObject adapter) {
-        if(adapter instanceof ObjectAdapter) {
-            return Oids.copy(((ObjectAdapter)adapter).getOid());
-        }
-        
-        return Oids.oidFactory.oidFor(adapter);
+    static RootOid _identify(ManagedObject adapter) {
+        return _mmc(adapter).getObjectManager().identifyObject(adapter); 
     }
 
-    static RootOid _rootOidIfAny(ManagedObject adapter) {
-        val oid = _oid(adapter);
-        if(oid instanceof RootOid) {
-            return (RootOid) oid;
+    static RootOid _identifyElseThrow(ManagedObject adapter) {
+        try {
+            val rootOid = _identify(adapter);
+            if(rootOid!=null){
+                return rootOid; 
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    "ManagedObject must represent an identifiable object: " + adapter, e);
         }
-        return null;
+        throw new IllegalArgumentException("ManagedObject must represent an identifiable object: " + adapter);
     }
     
-    static RootOid _rootOidElseThrow(ManagedObject adapter) {
-        val rootOid = _rootOidIfAny(adapter);
-        if(rootOid==null) {
-            throw new IllegalArgumentException("adapter must be a root adapter");
+    static String _instanceId(ManagedObject adapter) {
+        val identifier = ManagedObject._identifyElseThrow(adapter).getIdentifier();
+        return identifier; 
+    }
+    
+    static EntityState _entityState(ManagedObject adapter) {
+
+        if(adapter==null || adapter.getPojo()==null) {
+            return null;
         }
-        return rootOid;
+
+        val spec = adapter.getSpecification();
+        if(!spec.isEntity()) {
+            // services and view models are treated as persistent objects
+            return EntityState.not_Persistable;
+        }
+
+        val entityFacet = spec.getFacet(EntityFacet.class);
+        if(entityFacet==null) {
+            throw _Exceptions.unrecoverable("Entity types must have an EntityFacet");
+        }
+
+        return entityFacet.getEntityState(adapter.getPojo());
     }
-    
-    static String _instanceIdIfAny(ManagedObject adapter) {
-        String oidStr = ManagedObject._rootOidElseThrow(adapter).enString();
-        // REVIEW: it's a bit hokey to join these together just to split them out again.
-        // TODO inline this then refactor!
-        return oidStr != null ? Oid.unmarshaller().splitInstanceId(oidStr): null;
+
+    static boolean _isDestroyed(ManagedObject adapter) {
+        return _entityState(adapter) == EntityState.persistable_Destroyed;
     }
-    
+
+    @Deprecated
+    static void _whenFirstIsBookmarkable_ensureSecondIsNotTransient(
+            ManagedObject first,
+            ManagedObject second) {
+
+        if(ManagedObject.isBookmarkable(first) && second!=null) {
+
+            val refSpec = second.getSpecification();
+
+            if(refSpec.isParented() || !refSpec.isEntity()) {
+                return;
+            }
+
+            val oid = ManagedObject._identify(second);
+
+            if(oid.isTransient()) {
+
+                // TODO: I've never seen this exception, and in any case DataNucleus supports persistence-by-reachability; so probably not required
+                throw _Exceptions.illegalArgument(
+                        "can't set a reference to a transient object [%s] from a persistent one [%s]",
+                        second,
+                        first.titleString(null));
+            }
+
+        }
+
+    }
+
     // move this to ObjectManager?
     static ManagedObject _adapterOfRootOid(SpecificationLoader specificationLoader, RootOid rootOid) {
-        
+
         val mmc = ((SpecificationLoaderDefault)specificationLoader).getMetaModelContext();
-        
+
         val spec = specificationLoader.loadSpecification(rootOid.getObjectSpecId());
         val objectId = rootOid.getIdentifier();
-        
+
         val objectLoadRequest = ObjectLoader.Request.of(spec, objectId);
         val managedObject = mmc.getObjectManager().loadObject(objectLoadRequest);
-        
+
         return managedObject;
-        
+
     }
-    
+
     static ManagedObject _newTransientInstance(ObjectSpecification spec) {
-        
+
         if(spec == null) {
             return null;
         }
-        
+
         val mmc = spec.getMetaModelContext();
-        
+
         val objectCreateRequest = ObjectCreator.Request.of(spec);
         val managedObject = mmc.getObjectManager().createObject(objectCreateRequest);
-        
+
         return managedObject;
-        
+
     }
 
     @Deprecated
     static ManagedObject _adapterOfList(SpecificationLoader specificationLoader, DomainObjectList list) {
-        
+
         if(list == null) {
             return null;
         }
-        
+
         val spec = specificationLoader.loadSpecification(list.getClass());
         return ManagedObject.of(spec, list);
-        
+
         // legacy of
         // resourceContext.adapterOfPojo(list);
     }
-    
+
     @Deprecated
     static void _makePersistentInTransaction(ManagedObject adapter) {
 
         // legacy of
         // getResourceContext().makePersistentInTransaction(adapter);
-        
+
         val spec = adapter.getSpecification();
         if(spec.isEntity()) {
             val entityFacet = spec.getFacet(EntityFacet.class);
@@ -521,20 +498,22 @@ public interface ManagedObject {
 
     @Deprecated
     static Stream<ManagedObject> _bulkLoadStream(Stream<RootOid> rootOids) {
-        
+
         throw _Exceptions.notImplemented();
-        
-//        PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
-//                .orElseThrow(()->_Exceptions.unrecoverable("no PersistenceSession available"));
-//        
-//        final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
-//        final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
-//        return stream(adapterList)
-//                .filter(_NullSafe::isPresent)
-//                .map(ManagedObject.class::cast);
+
+        //        PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
+        //                .orElseThrow(()->_Exceptions.unrecoverable("no PersistenceSession available"));
+        //        
+        //        final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
+        //        final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
+        //        return stream(adapterList)
+        //                .filter(_NullSafe::isPresent)
+        //                .map(ManagedObject.class::cast);
     }
 
 
 
-    
- }
+
+
+
+}
