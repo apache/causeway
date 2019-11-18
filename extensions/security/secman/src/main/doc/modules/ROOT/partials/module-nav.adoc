@@ -1,1 +1,0 @@
-* xref:secman:ROOT:about.adoc[SecMan (extension)]

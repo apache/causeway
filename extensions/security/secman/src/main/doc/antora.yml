@@ -3,4 +3,4 @@ title: "SecMan"
 version: master
 start_page: ROOT:about.adoc
 nav:
-- modules/secman/nav.adoc
+- modules/ROOT/nav.adoc
