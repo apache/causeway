@@ -1,1 +1,0 @@
-// this module's pages are referenced by security-shiro module

@@ -3,4 +3,14 @@
 include::_attributes.adoc[]
 :page-partial:
 
+WARNING: TODO: v2: this needs to be updated for Spring Boot etc.
+
 This guide describes the configuration of the Shiro implementation of Apache Isis' `Authenticator and `Authorizor` APIs.
+
+include::about/configuring-isis-to-use-shiro.adoc[leveloffset=+1]
+include::about/ini-realm.adoc[leveloffset=+1]
+include::about/jdbc-realm.adoc[leveloffset=+1]
+include::about/ldap-realm.adoc[leveloffset=+1]
+include::about/enhanced-wildcard-permission.adoc[leveloffset=+1]
+include::about/run-as.adoc[leveloffset=+1]
+include::about/shiro-caching.adoc[leveloffset=+1]

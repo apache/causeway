@@ -1,5 +1,4 @@
-* xref:security:ROOT:about.adoc[Security]
-** xref:security:ROOT:api-for-applications.adoc[API for Applications]
+* xref:security:ROOT:domain-services-api-for-applications.adoc[Domain Services (API for Applications)]
 
 
 

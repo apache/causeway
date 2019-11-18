@@ -5,4 +5,4 @@ include::_attributes.adoc[]
 
 This guide describes the configuration of the Keycloak implementation of Apache Isis' `Authenticator and `Authorizor` APIs.
 
-TODO
+TODO: v2

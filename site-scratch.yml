@@ -14,34 +14,34 @@ content:
 #    - url: .
 #      start_path: antora/components/mignotes
 #      branches: HEAD
-    - url: .
-      start_path: antora/components/refguide
-      branches: HEAD
+#    - url: .
+#      start_path: antora/components/refguide
+#      branches: HEAD
 #    - url: .
 #      start_path: antora/components/relnotes
 #      branches: HEAD
-#    - url: .
-#      start_path: antora/components/security
-#      branches: HEAD
+    - url: .
+      start_path: antora/components/security
+      branches: HEAD
 #    - url: .
 #      start_path: antora/components/testing
 #      branches: HEAD
     - url: .
       start_path: antora/components/toc
       branches: HEAD
-    - url: .
-      start_path: antora/components/userguide
-      branches: HEAD
+#    - url: .
+#      start_path: antora/components/userguide
+#      branches: HEAD
 #
-    - url: .
-      start_path: core/applib/src/main/doc # refguide
-      branches: HEAD
+#    - url: .
+#      start_path: core/applib/src/main/doc # refguide
+#      branches: HEAD
 #    - url: .
 #      start_path: core/commons/src/main/doc # core
 #      branches: HEAD
-    - url: .
-      start_path: core/config/src/main/doc # refguide
-      branches: HEAD
+#    - url: .
+#      start_path: core/config/src/main/doc # refguide
+#      branches: HEAD
 #    - url: .
 #      start_path: core/detached-tests/src/main/doc # core
 #      branches: HEAD
@@ -69,21 +69,21 @@ content:
 #    - url: .
 #      start_path: core/runtime-web/src/main/doc # core
 #      branches: HEAD
+#    - url: .
+#      start_path: core/schema/src/main/doc # refguide
+#      branches: HEAD
     - url: .
-      start_path: core/schema/src/main/doc # refguide
+      start_path: core/security/api/src/main/doc # security
       branches: HEAD
-#    - url: .
-#      start_path: core/security/api/src/main/doc # security
-#      branches: HEAD
-#    - url: .
-#      start_path: core/security/bypass/src/main/doc # security
-#      branches: HEAD
-#    - url: .
-#      start_path: core/security/shiro/src/main/doc # security
-#      branches: HEAD
-#    - url: .
-#      start_path: core/security/keycloak/src/main/doc # security
-#      branches: HEAD
+    - url: .
+      start_path: core/security/bypass/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: core/security/shiro/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: core/security/keycloak/src/main/doc # security
+      branches: HEAD
 #    - url: .
 #      start_path: core/testsupport/unittestsupport/src/main/doc # testing
 #      branches: HEAD
@@ -123,24 +123,24 @@ content:
 #    - url: .
 #      start_path: extensions/core/spring/src/main/doc # extensions
 #      branches: HEAD
-#    - url: .
-#      start_path: extensions/security/secman/src/main/doc # secman
-#      branches: HEAD
-#    - url: .
-#      start_path: extensions/security/secman/api/src/main/doc # secman
-#      branches: HEAD
-#    - url: .
-#      start_path: extensions/security/secman/encryption-jbcrypt/src/main/doc # secman
-#      branches: HEAD
-#    - url: .
-#      start_path: extensions/security/secman/model/src/main/doc # secman
-#      branches: HEAD
-#    - url: .
-#      start_path: extensions/security/secman/persistence-jdo/src/main/doc # secman
-#      branches: HEAD
-#    - url: .
-#      start_path: extensions/security/secman/realm-shiro/src/main/doc # secman
-#      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/src/main/doc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/api/src/main/doc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/encryption-jbcrypt/src/main/doc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/model/src/main/doc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/persistence-jdo/src/main/doc # secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/realm-shiro/src/main/doc # secman
+      branches: HEAD
 #    - url: .
 #      start_path: extensions/testing/fixtures/src/main/doc # testing
 #      branches: HEAD

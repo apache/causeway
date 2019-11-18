@@ -1,1 +1,1 @@
-// this module's pages are referenced by security-shiro module
+* xref:security:shiro-realm-ldap:about.adoc[LDAP Realm]

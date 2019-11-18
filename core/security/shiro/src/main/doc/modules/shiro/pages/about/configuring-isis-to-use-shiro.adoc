@@ -34,7 +34,7 @@ public class HelloWorldAppManifest extends AppManifestAbstract {
 
 This installs the appropriate implementation (the `ShiroAuthenticatorOrAuthorizor` class) that use Shiro's APIs to perform authentication and authorization:
 
-image::security/security-apis-impl/configure-isis-to-use-shiro.png[width="600px",link="{imagesdir}/security/security-apis-impl/configure-isis-to-use-shiro.png"]
+image::configuration/configure-isis-to-use-shiro.png[width="600px",link="{imagesdir}/configuration/configure-isis-to-use-shiro.png"]
 
 The figure above doesn't tell the whole story; we haven't yet seen how Shiro itself is configured to use realms.
 The `ShiroAuthenticatorOrAuthorizor` is in essence the glue between the Apache Isis runtime and Shiro.
