@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
+import org.apache.isis.viewer.restfulobjects.IsisBootViewerRestfulObjects;
 
 import lombok.val;
 
@@ -46,7 +46,7 @@ import lombok.val;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
     Configuration_usingJdo.class,
-    IsisBootWebRestfulObjects.class
+    IsisBootViewerRestfulObjects.class
 })
 class RestServiceTest {
 

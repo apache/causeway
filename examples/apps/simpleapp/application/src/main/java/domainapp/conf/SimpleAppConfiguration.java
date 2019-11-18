@@ -34,8 +34,8 @@ import org.apache.isis.extensions.fixtures.IsisBootFixtures;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
-import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
+import org.apache.isis.viewer.restfulobjects.IsisBootViewerRestfulObjects;
+import org.apache.isis.viewer.wicket.viewer.IsisBootViewerWicket;
 
 import domainapp.application.DomainAppApplicationModule;
 import domainapp.application.fixture.scenarios.DomainAppDemo;
@@ -55,8 +55,8 @@ import domainapp.modules.simple.SimpleModule;
     IsisBoot.class,
     IsisBootSecurityShiro.class,
     IsisBootDataNucleus.class,
-    IsisBootWebRestfulObjects.class,
-    IsisBootWebWicket.class,
+    IsisBootViewerRestfulObjects.class,
+    IsisBootViewerWicket.class,
     IsisBootFixtures.class,
 
     DomainAppApplicationModule.class,
