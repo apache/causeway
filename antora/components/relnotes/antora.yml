@@ -1,6 +1,0 @@
-name: relnotes
-title: "Releases - Release Notes"
-version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc

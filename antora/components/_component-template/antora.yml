@@ -1,0 +1,7 @@
+name: _component-template
+title: "Component Template"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc
+#- modules/_module-template/nav.adoc

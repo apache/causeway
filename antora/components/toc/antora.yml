@@ -1,10 +1,6 @@
 name: toc
-title: "Table of Contents"
+title: "Main"
 version: master
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
-# not required because referenced from main nav.adoc
-#- modules/devguide/nav.adoc
-#- modules/comguide/nav.adoc
-#- modules/doc-template/nav.adoc

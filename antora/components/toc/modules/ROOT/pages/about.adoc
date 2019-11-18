@@ -58,8 +58,8 @@ include::_attributes.adoc[]
 == Support
 
 * xref:toc:devguide:about.adoc[Developers' Guide]
-* xref:mavendeps:ROOT:about.adoc[Maven dependencies]
-* xref:mixins:ROOT:about.adoc[Maven mixins]
+* xref:toc:mavendeps:about.adoc[Maven dependencies]
+* xref:toc:mixins:about.adoc[Maven mixins]
 
 _Mailing Lists_
 
@@ -72,8 +72,8 @@ _Mailing Lists_
 == Releases
 
 * xref:toc:ROOT:downloads/how-to.adoc[Downloads]
-* xref:relnotes:ROOT:about.adoc[Release Notes]
-* xref:mignotes:ROOT:about.adoc[Migration Notes]
+* xref:toc:relnotes:about.adoc[Release Notes]
+* xref:toc:mignotes:about.adoc[Migration Notes]
 
 _Other Resources_
 

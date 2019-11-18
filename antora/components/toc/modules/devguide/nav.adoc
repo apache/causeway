@@ -1,1 +1,1 @@
-* xref:about.adoc[Developers' Guide]
+// unused - referenced directly by toc/nav.adoc

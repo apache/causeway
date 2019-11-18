@@ -12,13 +12,7 @@ content:
       start_path: antora/components/extensions
       branches: HEAD
     - url: .
-      start_path: antora/components/mignotes
-      branches: HEAD
-    - url: .
       start_path: antora/components/refguide
-      branches: HEAD
-    - url: .
-      start_path: antora/components/relnotes
       branches: HEAD
     - url: .
       start_path: antora/components/security
