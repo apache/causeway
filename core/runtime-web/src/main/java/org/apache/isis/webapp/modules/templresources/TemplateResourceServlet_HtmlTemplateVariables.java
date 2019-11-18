@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.webapp.modules.resources;
+package org.apache.isis.webapp.modules.templresources;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,11 +32,11 @@ import static org.apache.isis.commons.internal.base._With.requires;
  * Package private mixin for ResourceServlet
  * @since 2.0
  */
-final class ResourceServlet_HtmlTemplateVariables {
+final class TemplateResourceServlet_HtmlTemplateVariables {
 
     final Map<String, String> placeholders = new HashMap<>();
 
-    public ResourceServlet_HtmlTemplateVariables(KeyValuePair ... kvPairs) {
+    public TemplateResourceServlet_HtmlTemplateVariables(KeyValuePair ... kvPairs) {
         requires(kvPairs, "placeholders");
 
         stream(kvPairs)

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.webapp.modules.resources;
+package org.apache.isis.webapp.modules.templresources;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,20 +45,13 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Serves static web-resources by class-path or file-system lookup.
- * Also handles HTML-templates, where template's placeholders get replaced by their values.
+ * Handles HTML-templates, where template's placeholders get replaced by their values.
  */
-//@WebServlet(
-//        urlPatterns = { 
-//                "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" }
-//        )
-//[ahuber] to support Servlet 3.0 annotations @WebFilter, @WebListener or others 
-//with skinny war deployment requires additional configuration, so for now we disable this annotation
 @Log4j2
-public class ResourceServlet extends HttpServlet {
+public class TemplateResourceServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private ResourceServlet_HtmlTemplateVariables templateVariables;
+    private TemplateResourceServlet_HtmlTemplateVariables templateVariables;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -66,7 +59,7 @@ public class ResourceServlet extends HttpServlet {
 
         final String restfulPath = ifPresentElse(_Resources.getRestfulPathIfAny(), "restful");
         final String restfulBase = _Resources.prependContextPathIfPresent(restfulPath);
-        templateVariables = new ResourceServlet_HtmlTemplateVariables(
+        templateVariables = new TemplateResourceServlet_HtmlTemplateVariables(
                 pair("restful-base", prefix(restfulBase, "/"))
                 );
     }
@@ -158,24 +151,8 @@ public class ResourceServlet extends HttpServlet {
     }
 
     private static String guessContentType(String servletPath) {
-        if(servletPath.endsWith(".css")) {
-            return "text/css";
-        } else if(servletPath.endsWith(".png")) {
-            return "image/png";
-        } else if(servletPath.endsWith(".jpg")) {
-            return "image/jpeg";
-        } else if(servletPath.endsWith(".jpeg")) {
-            return "image/jpeg";
-        } else if(servletPath.endsWith(".gif")) {
-            return "image/gif";
-        } else if(servletPath.endsWith(".svg")) {
-            return "image/svg+xml";
-        } else if(servletPath.endsWith(".js")) {
-            return "application/x-javascript";
-        } else if(servletPath.endsWith(".html")) {
+        if(servletPath.endsWith(".html")) {
             return "text/html";
-        } else if(servletPath.endsWith(".swf")) {
-            return "application/x-shockwave-flash";
         }
         return null;
     }

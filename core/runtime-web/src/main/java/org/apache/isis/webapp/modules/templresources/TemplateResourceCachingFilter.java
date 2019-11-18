@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.webapp.modules.resources;
+package org.apache.isis.webapp.modules.templresources;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -45,7 +45,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 //)
 //[ahuber] to support Servlet 3.0 annotations @WebFilter, @WebListener or others 
 //with skinny war deployment requires additional configuration, so for now we disable this annotation
-public class ResourceCachingFilter implements Filter {
+public class TemplateResourceCachingFilter implements Filter {
 
     /**
      * Attribute set on {@link HttpServletRequest} if the filter has been
@@ -54,7 +54,8 @@ public class ResourceCachingFilter implements Filter {
      * <p>
      * This is intended to inform other filters.
      */
-    private static final String REQUEST_ATTRIBUTE = ResourceCachingFilter.class.getName() + ".resource";
+    private static final String REQUEST_ATTRIBUTE = 
+            TemplateResourceCachingFilter.class.getName() + ".resource";
 
     /**
      * To allow other filters to ask whether a request is mapped to the resource

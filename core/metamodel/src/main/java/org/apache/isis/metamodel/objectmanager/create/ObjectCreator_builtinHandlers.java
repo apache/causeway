@@ -64,9 +64,9 @@ final class ObjectCreator_builtinHandlers {
             
             val spec = objectCreateRequest.getObjectSpecification();
             
-            //if (log.isDebugEnabled()) {
-                log.info("creating instance of {}", spec);
-            //}
+            if (log.isDebugEnabled()) {
+                log.debug("creating instance of {}", spec);
+            }
             
             val pojo = instantiateAndInjectServices(spec);
 

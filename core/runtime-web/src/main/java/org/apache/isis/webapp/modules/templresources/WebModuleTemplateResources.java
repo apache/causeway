@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp.modules.resources;
+package org.apache.isis.webapp.modules.templresources;
 
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
@@ -35,18 +35,17 @@ import org.apache.isis.webapp.modules.WebModuleContext;
  * @since 2.0
  */
 @Service @Order(-100)
-public final class WebModuleStaticResources implements WebModule  {
+public final class WebModuleTemplateResources implements WebModule  {
 
-    private final static String[] urlPatterns = { 
-            "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" };
+    private final static String[] urlPatterns = { "*.thtml" };
 
     private final static int cacheTimeSeconds = 86400;
 
-    private final static String RESOURCE_SERVLET_NAME = "ResourceServlet";
+    private final static String SERVLET_NAME = "TemplateResourceServlet";
 
     @Override
     public String getName() {
-        return "StaticResources";
+        return "TemplateResources";
     }
 
     @Override
@@ -57,7 +56,7 @@ public final class WebModuleStaticResources implements WebModule  {
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
-        final Dynamic filter = ctx.addFilter("ResourceCachingFilter", ResourceCachingFilter.class);
+        final Dynamic filter = ctx.addFilter("TemplateResourceCachingFilter", TemplateResourceCachingFilter.class);
         if(filter==null) {
             return null; // filter was already registered somewhere else (eg web.xml)
         }
@@ -67,8 +66,8 @@ public final class WebModuleStaticResources implements WebModule  {
                 ""+cacheTimeSeconds);
         filter.addMappingForUrlPatterns(null, true, urlPatterns);
 
-        ctx.addServlet(RESOURCE_SERVLET_NAME, ResourceServlet.class);
-        ctx.getServletRegistration(RESOURCE_SERVLET_NAME)
+        ctx.addServlet(SERVLET_NAME, TemplateResourceServlet.class);
+        ctx.getServletRegistration(SERVLET_NAME)
         .addMapping(urlPatterns);
 
         return null; // does not provide a listener

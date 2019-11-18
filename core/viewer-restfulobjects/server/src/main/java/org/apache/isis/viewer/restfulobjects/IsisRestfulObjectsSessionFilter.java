@@ -49,7 +49,7 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.webapp.IsisWebAppUtils;
 import org.apache.isis.webapp.auth.AuthenticationSessionStrategy;
 import org.apache.isis.webapp.auth.AuthenticationSessionStrategyDefault;
-import org.apache.isis.webapp.modules.resources.ResourceCachingFilter;
+import org.apache.isis.webapp.modules.templresources.TemplateResourceCachingFilter;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -138,7 +138,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
      *
      * <p>
      * It can also be used to specify ignored static resources (though putting
-     * the {@link ResourceCachingFilter} first in the <tt>web.xml</tt>
+     * the {@link TemplateResourceCachingFilter} first in the <tt>web.xml</tt>
      * accomplishes the same thing).
      *
      * <p>
@@ -358,7 +358,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
             }
 
             if (requestIsIgnoreExtension(this, httpServletRequest) ||
-                    ResourceCachingFilter.isCachedResource(httpServletRequest)) {
+                    TemplateResourceCachingFilter.isCachedResource(httpServletRequest)) {
                 chain.doFilter(request, response);
                 return;
             }

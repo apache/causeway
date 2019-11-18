@@ -58,7 +58,7 @@ public class SwaggerServiceMenu {
             )
     @MemberOrder(sequence="500.600.1")
     public LocalResourcePath openSwaggerUi() {
-        return new LocalResourcePath("/swagger-ui/index.template.html");
+        return new LocalResourcePath("/swagger-ui/index.thtml");
     }
 
     public static class OpenRestApiDomainEvent extends ActionDomainEvent { }
