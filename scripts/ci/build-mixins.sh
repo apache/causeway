@@ -1,11 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "Shared Vars File: ${SHARED_VARS_FILE}"
-echo
-cat ${SHARED_VARS_FILE}
-echo
-
 # import shared vars (non secret!)
 . $SHARED_VARS_FILE
 export $(cut -d= -f1 $SHARED_VARS_FILE)

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# import shared vars (non secret!)
+. $SHARED_VARS_FILE
+export $(cut -d= -f1 $SHARED_VARS_FILE)
+
 SITE_CONFIG=$1
 GROOVY_CMD=`command -v groovy`
 
