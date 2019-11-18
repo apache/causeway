@@ -2,13 +2,10 @@
 set -e
 
 # import shared vars (non secret!)
-if [ -z "$SHARED_VARS_FILE" ]; then
-  echo "\$SHARED_VARS_FILE not defined; skipping"
-  exit 0
+if [ ! -z "$SHARED_VARS_FILE" && -f "$SHARED_VARS_FILE" ]; then
+  . $SHARED_VARS_FILE
+  export $(cut -d= -f1 $SHARED_VARS_FILE)
 fi
-
-. $SHARED_VARS_FILE
-export $(cut -d= -f1 $SHARED_VARS_FILE)
 
 sh $CI_SCRIPTS_PATH/print-environment.sh "build-example-apps"
 
