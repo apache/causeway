@@ -2,9 +2,13 @@
 set -e
 
 echo "Shared Vars File: ${SHARED_VARS_FILE}"
+echo
+cat ${SHARED_VARS_FILE}
+echo
 
 # import shared vars (non secret!)
-source $SHARED_VARS_FILE && export $(cut -d= -f1 $SHARED_VARS_FILE)
+. $SHARED_VARS_FILE
+export $(cut -d= -f1 $SHARED_VARS_FILE)
 
 sh $CI_SCRIPTS_PATH/print-environment.sh "build-mixins"
 
