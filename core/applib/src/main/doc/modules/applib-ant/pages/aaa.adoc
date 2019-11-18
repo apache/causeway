@@ -7,9 +7,4 @@ include::_attributes.adoc[]
 This section summarizes the various annotations supported by Apache Isis.  They break out into five categories.
 
 
-include::aaa/main.adoc[leveloffset=+1]
-include::aaa/other.adoc[leveloffset=+1]
-include::aaa/jdo.adoc[leveloffset=+1]
-include::aaa/jee.adoc[leveloffset=+1]
-include::aaa/partial.adoc[leveloffset=+1]
 

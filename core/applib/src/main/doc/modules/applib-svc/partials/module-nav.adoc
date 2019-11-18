@@ -1,10 +1,6 @@
 * xref:refguide:applib-svc:about.adoc[Domain Services]
 
 
-** xref:refguide:applib-svc:intro.adoc[Introduction]
-
-
-
 ** xref:refguide:applib-svc:presentation-layer-api.adoc[Presentation Layer API]
 *** xref:refguide:applib-svc:presentation-layer-api/AcceptHeaderService.adoc[AcceptHeaderService]
 *** xref:refguide:applib-svc:presentation-layer-api/BookmarkUiService.adoc[BookmarkUiService]

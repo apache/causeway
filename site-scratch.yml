@@ -14,9 +14,9 @@ content:
 #    - url: .
 #      start_path: antora/components/mignotes
 #      branches: HEAD
-#    - url: .
-#      start_path: antora/components/refguide
-#      branches: HEAD
+    - url: .
+      start_path: antora/components/refguide
+      branches: HEAD
 #    - url: .
 #      start_path: antora/components/relnotes
 #      branches: HEAD
@@ -33,15 +33,15 @@ content:
       start_path: antora/components/userguide
       branches: HEAD
 #
-#    - url: .
-#      start_path: core/applib/src/main/doc # refguide
-#      branches: HEAD
+    - url: .
+      start_path: core/applib/src/main/doc # refguide
+      branches: HEAD
 #    - url: .
 #      start_path: core/commons/src/main/doc # core
 #      branches: HEAD
-#    - url: .
-#      start_path: core/config/src/main/doc # refguide
-#      branches: HEAD
+    - url: .
+      start_path: core/config/src/main/doc # refguide
+      branches: HEAD
 #    - url: .
 #      start_path: core/detached-tests/src/main/doc # core
 #      branches: HEAD
@@ -69,9 +69,9 @@ content:
 #    - url: .
 #      start_path: core/runtime-web/src/main/doc # core
 #      branches: HEAD
-#    - url: .
-#      start_path: core/schema/src/main/doc # refguide
-#      branches: HEAD
+    - url: .
+      start_path: core/schema/src/main/doc # refguide
+      branches: HEAD
 #    - url: .
 #      start_path: core/security/api/src/main/doc # security
 #      branches: HEAD

@@ -1,6 +1,5 @@
 * xref:refguide:applib-ant:about.adoc[Annotations]
 
-** xref:refguide:applib-ant:aaa.adoc[Summary]
 ** xref:refguide:applib-ant:Action.adoc[Action]
 ** xref:refguide:applib-ant:ActionLayout.adoc[ActionLayout]
 ** xref:refguide:applib-ant:Collection.adoc[Collection]

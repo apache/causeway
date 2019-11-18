@@ -1,1 +1,0 @@
-* xref:refguide:ROOT:about.adoc[Table of Contents]

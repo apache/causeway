@@ -1,6 +1,0 @@
-* xref:refguide:applib-cm:about.adoc[Classes & Methods]
-
-** xref:refguide:applib-cm:methods.adoc[Methods]
-** xref:refguide:applib-cm:classes.adoc[Classes]
-
-

@@ -1,24 +1,11 @@
-= Core Configuration Properties
+= Configuration Properties
 include::_attributes.adoc[]
 
 
-Apache Isis' own configuration properties are simple key-value pairs, typically held in the `WEB-INF/isis.properties`
-file and other related files.
-This guide describes how to configure an Apache Isis application.
+Apache Isis' is a Spring Boot application, and so is typically configured using an `application.properties` or `application.yaml` file.
+The configuration can be obtained from a variety of external locations; see the link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config[Spring Boot] documentation for more details.
 
-[NOTE]
-====
-This guide covers only the core configuration properties (relating to Apache Isis' metamodel and runtime management).
-Configuration properties for the viewers can be found in the xref:vw:ROOT:about.adoc[Wicket Viewer] guide and the xref:vro:ROOT:about.adoc[RestfulObjects viewer] guide.
-Likewise details of configuring security (Apache Shiro) can be
-found in the xref:security:ROOT:about.adoc#[Security] guide, and details for configuring the DataNucleus Object Store can be found in the xref:odn:ROOT:about.adoc#[DataNucleus] guide.
-====
-
-[TIP]
-====
-By default the configuration values are part of the built WAR file.
-Details on how to override these configuration properties externally for different environments can be found in the xref:userguide:btb:deployment.adoc[Beyond the Basics] guide, (deployment chapter).
-====
+This guide describes how the configuration properties available to configure an Apache Isis application.
 
 
 

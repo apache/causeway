@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-TODO: v2: this is out of date; the way in which components are found is being reworked in v2.0.
+WARNING: TODO: v2 - this is out of date; the way in which components are found is being reworked in v2.0.
 
 
 Bootstrapping an Apache Isis application involves identifying both:

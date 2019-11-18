@@ -1,7 +1,7 @@
 = Reference Guides
 include::_attributes.adoc[]
 
-The reference guides are:
+The reference guides cover:
 
 * xref:refguide:applib-ant:about.adoc[Annotations]
 * xref:refguide:applib-svc:about.adoc[Domain Services]

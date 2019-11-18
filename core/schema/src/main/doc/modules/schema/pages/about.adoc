@@ -17,7 +17,10 @@ To facilitate such integration scenarios, Apache Isis defines a number of standa
 
 These each use XSD types defined by the xref:refguide:schema:common.adoc[common schema] (most notably the `oidDto` complex type which identifies a domain object).
 
+
 The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and publishmq modules use these schemas to reify corresponding applib objects (`Command`, `Interaction.Execution` and `PublishedObjects`), either to persist or publishing using an link:http://activemq.apache.org[Apache ActiveMQ] message queue.
+
+NOTE: TODO: v2: these will move into extensions.
 
 The sections below discuss these schemas in more detail.
 
