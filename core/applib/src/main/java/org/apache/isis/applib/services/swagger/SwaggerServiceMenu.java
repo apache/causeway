@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.resources._Resources;
@@ -60,6 +61,10 @@ public class SwaggerServiceMenu {
     public LocalResourcePath openSwaggerUi() {
         return new LocalResourcePath("/swagger-ui/index.thtml");
     }
+    
+    public String disableOpenSwaggerUi() {
+        return disableReasonWhenRequiresROViewer();
+    }
 
     public static class OpenRestApiDomainEvent extends ActionDomainEvent { }
 
@@ -74,6 +79,10 @@ public class SwaggerServiceMenu {
     @MemberOrder(sequence="500.600.2")
     public LocalResourcePath openRestApi() {
         return new LocalResourcePath("/"+_Resources.getRestfulPathIfAny()+"/");
+    }
+    
+    public String disableOpenRestApi() {
+        return disableReasonWhenRequiresROViewer();
     }
 
     public static class DownloadSwaggerSpecDomainEvent extends ActionDomainEvent { }
@@ -107,5 +116,15 @@ public class SwaggerServiceMenu {
         return SwaggerService.Format.YAML;
     }
 
+    // -- HELPER
+    
+    private String disableReasonWhenRequiresROViewer() {
+        return serviceRegistry.lookupRegisteredBeanById("webModules.RestfulObjects").isPresent()
+                ? null
+                        : "WebModuleRestfulObjects is not installed";
+    }
+    
+    
     @Inject SwaggerService swaggerService;
+    @Inject ServiceRegistry serviceRegistry; 
 }

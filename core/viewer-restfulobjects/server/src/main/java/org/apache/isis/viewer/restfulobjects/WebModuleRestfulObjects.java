@@ -23,8 +23,9 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
@@ -43,7 +44,10 @@ import lombok.val;
  * 
  * @since 2.0
  */
-@Service @Order(-80)
+@DomainService(
+        nature = NatureOfService.DOMAIN, 
+        objectType = "webModules.RestfulObjects") // add to meta-model, for swagger-menu to check whether available or not 
+@Order(-80)
 public final class WebModuleRestfulObjects implements WebModule  {
 
     private final static String RESTEASY_BOOTSTRAPPER = 
