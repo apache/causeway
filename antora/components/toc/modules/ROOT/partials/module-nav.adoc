@@ -26,9 +26,14 @@
 
 * Components
 
-** xref:vw:ROOT:about.adoc[Wicket Viewer]
-** xref:vro:ROOT:about.adoc[Restful Objects]
+** xref:vw:ROOT:about.adoc[Wicket UI]
+** xref:vro:ROOT:about.adoc[Restful Objects (REST API)]
 ** xref:odn:ROOT:about.adoc[DataNucleus Object Store]
+
+
+* Extensions
+
+**  xref:extensions:ROOT:about.adoc[Extensions Catalog]
 
 
 * Support
@@ -37,8 +42,13 @@
 *** xref:toc:mavendeps:about.adoc[Maven Dependencies]
 *** xref:toc:mixins:about.adoc[Maven Mixins]
 
-** xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[Mailing Lists]
-*** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
+** xref:toc:ROOT:mailing-list.adoc#how-to-subscribe[Mailing Lists]
+
+** Other Resources
+*** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[ASF JIRA]
+*** link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
+*** link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
+*** link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
 
 * Releases
 
@@ -46,11 +56,6 @@
 ** xref:toc:relnotes:about.adoc[Release Notes]
 ** xref:toc:mignotes:about.adoc[Migration Notes]
 
-** Other Resources
-
-*** link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
-*** link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
-*** link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
 
 
 * Internal
@@ -59,9 +64,7 @@
 *** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
 *** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
 
-
 **  xref:core:ROOT:about.adoc[Core Framework]
-**  xref:extensions:ROOT:about.adoc[Extensions]
 
 
 

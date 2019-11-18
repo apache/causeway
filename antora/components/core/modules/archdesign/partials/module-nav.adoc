@@ -1,4 +1,4 @@
-* xref:core:archdesign:about.adoc[About]
+* xref:core:archdesign:about.adoc[Architecture & Design]
 
 ** xref:core:archdesign:maven-modules.adoc[Maven Modules]
 ** xref:core:archdesign:metamodel.adoc[MetaModel]

@@ -1,9 +1,4 @@
 = SmokeTests
 include::_attributes.adoc[]
 
-This guide describes the internal architecture and design of the framework.
-
-[CAUTION]
-====
-This material is out-of-date.
-====
+WARNING: TODO: v2
