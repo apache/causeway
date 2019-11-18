@@ -1,8 +1,9 @@
-package org.apache.isis.extensions.fixtures.module;
+package org.apache.isis.extensions.fixtures.modules;
 
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 
 /**
  * A module is a class that implements this {@link Module} interface, but in addition is expected to be annotated with

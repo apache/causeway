@@ -29,7 +29,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.extensions.fixtures.IsisBootFixtures;
+import org.apache.isis.extensions.fixtures.ExtFixturesModule;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.IsisBootSecurityBypass;
@@ -40,7 +40,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
     IsisBoot.class,
     IsisBootSecurityBypass.class,
     IsisBootDataNucleus.class,
-    IsisBootFixtures.class
+    ExtFixturesModule.class
 })
 @ComponentScan(
         basePackageClasses= {               

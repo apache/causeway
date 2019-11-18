@@ -30,7 +30,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.extensions.fixtures.IsisBootFixtures;
+import org.apache.isis.extensions.fixtures.ExtFixturesModule;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
@@ -72,7 +72,7 @@ import demoapp.utils.LibraryPreloadingService;
     IsisBootSecmanPersistenceJdo.class,
     IsisBootSecmanEncryptionJbcrypt.class,
 
-    IsisBootFixtures.class,
+    ExtFixturesModule.class,
     
     LibraryPreloadingService.class // just a performance enhancement
 

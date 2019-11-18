@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
  *  
  * @since 2.0
  */
-public abstract class IsisIntegrationTestAbstact {
+public abstract class IsisIntegrationTestAbstract {
 
     /**
      * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object)}

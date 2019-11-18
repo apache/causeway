@@ -30,9 +30,9 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.extensions.fixtures.legacy.TickingFixtureClock;
-import org.apache.isis.integtestsupport.IsisIntegrationTestAbstact;
+import org.apache.isis.integtestsupport.IsisIntegrationTestAbstract;
 
-public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegrationTestAbstact {
+public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegrationTestAbstract {
 
     protected void run(final FixtureScript... fixtureScriptList) {
         this.fixtureScripts.run(fixtureScriptList);

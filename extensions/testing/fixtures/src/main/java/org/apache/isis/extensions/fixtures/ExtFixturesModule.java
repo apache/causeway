@@ -18,13 +18,15 @@
  */
 package org.apache.isis.extensions.fixtures;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService;
 import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlInternal;
-import org.apache.isis.extensions.fixtures.module.ModuleService;
+import org.apache.isis.extensions.fixtures.modules.ModuleFixtureService;
+import org.apache.isis.extensions.fixtures.modules.ModuleService;
 import org.apache.isis.extensions.spring.ExtSpringModule;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
@@ -33,8 +35,9 @@ import org.springframework.context.annotation.Import;
     FixtureScriptsDefault.class,
     ExecutionParametersService.class,
     QueryResultsCacheControlInternal.class,
-    ModuleService.class
+    ModuleService.class,
+    ModuleFixtureService.class
 })
-public class IsisBootFixtures {
+public class ExtFixturesModule {
 
 }

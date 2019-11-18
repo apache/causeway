@@ -21,7 +21,6 @@ package domainapp.conf;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
@@ -30,7 +29,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.extensions.fixtures.IsisBootFixtures;
+import org.apache.isis.extensions.fixtures.ExtFixturesModule;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
@@ -39,7 +38,6 @@ import org.apache.isis.viewer.wicket.viewer.IsisBootViewerWicket;
 
 import domainapp.application.DomainAppApplicationModule;
 import domainapp.application.fixture.scenarios.DomainAppDemo;
-import domainapp.modules.simple.SimpleModule;
 
 /**
  * Makes the integral parts of the 'simple app' web application.
@@ -57,7 +55,7 @@ import domainapp.modules.simple.SimpleModule;
     IsisBootDataNucleus.class,
     IsisBootViewerRestfulObjects.class,
     IsisBootViewerWicket.class,
-    IsisBootFixtures.class,
+    ExtFixturesModule.class,
 
     DomainAppApplicationModule.class,
 

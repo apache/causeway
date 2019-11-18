@@ -23,10 +23,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -569,9 +571,23 @@ extends AbstractViewModel {
         public void executeChildren(
                 final FixtureScript callingFixtureScript,
                 final FixtureScript... fixtureScripts) {
+            executeChildren(callingFixtureScript, Arrays.asList(fixtureScripts));
+        }
+
+        @Programmatic
+        public void executeChildren(
+                final FixtureScript callingFixtureScript,
+                final List<FixtureScript> fixtureScripts) {
             for (FixtureScript fixtureScript : fixtureScripts) {
                 executeChild(callingFixtureScript, fixtureScript);
             }
+        }
+
+        @Programmatic
+        public void executeChildren(
+                final FixtureScript callingFixtureScript,
+                final Stream<FixtureScript> fixtureScripts) {
+            fixtureScripts.forEach(fixtureScript -> executeChild(callingFixtureScript, fixtureScript));
         }
 
         /**

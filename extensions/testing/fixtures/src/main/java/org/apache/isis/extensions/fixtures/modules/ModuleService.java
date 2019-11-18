@@ -16,24 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.module;
+package org.apache.isis.extensions.fixtures.modules;
 
-import lombok.Data;
-import lombok.extern.log4j.Log4j2;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.apache.isis.extensions.spring.service.SpringBeansService;
-import org.apache.isis.extensions.spring.service.BeanDescriptor;
-import org.apache.isis.extensions.spring.service.ContextBeans;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.extensions.spring.service.BeanDescriptor;
+import org.apache.isis.extensions.spring.service.ContextBeans;
+import org.apache.isis.extensions.spring.service.SpringBeansService;
+import org.apache.isis.metamodel.facets.Annotations;
+
+import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
