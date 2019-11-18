@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 Menu services provide actions to be rendered on the menu.
 
 For the Wicket viewer, each service's actions appear as a collection of menu items of a named menu, and this menu is on one of the three menu bars provided by the Wicket viewer.
-Although these can be organised using annotations, it's usually easier to use a xref:vw:ROOT:menubars-layout/file-based.adoc[`menubars.layout.xml`] file.
+Although these can be organised using annotations, it's usually easier to use a xref:vw:ROOT:menubars-layout.adoc#file-based[`menubars.layout.xml`] file.
 
 For the Restful Objects viewer, all menu services are shown in the services representation.
 

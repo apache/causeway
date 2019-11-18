@@ -3,6 +3,8 @@
 include::_attributes.adoc[]
 
 
+WARNING: TODO: v2: instead x-ref core config.
+
 Wicket configuration properties alter the way in which Apache Isis' Wicket viewer renders domain objects.
 
 == Loading Configuration Properties
@@ -536,7 +538,7 @@ Note that `inline_as_if_edit` does not make sense for a configuration property d
 (`_sidebar_`)
 | Whether an action on a domain object (entity or view model) which prompts with a style of `DIALOG` - as in, `@ActionLayout(promptStyle="DIALOG")` - should be rendered using a sidebar or alternatively in a modal dialog box.
 
-See the discussion on the xref:vw:ROOT:features/sidebar-vs-modal-dialogs.adoc[sidebar vs modal dialogs] feature for further details.
+See the discussion on the xref:vw:ROOT:features.adoc#sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
 
 |`isis.viewer.wicket.` +
 `dialogModeForMenu`
@@ -544,7 +546,7 @@ See the discussion on the xref:vw:ROOT:features/sidebar-vs-modal-dialogs.adoc[si
 (`_sidebar_`)
 | Whether an action for a domain service should be rendered using a sidebar or alternatively in a modal dialog box.
 
-See the discussion on the xref:vw:ROOT:features/sidebar-vs-modal-dialogs.adoc[sidebar vs modal dialogs] feature for further details.
+See the discussion on the xref:vw:ROOT:features.adoc#sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
 
 
 
@@ -552,7 +554,7 @@ See the discussion on the xref:vw:ROOT:features/sidebar-vs-modal-dialogs.adoc[si
 
 
 Objects whose title is overly long can be cumbersome in titles.
-The Wicket viewer has a xref:vw:ROOT:features/titles-in-tables.adoc[mechanism to automatically shorten] the titles of objects specified using `@Title`.
+The Wicket viewer has a xref:vw:ROOT:features.adoc#titles-in-tables[mechanism to automatically shorten] the titles of objects specified using `@Title`.
 As an alternative/in addition, the viewer can also be configured to simply truncate titles longer than a certain length.
 
 The properties themselves are:
@@ -712,7 +714,7 @@ where the value is the list of themes (from http://bootswatch.com[bootswatch.com
 
 [TIP]
 ====
-You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:vw:ROOT:extending/custom-bootstrap-theme.adoc[Extending] chapter for further details.
+You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:vw:ROOT:extending.adoc#custom-bootstrap-theme[Extending] chapter for further details.
 ====
 
 
@@ -862,7 +864,7 @@ These configuration properties are used to enable/disable features that are eith
 `whereAmI.enabled`
 | `true`,`false` +
 (`_true_`)
-| To disable the xref:vw:ROOT:features/where-am-i.adoc["Where am I"] feature.
+| To disable the xref:vw:ROOT:features.adoc#where-am-i["Where am I"] feature.
 
 
 |`isis.viewer.wicket.` +

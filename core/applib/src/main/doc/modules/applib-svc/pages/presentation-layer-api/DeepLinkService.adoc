@@ -32,7 +32,7 @@ For the xref:vro:ROOT:about.adoc[RestfulObjects viewer], a URL can be constructe
 
 == Usage within the framework
 
-The xref:refguide:applib-svc:presentation-layer-spi/EmailNotificationService.adoc[`EmailNotificationService`] uses this service in order to generate emails as part of xref:vw:ROOT:features/user-registration.adoc[user registration].
+The xref:refguide:applib-svc:presentation-layer-spi/EmailNotificationService.adoc[`EmailNotificationService`] uses this service in order to generate emails as part of xref:vw:ROOT:features.adoc#user-registration[user registration].
 
 
 

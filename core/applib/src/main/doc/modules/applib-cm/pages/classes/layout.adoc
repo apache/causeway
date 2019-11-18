@@ -103,7 +103,7 @@ These map to Bootstrap's link:http://getbootstrap.com/css/#responsive-utilities[
 As you can probably guess, the `BS3Grid` is the top-level object (that is, it is JAXB `@XmlRootElement`); this is the object that is serialized to/from XML.
 
 All of these classes also allow custom CSS to be specified; these are added to the CSS classes for the corresponding `<div`> in the rendered page.
-The xref:vw:ROOT:customisation/tweaking-css-classes.adoc[`application.css`] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
+The xref:vw:ROOT:customisation.adoc#tweaking-css-classes[`application.css`] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
 
 The XSD for these classes is available at link:http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd[].
 

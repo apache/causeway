@@ -20,7 +20,7 @@ The diagram below shows these categories:
 image::reference-services/categories.png[width="600px",link="{imagesdir}/reference-services/categories.png"]
 
 
-A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib-svc:integration-api/EmailService.adoc[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features/user-registration.adoc[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
+A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib-svc:integration-api/EmailService.adoc[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 The same is true of the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
 xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] etc.
 

@@ -1,59 +1,11 @@
 * xref:vw:ROOT:layout.adoc[Layout]
-
-
-
 * xref:vw:ROOT:menubars-layout.adoc[Menubars Layout]
-** xref:vw:ROOT:menubars-layout/annotation-based.adoc[Annotation-based]
-** xref:vw:ROOT:menubars-layout/file-based.adoc[File-based]
-
-
-
 * xref:vw:ROOT:configuration-properties.adoc[Configuration Properties]
-
-
-
 * xref:vw:ROOT:features.adoc[End-user Features]
-** xref:vw:ROOT:features/sidebar-vs-modal-dialogs.adoc[Sidebar vs Modal Dialogs]
-** xref:vw:ROOT:features/recent-pages.adoc[Recent Pages]
-** xref:vw:ROOT:features/bookmarked-pages.adoc[Bookmarked Pages]
-** xref:vw:ROOT:features/hints-and-copy-url.adoc[Hints-and-copy URL]
-** xref:vw:ROOT:features/where-am-i.adoc[Where am I]
-** xref:vw:ROOT:features/titles-in-tables.adoc[Titles in Tables]
-** xref:vw:ROOT:features/blob-attachments.adoc[Blob Attachments]
-** xref:vw:ROOT:features/user-registration.adoc[User Registration]
-
-
 * xref:vw:ROOT:security.adoc[Security]
-
-
 * xref:vw:ROOT:customisation.adoc[Customisation]
-** xref:vw:ROOT:customisation/top-level-index-page.adoc[Top-level Index Page]
-** xref:vw:ROOT:customisation/brand-logo.adoc[Brand Logo]
-** xref:vw:ROOT:customisation/welcome-page.adoc[Welcome Page]
-** xref:vw:ROOT:customisation/about-page.adoc[About Page]
-** xref:vw:ROOT:customisation/tweaking-css-classes.adoc[Tweaking CSS Classes]
-** xref:vw:ROOT:customisation/cheap-n-cheerful-theme.adoc[Cheap-n-Cheerful Theme]
-** xref:vw:ROOT:customisation/using-different-css-file.adoc[Using Different CSS File]
-** xref:vw:ROOT:customisation/custom-javascript.adoc[Custom Javascript]
-** xref:vw:ROOT:customisation/auto-refresh.adoc[Auto Refresh]
-** xref:vw:ROOT:customisation/request-parameters.adoc[Request Parameters]
-
-
-
 * xref:vw:ROOT:extending.adoc[Extending]
-** xref:vw:ROOT:extending/custom-bootstrap-theme.adoc[Custom Bootstrap Theme]
-** xref:vw:ROOT:extending/replacing-page-elements.adoc[Replacing Page Elements]
-** xref:vw:ROOT:extending/custom-pages.adoc[Custom Pages]
-** xref:vw:ROOT:extending/login-via-query-args-prototyping.adoc[Login via Query Args Prototyping]
-
-
-
 * xref:vw:ROOT:hints-and-tips.adoc[Hints-n-Tips]
-** xref:vw:ROOT:hints-and-tips/per-user-themes.adoc[Per User Themes]
-** xref:vw:ROOT:hints-and-tips/i18n-label-in-wicket-viewer.adoc[i18n Label in Wicket Viewer]
-** xref:vw:ROOT:hints-and-tips/highlight-current-row.adoc[Highlight Current Row]
-** xref:vw:ROOT:hints-and-tips/svg-support.adoc[SVG Support]
-
 
 
 

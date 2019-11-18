@@ -24,7 +24,7 @@ For example, a shipped `Order` might have a slightly different icon to a yet-to-
 == CSS Class
 
 In addition to the title and icon, it is also possible for a domain object to provide a CSS class hint.
-In conjunction with xref:vw:ROOT:customisation/tweaking-css-classes.adoc[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In conjunction with xref:vw:ROOT:customisation.adoc#tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 [TIP]

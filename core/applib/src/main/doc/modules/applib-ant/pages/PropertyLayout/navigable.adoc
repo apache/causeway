@@ -22,5 +22,5 @@ public class Employee {
 }
 ----
 
-For further details on using a navigable tree-structure, see xref:vw:ROOT:features/where-am-i.adoc[Where am I] in the user guide.
+For further details on using a navigable tree-structure, see xref:vw:ROOT:features.adoc#where-am-i[Where am I] in the user guide.
 

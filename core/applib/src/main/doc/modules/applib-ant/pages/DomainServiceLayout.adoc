@@ -8,7 +8,7 @@ The `@DomainServiceLayout` annotation applies to domain services, collecting tog
 
 [TIP]
 ====
-You will also find some additional material in the xref:vw:ROOT:layout/application-menu.adoc[object layout] chapter.
+You will also find some additional material in the xref:vw:ROOT:layout.adoc#application-menu[object layout] chapter.
 ====
 
 

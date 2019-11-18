@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-In the vast majority of cases customization should be sufficient by xref:vw:ROOT:extending/replacing-page-elements.adoc[replacing elements of a page].
+In the vast majority of cases customization should be sufficient by xref:vw:ROOT:extending.adoc#replacing-page-elements[replacing elements of a page].
 However, it is also possible to define an entirely new page for a given page type.
 
 Isis defines eight page types (see the `org.apache.isis.viewer.wicket.model.models.PageType` enum):

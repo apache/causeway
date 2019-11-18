@@ -19,7 +19,7 @@ That said, we expect that such use cases will be comparatively rare; the primary
 
 [NOTE]
 ====
-For further details on the user registration feature (as supported by the Wicket viewer), see xref:vw:ROOT:features/user-registration.adoc[here].
+For further details on the user registration feature (as supported by the Wicket viewer), see xref:vw:ROOT:features.adoc#user-registration[here].
 ====
 
 

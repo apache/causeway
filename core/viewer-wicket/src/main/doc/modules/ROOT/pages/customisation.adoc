@@ -6,3 +6,13 @@ include::_attributes.adoc[]
 
 This chapter describes a number of mechanisms by which the UI provided by the Wicket viewer can be customised.
 
+include::customisation/top-level-index-page.adoc[leveloffset=+1]
+include::customisation/brand-logo.adoc[leveloffset=+1]
+include::customisation/welcome-page.adoc[leveloffset=+1]
+include::customisation/about-page.adoc[leveloffset=+1]
+include::customisation/tweaking-css-classes.adoc[leveloffset=+1]
+include::customisation/cheap-n-cheerful-theme.adoc[leveloffset=+1]
+include::customisation/using-different-css-file.adoc[leveloffset=+1]
+include::customisation/custom-javascript.adoc[leveloffset=+1]
+include::customisation/auto-refresh.adoc[leveloffset=+1]
+include::customisation/request-parameters.adoc[leveloffset=+1]

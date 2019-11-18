@@ -7,6 +7,14 @@ This chapter highlights a number of features of the wicket viewer from the persp
 
 
 
+include::features/sidebar-vs-modal-dialogs.adoc[leveloffset=+1]
+include::features/recent-pages.adoc[leveloffset=+1]
+include::features/bookmarked-pages.adoc[leveloffset=+1]
+include::features/hints-and-copy-url.adoc[leveloffset=+1]
+include::features/where-am-i.adoc[leveloffset=+1]
+include::features/titles-in-tables.adoc[leveloffset=+1]
+include::features/blob-attachments.adoc[leveloffset=+1]
+include::features/user-registration.adoc[leveloffset=+1]
 
 
 

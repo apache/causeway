@@ -11,7 +11,7 @@ These pages all "reach inside" Apache Isis framework using a mechanism similar t
 
 [TIP]
 ====
-The sign-in verification page to render is pluggable; see xref:vw:ROOT:extending/custom-pages.adoc[extensions chapter] for details.
+The sign-in verification page to render is pluggable; see xref:vw:ROOT:extending.adoc#custom-pages[extensions chapter] for details.
 ====
 
 User registration is only available if the xref:refguide:applib-svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.

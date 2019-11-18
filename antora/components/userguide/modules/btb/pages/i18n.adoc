@@ -336,7 +336,7 @@ msgstr "You can only select 1 item"
 === Login/self-sign-up
 
 In addition, there are a reasonably large number of messages that are used for both login and the
- xref:vw:ROOT:features/user-registration.adoc[user registration] (self sign-up) and password reset features.
+ xref:vw:ROOT:features.adoc#user-registration[user registration] (self sign-up) and password reset features.
 
 These are:
 

@@ -18,7 +18,7 @@ isis.viewer.wicket.application.about=My Wonderful App v1.0
 
 [TIP]
 ====
-Do not confuse the welcome page file with the xref:vw:ROOT:customisation/top-level-index-page.adoc[top-level index page]; they are different things!
+Do not confuse the welcome page file with the xref:vw:ROOT:customisation.adoc#top-level-index-page[top-level index page]; they are different things!
 ====
 
 

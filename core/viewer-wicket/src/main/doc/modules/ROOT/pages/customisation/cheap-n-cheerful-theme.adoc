@@ -21,7 +21,7 @@ You can therefore use this CSS class as a way of building your own "theme" for t
 
 [TIP]
 ====
-Alternatively you could "do it properly" and create your xref:vw:ROOT:extending/custom-bootstrap-theme.adoc[own Bootstrap theme], as described in the xref:vw:ROOT:extending.adoc[extending] chapter.
+Alternatively you could "do it properly" and create your xref:vw:ROOT:extending.adoc#custom-bootstrap-theme[own Bootstrap theme], as described in the xref:vw:ROOT:extending.adoc[extending] chapter.
 ====
 
 

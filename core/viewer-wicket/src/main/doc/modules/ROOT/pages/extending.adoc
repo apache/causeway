@@ -7,15 +7,20 @@ The Wicket viewer allows you to customize the GUI in several (progressively more
 
 * the xref:vw:ROOT:customisation.adoc[customisation] chapter described:
 
-** by xref:vw:ROOT:customisation/tweaking-css-classes.adoc[tweaking the UI using CSS]
-** by xref:vw:ROOT:customisation/custom-javascript.adoc[tweaking the UI using Javascript]
+** by xref:vw:ROOT:customisation.adoc#tweaking-css-classes[tweaking the UI using CSS]
+** by xref:vw:ROOT:customisation.adoc#custom-javascript[tweaking the UI using Javascript]
 
 * in this chapter we have a number of heavier-weight approaches:
 
-** by writing a xref:vw:ROOT:extending/custom-bootstrap-theme.adoc[custom bootstrap theme]
-** by xref:vw:ROOT:extending/replacing-page-elements.adoc[replacing elements of the page] using the `ComponentFactory` interface
-** by implementing xref:vw:ROOT:extending/custom-pages.adoc[replacement page implementations] for the standard page types
+** by writing a xref:vw:ROOT:extending.adoc#custom-bootstrap-theme[custom bootstrap theme]
+** by xref:vw:ROOT:extending.adoc#replacing-page-elements[replacing elements of the page] using the `ComponentFactory` interface
+** by implementing xref:vw:ROOT:extending.adoc#custom-pages[replacement page implementations] for the standard page types
 
-The chapter also includes a technique useful when prototyping, allowing xref:vw:ROOT:extending/login-via-query-args-prototyping.adoc[user/passwords to be specified as query arguments].
+The chapter also includes a technique useful when prototyping, allowing xref:vw:ROOT:extending.adoc#login-via-query-args-prototyping[user/passwords to be specified as query arguments].
 
 
+
+include::extending/custom-bootstrap-theme.adoc[leveloffset=+1]
+include::extending/replacing-page-elements.adoc[leveloffset=+1]
+include::extending/custom-pages.adoc[leveloffset=+1]
+include::extending/login-via-query-args-prototyping.adoc[leveloffset=+1]

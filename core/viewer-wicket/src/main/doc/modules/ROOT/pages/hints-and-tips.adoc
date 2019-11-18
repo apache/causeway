@@ -10,3 +10,7 @@ This chapter provides some solutions for problems we've encountered ourselves or
 
 
 
+include::hints-and-tips/per-user-themes.adoc[leveloffset=+1]
+include::hints-and-tips/i18n-label-in-wicket-viewer.adoc[leveloffset=+1]
+include::hints-and-tips/highlight-current-row.adoc[leveloffset=+1]
+include::hints-and-tips/svg-support.adoc[leveloffset=+1]

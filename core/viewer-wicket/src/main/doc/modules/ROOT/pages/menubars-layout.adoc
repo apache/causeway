@@ -33,3 +33,6 @@ image::application-menu/tertiary.png[width="300px",link="{imagesdir}/application
 
 The Apache Isis framework provides two mechanisms to control the arrangement of domain service actions across menubars and menus, either using annotations or using a file-based layout.
 
+
+include::menubars-layout/annotation-based.adoc[leveloffset=+1]
+include::menubars-layout/file-based.adoc[leveloffset=+1]
