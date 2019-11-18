@@ -11,3 +11,12 @@ Since the Restful Objects viewer is designed for computer programs to interact w
 This section provides a few hints-and-tips to help you on your way.
 
 
+include::hints-and-tips/using-chrome-devtools.adoc[leveloffset=+1]
+include::hints-and-tips/angular-tips.adoc[leveloffset=+1]
+include::hints-and-tips/pretty-printing.adoc[leveloffset=+1]
+include::hints-and-tips/restful-image-property.adoc[leveloffset=+1]
+include::hints-and-tips/view-model-as-parameter.adoc[leveloffset=+1]
+include::hints-and-tips/troubleshooting.adoc[leveloffset=+1]
+
+//https://lists.apache.org/thread.html/cbd18320bbf6e5c5e767283f9e675cf56e7f4692c109e1e79dbaa90a@%3Cusers.isis.apache.org%3E // FIXME: to add
+

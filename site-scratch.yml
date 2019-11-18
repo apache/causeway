@@ -51,9 +51,9 @@ content:
 #    - url: .
 #      start_path: core/plugins/codegen-bytebuddy/src/main/doc # core
 #      branches: HEAD
-#    - url: .
-#      start_path: core/plugins/jaxrs-resteasy-4/src/main/doc # vro
-#      branches: HEAD
+    - url: .
+      start_path: core/plugins/jaxrs-resteasy-4/src/main/doc # vro
+      branches: HEAD
     - url: .
       start_path: core/plugins/jdo/src/main/doc # odn
       branches: HEAD
@@ -147,9 +147,9 @@ content:
 #    - url: .
 #      start_path: extensions/testing/specsupport/src/main/doc # testing
 #      branches: HEAD
-#    - url: .
-#      start_path: extensions/vro/restclient/src/main/doc # vro
-#      branches: HEAD
+    - url: .
+      start_path: extensions/vro/restclient/src/main/doc # vro
+      branches: HEAD
 #    - url: .
 #      start_path: extensions/vw/asciidoc/src/main/doc # vw
 #      branches: HEAD

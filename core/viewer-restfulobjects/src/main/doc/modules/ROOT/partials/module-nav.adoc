@@ -1,26 +1,9 @@
 * xref:vro:ROOT:ro-spec.adoc[RO Spec]
-
 * xref:vro:ROOT:architecture.adoc[Architecture]
-
 * xref:vro:ROOT:layout-resources.adoc[Layout Resources]
-
 * xref:vro:ROOT:health-check.adoc[Health Check]
-
 * xref:vro:ROOT:simplified-representations.adoc[Simplified Representations]
-
 * xref:vro:ROOT:configuration-properties.adoc[Configuration Properties]
-
-* xref:vro:ROOT:security.adoc[Hints-n-Tips]
-
+* xref:vro:ROOT:security.adoc[Security]
 * xref:vro:ROOT:hints-and-tips.adoc[Hints-n-Tips]
-
-** xref:vro:ROOT:hints-and-tips/using-chrome-devtools.adoc[Using Chrome DevTools]
-** xref:vro:ROOT:hints-and-tips/angular-tips.adoc[Angular Tips]
-** xref:vro:ROOT:hints-and-tips/pretty-printing.adoc[Pretty Printing]
-** xref:vro:ROOT:hints-and-tips/restful-image-property.adoc[Restful Image Property]
-** xref:vro:ROOT:hints-and-tips/view-model-as-parameter.adoc[View Model as Parameter]
-** xref:vro:ROOT:hints-and-tips/troubleshooting.adoc[Troubleshooting]
-
-//https://lists.apache.org/thread.html/cbd18320bbf6e5c5e767283f9e675cf56e7f4692c109e1e79dbaa90a@%3Cusers.isis.apache.org%3E // FIXME: to add
-
 

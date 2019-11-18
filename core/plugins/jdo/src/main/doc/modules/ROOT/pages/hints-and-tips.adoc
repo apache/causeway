@@ -10,3 +10,9 @@ This chapter provides some solutions for problems we've encountered ourselves or
 
 
 
+include::hints-and-tips/overriding-jdo-annotations.adoc[leveloffset=+1]
+include::hints-and-tips/subtype-entity-not-fully-populated.adoc[leveloffset=+1]
+include::hints-and-tips/java8.adoc[leveloffset=+1]
+include::hints-and-tips/diagnosing-n-plus-1.adoc[leveloffset=+1]
+include::hints-and-tips/typesafe-queries-and-fetchgroups.adoc[leveloffset=+1]
+include::hints-and-tips/jdoql-and-timestamps.adoc[leveloffset=+1]

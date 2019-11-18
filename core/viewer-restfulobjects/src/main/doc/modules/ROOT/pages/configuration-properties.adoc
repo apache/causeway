@@ -3,12 +3,12 @@
 include::_attributes.adoc[]
 
 
-The Restful Objects viewer provides a couple of configuration option that extend/simplify/alter the representations
-generated from the Restful Objects specification.
+WARNING: TODO: v2 : moved instead to core config.
 
-These configuration properties are typically stored in `WEB-INF/viewer_restfulobjects.properties`.  However, you can
-place all configuration properties into `WEB-INF/isis.properties` if you wish (the configuration properties from all
-config files are merged together).
+The Restful Objects viewer provides a couple of configuration option that extend/simplify/alter the representations generated from the Restful Objects specification.
+
+These configuration properties are typically stored in `WEB-INF/viewer_restfulobjects.properties`.
+However, you can place all configuration properties into `WEB-INF/isis.properties` if you wish (the configuration properties from all config files are merged together).
 
 
 == Standard
