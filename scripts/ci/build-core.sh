@@ -2,6 +2,11 @@
 set -e
 
 # import shared vars (non secret!)
+if [ -z "$SHARED_VARS_FILE" ]; then
+  echo "\$SHARED_VARS_FILE not defined; skipping"
+  exit 0
+fi
+
 . $SHARED_VARS_FILE
 export $(cut -d= -f1 $SHARED_VARS_FILE)
 
