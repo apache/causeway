@@ -48,7 +48,6 @@ import org.apache.isis.security.IsisBootSecurityBypass;
     IsisBootIncubator.class // @Model support
 })
 @PropertySources({
-    @PropertySource("classpath:/org/apache/isis/testdomain/conf/isis-non-changing.properties"),
     @PropertySource(IsisPresets.NoTranslations),
 })
 public class Configuration_headless {

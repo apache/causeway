@@ -20,8 +20,6 @@ package domainapp.application;
 
 import javax.inject.Singleton;
 
-import org.apache.isis.security.keycloak.IsisBootSecurityKeycloak;
-import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -34,18 +32,19 @@ import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
-//import org.apache.isis.security.shiro.IsisBootSecurityShiro;
+import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.viewer.restfulobjects.IsisBootViewerRestfulObjects;
 import org.apache.isis.viewer.wicket.viewer.IsisBootViewerWicket;
 
 import domainapp.dom.HelloWorldModule;
+
+//import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 
 /**
  * Makes the integral parts of the 'hello world' web application.
  */
 @Configuration
 @PropertySources({
-    @PropertySource("classpath:/domainapp/application/isis-non-changing.properties"),
     @PropertySource(IsisPresets.H2InMemory),
     @PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.DataNucleusAutoCreate),
