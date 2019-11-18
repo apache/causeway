@@ -5,17 +5,15 @@
 ** xref:what-is-apache-isis/powered-by.adoc[Powered By]
 
 
-* Quick Start
+* Starter Apps
 
-** Starter Apps
+** xref:helloworld:ROOT:about.adoc[HelloWorld]
+** xref:simpleapp:ROOT:about.adoc[SimpleApp]
 
-*** xref:helloworld:ROOT:about.adoc[HelloWorld]
-*** xref:simpleapp:ROOT:about.adoc[SimpleApp]
+* Demos & Tutorials
 
-** Demos & Tutorials
-
-*** xref:demoapp:ROOT:about.adoc[Demo App]
-*** link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (tutorial)]
+** xref:demoapp:ROOT:about.adoc[Demo App]
+** link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (tutorial)]
 
 
 * Guides
