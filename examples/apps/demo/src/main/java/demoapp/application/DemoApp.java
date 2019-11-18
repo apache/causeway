@@ -23,6 +23,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.config.IsisPresets;
+
 /**
  * Bootstrap the application.
  */
@@ -44,7 +46,7 @@ public class DemoApp extends SpringBootServletInitializer {
         //IsisPresets.logging(IsisBeanTypeRegistry.class, "DEBUG");
         //IsisPresets.logging(org.apache.shiro.realm.AuthorizingRealm.class, "TRACE");
         //IsisPresets.logging(org.apache.isis.metamodel.authorization.standard.AuthorizationFacetAbstract.class, "DEBUG");
-        
+        IsisPresets.logging(org.apache.isis.webapp.modules.templresources.TemplateResourceServlet.class, "DEBUG");
         SpringApplication.run(new Class[] { DemoApp.class }, args);
     }
 }

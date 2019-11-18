@@ -128,7 +128,7 @@ public class TemplateResourceServlet extends HttpServlet {
             final HttpServletResponse response) 
                     throws IOException {
 
-        if(request.getServletPath().endsWith(".template.html")) {
+        if(request.getServletPath().endsWith(".thtml")) {
 
             final String templateContent = _Strings.ofBytes(_Bytes.of(is), StandardCharsets.UTF_8);
             final String htmlContent = templateVariables.applyTo(templateContent);

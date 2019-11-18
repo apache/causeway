@@ -38,13 +38,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 
-//@WebFilter(
-//        initParams = { @WebInitParam(name = "CacheTime", value = "86400") }, 
-//        urlPatterns = { 
-//                "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" }
-//)
-//[ahuber] to support Servlet 3.0 annotations @WebFilter, @WebListener or others 
-//with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class TemplateResourceCachingFilter implements Filter {
 
     /**
