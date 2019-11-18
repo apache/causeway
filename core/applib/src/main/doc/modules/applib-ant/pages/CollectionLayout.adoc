@@ -88,7 +88,7 @@ public class ToDoItem {
 
 [TIP]
 ====
-As an alternative to using the `@CollectionLayout` annotation, a xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+As an alternative to using the `@CollectionLayout` annotation, a xref:vw:ROOT:layout.adoc#file-based[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
 ====
 
 

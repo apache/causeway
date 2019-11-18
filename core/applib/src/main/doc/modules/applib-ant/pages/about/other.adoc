@@ -13,7 +13,7 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Annotation
 |Purpose
 |Layer
-|xref:vw:ROOT:layout/file-based.adoc[File-based layout]?
+|xref:vw:ROOT:layout.adoc#file-based[File-based layout]?
 
 |xref:refguide:applib-ant:Facets.adoc[`@Facets`]
 |Install arbitrary facets within the Apache Isis metamodel.

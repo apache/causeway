@@ -12,3 +12,6 @@ The layout of application menu items is described in a xref:vw:ROOT:menubars-lay
 
 
 
+include::layout/annotation-based.adoc[leveloffset=+1]
+include::layout/file-based.adoc[leveloffset=+1]
+include::layout/table-columns.adoc[leveloffset=+1]

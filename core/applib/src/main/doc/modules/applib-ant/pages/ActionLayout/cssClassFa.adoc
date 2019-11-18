@@ -33,7 +33,7 @@ There can be multiple "fa-" classes, eg to mirror or rotate the icon. There is n
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout.adoc#file-based[file-based layout] can be used instead.
 
 
 [NOTE]

@@ -25,5 +25,5 @@ public class Customer {
 <1> prompt for the new value for the property using an inline panel
 Note that the value `INLINE_AS_IF_EDIT` does not make sense for properties; if specified then it will be interpreted as just `INLINE`.
 
-Alternatively, the `promptStyle()` can be specified using xref:vw:ROOT:layout/file-based.adoc[file-based layouts].
+Alternatively, the `promptStyle()` can be specified using xref:vw:ROOT:layout.adoc#file-based[file-based layouts].
 

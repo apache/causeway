@@ -47,7 +47,7 @@ For actions of domain services the visibility is dependent upon its xref:refguid
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout.adoc#file-based[file-based layout] can be used instead.
 
 
 

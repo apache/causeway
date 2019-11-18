@@ -64,7 +64,7 @@ Walking through the main classes that make up the SimpleApp: `SimpleObject` pers
 
 
 |link:https://www.youtube.com/watch?v=KCJ1ZPPB3pA[004^] +
-Using the optional `Xxx.layout.xml` file to provide xref:vw:ROOT:layout/file-based.adoc[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
+Using the optional `Xxx.layout.xml` file to provide xref:vw:ROOT:layout.adoc#file-based[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
 ||x|||||||||
 
 
@@ -139,7 +139,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotations or using xref:vw:ROOT:layout/file-based.adoc[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotations or using xref:vw:ROOT:layout.adoc#file-based[dynamic (XML) layouts].
 |x||||||||x||
 
 
@@ -198,7 +198,7 @@ Extending a xref:fixtures:ROOT:about.adoc[fixture script] to more easily demonst
 
 
 |link:https://www.youtube.com/watch?v=39Hpd7C4Kvo[018^] +
-Using xref:vw:ROOT:layout/file-based.adoc[dynamic (XML) layouts] to specify the page size for a domain object's collection.
+Using xref:vw:ROOT:layout.adoc#file-based[dynamic (XML) layouts] to specify the page size for a domain object's collection.
 ||||x|||||||
 
 

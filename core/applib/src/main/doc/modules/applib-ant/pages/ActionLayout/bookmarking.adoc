@@ -52,7 +52,7 @@ The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmar
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout.adoc#file-based[file-based layout] can be used instead.
 
 
 == See also

@@ -23,9 +23,9 @@ content:
 #    - url: .
 #      start_path: antora/components/security
 #      branches: HEAD
-    - url: .
-      start_path: antora/components/testing
-      branches: HEAD
+#    - url: .
+#      start_path: antora/components/testing
+#      branches: HEAD
     - url: .
       start_path: antora/components/toc
       branches: HEAD
@@ -54,9 +54,9 @@ content:
 #    - url: .
 #      start_path: core/plugins/jaxrs-resteasy-4/src/main/doc # vro
 #      branches: HEAD
-#    - url: .
-#      start_path: core/plugins/jdo/src/main/doc # odn
-#      branches: HEAD
+    - url: .
+      start_path: core/plugins/jdo/src/main/doc # odn
+      branches: HEAD
 #    - url: .
 #      start_path: core/runtime/src/main/doc # core
 #      branches: HEAD
@@ -84,22 +84,22 @@ content:
 #    - url: .
 #      start_path: core/security/keycloak/src/main/doc # security
 #      branches: HEAD
-    - url: .
-      start_path: core/testsupport/unittestsupport/src/main/doc # testing
-      branches: HEAD
-    - url: .
-      start_path: core/testsupport/integtestsupport/src/main/doc # testing
-      branches: HEAD
+#    - url: .
+#      start_path: core/testsupport/unittestsupport/src/main/doc # testing
+#      branches: HEAD
+#    - url: .
+#      start_path: core/testsupport/integtestsupport/src/main/doc # testing
+#      branches: HEAD
     # to be resurrected somehow.
     #- url: .
     #  start_path: core/testsupport/mvnplugin/src/main/doc
     #  branches: HEAD
-#    - url: .
-#      start_path: core/viewer-restfulobjects/src/main/doc # vro
-#      branches: HEAD
-#    - url: .
-#      start_path: core/viewer-wicket/src/main/doc # vw
-#      branches: HEAD
+    - url: .
+      start_path: core/viewer-restfulobjects/src/main/doc # vro
+      branches: HEAD
+    - url: .
+      start_path: core/viewer-wicket/src/main/doc # vw
+      branches: HEAD
 
 #    - url: .
 #      start_path: examples/apps/demo/src/main/doc # demoapp
@@ -141,12 +141,12 @@ content:
 #    - url: .
 #      start_path: extensions/security/secman/realm-shiro/src/main/doc # security secman
 #      branches: HEAD
-    - url: .
-      start_path: extensions/testing/fixtures/src/main/doc # testing
-      branches: HEAD
-    - url: .
-      start_path: extensions/testing/specsupport/src/main/doc # testing
-      branches: HEAD
+#    - url: .
+#      start_path: extensions/testing/fixtures/src/main/doc # testing
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/testing/specsupport/src/main/doc # testing
+#      branches: HEAD
 #    - url: .
 #      start_path: extensions/vro/restclient/src/main/doc # vro
 #      branches: HEAD

@@ -84,7 +84,7 @@ If these are not present then Apache Isis will render according to internal defa
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout.adoc#file-based[file-based layout] can be used instead.
 
 
 

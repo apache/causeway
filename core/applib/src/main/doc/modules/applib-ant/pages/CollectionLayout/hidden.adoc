@@ -52,7 +52,7 @@ The other values of the `Where` enum have no meaning for a collection.
 == Alternatives
 
 
-As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout.adoc#file-based[file-based layout] can be used instead.
 
 
 == See also

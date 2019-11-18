@@ -38,7 +38,7 @@ This mixin uses the xref:refguide:applib-svc:presentation-layer-spi/HintStore.ad
 
 == `downloadLayoutXml()`
 
-The `Object_downloadLayoutXml` mixin provides an action to download the xref:vw:ROOT:layout/file-based.adoc[layout XML] for the current domain object.
+The `Object_downloadLayoutXml` mixin provides an action to download the xref:vw:ROOT:layout.adoc#file-based[layout XML] for the current domain object.
 It has the following signature:
 
 [source,java]
@@ -52,7 +52,7 @@ public Object downloadLayoutXml(
 ----
 <1> either current, complete, normalized or minimal.
 
-See the documentation on xref:vw:ROOT:layout/file-based.adoc[layout XML] and also
+See the documentation on xref:vw:ROOT:layout.adoc#file-based[layout XML] and also
 the xref:refguide:applib-svc:metadata-api/LayoutService.adoc[`LayoutService`] for more information on these styles
 
 
@@ -84,7 +84,7 @@ This mixin calls xref:refguide:applib-svc:metadata-api/MetamodelService.adoc[`Me
 
 == `downloadLayoutXml()`
 
-The `Object_downloadLayoutXml` mixin provides an action to download the xref:vw:ROOT:layout/file-based.adoc[layout XML] for the current domain object.
+The `Object_downloadLayoutXml` mixin provides an action to download the xref:vw:ROOT:layout.adoc#file-based[layout XML] for the current domain object.
 It has the following signature:
 
 [source,java]
@@ -98,7 +98,7 @@ public Object downloadLayoutXml(
 ----
 <1> either current, complete, normalized or minimal.
 
-See the documentation on xref:vw:ROOT:layout/file-based.adoc[layout XML] and also
+See the documentation on xref:vw:ROOT:layout.adoc#file-based[layout XML] and also
 the xref:refguide:applib-svc:metadata-api/LayoutService.adoc[`LayoutService`] for more information on these styles
 
 

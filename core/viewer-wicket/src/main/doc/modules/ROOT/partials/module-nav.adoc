@@ -1,7 +1,4 @@
 * xref:vw:ROOT:layout.adoc[Layout]
-** xref:vw:ROOT:layout/annotation-based.adoc[Annotation based]
-** xref:vw:ROOT:layout/file-based.adoc[File based]
-** xref:vw:ROOT:layout/table-columns.adoc[Table Columns]
 
 
 

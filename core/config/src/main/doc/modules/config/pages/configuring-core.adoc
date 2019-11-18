@@ -614,7 +614,7 @@ See xref:userguide:btb:about.adoc#finetuning[finetuning the programming model] f
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:vw:ROOT:layout/file-based.adoc[file-based layout]s. +
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:vw:ROOT:layout.adoc#file-based[file-based layout]s. +
 
 See xref:userguide:btb:about.adoc#layout-metadata-reader[Layout Metadata Reader] for more information.
 
