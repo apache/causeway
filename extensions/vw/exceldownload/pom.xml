@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-exceldownload</artifactId>
-    <name>Apache Isis Extensions - Excel Download</name>
+    <name>Apache Isis Ext - Excel Download</name>
     <description></description>
 
     <properties>

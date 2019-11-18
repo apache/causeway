@@ -22,7 +22,7 @@
 	</parent>
 
 	<artifactId>isis-extensions-incubator</artifactId>
-	<name>Apache Isis Extensions - Incubator</name>
+	<name>Apache Isis Ext - Incubator</name>
 	<description>
 		Provides experimental features.
 	</description>

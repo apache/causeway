@@ -22,7 +22,7 @@
     </parent>
 
     <artifactId>isis-extensions-legacy</artifactId>
-    <name>Apache Isis Extensions - Legacy</name>
+    <name>Apache Isis Ext - Legacy</name>
     <description>
         To ease migration from Apache Isis versions 1.16+ to 2.0.0.
     </description>

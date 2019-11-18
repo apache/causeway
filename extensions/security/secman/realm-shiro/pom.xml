@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-secman-realm-shiro</artifactId>
-    <name>Apache Isis Extensions - Security Manager Realm (Using Shiro)</name>
+    <name>Apache Isis Ext - Sec Man Realm (Using Shiro)</name>
     <description></description>
 
     <properties>

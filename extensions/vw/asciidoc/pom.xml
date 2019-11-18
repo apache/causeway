@@ -22,7 +22,7 @@
 	</parent>
 
 	<artifactId>isis-extensions-asciidoc</artifactId>
-	<name>Apache Isis Extensions - Asciidoctor Bundle</name>
+	<name>Apache Isis Ext - Asciidoctor Bundle</name>
 	<description></description>
 
 	<properties>

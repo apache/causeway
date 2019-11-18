@@ -22,7 +22,7 @@
 	</parent>
 
 	<artifactId>isis-extensions-restclient</artifactId>
-	<name>Apache Isis Extensions - REST Client</name>
+	<name>Apache Isis Ext - REST Client</name>
 	<description>A client for the Restful Objects Viewer</description>
 
 	<properties>

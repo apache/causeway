@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
-    <name>Apache Isis Extensions - Security Manager Encryption (Using jbcrypt)</name>
+    <name>Apache Isis Ext - Sec Man Encryption (Using jbcrypt)</name>
     <description></description>
 
     <properties>

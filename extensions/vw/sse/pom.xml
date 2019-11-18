@@ -22,7 +22,7 @@
 	</parent>
 
 	<artifactId>isis-extensions-sse</artifactId>
-	<name>Apache Isis Extensions - Server Sent Events</name>
+	<name>Apache Isis Ext - Server Sent Events</name>
 	<description></description>
 
 	<properties>

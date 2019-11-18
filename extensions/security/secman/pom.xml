@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-secman</artifactId>
-    <name>Apache Isis Extensions - Security Manager</name>
+    <name>Apache Isis Ext - Sec Man</name>
     <description></description>
     
     <packaging>pom</packaging>

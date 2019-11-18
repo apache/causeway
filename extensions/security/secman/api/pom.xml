@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-secman-api</artifactId>
-    <name>Apache Isis Extensions - Security Manager API</name>
+    <name>Apache Isis Ext - Sec Man API</name>
     <description></description>
 
     <properties>

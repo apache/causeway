@@ -1503,6 +1503,12 @@
 				<version>${isis.version}</version>
 				<type>pom</type>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.mavendeps</groupId>
+				<artifactId>isis-mavendeps-jdk11</artifactId>
+				<version>${isis.version}</version>
+				<type>pom</type>
+			</dependency>
 
 			<!-- JodaTime -->
 			<dependency>

@@ -5,28 +5,31 @@ site:
 
 content:
   sources:
+
+# antora
     - url: .
-      start_path: antora/components/core
+      start_path: antora/components/core # core
       branches: HEAD
     - url: .
-      start_path: antora/components/extensions
+      start_path: antora/components/extensions # extensions
       branches: HEAD
     - url: .
-      start_path: antora/components/refguide
+      start_path: antora/components/refguide # refguide
       branches: HEAD
     - url: .
-      start_path: antora/components/security
+      start_path: antora/components/security # security
       branches: HEAD
     - url: .
-      start_path: antora/components/testing
+      start_path: antora/components/testing # testing
       branches: HEAD
     - url: .
-      start_path: antora/components/toc
+      start_path: antora/components/toc # toc
       branches: HEAD
     - url: .
-      start_path: antora/components/userguide
+      start_path: antora/components/userguide # userguide
       branches: HEAD
 
+# core
     - url: .
       start_path: core/applib/src/main/doc # refguide
       branches: HEAD
@@ -91,6 +94,7 @@ content:
       start_path: core/viewer-wicket/src/main/doc # vw
       branches: HEAD
 
+# examples
     - url: .
       start_path: examples/apps/demo/src/main/doc # demoapp
       branches: HEAD
@@ -104,6 +108,7 @@ content:
       start_path: examples/smoketests/src/main/doc # core
       branches: HEAD
 
+# extensions
     - url: .
       start_path: extensions/other/incubator/src/main/doc # other
       branches: HEAD
@@ -153,10 +158,12 @@ content:
       start_path: extensions/vw/sse/src/main/doc # vw
       branches: HEAD
 
+# mavendeps
     - url: .
       start_path: mavendeps/src/main/doc
       branches: HEAD
 
+# mixins
     - url: .
       start_path: mixins/src/main/doc
       branches: HEAD

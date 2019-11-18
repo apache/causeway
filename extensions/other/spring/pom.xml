@@ -22,7 +22,7 @@
 	</parent>
 
 	<artifactId>isis-extensions-spring</artifactId>
-	<name>Apache Isis Extensions - Spring</name>
+	<name>Apache Isis Ext - Spring</name>
 	<description>Utility services for interacting with the Spring application context</description>
 
 	<properties>

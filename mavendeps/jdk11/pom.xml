@@ -11,56 +11,43 @@
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>isis-extensions</artifactId>
+		<groupId>org.apache.isis.mavendeps</groupId>
+		<artifactId>isis-mavendeps</artifactId>
 		<version>${revision}</version>
-		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-markdown</artifactId>
-	<name>Apache Isis Ext - Markdown Bundle</name>
-	<description></description>
+	<artifactId>isis-mavendeps-jdk11</artifactId>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.markdown</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/markdown</git-plugin.propertiesDir>
-	</properties>
+	<packaging>pom</packaging>
+
+	<name>Apache Isis Maven Dependencies for JDK11</name>
+	<description>
+        Defines a module to bring in JDK11+ dependencies (within a profile)
+    </description>
 
 	<dependencies>
-
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-metamodel</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-viewer-wicket-ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- provides a markdown parser -->
-		<dependency>
-			<groupId>com.vladsch.flexmark</groupId>
-			<artifactId>flexmark-all</artifactId>
-			<version>0.34.32</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.jsoup</groupId>
-					<artifactId>jsoup</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-ri</artifactId>
+			<type>pom</type>
 		</dependency>
 		<dependency>
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>1.10.2</version>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+		</dependency>
 	</dependencies>
 
 	<profiles>
@@ -85,12 +72,11 @@
 									<goal>flatten</goal>
 								</goals>
 								<configuration>
-									<flattenMode>defaults</flattenMode>
+									<flattenMode>bom</flattenMode>
 									<updatePomFile>true</updatePomFile>
 									<pomElements>
-										<name>resolve</name>
-										<description>resolve</description>
-										<dependencies>resolve</dependencies>
+										<parent>resolve</parent>
+										<profiles>resolve</profiles>
 									</pomElements>
 								</configuration>
 							</execution>

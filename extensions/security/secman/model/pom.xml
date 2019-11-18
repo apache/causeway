@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-secman-model</artifactId>
-    <name>Apache Isis Extensions - Security Manager Model</name>
+    <name>Apache Isis Ext - Sec Man Model</name>
     <description></description>
 
     <properties>
