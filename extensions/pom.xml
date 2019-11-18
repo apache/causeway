@@ -267,9 +267,9 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>core/incubator</module>
-		<module>core/legacy</module>
-		<module>core/spring</module>
+		<module>other/incubator</module>
+		<module>other/legacy</module>
+		<module>other/spring</module>
 		<module>security/secman</module>
 		<module>testing/fixtures</module>
 		<module>testing/specsupport</module>

@@ -1,0 +1,196 @@
+site:
+  title: Apache Isis
+  url: https://isis.apache.org/
+  start_page: toc:ROOT:about.adoc
+
+content:
+  sources:
+#    - url: .
+#      start_path: antora/components/core
+#      branches: HEAD
+#    - url: .
+#      start_path: antora/components/extensions
+#      branches: HEAD
+#    - url: .
+#      start_path: antora/components/mignotes
+#      branches: HEAD
+#    - url: .
+#      start_path: antora/components/refguide
+#      branches: HEAD
+#    - url: .
+#      start_path: antora/components/relnotes
+#      branches: HEAD
+#    - url: .
+#      start_path: antora/components/security
+#      branches: HEAD
+    - url: .
+      start_path: antora/components/testing
+      branches: HEAD
+    - url: .
+      start_path: antora/components/toc
+      branches: HEAD
+#    - url: .
+#      start_path: antora/components/userguide
+#      branches: HEAD
+#
+#    - url: .
+#      start_path: core/applib/src/main/doc # refguide
+#      branches: HEAD
+#    - url: .
+#      start_path: core/commons/src/main/doc # core
+#      branches: HEAD
+#    - url: .
+#      start_path: core/config/src/main/doc # refguide
+#      branches: HEAD
+#    - url: .
+#      start_path: core/detached-tests/src/main/doc # core
+#      branches: HEAD
+#    - url: .
+#      start_path: core/metamodel/src/main/doc # core
+#      branches: HEAD
+#    - url: .
+#      start_path: core/plugins/codegen-bytebuddy/src/main/doc # core
+#      branches: HEAD
+#    - url: .
+#      start_path: core/plugins/jaxrs-resteasy-4/src/main/doc # vro
+#      branches: HEAD
+#    - url: .
+#      start_path: core/plugins/jdo/src/main/doc # odn
+#      branches: HEAD
+#    - url: .
+#      start_path: core/runtime/src/main/doc # core
+#      branches: HEAD
+#    - url: .
+#      start_path: core/runtime-extensions/src/main/doc # core
+#      branches: HEAD
+#    - url: .
+#      start_path: core/runtime-services/src/main/doc # core
+#      branches: HEAD
+#    - url: .
+#      start_path: core/runtime-web/src/main/doc # core
+#      branches: HEAD
+#    - url: .
+#      start_path: core/schema/src/main/doc # refguide
+#      branches: HEAD
+#    - url: .
+#      start_path: core/security/api/src/main/doc # security
+#      branches: HEAD
+#    - url: .
+#      start_path: core/security/bypass/src/main/doc # security
+#      branches: HEAD
+#    - url: .
+#      start_path: core/security/shiro/src/main/doc # security
+#      branches: HEAD
+#    - url: .
+#      start_path: core/security/keycloak/src/main/doc # security
+#      branches: HEAD
+    - url: .
+      start_path: core/testsupport/unittestsupport/src/main/doc # testing
+      branches: HEAD
+    - url: .
+      start_path: core/testsupport/integtestsupport/src/main/doc # testing
+      branches: HEAD
+#    - url: .
+#      start_path: core/viewer-restfulobjects/src/main/doc # vro
+#      branches: HEAD
+#    - url: .
+#      start_path: core/viewer-wicket/src/main/doc # vw
+#      branches: HEAD
+#
+#    - url: .
+#      start_path: examples/apps/demo/src/main/doc # demoapp
+#      branches: HEAD
+#    - url: .
+#      start_path: examples/apps/helloworld/src/main/doc # helloworld
+#      branches: HEAD
+#    - url: .
+#      start_path: examples/apps/simpleapp/src/main/doc # simpleapp
+#      branches: HEAD
+#    - url: .
+#      start_path: examples/smoketests/src/main/doc # core
+#      branches: HEAD
+#
+#    - url: .
+#      start_path: extensions/other/incubator/src/main/doc # other
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/other/legacy/src/main/doc # other
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/other/spring/src/main/doc # other
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/security/secman/src/main/doc # security secman
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/security/secman/api/src/main/doc # security secman
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/security/secman/encryption-jbcrypt/src/main/doc # security secman
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/security/secman/model/src/main/doc # security secman
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/security/secman/persistence-jdo/src/main/doc # security secman
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/security/secman/realm-shiro/src/main/doc # security secman
+#      branches: HEAD
+    - url: .
+      start_path: extensions/testing/fixtures/src/main/doc # testing
+      branches: HEAD
+    - url: .
+      start_path: extensions/testing/specsupport/src/main/doc # testing
+      branches: HEAD
+#    - url: .
+#      start_path: extensions/vro/restclient/src/main/doc # vro
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/vw/asciidoc/src/main/doc # vw
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/vw/exceldownload/src/main/doc # vw
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/vw/markdown/src/main/doc # vw
+#      branches: HEAD
+#    - url: .
+#      start_path: extensions/vw/sse/src/main/doc # vw
+#      branches: HEAD
+#
+#    - url: .
+#      start_path: mavendeps/src/main/doc
+#      branches: HEAD
+#
+#    - url: .
+#      start_path: mixins/src/main/doc
+#      branches: HEAD
+
+
+ui:
+  bundle:
+    url: ../isis-antora/build/ui-bundle.zip
+#    url: https://github.com/apache/isis-antora/blob/master/build/ui-bundle.zip?raw=true
+    #url: ./antora/theme/ui-bundle.zip
+    snapshot: true
+  supplemental_files: antora/supplemental-ui
+
+asciidoc:
+  extensions:
+    - asciidoctor-plantuml
+    - ./antora/lib/lorem
+    - ./antora/lib/jira-issue
+    - ./antora/lib/powershell
+  attributes:
+    experimental: ""
+    idprefix: ""
+    idseparator: "-"
+    plantuml-server-url: "http://www.plantuml.com/plantuml"
+    isiscurr: "2.0.0-M2"
+    isisnext: "2.0.0-M3"
+    isisnextafter: "2.0.0-M4"
+    :isisdevafter: "2.0.0-M4-SNAPSHOT"
+
+output:
+  dir: antora/target/site

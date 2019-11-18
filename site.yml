@@ -90,10 +90,6 @@ content:
     - url: .
       start_path: core/testsupport/integtestsupport/src/main/doc # testing
       branches: HEAD
-    # to be resurrected somehow.
-    #- url: .
-    #  start_path: core/testsupport/mvnplugin/src/main/doc
-    #  branches: HEAD
     - url: .
       start_path: core/viewer-restfulobjects/src/main/doc # vro
       branches: HEAD
@@ -115,37 +111,37 @@ content:
       branches: HEAD
 
     - url: .
-      start_path: extensions/core/incubator/src/main/doc # extensions
+      start_path: extensions/other/incubator/src/main/doc # other
       branches: HEAD
     - url: .
-      start_path: extensions/core/legacy/src/main/doc # extensions
+      start_path: extensions/other/legacy/src/main/doc # other
       branches: HEAD
     - url: .
-      start_path: extensions/core/spring/src/main/doc # extensions
+      start_path: extensions/other/spring/src/main/doc # other
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/src/main/doc # secman
+      start_path: extensions/security/secman/src/main/doc # security secman
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/api/src/main/doc # secman
+      start_path: extensions/security/secman/api/src/main/doc # security secman
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/encryption-jbcrypt/src/main/doc # secman
+      start_path: extensions/security/secman/encryption-jbcrypt/src/main/doc # security secman
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/model/src/main/doc # secman
+      start_path: extensions/security/secman/model/src/main/doc # security secman
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/persistence-jdo/src/main/doc # secman
+      start_path: extensions/security/secman/persistence-jdo/src/main/doc # security secman
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/realm-shiro/src/main/doc # secman
+      start_path: extensions/security/secman/realm-shiro/src/main/doc # security secman
       branches: HEAD
     - url: .
       start_path: extensions/testing/fixtures/src/main/doc # testing
       branches: HEAD
     - url: .
-      start_path: extensions/testing/specsupport/src/main/doc # secman
+      start_path: extensions/testing/specsupport/src/main/doc # testing
       branches: HEAD
     - url: .
       start_path: extensions/vro/restclient/src/main/doc # vro
