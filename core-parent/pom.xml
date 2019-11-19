@@ -22,7 +22,7 @@ under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- APACHE ISIS (customisation 1/1: start) -->
+	<!-- APACHE ISIS customisation: start -->
 	<!--
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -30,13 +30,14 @@ under the License.
 		<version>2.2.0.RELEASE</version>
 	</parent>
 	-->
-	<!-- APACHE ISIS (customisation 1/1: end) -->
 
-	<!-- for more information, see the documentation of this POM: http://maven.apache.org/pom/asf/ -->
 	<groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-parent</artifactId>
 	<version>2.0.0-M3-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
+	<!-- (The remainder of the  pom.xml is a copy of org.apache:apache) -->
+	<!-- APACHE ISIS customisation: end. -->
 
 	<name>The Apache Software Foundation</name>
 	<description>
