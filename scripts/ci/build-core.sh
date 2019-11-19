@@ -29,6 +29,7 @@ mvn versions:set -DnewVersion=$REVISION
 mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     --batch-mode \
     $MVN_STAGES \
+    -Drevision=$REVISION \
     -Dskip.assemble-zip \
     $MVN_ADDITIONAL_OPTS
 

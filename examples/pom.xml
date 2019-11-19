@@ -252,19 +252,19 @@
 			<dependency>
 				<groupId>org.apache.isis.mixins</groupId>
 				<artifactId>isis-mixin-standard</artifactId>
-				<version>${project.version}</version>
+				<version>${revision}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.mixins</groupId>
 				<artifactId>isis-mixin-datanucleus-enhance</artifactId>
-				<version>${project.version}</version>
+				<version>${revision}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.mixins</groupId>
 				<artifactId>isis-mixin-surefire</artifactId>
-				<version>${project.version}</version>
+				<version>${revision}</version>
 				<type>pom</type>
 			</dependency>
 
