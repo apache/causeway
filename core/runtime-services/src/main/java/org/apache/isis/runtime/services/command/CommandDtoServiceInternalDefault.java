@@ -21,17 +21,14 @@ package org.apache.isis.runtime.services.command;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
@@ -40,8 +37,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
@@ -60,12 +55,8 @@ import lombok.val;
         )
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
-    @Programmatic
-    @PostConstruct
-    public void init() {
-    }
-
-    // //////////////////////////////////////
+    @Inject private CommandContext commandContext;
+    @Inject private BookmarkService bookmarkService;
 
     @Override
     public CommandDto asCommandDto(
@@ -176,18 +167,6 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
                 valueType, ManagedObject.unwrapPojo(valueAdapter), bookmarkService);
         propertyDto.setNewValue(newValue);
     }
-
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return objectAdapterProvider;
-    }
-    
-    // -- DEPENDENCIES
-    
-    @Inject CommandContext commandContext;
-    @Inject private BookmarkService bookmarkService;
-    @Inject SpecificationLoader specificationLoader;
-    @Inject IsisSessionFactory isisSessionFactory;
-    @Inject ObjectAdapterProvider objectAdapterProvider;
 
 
 }
