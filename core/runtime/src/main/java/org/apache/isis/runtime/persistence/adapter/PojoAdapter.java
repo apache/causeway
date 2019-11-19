@@ -37,6 +37,7 @@ import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.Getter;
 import lombok.val;
 
 public final class PojoAdapter implements ObjectAdapter {
@@ -44,8 +45,8 @@ public final class PojoAdapter implements ObjectAdapter {
     private final SpecificationLoader specificationLoader;
     private final PersistenceSession persistenceSession;
 
-    private final Object pojo;
-    private final Oid oid;
+    @Getter(onMethod = @__(@Override)) private final Object pojo;
+    @Getter(onMethod = @__(@Override)) private final Oid oid;
 
     // -- FACTORIES
 
@@ -107,11 +108,6 @@ public final class PojoAdapter implements ObjectAdapter {
         this.oid = requires(oid, "oid");
     }
 
-    @Override
-    public Object getPojo() {
-        return pojo;
-    }
-
     // -- getSpecification
 
     final _Lazy<ObjectSpecification> objectSpecification = _Lazy.of(this::loadSpecification);
@@ -127,61 +123,8 @@ public final class PojoAdapter implements ObjectAdapter {
         return specification;
     }
 
-    // -- getOid
-
-    @Override
-    public Oid getOid() {
-        return oid;
-    }
-
-    // -- PREDICATES
-
-//    @Override
-//    public boolean isTransient() {
-//        val spec = getSpecification();
-//        if(spec.isManagedBean() || spec.isViewModel()) {
-//            // services and view models are treated as persistent objects
-//            return false;
-//        }
-//
-//        if(persistenceSession==null) {
-//            return false;
-//        }
-//
-//        val state = persistenceSession.getEntityState(pojo);
-//        return state.isDetached();
-//    }
-
-    @Override
-    public boolean isRepresentingPersistent() {
-        val spec = getSpecification();
-        if(spec.isManagedBean() || spec.isViewModel()) {
-            // services and view models are treated as persistent objects
-            return true;
-        }
-        if(persistenceSession==null) {
-            return false;
-        }
-        val state = persistenceSession.getEntityState(pojo);
-        val isRepresentingPersistent = state.isAttached() || state.isDestroyed();
-        return isRepresentingPersistent;
-    }
-
-    @Override
-    public boolean isDestroyed() {
-        val spec = getSpecification();
-        if(spec.isManagedBean() || spec.isViewModel() || spec.isValue()) {
-            // services and view models are treated as persistent objects
-            return false;
-        }
-        if(persistenceSession==null) {
-            return false;
-        }
-        val state = persistenceSession.getEntityState(pojo);
-        return state.isDestroyed();
-    }
-
     // -- getAggregateRoot
+    
     @Override
     public ObjectAdapter getAggregateRoot() {
         if(!isParentedCollection()) {

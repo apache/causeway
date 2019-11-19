@@ -62,16 +62,6 @@ public class ObjectAdapterForBean implements ObjectAdapter {
     }
 
     @Override
-    public boolean isRepresentingPersistent() {
-        return false;
-    }
-
-    @Override
-    public boolean isDestroyed() {
-        return false;
-    }
-
-    @Override
     public String toString() {
         return String.format("ObjectAdapterForBean[specId=%s, featureType=%s, moSort=%s]", 
                 spec.getSpecId(), 

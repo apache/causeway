@@ -590,7 +590,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void makePersistentInTransaction(final ObjectAdapter adapter) {
-        if (adapter.isRepresentingPersistent()) {
+        
+        val pojo = adapter.getPojo();
+        
+        if (getEntityState(pojo).isAttached()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
         if (adapter.isParentedCollection()) {
@@ -650,20 +653,26 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      *
      */
     private CreateObjectCommand newCreateObjectCommand(final ObjectAdapter adapter) {
+
         ensureOpened();
+        
+        val pojo = adapter.getPojo();
 
         log.debug("create object - creating command for: {}", adapter);
-        if (adapter.isRepresentingPersistent()) {
+        if (getEntityState(pojo).isAttached()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
         return new DataNucleusCreateObjectCommand(adapter, persistenceManager);
     }
 
     private DestroyObjectCommand newDestroyObjectCommand(final ObjectAdapter adapter) {
+        
         ensureOpened();
+        
+        val pojo = adapter.getPojo();
 
         log.debug("destroy object - creating command for: {}", adapter);
-        if (!adapter.isRepresentingPersistent()) {
+        if (!getEntityState(pojo).isAttached()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
         return new DataNucleusDeleteObjectCommand(adapter, persistenceManager);
