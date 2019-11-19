@@ -33,6 +33,6 @@ mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     -Dskip.assemble-zip \
     $MVN_ADDITIONAL_OPTS
 
-mvn versions:revert
+mvn versions:revert -Drevision=$REVISION
 
 cd $PROJECT_ROOT_PATH
