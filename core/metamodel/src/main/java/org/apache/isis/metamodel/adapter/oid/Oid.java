@@ -100,20 +100,22 @@ public interface Oid extends Encodable {
         // -- LEGACY
 
         public static RootOid ofBookmark(Bookmark bookmark) {
-            return Oid_Root.of(ObjectSpecId.of(bookmark.getObjectType()), 
-                    bookmark.getIdentifier(), Oid_State.from(bookmark));
+            return Oid_Root.of(
+                    ObjectSpecId.of(bookmark.getObjectType()), 
+                    bookmark.getIdentifier(), 
+                    bookmark.getObjectState());
         }
 
         public static RootOid viewmodelOf(ObjectSpecId objectSpecId, String mementoStr) {
-            return Oid_Root.of(objectSpecId, mementoStr, Oid_State.VIEWMODEL);
+            return Oid_Root.of(objectSpecId, mementoStr, Bookmark.ObjectState.VIEW_MODEL);
         }
 
         public static RootOid transientOf(ObjectSpecId objectSpecId, String identifier) {
-            return Oid_Root.of(objectSpecId, identifier, Oid_State.TRANSIENT);
+            return Oid_Root.of(objectSpecId, identifier, Bookmark.ObjectState.TRANSIENT);
         }
 
         public static RootOid persistentOf(ObjectSpecId objectSpecId, String identifier) {
-            return Oid_Root.of(objectSpecId, identifier, Oid_State.PERSISTENT);
+            return Oid_Root.of(objectSpecId, identifier, Bookmark.ObjectState.PERSISTENT);
         }
 
         // -- PARENTED COLLECTIONS

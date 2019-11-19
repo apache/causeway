@@ -28,6 +28,7 @@ import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -37,18 +38,22 @@ import lombok.val;
 final class Oid_Root implements RootOid {
 
     // -- fields
-    private final static long serialVersionUID = 1L;
+    private final static long serialVersionUID = 2L;
 
     private final ObjectSpecId objectSpecId;
     private final String identifier;
-    private final Oid_State state;
+    private final Bookmark.ObjectState state;
     private final int hashCode;
 
-    public static Oid_Root of(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state) {
+    public static Oid_Root of(
+            ObjectSpecId objectSpecId, 
+            String identifier, 
+            Bookmark.ObjectState state) {
+        
         return new Oid_Root(objectSpecId, identifier, state);
     }
 
-    private Oid_Root(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state) {
+    private Oid_Root(ObjectSpecId objectSpecId, String identifier, Bookmark.ObjectState state) {
 
         requires(objectSpecId, "objectSpecId");
         requires(identifier, "identifier");
@@ -120,27 +125,40 @@ final class Oid_Root implements RootOid {
 
     @Override
     public boolean isTransient() {
-        return state.isTransient();
+        return state == Bookmark.ObjectState.TRANSIENT;
     }
 
     @Override
     public boolean isViewModel() {
-        return state.isViewModel();
+        return state == Bookmark.ObjectState.VIEW_MODEL;
     }
 
     @Override
     public boolean isPersistent() {
-        return state.isPersistent();
+        return state == Bookmark.ObjectState.PERSISTENT;
     }
 
     @Override
     public Bookmark asBookmark() {
-        return state.bookmarkOf(this);
+        val objectType = state.getCode() + getObjectSpecId().asString();
+        val identifier = getIdentifier();
+        return new Bookmark(objectType, identifier);
     }
 
     @Override
     public OidDto asOidDto() {
-        return state.toOidDto(this);
+        
+        val oidDto = new OidDto();
+
+        oidDto.setType(getObjectSpecId().asString());
+        oidDto.setId(getIdentifier());
+
+        val bookmarkState = state.toBookmarkState();
+        // persistent is assumed if not specified...
+        oidDto.setObjectState(
+                bookmarkState != BookmarkObjectState.PERSISTENT ? bookmarkState : null);
+
+        return oidDto;
     }
 
     // -- equals, hashCode

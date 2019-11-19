@@ -148,13 +148,13 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
         }
 
         final String isTransientOrViewModelStr = getGroup(matcher, 3);
-        final Oid_State state;
+        final Bookmark.ObjectState state;
         if("!".equals(isTransientOrViewModelStr)) {
-            state = Oid_State.TRANSIENT;
+            state = Bookmark.ObjectState.TRANSIENT;
         } else if("*".equals(isTransientOrViewModelStr)) {
-            state = Oid_State.VIEWMODEL;
+            state = Bookmark.ObjectState.VIEW_MODEL;
         } else {
-            state = Oid_State.PERSISTENT;
+            state = Bookmark.ObjectState.PERSISTENT;
         }
 
         final String rootObjectType = getGroup(matcher, 4);
