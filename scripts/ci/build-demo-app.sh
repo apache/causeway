@@ -31,11 +31,12 @@ echo ""
 
 cd $PROJECT_ROOT_PATH/examples/apps/demo
 
-mvn versions:set -DnewVersion=$REVISION
+mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION
 
 mvn install \
     --batch-mode \
     -Dflavor=$FLAVOR \
+    -Drevision=$REVISION \
     -Dskip.git \
     -Dskip.arch \
     -DskipTests
@@ -43,10 +44,11 @@ mvn install \
 mvn compile jib:build \
     --batch-mode \
     -Dflavor=$FLAVOR \
+    -Drevision=$REVISION \
     -Dskip.git \
     -Dskip.arch \
     -DskipTests
 
-mvn versions:revert
+mvn versions:revert -Drevision=$REVISION
 
 cd $PROJECT_ROOT_PATH

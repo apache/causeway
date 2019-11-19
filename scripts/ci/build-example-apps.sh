@@ -24,12 +24,13 @@ sh $SCRIPT_DIR/print-environment.sh "build-example-apps"
 
 cd $PROJECT_ROOT_PATH/examples
 
-mvn versions:set -DnewVersion=$REVISION
+mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION
 
 mvn --batch-mode \
     -Dexample-apps \
-    clean install
+    -Drevision=$REVISION \
+     clean install
 
-mvn versions:revert
+mvn versions:revert -Drevision=$REVISION
 
 cd $PROJECT_ROOT_PATH
