@@ -16,6 +16,9 @@ if [ -z "$REVISION" ]; then
   echo "\$REVISION is not set" >&2
   exit 1
 fi
+if [ -z "$MVN_STAGES" ]; then
+  MVN_STAGES=clean install
+fi
 
 sh $SCRIPT_DIR/print-environment.sh "build-mixins"
 
