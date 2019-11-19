@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.query.Query;
@@ -43,6 +44,7 @@ import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.val;
 
@@ -187,7 +189,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        final List<ObjectAdapter> allMatching = persistenceSessionServiceInternal.allMatchingQuery(query);
+        final List<ObjectAdapter> allMatching = getPersistenceSession().allMatchingQuery(query);
         return ObjectAdapter.Util.unwrapTypedPojoList(allMatching);
     }
 
@@ -224,6 +226,12 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
+    }
+    
+    protected PersistenceSession getPersistenceSession() {
+        return PersistenceSession.current(PersistenceSession.class)
+                .getFirst()
+                .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
     }
 
 

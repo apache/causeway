@@ -18,9 +18,6 @@
  */
 package org.apache.isis.metamodel.services.persistsession;
 
-import java.util.List;
-
-import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -70,16 +67,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
     void remove(ObjectAdapter adapter);
-
-    // -- allMatchingQuery, firstMatchingQuery
-    /**
-     * Provided by <tt>PersistenceSession</tt> when used by framework.
-     *
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt> and also by the choices
-     * facets.
-     */
-    <T> List<ObjectAdapter> allMatchingQuery(Query<T> query);
 
 
 }

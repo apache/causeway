@@ -18,14 +18,11 @@
  */
 package org.apache.isis.runtime.system.transaction;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -117,11 +114,6 @@ implements PersistenceSessionServiceInternal {
     @Override
     public void resolve(final Object parent) {
         getPersistenceSession().refreshRootInTransaction(parent);
-    }
-
-    @Override
-    public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
-        return getPersistenceSession().allMatchingQuery(query);
     }
 
     protected PersistenceSession getPersistenceSession() {
