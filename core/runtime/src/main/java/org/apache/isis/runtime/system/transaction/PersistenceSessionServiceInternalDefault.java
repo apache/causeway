@@ -36,7 +36,6 @@ import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServi
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
@@ -44,6 +43,8 @@ import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 @Service
 public class PersistenceSessionServiceInternalDefault 
 implements PersistenceSessionServiceInternal {
+    
+    @Inject private SpecificationLoader specificationLoader;
 
     @Override
     public ObjectAdapter adapterFor(Object pojo) {
@@ -123,19 +124,13 @@ implements PersistenceSessionServiceInternal {
         return getPersistenceSession().allMatchingQuery(query);
     }
 
-    @Override
-    public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
-        return getPersistenceSession().firstMatchingQuery(query);
-    }
-
     protected PersistenceSession getPersistenceSession() {
         return PersistenceSession.current(PersistenceSession.class)
                 .getFirst()
                 .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
     }
 
-    @Inject IsisSessionFactory isisSessionFactory;
-    @Inject SpecificationLoader specificationLoader;
+
 
 
 }

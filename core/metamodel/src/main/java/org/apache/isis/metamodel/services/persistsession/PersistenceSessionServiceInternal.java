@@ -81,13 +81,5 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      */
     <T> List<ObjectAdapter> allMatchingQuery(Query<T> query);
 
-    /**
-     * Provided by <tt>PersistenceSession</tt> when used by framework.
-     *
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     */
-    <T> ObjectAdapter firstMatchingQuery(Query<T> query);
-
 
 }

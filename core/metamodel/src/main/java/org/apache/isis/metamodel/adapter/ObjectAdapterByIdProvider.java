@@ -34,7 +34,8 @@ public interface ObjectAdapterByIdProvider {
     // -- INTERFACE
 
     /**
-     * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
+     * This method  will <i>always</i> return an object, possibly indicating it is persistent; 
+     * so make sure that you
      * know that the oid does indeed represent an object you know exists.
      */
     ObjectAdapter adapterFor(RootOid rootOid);
