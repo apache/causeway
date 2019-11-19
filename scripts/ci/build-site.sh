@@ -24,21 +24,21 @@ bash $SCRIPT_DIR/print-environment.sh "build-site"
 
 echo ""
 echo "\$SITE_CONFIG: ${SITE_CONFIG}"
-echo "\$GROOVY_CMD:  ${GROOVY_CMD}"
+echo "\$GROOVY_CMD : ${GROOVY_CMD}"
 echo ""
  
 # for now meant to run with nightly builds only 
 if [ -z "${GROOVY_CMD}" ]; then
-
   echo "no groovy: skipping automated site content script(s)"
-
 else
-
-  ## generate automated site content (adoc files) 
-  ${GROOVY_CMD} $SCRIPT_DIR/../generateConfigDocs.groovy \
-    -f $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json \
-    -o $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
-  
+  if [ ! -f "$PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json" ]; then
+    echo "no spring-configuration-metadata.json to parse: skipping"
+  else
+    # generate automated site content (adoc files)
+    ${GROOVY_CMD} $SCRIPT_DIR/../generateConfigDocs.groovy \
+      -f $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json \
+      -o $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
+  fi
 fi
 
 echo "copying over examples ..."
