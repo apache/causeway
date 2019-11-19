@@ -16,8 +16,8 @@
 	</bs3:row>
 
 	<bs3:row>
-		<bs3:col span="6">
-
+		<bs3:col span="4">
+		
 			<cpt:fieldSet name="Byte" id="byte">
 				<cpt:action id="calculateByte" />
 				<cpt:action id="calculateBytes" />
@@ -47,20 +47,18 @@
 			</cpt:fieldSet>
 
 		</bs3:col>
-		<bs3:col span="6" unreferencedCollections="true">
 		
-			<cpt:fieldSet name="Description" id="description"
-				unreferencedProperties="true">
-				<cpt:property labelPosition="NONE" id="description" />
-			</cpt:fieldSet>
-			
-			<cpt:fieldSet name="Null and Void" id="null">
-				<cpt:action id="calculateNull" />
-				<cpt:action id="calculateNullCollection" />
-				<cpt:action id="calculateVoid" />
-				<cpt:property id="nullObject" />
-			</cpt:fieldSet>
-
+		
+		<bs3:col span="4">
+		
+		    <cpt:fieldSet name="Boolean" id="boolean">
+		    	<cpt:action id="calculateBoolean"/>
+            	<cpt:action id="calculateBooleans"/>
+            	<cpt:property id="primitiveFalse"/>
+            	<cpt:property id="primitiveTrue"/>
+		        <cpt:property id="javaLangBoolean"/>
+            </cpt:fieldSet>
+		
 			<cpt:fieldSet name="Float" id="float">
 				<cpt:action id="calculateFloat" />
 				<cpt:action id="calculateFloats" />
@@ -74,6 +72,23 @@
 				<cpt:property id="primitiveDouble"/>
 				<cpt:property id="javaLangDouble" />
 			</cpt:fieldSet>
+			
+			<cpt:fieldSet name="Null and Void" id="null">
+				<cpt:action id="calculateNull" />
+				<cpt:action id="calculateNullCollection" />
+				<cpt:action id="calculateVoid" />
+				<cpt:property id="nullObject" />
+			</cpt:fieldSet>
+
+		</bs3:col>
+		
+		<bs3:col span="4" unreferencedCollections="true">
+		
+			<cpt:fieldSet name="Description" id="description"
+				unreferencedProperties="true">
+				<cpt:property labelPosition="NONE" id="description" />
+			</cpt:fieldSet>
+
 			
 		</bs3:col>
 	</bs3:row>

@@ -2,6 +2,7 @@
 
 The framework supports following types in their primitive and boxed form:
 
+* java.lang.*Boolean*
 * java.lang.*Byte*
 * java.lang.*Short*
 * java.lang.*Integer*

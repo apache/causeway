@@ -70,6 +70,26 @@ public class PrimitivesDemo extends DemoStub {
     public void calculateVoid() {
     }
     
+    // -- BOOLEAN
+    
+    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @PropertyLayout(describedAs="java.lang.Boolean")
+    @Getter @Setter private Boolean javaLangBoolean;
+    
+    @Getter private boolean primitiveFalse = false;
+    @Getter private boolean primitiveTrue = true;
+    
+    @Action
+    public Boolean calculateBoolean() {
+        return Boolean.TRUE;
+    }
+    
+    @Action
+    public List<Boolean> calculateBooleans() {
+        return _Lists.of(Boolean.FALSE, Boolean.TRUE);
+    }
+    
+    
     // -- BYTE
 
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
