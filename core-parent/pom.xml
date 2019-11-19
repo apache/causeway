@@ -23,6 +23,7 @@ under the License.
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- APACHE ISIS customisation: start -->
+
 	<!--
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -37,7 +38,8 @@ under the License.
 	<packaging>pom</packaging>
 
 	<!-- (The remainder of the  pom.xml is a copy of org.apache:apache) -->
-	<!-- APACHE ISIS customisation: end. -->
+	<!-- APACHE ISIS customisation: end -->
+
 
 	<name>The Apache Software Foundation</name>
 	<description>
@@ -91,7 +93,6 @@ under the License.
 	</distributionManagement>
 
 	<properties>
-
 		<distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
 		<distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
 		<organization.logo>https://www.apache.org/images/asf_logo_wide.gif</organization.logo>
