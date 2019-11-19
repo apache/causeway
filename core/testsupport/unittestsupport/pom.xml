@@ -182,14 +182,14 @@
 
 	<profiles>
 
-		<!--
-		REMOVED BECAUSE IF BUILT ON JDK11, THEN ADDS DEPENDENCIES ALWAYS
-
 		<profile>
 			<id>jdk11</id>
 			<activation>
 				<jdk>[11,)</jdk>
 			</activation>
+			<!--
+			These dependencies are required in order to build on jdk11
+			-->
 			<dependencies>
 				<dependency>
 					<groupId>com.sun.xml.ws</groupId>
@@ -210,7 +210,6 @@
 				</dependency>
 			</dependencies>
 		</profile>
-		-->
 
 		<profile>
 			<id>flatten</id>
