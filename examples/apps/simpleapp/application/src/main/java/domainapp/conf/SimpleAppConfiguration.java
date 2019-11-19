@@ -44,7 +44,6 @@ import domainapp.application.fixture.scenarios.DomainAppDemo;
  */
 @Configuration
 @PropertySources({
-    @PropertySource("classpath:/domainapp/conf/isis-non-changing.properties"),
     @PropertySource(IsisPresets.H2InMemory),
     //@PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.DataNucleusAutoCreate),

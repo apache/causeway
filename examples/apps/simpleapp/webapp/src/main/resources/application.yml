@@ -1,0 +1,135 @@
+isis:
+  reflector:
+    validator:
+      allowDeprecated: false
+      noParamsOnly: true
+      explicitObjectType: true
+      serviceActionsOnly: true
+      mixinsOnly: true
+
+    facet:
+      cssClassFa:
+        patterns:
+          new.*:fa-plus,\
+          add.*:fa-plus-square,\
+          create.*:fa-plus,\
+          update.*:fa-edit,\
+          delete.*:fa-trash,\
+          save.*:fa-floppy-o,\
+          change.*:fa-edit,\
+          edit.*:fa-pencil-square-o,\
+          maintain.*:fa-edit,\
+          remove.*:fa-minus-square,\
+          copy.*:fa-copy,\
+          move.*:fa-exchange,\
+          first.*:fa-star,\
+          find.*:fa-search,\
+          lookup.*:fa-search,\
+          search.*:fa-search,\
+          view.*:fa-search,\
+          clear.*:fa-remove,\
+          previous.*:fa-step-backward,\
+          next.*:fa-step-forward,\
+          list.*:fa-list, \
+          all.*:fa-list, \
+          download.*:fa-download, \
+          upload.*:fa-upload, \
+          export.*:fa-download,\
+          switch.*:fa-exchange,\
+          import.*:fa-upload,\
+          execute.*:fa-bolt, \
+          run.*:fa-bolt, \
+          calculate.*:fa-calculator, \
+          verify.*:fa-check-circle, \
+          refresh.*:fa-refresh, \
+          install.*:fa-wrench,\
+          stop.*:fa-stop,\
+          terminate.*:fa-stop,\
+          cancel.*:fa-stop,\
+          discard.*:fa-trash-o,\
+          pause.*:fa-pause,\
+          suspend.*:fa-pause,\
+          resume.*:fa-play,\
+          renew.*:fa-repeat,\
+          reset.*:fa-repeat,\
+          categorise.*:fa-folder-open-o,\
+          assign.*:fa-hand-o-right,\
+          approve.*:fa-thumbs-o-up,\
+          decline.*:fa-thumbs-o-down
+
+      cssClass:
+        patterns:
+          delete.*:btn-danger,\
+          discard.*:btn-warning,\
+          remove.*:btn-warning
+
+    explicitAnnotations:
+      action: true
+
+  objects:
+    editing: false
+
+  services:
+    audit:
+      objects: all
+    command:
+      actions: ignore_safe
+      properties: all
+    publish:
+      objects: all
+      actions: all
+      properties: all
+
+    injector:
+      setPrefix: false
+
+  value:
+    format:
+      date: dd-MM-yyyy
+
+  viewer:
+    wicket:
+      application:
+        name: Simple App
+        css: css/application.css
+        js: scripts/application.js
+        about: Simple App
+      welcome:
+        file: welcome.html
+
+      credit[0]:
+        image: /images/apache-isis/logo-48x48.png
+        name: Apache Isis
+        url: http://isis.apache.org
+
+      themes:
+        initial: Flatly
+        showChooser: true
+        enabled: bootstrap-theme, Cerulean, Cosmo, Cyborg, Darkly, Flatly, Journal, Lumen, Paper, Readable, Sandstone, Simplex, Slate, Spacelab, Superhero, United, Yeti
+
+      maxTitleLengthInStandaloneTables: 0
+      maxTitleLengthInParentedTables: 0
+
+      developmentUtilities:
+        enable: true
+
+  persistor:
+    datanucleus:
+      impl:
+        datanucleus:
+          schema:
+            validateTables: true
+            validateConstraints: true
+
+          persistenceByReachabilityAtCommit: false
+          identifier:
+            case: MixedCase
+
+          cache:
+            level2:
+              type: none
+              mode: ENABLE_SELECTIVE
+
+      standaloneCollection:
+        bulkLoad: true
+
