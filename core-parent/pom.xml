@@ -22,7 +22,7 @@ under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- APACHE ISIS customisation: start -->
+	<!-- APACHE ISIS customisation 1/2: start -->
 
 	<!--
 	<parent>
@@ -41,8 +41,7 @@ under the License.
 		<module>../core</module>
 	</modules>
 
-	<!-- (The remainder of the  pom.xml is a copy of org.apache:apache) -->
-	<!-- APACHE ISIS customisation: end -->
+	<!-- APACHE ISIS customisation 1/2: end -->
 
 
 	<name>The Apache Software Foundation</name>
@@ -476,6 +475,23 @@ under the License.
 			</build>
 		</profile>
 		<!-- END SNIPPET: release-profile -->
+
+		<!-- APACHE ISIS customisation 2/2: start -->
+		<profile>
+			<id>gcpappenginerepo-deploy</id>
+			<activation>
+				<property>
+					<name>gcpappenginerepo-deploy.repositoryUrl</name>
+				</property>
+			</activation>
+			<distributionManagement>
+				<repository>
+					<id>gcpappenginerepo-deploy.serverId</id>
+					<url>${gcpappenginerepo-deploy.repositoryUrl}</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+		<!-- APACHE ISIS customisation 2/2: end -->
 
 	</profiles>
 </project>
