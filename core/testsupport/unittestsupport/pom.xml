@@ -182,6 +182,9 @@
 
 	<profiles>
 
+		<!--
+		REMOVED BECAUSE IF BUILT ON JDK11, THEN ADDS DEPENDENCIES ALWAYS
+
 		<profile>
 			<id>jdk11</id>
 			<activation>
@@ -207,6 +210,7 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		-->
 
 		<profile>
 			<id>flatten</id>

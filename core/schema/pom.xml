@@ -53,6 +53,9 @@
 				<jdk>[11,)</jdk>
 			</activation>
 
+			<!--
+			REMOVED BECAUSE IF BUILT ON JDK11, THEN ADDS DEPENDENCIES ALWAYS
+
 			<dependencies>
 				<dependency>
 					<groupId>javax.xml.bind</groupId>
@@ -67,6 +70,7 @@
 					<artifactId>jaxb-impl</artifactId>
 				</dependency>
 			</dependencies>
+			-->
 
 			<build>			
 				<pluginManagement>
