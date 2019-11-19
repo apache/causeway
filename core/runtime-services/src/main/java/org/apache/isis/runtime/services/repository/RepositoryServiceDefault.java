@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.services.repository;
+package org.apache.isis.runtime.services.repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import lombok.val;
 
 @Service
-public class RepositoryServiceJdo implements RepositoryService {
+public class RepositoryServiceDefault implements RepositoryService {
 
     @Inject private FactoryService factoryService;
     @Inject private WrapperFactory wrapperFactory;
