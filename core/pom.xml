@@ -46,56 +46,58 @@
 		<isis.skipTests>false</isis.skipTests>
 		<maven.test.skip>${isis.skipTests}</maven.test.skip>
 
+		<projectUrl>${project.url}</projectUrl>
+
+		<coreBaseDir>${project.build.directory}/..</coreBaseDir>
+
 		<jar-plugin.automaticModuleName>org.apache.isis.core</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
+		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
+		<compileSource>8</compileSource>
+		<compileTarget>8</compileTarget>
+		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
+
+
+		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+		<surefire-plugin.argLine>-Xms1024m -Xmx1024m</surefire-plugin.argLine>
 		<testsToExclude>**/*IntegrationTest.java</testsToExclude>
 
-		<!-- remaining properties should not need to be overridden -->
-		<compileSource>8</compileSource>
-		<compileTarget>8</compileTarget>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<surefire-plugin.argLine>-Xms1024m -Xmx1024m</surefire-plugin.argLine>
-
-		<dependency.locations.enabled>false</dependency.locations.enabled>
-		<coreBaseDir>${project.build.directory}/..</coreBaseDir>
 		<checkstyle.configLocation>${coreBaseDir}/codequality/checkstyle.xml</checkstyle.configLocation>
 		<pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
-		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
-		<projectUrl>${project.url}</projectUrl>
+		<license.additional-notes>In addition, Apache Isis uses some Javascript libraries:
 
-		<license.additional-notes>In addition, Isis uses some Javascript
-			libraries:
 			* Twitter Bootstrap, licensed under MIT [1]
-			*
-			Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
-			*
-			LiveQuery (JQuery plugin), licensed under MIT license [3]
-			* Wicket
-			Bootstrap, licenced under ASL 2 [4]
-			* Bootstrap Datetimepicker,
-			licenced under MIT licence [5]
-			* Moment.js, licenced under MIT licence
-			[6]
+			* Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
+			* LiveQuery (JQuery plugin), licensed under MIT license [3]
+			* Wicket Bootstrap, licenced under ASL 2 [4]
+			* Bootstrap Datetimepicker, licensed under MIT licence [5]
+			* Moment.js, licenced under MIT licence [6]
 
 			[1] https://github.com/twbs/bootstrap/blob/master/LICENSE
-			[2]
-			https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
-			[3]
-			https://github.com/brandonaaron/livequery#license
-			[4]
-			https://github.com/l0rdn1kk0n/wicket-bootstrap
-			[5]
-			https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
+			[2] https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
+			[3] https://github.com/brandonaaron/livequery#license
+			[4] https://github.com/l0rdn1kk0n/wicket-bootstrap
+			[5] https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
 			[6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
-		<!-- JDO API -->
-		<jdo-api.version>3.1</jdo-api.version>
+
+		<!-- LIBRARY DEPENDENCIES -->
+
+		<assertj.version>3.11.1</assertj.version>
+
+		<bytebuddy.version>1.9.12</bytebuddy.version>
+
+		<commons-logging.version>1.2</commons-logging.version>
+		<commons-httpclient.version>3.1</commons-httpclient.version>
+		<commons-codec.version>1.10</commons-codec.version>
+		<commons-email.version>1.4</commons-email.version>
+		<commons-io.version>2.6</commons-io.version>
+		<com-sun-mail.version>1.5.2</com-sun-mail.version>
 
 		<!-- Isis Datanucleus JDO Plugin dn5 -->
 		<dn5-jdo-api.version>3.2.0-m12</dn5-jdo-api.version>
@@ -106,78 +108,68 @@
 		<dn5-jodatime.version>5.2.0-release</dn5-jodatime.version>
 		<dn5-maven-plugin.version>5.0.2</dn5-maven-plugin.version>
 
-		<!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
-
-		<resteasy4-jaxrs.version>4.0.0.Beta5</resteasy4-jaxrs.version>
-
-		<!-- failing to update to Shiro 1.4.0, running into unresolved issue: https://issues.apache.org/jira/browse/SHIRO-610 -->
-		<shiro.version>1.4.1</shiro.version>
-
-		<lombok.version>[1.18.,)</lombok.version>
-
-		<joda-time.version>2.9.4</joda-time.version>
-
-		<guava.version>19.0</guava.version>
-
-		<hamcrest.version>1.3</hamcrest.version>
+		<easymock.version>2.5.2</easymock.version>
 
 		<findbugs-annotations.version>2.0.1</findbugs-annotations.version>
 
-		<commons-logging.version>1.2</commons-logging.version>
-		<commons-httpclient.version>3.1</commons-httpclient.version>
-		<commons-codec.version>1.10</commons-codec.version>
-		<commons-email.version>1.4</commons-email.version>
-		<commons-io.version>2.6</commons-io.version>
-		<com-sun-mail.version>1.5.2</com-sun-mail.version>
-		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
-
-		<jackson.version>2.10.0</jackson.version>
+		<guava.version>19.0</guava.version>
 		<gson.version>2.7</gson.version>
-		<swagger-core.version>1.5.21</swagger-core.version>
 
-		<hsqldb.version>2.5.0</hsqldb.version>
-		<h2.version>1.4.199</h2.version>
-		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-
-		<spring-framework.version>5.2.0.RELEASE</spring-framework.version>
-		<spring-boot.version>2.2.0.RELEASE</spring-boot.version>
-		<slf4j-api.version>1.7.26</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
-
-		<javax-servlet.version>3.1.0</javax-servlet.version>
-		<wicket.version>8.6.1</wicket.version>
-		<wicketstuff.version>8.6.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
-		<wicket-bootstrap.version>2.0.10</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
-		<wicket-source.version>7.0.0</wicket-source.version>
-		<summernote.version>0.8.11</summernote.version> <!-- overrides wicket dependencies -->
-
-		<wicket-webjars.version>2.0.15</wicket-webjars.version>
-
-		<select2.version>4.0.10</select2.version>
-
-		<jquery-ui.version>1.12.1</jquery-ui.version>
-
-
-		<picocontainer.version>2.15</picocontainer.version>
-
-		<javaee.version>8.0</javaee.version>
+		<hamcrest.version>1.3</hamcrest.version>
 
 		<htmlparser.version>2.1</htmlparser.version>
 
-		<junit.version>5.5.2</junit.version>
-		<junit-legacy.version>4.12</junit-legacy.version>
-		<assertj.version>3.11.1</assertj.version>
+		<h2.version>1.4.199</h2.version>
+		<hsqldb.version>2.5.0</hsqldb.version>
 
-		<mockito.version>2.23.4</mockito.version>
-		<bytebuddy.version>1.9.12</bytebuddy.version>
+		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
+
+		<jackson.version>2.10.0</jackson.version>
+
+		<javaee.version>8.0</javaee.version>
+		<javax-mail.version>1.4.7</javax-mail.version>
+		<javax-servlet.version>3.1.0</javax-servlet.version>
+		<jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
+		<jdo-api.version>3.1</jdo-api.version>
 
 		<jmock.version>2.11.0</jmock.version>
-		<easymock.version>2.5.2</easymock.version>
+
+		<junit.version>5.5.2</junit.version>
+		<junit-legacy.version>4.12</junit-legacy.version>
+
+		<jquery-ui.version>1.12.1</jquery-ui.version>
+
+		<joda-time.version>2.9.4</joda-time.version>
+		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
+		<lombok.version>[1.18.,)</lombok.version>
+
+		<mockito.version>2.23.4</mockito.version>
+
+		<picocontainer.version>2.15</picocontainer.version>
+
+		<!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
+		<resteasy4-jaxrs.version>4.0.0.Beta5</resteasy4-jaxrs.version>
+
+		<select2.version>4.0.10</select2.version>
+		<summernote.version>0.8.11</summernote.version>
+
+		<shiro.version>1.4.1</shiro.version> <!-- Shiro 1.4.0 fails: https://issues.apache.org/jira/browse/SHIRO-610 -->
+
+		<slf4j-api.version>1.7.26</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
+
+		<spring-framework.version>5.2.0.RELEASE</spring-framework.version>
+		<spring-boot.version>2.2.0.RELEASE</spring-boot.version>
+
+		<swagger-core.version>1.5.21</swagger-core.version>
 
 		<transaction-api.version>1.2</transaction-api.version>
 
-		<javax-mail.version>1.4.7</javax-mail.version>
+		<wicket.version>8.6.1</wicket.version>
+		<wicketstuff.version>8.6.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+		<wicket-bootstrap.version>2.0.10</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
+		<wicket-webjars.version>2.0.15</wicket-webjars.version>
+		<wicket-source.version>7.0.0</wicket-source.version>
 
-		<jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
 	</properties>
 
 	<scm>
@@ -337,16 +329,7 @@
 
 	<ciManagement>
 		<system>CI</system>
-		<url>https://builds.apache.org/job/isis-core-ubuntu</url>
-		<notifiers>
-			<notifier>
-				<type>mail</type>
-				<address>dev@isis.apache.org</address>
-				<!-- <sendOnError /> <sendOnFailure /> <sendOnSuccess /> <sendOnWarning 
-					/> -->
-				<configuration />
-			</notifier>
-		</notifiers>
+		<url>https://github.com/apache-isis-committers/isis-nightly</url>
 	</ciManagement>
 
 	<pluginRepositories>
@@ -375,13 +358,15 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-<!-- 		<repository> -->
-<!-- 			<id>Spring Milestones</id> -->
-<!-- 			<url>https://repo.spring.io/milestone/</url> -->
-<!-- 			<snapshots> -->
-<!-- 				<enabled>false</enabled> -->
-<!-- 			</snapshots> -->
-<!-- 		</repository> -->
+<!--
+ 		<repository>
+ 			<id>Spring Milestones</id>
+ 			<url>https://repo.spring.io/milestone/</url>
+ 			<snapshots>
+ 				<enabled>false</enabled>
+ 			</snapshots>
+ 		</repository>
+-->
 		<repository>
 			<id>JBoss Public Release</id>
 			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
@@ -434,8 +419,6 @@
 		</extensions>
 
 		<pluginManagement>
-			<!-- defines versions of plugins and the configuration for their non-reporting 
-				goals. -->
 			<plugins>
 
 				<!-- Apache Release Audit Tool -->
@@ -596,8 +579,8 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
+					<!-- JUnit 5 requires Surefire version 2.22.0 or higher -->
 					<version>3.0.0-M3</version>
-					<!-- <version>2.22.2</version> -->
 					<configuration>
 						<!-- override defaults and include everything unless explicitly excluded -->
 						<includes>
@@ -2200,7 +2183,6 @@
 				</plugins>
 			</build>
 		</profile>
-
 
 		<profile>
 			<id>jdk11</id>
