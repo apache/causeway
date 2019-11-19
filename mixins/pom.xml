@@ -71,7 +71,7 @@
 			<id>gcpappenginerepo-deploy</id>
 			<activation>
 				<property>
-					<name>gcpappenginerepo-deploy</name>
+					<name>gcpappenginerepo-deploy.repositoryUrl</name>
 				</property>
 			</activation>
 			<properties>
