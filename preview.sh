@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 FILE=site.yml
 if [[ $# -gt 0 ]]; then
-  FILE=site-$1.yml
+  FILE=antora/playbooks/site-$1.yml
   shift
 fi
 
