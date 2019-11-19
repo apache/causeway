@@ -68,27 +68,6 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-schema</artifactId>
-            <!--
-            these are transitively included only if built on jdk11; can't think of another way to remove them
-            -->
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.xml.ws</groupId>
-                    <artifactId>jaxws-ri</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jaxb-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.xml.bind</groupId>
-                    <artifactId>jaxb-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.xml.bind</groupId>
-                    <artifactId>jaxb-impl</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 		
         <!-- HSQL-DB -->
