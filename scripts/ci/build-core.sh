@@ -7,11 +7,31 @@ if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
   export $(cut -d= -f1 $SHARED_VARS_FILE)
 fi
 
+
 sh $CI_SCRIPTS_PATH/print-environment.sh "build-core"
 
+
+#
+# first build core-parent
+#
+cd $PROJECT_ROOT_PATH/core-parent
+
+mvn versions:set -DnewVersion=$REVISION
+
+mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
+    --batch-mode \
+    $MVN_STAGES \
+    $MVN_ADDITIONAL_OPTS
+
+cd $PROJECT_ROOT_PATH
+
+
+
+#
+# then build core
+#
 cd $PROJECT_ROOT_PATH/core
 
-# temporarily set version
 mvn versions:set -DnewVersion=$REVISION
 
 mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
@@ -20,8 +40,17 @@ mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     -Dskip.assemble-zip \
     $MVN_ADDITIONAL_OPTS
 
-# revert the edits from earlier ...
+cd $PROJECT_ROOT_PATH
+
+
+#
+# then tidy up
+#
+
+cd $PROJECT_ROOT_PATH/core
+mvn versions:revert
+
+cd $PROJECT_ROOT_PATH/core-parent
 mvn versions:revert
 
 cd $PROJECT_ROOT_PATH
-
