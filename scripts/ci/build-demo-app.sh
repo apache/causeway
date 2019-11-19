@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 if [ -z "$REVISION" ]; then
   if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
     . $SHARED_VARS_FILE
@@ -12,7 +14,7 @@ if [ -z "$REVISION" ]; then
   exit 1
 fi
 
-sh $CI_SCRIPTS_PATH/print-environment.sh "build-demo-app"
+sh $SCRIPT_DIR/print-environment.sh "build-demo-app"
 
 export FLAVOR=$1
 export ISIS_VERSION=$REVISION
