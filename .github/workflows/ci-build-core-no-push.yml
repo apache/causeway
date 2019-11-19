@@ -13,7 +13,7 @@ jobs:
     name: build-local-no-push
     runs-on: ubuntu-latest
     env:
-      # to be shared amoung all steps of this job
+      # to be shared among all steps of this job
       BASELINE: 2.0.0-M2
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
@@ -28,7 +28,7 @@ jobs:
       MVN_STAGES: install
       
       # though equivalent, setting SHARED_VARS_FILE to ~/.env breaks the build, not sure why
-      # the tilde character appears to produce strange side-effects when used here  
+      # the tilde character appears to produce strange side-effects when used here
       SHARED_VARS_FILE: /home/runner/.env
 
     steps:
@@ -49,11 +49,11 @@ jobs:
       run: |
         echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > $SHARED_VARS_FILE
         echo ==============  ENV  =================
-        echo BASELINE\: $BASELINE
-        echo TIMESTAMP\: $TIMESTAMP
+        echo BASELINE         \: $BASELINE
+        echo TIMESTAMP        \: $TIMESTAMP
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
-        echo CI_SCRIPTS_PATH\: $CI_SCRIPTS_PATH
-        echo MVN_STAGES\: $MVN_STAGES
+        echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
+        echo MVN_STAGES       \: $MVN_STAGES
         cat $SHARED_VARS_FILE
         echo ======================================
     
