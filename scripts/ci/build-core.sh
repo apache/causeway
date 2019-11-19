@@ -24,7 +24,7 @@ sh $SCRIPT_DIR/print-environment.sh "build-core"
 
 cd $PROJECT_ROOT_PATH/core-parent
 
-mvn versions:set -DnewVersion=$REVISION
+mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION
 
 mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     --batch-mode \
