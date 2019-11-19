@@ -32,7 +32,6 @@ import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.param.hide.ActionParameterHiddenFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 import lombok.val;
 
@@ -86,7 +85,5 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
         }
 
     }
-
-    PersistenceSessionServiceInternal adapterManager;
 
 }

@@ -54,7 +54,6 @@ import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.ValidityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -518,11 +517,6 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     protected ObjectManager getObjectManager() {
         return parentAction.getObjectManager();
-    }
-
-    protected PersistenceSessionServiceInternal getObjectPersistor() {
-        return parentAction.getMetaModelContext().getServiceRegistry()
-                .lookupServiceElseFail(PersistenceSessionServiceInternal.class);
     }
 
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.services.repository;
+package org.apache.isis.runtime.services.repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.query.Query;
@@ -41,19 +42,18 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.val;
 
 @Service
-public class RepositoryServiceJdo implements RepositoryService {
+public class RepositoryServiceDefault implements RepositoryService {
 
     @Inject private FactoryService factoryService;
     @Inject private WrapperFactory wrapperFactory;
     @Inject private TransactionService transactionService;
     @Inject private MetaModelContext metaModelContext;
-    @Inject private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     @Inject private IsisConfiguration isisConfiguration;
     
     private boolean autoFlush;
@@ -104,7 +104,7 @@ public class RepositoryServiceJdo implements RepositoryService {
         if (isPersistent(object)) {
             return object;
         }
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
+        val adapter = getPersistenceSession().adapterFor(unwrapped(object));
 
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
@@ -116,7 +116,7 @@ public class RepositoryServiceJdo implements RepositoryService {
         if (isPersistent(object)) {
             throw new PersistFailedException("Object already persistent; OID=" + adapter.getOid());
         }
-        persistenceSessionServiceInternal.makePersistent(adapter);
+        getPersistenceSession().makePersistentInTransaction(adapter);
 
         return object;
     }
@@ -141,12 +141,12 @@ public class RepositoryServiceJdo implements RepositoryService {
         if (object == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
+        val adapter = getPersistenceSession().adapterFor(unwrapped(object));
         if (!isPersistent(object)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
 
-        persistenceSessionServiceInternal.remove(adapter);
+        getPersistenceSession().destroyObjectInTransaction(adapter);
     }
 
     @Override
@@ -187,7 +187,7 @@ public class RepositoryServiceJdo implements RepositoryService {
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        final List<ObjectAdapter> allMatching = persistenceSessionServiceInternal.allMatchingQuery(query);
+        final List<ObjectAdapter> allMatching = getPersistenceSession().allMatchingQuery(query);
         return ObjectAdapter.Util.unwrapTypedPojoList(allMatching);
     }
 
@@ -224,6 +224,12 @@ public class RepositoryServiceJdo implements RepositoryService {
 
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
+    }
+    
+    protected PersistenceSession getPersistenceSession() {
+        return PersistenceSession.current(PersistenceSession.class)
+                .getFirst()
+                .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
     }
 
 

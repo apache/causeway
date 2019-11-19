@@ -43,7 +43,6 @@ import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneActionParameter;
@@ -59,7 +58,6 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock protected SpecificationLoader mockSpecificationLoader;
-    @Mock protected PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock protected MethodRemover mockMethodRemover;
     @Mock protected FacetHolder mockFacetHolder;
     @Mock protected ServiceInjector mockServiceInjector;
