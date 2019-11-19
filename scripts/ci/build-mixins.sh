@@ -19,6 +19,9 @@ fi
 if [ -z "$MVN_STAGES" ]; then
   MVN_STAGES="clean install"
 fi
+if [ -z "$SETTINGS_XML" ]; then
+  SETTINGS_XML=$PROJECT_ROOT_PATH/.m2/settings.xml
+fi
 
 sh $SCRIPT_DIR/print-environment.sh "build-mixins"
 
@@ -26,7 +29,7 @@ cd $PROJECT_ROOT_PATH/mixins
 
 mvn versions:set -DnewVersion=$REVISION
 
-mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
+mvn -s $SETTINGS_XML \
     --batch-mode \
     $MVN_STAGES \
     -Dskip.mavenmixin-standard \
