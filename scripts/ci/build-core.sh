@@ -11,12 +11,17 @@ sh $CI_SCRIPTS_PATH/print-environment.sh "build-core"
 
 cd $PROJECT_ROOT_PATH/core
 
+# temporarily set version
+mvn versions:set -DnewVersion=$REVISION
+
 mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \
     --batch-mode \
     $MVN_STAGES \
-    -Drevision=$REVISION \
     -Dskip.assemble-zip \
     $MVN_ADDITIONAL_OPTS
+
+# revert the edits from earlier ...
+mvn versions:revert
 
 cd $PROJECT_ROOT_PATH
 

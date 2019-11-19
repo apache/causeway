@@ -11,10 +11,15 @@ sh $CI_SCRIPTS_PATH/print-environment.sh "build-example-apps"
 
 cd $PROJECT_ROOT_PATH/examples
 
+# temporarily set version
+mvn versions:set -DnewVersion=$REVISION
+
 mvn --batch-mode \
     -Dexample-apps \
-    clean install \
-    -Drevision=$REVISION
+    clean install
+
+# revert the edits from earlier ...
+mvn versions:revert
 
 cd $PROJECT_ROOT_DIR
 

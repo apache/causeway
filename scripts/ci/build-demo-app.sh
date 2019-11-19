@@ -18,23 +18,25 @@ echo ""
 
 cd $PROJECT_ROOT_PATH/examples/apps/demo
 
+# temporarily set version
+mvn versions:set -DnewVersion=$REVISION
+
 mvn install \
     --batch-mode \
     -Dflavor=$FLAVOR \
     -Dskip.git \
     -Dskip.arch \
-    -DskipTests \
-    -Drevision=$REVISION \
-    -Disis.version=$ISIS_VERSION
+    -DskipTests
 
 mvn compile jib:build \
     --batch-mode \
     -Dflavor=$FLAVOR \
     -Dskip.git \
     -Dskip.arch \
-    -DskipTests \
-    -Drevision=$REVISION \
-    -Disis.version=$ISIS_VERSION
+    -DskipTests
+
+# revert the edits from earlier ...
+mvn versions:revert
 
 cd $PROJECT_ROOT_PATH
 

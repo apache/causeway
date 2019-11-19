@@ -11,7 +11,7 @@ sh $CI_SCRIPTS_PATH/print-environment.sh "build-parent"
 
 cd $PROJECT_ROOT_PATH/core-parent
 
-# can't use flatten pom, so have to edit directly instead...
+# temporarily set version
 mvn versions:set -DnewVersion=$REVISION
 
 mvn -s $PROJECT_ROOT_PATH/.m2/settings.xml \

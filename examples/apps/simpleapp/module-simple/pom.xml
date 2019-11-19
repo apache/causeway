@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.apache.isis.examples.apps</groupId>
 		<artifactId>simpleapp</artifactId>
-		<version>${revision}</version>
+		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>simpleapp-module-simple</artifactId>
@@ -86,13 +86,13 @@
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-fixtures</artifactId>
-			<version>${isis.version}</version>
+			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-specsupport</artifactId>
-			<version>${isis.version}</version>
+			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- TESTS -->

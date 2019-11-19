@@ -17,8 +17,8 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis-parent</artifactId>
-		<version>${revision}</version>
-		<relativePath>../core-parent/pom.xml</relativePath>
+		<version>2.0.0-M3-SNAPSHOT</version>
+		<relativePath/>
 	</parent>
 
 <!--
@@ -32,7 +32,7 @@
 
 	<groupId>org.apache.isis.core</groupId>
 	<artifactId>isis</artifactId>
-	<version>${revision}</version>
+	<version>2.0.0-M3-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -50,7 +50,6 @@
 
 	<properties>
 		<revision>2.0.0-M3-SNAPSHOT</revision>
-		<isis.version>${revision}</isis.version>
 
 		<isis.skipTests>false</isis.skipTests>
 		<maven.test.skip>${isis.skipTests}</maven.test.skip>
@@ -881,7 +880,7 @@
 								<!-- required for DN plugin.xml loading -->
 								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
 								<!-- no requirement as of yet. <Bundle-ManifestVersion>2</Bundle-ManifestVersion> 
-									<Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name> <Bundle-Version>${isis.version}</Bundle-Version> 
+									<Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name> <Bundle-Version>2.0.0-M3-SNAPSHOT</Bundle-Version>
 									<Bundle-Vendor>Apache Isis™ Project</Bundle-Vendor> -->
 							</manifestEntries>
 						</archive>
@@ -1016,7 +1015,7 @@
 							<requireJavaVersion>
 								<version>[1.8.0,)</version>
 							</requireJavaVersion>
-							<!-- seemingly not compatible with use of ${revision} placeholders 
+							<!-- seemingly not compatible with use of 2.0.0-M3-SNAPSHOT placeholders
 								<requirePluginVersions> <message>All plugin versions must be defined!</message> 
 								<banLatest>true</banLatest> <banRelease>true</banRelease> </requirePluginVersions> -->
 							<DependencyConvergence />
@@ -1229,19 +1228,19 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-commons</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<!-- unittestsupport -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-unittestsupport</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-unittestsupport</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1250,14 +1249,14 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-applib</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-applib</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1266,14 +1265,14 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-config</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-config</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1289,14 +1288,14 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-schema</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-schema</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1305,14 +1304,14 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-metamodel</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-metamodel</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1321,12 +1320,12 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1335,12 +1334,12 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime-extensions</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime-extensions</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1349,12 +1348,12 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime-services</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime-services</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1363,12 +1362,12 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime-web</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime-web</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1377,57 +1376,57 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-webserver</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<!-- integtestsupport -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-integtestsupport</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<!-- maven plugin -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-mavenplugin</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<!-- Restful Objects viewer -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-restfulobjects-server</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-restfulobjects-server</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
@@ -1436,12 +1435,12 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-security</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-security-bypass</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 
@@ -1450,37 +1449,37 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-security-shiro</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-security-keycloak</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-plugins-jdo-common</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 
@@ -1488,36 +1487,36 @@
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-wicket-impl</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-wicket-impl</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
@@ -1526,26 +1525,26 @@
 			<dependency>
 				<groupId>org.apache.isis.tool</groupId>
 				<artifactId>isis-maven-plugin</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<!-- Maven dependencies -->
 			<dependency>
 				<groupId>org.apache.isis.mavendeps</groupId>
 				<artifactId>isis-mavendeps-testing</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.mavendeps</groupId>
 				<artifactId>isis-mavendeps-webapp</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.mavendeps</groupId>
 				<artifactId>isis-mavendeps-jdk11</artifactId>
-				<version>${isis.version}</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 
@@ -2434,47 +2433,6 @@
 					<plugin>
 						<groupId>pl.project13.maven</groupId>
 						<artifactId>git-commit-id-plugin</artifactId>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>flatten</id>
-			<activation>
-				<property>
-					<name>!skip.flatten</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>flatten-maven-plugin</artifactId>
-						<version>1.0.0</version>
-						<executions>
-							<execution>
-								<id>flatten</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>flatten</goal>
-								</goals>
-								<configuration>
-									<flattenMode>bom</flattenMode>
-									<updatePomFile>true</updatePomFile>
-									<pomElements>
-										<parent>resolve</parent>
-									</pomElements>
-								</configuration>
-							</execution>
-							<execution>
-								<id>flatten.clean</id>
-								<phase>clean</phase>
-								<goals>
-									<goal>clean</goal>
-								</goals>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>
