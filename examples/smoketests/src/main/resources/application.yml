@@ -1,0 +1,55 @@
+isis:
+  reflector:
+    validator:
+      allowDeprecated: false
+      noParamsOnly: true
+      #explicitObjectType: true # DON'T DEFINE HERE
+      #serviceActionsOnly: true # DEPRECATED
+      #mixinsOnly: true         # DEPRECATED
+
+    facet:
+      cssClassFa:
+        patterns:
+          new.*:fa-plus,\
+          add.*:fa-plus-square,\
+          create.*:fa-plus,\
+          update.*:fa-edit,\
+          delete.*:fa-trash,\
+          find.*:fa-search,\
+          list.*:fa-list
+
+      cssClass:
+        patterns:
+          delete.*:btn-danger
+
+    explicitAnnotations:
+      action: true
+
+  objects:
+    editing: false
+
+  viewer:
+    wicket:
+      application:
+        name: Smoke Tests
+        css: css/application.css
+        js: scripts/application.js
+        about: Smoke Tests
+      welcome:
+        file: welcome.html
+
+      credit[0]:
+        image: /images/apache-isis/logo-48x48.png
+        name: Apache Isis
+        url: http://isis.apache.org
+
+      themes:
+        initial: Flatly
+        showChooser: true
+        enabled: Cosmo,Flatly,Darkly,Sandstone,United
+
+      maxTitleLengthInStandaloneTables: 0
+      maxTitleLengthInParentedTables: 0
+
+
+
