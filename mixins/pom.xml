@@ -67,30 +67,16 @@
 	</modules>
 
 	<profiles>
-	
-		<profile>
-			<id>github-deploy</id>
-			<activation>
-				<property>
-					<name>github-deploy.repositoryUrl</name>
-				</property>
-			</activation>
-			<distributionManagement>
-				<repository>
-					<id>github-deploy.serverId</id>
-					<name>GitHub Apache Isis Maven Packages (Nightly)</name>
-					<url>${github-deploy.repositoryUrl}</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-	
 		<profile>
 			<id>gcpappenginerepo-deploy</id>
 			<activation>
 				<property>
-					<name>gcpappenginerepo-deploy.repositoryUrl</name>
+					<name>gcpappenginerepo-deploy</name>
 				</property>
 			</activation>
+			<properties>
+				<gcpappenginerepo-deploy.repositoryUrl>https://my-gcp-project-id.appspot.com</gcpappenginerepo-deploy.repositoryUrl>
+			</properties>
 			<distributionManagement>
 				<repository>
 					<id>gcpappenginerepo-deploy.serverId</id>
