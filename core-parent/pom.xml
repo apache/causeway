@@ -37,6 +37,10 @@ under the License.
 	<version>2.0.0-M3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<modules>
+		<module>../core</module>
+	</modules>
+
 	<!-- (The remainder of the  pom.xml is a copy of org.apache:apache) -->
 	<!-- APACHE ISIS customisation: end -->
 
