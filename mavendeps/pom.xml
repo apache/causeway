@@ -122,7 +122,6 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>intellij</module>
 		<module>jdk11</module>
 		<module>testing</module>
 		<module>webapp</module>
