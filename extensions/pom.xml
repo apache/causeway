@@ -34,15 +34,6 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.extensions</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/extensions</git-plugin.propertiesDir>
-
-		<lombok.version>[1.18,)</lombok.version>
-		<poi.version>[4,5)</poi.version>
-
-		<failOnMissingWebXml>false</failOnMissingWebXml>
-
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
 	</properties>
 
 	<build>

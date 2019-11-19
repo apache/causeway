@@ -88,18 +88,31 @@
 
 		<!-- LIBRARY DEPENDENCIES -->
 
+		<activemq.version>5.14.3</activemq.version>
+
+		<assertj-core.version>3.6.2</assertj-core.version>
+		<assertj-guava.version>3.1.0</assertj-guava.version>
 		<assertj.version>3.11.1</assertj.version>
+
+		<axon-core.version>3.3.5</axon-core.version>
 
 		<bytebuddy.version>1.9.12</bytebuddy.version>
 
-		<commons-logging.version>1.2</commons-logging.version>
-		<commons-httpclient.version>3.1</commons-httpclient.version>
+		<camel.version>2.17.6</camel.version> <!-- TODO: bump to 2.24.2, as per v1 -->
+
 		<commons-codec.version>1.10</commons-codec.version>
 		<commons-email.version>1.4</commons-email.version>
+		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<commons-io.version>2.6</commons-io.version>
+		<commons-lang3.version>3.1</commons-lang3.version>
+		<commons-logging.version>1.2</commons-logging.version>
 		<com-sun-mail.version>1.5.2</com-sun-mail.version>
 
-		<!-- Isis Datanucleus JDO Plugin dn5 -->
+		<cxf-rt-rs-client.version>3.1.5</cxf-rt-rs-client.version> <!-- TODO: bump, as in v1 -->
+
+		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
+		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
+
 		<dn5-jdo-api.version>3.2.0-m12</dn5-jdo-api.version>
 		<dn5-core.version>5.2.1</dn5-core.version>
 		<dn5-api-jdo.version>5.2.1</dn5-api-jdo.version>
@@ -108,29 +121,45 @@
 		<dn5-jodatime.version>5.2.0-release</dn5-jodatime.version>
 		<dn5-maven-plugin.version>5.0.2</dn5-maven-plugin.version>
 
+		<docx4j.version>3.2.1</docx4j.version>
+
 		<easymock.version>2.5.2</easymock.version>
 
 		<findbugs-annotations.version>2.0.1</findbugs-annotations.version>
+
+		<flyway-core.version>4.0.3</flyway-core.version>
+		<freemarker.version>2.3.25-incubating</freemarker.version>
+
+		<geronimo-servlet_3.0_spec.version>1.0</geronimo-servlet_3.0_spec.version>
 
 		<guava.version>19.0</guava.version>
 		<gson.version>2.7</gson.version>
 
 		<hamcrest.version>1.3</hamcrest.version>
 
-		<htmlparser.version>2.1</htmlparser.version>
-
 		<h2.version>1.4.199</h2.version>
+		<htmlparser.version>2.1</htmlparser.version>
+		<httpclient.version>4.5.2</httpclient.version>
 		<hsqldb.version>2.5.0</hsqldb.version>
 
-		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
 		<jackson.version>2.10.0</jackson.version>
 
 		<javaee.version>8.0</javaee.version>
+
+		<javafaker.version>0.5</javafaker.version>
+		<javassist.version>3.19.0-GA</javassist.version>
+
 		<javax-mail.version>1.4.7</javax-mail.version>
 		<javax-servlet.version>3.1.0</javax-servlet.version>
+
+		<jbcrypt.version>0.3m</jbcrypt.version>
 		<jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
+
 		<jdo-api.version>3.1</jdo-api.version>
+
+		<jdom.version>2.0.2</jdom.version>
+		<jdom2.version>2.0.5</jdom2.version>
 
 		<jmock.version>2.11.0</jmock.version>
 
@@ -141,19 +170,33 @@
 
 		<joda-time.version>2.9.4</joda-time.version>
 		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
+
+		<junit.jupiter.version>5.3.2</junit.jupiter.version>
+
+		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
+
 		<lombok.version>[1.18.,)</lombok.version>
 
 		<mockito.version>2.23.4</mockito.version>
 
-		<picocontainer.version>2.15</picocontainer.version>
+		<objenesis.version>2.2</objenesis.version>
+		<ognl.version>3.0.9</ognl.version>
 
-		<!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
-		<resteasy4-jaxrs.version>4.0.0.Beta5</resteasy4-jaxrs.version>
+		<pdfbox.version>2.0.12</pdfbox.version>
+		<picocontainer.version>2.15</picocontainer.version>
+		<poi.version>3.10-FINAL</poi.version>
+
+		<quartz-scheduler.version>2.2.1</quartz-scheduler.version>
+
+		<resteasy4-jaxrs.version>4.0.0.Beta5</resteasy4-jaxrs.version> <!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
 
 		<select2.version>4.0.10</select2.version>
 		<summernote.version>0.8.11</summernote.version>
 
 		<shiro.version>1.4.1</shiro.version> <!-- Shiro 1.4.0 fails: https://issues.apache.org/jira/browse/SHIRO-610 -->
+		<shiro-core.version>1.2.3</shiro-core.version> <!-- TODO: probably same as shiro.version -->
+
+		<simpleslackapi.version>1.2.0</simpleslackapi.version>
 
 		<slf4j-api.version>1.7.26</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
 
@@ -162,13 +205,22 @@
 
 		<swagger-core.version>1.5.21</swagger-core.version>
 
+		<togglz.version>2.1.0.Final</togglz.version>
+
 		<transaction-api.version>1.2</transaction-api.version>
 
 		<wicket.version>8.6.1</wicket.version>
-		<wicketstuff.version>8.6.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicket-bootstrap.version>2.0.10</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
-		<wicket-webjars.version>2.0.15</wicket-webjars.version>
+		<wicket-bootstrap-core.version>2.0.4</wicket-bootstrap-core.version>
+		<wicket-bootstrap-datetimepicker.version>4.17.37-1</wicket-bootstrap-datetimepicker.version>
+		<wicket-fullcalendar.version>2.2.0</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
+		<wicket-webjars.version>2.0.15</wicket-webjars.version>
+
+		<wicketstuff.version>8.6.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
+
+		<xdocreport.version>1.0.6</xdocreport.version>
 
 	</properties>
 
@@ -1155,13 +1207,14 @@
 			<!-- JDO API -->
 			<!-- not managed, because scope=provided can not be overwritten by plugins 
 				that are responsible for providing jdo-api -->
-			<!-- <dependency> -->
-			<!-- <groupId>javax.jdo</groupId> -->
-			<!-- <artifactId>jdo-api</artifactId> -->
-			<!-- <version>${jdo-api.version}</version> -->
-			<!-- provided by plugins -->
-			<!-- <scope>provided</scope> -->
-			<!-- </dependency> -->
+			<!--
+			<dependency>
+			    <groupId>javax.jdo</groupId>
+			    <artifactId>jdo-api</artifactId>
+			    <version>${jdo-api.version}</version>
+			    <scope>provided</scope>
+			</dependency>
+			-->
 
 			<!-- isis commons -->
 			<dependency>
@@ -1487,21 +1540,57 @@
 				<type>pom</type>
 			</dependency>
 
-			<!-- JodaTime -->
+
+
+			<!-- THIRD PARTY DEPENDENCIES -->
+
 			<dependency>
-				<groupId>joda-time</groupId>
-				<artifactId>joda-time</artifactId>
-				<version>${joda-time.version}</version>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>${assertj.version}</version>
 			</dependency>
 
-			<!-- lombok -->
 			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>${lombok.version}</version>
+				<groupId>net.bytebuddy</groupId>
+				<artifactId>byte-buddy</artifactId>
+				<version>${bytebuddy.version}</version>
 			</dependency>
 
-			<!-- Google Guava (collections and commons) -->
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>${commons-codec.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-httpclient</groupId>
+				<artifactId>commons-httpclient</artifactId>
+				<version>${commons-httpclient.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io.version}</version>
+			</dependency>
+			<dependency>
+				<!-- required because resteasy-jaxrs declares as a test dependency whereas
+					httpclient4 needs it as a compile dependency -->
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>${commons-logging.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>${easymock.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
@@ -1509,50 +1598,40 @@
 			</dependency>
 
 			<dependency>
-				<!-- required because resteasy-jaxrs declares as a test dependency whereas 
-					httpclient4 needs it as a compile dependency -->
-				<groupId>commons-logging</groupId>
-				<artifactId>commons-logging</artifactId>
-				<version>${commons-logging.version}</version>
-			</dependency>
-
-
-			<!-- Apache Commons -->
-			<dependency>
-				<groupId>commons-httpclient</groupId>
-				<artifactId>commons-httpclient</artifactId>
-				<version>${commons-httpclient.version}</version>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-core</artifactId>
+				<version>${hamcrest.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>commons-codec</groupId>
-				<artifactId>commons-codec</artifactId>
-				<version>${commons-codec.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>${commons-io.version}</version>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-library</artifactId>
+				<version>${hamcrest.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>net.sf.jopt-simple</groupId>
-				<artifactId>jopt-simple</artifactId>
-				<version>${jopt-simple.version}</version>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>${h2.version}</version>
 			</dependency>
 
-			<!-- Dependency injection -->
 			<dependency>
-				<groupId>com.google.inject</groupId>
-				<artifactId>guice</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.picocontainer</groupId>
-				<artifactId>picocontainer</artifactId>
-				<version>${picocontainer.version}</version>
+				<groupId>org.hsqldb</groupId>
+				<artifactId>hsqldb</artifactId>
+				<version>${hsqldb.version}</version>
 			</dependency>
 
-			<!-- JSON libraries -->
+			<dependency>
+				<groupId>org.htmlparser</groupId>
+				<artifactId>htmlparser</artifactId>
+				<version>${htmlparser.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>com.sun</groupId>
+						<artifactId>tools</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
@@ -1573,40 +1652,87 @@
 				<artifactId>jackson-module-jaxb-annotations</artifactId>
 				<version>${jackson.version}</version>
 			</dependency>
+
 			<dependency>
-				<groupId>com.google.code.gson</groupId>
-				<artifactId>gson</artifactId>
-				<version>${gson.version}</version>
+				<groupId>org.jboss.spec.javax.ws.rs</groupId>
+				<artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+				<version>${jboss-jaxrs-api_2.0_spec.version}</version>
 			</dependency>
 
-
-			<!-- HTML -->
 			<dependency>
-				<groupId>org.htmlparser</groupId>
-				<artifactId>htmlparser</artifactId>
-				<version>${htmlparser.version}</version>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-servlet</artifactId>
+				<version>${jetty.version}</version>
 				<exclusions>
 					<exclusion>
-						<groupId>com.sun</groupId>
-						<artifactId>tools</artifactId>
+						<groupId>org.eclipse.jetty.orbit</groupId>
+						<artifactId>javax.servlet</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-webapp</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock</artifactId>
+				<version>${jmock.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock-junit4</artifactId>
+				<version>${jmock.version}</version>
+				<exclusions>
+					<exclusion>
+						<!-- for dependency convergence -->
+						<groupId>junit</groupId>
+						<artifactId>junit-dep</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
 
-
-			<!-- Databases -->
 			<dependency>
-				<groupId>org.hsqldb</groupId>
-				<artifactId>hsqldb</artifactId>
-				<version>${hsqldb.version}</version>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>${joda-time.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.h2database</groupId>
-				<artifactId>h2</artifactId>
-				<version>${h2.version}</version>
+				<groupId>net.sf.jopt-simple</groupId>
+				<artifactId>jopt-simple</artifactId>
+				<version>${jopt-simple.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.webjars</groupId>
+				<artifactId>jquery-ui</artifactId>
+				<version>${jquery-ui.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.webjars</groupId>
+						<artifactId>jquery</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.vintage</groupId>
+				<artifactId>junit-vintage-engine</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.lazyluke</groupId>
@@ -1614,8 +1740,30 @@
 				<version>${log4jdbc-remix.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
 
-			<!-- Shiro -->
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.picocontainer</groupId>
+				<artifactId>picocontainer</artifactId>
+				<version>${picocontainer.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.webjars</groupId>
+				<artifactId>select2</artifactId>
+				<version>${select2.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.apache.shiro</groupId>
 				<artifactId>shiro-core</artifactId>
@@ -1628,12 +1776,101 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring-framework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring-framework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring-framework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring-framework.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-actuator</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-actuator-autoconfigure</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-configuration-processor</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-log4j2</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<version>${spring-boot.version}</version>
+				<exclusions>
+					<!-- version clash with org.jmock:jmock:2.11.0, which requires org.ow2.asm:asm:6.2.1 -->
+					<exclusion>
+						<artifactId>org.ow2.asm</artifactId>
+						<groupId>asm</groupId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.validation</groupId>
+						<artifactId>validation-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<!-- we use log4j-2 instead -->
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-tomcat</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-core</artifactId>
+				<version>${swagger-core.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.commons</groupId>
+						<artifactId>commons-lang3</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket</artifactId>
 				<version>${wicket.version}</version>
 				<type>pom</type>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-core</artifactId>
@@ -1649,13 +1886,11 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-devutils</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-request</artifactId>
@@ -1667,7 +1902,6 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-util</artifactId>
@@ -1679,7 +1913,6 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
@@ -1691,7 +1924,6 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-datetime</artifactId>
@@ -1703,7 +1935,6 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-auth-roles</artifactId>
@@ -1715,7 +1946,6 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
@@ -1731,54 +1961,6 @@
 							of this component) -->
 						<groupId>cglib</groupId>
 						<artifactId>cglib</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<!-- Wicket-Select2 -->
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-select2</artifactId>
-				<version>${wicketstuff.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>select2</artifactId>
-				<version>${select2.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>jquery-ui</artifactId>
-				<version>${jquery-ui.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>jquery</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<!-- Webjars -->
-			<dependency>
-				<groupId>de.agilecoders.wicket.webjars</groupId>
-				<artifactId>wicket-webjars</artifactId>
-				<version>${wicket-webjars.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-request</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -1806,12 +1988,12 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
 			<dependency>
 				<groupId>de.agilecoders.wicket</groupId>
 				<artifactId>wicket-bootstrap-extensions</artifactId>
 				<version>${wicket-bootstrap.version}</version>
 				<exclusions>
+					<!-- exclude unused extensions -->
 					<exclusion>
 						<groupId>org.apache.wicket</groupId>
 						<artifactId>wicket-util</artifactId>
@@ -1836,7 +2018,6 @@
 						<groupId>org.webjars</groupId>
 						<artifactId>jquery</artifactId>
 					</exclusion>
-					<!-- exclude unused extensions -->
 					<exclusion>
 						<groupId>org.webjars</groupId>
 						<artifactId>jquerypp</artifactId>
@@ -1863,19 +2044,6 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>Eonasdan-bootstrap-datetimepicker</artifactId>
-				<version>4.17.37-1</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>momentjs</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
 			<dependency>
 				<groupId>de.agilecoders.wicket</groupId>
 				<artifactId>wicket-bootstrap-themes</artifactId>
@@ -1888,11 +2056,48 @@
 				</exclusions>
 			</dependency>
 
+			<dependency>
+				<groupId>org.webjars</groupId>
+				<artifactId>Eonasdan-bootstrap-datetimepicker</artifactId>
+				<version>${wicket-bootstrap-datetimepicker.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.webjars</groupId>
+						<artifactId>momentjs</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 
 			<dependency>
-				<!-- version 7.0.0 -->
+				<groupId>de.agilecoders.wicket.webjars</groupId>
+				<artifactId>wicket-webjars</artifactId>
+				<version>${wicket-webjars.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.wicket</groupId>
+						<artifactId>wicket-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.wicket</groupId>
+						<artifactId>wicket-request</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-select2</artifactId>
+				<version>${wicketstuff.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.wicket</groupId>
+						<artifactId>wicket-core</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
 				<groupId>net.ftlines.wicket-source</groupId>
-				<!-- version 8.0.0 -->
 				<!-- <groupId>com.github.jennybrown8.wicket-source</groupId> -->
 				<artifactId>wicket-source</artifactId>
 				<version>${wicket-source.version}</version>
@@ -1901,218 +2106,6 @@
 						<!-- for dependency convergence -->
 						<groupId>org.apache.wicket</groupId>
 						<artifactId>wicket-core</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-
-			<!-- predicate libraries -->
-			<dependency>
-				<groupId>org.hamcrest</groupId>
-				<artifactId>hamcrest-core</artifactId>
-				<version>${hamcrest.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hamcrest</groupId>
-				<artifactId>hamcrest-library</artifactId>
-				<version>${hamcrest.version}</version>
-			</dependency>
-
-			<!-- Web development -->
-			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-servlet</artifactId>
-				<version>${jetty.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.eclipse.jetty.orbit</groupId>
-						<artifactId>javax.servlet</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-webapp</artifactId>
-				<version>${jetty.version}</version>
-			</dependency>
-
-			<!-- Spring -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring-framework.version}</version>
-			</dependency>
-			
-			<dependency>
-			    <groupId>org.springframework</groupId>
-			    <artifactId>spring-tx</artifactId>
-			    <version>${spring-framework.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
-				<version>${spring-framework.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-test</artifactId>
-				<version>${spring-framework.version}</version>
-			</dependency>
-
-			<!-- Spring Boot -->
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-log4j2</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-configuration-processor</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-web</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-tomcat</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-actuator</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-actuator-autoconfigure</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<!-- TESTING LIBRARIES (not scope=test because used by isis-integtest) -->
-
-			<dependency>
-				<!-- JUnit API for writing tests and extensions -->
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-api</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
-			<dependency>
-				<!-- implementation of the JUnit Jupiter test engine -->
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-engine</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
-			<dependency>
-				<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
-				<groupId>org.junit.vintage</groupId>
-				<artifactId>junit-vintage-engine</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
-
-			<!-- SPRING TEST -->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-test</artifactId>
-				<version>${spring-boot.version}</version>
-				<exclusions>
-					<!-- version clash with org.jmock:jmock:2.11.0, which requires org.ow2.asm:asm:6.2.1 -->
-					<exclusion>
-						<artifactId>org.ow2.asm</artifactId>
-						<groupId>asm</groupId>
-					</exclusion>
-					<exclusion>
-						<groupId>javax.validation</groupId>
-						<artifactId>validation-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<!-- we use log4j-2 instead -->
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<!-- BYTEBUDDDY -->
-			<dependency>
-				<groupId>net.bytebuddy</groupId>
-				<artifactId>byte-buddy</artifactId>
-				<version>${bytebuddy.version}</version>
-			</dependency>
-
-			<!-- MOCKITO -->
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-core</artifactId>
-				<version>${mockito.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.jmock</groupId>
-				<artifactId>jmock</artifactId>
-				<version>${jmock.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.jmock</groupId>
-				<artifactId>jmock-junit4</artifactId>
-				<version>${jmock.version}</version>
-				<exclusions>
-					<exclusion>
-						<!-- for dependency convergence -->
-						<groupId>junit</groupId>
-						<artifactId>junit-dep</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>org.assertj</groupId>
-				<artifactId>assertj-core</artifactId>
-				<version>${assertj.version}</version>
-			</dependency>
-
-			<!-- Testing libraries (scope=test) -->
-			<dependency>
-				<groupId>org.easymock</groupId>
-				<artifactId>easymock</artifactId>
-				<version>${easymock.version}</version>
-				<scope>test</scope>
-			</dependency>
-
-
-			<!-- JAX-RS API -->
-			<dependency>
-				<groupId>org.jboss.spec.javax.ws.rs</groupId>
-				<artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
-				<version>${jboss-jaxrs-api_2.0_spec.version}</version>
-			</dependency>
-
-
-			<!-- SWAGGER -->
-			<dependency>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-core</artifactId>
-				<version>${swagger-core.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.commons</groupId>
-						<artifactId>commons-lang3</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -2135,19 +2128,16 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<!-- JUnit API for writing tests and extensions -->
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<!-- implementation of the JUnit Jupiter test engine -->
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
 			<scope>test</scope>
