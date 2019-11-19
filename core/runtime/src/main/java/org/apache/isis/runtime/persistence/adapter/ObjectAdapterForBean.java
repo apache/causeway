@@ -62,11 +62,6 @@ public class ObjectAdapterForBean implements ObjectAdapter {
     }
 
     @Override
-    public boolean isTransient() {
-        return false;
-    }
-
-    @Override
     public boolean isRepresentingPersistent() {
         return false;
     }

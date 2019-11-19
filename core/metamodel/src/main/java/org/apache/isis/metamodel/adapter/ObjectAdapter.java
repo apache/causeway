@@ -58,7 +58,6 @@ public interface ObjectAdapter extends ManagedObject {
         return getOid() instanceof ParentedOid;
     }
 
-    @Deprecated boolean isTransient();
     @Deprecated boolean isRepresentingPersistent();
     @Deprecated boolean isDestroyed();
 

@@ -136,21 +136,21 @@ public final class PojoAdapter implements ObjectAdapter {
 
     // -- PREDICATES
 
-    @Override
-    public boolean isTransient() {
-        val spec = getSpecification();
-        if(spec.isManagedBean() || spec.isViewModel()) {
-            // services and view models are treated as persistent objects
-            return false;
-        }
-
-        if(persistenceSession==null) {
-            return false;
-        }
-
-        val state = persistenceSession.getEntityState(pojo);
-        return state.isDetached();
-    }
+//    @Override
+//    public boolean isTransient() {
+//        val spec = getSpecification();
+//        if(spec.isManagedBean() || spec.isViewModel()) {
+//            // services and view models are treated as persistent objects
+//            return false;
+//        }
+//
+//        if(persistenceSession==null) {
+//            return false;
+//        }
+//
+//        val state = persistenceSession.getEntityState(pojo);
+//        return state.isDetached();
+//    }
 
     @Override
     public boolean isRepresentingPersistent() {

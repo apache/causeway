@@ -20,16 +20,20 @@ package org.apache.isis.jdo.datanucleus.persistence.commands;
 
 import javax.jdo.PersistenceManager;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class DataNucleusCreateObjectCommand extends AbstractDataNucleusObjectCommand implements CreateObjectCommand {
+public class DataNucleusCreateObjectCommand 
+extends AbstractDataNucleusObjectCommand 
+implements CreateObjectCommand {
 
-    public DataNucleusCreateObjectCommand(ObjectAdapter adapter, PersistenceManager persistenceManager) {
+    public DataNucleusCreateObjectCommand(ManagedObject adapter, PersistenceManager persistenceManager) {
         super(adapter, persistenceManager);
     }
 
@@ -37,23 +41,33 @@ public class DataNucleusCreateObjectCommand extends AbstractDataNucleusObjectCom
     @Override
     public void execute(final PersistenceCommandContext context) {
         if (log.isDebugEnabled()) {
-            log.debug("create object - executing command for: {}", onAdapter());
+            log.debug("create object - executing command for: {}", onManagedObject());
         }
-        final ObjectAdapter adapter = onAdapter();
-        if(!adapter.isTransient()) {
+        
+        val domainObject = onManagedObject().getPojo();
+        if(!isDetached(domainObject)) {
             // this could happen if DN's persistence-by-reachability has already caused the domainobject
             // to be persisted.  It's Isis adapter will have been updated as a result of the postStore
             // lifecycle callback, so in essence there's nothing to be done.
             return;
         }
-        final Object domainObject = adapter.getPojo();
 
         getPersistenceManager().makePersistent(domainObject);
     }
 
     @Override
     public String toString() {
-        return "CreateObjectCommand [adapter=" + onAdapter() + "]";
+        return "CreateObjectCommand [adapter=" + onManagedObject() + "]";
     }
+    
+    // -- HELPER
 
+    private boolean isDetached(Object pojo) {
+        val ps = PersistenceSession.current(PersistenceSession.class)
+        .getFirst()
+        .get();
+        
+        val state = ps.getEntityState(pojo);
+        return state.isDetached();
+    }
 }

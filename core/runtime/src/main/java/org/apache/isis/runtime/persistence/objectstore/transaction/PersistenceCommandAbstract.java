@@ -19,19 +19,19 @@
 
 package org.apache.isis.runtime.persistence.objectstore.transaction;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public abstract class PersistenceCommandAbstract implements PersistenceCommand {
 
-    private final ObjectAdapter adapter;
+    private final ManagedObject adapter;
 
-    public PersistenceCommandAbstract(final ObjectAdapter adapter) {
+    public PersistenceCommandAbstract(final ManagedObject adapter) {
         super();
         this.adapter = adapter;
     }
 
     @Override
-    public ObjectAdapter onAdapter() {
+    public ManagedObject onManagedObject() {
         return adapter;
     }
 

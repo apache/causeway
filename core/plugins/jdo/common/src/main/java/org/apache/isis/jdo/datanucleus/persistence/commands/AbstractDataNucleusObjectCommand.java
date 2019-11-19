@@ -20,23 +20,23 @@ package org.apache.isis.jdo.datanucleus.persistence.commands;
 
 import javax.jdo.PersistenceManager;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
+import lombok.Getter;
+
 public abstract class AbstractDataNucleusObjectCommand extends PersistenceCommandAbstract {
 
-    private final PersistenceManager persistenceManager;
+    @Getter private final PersistenceManager persistenceManager;
 
-    AbstractDataNucleusObjectCommand(final ObjectAdapter adapter,
+    AbstractDataNucleusObjectCommand(
+            final ManagedObject adapter,
             final PersistenceManager persistenceManager) {
+        
         super(adapter);
         this.persistenceManager = persistenceManager;
 
-    }
-
-    protected PersistenceManager getPersistenceManager() {
-        return persistenceManager;
     }
 
     @Override
