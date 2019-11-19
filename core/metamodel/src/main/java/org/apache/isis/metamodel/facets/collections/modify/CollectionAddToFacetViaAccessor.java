@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
@@ -60,7 +59,7 @@ public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstrac
             final ManagedObject elementAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         @SuppressWarnings("unchecked")
-        final Collection<? super Object> collection = (Collection<? super Object>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+        final Collection<? super Object> collection = (Collection<? super Object>) ManagedObject.InvokeUtil.invoke(method, owningAdapter);
         final Object elementPojo = ManagedObject.unwrapPojo(elementAdapter);
         collection.add(elementPojo);
     }

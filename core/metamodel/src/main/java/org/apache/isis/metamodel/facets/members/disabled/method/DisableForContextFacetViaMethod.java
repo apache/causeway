@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
@@ -73,7 +72,7 @@ public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstr
         if (target == null) {
             return null;
         }
-        final Object returnValue = ObjectAdapter.InvokeUtils.invokeC(method, target, 
+        final Object returnValue = ManagedObject.InvokeUtil.invokeC(method, target, 
                 _NullSafe.streamNullable(ic.getContributeeWithParamIndex()));
         if(returnValue instanceof String) {
             return (String) returnValue;

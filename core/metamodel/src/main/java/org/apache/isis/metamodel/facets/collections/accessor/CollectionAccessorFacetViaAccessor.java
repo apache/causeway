@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.CollectionUtils;
@@ -68,7 +67,7 @@ implements ImperativeFacet {
     public Object getProperty(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+        final Object collectionOrArray = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
         if(collectionOrArray == null) {
             return null;
         }
@@ -78,7 +77,7 @@ implements ImperativeFacet {
         final boolean filterForVisibility = getConfiguration().getReflector().getFacet().isFilterVisibility();
         if(filterForVisibility) {
             final List<ManagedObject> visibleAdapters =
-                    ObjectAdapter.Util.visibleAdapters(
+                    ManagedObject.VisibilityUtil.visibleAdapters(
                             collectionAdapter,
                             interactionInitiatedBy);
             final Object visibleObjects =

@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
@@ -49,7 +48,7 @@ public class HiddenObjectFacetViaMethod extends HiddenObjectFacetAbstract {
         if (target == null) {
             return null;
         }
-        final Boolean isHidden = (Boolean) ObjectAdapter.InvokeUtils.invoke(method, target);
+        final Boolean isHidden = (Boolean) ManagedObject.InvokeUtil.invoke(method, target);
         return isHidden.booleanValue() ? "Hidden" : null;
     }
 

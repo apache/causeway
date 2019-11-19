@@ -33,9 +33,9 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Inbox;
 import org.apache.isis.commons.internal.components.TransactionScopedComponent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -223,7 +223,7 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
             return;
         }
 
-        final ObjectAdapter onObject = command.onAdapter();
+        final ManagedObject onObject = command.onManagedObject();
 
         // Destroys are ignored when preceded by a create, or another destroy
         if (command instanceof DestroyObjectCommand) {
@@ -247,21 +247,21 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
         persistenceCommands.add(command);
     }
 
-    private boolean alreadyHasCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
+    private boolean alreadyHasCommand(final Class<?> commandClass, final ManagedObject onObject) {
         return getCommand(commandClass, onObject) != null;
     }
 
-    private boolean alreadyHasCreate(final ObjectAdapter onObject) {
+    private boolean alreadyHasCreate(final ManagedObject onObject) {
         return alreadyHasCommand(CreateObjectCommand.class, onObject);
     }
 
-    private boolean alreadyHasDestroy(final ObjectAdapter onObject) {
+    private boolean alreadyHasDestroy(final ManagedObject onObject) {
         return alreadyHasCommand(DestroyObjectCommand.class, onObject);
     }
 
-    private PersistenceCommand getCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
+    private PersistenceCommand getCommand(final Class<?> commandClass, final ManagedObject onObject) {
         for (final PersistenceCommand command : persistenceCommands.snapshot()) {
-            if (command.onAdapter().equals(onObject)) {
+            if (command.onManagedObject().equals(onObject)) {
                 if (commandClass.isAssignableFrom(command.getClass())) {
                     return command;
                 }
@@ -270,12 +270,12 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
         return null;
     }
 
-    private void removeCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
+    private void removeCommand(final Class<?> commandClass, final ManagedObject onObject) {
         final PersistenceCommand toDelete = getCommand(commandClass, onObject);
         persistenceCommands.remove(toDelete);
     }
 
-    private void removeCreate(final ObjectAdapter onObject) {
+    private void removeCreate(final ManagedObject onObject) {
         removeCommand(CreateObjectCommand.class, onObject);
     }
 

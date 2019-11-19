@@ -117,7 +117,9 @@ public interface ObjectAction extends ObjectMember {
      * Invokes the action's method on the target object given the specified set
      * of parameters.
      *
-     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
+     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  
+     * When a mixin action invokes its underlying mixedIn action, then will be populated 
+     * (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject execute(
             ManagedObject targetAdapter,
@@ -133,8 +135,10 @@ public interface ObjectAction extends ObjectMember {
      *
      * <p>
      *     Basically just calls (the helper methods also called by) first
-     *     {@link #isEachIndividualArgumentValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)} and then
-     *     {@link #isArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}.  Those methods are
+     *     {@link #isEachIndividualArgumentValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)} 
+     *     and then
+     *     {@link #isArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)}.  
+     *     Those methods are
      *     separated out so that viewers have more fine-grained control.
      * </p>
      */

@@ -189,7 +189,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * of some other adapter (if any).
      *
      * <p>
-     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter)
+     * @see TitleFacet#title(ManagedObject, ManagedObject)
      */
     String getTitle(ManagedObject contextAdapterIfAny, ManagedObject targetAdapter);
 

@@ -38,10 +38,10 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
@@ -187,8 +187,8 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        final List<ObjectAdapter> allMatching = getPersistenceSession().allMatchingQuery(query);
-        return ObjectAdapter.Util.unwrapTypedPojoList(allMatching);
+        val allMatching = getPersistenceSession().allMatchingQuery(query);
+        return _Casts.uncheckedCast(ManagedObject.unwrapPojoListElseEmpty(allMatching));
     }
 
 

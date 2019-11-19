@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.object.cssclass.method;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -49,7 +48,7 @@ public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet 
             return "";
         }
         try {
-            return (String) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+            return (String) ManagedObject.InvokeUtil.invoke(method, owningAdapter);
         } catch (final RuntimeException ex) {
             return null;
         }

@@ -19,6 +19,7 @@
 
 package org.apache.isis.metamodel.spec;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,9 +30,16 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.commons.internal.base._Tuples.Tuple2;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.commons.ClassExtensions;
+import org.apache.isis.metamodel.commons.ListExtensions;
+import org.apache.isis.metamodel.commons.MethodExtensions;
+import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
@@ -43,8 +51,10 @@ import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -106,8 +116,8 @@ public interface ManagedObject {
         return TitleUtil.titleString(this, contextAdapterIfAny);
     }
 
-
-    public static class TitleUtil {
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static final class TitleUtil {
 
         public static String titleString(ManagedObject managedObject, ManagedObject contextAdapterIfAny) {
             if (managedObject.getSpecification().isParentedOrFreeCollection()) {
@@ -253,7 +263,7 @@ public interface ManagedObject {
         return (String) obj;
     }
 
-    public static List<Object> unwrapPojoListElseEmpty(Collection<ManagedObject> adapters) {
+    public static List<Object> unwrapPojoListElseEmpty(Collection<? extends ManagedObject> adapters) {
         if (adapters == null) {
             return Collections.emptyList();
         }
@@ -308,12 +318,29 @@ public interface ManagedObject {
 
     // -- VISIBILITY UTILITIES
 
-    static final class Visibility {
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    static final class VisibilityUtil {
 
         public static Predicate<? super ManagedObject> filterOn(InteractionInitiatedBy interactionInitiatedBy) {
-            return $->ManagedObject.Visibility.isVisible($, interactionInitiatedBy);
+            return $->ManagedObject.VisibilityUtil.isVisible($, interactionInitiatedBy);
         }
 
+        /**
+         * Filters a collection (an adapter around either a Collection or an Object[]) and returns a list of
+         * {@link ManagedObject}s of those that are visible (as per any facet(s) installed on the element class
+         * of the collection).
+         *  @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
+         * @param interactionInitiatedBy
+         */
+        public static List<ManagedObject> visibleAdapters(
+                final ManagedObject collectionAdapter,
+                final InteractionInitiatedBy interactionInitiatedBy) {
+    
+            return CollectionFacet.Utils.streamAdapters(collectionAdapter)
+            .filter(VisibilityUtil.filterOn(interactionInitiatedBy))
+            .collect(Collectors.toList());
+        }
+        
         /**
          * @param adapter - an adapter around the domain object whose visibility is being checked
          * @param interactionInitiatedBy
@@ -356,7 +383,100 @@ public interface ManagedObject {
         }
     }
 
+    // -- INVOCATION UTILITY
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    static final class InvokeUtil {
+    
+        public static void invokeAll(final Collection<Method> methods, final ManagedObject adapter) {
+            MethodUtil.invoke(methods, unwrapPojo(adapter));
+        }
+    
+        public static Object invoke(final Method method, final ManagedObject adapter) {
+            return MethodExtensions.invoke(method, unwrapPojo(adapter));
+        }
+    
+        public static Object invoke(final Method method, final ManagedObject adapter, final Object arg0) {
+            return MethodExtensions.invoke(method, unwrapPojo(adapter), new Object[] {arg0});
+        }
+    
+        public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
+            return invoke(method, adapter, unwrapPojo(arg0Adapter));
+        }
+    
+        public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
+            return MethodExtensions.invoke(method, unwrapPojo(adapter), unwrapPojoArray(argumentAdapters));
+        }
+    
+        public static Object invokeC(final Method method, final ManagedObject adapter, 
+                final Stream<Tuple2<Integer, ? extends ManagedObject>> paramsAndIndexes) {
+            return invoke(method, adapter, asArray(paramsAndIndexes, method.getParameterTypes().length));
+        }
+    
+        private static ManagedObject[] asArray(final Stream<Tuple2<Integer, ? extends ManagedObject>> paramsAndIndexes, int length) {
+            final ManagedObject[] args = new ManagedObject[length];
+            paramsAndIndexes.forEach(entry->{
+                final Integer paramNum = entry.get_1();
+                if(paramNum < length) {
+                    args[paramNum] = entry.get_2();
+                }
+            });
+            return args;
+        }
+    
+        /**
+         * Invokes the method, adjusting arguments as required to make them fit the method's parameters.
+         *
+         * <p>
+         * That is:
+         * <ul>
+         * <li>if the method declares parameters but arguments are missing, then will provide 'null' defaults for these.
+         * <li>if the method does not declare all parameters for arguments, then truncates arguments.
+         * </ul>
+         */
+        public static Object invokeAutofit(
+                final Method method, 
+                final ManagedObject target, 
+                List<? extends ManagedObject> argumentsIfAvailable/*, 
+                final SpecificationLoader specLoader*/) {
+    
+            final List<ManagedObject> args = _Lists.newArrayList();
+            if(argumentsIfAvailable != null) {
+                args.addAll(argumentsIfAvailable);
+            }
+    
+            adjust(method, args/*, specLoader*/);
+    
+            final ManagedObject[] argArray = args.toArray(new ManagedObject[]{});
+            return invoke(method, target, argArray);
+        }
+    
+        private static void adjust(
+                final Method method, final List<ManagedObject> args /*, final SpecificationLoader specLoader*/) {
+    
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            ListExtensions.adjust(args, parameterTypes.length);
+    
+            for(int i=0; i<parameterTypes.length; i++) {
+                final Class<?> cls = parameterTypes[i];
+                if(args.get(i) == null && cls.isPrimitive()) {
+                    final Object object = ClassExtensions.toDefault(cls);
+    
+                    final ManagedObject adapter = of((ObjectSpecification)null, object);
+                    args.set(i, adapter);
+                }
+            }
+        }
+    
+    }
+    
     // -- DEPRECATIONS (REFACTORING)
+
+    class Util {
+    
+
+    
+    }
 
     static MetaModelContext _mmc(ManagedObject adapter) {
         return adapter.getSpecification().getMetaModelContext();
@@ -392,7 +512,6 @@ public interface ManagedObject {
 
         val spec = adapter.getSpecification();
         if(!spec.isEntity()) {
-            // services and view models are treated as persistent objects
             return EntityState.not_Persistable;
         }
 

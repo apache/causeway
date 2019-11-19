@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.Wormhole;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
@@ -56,7 +55,7 @@ public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstrac
 
     @Override
     public void invoke(final ManagedObject adapter) {
-        Wormhole.invoke(()->ObjectAdapter.InvokeUtils.invokeAll(methods, adapter));
+        Wormhole.invoke(()->ManagedObject.InvokeUtil.invokeAll(methods, adapter));
     }
 
     @Override

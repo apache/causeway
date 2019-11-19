@@ -133,7 +133,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
             return null;
         }
         val adapter = getPersistenceSession().adapterFor(unwrapped(domainObject));
-        if(adapter.isValue()) {
+        if(adapter.getOid().isValue()) {
             // values cannot be bookmarked
             return null;
         }

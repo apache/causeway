@@ -28,10 +28,10 @@ import java.awt.image.PixelGrabber;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.exceptions.UnexpectedCallException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public abstract class ImageValueSemanticsProviderAbstract<T> 
 extends ValueSemanticsProviderAndFacetAbstract<T> 
@@ -74,7 +74,7 @@ implements ImageValueFacet {
         throw new UnexpectedCallException();
     }
 
-    public byte[] getAsByteArray(final ObjectAdapter object) {
+    public byte[] getAsByteArray(final ManagedObject object) {
         final int[] flatIntArray = flatten(object);
         final byte[] byteArray = new byte[flatIntArray.length * 4];
         for (int i = 0; i < flatIntArray.length; i++) {
@@ -127,7 +127,7 @@ implements ImageValueFacet {
         return setPixels(inflate(flatIntArray));
     }
 
-    private int[] flatten(final ObjectAdapter object) {
+    private int[] flatten(final ManagedObject object) {
         final int[][] image = getPixels(object);
         final int[] flatArray = new int[(getHeight(object) * getWidth(object)) + 2];
         int flatIndex = 0;

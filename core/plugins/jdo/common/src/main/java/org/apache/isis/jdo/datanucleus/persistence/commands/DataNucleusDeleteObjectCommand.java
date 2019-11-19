@@ -20,7 +20,7 @@ package org.apache.isis.jdo.datanucleus.persistence.commands;
 
 import javax.jdo.PersistenceManager;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
@@ -29,21 +29,21 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class DataNucleusDeleteObjectCommand extends AbstractDataNucleusObjectCommand implements DestroyObjectCommand {
 
-    public DataNucleusDeleteObjectCommand(ObjectAdapter adapter, PersistenceManager persistenceManager) {
+    public DataNucleusDeleteObjectCommand(ManagedObject adapter, PersistenceManager persistenceManager) {
         super(adapter, persistenceManager);
     }
 
     @Override
     public void execute(final PersistenceCommandContext context) {
         if (log.isDebugEnabled()) {
-            log.debug("destroy object - executing command for {}", onAdapter());
+            log.debug("destroy object - executing command for {}", onManagedObject());
         }
-        getPersistenceManager().deletePersistent(onAdapter().getPojo());
+        getPersistenceManager().deletePersistent(onManagedObject().getPojo());
     }
 
     @Override
     public String toString() {
-        return "DestroyObjectCommand [adapter=" + onAdapter() + "]";
+        return "DestroyObjectCommand [adapter=" + onManagedObject() + "]";
     }
 
 }

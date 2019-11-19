@@ -195,7 +195,7 @@ final public class ObjectAdapterContext {
     // package private
     ObjectAdapter injectServices(final ObjectAdapter adapter) {
         Objects.requireNonNull(adapter);
-        if(adapter.isValue()) {
+        if(adapter.getOid().isValue()) {
             return adapter; // guard against value objects
         }
         final Object pojo = adapter.getPojo();

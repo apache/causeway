@@ -19,10 +19,10 @@
 
 package org.apache.isis.runtime.persistence.objectstore.transaction;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface PersistenceCommand {
     void execute(PersistenceCommandContext context);
 
-    ObjectAdapter onAdapter();
+    ManagedObject onManagedObject();
 }

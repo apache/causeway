@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
@@ -61,7 +60,7 @@ public class HideForContextFacetViaMethod extends HideForContextFacetAbstract im
         if (target == null) {
             return null;
         }
-        final Boolean isHidden = (Boolean) ObjectAdapter.InvokeUtils.invokeC(method, target, 
+        final Boolean isHidden = (Boolean) ManagedObject.InvokeUtil.invokeC(method, target, 
                 _NullSafe.streamNullable(ic.getContributeeWithParamIndex()));
         return isHidden.booleanValue() ? "Hidden" : null;
     }

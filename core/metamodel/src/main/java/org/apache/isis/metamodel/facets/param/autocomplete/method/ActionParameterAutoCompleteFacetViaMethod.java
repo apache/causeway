@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.CollectionUtils;
@@ -80,7 +79,7 @@ extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
+        final Object collectionOrArray = ManagedObject.InvokeUtil.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return _Constants.emptyObjects;
         }
@@ -90,7 +89,7 @@ extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
         final Class<?> parameterType = facetedMethodParameter.getType();
 
         final List<ManagedObject> visibleAdapters =
-                ObjectAdapter.Util.visibleAdapters(
+                ManagedObject.VisibilityUtil.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> visibleObjects =

@@ -24,7 +24,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -68,7 +67,7 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
 
     /**
-     * The underlying collection of objects (not {@link ObjectAdapter}s).
+     * The underlying collection of objects (not {@link ManagedObject}s).
      */
     private Collection<?> pojoCollection(final ManagedObject collectionAdapter) {
         return (Collection<?>) collectionAdapter.getPojo();

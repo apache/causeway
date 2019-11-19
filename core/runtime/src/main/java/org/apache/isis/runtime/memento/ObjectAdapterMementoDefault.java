@@ -415,7 +415,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
     private Bookmark bookmark;
 
     /**
-     * Only populated for {@link ObjectAdapter#getPojo() domain object}s that implement {@link HintStore.HintIdProvider}.
+     * Only populated for {@link ManagedObject#getPojo() domain object}s that implement {@link HintStore.HintIdProvider}.
      */
     private String hintId;
 
@@ -546,14 +546,14 @@ public class ObjectAdapterMementoDefault implements Serializable {
     }
 
     /**
-     * Lazily looks up {@link ObjectAdapter} if required.
+     * Lazily looks up {@link ManagedObject} if required.
      *
      * <p>
      * For transient objects, be aware that calling this method more than once
-     * will cause the underlying {@link ObjectAdapter} to be recreated,
+     * will cause the underlying {@link ManagedObject} to be recreated,
      * overwriting any changes that may have been made. In general then it's
      * best to call once and then hold onto the value thereafter. Alternatively,
-     * can call {@link #setAdapter(ObjectAdapter)} to keep this memento in sync.
+     * can call {@link #setAdapter(ManagedObject)} to keep this memento in sync.
      */
     public ManagedObject getObjectAdapter(
             PersistenceSession persistenceSession,

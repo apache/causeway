@@ -110,7 +110,7 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
         val repository = context.getRepositoryService();
 
         final Predicate<ManagedObject> visibilityFilter = 
-                objectAdapter -> ManagedObject.Visibility.isVisible(objectAdapter, interactionInitiatedBy); 
+                objectAdapter -> ManagedObject.VisibilityUtil.isVisible(objectAdapter, interactionInitiatedBy); 
 
         val query = new QueryFindAllChoices(getObjectSpecification().getFullIdentifier(), visibilityFilter);
         return repository.allMatches(query).toArray();

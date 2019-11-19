@@ -21,13 +21,13 @@ package org.apache.isis.metamodel.facets.value.datetimejdk8offset;
 
 import java.time.OffsetDateTime;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface Jdk8OffsetDateTimeValueFacet extends Facet {
 
-    OffsetDateTime dateValue(ObjectAdapter object);
+    OffsetDateTime dateValue(ManagedObject object);
 
-    ObjectAdapter createValue(OffsetDateTime date);
+    ManagedObject createValue(OffsetDateTime date);
 
 }

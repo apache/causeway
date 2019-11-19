@@ -20,7 +20,6 @@
 package org.apache.isis.runtime.persistence.query;
 
 import org.apache.isis.applib.query.QueryFindAllInstances;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
@@ -29,31 +28,31 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
  */
 public class PersistenceQueryFindAllInstances extends PersistenceQueryAbstract  {
 
-    protected long index;
-    protected long countedSoFar;
+//    protected long index;
+//    protected long countedSoFar;
 
     public PersistenceQueryFindAllInstances(
             final ObjectSpecification specification,
             final long... range) {
         super(specification, range);
-        index=0;
-        countedSoFar=0;
+//        index=0;
+//        countedSoFar=0;
     }
 
-
-    public boolean matches(final ObjectAdapter object) {
-
-        if (getCount() == 0 && getStart() == 0){
-            return true;
-        }
-        if (index++ < start){
-            return false;
-        }
-        if (countedSoFar++ < count){
-            return true;
-        }
-        return false;
-    }
+//TODO not used, remove?
+//    public boolean matches(final ManagedObject object) {
+//
+//        if (getCount() == 0 && getStart() == 0){
+//            return true;
+//        }
+//        if (index++ < start){
+//            return false;
+//        }
+//        if (countedSoFar++ < count){
+//            return true;
+//        }
+//        return false;
+//    }
 
     @Override
     public String toString() {

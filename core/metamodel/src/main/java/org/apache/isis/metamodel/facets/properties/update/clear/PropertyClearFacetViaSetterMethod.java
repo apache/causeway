@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
@@ -60,7 +59,7 @@ public class PropertyClearFacetViaSetterMethod extends PropertyClearFacetAbstrac
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        ObjectAdapter.InvokeUtils.invoke(method, targetAdapter);
+        ManagedObject.InvokeUtil.invoke(method, targetAdapter);
     }
 
     @Override

@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionClearFacetAbstract;
@@ -59,7 +58,7 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
 
     @Override
     public void clear(final ManagedObject owningAdapter) {
-        final Collection<?> collection = (Collection<?>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+        final Collection<?> collection = (Collection<?>) ManagedObject.InvokeUtil.invoke(method, owningAdapter);
         collection.clear();
     }
 

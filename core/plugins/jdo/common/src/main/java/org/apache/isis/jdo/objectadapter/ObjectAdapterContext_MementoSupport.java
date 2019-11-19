@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.jdo.objectadapter.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -124,12 +125,13 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     }
 
     private void updateObject(final ObjectAdapter adapter, final Data data) {
-        final Object oid = adapter.getOid();
+        val oid = adapter.getOid();
         if (oid != null && !oid.equals(data.getOid())) {
-            throw new IllegalArgumentException("This memento can only be used to update the ObjectAdapter with the Oid " + data.getOid() + " but is " + oid);
+            throw new IllegalArgumentException(
+                    "This memento can only be used to update the ObjectAdapter with the Oid " + data.getOid() + " but is " + oid);
         }
         if (!(data instanceof ObjectData)) {
-            throw new IsisException("Expected an ObjectData but got " + data.getClass());
+            throw new IsisException("Expected ObjectData but got " + data.getClass());
         }
 
         updateFieldsAndResolveState(adapter, data);
@@ -145,10 +147,11 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             final CollectionData state) {
 
         final Stream<ManagedObject> initData = state.streamElements()
-                .map((final Data elementData) -> recreateReference(elementData));
+                .map(this::recreateReference);
 
-        final CollectionFacet facet = collectionSpec.getFacet(CollectionFacet.class);
-        return facet.populatePojo(emptyCollectionPojoFactory, collectionSpec, initData, state.getElementCount());
+        val collectionFacet = collectionSpec.getFacet(CollectionFacet.class);
+        return collectionFacet.populatePojo(
+                emptyCollectionPojoFactory, collectionSpec, initData, state.getElementCount());
     }
 
     private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {
@@ -158,7 +161,8 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         if (!dataIsTransient) {
             updateFields(objectAdapter, data);
             
-        } else if (objectAdapter.isTransient() && dataIsTransient) {
+        } else if (dataIsTransient 
+                && persistenceSession.getEntityState(objectAdapter.getPojo()).isDetached()) {
             updateFields(objectAdapter, data);
 
         } else if (objectAdapter.isParentedCollection()) {
@@ -168,29 +172,32 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         } else {
             final ObjectData od = (ObjectData) data;
             if (od.containsField()) {
-                throw new IsisException("Resolve state (for " + objectAdapter + ") inconsistent with fact that data exists for fields");
+                throw _Exceptions.unrecoverableFormatted(
+                        "Resolve state (for %s) inconsistent with fact that data exists for fields", 
+                        objectAdapter); 
             }
         }
     }
 
-    private void updateFields(final ObjectAdapter object, final Data state) {
-        final ObjectData od = (ObjectData) state;
-        final Stream<ObjectAssociation> fields = object.getSpecification().streamAssociations(Contributed.EXCLUDED);
-
-        fields
+    private void updateFields(final ManagedObject adapter, final Data state) {
+        val objectData = (ObjectData) state;
+        
+        adapter.getSpecification().streamAssociations(Contributed.EXCLUDED)
         .filter(field->{
             if (field.isNotPersisted()) {
                 if (field.isOneToManyAssociation()) {
                     return false;
                 }
-                if (field.containsFacet(PropertyOrCollectionAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
+                if (field.containsFacet(PropertyOrCollectionAccessorFacet.class) 
+                        && !field.containsFacet(PropertySetterFacet.class)) {
+                    
                     log.debug("ignoring not-settable field {}", field.getName());
                     return false;
                 }
             }
             return true;
         })
-        .forEach(field->updateField(object, od, field));
+        .forEach(field->updateField(adapter, objectData, field));
 
     }
 
