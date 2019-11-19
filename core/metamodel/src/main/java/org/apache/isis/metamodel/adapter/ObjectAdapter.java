@@ -59,7 +59,5 @@ public interface ObjectAdapter extends ManagedObject {
     }
 
     @Deprecated boolean isRepresentingPersistent();
-    @Deprecated boolean isDestroyed();
-
 
 }

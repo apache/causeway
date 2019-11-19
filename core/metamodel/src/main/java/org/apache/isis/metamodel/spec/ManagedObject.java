@@ -512,7 +512,6 @@ public interface ManagedObject {
 
         val spec = adapter.getSpecification();
         if(!spec.isEntity()) {
-            // services and view models are treated as persistent objects
             return EntityState.not_Persistable;
         }
 

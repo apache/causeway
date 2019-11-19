@@ -35,9 +35,12 @@ import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+
+import lombok.val;
 
 @RequestScoped @Service 
 public class ChangedObjectsServiceInternal implements WithTransactionScope {
@@ -205,19 +208,19 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
             final Set<AdapterAndProperty> keys = _Sets.newLinkedHashSet(changedObjectProperties.keySet());
             for (final AdapterAndProperty aap : keys) {
 
-                final PreAndPostValues papv = changedObjectProperties.remove(aap);
+                val preAndPostValues = changedObjectProperties.remove(aap);
 
-                final ObjectAdapter adapter = aap.getAdapter();
-                if(adapter.isDestroyed()) {
+                val adapter = aap.getAdapter();
+                if(ManagedObject._isDestroyed(adapter)) {
                     // don't touch the object!!!
                     // JDO, for example, will complain otherwise...
-                    papv.setPost(IsisTransactionPlaceholder.DELETED);
+                    preAndPostValues.setPost(IsisTransactionPlaceholder.DELETED);
                 } else {
-                    papv.setPost(aap.getPropertyValue());
+                    preAndPostValues.setPost(aap.getPropertyValue());
                 }
 
                 // if we encounter the same objectProperty again, this will simply overwrite it
-                processedObjectProperties.put(aap, papv);
+                processedObjectProperties.put(aap, preAndPostValues);
             }
         }
 
