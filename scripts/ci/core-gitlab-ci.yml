@@ -1,11 +1,10 @@
 #
 # This script:
 #
-# - builds snapshot of isis
-#   - pushes to ???
-#
-# - builds Docker image of demo-app and simple-app
-#   -  pushes to hub.docker.com
+# - builds interim of isis
+# - pushes to repo.incode.cloud
+# - builds demo-app, simple-app, helloworld
+# - pushes demo-app image to hub.docker.com
 #
 # It requires the following gitlab secret variables
 #
