@@ -18,7 +18,7 @@
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis-parent</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath/>
+		<relativePath>../core-parent/pom.xml</relativePath>
 	</parent>
 
 <!--
