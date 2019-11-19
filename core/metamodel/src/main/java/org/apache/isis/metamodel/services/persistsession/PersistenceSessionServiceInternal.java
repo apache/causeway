@@ -20,9 +20,8 @@ package org.apache.isis.metamodel.services.persistsession;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 
-public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider {
+public interface PersistenceSessionServiceInternal {
 
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.

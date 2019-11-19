@@ -42,7 +42,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
@@ -55,7 +54,6 @@ public class RepositoryServiceDefault implements RepositoryService {
     @Inject private WrapperFactory wrapperFactory;
     @Inject private TransactionService transactionService;
     @Inject private MetaModelContext metaModelContext;
-    @Inject private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     @Inject private IsisConfiguration isisConfiguration;
     
     private boolean autoFlush;
@@ -106,7 +104,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         if (isPersistent(object)) {
             return object;
         }
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
+        val adapter = getPersistenceSession().adapterFor(unwrapped(object));
 
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
@@ -143,7 +141,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         if (object == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
+        val adapter = getPersistenceSession().adapterFor(unwrapped(object));
         if (!isPersistent(object)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }

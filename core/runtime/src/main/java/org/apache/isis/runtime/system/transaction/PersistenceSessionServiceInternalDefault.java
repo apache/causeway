@@ -26,16 +26,16 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
+import lombok.val;
 
 @Service
 public class PersistenceSessionServiceInternalDefault 
@@ -44,17 +44,12 @@ implements PersistenceSessionServiceInternal {
     @Inject private SpecificationLoader specificationLoader;
 
     @Override
-    public ObjectAdapter adapterFor(Object pojo) {
-        return getPersistenceSession().adapterFor(pojo);
-    }
-    
-    @Override
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {
 
-        final RootOid rootOid = Factory.ofBookmark(bookmark);
-        final PersistenceSession ps = getPersistenceSession();
+        val rootOid = Factory.ofBookmark(bookmark);
+        val ps = getPersistenceSession();
         final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
 
         if(rootOid.isViewModel()) {
@@ -65,13 +60,13 @@ implements PersistenceSessionServiceInternal {
 
         } else if(denyRefresh) {
 
-            final Object pojo = ps.fetchPersistentPojoInTransaction(rootOid);
+            val pojo = ps.fetchPersistentPojoInTransaction(rootOid);
             return pojo;            
 
         } else {
-            final ObjectAdapter adapter = ps.adapterFor(rootOid);
+            val adapter = ps.adapterFor(rootOid);
 
-            final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
+            val pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
             acceptIfPresent(pojo, ps::refreshRootInTransaction);
             return pojo;
         }
@@ -80,24 +75,24 @@ implements PersistenceSessionServiceInternal {
 
     @Override
     public Bookmark bookmarkFor(Object domainObject) {
-        final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
+        val adapter = getPersistenceSession().adapterFor(domainObject);
         if(adapter.isValue()) {
             // values cannot be bookmarked
             return null;
         }
-        final Oid oid = adapter.getOid();
+        val oid = adapter.getOid();
         if(!(oid instanceof RootOid)) {
             // must be root
             return null;
         }
-        final RootOid rootOid = (RootOid) oid;
+        val rootOid = (RootOid) oid;
         return rootOid.asBookmark();
     }
 
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(cls);
-        String objectType = objectSpec.getSpecId().asString();
+        val spec = specificationLoader.loadSpecification(cls);
+        val objectType = spec.getSpecId().asString();
         return new Bookmark(objectType, identifier);
     }
 
