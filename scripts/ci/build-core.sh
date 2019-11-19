@@ -1,14 +1,19 @@
 #!/bin/bash
 set -e
 
-# import shared vars (non secret!)
-if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
-  . $SHARED_VARS_FILE
-  export $(cut -d= -f1 $SHARED_VARS_FILE)
+if [ -z "$REVISION" ]; then
+  if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
+    . $SHARED_VARS_FILE
+    export $(cut -d= -f1 $SHARED_VARS_FILE)
+  fi
+fi
+if [ -z "$REVISION" ]; then
+  echo "\$REVISION is not set" >&2
+  exit 1
 fi
 
-sh $CI_SCRIPTS_PATH/print-environment.sh "build-core"
 
+sh $CI_SCRIPTS_PATH/print-environment.sh "build-core"
 
 cd $PROJECT_ROOT_PATH/core-parent
 
