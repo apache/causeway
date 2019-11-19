@@ -49,11 +49,6 @@ implements PersistenceSessionServiceInternal {
     }
     
     @Override
-    public void makePersistent(final ObjectAdapter adapter) {
-        getPersistenceSession().makePersistentInTransaction(adapter);
-    }
-
-    @Override
     public void remove(final ObjectAdapter adapter) {
         getPersistenceSession().destroyObjectInTransaction(adapter);
     }

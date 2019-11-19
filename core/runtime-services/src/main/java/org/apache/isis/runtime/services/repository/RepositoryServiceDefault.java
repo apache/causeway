@@ -118,7 +118,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         if (isPersistent(object)) {
             throw new PersistFailedException("Object already persistent; OID=" + adapter.getOid());
         }
-        persistenceSessionServiceInternal.makePersistent(adapter);
+        getPersistenceSession().makePersistentInTransaction(adapter);
 
         return object;
     }
