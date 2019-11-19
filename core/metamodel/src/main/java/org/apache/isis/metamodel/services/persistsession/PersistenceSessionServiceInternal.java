@@ -20,20 +20,9 @@ package org.apache.isis.metamodel.services.persistsession;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 
 public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider {
-
-    // -- retrieve
-
-    /**
-     * Provided by <tt>PersistenceSession</tt> when used by framework.
-     *
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     */
-    void resolve(Object parent);
 
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
@@ -47,15 +36,5 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
     Bookmark bookmarkFor(Object domainObject);
 
     Bookmark bookmarkFor(Class<?> cls, String identifier);
-
-    /**
-     * Provided by <tt>UpdateNotifier</tt> and <tt>PersistenceSession</tt> when
-     * used by framework.
-     *
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     */
-    void remove(ObjectAdapter adapter);
-
 
 }

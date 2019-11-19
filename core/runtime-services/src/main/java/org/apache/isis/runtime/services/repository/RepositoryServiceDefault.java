@@ -148,7 +148,7 @@ public class RepositoryServiceDefault implements RepositoryService {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
 
-        persistenceSessionServiceInternal.remove(adapter);
+        getPersistenceSession().destroyObjectInTransaction(adapter);
     }
 
     @Override

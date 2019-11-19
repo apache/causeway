@@ -49,11 +49,6 @@ implements PersistenceSessionServiceInternal {
     }
     
     @Override
-    public void remove(final ObjectAdapter adapter) {
-        getPersistenceSession().destroyObjectInTransaction(adapter);
-    }
-
-    @Override
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {
@@ -104,11 +99,6 @@ implements PersistenceSessionServiceInternal {
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(cls);
         String objectType = objectSpec.getSpecId().asString();
         return new Bookmark(objectType, identifier);
-    }
-
-    @Override
-    public void resolve(final Object parent) {
-        getPersistenceSession().refreshRootInTransaction(parent);
     }
 
     protected PersistenceSession getPersistenceSession() {
