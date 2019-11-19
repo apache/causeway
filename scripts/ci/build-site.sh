@@ -13,8 +13,7 @@ if [ -z "$REVISION" ]; then
   fi
 fi
 if [ -z "$REVISION" ]; then
-  echo "\$REVISION is not set" >&2
-  exit 1
+  echo "\$REVISION is not set - continuing"
 fi
 
 SITE_CONFIG=$1
