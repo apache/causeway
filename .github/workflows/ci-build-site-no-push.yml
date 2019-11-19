@@ -71,4 +71,4 @@ jobs:
     - name: Build Site
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
-      run: bash $CI_SCRIPTS_PATH/build-site.sh site.yml
+      run: bash -x $CI_SCRIPTS_PATH/build-site.sh site.yml
