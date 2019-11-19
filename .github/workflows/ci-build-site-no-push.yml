@@ -18,7 +18,7 @@ jobs:
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       
-      # used for printing 
+      # used for printing
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
 
       # though equivalent, setting SHARED_VARS_FILE to ~/.env breaks the build, not sure why
@@ -35,7 +35,7 @@ jobs:
     
     - name: Setup Script Environment
       shell: bash
-      # we write the more tricky varibles to the $SHARED_VARS_FILE using the full power of bash commands
+      # we write the more tricky variables to the $SHARED_VARS_FILE using the full power of bash commands
       # then we simply print all the (non-secret) variables as used by the build scripts to the console
       run: |
         echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > $SHARED_VARS_FILE
@@ -44,11 +44,11 @@ jobs:
         echo TIMESTAMP        \: $TIMESTAMP
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
         echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
+        echo REVISION         \: $REVISION
         cat $SHARED_VARS_FILE
         echo ======================================
     
-    ## now prepare then build the site (antora build) ...
-    
+
     - name: Print Node Version
       run: node --version
     
@@ -67,8 +67,19 @@ jobs:
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
       run: $(npm bin)/antora version
-    
-    - name: Build Site
+
+    - name: Setup Groovy
+      if: steps.revision.outputs.revision != 'skip'
+      run: sudo apt-get -f install groovy
+
+    - name: Print Groovy Version
+      if: steps.revision.outputs.revision != 'skip'
+      shell: bash
+      run: groovy --version
+
+    - name: Build Apache Isis Site
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
       run: bash -x $CI_SCRIPTS_PATH/build-site.sh site.yml
+      env:
+        REVISION: ${{ steps.revision.outputs.revision }}
