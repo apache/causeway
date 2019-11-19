@@ -31,7 +31,6 @@ import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
@@ -54,7 +53,6 @@ public class ObjectActionLayoutXmlDefaultTest {
     @Mock private FacetedMethod mockFacetedMethod;
     @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock private SpecificationLoader mockSpecificationLoader;
-    @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
     private MetaModelContext metaModelContext;
 
@@ -63,7 +61,6 @@ public class ObjectActionLayoutXmlDefaultTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .singleton(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .build();
 

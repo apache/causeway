@@ -34,7 +34,6 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -65,9 +64,6 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected TranslationService mockTranslationService;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected AuthenticationSession mockAuthenticationSession;
-
-    protected PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
-
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemoverForTesting methodRemover;
 
@@ -109,8 +105,6 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockTranslationService = context.mock(TranslationService.class);
         mockAuthenticationSession = context.mock(AuthenticationSession.class);
-
-        mockPersistenceSessionServiceInternal = context.mock(PersistenceSessionServiceInternal.class);
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 

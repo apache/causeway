@@ -54,7 +54,6 @@ import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -78,9 +77,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    //@Mock private ObjectAdapterProvider mockAdapterManager;
     @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private IsisSessionFactory mockIsisSessionFactory;
     @Mock private FactoryService mockFactoryService;
@@ -120,7 +117,6 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectManager(mockObjectManager)
-                .singleton(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .singleton(wrapperFactory = createWrapperFactory())
                 .singleton(mockFactoryService)

@@ -28,19 +28,27 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.tree.TreeState;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
+
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
+import lombok.val;
 
 /**
  * This service enables a serializable 'bookmark' to be created for an entity.
@@ -49,12 +57,13 @@ import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServi
 @Service
 public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 
-
+    @Inject private SpecificationLoader specificationLoader;
+    @Inject private WrapperFactory wrapperFactory;
+    
     @Override
-    @Programmatic
     public Object lookup(
             final BookmarkHolder bookmarkHolder,
-            final FieldResetPolicy fieldResetPolicy) {
+            final BookmarkService.FieldResetPolicy fieldResetPolicy) {
         Bookmark bookmark = bookmarkHolder.bookmark();
         return bookmark != null? lookup(bookmark, fieldResetPolicy): null;
     }
@@ -66,14 +75,34 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
             return null;
         }
         try {
-            return persistenceSessionServiceInternal.lookup(bookmark, fieldResetPolicy);
+            val rootOid = Factory.ofBookmark(bookmark);
+            val ps = getPersistenceSession();
+            final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
+
+            if(rootOid.isViewModel()) {
+                final ObjectAdapter adapter = ps.adapterFor(rootOid);
+                final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
+
+                return pojo;
+
+            } else if(denyRefresh) {
+
+                val pojo = ps.fetchPersistentPojoInTransaction(rootOid);
+                return pojo;            
+
+            } else {
+                val adapter = ps.adapterFor(rootOid);
+
+                val pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
+                acceptIfPresent(pojo, ps::refreshRootInTransaction);
+                return pojo;
+            }
         } catch(ObjectNotFoundException ex) {
             return null;
         }
     }
+    
 
-
-    @Programmatic
     @Override
     public Object lookup(
             final Bookmark bookmark,
@@ -90,23 +119,31 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         return lookupInternal(bookmark, fieldResetPolicy);
     }
 
-    @SuppressWarnings("unchecked")
-    @Programmatic
     @Override
     public <T> T lookup(
             final Bookmark bookmark,
             final FieldResetPolicy fieldResetPolicy,
             Class<T> cls) {
-        return (T) lookup(bookmark, fieldResetPolicy);
+        return _Casts.uncheckedCast(lookup(bookmark, fieldResetPolicy));
     }
 
-    @Programmatic
     @Override
     public Bookmark bookmarkFor(final Object domainObject) {
         if(domainObject == null) {
             return null;
         }
-        return persistenceSessionServiceInternal.bookmarkFor(unwrapped(domainObject));
+        val adapter = getPersistenceSession().adapterFor(unwrapped(domainObject));
+        if(adapter.isValue()) {
+            // values cannot be bookmarked
+            return null;
+        }
+        val oid = adapter.getOid();
+        if(!(oid instanceof RootOid)) {
+            // must be root
+            return null;
+        }
+        val rootOid = (RootOid) oid;
+        return rootOid.asBookmark();
     }
 
     private Object unwrapped(Object domainObject) {
@@ -114,10 +151,11 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
     }
 
 
-    @Programmatic
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        return persistenceSessionServiceInternal.bookmarkFor(cls, identifier);
+        val spec = specificationLoader.loadSpecification(cls);
+        val objectType = spec.getSpecId().asString();
+        return new Bookmark(objectType, identifier);
     }
 
     //FIXME[2112] why would we ever store Service Beans as Bookmarks?
@@ -207,15 +245,11 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         return serializableTypes.stream().anyMatch(t->t.isAssignableFrom(cls));
     }
 
-    // -- INJECTION
-
-    @Inject
-    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-
-    @Inject
-    WrapperFactory wrapperFactory;
-
-    @Inject
-    ServiceRegistry serviceRegistry;
+    protected PersistenceSession getPersistenceSession() {
+        return PersistenceSession.current(PersistenceSession.class)
+                .getFirst()
+                .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
+    }
+    
 
 }
