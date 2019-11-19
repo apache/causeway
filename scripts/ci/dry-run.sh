@@ -25,14 +25,15 @@ cd $PROJECT_ROOT_PATH
 
 SECRETS_FILE=~/ci-secrets.txt
 if [ -f "$SECRETS_FILE" ]; then
-	source $SECRETS_FILE
-	export $(cut -d= -f1 $SECRETS_FILE)
+	  source $SECRETS_FILE
+	  export $(cut -d= -f1 $SECRETS_FILE)
 else
     echo "creating a template secrets file at your home: $SECRETS_FILE"
     printf 'DOCKER_REGISTRY_USERNAME=apacheisiscommitters\nDOCKER_REGISTRY_PASSWORD=\n' > $SECRETS_FILE
     exit 0
 fi
 
+bash $CI_SCRIPTS_PATH/build-parent.sh
 bash $CI_SCRIPTS_PATH/build-mixins.sh
 bash $CI_SCRIPTS_PATH/build-core.sh
 bash $CI_SCRIPTS_PATH/build-demo-app.sh dryrun
