@@ -1,17 +1,26 @@
 #!/bin/bash
+set -e
 
-# import shared vars (non secret!)
-if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
-  . $SHARED_VARS_FILE
-  export $(cut -d= -f1 $SHARED_VARS_FILE)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+if [ -z "$PROJECT_ROOT_PATH" ]; then
+  PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
+fi
+
+if [ -z "$REVISION" ]; then
+  if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
+    . $SHARED_VARS_FILE
+    export $(cut -d= -f1 $SHARED_VARS_FILE)
+  fi
+fi
+if [ -z "$REVISION" ]; then
+  echo "\$REVISION is not set" >&2
+  exit 1
 fi
 
 SITE_CONFIG=$1
 GROOVY_CMD=`command -v groovy`
 
-set -e
-
-bash $CI_SCRIPTS_PATH/print-environment.sh "build-site"
+bash $SCRIPT_DIR/print-environment.sh "build-site"
 
 echo ""
 echo "\$SITE_CONFIG: ${SITE_CONFIG}"
@@ -26,11 +35,18 @@ if [ -z "${GROOVY_CMD}" ]; then
 else
 
   ## generate automated site content (adoc files) 
-  ${GROOVY_CMD} $CI_SCRIPTS_PATH/../generateConfigDocs.groovy \
+  ${GROOVY_CMD} $SCRIPT_DIR/../generateConfigDocs.groovy \
     -f $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json \
     -o $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
   
 fi
+
+echo "copying over examples ..."
+for examples_sh in $(find $PROJECT_ROOT_PATH -name examples.sh -print)
+do
+  echo $examples_sh
+  sh $examples_sh
+done
 
 ## run antora
 $(npm bin)/antora --stacktrace $SITE_CONFIG

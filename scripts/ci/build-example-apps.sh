@@ -2,6 +2,9 @@
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+if [ -z "$PROJECT_ROOT_PATH" ]; then
+  PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
+fi
 
 if [ -z "$REVISION" ]; then
   if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
