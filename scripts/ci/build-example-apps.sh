@@ -17,7 +17,7 @@ if [ -z "$REVISION" ]; then
   exit 1
 fi
 if [ -z "$MVN_STAGES" ]; then
-  MVN_STAGES=clean install
+  MVN_STAGES="clean install"
 fi
 
 sh $SCRIPT_DIR/print-environment.sh "build-example-apps"
