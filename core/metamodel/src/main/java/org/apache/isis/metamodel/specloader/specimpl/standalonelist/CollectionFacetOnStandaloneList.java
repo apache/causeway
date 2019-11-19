@@ -47,7 +47,7 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
     }
 
     /**
-     * Expected to be called with a {@link ObjectAdapter} wrapping a
+     * Expected to be called with a {@link ManagedObject} wrapping a
      * {@link FreeStandingList}.
      */
     @Override

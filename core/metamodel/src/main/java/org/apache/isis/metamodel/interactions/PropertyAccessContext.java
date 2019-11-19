@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
 
@@ -33,12 +33,12 @@ import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
  */
 public class PropertyAccessContext extends AccessContext<PropertyAccessEvent> {
 
-    private final ObjectAdapter value;
+    private final ManagedObject value;
 
     public PropertyAccessContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Identifier id,
-            final ObjectAdapter value,
+            final ManagedObject value,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.PROPERTY_READ, id, targetAdapter, interactionInitiatedBy);
 
@@ -48,7 +48,7 @@ public class PropertyAccessContext extends AccessContext<PropertyAccessEvent> {
     /**
      * The current value for a property.
      */
-    public ObjectAdapter getValue() {
+    public ManagedObject getValue() {
         return value;
     }
 

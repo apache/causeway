@@ -327,7 +327,7 @@ public interface ManagedObject {
 
         /**
          * Filters a collection (an adapter around either a Collection or an Object[]) and returns a list of
-         * {@link ObjectAdapter}s of those that are visible (as per any facet(s) installed on the element class
+         * {@link ManagedObject}s of those that are visible (as per any facet(s) installed on the element class
          * of the collection).
          *  @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
          * @param interactionInitiatedBy

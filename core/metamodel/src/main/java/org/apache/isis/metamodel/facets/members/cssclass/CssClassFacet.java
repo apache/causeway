@@ -28,7 +28,7 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 public interface CssClassFacet extends Facet {
 
     /**
-     * return custom CSS (if any) for provided {@link org.apache.isis.metamodel.adapter.ObjectAdapter object}.
+     * return custom CSS (if any) for provided {@link ManagedObject object}.
      *
      * @param objectAdapter - to evaluate.  May be <tt>null</tt> in exceptional circumstances (specifically: the {@link org.apache.isis.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson#asJson(org.apache.isis.metamodel.spec.ObjectSpecification)} which generates <tt>xxx.layout.json</tt> for a spec without recourse to any given object).
      */

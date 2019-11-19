@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.spec.feature;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
@@ -36,14 +35,14 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 public interface MutableCurrentHolder extends CurrentHolder {
 
     /**
-     * Updates the referenced {@link ObjectAdapter} for the owning
-     * {@link ObjectAdapter} with the new value provided, or clears the
+     * Updates the referenced {@link ManagedObject} for the owning
+     * {@link ManagedObject} with the new value provided, or clears the
      * reference if null.
      *
      * <p>
      * For example, if this is a {@link OneToOneAssociation}, then updates the
      * object referenced .
-     *  @param owner
+     * @param owner
      * @param newValue
      * @param interactionInitiatedBy
      */
@@ -53,7 +52,8 @@ public interface MutableCurrentHolder extends CurrentHolder {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
-     * As per {@link #set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)}, with {@link InteractionInitiatedBy#USER}.
+     * As per {@link #set(ManagedObject, ManagedObject, InteractionInitiatedBy)}, 
+     * with {@link InteractionInitiatedBy#USER}.
      * @param owner
      * @param newValue
      */

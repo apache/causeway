@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.object.title;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -36,7 +35,7 @@ public abstract class TitleFacetAbstract extends FacetAbstract implements TitleF
     }
 
     /**
-     * Default implementation that simply delegates to {@link TitleFacet#title(ObjectAdapter)}.
+     * Default implementation that simply delegates to {@link TitleFacet#title(ManagedObject)}.
      */
     @Override
     public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {

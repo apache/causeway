@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.spec.feature;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
@@ -35,8 +34,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 public interface CurrentHolder {
 
     /**
-     * Returns the referenced {@link ObjectAdapter} for the owning
-     * {@link ObjectAdapter}.
+     * Returns the referenced {@link ManagedObject} for the owning
+     * {@link ManagedObject}.
      *
      * <p>
      * For example, if this is an {@link OneToOneAssociation}, then returns the

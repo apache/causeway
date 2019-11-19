@@ -97,7 +97,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     /**
      * Gets the proposed value of the {@link ManagedObject} (downcast as a
      * <code>MutableProposedHolder</code>, wrapping the proposed value into a
-     * {@link ObjectAdapter}.
+     * {@link ManagedObject}.
      */
     @Override
     public ManagedObject get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {

@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
 
@@ -34,7 +34,7 @@ import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
 public class CollectionAccessContext extends AccessContext<CollectionAccessEvent> {
 
     public CollectionAccessContext(
-            final ObjectAdapter target,
+            final ManagedObject target,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.COLLECTION_READ, identifier, target, interactionInitiatedBy);

@@ -35,7 +35,7 @@ public interface PropertyOrCollectionAccessorFacet extends Facet {
 
     /**
      * Gets the value of this property or collection from this object (as a pojo, not as
-     * an {@link org.apache.isis.metamodel.adapter.ObjectAdapter adapter}).
+     * an {@link ManagedObject adapter}).
      *
      * <p>
      *     The object(s) will be excluded if not visible to the current user.  That is, for a collection they will be

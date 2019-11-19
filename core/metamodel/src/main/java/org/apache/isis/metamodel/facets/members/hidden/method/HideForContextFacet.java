@@ -19,13 +19,13 @@
 
 package org.apache.isis.metamodel.facets.members.hidden.method;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Hide a property, collection or action based on the state of the target
- * {@link ObjectAdapter object}.
+ * {@link ManagedObject object}.
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the

@@ -154,7 +154,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
      *
      * <p>
      * Typically it is easier to just call
-     * {@link ObjectMember#isVisible(ObjectAdapter, InteractionInitiatedBy, Where)}; this is
+     * {@link ObjectMember#isVisible(ManagedObject, InteractionInitiatedBy, Where)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
@@ -203,7 +203,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
      *
      * <p>
      * Typically it is easier to just call
-     * {@link ObjectMember#isUsable(ObjectAdapter, InteractionInitiatedBy, Where)}; this is
+     * {@link ObjectMember#isUsable(ManagedObject, InteractionInitiatedBy, Where)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */

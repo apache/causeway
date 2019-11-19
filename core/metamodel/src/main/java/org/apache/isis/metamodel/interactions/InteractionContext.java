@@ -49,7 +49,7 @@ import org.apache.isis.security.authentication.AuthenticationSession;
  * {@link InteractionEvent} hierarchy. Having parallel hierarchies is a bit of a
  * code-smell. However, it is required because the {@link InteractionContext
  * context} hierarchy is internal to the framework (with references to
- * {@link ObjectAdapter}s, {@link AuthenticationSession}s and so forth), whereas
+ * {@link ManagedObject}s, {@link AuthenticationSession}s and so forth), whereas
  * the {@link InteractionEvent event} hierarchy is part of the corelib, that is
  * public API.
  *

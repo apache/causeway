@@ -273,10 +273,10 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     /**
      * The Validates all arguments individually (by calling same helper that
-     * {@link #isEachIndividualArgumentValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)} delegates to)
+     * {@link #isEachIndividualArgumentValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)} delegates to)
      * and if there are no validation errors, then validates the entire argument
      * set (by calling same helper that
-     * {@link #isArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)} delegates to).
+     * {@link #isArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)} delegates to).
      *
      * <p>
      * The two other validation methods mentioned above are separated out to allow viewers (such as the RO viewer) to
@@ -302,10 +302,10 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     /**
      * Normally action validation is all performed by
-     * {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}, which calls
-     * {@link #isEachIndividualArgumentValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy) this method} to
+     * {@link #isProposedArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)}, which calls
+     * {@link #isEachIndividualArgumentValid(ManagedObject, ManagedObject[], InteractionInitiatedBy) this method} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy) validate argument set}
+     * {@link #isArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy) validate argument set}
      * afterwards.
      *
      * <p>
@@ -345,10 +345,10 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     /**
      * Normally action validation is all performed by
-     * {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}, which calls
-     * {@link #isEachIndividualArgumentValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)} to
+     * {@link #isProposedArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)}, which calls
+     * {@link #isEachIndividualArgumentValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy) this method} to
+     * {@link #isArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy) this method} to
      * validate the entire argument set afterwards.
      *
      * <p>
@@ -421,7 +421,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     /**
      * Sets up the {@link Command}, then delegates off to
-     * {@link #executeInternal(ObjectAdapter, ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy) executeInternal}
+     * {@link #executeInternal(ManagedObject, ManagedObject, ManagedObject[], InteractionInitiatedBy) executeInternal}
      * to invoke the {@link ActionInvocationFacet invocation facet}.
      *
      * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
