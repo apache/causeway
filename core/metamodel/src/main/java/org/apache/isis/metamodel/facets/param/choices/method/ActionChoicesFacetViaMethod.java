@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.CollectionUtils;
@@ -70,7 +69,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     public Object[][] getChoices(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final Object objectOrCollection = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+        final Object objectOrCollection = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
         if (!(objectOrCollection instanceof Object[])) {
             throw new DomainModelException(String.format(
                     "Expected an array of collections (Object[]) containing choices for all parameters, "
@@ -99,7 +98,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
         final ManagedObject collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
         final List<ManagedObject> visibleAdapters =
-                ObjectAdapter.Util.visibleAdapters(
+                ManagedObject.VisibilityUtil.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> filteredObjects =

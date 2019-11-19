@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.CollectionUtils;
@@ -71,7 +70,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final Object choices =
-                ObjectAdapter.InvokeUtils.invokeAutofit(
+                ManagedObject.InvokeUtil.invokeAutofit(
                         method, adapter, argumentsIfAvailable);
         if (choices == null) {
             return _Constants.emptyObjects;
@@ -81,7 +80,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
         final Class<?> parameterType = facetedMethodParameter.getType();
 
         final List<ManagedObject> visibleAdapters =
-                ObjectAdapter.Util.visibleAdapters(
+                ManagedObject.VisibilityUtil.visibleAdapters(
                         objectAdapter,
                         interactionInitiatedBy);
         final List<Object> visibleObjects =

@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.ObjectExtensions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -68,7 +67,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final Object options = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+        final Object options = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
         if (options == null) {
             return null;
         }

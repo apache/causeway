@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.object.layout;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
@@ -41,7 +40,7 @@ public class LayoutFacetMethod extends LayoutFacetAbstract {
             return null;
         }
         try {
-            return (String) ObjectAdapter.InvokeUtils.invoke(method, objectAdapterIfAny);
+            return (String) ManagedObject.InvokeUtil.invoke(method, objectAdapterIfAny);
         } catch (final RuntimeException ex) {
             return null;
         }

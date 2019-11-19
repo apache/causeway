@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
@@ -59,7 +58,7 @@ public class CollectionAddToFacetViaMethod extends CollectionAddToFacetAbstract 
             final ManagedObject elementAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, elementAdapter);
+        ManagedObject.InvokeUtil.invoke(method, owningAdapter, elementAdapter);
     }
 
     @Override

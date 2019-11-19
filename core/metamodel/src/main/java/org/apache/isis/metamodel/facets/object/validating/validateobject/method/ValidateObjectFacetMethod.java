@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.object.validating.validateobject.ValidateObjectFacetAbstract;
@@ -57,7 +56,7 @@ public class ValidateObjectFacetMethod extends ValidateObjectFacetAbstract imple
 
     @Override
     public String invalidReason(final ManagedObject owningAdapter) {
-        final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+        final Object returnValue = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

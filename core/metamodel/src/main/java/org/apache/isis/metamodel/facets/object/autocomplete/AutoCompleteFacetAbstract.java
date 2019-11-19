@@ -95,7 +95,7 @@ implements AutoCompleteFacet {
         }
 
         return CollectionFacet.Utils.streamAdapters(resultAdapter)
-        .filter(ManagedObject.Visibility.filterOn(interactionInitiatedBy))
+        .filter(ManagedObject.VisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Collectors.toList());
 
     }

@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -60,7 +59,7 @@ public class RemovedCallbackFacetViaMethod extends RemovedCallbackFacetAbstract 
 
     @Override
     public void invoke(final ManagedObject adapter) {
-        ObjectAdapter.InvokeUtils.invokeAll(methods, adapter);
+        ManagedObject.InvokeUtil.invokeAll(methods, adapter);
     }
 
     @Override

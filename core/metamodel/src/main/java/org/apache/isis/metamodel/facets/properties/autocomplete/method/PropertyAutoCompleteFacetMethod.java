@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.CollectionUtils;
@@ -79,7 +78,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
+        final Object collectionOrArray = ManagedObject.InvokeUtil.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return null;
         }
@@ -90,7 +89,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
         final Class<?> propertyType = facetedMethod.getType();
 
         final List<ManagedObject> visibleAdapters =
-                ObjectAdapter.Util.visibleAdapters(
+                ManagedObject.VisibilityUtil.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> filteredObjects =

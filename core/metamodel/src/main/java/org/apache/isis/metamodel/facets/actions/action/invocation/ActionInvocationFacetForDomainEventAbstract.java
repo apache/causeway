@@ -451,7 +451,7 @@ implements ImperativeFacet {
             final Object visibleObjects =
                     CollectionUtils.copyOf(
                             adapters
-                            .filter(ManagedObject.Visibility.filterOn(interactionInitiatedBy))
+                            .filter(ManagedObject.VisibilityUtil.filterOn(interactionInitiatedBy))
                             .map(ManagedObject::unwrapPojo)
                             .collect(Collectors.toList()),
                             method.getReturnType());
@@ -466,7 +466,7 @@ implements ImperativeFacet {
             return resultAdapter;
 
         } else {
-            boolean visible = ManagedObject.Visibility.isVisible(resultAdapter, interactionInitiatedBy);
+            boolean visible = ManagedObject.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy);
             return visible ? resultAdapter : null;
         }
     }

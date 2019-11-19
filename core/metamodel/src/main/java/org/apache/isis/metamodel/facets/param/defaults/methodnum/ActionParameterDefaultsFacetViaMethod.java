@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
@@ -74,7 +73,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
         // this isn't a dependent defaults situation, so just evaluate the default.
         if (argumentsIfAvailable == null || paramNumUpdated == null) {
-            return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable);
+            return ManagedObject.InvokeUtil.invokeAutofit(method, target, argumentsIfAvailable);
         }
 
         // this could be a dependent defaults situation, but has a previous parameter been updated
@@ -89,7 +88,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
             // converesly, if method default2Foo(int), and the second param is updated... we don't want to re-evaluate
             // so numParams == 1, and paramNumUpdated == 1, and (paramNumUpdated < numParams) is FALSE
             //
-            return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable);
+            return ManagedObject.InvokeUtil.invokeAutofit(method, target, argumentsIfAvailable);
         }
 
         // otherwise, just return the arguments that are already known; we don't want to recompute the default
