@@ -39,6 +39,25 @@
 				</property>
 			</activation>
 
+			<properties>
+				<jsr305.version>3.0.2</jsr305.version>
+				<error_prone_annotations.version>2.3.2</error_prone_annotations.version>
+			</properties>
+
+			<dependencyManagement>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.code.findbugs</groupId>
+						<artifactId>jsr305</artifactId>
+						<version>${jsr305.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>com.google.errorprone</groupId>
+						<artifactId>error_prone_annotations</artifactId>
+						<version>${error_prone_annotations.version}</version>
+					</dependency>
+				</dependencies>
+			</dependencyManagement>
 			<dependencies>
 
 				<!-- SPRING -->

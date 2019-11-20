@@ -161,8 +161,8 @@
 		<togglz.version>2.1.0.Final</togglz.version>
 
 		<wicket.version>8.6.1</wicket.version>
-		<wicket-bootstrap.version>2.0.10</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
-		<wicket-bootstrap-core.version>2.0.4</wicket-bootstrap-core.version>
+		<wicket-bootstrap.version>2.0.11</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
+		<wicket-bootstrap-core.version>2.0.11</wicket-bootstrap-core.version>
 		<wicket-bootstrap-datetimepicker.version>4.17.37-1</wicket-bootstrap-datetimepicker.version>
 		<wicket-fullcalendar.version>2.2.0</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
