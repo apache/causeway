@@ -35,6 +35,13 @@
 			<groupId>com.sun.xml.ws</groupId>
 			<artifactId>jaxws-ri</artifactId>
 			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<!-- version clash with spring, we pull in the newer 1.3.5 below -->
+					<groupId>jakarta.annotation</groupId>
+					<artifactId>jakarta.annotation-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>javax.xml.bind</groupId>

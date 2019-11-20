@@ -75,7 +75,6 @@
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jackson-provider</artifactId>
-			<version>${resteasy4-jaxrs.version}</version>
 		</dependency>
 
 		<!-- OVERRIDES RestEasy JAX-B 2.3, to be the newest, such that code can 
@@ -83,7 +82,6 @@
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxb-provider</artifactId>
-			<version>${resteasy4-jaxrs.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.sun.xml.bind</groupId>
@@ -105,7 +103,6 @@
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
-			<version>${resteasy4-jaxrs.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.jboss.spec.javax.servlet</groupId>

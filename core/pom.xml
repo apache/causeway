@@ -86,8 +86,6 @@
 
 		<camel.version>2.14.2</camel.version>
 
-		<com-sun-mail.version>1.5.2</com-sun-mail.version>
-
 		<commons-email.version>1.4</commons-email.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<commons-io.version>2.6</commons-io.version>
@@ -112,11 +110,9 @@
 
 		<findbugs-annotations.version>2.0.1</findbugs-annotations.version>
 
-		<geronimo-servlet_3.0_spec.version>1.0</geronimo-servlet_3.0_spec.version>
 		<guava.version>28.1-jre</guava.version>
 
 		<htmlparser.version>2.1</htmlparser.version>
-		<hsqldb.version>2.5.0</hsqldb.version>
 
 		<jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
 		<javaee.version>8.0</javaee.version>
@@ -127,7 +123,7 @@
 		<jaxb-impl.version>2.3.0.1</jaxb-impl.version>
 		<jaxws-ri.version>2.3.2</jaxws-ri.version>
 
-		<jbcrypt.version>0.3m</jbcrypt.version>
+		<jbcrypt.version>0.4</jbcrypt.version>
 		<jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
 
 		<jdo-api.version>3.1</jdo-api.version> <!-- see also datanucleus.x.x versions -->
@@ -163,7 +159,6 @@
 		<swagger-core.version>1.5.21</swagger-core.version>
 
 		<togglz.version>2.1.0.Final</togglz.version>
-		<transaction-api.version>1.2</transaction-api.version>
 
 		<wicket.version>8.6.1</wicket.version>
 		<wicket-bootstrap.version>2.0.10</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
@@ -177,11 +172,6 @@
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
 		<xdocreport.version>1.0.6</xdocreport.version>
-
-		<!-- PLUGIN DEPENDENCIES -->
-<!--
-		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version> &lt;!&ndash; JUnit 5 requires Surefire version 2.22.0 or higher &ndash;&gt;
--->
 
 	</properties>
 
@@ -1111,6 +1101,18 @@
 
 			<!-- THIRD PARTY DEPENDENCIES -->
 
+			<dependency>
+				<groupId>com.danhaywood.java</groupId>
+				<artifactId>danhaywood-java-assertjext</artifactId>
+				<version>${danhaywood-java-assertjext.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.danhaywood.java</groupId>
+				<artifactId>danhaywood-java-testsupport</artifactId>
+				<version>${danhaywood-java-testsupport.version}</version>
+				<scope>test</scope>
+			</dependency>
+
 			<!-- provides @Nullable -->
 			<dependency>
 				<groupId>com.google.code.findbugs</groupId>
@@ -1143,18 +1145,17 @@
 			</dependency>
 
 			<dependency>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-core</artifactId>
-				<version>${swagger-core.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.commons</groupId>
-						<artifactId>commons-lang3</artifactId>
-					</exclusion>
-				</exclusions>
+				<groupId>com.github.javafaker</groupId>
+				<artifactId>javafaker</artifactId>
+				<version>${javafaker.version}</version>
 			</dependency>
 
-			<!-- JDK11+ LEGACY SUPPORT -->
+			<dependency>
+				<groupId>com.ullink.slack</groupId>
+				<artifactId>simpleslackapi</artifactId>
+				<version>${simpleslackapi.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-core</artifactId>
@@ -1170,140 +1171,75 @@
 				<artifactId>jaxws-ri</artifactId>
 				<version>${jaxws-ri.version}</version>
 				<type>pom</type>
-				<exclusions>
-					<exclusion>
-						<!-- version clash with spring, we pull in the newer 1.3.5 below -->
-						<groupId>jakarta.annotation</groupId>
-						<artifactId>jakarta.annotation-api</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
+
 
 			<dependency>
 				<groupId>de.agilecoders.wicket</groupId>
 				<artifactId>wicket-bootstrap-core</artifactId>
-				<version>${wicket-bootstrap.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-util</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-request</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-extensions</artifactId>
-					</exclusion>
-				</exclusions>
+				<version>${wicket-bootstrap-core.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>de.agilecoders.wicket</groupId>
 				<artifactId>wicket-bootstrap-extensions</artifactId>
 				<version>${wicket-bootstrap.version}</version>
-				<exclusions>
-					<!-- exclude unused extensions -->
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-util</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-request</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-extensions</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>bootstrap</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>jquery</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>jquerypp</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>jquery-ui</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>typeaheadjs</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>x-editable-bootstrap</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>spin-js</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.google.javascript</groupId>
-						<artifactId>closure-compiler</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>de.agilecoders.wicket</groupId>
 				<artifactId>wicket-bootstrap-themes</artifactId>
 				<version>${wicket-bootstrap.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>de.agilecoders.wicket.webjars</groupId>
 				<artifactId>wicket-webjars</artifactId>
 				<version>${wicket-webjars.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-request</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 
+			<dependency>
+				<groupId>fr.opensagres.xdocreport</groupId>
+				<artifactId>fr.opensagres.xdocreport.document.docx</artifactId>
+				<version>${xdocreport.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.opensagres.xdocreport</groupId>
+				<artifactId>fr.opensagres.xdocreport.template.freemarker</artifactId>
+				<version>${xdocreport.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.opensagres.xdocreport</groupId>
+				<artifactId>fr.opensagres.xdocreport.converter.docx.xwpf</artifactId>
+				<version>${xdocreport.version}</version>
+			</dependency>
 
-			<!-- JEE API -->
+			<dependency>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-core</artifactId>
+				<version>${swagger-core.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>jakarta.annotation</groupId>
+				<artifactId>jakarta.annotation-api</artifactId>
+				<version>${jakarta.annotation-api.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>javax</groupId>
 				<artifactId>javaee-api</artifactId>
 				<version>${javaee.version}</version>
 			</dependency>
 
-			<!-- JDO API -->
-			<!-- not managed, because scope=provided can not be overwritten by plugins
-				that are responsible for providing jdo-api -->
-			<!--
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${javax-servlet.version}</version>
+			</dependency>
+
 			<dependency>
 			    <groupId>javax.jdo</groupId>
 			    <artifactId>jdo-api</artifactId>
 			    <version>${jdo-api.version}</version>
-			    <scope>provided</scope>
 			</dependency>
-			-->
 
 			<dependency>
 				<groupId>net.sf.jopt-simple</groupId>
@@ -1312,17 +1248,129 @@
 			</dependency>
 
 			<dependency>
+				<groupId>net.ftlines.wicket-fullcalendar</groupId>
+				<artifactId>wicket-fullcalendar-core</artifactId>
+				<version>${wicket-fullcalendar.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>net.ftlines.wicket-source</groupId>
 				<!-- <groupId>com.github.jennybrown8.wicket-source</groupId> -->
 				<artifactId>wicket-source</artifactId>
 				<version>${wicket-source.version}</version>
+			</dependency>
+
+			<!-- TODO: when used, move exclusions down -->
+			<dependency>
+				<groupId>ognl</groupId>
+				<artifactId>ognl</artifactId>
+				<version>${ognl.version}</version>
 				<exclusions>
 					<exclusion>
-						<!-- for dependency convergence -->
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
+						<groupId>javassist</groupId>
+						<artifactId>javassist</artifactId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-core</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-spring</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-jms</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-stream</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-ognl</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-jaxb</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-jackson</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-spring-javaconfig</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-cxf</artifactId>
+				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-test</artifactId>
+				<version>${camel.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-test-spring</artifactId>
+				<version>${camel.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- TODO: when used, move exclusions down -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-email</artifactId>
+				<version>${commons-email.version}</version>
+				<exclusions>
+					<!-- excluded because provided by javax:javaee-api -->
+					<exclusion>
+						<groupId>com.sun.mail</groupId>
+						<artifactId>javax.mail</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.activation</groupId>
+						<artifactId>activation</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-rs-client</artifactId>
+				<version>${cxf-rt-rs-client.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.pdfbox</groupId>
+				<artifactId>pdfbox</artifactId>
+				<version>${pdfbox.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-schemas</artifactId>
+				<version>${poi.version}</version>
 			</dependency>
 
 			<dependency>
@@ -1346,22 +1394,14 @@
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-core</artifactId>
 				<version>${wicket.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>commons-io</groupId>
-						<artifactId>commons-io</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-devutils</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
+
+			<!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-request</artifactId>
@@ -1373,6 +1413,8 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+
+			<!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-util</artifactId>
@@ -1384,17 +1426,14 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
 				<version>${wicket.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
+
+			<!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-datetime</artifactId>
@@ -1406,34 +1445,59 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-auth-roles</artifactId>
 				<version>${wicket.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
 				<version>${wicket.version}</version>
-				<exclusions>
-					<!-- TODO[2112] exclusions might no longer be relevant -->
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<!-- for Java7 compatibility (we don't use the proxying capability
-							of this component) -->
-						<groupId>cglib</groupId>
-						<artifactId>cglib</artifactId>
-					</exclusion>
-				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-guava</artifactId>
+				<version>${assertj-guava.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.datanucleus</groupId>
+				<artifactId>datanucleus-api-jdo</artifactId>
+				<version>${datanucleus-api-jdo.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.datanucleus</groupId>
+				<artifactId>datanucleus-core</artifactId>
+				<version>${datanucleus-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.datanucleus</groupId>
+				<artifactId>datanucleus-jdo-query</artifactId>
+				<version>${datanucleus-jdo-query.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.datanucleus</groupId>
+				<artifactId>datanucleus-jodatime</artifactId>
+				<version>${datanucleus-jodatime.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.datanucleus</groupId>
+				<artifactId>datanucleus-rdbms</artifactId>
+				<version>${datanucleus-rdbms.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.datanucleus</groupId>
+				<artifactId>javax.jdo</artifactId>
+				<version>${datanucleus-jdo-api.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.docx4j</groupId>
+				<artifactId>docx4j</artifactId>
+				<version>${docx4j.version}</version>
 			</dependency>
 
 			<dependency>
@@ -1442,6 +1506,7 @@
 				<version>${easymock.version}</version>
 			</dependency>
 
+			<!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.htmlparser</groupId>
 				<artifactId>htmlparser</artifactId>
@@ -1455,9 +1520,39 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.javassist</groupId>
+				<artifactId>javassist</artifactId>
+				<version>${javassist.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.jboss.spec.javax.ws.rs</groupId>
 				<artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
 				<version>${jboss-jaxrs-api_2.0_spec.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jdom</groupId>
+				<artifactId>jdom</artifactId>
+				<version>${jdom.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jackson-provider</artifactId>
+				<version>${resteasy4-jaxrs.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxrs</artifactId>
+				<version>${resteasy4-jaxrs.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxb-provider</artifactId>
+				<version>${resteasy4-jaxrs.version}</version>
 			</dependency>
 
 			<dependency>
@@ -1469,13 +1564,6 @@
 				<groupId>org.jmock</groupId>
 				<artifactId>jmock-junit4</artifactId>
 				<version>${jmock.version}</version>
-				<exclusions>
-					<exclusion>
-						<!-- for dependency convergence -->
-						<groupId>junit</groupId>
-						<artifactId>junit-dep</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 
 			<dependency>
@@ -1485,45 +1573,69 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.mindrot</groupId>
+				<artifactId>jbcrypt</artifactId>
+				<version>${jbcrypt.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.objenesis</groupId>
+				<artifactId>objenesis</artifactId>
+				<version>${objenesis.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.picocontainer</groupId>
 				<artifactId>picocontainer</artifactId>
 				<version>${picocontainer.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-test</artifactId>
-				<version>${spring-boot.version}</version>
-				<exclusions>
-					<!-- version clash with org.jmock:jmock:2.11.0, which requires org.ow2.asm:asm:6.2.1 -->
-					<exclusion>
-						<artifactId>org.ow2.asm</artifactId>
-						<groupId>asm</groupId>
-					</exclusion>
-					<exclusion>
-						<groupId>javax.validation</groupId>
-						<artifactId>validation-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<!-- we use log4j-2 instead -->
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>${quartz-scheduler.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz-jobs</artifactId>
+				<version>${quartz-scheduler.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j-api.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.togglz</groupId>
+				<artifactId>togglz-core</artifactId>
+				<version>${togglz.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.togglz</groupId>
+				<artifactId>togglz-junit</artifactId>
+				<version>${togglz.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.togglz</groupId>
+				<artifactId>togglz-servlet</artifactId>
+				<version>${togglz.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.togglz</groupId>
+				<artifactId>togglz-console</artifactId>
+				<version>${togglz.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.webjars</groupId>
 				<artifactId>jquery-ui</artifactId>
 				<version>${jquery-ui.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>jquery</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 
+			<!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.webjars</groupId>
 				<artifactId>Eonasdan-bootstrap-datetimepicker</artifactId>
@@ -1543,15 +1655,21 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.webjars.bower</groupId>
+				<artifactId>summernote</artifactId>
+				<version>${summernote.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-gmap3</artifactId>
+				<version>${wicketstuff-gmap3.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.wicketstuff</groupId>
 				<artifactId>wicketstuff-select2</artifactId>
 				<version>${wicketstuff.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 
 		</dependencies>
@@ -1565,6 +1683,12 @@
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-junit4</artifactId>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit-dep</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>

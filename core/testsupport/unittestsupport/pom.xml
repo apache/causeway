@@ -156,6 +156,10 @@
 			<artifactId>jmock-junit4</artifactId>
 			<exclusions>
 				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit-dep</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>org.ow2.asm</groupId>
 					<artifactId>asm</artifactId>
 				</exclusion>

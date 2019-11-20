@@ -70,33 +70,72 @@
             		<groupId>org.ow2.asm</groupId>
             		<artifactId>asm</artifactId>
             	</exclusion>
+                <!-- TODO[2112] exclusions might no longer be relevant -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <!-- for Java7 compatibility (we don't use the proxying capability
+                        of this component) -->
+                    <groupId>cglib</groupId>
+                    <artifactId>cglib</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-auth-roles</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
             <exclusions>
-            	<exclusion>
-            		<groupId>org.slf4j</groupId>
-            		<artifactId>slf4j-api</artifactId>
-            	</exclusion>
-            	<exclusion>
-            		<groupId>com.google.guava</groupId>
-            		<artifactId>guava</artifactId>
-            	</exclusion>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket-util</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket-request</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket-extensions</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
-	
+
         <dependency>
             <groupId>net.ftlines.wicket-source</groupId>
+            <!-- <groupId>com.github.jennybrown8.wicket-source</groupId> -->
             <artifactId>wicket-source</artifactId>
             <exclusions>
+                <exclusion>
+                    <!-- for dependency convergence -->
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket-core</artifactId>
+                </exclusion>
             	<exclusion>
             		<groupId>org.slf4j</groupId>
             		<artifactId>slf4j-api</artifactId>
@@ -133,7 +172,12 @@
         			<groupId>org.ow2.asm</groupId>
         			<artifactId>asm</artifactId>
         		</exclusion>
-        	</exclusions>
+                <exclusion>
+                    <!-- for dependency convergence -->
+                    <groupId>junit</groupId>
+                    <artifactId>junit-dep</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

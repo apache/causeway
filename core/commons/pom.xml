@@ -110,6 +110,7 @@
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 			<exclusions>
 				<exclusion>
+					<!-- convergence issues from spring-boot-starter-log4j2 -->
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
@@ -118,8 +119,6 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<!-- convergence issues from spring-boot-starter-log4j2 -->
-			<version>${slf4j-api.version}</version>
 		</dependency>
 
 	</dependencies>

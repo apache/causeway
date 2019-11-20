@@ -79,6 +79,11 @@
 			<artifactId>jmock-junit4</artifactId>
 			<exclusions>
 				<exclusion>
+					<!-- for dependency convergence -->
+					<groupId>junit</groupId>
+					<artifactId>junit-dep</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>net.bytebuddy</groupId>
 					<artifactId>byte-buddy</artifactId>
 				</exclusion>
