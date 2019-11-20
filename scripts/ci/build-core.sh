@@ -23,19 +23,19 @@ sh $SCRIPT_DIR/print-environment.sh "build-core"
 
 cd $PROJECT_ROOT_PATH/core-parent
 
-if [ -z "$REVISION" ]; then
-  REVISION=$(grep "<version>" pom.xml | head -1 | cut -d">" -f2 | cut -d"<" -f1)
+if [ ! -z "$REVISION" ]; then
+  mvn versions:set -DnewVersion=$REVISION
 fi
 
-mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION
 
 mvn -s $SETTINGS_XML \
     --batch-mode \
     $MVN_STAGES \
-    -Drevision=$REVISION \
     -Dskip.assemble-zip \
     $MVN_ADDITIONAL_OPTS
 
-mvn versions:revert -Drevision=$REVISION
+if [ ! -z "$REVISION" ]; then
+  mvn versions:revert
+fi
 
 cd $PROJECT_ROOT_PATH

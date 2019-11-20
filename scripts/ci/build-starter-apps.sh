@@ -21,15 +21,11 @@ sh $SCRIPT_DIR/print-environment.sh "build-starter-apps"
 #
 # update version (but just for the modules we need to build)
 #
-cd $PROJECT_ROOT_PATH/core-parent
-
-if [ -z "$REVISION" ]; then
-  REVISION=$(grep "<version>" pom.xml | head -1 | cut -d">" -f2 | cut -d"<" -f1)
+if [ ! -z "$REVISION" ]; then
+  cd $PROJECT_ROOT_PATH/core-parent
+  mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION -Dstarter-apps-modules
+  cd $PROJECT_ROOT_PATH
 fi
-
-mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION -Dstarter-apps-modules
-
-cd $PROJECT_ROOT_PATH
 
 #
 # now build the apps
@@ -39,7 +35,6 @@ do
   cd $PROJECT_ROOT_PATH/examples/demo/$app
 
   mvn --batch-mode \
-      -Drevision=$REVISION \
        clean install
 
   cd $PROJECT_ROOT_PATH
@@ -48,6 +43,8 @@ done
 #
 # finally, revert the version
 #
-cd $PROJECT_ROOT_PATH/core-parent
-mvn versions:revert -Drevision=$REVISION -Dstarter-apps-modules
-cd $PROJECT_ROOT_PATH
+if [ ! -z "$REVISION" ]; then
+  cd $PROJECT_ROOT_PATH/core-parent
+  mvn versions:revert -Drevision=$REVISION -Dstarter-apps-modules
+  cd $PROJECT_ROOT_PATH
+fi

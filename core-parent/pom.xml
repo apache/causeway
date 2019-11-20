@@ -31,16 +31,6 @@ under the License.
 	then the original from org.apache:apache have been commented out.
 	-->
 
-	<!-- APACHE ISIS customisation 1/6: start -->
-
-	<!-- NB: <groupId> must come before the <parent>, because the
-	     build scripts grep for the version as a fallback -->
-	<groupId>org.apache.isis.core</groupId>
-	<artifactId>isis-parent</artifactId>
-	<version>2.0.0-M3-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<!-- APACHE ISIS customisation 1/6: end -->
-
 	<!-- for more information, see the documentation of this POM: http://maven.apache.org/pom/asf/ -->
 
 	<!-- ORG.APACHE:APACHE : commented out : start
@@ -52,13 +42,20 @@ under the License.
 
 	ORG.APACHE:APACHE : commented out : end -->
 
-	<!-- APACHE ISIS customisation 2/6: start -->
+	<!-- APACHE ISIS customisation 1/5: start -->
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.0.RELEASE</version>
 	</parent>
-	<!-- APACHE ISIS customisation 2/6: end -->
+
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-parent</artifactId>
+	<version>2.0.0-M3-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<!-- APACHE ISIS customisation 1/5: end -->
 
 
 	<!-- ORG.APACHE:APACHE : commented out : start
@@ -75,13 +72,13 @@ under the License.
 
 	ORG.APACHE:APACHE : commented out : end -->
 
-	<!-- APACHE ISIS customisation 3/6: start -->
+	<!-- APACHE ISIS customisation 2/5: start -->
 	<name>Apache Isis</name>
 	<description>Parent for the core framework + extensions, starter parent pom for starter apps.</description>
 
     <url>https://isis.apache.org</url>
 	<inceptionYear>2010</inceptionYear>
-	<!-- APACHE ISIS customisation 3/6: end -->
+	<!-- APACHE ISIS customisation 2/5: end -->
 
 	<organization>
 		<name>The Apache Software Foundation</name>
@@ -114,7 +111,7 @@ under the License.
     </scm>
 	ORG.APACHE:APACHE : commented out : end -->
 
-	<!-- APACHE ISIS customisation 4/6: start -->
+	<!-- APACHE ISIS customisation 3/5: start -->
 	<mailingLists>
 		<mailingList>
 			<name>developers</name>
@@ -272,7 +269,7 @@ under the License.
 			<timezone>+3</timezone>
 		</developer>
 	</developers>
-	<!-- APACHE ISIS customisation 4/6: end -->
+	<!-- APACHE ISIS customisation 3/5: end -->
 
 	<distributionManagement>
 		<repository>
@@ -488,7 +485,7 @@ under the License.
 					<artifactId>apache-rat-plugin</artifactId>
 					<version>0.12</version>
 
-					<!-- APACHE ISIS customisation 5/6: start -->
+					<!-- APACHE ISIS customisation 4/5: start -->
 					<configuration>
 						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 						<excludeSubProjects>true</excludeSubProjects>
@@ -594,7 +591,7 @@ under the License.
 							</licenseFamily>
 						</licenseFamilies>
 					</configuration>
-					<!-- APACHE ISIS customisation 5/6: end -->
+					<!-- APACHE ISIS customisation 4/5: end -->
 
 				</plugin>
 
@@ -778,7 +775,7 @@ under the License.
 		</profile>
 		<!-- END SNIPPET: release-profile -->
 
-		<!-- APACHE ISIS customisation 6/6: start -->
+		<!-- APACHE ISIS customisation 5/5: start -->
 		<profile>
 			<id>gcpappenginerepo-deploy</id>
 			<activation>
@@ -845,7 +842,7 @@ under the License.
 				<module>../examples/apps/simpleapp</module>
 			</modules>
 		</profile>
-		<!-- APACHE ISIS customisation 6/6: end -->
+		<!-- APACHE ISIS customisation 5/5: end -->
 
 	</profiles>
 </project>

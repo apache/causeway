@@ -28,15 +28,11 @@ echo ""
 #
 # update version (but just for the modules we need to build)
 #
-cd $PROJECT_ROOT_PATH/core-parent
-
-if [ -z "$REVISION" ]; then
-  REVISION=$(grep "<version>" pom.xml | head -1 | cut -d">" -f2 | cut -d"<" -f1)
+if [ ! -z "$REVISION" ]; then
+  cd $PROJECT_ROOT_PATH/core-parent
+  mvn versions:set -DnewVersion=$REVISION -Ddemo-app-modules
+  cd $PROJECT_ROOT_PATH
 fi
-
-mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION -Ddemo-app-modules
-
-cd $PROJECT_ROOT_PATH
 
 #
 # now build the apps
@@ -46,7 +42,6 @@ do
   cd $PROJECT_ROOT_PATH/examples/apps/$app
 
   mvn --batch-mode \
-      -Drevision=$REVISION \
       clean install \
       -Dflavor=$FLAVOR \
       -Dskip.git \
@@ -54,7 +49,6 @@ do
       -DskipTests
 
   mvn --batch-mode \
-      -Drevision=$REVISION \
       compile jib:build \
       -Dflavor=$FLAVOR \
       -Dskip.git \
@@ -67,6 +61,8 @@ done
 #
 # finally, revert the version
 #
-cd $PROJECT_ROOT_PATH/core-parent
-mvn versions:revert -Drevision=$REVISION -Dstarter-apps-modules
-cd $PROJECT_ROOT_PATH
+if [ ! -z "$REVISION" ]; then
+  cd $PROJECT_ROOT_PATH/core-parent
+  mvn versions:revert -Dstarter-apps-modules
+  cd $PROJECT_ROOT_PATH
+fi

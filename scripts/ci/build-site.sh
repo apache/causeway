@@ -12,9 +12,9 @@ if [ -z "$REVISION" ]; then
     export $(cut -d= -f1 $SHARED_VARS_FILE)
   fi
 fi
+
 if [ -z "$REVISION" ]; then
-  echo "\$REVISION is not set" >&2
-  exit 1
+  export REVISION="SNAPSHOT"
 fi
 
 SITE_CONFIG=$1
