@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.commons.matchers;
 
 import org.hamcrest.Description;
-import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -33,7 +32,6 @@ public final class IsisMatchers {
     private IsisMatchers() {
     }
 
-    @Factory
     public static Matcher<String> nonEmptyString() {
         return new TypeSafeMatcher<String>() {
             @Override
@@ -49,7 +47,6 @@ public final class IsisMatchers {
         };
     }
 
-    @Factory
     public static Matcher<Class<?>> classEqualTo(final Class<?> operand) {
 
         class ClassEqualsMatcher extends TypeSafeMatcher<Class<?>> {
