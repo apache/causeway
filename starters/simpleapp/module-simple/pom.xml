@@ -38,44 +38,22 @@
 			<artifactId>isis-applib</artifactId>
 		</dependency>
 
-		<!-- ISIS CORE PLUGINS -->
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
-		</dependency>
-
-		<!-- ISIS EXTENSIONS -->
-		
-		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-fixtures</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-specsupport</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- TESTS -->
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-security-bypass</artifactId>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-testing</artifactId>
@@ -83,6 +61,14 @@
 			<scope>test</scope>
 		</dependency>
 
+<!--
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-security-bypass</artifactId>
+			<scope>test</scope>
+		</dependency>
+-->
+<!--
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -94,6 +80,7 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<scope>test</scope>
 		</dependency>
+-->
 
 	</dependencies>
 

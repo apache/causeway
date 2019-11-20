@@ -57,6 +57,14 @@ under the License.
 			</dependency>
 
 			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+
+			<dependency>
 				<groupId>com.approvaltests</groupId>
 				<artifactId>approvaltests</artifactId>
 				<version>${approvaltests.version}</version>

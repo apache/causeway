@@ -114,7 +114,7 @@ class MetaModelService_IntegTest extends SpringIntegrationTest {
     private void verifyClass(final DomainClassDto domainClass) {
         String asXml = jaxbService.toXml(domainClass);
         verify(new ApprovalTextWriter(asXml, "xml"){
-            @Override public String writeReceivedFile(final String received) throws Exception {
+            @Override public String writeReceivedFile(final String received) {
                 return super.writeReceivedFile(received);
             }
 

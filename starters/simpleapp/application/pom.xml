@@ -33,6 +33,14 @@
 
     <packaging>jar</packaging>
 
+    <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/java</directory>
+            </testResource>
+        </testResources>
+    </build>
+
     <dependencies>
     
     	<dependency>
@@ -40,20 +48,11 @@
             <artifactId>simpleapp-module-simple</artifactId>
         </dependency>
         
-        <!-- ISIS WEB-APP BUNDLE -->
-		
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-webapp</artifactId>
 			<type>pom</type>
 		</dependency>
-
-		<!-- ISIS CORE PLUGINS -->
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-plugins-codegen-bytebuddy</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -74,10 +73,6 @@
 
 <!--        
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-        <dependency>
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>9.1-901.jdbc4</version>
@@ -91,12 +86,14 @@
         
         <!-- TESTS -->
         
+<!--
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>simpleapp-module-simple</artifactId>
-            <type>test-jar</type>
             <scope>test</scope>
+            <type>test-jar</type>
         </dependency>
+-->
 
         <dependency>
             <groupId>org.apache.isis.mavendeps</groupId>
@@ -105,11 +102,13 @@
             <scope>test</scope>
         </dependency>
 
+<!--
         <dependency>
             <groupId>com.approvaltests</groupId>
             <artifactId>approvaltests</artifactId>
             <scope>test</scope>
         </dependency>
+-->
 
     </dependencies>
 

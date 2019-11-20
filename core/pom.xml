@@ -82,6 +82,8 @@
 
 		<!-- LIBRARY DEPENDENCIES -->
 
+		<approvaltests.version>4.0.2</approvaltests.version>
+
 		<assertj-guava.version>3.1.0</assertj-guava.version>
 
 		<camel.version>2.14.2</camel.version>
@@ -1103,6 +1105,13 @@
 
 
 			<!-- THIRD PARTY DEPENDENCIES -->
+
+
+			<dependency>
+				<groupId>com.approvaltests</groupId>
+				<artifactId>approvaltests</artifactId>
+				<version>${approvaltests.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>com.danhaywood.java</groupId>

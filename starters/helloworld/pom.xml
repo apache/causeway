@@ -18,7 +18,6 @@
 		<groupId>org.apache.isis.app</groupId>
 		<artifactId>isis-app-starter-parent</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../../starters/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.examples.apps</groupId>
@@ -34,43 +33,32 @@
 
 	<dependencies>
 
-		<!-- ISIS WEB-APP BUNDLE -->
-
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-webapp</artifactId>
 			<type>pom</type>
 		</dependency>
-
-		<!-- ISIS CORE PLUGINS -->
-
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-security-shiro</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-security-keycloak</artifactId>
 		</dependency>
 
-		<!-- OTHER DEPENDENCIES -->
-		
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -78,20 +66,11 @@
 
 
 		<!-- TEST DEPENDENCIES -->
-
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-testing</artifactId>
 			<scope>test</scope>
 			<type>pom</type>
-		</dependency>
-
-
-		<dependency>
-			<groupId>com.approvaltests</groupId>
-			<artifactId>approvaltests</artifactId>
-			<version>2.0.0</version>
-			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
@@ -185,6 +164,56 @@
 					<type>pom</type>
 				</dependency>
 			</dependencies>
+		</profile>
+
+		<profile>
+			<id>docker</id>
+			<activation>
+				<property>
+					<name>docker</name>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+				<package-as-war>false</package-as-war>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<configuration>
+							<from>
+								<image>openjdk:13-alpine</image>
+							</from>
+							<container>
+								<jvmFlags>
+									<jvmFlag>-Xmx512m</jvmFlag>
+								</jvmFlags>
+								<mainClass>domainapp.application.HelloWorldApp</mainClass>
+								<ports>
+									<port>8080</port>
+								</ports>
+							</container>
+							<to>
+								<image>docker.io/apacheisis/helloworld:latest</image>
+								<auth>
+									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
+									<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
+								</auth>
+							</to>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 
 	</profiles>

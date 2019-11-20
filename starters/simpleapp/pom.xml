@@ -25,7 +25,6 @@
         <groupId>org.apache.isis.app</groupId>
         <artifactId>isis-app-starter-parent</artifactId>
         <version>2.0.0-M3-SNAPSHOT</version>
-        <relativePath>../../../starters/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.examples.apps</groupId>
@@ -48,6 +47,7 @@
                 <groupId>org.apache.isis.examples.apps</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
                 <version>${project.version}</version>
+                <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>

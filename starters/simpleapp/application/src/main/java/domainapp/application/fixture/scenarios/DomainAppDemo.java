@@ -35,12 +35,7 @@ public class DomainAppDemo extends FixtureScript {
 
     @Override
     protected void execute(final ExecutionContext ec) {
-        //XXX migrated from
-        //        AppManifest2 appManifest2 = metaModelService.getAppManifest2();
-        //        ec.executeChild(this, appManifest2.getTeardownFixture());
-        //        ec.executeChild(this, appManifest2.getRefDataSetupFixture());
-        //        ec.executeChild(this, new SimpleObject_persona.PersistAll());
-        
+        // TODO: use Module support instead...
         ec.executeChild(this, new TeardownFixtureAbstract2() {
             @Override
             protected void execute(final ExecutionContext executionContext) {

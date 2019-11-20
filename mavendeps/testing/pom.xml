@@ -80,6 +80,11 @@
 				</dependency>
 
 				<dependency>
+					<groupId>com.approvaltests</groupId>
+					<artifactId>approvaltests</artifactId>
+				</dependency>
+
+				<dependency>
 					<groupId>org.picocontainer</groupId>
 					<artifactId>picocontainer</artifactId>
 				</dependency>

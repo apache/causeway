@@ -16,10 +16,10 @@
  */
 package domainapp.application.bdd.specs;
 
-import org.junit.runner.RunWith;
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
 
-import cucumber.api.CucumberOptions;
-import cucumber.api.junit.Cucumber;
+import org.junit.runner.RunWith;
 
 
 /**
@@ -32,7 +32,9 @@ import cucumber.api.junit.Cucumber;
                 ,"json:target/cucumber.json"
         },
         strict = true,
-        tags = { "~@backlog", "~@ignore" }
+        tags = { "not @backlog", "not @ignore" },
+        glue = {
+        }
         )
 public class RunIntegBddSpecs {
     // intentionally empty 

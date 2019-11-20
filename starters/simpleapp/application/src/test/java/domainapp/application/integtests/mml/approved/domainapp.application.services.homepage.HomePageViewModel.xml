@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mml:domainClassDto id="domainapp.application.services.homepage.HomePageViewModel" xmlns:mml="http://isis.apache.org/schema/metamodel">
     <mml:facets>
+        <mml:facet id="org.apache.isis.metamodel.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.metamodel.authorization.standard.AuthorizationFacetImpl">
+            <mml:attr name="disabling">true</mml:attr>
+            <mml:attr name="hiding">true</mml:attr>
+        </mml:facet>
         <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.named.NamedFacetInferred">
             <mml:attr name="escaped">true</mml:attr>
             <mml:attr name="value">Home Page View Model</mml:attr>
-        </mml:facet>
-        <mml:facet id="org.apache.isis.metamodel.facets.object.audit.AuditableFacet" fqcn="org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditableFacetFromConfiguration">
-            <mml:attr name="enablement">ENABLED</mml:attr>
         </mml:facet>
         <mml:facet id="org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
             <mml:attr name="bookmarkPolicy">NEVER</mml:attr>
@@ -33,10 +34,6 @@
             <mml:attr name="value">org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent.Default</mml:attr>
         </mml:facet>
         <mml:facet id="org.apache.isis.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.isis.metamodel.facets.object.grid.GridFacetDefault"/>
-        <mml:facet id="org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet" fqcn="org.apache.isis.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration">
-            <mml:attr name="disabling">true</mml:attr>
-            <mml:attr name="reason">Disabled</mml:attr>
-        </mml:facet>
         <mml:facet id="org.apache.isis.metamodel.facets.object.layout.LayoutFacet" fqcn="org.apache.isis.metamodel.facets.object.layout.LayoutFacetFallback">
             <mml:attr name="derived">true</mml:attr>
         </mml:facet>
@@ -55,7 +52,6 @@
             <mml:attr name="derived">true</mml:attr>
             <mml:attr name="value">Home Page View Models</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet" fqcn="org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetFromConfiguration"/>
         <mml:facet id="org.apache.isis.metamodel.facets.object.title.TitleFacet" fqcn="org.apache.isis.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod">
             <mml:attr name="intent.title">UI_HINT</mml:attr>
             <mml:attr name="methods">public org.apache.isis.applib.services.i18n.TranslatableString domainapp.application.services.homepage.HomePageViewModel.title()</mml:attr>
@@ -67,6 +63,10 @@
     <mml:properties>
         <mml:prop id="objectIdentifier">
             <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.metamodel.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
                     <mml:attr name="disabling">true</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
@@ -80,11 +80,6 @@
                     <mml:attr name="onType">org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier</mml:attr>
                     <mml:attr name="returnType">java.lang.String</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
-                    <mml:attr name="disabled">false</mml:attr>
-                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
-                    <mml:attr name="persistence">PERSISTED</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation">
                     <mml:attr name="contributed">AS_ASSOCIATION</mml:attr>
                     <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacet</mml:attr>
@@ -92,11 +87,10 @@
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.isis.metamodel.facets.actions.position.ActionPositionFacetFallback">
                     <mml:attr name="position">BELOW</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration"/>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
                     <mml:attr name="redirect">AS_CONFIGURED</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet">
                     <mml:attr name="value">SAFE</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
@@ -130,26 +124,22 @@
                 <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                     <mml:attr name="promptStyle">INLINE</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType">
-                    <mml:attr name="derived">true</mml:attr>
-                    <mml:attr name="typicalLengthFacet">org.apache.isis.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet"/>
-                <mml:facet id="org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet" fqcn="org.apache.isis.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet">
-                    <mml:attr name="typeFacet">org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation">
                     <mml:attr name="disabling">true</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                     <mml:attr name="validating">true</mml:attr>
                     <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
             </mml:facets>
             <mml:type>java.lang.String</mml:type>
         </mml:prop>
         <mml:prop id="objectType">
             <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.metamodel.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
                     <mml:attr name="disabling">true</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
@@ -163,11 +153,6 @@
                     <mml:attr name="onType">org.apache.isis.applib.mixins.metamodel.Object_objectType</mml:attr>
                     <mml:attr name="returnType">java.lang.String</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
-                    <mml:attr name="disabled">false</mml:attr>
-                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
-                    <mml:attr name="persistence">PERSISTED</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation">
                     <mml:attr name="contributed">AS_ASSOCIATION</mml:attr>
                     <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacet</mml:attr>
@@ -175,11 +160,10 @@
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.isis.metamodel.facets.actions.position.ActionPositionFacetFallback">
                     <mml:attr name="position">BELOW</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration"/>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
                     <mml:attr name="redirect">AS_CONFIGURED</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet">
                     <mml:attr name="value">SAFE</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
@@ -213,21 +197,13 @@
                 <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                     <mml:attr name="promptStyle">INLINE</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType">
-                    <mml:attr name="derived">true</mml:attr>
-                    <mml:attr name="typicalLengthFacet">org.apache.isis.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet"/>
-                <mml:facet id="org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet" fqcn="org.apache.isis.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet">
-                    <mml:attr name="typeFacet">org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation">
                     <mml:attr name="disabling">true</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                     <mml:attr name="validating">true</mml:attr>
                     <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
             </mml:facets>
             <mml:type>java.lang.String</mml:type>
         </mml:prop>
@@ -235,6 +211,10 @@
     <mml:collections>
         <mml:coll id="objects">
             <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.metamodel.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics">
                     <mml:attr name="value">domainapp.modules.simple.dom.impl.SimpleObject</mml:attr>
                 </mml:facet>
@@ -273,12 +253,6 @@
                 <mml:facet id="org.apache.isis.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
                     <mml:attr name="value">LIST_INTERFACE</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutable">
-                    <mml:attr name="disabling">true</mml:attr>
-                    <mml:attr name="inverted">false</mml:attr>
-                    <mml:attr name="semantics">DISABLED</mml:attr>
-                    <mml:attr name="where">ANYWHERE</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.metamodel.facets.fallback.PagedFacetFromConfiguration">
                     <mml:attr name="derived">true</mml:attr>
                     <mml:attr name="value">12</mml:attr>
@@ -301,6 +275,10 @@
     <mml:actions>
         <mml:act id="downloadLayoutXml">
             <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.metamodel.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
                     <mml:attr name="disabling">true</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
@@ -314,11 +292,6 @@
                     <mml:attr name="onType">org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml</mml:attr>
                     <mml:attr name="returnType">java.lang.Object</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
-                    <mml:attr name="disabled">false</mml:attr>
-                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
-                    <mml:attr name="persistence">PERSISTED</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation">
                     <mml:attr name="contributed">AS_ACTION</mml:attr>
                     <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacet</mml:attr>
@@ -330,7 +303,6 @@
                     <mml:attr name="deploymentType">PRODUCTION</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration"/>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
                     <mml:attr name="redirect">AS_CONFIGURED</mml:attr>
                 </mml:facet>
@@ -348,7 +320,6 @@
                 </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.CssClassFaFacetForActionLayoutAnnotation">
                     <mml:attr name="position">LEFT</mml:attr>
-                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFromConfiguredRegex</mml:attr>
                     <mml:attr name="value">fa fa-fw fa-download</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.members.order.MemberOrderFacet" fqcn="org.apache.isis.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation">
@@ -362,7 +333,6 @@
                 <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                     <mml:attr name="promptStyle">INLINE</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
             </mml:facets>
             <mml:returnType>java.lang.Object</mml:returnType>
             <mml:params>
@@ -377,6 +347,10 @@
                             <mml:attr name="context">org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml#act(java.lang.String,org.apache.isis.applib.services.layout.LayoutService$Style)</mml:attr>
                             <mml:attr name="originalText">File name</mml:attr>
                             <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                            <mml:attr name="label">NOT_SPECIFIED</mml:attr>
+                            <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration</mml:attr>
                         </mml:facet>
                         <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
                             <mml:attr name="inverted">false</mml:attr>
@@ -398,6 +372,10 @@
                             <mml:attr name="originalText">Style</mml:attr>
                             <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.param.name.NamedFacetForParameterUsingReflection</mml:attr>
                         </mml:facet>
+                        <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                            <mml:attr name="label">NOT_SPECIFIED</mml:attr>
+                            <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration</mml:attr>
+                        </mml:facet>
                         <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
                             <mml:attr name="inverted">false</mml:attr>
                             <mml:attr name="semantics">REQUIRED</mml:attr>
@@ -415,6 +393,10 @@
         </mml:act>
         <mml:act id="downloadMetaModelXml">
             <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.metamodel.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
                     <mml:attr name="disabling">true</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
@@ -428,11 +410,6 @@
                     <mml:attr name="onType">org.apache.isis.applib.mixins.metamodel.Object_downloadMetaModelXml</mml:attr>
                     <mml:attr name="returnType">java.lang.Object</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
-                    <mml:attr name="disabled">false</mml:attr>
-                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
-                    <mml:attr name="persistence">PERSISTED</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation">
                     <mml:attr name="contributed">AS_ACTION</mml:attr>
                     <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacet</mml:attr>
@@ -444,7 +421,6 @@
                     <mml:attr name="deploymentType">PRODUCTION</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration"/>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
                     <mml:attr name="redirect">AS_CONFIGURED</mml:attr>
                 </mml:facet>
@@ -462,7 +438,6 @@
                 </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.CssClassFaFacetForActionLayoutAnnotation">
                     <mml:attr name="position">LEFT</mml:attr>
-                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFromConfiguredRegex</mml:attr>
                     <mml:attr name="value">fa fa-fw fa-download</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.members.order.MemberOrderFacet" fqcn="org.apache.isis.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation">
@@ -476,7 +451,6 @@
                 <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                     <mml:attr name="promptStyle">INLINE</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
             </mml:facets>
             <mml:returnType>java.lang.Object</mml:returnType>
             <mml:params>
@@ -491,6 +465,10 @@
                             <mml:attr name="context">org.apache.isis.applib.mixins.metamodel.Object_downloadMetaModelXml#act(java.lang.String)</mml:attr>
                             <mml:attr name="originalText">File name</mml:attr>
                             <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                            <mml:attr name="label">NOT_SPECIFIED</mml:attr>
+                            <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration</mml:attr>
                         </mml:facet>
                         <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
                             <mml:attr name="inverted">false</mml:attr>
@@ -509,6 +487,10 @@
         </mml:act>
         <mml:act id="openRestApi">
             <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.metamodel.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
                     <mml:attr name="disabling">true</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
@@ -522,11 +504,6 @@
                     <mml:attr name="onType">org.apache.isis.applib.mixins.layout.Object_openRestApi</mml:attr>
                     <mml:attr name="returnType">org.apache.isis.applib.value.LocalResourcePath</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
-                    <mml:attr name="disabled">false</mml:attr>
-                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
-                    <mml:attr name="persistence">PERSISTED</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation">
                     <mml:attr name="contributed">AS_ACTION</mml:attr>
                     <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacet</mml:attr>
@@ -538,7 +515,6 @@
                     <mml:attr name="deploymentType">PRODUCTION</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration"/>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
                     <mml:attr name="redirect">AS_CONFIGURED</mml:attr>
                 </mml:facet>
@@ -569,13 +545,16 @@
                 <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                     <mml:attr name="promptStyle">INLINE</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
             </mml:facets>
             <mml:returnType>org.apache.isis.applib.value.LocalResourcePath</mml:returnType>
             <mml:params/>
         </mml:act>
         <mml:act id="rebuildMetamodel">
             <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.metamodel.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
                     <mml:attr name="disabling">true</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
@@ -589,12 +568,6 @@
                     <mml:attr name="onType">org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel</mml:attr>
                     <mml:attr name="returnType">java.lang.Object</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
-                    <mml:attr name="disabled">false</mml:attr>
-                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
-                    <mml:attr name="persistence">PERSISTED</mml:attr>
-                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration</mml:attr>
-                </mml:facet>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation">
                     <mml:attr name="contributed">AS_ACTION</mml:attr>
                     <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacet</mml:attr>
@@ -606,7 +579,6 @@
                     <mml:attr name="deploymentType">PRODUCTION</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration"/>
                 <mml:facet id="org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.isis.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
                     <mml:attr name="redirect">AS_CONFIGURED</mml:attr>
                 </mml:facet>
@@ -637,7 +609,6 @@
                 <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                     <mml:attr name="promptStyle">INLINE</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
             </mml:facets>
             <mml:returnType>java.lang.Object</mml:returnType>
             <mml:params/>

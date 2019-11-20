@@ -18,6 +18,7 @@
  */
 package domainapp.conf;
 
+import org.apache.isis.extensions.fixtures.ExtFixturesModule;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -45,6 +46,7 @@ import domainapp.modules.simple.SimpleModule;
     IsisBoot.class,
     IsisBootSecurityBypass.class,
     IsisBootDataNucleus.class,
+    ExtFixturesModule.class
 })
 @ComponentScan(
         basePackageClasses= {

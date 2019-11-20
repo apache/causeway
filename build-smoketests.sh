@@ -1,2 +1,2 @@
 #!/bin/bash
-sh scripts/ci/build-smoketests.sh "$@"
+sh scripts/ci/build-smoketests.sh $*

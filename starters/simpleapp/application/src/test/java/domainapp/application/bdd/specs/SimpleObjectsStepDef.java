@@ -32,12 +32,15 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
+import domainapp.application.fixture.scenarios.DomainAppDemo;
 import domainapp.application.integtests.SpringIntegrationTest;
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
 import domainapp.modules.simple.fixture.SimpleObject_persona;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
 import lombok.val;
 
 @Ignore("not a JUnit test")
@@ -59,7 +62,7 @@ public class SimpleObjectsStepDef extends SpringIntegrationTest {
 
     private Runnable afterScenario;
 
-    @cucumber.api.java.Before //TODO is there another way to make scenarios transactional?
+    @Before //TODO is there another way to make scenarios transactional?
     public void beforeScenario(){
         val txTemplate = new TransactionTemplate(txMan);
         val status = txTemplate.getTransactionManager().getTransaction(null);
@@ -75,7 +78,7 @@ public class SimpleObjectsStepDef extends SpringIntegrationTest {
         status.flush();
     } 
 
-    @cucumber.api.java.After //TODO is there another way to make scenarios transactional?
+    @After
     public void afterScenario(){
         if(afterScenario==null) {
             return;
@@ -84,11 +87,16 @@ public class SimpleObjectsStepDef extends SpringIntegrationTest {
         afterScenario = null;
     }
 
+
     // -- DEPENDENCIES
 
     @Inject protected SimpleObjects simpleObjects;
-    @Inject private FixtureScripts fixtureScripts;
-    @Inject private PlatformTransactionManager txMan; 
+    @Inject private FixtureScripts fixtureScripts; 
+    @Inject private PlatformTransactionManager txMan;
 
+    @Before(value="@DomainAppDemo", order=20000)
+    public void runDomainAppDemo() {
+        fixtureScripts.runFixtureScript(new DomainAppDemo(), null); // <1>
+    }
 
 }

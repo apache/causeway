@@ -30,7 +30,8 @@ fi
 #
 # now build the apps
 #
-for app in helloworld simpleapp
+#for app in helloworld simpleapp
+for app in simpleapp helloworld
 do
   cd $PROJECT_ROOT_PATH/starters/$app
 

@@ -32,7 +32,8 @@ mvn -s $SETTINGS_XML \
     --batch-mode \
     $MVN_STAGES \
     -Dskip.assemble-zip \
-    $MVN_ADDITIONAL_OPTS
+    $MVN_ADDITIONAL_OPTS \
+    $*
 
 if [ ! -z "$REVISION" ]; then
   mvn versions:revert
