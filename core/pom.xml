@@ -29,23 +29,17 @@
 
 	<name>Apache Isis Core</name>
 
+	<url>https://isis.apache.org</url>
+
 	<description>
         Core framework, providing metamodel, runtime and core APIs.
-
-        Also defines standard build process, as well as
-        standard set of 3rd party dependencies (eg for testing and 
-        logging frameworks).
     </description>
-
-	<inceptionYear>2010</inceptionYear>
 
 	<properties>
 		<revision>2.0.0-M3-SNAPSHOT</revision>
 
 		<isis.skipTests>false</isis.skipTests>
 		<maven.test.skip>${isis.skipTests}</maven.test.skip>
-
-		<projectUrl>${project.url}</projectUrl>
 
 		<coreBaseDir>${project.build.directory}/..</coreBaseDir>
 
@@ -56,6 +50,8 @@
 		<compileSource>8</compileSource>
 		<compileTarget>8</compileTarget>
 		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
 
 
 		<dependency.locations.enabled>false</dependency.locations.enabled>
@@ -87,27 +83,18 @@
 
 		<!-- LIBRARY DEPENDENCIES -->
 
-		<activemq.version>5.14.3</activemq.version>
-
-		<assertj-core.version>3.6.2</assertj-core.version>
 		<assertj-guava.version>3.1.0</assertj-guava.version>
-		<assertj.version>3.11.1</assertj.version>
 
-		<axon-core.version>3.3.5</axon-core.version>
+		<camel.version>2.14.2</camel.version>
 
-		<bytebuddy.version>1.9.12</bytebuddy.version>
+		<com-sun-mail.version>1.5.2</com-sun-mail.version>
 
-		<camel.version>2.17.6</camel.version> <!-- TODO: bump to 2.24.2, as per v1 -->
-
-		<commons-codec.version>1.10</commons-codec.version>
 		<commons-email.version>1.4</commons-email.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<commons-io.version>2.6</commons-io.version>
-		<commons-lang3.version>3.1</commons-lang3.version>
 		<commons-logging.version>1.2</commons-logging.version>
-		<com-sun-mail.version>1.5.2</com-sun-mail.version>
 
-		<cxf-rt-rs-client.version>3.1.5</cxf-rt-rs-client.version> <!-- TODO: bump, as in v1 -->
+		<cxf-rt-rs-client.version>3.3.4</cxf-rt-rs-client.version>
 
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
@@ -117,8 +104,8 @@
 		<datanucleus-jdo-api.version>3.2.0-m12</datanucleus-jdo-api.version>
 		<datanucleus-jdo-query.version>5.0.9</datanucleus-jdo-query.version>
 		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
-		<datanucleus-rdbms.version>5.2.1</datanucleus-rdbms.version>
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
+		<datanucleus-rdbms.version>5.2.1</datanucleus-rdbms.version>
 
 		<docx4j.version>3.2.1</docx4j.version>
 
@@ -126,31 +113,21 @@
 
 		<findbugs-annotations.version>2.0.1</findbugs-annotations.version>
 
-		<flyway-core.version>4.0.3</flyway-core.version>
-		<freemarker.version>2.3.25-incubating</freemarker.version>
-
 		<geronimo-servlet_3.0_spec.version>1.0</geronimo-servlet_3.0_spec.version>
+		<guava.version>28.1-jre</guava.version>
 
-		<guava.version>19.0</guava.version>
-		<gson.version>2.7</gson.version>
-
-		<hamcrest.version>1.3</hamcrest.version>
-
-		<h2.version>1.4.199</h2.version>
 		<htmlparser.version>2.1</htmlparser.version>
-		<httpclient.version>4.5.2</httpclient.version>
 		<hsqldb.version>2.5.0</hsqldb.version>
 
-
-		<jackson.version>2.10.0</jackson.version>
-
+		<jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
 		<javaee.version>8.0</javaee.version>
-
-		<javafaker.version>0.5</javafaker.version>
+		<javafaker.version>1.0.1</javafaker.version>
 		<javassist.version>3.19.0-GA</javassist.version>
-
-		<javax-mail.version>1.4.7</javax-mail.version>
 		<javax-servlet.version>3.1.0</javax-servlet.version>
+		<jaxb-api.version>2.3.0</jaxb-api.version>
+		<jaxb-core.version>2.3.0.1</jaxb-core.version>
+		<jaxb-impl.version>2.3.0.1</jaxb-impl.version>
+		<jaxws-ri.version>2.3.2</jaxws-ri.version>
 
 		<jbcrypt.version>0.3m</jbcrypt.version>
 		<jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
@@ -158,25 +135,14 @@
 		<jdo-api.version>3.1</jdo-api.version> <!-- see also datanucleus.x.x versions -->
 
 		<jdom.version>2.0.2</jdom.version>
-		<jdom2.version>2.0.5</jdom2.version>
-
 		<jmock.version>2.11.0</jmock.version>
-
-		<junit.version>5.5.2</junit.version>
-		<junit-legacy.version>4.12</junit-legacy.version>
-
+		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 		<jquery-ui.version>1.12.1</jquery-ui.version>
 
-		<joda-time.version>2.9.4</joda-time.version>
-		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
-
 		<junit.jupiter.version>5.3.2</junit.jupiter.version>
+		<junit-legacy.version>4.12</junit-legacy.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-
-		<lombok.version>[1.18.,)</lombok.version>
-
-		<mockito.version>2.23.4</mockito.version>
 
 		<objenesis.version>2.2</objenesis.version>
 		<ognl.version>3.0.9</ognl.version>
@@ -190,22 +156,15 @@
 		<resteasy4-jaxrs.version>4.0.0.Beta5</resteasy4-jaxrs.version> <!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
 
 		<select2.version>4.0.10</select2.version>
-		<summernote.version>0.8.11</summernote.version>
-
-		<shiro.version>1.4.1</shiro.version> <!-- Shiro 1.4.0 fails: https://issues.apache.org/jira/browse/SHIRO-610 -->
-		<shiro-core.version>1.2.3</shiro-core.version> <!-- TODO: probably same as shiro.version -->
-
+		<shiro.version>1.4.1</shiro.version>
 		<simpleslackapi.version>1.2.0</simpleslackapi.version>
-
 		<slf4j-api.version>1.7.26</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
-
 		<spring-framework.version>5.2.0.RELEASE</spring-framework.version>
 		<spring-boot.version>2.2.0.RELEASE</spring-boot.version>
-
+		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.5.21</swagger-core.version>
 
 		<togglz.version>2.1.0.Final</togglz.version>
-
 		<transaction-api.version>1.2</transaction-api.version>
 
 		<wicket.version>8.6.1</wicket.version>
@@ -222,169 +181,11 @@
 		<xdocreport.version>1.0.6</xdocreport.version>
 
 		<!-- PLUGIN DEPENDENCIES -->
-		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version> <!-- JUnit 5 requires Surefire version 2.22.0 or higher -->
+<!--
+		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version> &lt;!&ndash; JUnit 5 requires Surefire version 2.22.0 or higher &ndash;&gt;
+-->
 
 	</properties>
-
-	<scm>
-		<connection>scm:git:http://github.com/apache/isis.git</connection>
-		<developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
-		<url>http://github.com/apache/isis</url>
-		<tag>HEAD</tag>
-	</scm>
-
-	<url>http://isis.apache.org</url>
-
-	<mailingLists>
-		<mailingList>
-			<name>developers</name>
-			<archive>http://mail-archives.apache.org/mod_mbox/isis-dev/</archive>
-			<post>dev@isis.apache.org</post>
-			<subscribe>dev-subscribe@isis.apache.org</subscribe>
-			<unsubscribe>dev-unsubscribe@isis.apache.org</unsubscribe>
-		</mailingList>
-		<mailingList>
-			<name>users</name>
-			<archive>http://mail-archives.apache.org/mod_mbox/isis-users/</archive>
-			<post>users@isis.apache.org</post>
-			<subscribe>users-subscribe@isis.apache.org</subscribe>
-			<unsubscribe>users-unsubscribe@isis.apache.org</unsubscribe>
-		</mailingList>
-	</mailingLists>
-
-	<developers>
-		<developer>
-			<id>ahuber</id>
-			<name>Andi Huber</name>
-			<email>ahuber@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>danhaywood</id>
-			<name>Dan Haywood</name>
-			<email>danhaywood@apache.org</email>
-			<roles>
-				<role>pmc chair</role>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+0</timezone>
-		</developer>
-		<developer>
-			<id>dslaughter</id>
-			<name>Dave Slaughter</name>
-			<email>dslaughter@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>-6</timezone>
-		</developer>
-		<developer>
-			<id>jcvanderwal</id>
-			<name>Jeroen van der Wal</name>
-			<email>jeroen@stromboli.it</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>kevin</id>
-			<name>Kevin Meyer</name>
-			<email>kevin@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
-			<id>madytyoo</id>
-			<name>Maurizio Taverna</name>
-			<email>tavernamaurizio@gmail.com</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>mgrigorov</id>
-			<name>Martin Grigorov</name>
-			<email>mgrigorov@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
-			<id>mnour</id>
-			<name>Mohammad Nour El-Din</name>
-			<email>mnour@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>mentor while incubating</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>oscarbou</id>
-			<name>Oscar Bou</name>
-			<email>o.bou@gesconsultor.com</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>rcmatthews</id>
-			<name>Robert Matthews</name>
-			<email>rmatthews@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+0</timezone>
-		</developer>
-		<developer>
-			<id>struberg</id>
-			<name>Mark Struberg</name>
-			<email>struberg@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>mentor while incubating</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>themalkolm</id>
-			<name>Alexander Krasnuhkin</name>
-			<email>themalkolm@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+3</timezone>
-		</developer>
-	</developers>
-
-	<issueManagement>
-		<system>Jira</system>
-		<url>https://issues.apache.org/jira/browse/ISIS</url>
-	</issueManagement>
-
-	<ciManagement>
-		<system>CI</system>
-		<url>https://github.com/apache-isis-committers/isis-nightly</url>
-	</ciManagement>
 
 	<pluginRepositories>
 		<pluginRepository>
@@ -475,120 +276,7 @@
 		<pluginManagement>
 			<plugins>
 
-				<!-- Apache Release Audit Tool -->
-				<plugin>
-					<groupId>org.apache.rat</groupId>
-					<artifactId>apache-rat-plugin</artifactId>
-					<version>0.10</version>
-					<configuration>
-						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
-						<excludeSubProjects>true</excludeSubProjects>
-						<excludes>
-							<exclude>**/target/**</exclude>
-							<exclude>**/target-ide/**</exclude>
-
-							<exclude>**/*.project</exclude>
-							<exclude>**/.classpath</exclude>
-							<exclude>**/.settings/**</exclude>
-							<exclude>**/*.launch</exclude>
-							<!-- <exclude>src/site/resources/ide/eclipse/**</exclude> -->
-
-							<exclude>**/*.iml</exclude>
-
-							<exclude>**/*.pdn</exclude>
-							<exclude>**/*.svg</exclude>
-							<exclude>**/*.json</exclude>
-							<exclude>**/*.min.js</exclude>
-
-							<exclude>**/MANIFEST.MF</exclude>
-							<exclude>**/*.ucd</exclude>
-							<exclude>**/*.ucls</exclude>
-
-							<exclude>**/xml/objects/**</exclude>
-							<exclude>**/test.data</exclude>
-							<exclude>**/fixture-data/**</exclude>
-
-							<exclude>**/application.js</exclude>
-
-							<exclude>**/jquery.zclip.js</exclude>
-							<exclude>**/simple-sidebar.css</exclude>
-							<exclude>**/bootstrap-growl.js</exclude>
-							<exclude>**/moment.js</exclude>
-
-							<exclude>**/bootstrap-datetimepicker.min.css</exclude>
-							<exclude>**/bootstrap-datetimepicker.css</exclude>
-							<exclude>**/select2-bootstrap.css</exclude>
-
-							<exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
-
-							<exclude>**/src/main/resources/supplemental-models.xml</exclude>
-							<exclude>**/datanucleus.log</exclude>
-							<exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
-							<exclude>**/gradlew</exclude>
-							<exclude>**/gradlew.bat</exclude>
-							<exclude>**/rebel.xml</exclude>
-							<exclude>**/translations**.po</exclude>
-							<exclude>**/integtests/translations.pot</exclude>
-							<exclude>**/intellij/launch/*.xml</exclude>
-
-							<exclude>**/swagger-ui/**</exclude>
-
-							<exclude>**/META-INF/services/**</exclude>
-						</excludes>
-						<licenses>
-							<license
-								implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>AL2  </licenseFamilyCategory>
-								<licenseFamilyName>Apache License 2.0</licenseFamilyName>
-								<notes />
-								<patterns>
-									<pattern>Licensed to the Apache Software Foundation (ASF) under
-										one</pattern>
-								</patterns>
-							</license>
-							<license
-								implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>JQRY</licenseFamilyCategory>
-								<licenseFamilyName>MIT  </licenseFamilyName>
-								<notes />
-								<patterns>
-									<pattern>The MIT License (MIT)</pattern>
-									<pattern>Dual licensed under the MIT</pattern>
-								</patterns>
-							</license>
-							<license
-								implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>JMOCK</licenseFamilyCategory>
-								<licenseFamilyName>JMock</licenseFamilyName>
-								<notes />
-								<patterns>
-									<pattern>Copyright (c) 2000-2007, jMock.org</pattern>
-								</patterns>
-							</license>
-						</licenses>
-						<licenseFamilies>
-							<licenseFamily
-								implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>Apache License 2.0</familyName>
-							</licenseFamily>
-							<licenseFamily
-								implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>MIT</familyName>
-							</licenseFamily>
-							<licenseFamily
-								implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>JMock</familyName>
-							</licenseFamily>
-							<licenseFamily
-								implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>XHTML</familyName>
-							</licenseFamily>
-						</licenseFamilies>
-					</configuration>
-				</plugin>
-
-
-				<!-- IDE support for Eclipse (if not using m2e). (NetBeans 6.7+ and IDEA 
+				<!-- IDE support for Eclipse (if not using m2e). (NetBeans 6.7+ and IDEA
 					7.0+ also have built-in support -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -1160,71 +848,16 @@
 
 
 	<dependencyManagement>
-		<!-- is also for benefit of application developers, using scope=import -->
+
 		<dependencies>
 
-			<!-- JDK11+ LEGACY SUPPORT -->		
-			<dependency>
-				  <groupId>com.sun.xml.ws</groupId>
-				  <artifactId>jaxws-ri</artifactId>
-				  <version>2.3.2</version>
-				  <type>pom</type>
-				  <exclusions>
-					  	<exclusion>
-					  		<!-- version clash with spring, we pull in the newer 1.3.5 below -->
-					  		<groupId>jakarta.annotation</groupId>
-			    			<artifactId>jakarta.annotation-api</artifactId>
-					  	</exclusion>
-				  </exclusions>
-			</dependency>
-			<dependency>
-			    <groupId>jakarta.annotation</groupId>
-			    <artifactId>jakarta.annotation-api</artifactId>
-			    <version>1.3.5</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.xml.bind</groupId>
-				<artifactId>jaxb-api</artifactId>
-				<version>2.3.0</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-core</artifactId>
-				<version>2.3.0</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-impl</artifactId>
-				<version>2.3.0</version>
-			</dependency>
-	
-			<!-- JEE API -->
-			<dependency>
-				<groupId>javax</groupId>
-				<artifactId>javaee-api</artifactId>
-				<version>${javaee.version}</version>
-			</dependency>
-
-			<!-- JDO API -->
-			<!-- not managed, because scope=provided can not be overwritten by plugins 
-				that are responsible for providing jdo-api -->
-			<!--
-			<dependency>
-			    <groupId>javax.jdo</groupId>
-			    <artifactId>jdo-api</artifactId>
-			    <version>${jdo-api.version}</version>
-			    <scope>provided</scope>
-			</dependency>
-			-->
-
-			<!-- isis commons -->
+			<!-- CHILD MODULES -->
+			<!-- for benefit of application developers, using scope=import, type=pom -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-commons</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-
-			<!-- unittestsupport -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-unittestsupport</artifactId>
@@ -1237,8 +870,6 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-
-			<!-- applib -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-applib</artifactId>
@@ -1253,8 +884,6 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-
-			<!-- config -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-config</artifactId>
@@ -1269,15 +898,6 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-
-			<!-- provides @Nullable -->
-			<dependency>
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>annotations</artifactId>
-				<version>${findbugs-annotations.version}</version>
-			</dependency>
-
-			<!-- schema -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-schema</artifactId>
@@ -1292,8 +912,6 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-
-			<!-- metamodel -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-metamodel</artifactId>
@@ -1308,8 +926,6 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-
-			<!-- runtime -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime</artifactId>
@@ -1322,8 +938,6 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-
-			<!-- runtime-extensions -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime-extensions</artifactId>
@@ -1336,8 +950,6 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-
-			<!-- runtime-services -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime-services</artifactId>
@@ -1350,8 +962,6 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-			
-			<!-- runtime-services -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime-web</artifactId>
@@ -1364,29 +974,11 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-
-			<!-- webserver -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-webserver</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-
-			<!-- integtestsupport -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-integtestsupport</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-
-			<!-- maven plugin -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-mavenplugin</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-
-			<!-- Restful Objects viewer -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
@@ -1423,8 +1015,6 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-
-			<!-- security support -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-security</artifactId>
@@ -1435,48 +1025,36 @@
 				<artifactId>isis-security-bypass</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-
-
-			<!-- core plugins -->
-
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-security-shiro</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-security-keycloak</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-plugins-jdo-common</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-
-
-			<!-- also for benefit of application developers, using scope=import -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
@@ -1513,15 +1091,6 @@
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
-
-			<!-- Maven plugin -->
-			<dependency>
-				<groupId>org.apache.isis.tool</groupId>
-				<artifactId>isis-maven-plugin</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-
-			<!-- Maven dependencies -->
 			<dependency>
 				<groupId>org.apache.isis.mavendeps</groupId>
 				<artifactId>isis-mavendeps-testing</artifactId>
@@ -1542,29 +1111,54 @@
 			</dependency>
 
 
-
 			<!-- THIRD PARTY DEPENDENCIES -->
 
-			<!--
+			<!-- provides @Nullable -->
 			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
-				<version>${spring-boot.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-        	</dependency>
-			-->
-			<dependency>
-				<groupId>org.assertj</groupId>
-				<artifactId>assertj-core</artifactId>
-				<version>${assertj.version}</version>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>annotations</artifactId>
+				<version>${findbugs-annotations.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>net.bytebuddy</groupId>
-				<artifactId>byte-buddy</artifactId>
-				<version>${bytebuddy.version}</version>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>${h2.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-jaxb-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
 
 			<dependency>
 				<groupId>commons-codec</groupId>
@@ -1589,279 +1183,6 @@
 				<version>${commons-logging.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.easymock</groupId>
-				<artifactId>easymock</artifactId>
-				<version>${easymock.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.google.code.gson</groupId>
-				<artifactId>gson</artifactId>
-				<version>${gson.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.hamcrest</groupId>
-				<artifactId>hamcrest-core</artifactId>
-				<version>${hamcrest.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hamcrest</groupId>
-				<artifactId>hamcrest-library</artifactId>
-				<version>${hamcrest.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.h2database</groupId>
-				<artifactId>h2</artifactId>
-				<version>${h2.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.hsqldb</groupId>
-				<artifactId>hsqldb</artifactId>
-				<version>${hsqldb.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.htmlparser</groupId>
-				<artifactId>htmlparser</artifactId>
-				<version>${htmlparser.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>com.sun</groupId>
-						<artifactId>tools</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-core</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-annotations</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.module</groupId>
-				<artifactId>jackson-module-jaxb-annotations</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.jboss.spec.javax.ws.rs</groupId>
-				<artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
-				<version>${jboss-jaxrs-api_2.0_spec.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-servlet</artifactId>
-				<version>${jetty.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.eclipse.jetty.orbit</groupId>
-						<artifactId>javax.servlet</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-webapp</artifactId>
-				<version>${jetty.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.jmock</groupId>
-				<artifactId>jmock</artifactId>
-				<version>${jmock.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.jmock</groupId>
-				<artifactId>jmock-junit4</artifactId>
-				<version>${jmock.version}</version>
-				<exclusions>
-					<exclusion>
-						<!-- for dependency convergence -->
-						<groupId>junit</groupId>
-						<artifactId>junit-dep</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>joda-time</groupId>
-				<artifactId>joda-time</artifactId>
-				<version>${joda-time.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>net.sf.jopt-simple</groupId>
-				<artifactId>jopt-simple</artifactId>
-				<version>${jopt-simple.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>jquery-ui</artifactId>
-				<version>${jquery-ui.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>jquery</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-api</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-engine</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.junit.vintage</groupId>
-				<artifactId>junit-vintage-engine</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.lazyluke</groupId>
-				<artifactId>log4jdbc-remix</artifactId>
-				<version>${log4jdbc-remix.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>${lombok.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-core</artifactId>
-				<version>${mockito.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.picocontainer</groupId>
-				<artifactId>picocontainer</artifactId>
-				<version>${picocontainer.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>select2</artifactId>
-				<version>${select2.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.shiro</groupId>
-				<artifactId>shiro-core</artifactId>
-				<version>${shiro.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.shiro</groupId>
-				<artifactId>shiro-web</artifactId>
-				<version>${shiro.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring-framework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-tx</artifactId>
-				<version>${spring-framework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
-				<version>${spring-framework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-test</artifactId>
-				<version>${spring-framework.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-actuator</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-actuator-autoconfigure</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-configuration-processor</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-log4j2</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-test</artifactId>
-				<version>${spring-boot.version}</version>
-				<exclusions>
-					<!-- version clash with org.jmock:jmock:2.11.0, which requires org.ow2.asm:asm:6.2.1 -->
-					<exclusion>
-						<artifactId>org.ow2.asm</artifactId>
-						<groupId>asm</groupId>
-					</exclusion>
-					<exclusion>
-						<groupId>javax.validation</groupId>
-						<artifactId>validation-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<!-- we use log4j-2 instead -->
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-tomcat</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-web</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
 
 			<dependency>
 				<groupId>io.swagger</groupId>
@@ -1875,104 +1196,40 @@
 				</exclusions>
 			</dependency>
 
+
+			<!-- JDK11+ LEGACY SUPPORT -->
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket</artifactId>
-				<version>${wicket.version}</version>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-core</artifactId>
+				<version>${jaxb-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-impl</artifactId>
+				<version>${jaxb-impl.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.xml.ws</groupId>
+				<artifactId>jaxws-ri</artifactId>
+				<version>${jaxws-ri.version}</version>
 				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-core</artifactId>
-				<version>${wicket.version}</version>
 				<exclusions>
 					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>commons-io</groupId>
-						<artifactId>commons-io</artifactId>
+						<!-- version clash with spring, we pull in the newer 1.3.5 below -->
+						<groupId>jakarta.annotation</groupId>
+						<artifactId>jakarta.annotation-api</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-devutils</artifactId>
-				<version>${wicket.version}</version>
+				<groupId>jakarta.annotation</groupId>
+				<artifactId>jakarta.annotation-api</artifactId>
+				<version>${jakarta.annotation-api.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-request</artifactId>
-				<version>${wicket.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-util</artifactId>
-				<version>${wicket.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-extensions</artifactId>
-				<version>${wicket.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-datetime</artifactId>
-				<version>${wicket.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-auth-roles</artifactId>
-				<version>${wicket.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-spring</artifactId>
-				<version>${wicket.version}</version>
-				<exclusions>
-					<!-- TODO[2112] exclusions might no longer be relevant -->
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<!-- for Java7 compatibility (we don't use the proxying capability 
-							of this component) -->
-						<groupId>cglib</groupId>
-						<artifactId>cglib</artifactId>
-					</exclusion>
-				</exclusions>
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>${jaxb-api.version}</version>
 			</dependency>
 
 			<dependency>
@@ -2067,18 +1324,6 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>Eonasdan-bootstrap-datetimepicker</artifactId>
-				<version>${wicket-bootstrap-datetimepicker.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>momentjs</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
 				<groupId>de.agilecoders.wicket.webjars</groupId>
 				<artifactId>wicket-webjars</artifactId>
 				<version>${wicket-webjars.version}</version>
@@ -2094,17 +1339,44 @@
 				</exclusions>
 			</dependency>
 
+
+			<!-- JEE API -->
 			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-select2</artifactId>
-				<version>${wicketstuff.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
-					</exclusion>
-				</exclusions>
+				<groupId>javax</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>${javaee.version}</version>
 			</dependency>
+
+			<!-- JDO API -->
+			<!-- not managed, because scope=provided can not be overwritten by plugins
+				that are responsible for providing jdo-api -->
+			<!--
+			<dependency>
+			    <groupId>javax.jdo</groupId>
+			    <artifactId>jdo-api</artifactId>
+			    <version>${jdo-api.version}</version>
+			    <scope>provided</scope>
+			</dependency>
+			-->
+
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>${joda-time.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.bytebuddy</groupId>
+				<artifactId>byte-buddy</artifactId>
+				<version>${byte-buddy.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sf.jopt-simple</groupId>
+				<artifactId>jopt-simple</artifactId>
+				<version>${jopt-simple.version}</version>
+			</dependency>
+
 
 			<dependency>
 				<groupId>net.ftlines.wicket-source</groupId>
@@ -2114,6 +1386,362 @@
 				<exclusions>
 					<exclusion>
 						<!-- for dependency convergence -->
+						<groupId>org.apache.wicket</groupId>
+						<artifactId>wicket-core</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-core</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-web</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket</artifactId>
+				<version>${wicket.version}</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-core</artifactId>
+				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>commons-io</groupId>
+						<artifactId>commons-io</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-devutils</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-request</artifactId>
+				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-util</artifactId>
+				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-extensions</artifactId>
+				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-datetime</artifactId>
+				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-auth-roles</artifactId>
+				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-spring</artifactId>
+				<version>${wicket.version}</version>
+				<exclusions>
+					<!-- TODO[2112] exclusions might no longer be relevant -->
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<!-- for Java7 compatibility (we don't use the proxying capability
+							of this component) -->
+						<groupId>cglib</groupId>
+						<artifactId>cglib</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>${assertj.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>${easymock.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-servlet</artifactId>
+				<version>${jetty.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.eclipse.jetty.orbit</groupId>
+						<artifactId>javax.servlet</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-webapp</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-core</artifactId>
+				<version>${hamcrest.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-library</artifactId>
+				<version>${hamcrest.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.hsqldb</groupId>
+				<artifactId>hsqldb</artifactId>
+				<version>${hsqldb.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.htmlparser</groupId>
+				<artifactId>htmlparser</artifactId>
+				<version>${htmlparser.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>com.sun</groupId>
+						<artifactId>tools</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.spec.javax.ws.rs</groupId>
+				<artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+				<version>${jboss-jaxrs-api_2.0_spec.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock</artifactId>
+				<version>${jmock.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock-junit4</artifactId>
+				<version>${jmock.version}</version>
+				<exclusions>
+					<exclusion>
+						<!-- for dependency convergence -->
+						<groupId>junit</groupId>
+						<artifactId>junit-dep</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<!--
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.vintage</groupId>
+				<artifactId>junit-vintage-engine</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			-->
+
+			<dependency>
+				<groupId>org.lazyluke</groupId>
+				<artifactId>log4jdbc-remix</artifactId>
+				<version>${log4jdbc-remix.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.picocontainer</groupId>
+				<artifactId>picocontainer</artifactId>
+				<version>${picocontainer.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring-framework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring-framework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring-framework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring-framework.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-actuator</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-actuator-autoconfigure</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-configuration-processor</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-log4j2</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<version>${spring-boot.version}</version>
+				<exclusions>
+					<!-- version clash with org.jmock:jmock:2.11.0, which requires org.ow2.asm:asm:6.2.1 -->
+					<exclusion>
+						<artifactId>org.ow2.asm</artifactId>
+						<groupId>asm</groupId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.validation</groupId>
+						<artifactId>validation-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<!-- we use log4j-2 instead -->
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-tomcat</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.webjars</groupId>
+				<artifactId>jquery-ui</artifactId>
+				<version>${jquery-ui.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.webjars</groupId>
+						<artifactId>jquery</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.webjars</groupId>
+				<artifactId>Eonasdan-bootstrap-datetimepicker</artifactId>
+				<version>${wicket-bootstrap-datetimepicker.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.webjars</groupId>
+						<artifactId>momentjs</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.webjars</groupId>
+				<artifactId>select2</artifactId>
+				<version>${select2.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-select2</artifactId>
+				<version>${wicketstuff.version}</version>
+				<exclusions>
+					<exclusion>
 						<groupId>org.apache.wicket</groupId>
 						<artifactId>wicket-core</artifactId>
 					</exclusion>

@@ -87,31 +87,27 @@
 			<artifactId>spring-test</artifactId>
 		</dependency>
 
-		<!-- JUPITER -->
+<!--
 		<dependency>
-			<!-- JUnit API for writing tests and extensions -->
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>
 		<dependency>
-			<!-- implementation of the JUnit Jupiter test engine -->
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 		</dependency>
 		<dependency>
-			<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
 		</dependency>
 		<dependency>
-			<!-- JUnit 4 compile dependency in unittestsupport's src/main/java folder, 
-				non-transitive -->
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit-legacy.version}</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
+-->
 
 		<dependency>
 			<groupId>net.bytebuddy</groupId>

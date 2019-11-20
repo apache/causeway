@@ -87,7 +87,6 @@
         </dependency>
 
 		<!-- CUCUMBER -->
-
 		<dependency>
 		    <groupId>${cucumber.impl}</groupId>
 		    <artifactId>cucumber-java</artifactId>
@@ -110,12 +109,14 @@
 		    </exclusions>
 		</dependency>
 
+<!--
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit-legacy.version}</version>
             <scope>compile</scope>
         </dependency>
+-->
 
 	</dependencies>
 

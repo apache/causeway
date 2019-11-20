@@ -22,25 +22,46 @@ under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- APACHE ISIS customisation 1/2: start -->
+	<!--
+	This pom is a copy of org.apache:apache, the idea being to also inherit
+	from org.springframework.boot:spring-boot-starter-parent.
 
-	<!-- NB: this must come before the <parent>,
-	     because the build scripts grep for the version as a fallback -->
+	As little as possible has been changed.  The customisations are clearly identified.
+	Where the customisations clash with existing (eg project metadata stuff),
+	then the original from org.apache:apache have been commented out.
+	-->
+
+	<!-- APACHE ISIS customisation 1/6: start -->
+
+	<!-- NB: <groupId> must come before the <parent>, because the
+	     build scripts grep for the version as a fallback -->
 	<groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-parent</artifactId>
 	<version>2.0.0-M3-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<!-- APACHE ISIS customisation 1/6: end -->
 
-	<!--
+	<!-- for more information, see the documentation of this POM: http://maven.apache.org/pom/asf/ -->
+
+	<!-- ORG.APACHE:APACHE : commented out : start
+
+	<groupId>org.apache</groupId>
+	<artifactId>apache</artifactId>
+	<version>21</version>
+	<packaging>pom</packaging>
+
+	ORG.APACHE:APACHE : commented out : end -->
+
+	<!-- APACHE ISIS customisation 2/6: start -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.0.RELEASE</version>
 	</parent>
-	-->
+	<!-- APACHE ISIS customisation 2/6: end -->
 
-	<!-- APACHE ISIS customisation 1/2: end -->
 
+	<!-- ORG.APACHE:APACHE : commented out : start
 
 	<name>The Apache Software Foundation</name>
 	<description>
@@ -51,6 +72,17 @@ under the License.
 		and users.
 	</description>
 	<url>https://www.apache.org/</url>
+
+	ORG.APACHE:APACHE : commented out : end -->
+
+	<!-- APACHE ISIS customisation 3/6: start -->
+	<name>Apache Isis</name>
+	<description>Parent for the core framework + extensions, starter parent pom for starter apps.</description>
+
+    <url>https://isis.apache.org</url>
+	<inceptionYear>2010</inceptionYear>
+	<!-- APACHE ISIS customisation 3/6: end -->
+
 	<organization>
 		<name>The Apache Software Foundation</name>
 		<url>https://www.apache.org/</url>
@@ -63,22 +95,184 @@ under the License.
 		</license>
 	</licenses>
 
+	<!-- ORG.APACHE:APACHE : commented out : start
+	<mailingLists>
+        <mailingList>
+            <name>Apache Announce List</name>
+            <subscribe>announce-subscribe@apache.org</subscribe>
+            <unsubscribe>announce-unsubscribe@apache.org</unsubscribe>
+            <post>announce@apache.org</post>
+            <archive>https://mail-archives.apache.org/mod_mbox/www-announce/</archive>
+        </mailingList>
+    </mailingLists>
+
+    <scm>
+        <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</connection>
+        <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</developerConnection>
+        <url>https://github.com/apache/maven-apache-parent/tree/${project.scm.tag}</url>
+        <tag>apache-21</tag>
+    </scm>
+	ORG.APACHE:APACHE : commented out : end -->
+
+	<!-- APACHE ISIS customisation 4/6: start -->
 	<mailingLists>
 		<mailingList>
-			<name>Apache Announce List</name>
-			<subscribe>announce-subscribe@apache.org</subscribe>
-			<unsubscribe>announce-unsubscribe@apache.org</unsubscribe>
-			<post>announce@apache.org</post>
-			<archive>https://mail-archives.apache.org/mod_mbox/www-announce/</archive>
+			<name>developers</name>
+			<archive>http://mail-archives.apache.org/mod_mbox/isis-dev/</archive>
+			<post>dev@isis.apache.org</post>
+			<subscribe>dev-subscribe@isis.apache.org</subscribe>
+			<unsubscribe>dev-unsubscribe@isis.apache.org</unsubscribe>
+		</mailingList>
+		<mailingList>
+			<name>users</name>
+			<archive>http://mail-archives.apache.org/mod_mbox/isis-users/</archive>
+			<post>users@isis.apache.org</post>
+			<subscribe>users-subscribe@isis.apache.org</subscribe>
+			<unsubscribe>users-unsubscribe@isis.apache.org</unsubscribe>
 		</mailingList>
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</connection>
-		<developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</developerConnection>
-		<url>https://github.com/apache/maven-apache-parent/tree/${project.scm.tag}</url>
-		<tag>apache-21</tag>
+		<connection>scm:git:http://github.com/apache/isis.git</connection>
+		<developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
+		<url>http://github.com/apache/isis</url>
+		<tag>HEAD</tag>
 	</scm>
+
+	<issueManagement>
+		<system>Jira</system>
+		<url>https://issues.apache.org/jira/browse/ISIS</url>
+	</issueManagement>
+
+	<ciManagement>
+		<system>CI</system>
+		<url>https://github.com/apache-isis-committers/isis-nightly</url>
+	</ciManagement>
+
+	<developers>
+		<developer>
+			<id>ahuber</id>
+			<name>Andi Huber</name>
+			<email>ahuber@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>danhaywood</id>
+			<name>Dan Haywood</name>
+			<email>danhaywood@apache.org</email>
+			<roles>
+				<role>pmc chair</role>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+0</timezone>
+		</developer>
+		<developer>
+			<id>dslaughter</id>
+			<name>Dave Slaughter</name>
+			<email>dslaughter@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>-6</timezone>
+		</developer>
+		<developer>
+			<id>jcvanderwal</id>
+			<name>Jeroen van der Wal</name>
+			<email>jeroen@stromboli.it</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>kevin</id>
+			<name>Kevin Meyer</name>
+			<email>kevin@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+			<id>madytyoo</id>
+			<name>Maurizio Taverna</name>
+			<email>tavernamaurizio@gmail.com</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>mgrigorov</id>
+			<name>Martin Grigorov</name>
+			<email>mgrigorov@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+			<id>mnour</id>
+			<name>Mohammad Nour El-Din</name>
+			<email>mnour@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>mentor while incubating</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>oscarbou</id>
+			<name>Oscar Bou</name>
+			<email>o.bou@gesconsultor.com</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>rcmatthews</id>
+			<name>Robert Matthews</name>
+			<email>rmatthews@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+0</timezone>
+		</developer>
+		<developer>
+			<id>struberg</id>
+			<name>Mark Struberg</name>
+			<email>struberg@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>mentor while incubating</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>themalkolm</id>
+			<name>Alexander Krasnuhkin</name>
+			<email>themalkolm@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+3</timezone>
+		</developer>
+	</developers>
+	<!-- APACHE ISIS customisation 4/6: end -->
 
 	<distributionManagement>
 		<repository>
@@ -293,7 +487,117 @@ under the License.
 					<groupId>org.apache.rat</groupId>
 					<artifactId>apache-rat-plugin</artifactId>
 					<version>0.12</version>
+
+					<!-- APACHE ISIS customisation 5/6: start -->
+					<configuration>
+						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
+						<excludeSubProjects>true</excludeSubProjects>
+						<excludes>
+							<exclude>**/target/**</exclude>
+							<exclude>**/target-ide/**</exclude>
+
+							<exclude>**/*.project</exclude>
+							<exclude>**/.classpath</exclude>
+							<exclude>**/.settings/**</exclude>
+							<exclude>**/*.launch</exclude>
+							<!-- <exclude>src/site/resources/ide/eclipse/**</exclude> -->
+
+							<exclude>**/*.iml</exclude>
+
+							<exclude>**/*.pdn</exclude>
+							<exclude>**/*.svg</exclude>
+							<exclude>**/*.json</exclude>
+							<exclude>**/*.min.js</exclude>
+
+							<exclude>**/MANIFEST.MF</exclude>
+							<exclude>**/*.ucd</exclude>
+							<exclude>**/*.ucls</exclude>
+
+							<exclude>**/xml/objects/**</exclude>
+							<exclude>**/test.data</exclude>
+							<exclude>**/fixture-data/**</exclude>
+
+							<exclude>**/application.js</exclude>
+
+							<exclude>**/jquery.zclip.js</exclude>
+							<exclude>**/simple-sidebar.css</exclude>
+							<exclude>**/bootstrap-growl.js</exclude>
+							<exclude>**/moment.js</exclude>
+
+							<exclude>**/bootstrap-datetimepicker.min.css</exclude>
+							<exclude>**/bootstrap-datetimepicker.css</exclude>
+							<exclude>**/select2-bootstrap.css</exclude>
+
+							<exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
+
+							<exclude>**/src/main/resources/supplemental-models.xml</exclude>
+							<exclude>**/datanucleus.log</exclude>
+							<exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
+							<exclude>**/gradlew</exclude>
+							<exclude>**/gradlew.bat</exclude>
+							<exclude>**/rebel.xml</exclude>
+							<exclude>**/translations**.po</exclude>
+							<exclude>**/integtests/translations.pot</exclude>
+							<exclude>**/intellij/launch/*.xml</exclude>
+
+							<exclude>**/swagger-ui/**</exclude>
+
+							<exclude>**/META-INF/services/**</exclude>
+						</excludes>
+						<licenses>
+							<license
+									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>AL2  </licenseFamilyCategory>
+								<licenseFamilyName>Apache License 2.0</licenseFamilyName>
+								<notes />
+								<patterns>
+									<pattern>Licensed to the Apache Software Foundation (ASF) under
+										one</pattern>
+								</patterns>
+							</license>
+							<license
+									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>JQRY</licenseFamilyCategory>
+								<licenseFamilyName>MIT  </licenseFamilyName>
+								<notes />
+								<patterns>
+									<pattern>The MIT License (MIT)</pattern>
+									<pattern>Dual licensed under the MIT</pattern>
+								</patterns>
+							</license>
+							<license
+									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>JMOCK</licenseFamilyCategory>
+								<licenseFamilyName>JMock</licenseFamilyName>
+								<notes />
+								<patterns>
+									<pattern>Copyright (c) 2000-2007, jMock.org</pattern>
+								</patterns>
+							</license>
+						</licenses>
+						<licenseFamilies>
+							<licenseFamily
+									implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>Apache License 2.0</familyName>
+							</licenseFamily>
+							<licenseFamily
+									implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>MIT</familyName>
+							</licenseFamily>
+							<licenseFamily
+									implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>JMock</familyName>
+							</licenseFamily>
+							<licenseFamily
+									implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>XHTML</familyName>
+							</licenseFamily>
+						</licenseFamilies>
+					</configuration>
+					<!-- APACHE ISIS customisation 5/6: end -->
+
 				</plugin>
+
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>clirr-maven-plugin</artifactId>
@@ -474,7 +778,7 @@ under the License.
 		</profile>
 		<!-- END SNIPPET: release-profile -->
 
-		<!-- APACHE ISIS customisation 2/2: start -->
+		<!-- APACHE ISIS customisation 6/6: start -->
 		<profile>
 			<id>gcpappenginerepo-deploy</id>
 			<activation>
@@ -541,7 +845,7 @@ under the License.
 				<module>../examples/apps/simpleapp</module>
 			</modules>
 		</profile>
-		<!-- APACHE ISIS customisation 2/2: end -->
+		<!-- APACHE ISIS customisation 6/6: end -->
 
 	</profiles>
 </project>
