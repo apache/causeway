@@ -141,16 +141,6 @@
 	<dependencyManagement>
 		<dependencies>
 
-			<!-- ISIS CORE -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<!-- extensions -->
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-asciidoc</artifactId>
