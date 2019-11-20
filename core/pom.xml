@@ -123,6 +123,7 @@
 
 		<datanucleus-api-jdo.version>5.2.2</datanucleus-api-jdo.version>
 		<datanucleus-core.version>5.2.2</datanucleus-core.version>
+		<datanucleus-jdo-api.version>3.2.0-m12</datanucleus-jdo-api.version>
 		<datanucleus-jdo-query.version>5.0.9</datanucleus-jdo-query.version>
 		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 		<datanucleus-rdbms.version>5.2.1</datanucleus-rdbms.version>
@@ -163,7 +164,7 @@
 		<jbcrypt.version>0.3m</jbcrypt.version>
 		<jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
 
-		<jdo-api.version>3.2.0-m12</jdo-api.version> <!-- see also datanucleus.x.x versions -->
+		<jdo-api.version>3.1</jdo-api.version> <!-- see also datanucleus.x.x versions -->
 
 		<jdom.version>2.0.2</jdom.version>
 		<jdom2.version>2.0.5</jdom2.version>

@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>javax.jdo</artifactId>
-			<version>${jdo-api.version}</version>
+			<version>${datanucleus-jdo-api.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
