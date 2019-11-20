@@ -2,6 +2,7 @@ package org.ro.org.ro.ui.kv
 
 import org.ro.ui.Command
 import org.ro.ui.IconManager
+import org.ro.ui.Point
 import org.ro.ui.kv.UiManager
 import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.core.StringPair
@@ -81,7 +82,6 @@ class RoDialog(
             margin = 10.px
         }
         buttonBar.add(loginButton)
-        //IMPROVE: put int hpanel with offset
         buttonBar.add(cancelButton)
         add(buttonBar)
     }
@@ -91,8 +91,8 @@ class RoDialog(
         close()
     }
 
-    override fun show(): Widget {
-        UiManager.openDialog(this)
+    fun show(at: Point): Widget {
+        UiManager.openDialog(this, at)
         return super.show()
     }
 

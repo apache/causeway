@@ -19,6 +19,8 @@ import pl.treksoft.kvision.utils.obj
  */
 class ColumnFactory {
 
+    //IMPROVE reduce paddingTop/paddingBottom for tabulator-col-content
+
     private val checkFormatterParams = obj {
         allowEmpty = true
         allowTruthy = true
@@ -71,6 +73,7 @@ class ColumnFactory {
         val icon = ColumnDefinition<dynamic>(
                 "",
                 field = "iconName",
+                align = Align.CENTER,
                 width = "40",
                 formatterComponentFunction = { _, _, data ->
                     Button(text = "", icon = data["iconName"], style = ButtonStyle.LINK).onClick {
@@ -124,24 +127,31 @@ class ColumnFactory {
                 headerSort = false,
                 cellClick = { evt, cell ->
                     evt.stopPropagation()
-                    showContextMenu(evt, cell)
+                    buildContextMenu(evt, cell)
                 })
     }
 
-    private fun showContextMenu(mouseEvent: MouseEvent, cell: Tabulator.CellComponent): ContextMenu {
+    private fun buildContextMenu(mouseEvent: MouseEvent, cell: Tabulator.CellComponent): ContextMenu {
         val exposer = getData(cell)
         val tObject = exposer.delegate
         val menu = MenuFactory.buildFor(tObject)
         //FIXME x/y coordinates are sometimes off screen
         //val menuWidth =  menu.maxWidth?.first!!.toInt()
+/*        val mei = MouseEventInit(
+                clientX = (mouseEvent.clientX - 250),
+                clientY = (mouseEvent.clientY - 500),
+                screenY = (mouseEvent.clientY - 500)) */
         val mei = MouseEventInit(
                 clientX = (mouseEvent.clientX - 250),
                 clientY = (mouseEvent.clientY - 500),
                 screenY = (mouseEvent.clientY - 500))
         val positionedEvent = MouseEvent("", mei)
+        positionedEvent.pageX //= 200 as Double
         menu.positionMenu(positionedEvent)
         console.log("[ColFac.showContextMenu]")
         console.log(mouseEvent)
+ //       menu.left = 200.px
+ //       menu.top = 200.px
         return menu
     }
 

@@ -5,6 +5,7 @@ import org.ro.core.MenuEntry
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
 import org.ro.ui.IconManager
+import org.ro.ui.Point
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
@@ -26,36 +27,44 @@ object RoMenuBar : SimplePanel() {
                 marginLeft = CssSize(-32, UNIT.px)
                 height = CssSize(40, UNIT.px)
                 nav = nav()
-                val mainEntry = buildMainEntry()
+                val mainEntry = buildMainMenu()
                 nav.add(mainEntry)
             }
         }
     }
 
-    private fun buildMainEntry(): DropDown {
+    private fun buildMainMenu(): DropDown {
         val iconName = IconManager.find("Burger") //IMPROVE use for branding
-        val dd = dropDown(
+        return dropDown(
                 "",
                 icon = iconName,
                 forNavbar = false,
                 style = ButtonStyle.LIGHT)
         {
-            ddLink("Connect ...", icon = IconManager.find("Connect"))
-                    .onClick { LoginPrompt().open() }
+            ddLink(
+                    "Connect ...",
+                    icon = IconManager.find("Connect")
+            ).onClick { e ->
+                val at = Point(e.pageX.toInt(), e.pageY.toInt())
+                LoginPrompt().open(at) }
+
             val logTitle = "Log Entries"
-            ddLink(logTitle, icon = IconManager.find(logTitle))
-                    .onClick {
-                        val model = EventStore.log
-                        UiManager.add(logTitle, EventLogTable(model))
-                    }
+            ddLink(
+                    logTitle,
+                    icon = IconManager.find(logTitle)
+            ).onClick {
+                val model = EventStore.log
+                UiManager.add(logTitle, EventLogTable(model))
+            }
+
             val sampleTitle = "Image Sample"
-            ddLink(sampleTitle, icon = IconManager.find(sampleTitle))
-                    .onClick {
-                        val panel = ImagePanel()
-                        UiManager.add(sampleTitle, panel)
-                    }
+            ddLink(sampleTitle,
+                    icon = IconManager.find(sampleTitle)
+            ).onClick {
+                val panel = ImagePanel()
+                UiManager.add(sampleTitle, panel)
+            }
         }
-        return dd
     }
 
     // tr("Separator") to DD.SEPARATOR.option,
@@ -67,12 +76,13 @@ object RoMenuBar : SimplePanel() {
                     forNavbar = false,
                     style = ButtonStyle.LIGHT)
             for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
-                val l = me.action.getInvokeLink()!!
                 val label = me.action.id
                 dd.ddLink(
                         label = label,
                         icon = IconManager.find(label)
-                ).onClick {
+                ).onClick { e ->
+                    val at = Point(e.pageX.toInt(), e.pageY.toInt())
+                    val l = me.action.getInvokeLink()!!
                     ActionAggregator().invoke(l)
                 }
             }

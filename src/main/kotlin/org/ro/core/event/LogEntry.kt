@@ -1,14 +1,12 @@
 package org.ro.core.event
 
-import kotlinext.js.Object
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
-import org.ro.core.Session
 import org.ro.core.Utils.removeHexCode
 import org.ro.core.aggregator.IAggregator
 import org.ro.to.TransferObject
+import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.core.Col
-import pl.treksoft.kvision.panel.VPanel
 import kotlin.js.Date
 
 //Eventually color codes from css instead
@@ -126,7 +124,7 @@ data class LogEntry(
 
     private fun stripHostPort(url: String): String {
         var result = url
-        val protocolHostPort = Session.url
+        val protocolHostPort = UiManager.getUrl()
         result = result.replace(protocolHostPort + "restful/", "")
         result = removeHexCode(result)
         return result

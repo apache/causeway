@@ -4,9 +4,10 @@ import org.ro.core.event.LogEntry
 import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Method
+import org.ro.ui.Point
 import org.ro.ui.kv.ActionPrompt
 
-class ActionAggregator : BaseAggregator() {
+class ActionAggregator(val at: Point = Point(100,100)) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry) {
         val action = logEntry.getTransferObject() as Action
@@ -25,14 +26,14 @@ class ActionAggregator : BaseAggregator() {
 
     private fun processGet(action: Action, link: Link) {
         if (link.hasArguments()) {
-            ActionPrompt(action).open()
+            ActionPrompt(action).open(at)
         } else {
             this.invoke(link)
         }
     }
 
     private fun processPost(action: Action) {
-        ActionPrompt(action).open()
+        ActionPrompt(action).open(this.at)
     }
 
     private fun processPut(action: Action) {

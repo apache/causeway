@@ -1,9 +1,9 @@
 package org.ro.ui.kv
 
-import org.ro.core.Session
 import org.ro.org.ro.ui.kv.RoDialog
 import org.ro.to.Link
 import org.ro.ui.Command
+import org.ro.ui.Point
 import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.form.text.Password
 import pl.treksoft.kvision.form.text.Text
@@ -17,18 +17,18 @@ class LoginPrompt() : Command {
     private var username = "sven"
     private var password = "pass"
 
-    fun open() {
+    fun open(at: Point) {
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("Url", "Text", url))
         formItems.add(FormItem("User", "Text", username))
         formItems.add(FormItem("Password", "Password", password))
         form = RoDialog(caption = "Connect", items = formItems, command = this)
-        form.show()
+        form.show(at)
     }
 
     override fun execute() {
         extractUserInput()
-        Session.login(url, username, password)
+        UiManager.login(url, username, password)
         val link = Link(href = url + "restful/services/")
         invoke(link)
         UiManager.closeDialog(form)

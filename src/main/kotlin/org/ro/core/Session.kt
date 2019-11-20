@@ -5,8 +5,7 @@ import org.ro.ui.kv.UiManager
 /**
  * Keep track of connected server.
  */
-//TODO convert to class in order to have multiple sessions in parallel
-object Session {
+class Session {
     private var user: String = ""
     private var pw: String = ""
     var url: String = ""
@@ -16,7 +15,7 @@ object Session {
         this.pw = pw
         this.url = url
         UiManager.updateUser(user)
-//TODO        UiManager.updatePower("Powered By: Apache Isis")
+//        UiManager.updatePower("Powered By: Apache Isis")
     }
 
     fun getCredentials(): String {
@@ -26,7 +25,7 @@ object Session {
     /**
      * https://discuss.kotlinlang.org/t/kotlin-native-base64-en-decoder-code/10043
      */
-    private const val BASE64_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+    private val BASE64_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
     /**
      * Base64 encode a string.
