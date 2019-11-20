@@ -39,7 +39,7 @@ fi
 #
 for app in demo
 do
-  cd $PROJECT_ROOT_PATH/examples/apps/$app
+  cd $PROJECT_ROOT_PATH/examples/$app
 
   mvn --batch-mode \
       clean install \

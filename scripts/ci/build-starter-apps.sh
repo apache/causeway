@@ -32,7 +32,7 @@ fi
 #
 for app in helloworld simpleapp
 do
-  cd $PROJECT_ROOT_PATH/examples/demo/$app
+  cd $PROJECT_ROOT_PATH/starters/$app
 
   mvn --batch-mode \
        clean install

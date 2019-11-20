@@ -36,10 +36,11 @@
 	<modules>
 		<module>core-parent</module>
 
-		<module>examples/apps/demo</module>
-		<module>examples/apps/helloworld</module>
-		<module>examples/apps/simpleapp</module>
+		<module>examples/demo</module>
 		<module>examples/smoketests</module>
+
+		<module>starters/helloworld</module>
+		<module>starters/simpleapp</module>
 	</modules>
 
 	<profiles>
