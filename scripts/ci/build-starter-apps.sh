@@ -16,14 +16,7 @@ if [ -z "$MVN_STAGES" ]; then
   MVN_STAGES="clean install"
 fi
 
-sh $SCRIPT_DIR/print-environment.sh "build-demo-app"
-
-export FLAVOR=$1
-export ISIS_VERSION=$REVISION
-echo ""
-echo "\$Docker Image Flavor: ${FLAVOR}"
-echo "\$Isis Version: ${ISIS_VERSION}"
-echo ""
+sh $SCRIPT_DIR/print-environment.sh "build-starter-apps"
 
 #
 # update version (but just for the modules we need to build)
@@ -34,32 +27,20 @@ if [ -z "$REVISION" ]; then
   REVISION=$(grep "<version>" pom.xml | head -1 | cut -d">" -f2 | cut -d"<" -f1)
 fi
 
-mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION -Ddemo-app-modules
+mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION -Dstarter-apps-modules
 
 cd $PROJECT_ROOT_PATH
 
 #
 # now build the apps
 #
-for app in demo
+for app in helloworld simpleapp
 do
-  cd $PROJECT_ROOT_PATH/examples/apps/$app
+  cd $PROJECT_ROOT_PATH/examples/demo/$app
 
   mvn --batch-mode \
       -Drevision=$REVISION \
-      clean install \
-      -Dflavor=$FLAVOR \
-      -Dskip.git \
-      -Dskip.arch \
-      -DskipTests
-
-  mvn --batch-mode \
-      -Drevision=$REVISION \
-      compile jib:build \
-      -Dflavor=$FLAVOR \
-      -Dskip.git \
-      -Dskip.arch \
-      -DskipTests
+       clean install
 
   cd $PROJECT_ROOT_PATH
 done

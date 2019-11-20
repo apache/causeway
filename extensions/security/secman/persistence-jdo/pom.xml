@@ -37,35 +37,6 @@
         
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.github.odavid.maven.plugins</groupId>
-                <artifactId>mixin-maven-plugin</artifactId>
-                <version>0.1-alpha-40</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <mixins>
-                        <mixin>
-                            <groupId>org.apache.isis.mixins</groupId>
-                            <artifactId>isis-mixin-standard</artifactId>
-                            <version>${revision}</version>
-                        </mixin>
-                        <mixin>
-                            <groupId>org.apache.isis.mixins</groupId>
-                            <artifactId>isis-mixin-datanucleus-enhance</artifactId>
-                            <version>${revision}</version>
-                        </mixin>
-                        <mixin>
-                            <groupId>org.apache.isis.mixins</groupId>
-                            <artifactId>isis-mixin-surefire</artifactId>
-                            <version>${revision}</version>
-                        </mixin>
-                    </mixins>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
 	

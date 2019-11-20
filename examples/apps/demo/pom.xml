@@ -15,10 +15,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.examples</groupId>
-		<artifactId>isis-examples</artifactId>
+		<groupId>org.apache.isis.app</groupId>
+		<artifactId>isis-app-starter-parent</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
+		<relativePath>../../../starters/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.examples.apps</groupId>
@@ -327,34 +327,5 @@
 		</profile>
 
 	</profiles>
-
-	<build>
-		<plugins>
-
-			<plugin>
-				<groupId>com.github.odavid.maven.plugins</groupId>
-				<artifactId>mixin-maven-plugin</artifactId>
-				<version>0.1-alpha-40</version>
-				<extensions>true</extensions>
-				<configuration>
-					<mixins>
-						<mixin>
-							<groupId>org.apache.isis.mixins</groupId>
-							<artifactId>isis-mixin-standard</artifactId>
-						</mixin>
-						<mixin>
-							<groupId>org.apache.isis.mixins</groupId>
-							<artifactId>isis-mixin-datanucleus-enhance</artifactId>
-						</mixin>
-						<mixin>
-							<groupId>org.apache.isis.mixins</groupId>
-							<artifactId>isis-mixin-surefire</artifactId>
-						</mixin>
-					</mixins>
-				</configuration>
-			</plugin>
-
-		</plugins>
-	</build>
 
 </project>

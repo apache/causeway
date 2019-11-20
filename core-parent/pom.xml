@@ -24,6 +24,13 @@ under the License.
 
 	<!-- APACHE ISIS customisation 1/2: start -->
 
+	<!-- NB: this must come before the <parent>,
+	     because the build scripts grep for the version as a fallback -->
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-parent</artifactId>
+	<version>2.0.0-M3-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
 	<!--
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -31,15 +38,6 @@ under the License.
 		<version>2.2.0.RELEASE</version>
 	</parent>
 	-->
-
-	<groupId>org.apache.isis.core</groupId>
-	<artifactId>isis-parent</artifactId>
-	<version>2.0.0-M3-SNAPSHOT</version>
-	<packaging>pom</packaging>
-
-	<modules>
-		<module>../core</module>
-	</modules>
 
 	<!-- APACHE ISIS customisation 1/2: end -->
 
@@ -490,6 +488,58 @@ under the License.
 					<url>${gcpappenginerepo-deploy.repositoryUrl}</url>
 				</repository>
 			</distributionManagement>
+		</profile>
+
+		<profile>
+			<id>core-modules</id>
+			<activation>
+				<property>
+					<name>!skip.core-modules</name>
+				</property>
+			</activation>
+			<modules>
+				<module>../core</module>
+				<module>../mavendeps</module>
+				<module>../extensions</module>
+				<module>../starters</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>demo-app-module</id>
+			<activation>
+				<property>
+					<name>demo-app-module</name>
+				</property>
+			</activation>
+			<modules>
+				<module>../examples/apps/demo</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>smoketests-module</id>
+			<activation>
+				<property>
+					<name>smoketests-module</name>
+				</property>
+			</activation>
+			<modules>
+				<module>../examples/smoketests</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>starter-apps-module</id>
+			<activation>
+				<property>
+					<name>starter-apps-modules</name>
+				</property>
+			</activation>
+			<modules>
+				<module>../examples/apps/helloworld</module>
+				<module>../examples/apps/simpleapp</module>
+			</modules>
 		</profile>
 		<!-- APACHE ISIS customisation 2/2: end -->
 

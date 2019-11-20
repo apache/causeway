@@ -22,10 +22,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-    	<groupId>org.apache.isis.examples</groupId>
-    	<artifactId>isis-examples</artifactId>
+        <groupId>org.apache.isis.app</groupId>
+        <artifactId>isis-app-starter-parent</artifactId>
         <version>2.0.0-M3-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../../../starters/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.examples.apps</groupId>
@@ -35,10 +35,6 @@
 
     <packaging>pom</packaging>
 
-    <properties>
-		<isis.version>2.0.0-M3-SNAPSHOT</isis.version>
-    </properties>
-    
     <dependencyManagement>
         <dependencies>
 

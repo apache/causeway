@@ -12,10 +12,6 @@ if [ -z "$REVISION" ]; then
     export $(cut -d= -f1 $SHARED_VARS_FILE)
   fi
 fi
-if [ -z "$REVISION" ]; then
-  echo "\$REVISION is not set" >&2
-  exit 1
-fi
 if [ -z "$MVN_STAGES" ]; then
   MVN_STAGES="clean install"
 fi
@@ -26,6 +22,10 @@ fi
 sh $SCRIPT_DIR/print-environment.sh "build-core"
 
 cd $PROJECT_ROOT_PATH/core-parent
+
+if [ -z "$REVISION" ]; then
+  REVISION=$(grep "<version>" pom.xml | head -1 | cut -d">" -f2 | cut -d"<" -f1)
+fi
 
 mvn versions:set -DnewVersion=$REVISION -Drevision=$REVISION
 

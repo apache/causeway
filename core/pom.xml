@@ -121,13 +121,12 @@
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
 
-		<dn5-jdo-api.version>3.2.0-m12</dn5-jdo-api.version>
-		<dn5-core.version>5.2.1</dn5-core.version>
-		<dn5-api-jdo.version>5.2.1</dn5-api-jdo.version>
-		<dn5-jdo-query.version>5.0.9</dn5-jdo-query.version>
-		<dn5-rdbms.version>5.2.1</dn5-rdbms.version>
-		<dn5-jodatime.version>5.2.0-release</dn5-jodatime.version>
-		<dn5-maven-plugin.version>5.0.2</dn5-maven-plugin.version>
+		<datanucleus-api-jdo.version>5.2.2</datanucleus-api-jdo.version>
+		<datanucleus-core.version>5.2.2</datanucleus-core.version>
+		<datanucleus-jdo-query.version>5.0.9</datanucleus-jdo-query.version>
+		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
+		<datanucleus-rdbms.version>5.2.1</datanucleus-rdbms.version>
+		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
 
 		<docx4j.version>3.2.1</docx4j.version>
 
@@ -164,7 +163,7 @@
 		<jbcrypt.version>0.3m</jbcrypt.version>
 		<jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
 
-		<jdo-api.version>3.1</jdo-api.version>
+		<jdo-api.version>3.2.0-m12</jdo-api.version> <!-- see also datanucleus.x.x versions -->
 
 		<jdom.version>2.0.2</jdom.version>
 		<jdom2.version>2.0.5</jdom2.version>
@@ -229,6 +228,9 @@
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
 		<xdocreport.version>1.0.6</xdocreport.version>
+
+		<!-- PLUGIN DEPENDENCIES -->
+		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version> <!-- JUnit 5 requires Surefire version 2.22.0 or higher -->
 
 	</properties>
 
@@ -639,8 +641,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<!-- JUnit 5 requires Surefire version 2.22.0 or higher -->
-					<version>3.0.0-M3</version>
+					<version>${maven-surefire-plugin.version}</version>
 					<configuration>
 						<!-- override defaults and include everything unless explicitly excluded -->
 						<includes>
@@ -2237,46 +2238,6 @@
 		</profile>
 
 		<profile>
-			<id>deploy-local</id>
-			<activation>
-				<property>
-					<name>deploy</name>
-					<value>local</value>
-				</property>
-			</activation>
-			<!-- to deploy locally -->
-			<properties>
-				<distMgmtSiteUrl>file:///tmp/m2-sites/isis</distMgmtSiteUrl>
-			</properties>
-		</profile>
-
-		<!-- overrides inherited configuration to allow regular deploy plugin to 
-			work to snapshot repo. Use: -D deploy=snapshot -D modules=standard -D distMgmtSnapshotsUrl=... 
-			where the last property is the repo URL to deploy to -->
-		<profile>
-			<id>deploy-snapshot</id>
-			<activation>
-				<property>
-					<name>deploy</name>
-					<value>snapshot</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-deploy-plugin</artifactId>
-						<inherited>true</inherited>
-						<configuration>
-							<skip>false</skip>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-
 			<id>nexus-deploy</id>
 			<activation>
 				<property>
@@ -2465,6 +2426,71 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<profile>
+			<id>datanucleusenhance</id>
+			<activation>
+				<file>
+					<exists>${basedir}/logging-dn-enhance.properties</exists>
+				</file>
+			</activation>
+			<properties>
+				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
+				<datanucleus-maven-plugin.verbose>true</datanucleus-maven-plugin.verbose>
+				<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.datanucleus</groupId>
+						<artifactId>datanucleus-maven-plugin</artifactId>
+						<version>${datanucleus-maven-plugin.version}</version>
+						<configuration>
+							<fork>${datanucleus-maven-plugin.fork}</fork>
+							<log4jConfiguration>${datanucleus-maven-plugin.log4jConfiguration}</log4jConfiguration>
+							<verbose>${datanucleus-maven-plugin.verbose}</verbose>
+						</configuration>
+						<executions>
+							<execution>
+								<id>process-classes</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>enhance</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>process-test-classes</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>test-enhance</goal>
+								</goals>
+								<configuration>
+									<metadataDirectory>${project.build.testOutputDirectory}</metadataDirectory>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-core</artifactId>
+								<version>${datanucleus-core.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-api-jdo</artifactId>
+								<version>${datanucleus-api-jdo.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-jodatime</artifactId>
+								<version>${datanucleus-jodatime.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 	</profiles>
 
 	<modules>
@@ -2505,9 +2531,6 @@
 		<!-- to break cyclic dependencies some tests needed to be moved to their 
 			own modules -->
 		<module>detached-tests</module>
-
-		<module>../mavendeps</module>
-		<module>../extensions</module>
 	</modules>
 
 </project>

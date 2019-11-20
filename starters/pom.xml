@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.0.RELEASE</version>
+	</parent>
+
+	<groupId>org.apache.isis.app</groupId>
+	<artifactId>isis-app-starter-parent</artifactId>
+	<version>2.0.0-M3-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Apache Isis Starter Parent</name>
+	<description>
+		Parent pom providing dependency and plugin management for Apache Isis applications
+		built with Maven.  Builds on top of spring-boot-starter-parent.
+	</description>
+	<url>https://isis.apache.org</url>
+
+	<profiles>
+		<profile>
+			<id>isis-app-starter-datanucleusenhance</id>
+			<activation>
+				<file>
+					<exists>${basedir}/logging-dn-enhance.properties</exists>
+				</file>
+			</activation>
+			<properties>
+
+				<!-- keep in sync with versions used in Apache Isis -->
+				<datanucleus-api-jdo.version>5.2.2</datanucleus-api-jdo.version>
+				<datanucleus-core.version>5.2.2</datanucleus-core.version>
+				<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
+				<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
+
+				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
+				<datanucleus-maven-plugin.verbose>true</datanucleus-maven-plugin.verbose>
+				<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
+
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.datanucleus</groupId>
+						<artifactId>datanucleus-maven-plugin</artifactId>
+						<version>${datanucleus-maven-plugin.version}</version>
+						<configuration>
+							<fork>${datanucleus-maven-plugin.fork}</fork>
+							<log4jConfiguration>${datanucleus-maven-plugin.log4jConfiguration}</log4jConfiguration>
+							<verbose>${datanucleus-maven-plugin.verbose}</verbose>
+						</configuration>
+						<executions>
+							<execution>
+								<id>process-classes</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>enhance</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>process-test-classes</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>test-enhance</goal>
+								</goals>
+								<configuration>
+									<metadataDirectory>${project.build.testOutputDirectory}</metadataDirectory>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-core</artifactId>
+								<version>${datanucleus-core.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-api-jdo</artifactId>
+								<version>${datanucleus-api-jdo.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-jodatime</artifactId>
+								<version>${datanucleus-jodatime.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>isis-app-starter-surefire</id>
+			<activation>
+				<property>
+					<name>!skip.isis-app-starter-surefire</name>
+				</property>
+			</activation>
+
+			<properties>
+				<!--
+				uses maven-surefire-plugin.version, which is declared by spring-boot-starter-parent
+				-->
+				<isis.integTest.module></isis.integTest.module>
+				<skipTests>false</skipTests>
+				<skipUTs>${skipTests}</skipUTs>
+				<skipITs>${skipTests}</skipITs>
+				<skipBSs>${skipTests}</skipBSs>
+				<surefire-plugin.argLine></surefire-plugin.argLine>
+			</properties>
+
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>${maven-surefire-plugin.version}</version>
+							<executions>
+								<execution>
+									<id>default-test</id>
+									<phase>test</phase>
+									<goals>
+										<goal>test</goal>
+									</goals>
+									<configuration>
+										<skipTests>${skipUTs}</skipTests>
+										<includes>
+											<include>**/*Test*.java</include>
+										</includes>
+										<excludes>
+											<exclude>**/*Testing.java</exclude>
+											<exclude>**/*IntegTest*.java</exclude>
+											<exclude>**/*Abstract*.java</exclude>
+										</excludes>
+										<useFile>true</useFile>
+										<printSummary>true</printSummary>
+										<reportsDirectory>${project.build.directory}/surefire-unittest-reports</reportsDirectory>
+										<forkCount>1</forkCount>
+										<reuseForks>true</reuseForks>
+										<argLine>${surefire-plugin.argLine}</argLine>
+									</configuration>
+								</execution>
+								<execution>
+									<id>integ-test</id>
+									<phase>integration-test</phase>
+									<goals>
+										<goal>test</goal>
+									</goals>
+									<configuration>
+										<skipTests>${skipITs}</skipTests>
+										<includes>
+											<include>**/*IntegTest*.java</include>
+										</includes>
+										<excludes>
+											<exclude>**/*Abstract*.java</exclude>
+										</excludes>
+										<useFile>true</useFile>
+										<printSummary>true</printSummary>
+										<reportsDirectory>${project.build.directory}/surefire-integtest-reports</reportsDirectory>
+										<systemPropertyVariables>
+											<isis.integTest.module>${isis.integTest.module}</isis.integTest.module>
+										</systemPropertyVariables>
+										<forkCount>1</forkCount>
+										<reuseForks>true</reuseForks>
+										<argLine>${surefire-plugin.argLine}</argLine>
+									</configuration>
+								</execution>
+								<execution>
+									<id>integ-bddspecs</id>
+									<phase>integration-test</phase>
+									<goals>
+										<goal>test</goal>
+									</goals>
+									<configuration>
+										<skipTests>${skipBSs}</skipTests>
+										<includes>
+											<include>**/*IntegBddSpecs.java</include>
+										</includes>
+										<excludes>
+											<exclude>**/*Abstract*.java</exclude>
+											<exclude>**/*Test*.java</exclude>
+										</excludes>
+										<useFile>true</useFile>
+										<printSummary>true</printSummary>
+										<testFailureIgnore>true</testFailureIgnore>
+										<reportsDirectory>${project.build.directory}/surefire-integbddspecs-reports</reportsDirectory>
+										<forkCount>1</forkCount>
+										<reuseForks>true</reuseForks>
+										<argLine>${surefire-plugin.argLine}</argLine>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-report-plugin</artifactId>
+							<version>${maven-surefire-plugin.version}</version>
+							<configuration>
+								<showSuccess>false</showSuccess>
+							</configuration>
+							<executions>
+								<execution>
+									<id>test</id>
+									<phase>test</phase>
+								</execution>
+								<execution>
+									<id>integration-test</id>
+									<phase>integration-test</phase>
+								</execution>
+							</executions>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+
+		<profile>
+			<id>isis-app-starter-docker</id>
+			<activation>
+				<property>
+					<name>!skip.isis-app-starter-docker</name>
+				</property>
+			</activation>
+			<properties>
+				<jib-maven-plugin.version>1.8.0</jib-maven-plugin.version>
+			</properties>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>com.google.cloud.tools</groupId>
+							<artifactId>jib-maven-plugin</artifactId>
+							<version>${jib-maven-plugin.version}</version>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+
+
+	</profiles>
+</project>

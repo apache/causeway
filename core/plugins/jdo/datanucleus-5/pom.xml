@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>javax.jdo</artifactId>
-			<version>${dn5-jdo-api.version}</version>
+			<version>${jdo-api.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -82,27 +82,27 @@
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-core</artifactId>
-			<version>${dn5-core.version}</version>
+			<version>${datanucleus-core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-api-jdo</artifactId>
-			<version>${dn5-api-jdo.version}</version>
+			<version>${datanucleus-api-jdo.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-jdo-query</artifactId>
-			<version>${dn5-jdo-query.version}</version>
+			<version>${datanucleus-jdo-query.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-rdbms</artifactId>
-			<version>${dn5-rdbms.version}</version>
+			<version>${datanucleus-rdbms.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-jodatime</artifactId>
-			<version>${dn5-jodatime.version}</version>
+			<version>${datanucleus-jodatime.version}</version>
 		</dependency>
 
 		<!-- Core Runtime -->

@@ -57,10 +57,6 @@ jobs:
         cat $SHARED_VARS_FILE
         echo ======================================
     
-    - name: Build Mixins
-      shell: bash
-      run: bash $CI_SCRIPTS_PATH/build-mixins.sh
-
     - name: Build Core
       shell: bash
       run: bash $CI_SCRIPTS_PATH/build-core.sh

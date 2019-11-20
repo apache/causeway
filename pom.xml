@@ -34,8 +34,12 @@
 	</scm>
 
 	<modules>
-		<module>mixins</module>
-		<module>core</module>
+		<module>core-parent</module>
+
+		<module>examples/apps/demo</module>
+		<module>examples/apps/helloworld</module>
+		<module>examples/apps/simpleapp</module>
+		<module>examples/smoketests</module>
 	</modules>
 
 	<profiles>
