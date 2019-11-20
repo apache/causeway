@@ -46,31 +46,28 @@ public class Bookmark implements Serializable {
     
     @Getter private final String objectType;
     @Getter private final String identifier;
+    
     @Getter private final ObjectState objectState;
     
+    /**
+     * @deprecated since 2.0, only kept for compatibility with common schema v1.1
+     */
+    @Deprecated
     public enum ObjectState {
         PERSISTENT("", BookmarkObjectState.PERSISTENT),
         TRANSIENT("!", BookmarkObjectState.TRANSIENT), // same as OidMarshaller
         VIEW_MODEL("*", BookmarkObjectState.VIEW_MODEL); // same as OidMarshaller
 
         @Getter private final String code;
+        
         private final BookmarkObjectState bookmarkObjectState;
 
+        
         ObjectState(
                 final String code,
                 final BookmarkObjectState bookmarkObjectState) {
             this.code = code;
             this.bookmarkObjectState = bookmarkObjectState;
-        }
-
-        public boolean isTransient() {
-            return this == TRANSIENT;
-        }
-        public boolean isViewModel() {
-            return this == VIEW_MODEL;
-        }
-        public boolean isPersistent() {
-            return this == PERSISTENT;
         }
 
         public static ObjectState from(final String objectType) {
@@ -96,6 +93,7 @@ public class Bookmark implements Serializable {
             }
         }
 
+        @Deprecated
         public BookmarkObjectState toBookmarkState() {
             return bookmarkObjectState;
         }
