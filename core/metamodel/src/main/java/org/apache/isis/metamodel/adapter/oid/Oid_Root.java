@@ -25,7 +25,6 @@ import java.util.Objects;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
@@ -37,7 +36,6 @@ import lombok.val;
 
 final class Oid_Root implements RootOid {
 
-    // -- fields
     private final static long serialVersionUID = 2L;
 
     private final ObjectSpecId objectSpecId;
@@ -49,7 +47,7 @@ final class Oid_Root implements RootOid {
             ObjectSpecId objectSpecId, 
             String identifier, 
             Bookmark.ObjectState state) {
-        
+
         return new Oid_Root(objectSpecId, identifier, state);
     }
 
@@ -59,21 +57,10 @@ final class Oid_Root implements RootOid {
         requires(identifier, "identifier");
         requires(state, "state");
 
-        // too slow...
-        // Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))), "identifier '" + identifier + "' contains a '#' symbol");
-        // Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))), "identifier '" + identifier + "' contains an '@' symbol");
-
         this.objectSpecId = objectSpecId;
         this.identifier = identifier;
         this.state = state;
         this.hashCode = calculateHash();
-
-
-        val debug = this.toString(); 
-        if(debug.contains("/spring/")) {
-            _Exceptions.throwUnexpectedCodeReach();
-        }
-
 
     }
 
@@ -147,25 +134,21 @@ final class Oid_Root implements RootOid {
 
     @Override
     public OidDto asOidDto() {
-        
+
         val oidDto = new OidDto();
 
         oidDto.setType(getObjectSpecId().asString());
         oidDto.setId(getIdentifier());
 
         val bookmarkState = state.toBookmarkState();
-        // persistent is assumed if not specified...
         oidDto.setObjectState(
-                bookmarkState != BookmarkObjectState.PERSISTENT ? bookmarkState : null);
+                bookmarkState != BookmarkObjectState.PERSISTENT 
+                ? bookmarkState  
+                        : null); // persistent is assumed if not specified...
 
         return oidDto;
     }
 
-    // -- equals, hashCode
-
-    private int calculateHash() {
-        return Objects.hash(objectSpecId, identifier, state);
-    }
 
     @Override
     public boolean equals(final Object other) {
@@ -182,9 +165,9 @@ final class Oid_Root implements RootOid {
     }
 
     public boolean equals(final Oid_Root other) {
-        return Objects.equals(objectSpecId, other.getObjectSpecId()) && 
-                Objects.equals(identifier, other.getIdentifier()) && 
-                Objects.equals(state, other.state);
+        return Objects.equals(objectSpecId, other.getObjectSpecId()) 
+                && Objects.equals(identifier, other.getIdentifier())
+                && Objects.equals(state, other.state);
     }
 
     @Override
@@ -192,7 +175,6 @@ final class Oid_Root implements RootOid {
         return hashCode;
     }
 
-    // -- toString
     @Override
     public String toString() {
         return enString();
@@ -200,8 +182,15 @@ final class Oid_Root implements RootOid {
 
     @Override
     public Oid copy() {
-        // these are all immutable ...
-        return of(objectSpecId, identifier, state);
+        // these are all immutable ... of(objectSpecId, identifier, state);
+        return this; 
     }
+
+    // -- HELPER
+
+    private int calculateHash() {
+        return Objects.hash(objectSpecId, identifier, state);
+    }
+
 
 }
