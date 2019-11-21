@@ -33,12 +33,40 @@
 
     <packaging>jar</packaging>
 
+    <properties>
+        <maven-cucumber-reporting.version>4.11.2</maven-cucumber-reporting.version>
+    </properties>
+
     <build>
         <testResources>
             <testResource>
                 <directory>src/test/java</directory>
             </testResource>
         </testResources>
+        <plugins>
+            <plugin>
+                <groupId>net.masterthought</groupId>
+                <artifactId>maven-cucumber-reporting</artifactId>
+                <version>${maven-cucumber-reporting.version}</version>
+                <executions>
+                    <execution>
+                        <id>execution</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <projectName>SimpleApp</projectName>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <inputDirectory>${project.build.directory}</inputDirectory>
+                            <jsonFiles>
+                                <param>**/*.json</param>
+                            </jsonFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <dependencies>
@@ -71,29 +99,7 @@
             <artifactId>h2</artifactId>
         </dependency>
 
-<!--        
-        <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.1-901.jdbc4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>6.4.0.jre8</version>
-        </dependency>
--->
-        
         <!-- TESTS -->
-        
-<!--
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>simpleapp-module-simple</artifactId>
-            <scope>test</scope>
-            <type>test-jar</type>
-        </dependency>
--->
 
         <dependency>
             <groupId>org.apache.isis.mavendeps</groupId>
@@ -101,14 +107,6 @@
             <type>pom</type>
             <scope>test</scope>
         </dependency>
-
-<!--
-        <dependency>
-            <groupId>com.approvaltests</groupId>
-            <artifactId>approvaltests</artifactId>
-            <scope>test</scope>
-        </dependency>
--->
 
     </dependencies>
 
