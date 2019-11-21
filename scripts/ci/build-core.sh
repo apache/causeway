@@ -27,11 +27,11 @@ if [ ! -z "$REVISION" ]; then
   mvn versions:set -DnewVersion=$REVISION
 fi
 
+cat pom.xml
 
 mvn -s $SETTINGS_XML \
     --batch-mode \
     $MVN_STAGES \
-    -Dskip.assemble-zip \
     $MVN_ADDITIONAL_OPTS \
     $*
 
