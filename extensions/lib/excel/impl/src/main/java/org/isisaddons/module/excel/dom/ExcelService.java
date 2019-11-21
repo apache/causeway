@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -55,7 +56,7 @@ public class ExcelService {
     @PostConstruct
     public void init(final Map<String,String> properties) {
         excelServiceImpl = new ExcelServiceImpl();
-        serviceRegistry.injectServicesInto(excelServiceImpl);
+        serviceInjector.injectServicesInto(excelServiceImpl);
     }
 
     // //////////////////////////////////////
@@ -227,6 +228,6 @@ public class ExcelService {
     }
 
     @Inject BookmarkService bookmarkService;
-    @Inject ServiceRegistry serviceRegistry;
+    @Inject ServiceInjector serviceInjector;
 
 }

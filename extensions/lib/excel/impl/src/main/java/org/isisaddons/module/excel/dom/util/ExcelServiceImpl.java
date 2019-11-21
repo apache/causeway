@@ -1,11 +1,20 @@
 package org.isisaddons.module.excel.dom.util;
 
+import lombok.SneakyThrows;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
+import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -212,8 +221,10 @@ public class ExcelServiceImpl {
         }
     }
 
+    @SneakyThrows
     private ExcelConverter newExcelConverter() {
-        return new ExcelConverter(getSpecificationLoader(), getPersistenceSession(), bookmarkService, isisSessionFactory.getServicesInjector());
+        final ObjectManager objectManager = IsisSession.current().map(RuntimeContextBase::getObjectManager).orElseThrow((Supplier<Throwable>) _Exceptions::unexpectedCodeReach);
+        return new ExcelConverter(specificationLoader, objectManager, bookmarkService, serviceInjector);
     }
 
 
@@ -222,6 +233,12 @@ public class ExcelServiceImpl {
 
     @javax.inject.Inject
     BookmarkService bookmarkService;
+
+    @javax.inject.Inject
+    SpecificationLoader specificationLoader;
+
+    @javax.inject.Inject
+    ServiceInjector serviceInjector;
 
 //    @javax.inject.Inject
 //    IsisSessionFactory isisSessionFactory;

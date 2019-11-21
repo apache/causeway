@@ -7,11 +7,7 @@ import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 
 import org.isisaddons.module.excel.dom.AggregationType;
@@ -59,9 +55,9 @@ public class SheetPivoter {
         final static int columnLabelOffsetY = 0; // top row used for pivot
 
         //some styling
-        final static short fieldnameBgColorIndex = HSSFColor.GREY_25_PERCENT.index;
-        final static short columnHeaderValueBgColorIndex = HSSFColor.GREY_40_PERCENT.index;
-        final static short sumBgColorIndex = HSSFColor.GREY_25_PERCENT.index;
+        final static short fieldnameBgColorIndex = HSSFColor.HSSFColorPredefined.GREY_25_PERCENT.getIndex();
+        final static short columnHeaderValueBgColorIndex = HSSFColor.HSSFColorPredefined.GREY_40_PERCENT.getIndex();
+        final static short sumBgColorIndex = HSSFColor.HSSFColorPredefined.GREY_25_PERCENT.getIndex();
         static CellStyle fieldNameStyle;
         static CellStyle columnHeaderValueStyle;
         static CellStyle rowSumStyle;
@@ -205,11 +201,11 @@ public class SheetPivoter {
             cell.setCellValue("(empty)");
             return cell;
         }
-        if (cell.getCellType()==Cell.CELL_TYPE_BLANK){
+        if (cell.getCellType()== CellType.BLANK){
             cell.setCellValue("(empty)");
             return cell;
         }
-        if (cell.getCellType()==Cell.CELL_TYPE_STRING && cell.getStringCellValue().equals("")){
+        if (cell.getCellType()==CellType.STRING && cell.getStringCellValue().equals("")){
             cell.setCellValue("(empty)");
         }
         return cell;
@@ -221,8 +217,8 @@ public class SheetPivoter {
         for (AnnotationTriplet at : annotations.getByAnnotation_OrderBy_OrderAscending("value")){
             for (srCnt = SourceLayOut.VALUES_START_AT_ROWNUMBER; srCnt <= sourceSheet.getLastRowNum(); srCnt++){
                 Cell c = sourceSheet.getRow(srCnt).getCell(at.getColnumber());
-                if (c != null && c.getCellType()!=Cell.CELL_TYPE_BLANK){
-                    if (c.getCellType()!=Cell.CELL_TYPE_NUMERIC) {
+                if (c != null && c.getCellType()!=CellType.BLANK){
+                    if (c.getCellType()!=CellType.NUMERIC) {
                         badData = true;
                         continue;
                     }
@@ -424,7 +420,7 @@ public class SheetPivoter {
         // copy or add value to target cell
         Cell valueCellSource = sourceSheet.getRow(rowInSource).getCell(colInSource);
         Cell valueCellTarget = targetSheet.getRow(rowInTarget).getCell(colPosTarget);
-        if (valueCellSource!=null && (valueCellTarget== null || valueCellTarget.getCellType()==Cell.CELL_TYPE_BLANK)){
+        if (valueCellSource!=null && (valueCellTarget== null || valueCellTarget.getCellType()==CellType.BLANK)){
             valueCellTarget = targetSheet.getRow(rowInTarget).createCell(colPosTarget);
             switch (type) {
             case SUM:
@@ -569,33 +565,33 @@ public class SheetPivoter {
 
     private void defineSomeCellStyles() {
         TargetLayOut.boldFont= targetSheet.getWorkbook().createFont();
-        TargetLayOut.boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        TargetLayOut.boldFont.setBold(true);
 
         TargetLayOut.fieldNameStyle = targetSheet.getWorkbook().createCellStyle();
         TargetLayOut.fieldNameStyle.setFillForegroundColor(TargetLayOut.fieldnameBgColorIndex);
-        TargetLayOut.fieldNameStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        TargetLayOut.fieldNameStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         TargetLayOut.fieldNameStyle.setFont(TargetLayOut.boldFont);
 
         TargetLayOut.columnHeaderValueStyle = targetSheet.getWorkbook().createCellStyle();
         TargetLayOut.columnHeaderValueStyle.setFillForegroundColor(TargetLayOut.columnHeaderValueBgColorIndex);
-        TargetLayOut.columnHeaderValueStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        TargetLayOut.columnHeaderValueStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         TargetLayOut.columnHeaderValueStyle.setFont(TargetLayOut.boldFont);
 
         TargetLayOut.rowSumStyle = targetSheet.getWorkbook().createCellStyle();
-        TargetLayOut.rowSumStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        TargetLayOut.rowSumStyle.setBorderLeft(BorderStyle.THIN);
         TargetLayOut.rowSumStyle.setFillForegroundColor(TargetLayOut.sumBgColorIndex);
-        TargetLayOut.rowSumStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        TargetLayOut.rowSumStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         TargetLayOut.columSumStyle = targetSheet.getWorkbook().createCellStyle();
-        TargetLayOut.columSumStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        TargetLayOut.columSumStyle.setBorderTop(BorderStyle.THIN);
         TargetLayOut.columSumStyle.setFillForegroundColor(TargetLayOut.sumBgColorIndex);
-        TargetLayOut.columSumStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        TargetLayOut.columSumStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         TargetLayOut.totalSumStyle = targetSheet.getWorkbook().createCellStyle();
-        TargetLayOut.totalSumStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        TargetLayOut.totalSumStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        TargetLayOut.totalSumStyle.setBorderTop(BorderStyle.THIN);
+        TargetLayOut.totalSumStyle.setBorderLeft(BorderStyle.THIN);
         TargetLayOut.totalSumStyle.setFillForegroundColor(TargetLayOut.sumBgColorIndex);
-        TargetLayOut.totalSumStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        TargetLayOut.totalSumStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     }
 
 }

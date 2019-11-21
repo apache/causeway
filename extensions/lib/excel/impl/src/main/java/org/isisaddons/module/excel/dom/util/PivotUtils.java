@@ -3,6 +3,7 @@ package org.isisaddons.module.excel.dom.util;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
 import org.isisaddons.module.excel.dom.AggregationType;
@@ -46,35 +47,33 @@ public class PivotUtils {
         if (cell != null && other != null && cell.getCellType() == other.getCellType()) {
 
             switch (cell.getCellType()) {
-                case Cell.CELL_TYPE_BLANK:
-                    if (other.getCellType()==Cell.CELL_TYPE_BLANK){
+                case BLANK:
+                    if (other.getCellType()==CellType.BLANK) {
                         return true;
                     }
                     break;
-                case Cell.CELL_TYPE_BOOLEAN:
+                case BOOLEAN:
                     if (cell.getBooleanCellValue() == other.getBooleanCellValue()){
                         return true;
                     }
                     break;
-                case Cell.CELL_TYPE_ERROR:
+                case ERROR:
                     if (cell.getErrorCellValue() == other.getErrorCellValue()){
                         return true;
                     }
                     break;
-                case Cell.CELL_TYPE_FORMULA:
+                case FORMULA:
                     break;
-                case Cell.CELL_TYPE_NUMERIC:
+                case NUMERIC:
                     if (cell.getNumericCellValue() == other.getNumericCellValue()){
                         return true;
                     }
                     break;
-                case Cell.CELL_TYPE_STRING:
+                case STRING:
                     if (cell.getStringCellValue().equals(other.getStringCellValue())){
                         return true;
                     }
-
             }
-
         }
 
         return  false;
@@ -86,7 +85,7 @@ public class PivotUtils {
             return target;
         }
 
-        if (target.getCellType()==Cell.CELL_TYPE_NUMERIC && source.getCellType()==Cell.CELL_TYPE_NUMERIC ){
+        if (target.getCellType()==CellType.NUMERIC && source.getCellType()==CellType.NUMERIC ){
             double val1 = target.getNumericCellValue();
             double val2 = source.getNumericCellValue();
             target.setCellValue(val1+val2);
@@ -115,26 +114,24 @@ public class PivotUtils {
             target.setHyperlink(source.getHyperlink());
         }
 
-        // Set the cell data type
-        target.setCellType(source.getCellType());
-
         // Set the cell data value
         switch (source.getCellType()) {
-            case Cell.CELL_TYPE_BLANK:
+            case BLANK:
+                target.setBlank();
                 break;
-            case Cell.CELL_TYPE_BOOLEAN:
+            case BOOLEAN:
                 target.setCellValue(source.getBooleanCellValue());
                 break;
-            case Cell.CELL_TYPE_ERROR:
+            case ERROR:
                 target.setCellErrorValue(source.getErrorCellValue());
                 break;
-            case Cell.CELL_TYPE_FORMULA:
+            case FORMULA:
                 target.setCellFormula(source.getCellFormula());
                 break;
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 target.setCellValue(source.getNumericCellValue());
                 break;
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 target.setCellValue(source.getRichStringCellValue());
                 break;
         }

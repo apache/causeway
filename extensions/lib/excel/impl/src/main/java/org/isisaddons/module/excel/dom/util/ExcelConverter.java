@@ -6,11 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -20,21 +19,19 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.apache.isis.applib.annotation.Where;
@@ -78,30 +75,27 @@ class ExcelConverter {
     // //////////////////////////////////////
 
     private final SpecificationLoader specificationLoader;
-    private final AdapterManager adapterManager;
+    private final ObjectManager objectManager;
     private final BookmarkService bookmarkService;
-    private final ServicesInjector servicesInjector;
+    private final ServiceInjector serviceInjector;
 
     ExcelConverter(
             final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
+            final ObjectManager objectManager,
             final BookmarkService bookmarkService,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector serviceInjector) {
         this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
+        this.objectManager = objectManager;
         this.bookmarkService = bookmarkService;
-        this.servicesInjector = servicesInjector;
+        this.serviceInjector = serviceInjector;
     }
 
     // //////////////////////////////////////
 
     File appendSheet(final List<WorksheetContent> worksheetContents, XSSFWorkbook workbook) throws IOException {
-        final ImmutableSet<String> worksheetNames = FluentIterable.from(worksheetContents)
-                .transform(new Function<WorksheetContent, String>() {
-                    @Nullable @Override public String apply(@Nullable final WorksheetContent worksheetContent) {
-                        return worksheetContent.getSpec().getSheetName();
-                    }
-                }).toSet();
+        final Set<String> worksheetNames = worksheetContents.stream()
+                .map(x -> x.getSpec().getSheetName())
+                .collect(Collectors.toSet());
         if(worksheetNames.size() < worksheetContents.size()) {
             throw new IllegalArgumentException("Sheet names must have distinct names");
         }
@@ -134,18 +128,17 @@ class ExcelConverter {
 
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(factory.getCls());
 
-        final List<ManagedObject> adapters = Lists.transform(domainObjects, ObjectAdapter.Functions.adapterForUsing(adapterManager));
+        final List<ManagedObject> adapters = domainObjects.stream().map(objectManager::adapt).collect(Collectors.toList());
 
-        @SuppressWarnings("deprecation")
-        final List<? extends ObjectAssociation> propertyList = objectSpec.getAssociations(VISIBLE_PROPERTIES);
+        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(Contributed.INCLUDED)
+                                                        .filter(VISIBLE_PROPERTIES)
+                                                        .collect(Collectors.toList());
 
         List<ObjectAssociation> annotatedAsHyperlink = new ArrayList<>();
         for (Field f : fieldsAnnotatedWith(factory.getCls(), HyperLink.class)){
-            for (ObjectAssociation oa :propertyList){
-                if (oa.getId().equals(f.getName())){
-                    annotatedAsHyperlink.add(oa);
-                }
-            }
+            propertyList.stream()
+                    .filter(oa -> Objects.equals(oa.getId(), f.getName()))
+                    .forEach(annotatedAsHyperlink::add);
         }
 
         final Sheet sheet = ((Workbook) workbook).createSheet(sheetName);
@@ -224,10 +217,9 @@ class ExcelConverter {
 
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(factory.getCls());
 
-        final List<ObjectAdapter> adapters = Lists.transform(domainObjects, ObjectAdapter.Functions.adapterForUsing(adapterManager));
-
-        @SuppressWarnings("deprecation")
-        final List<? extends ObjectAssociation> propertyList = objectSpec.getAssociations(VISIBLE_PROPERTIES);
+        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(Contributed.INCLUDED)
+                .filter(VISIBLE_PROPERTIES)
+                .collect(Collectors.toList());
 
         // Validate the annotations for pivot
         validateAnnotations(propertyList, factory.getCls());
@@ -366,11 +358,7 @@ class ExcelConverter {
             final WorksheetSpec worksheetSpec) {
 
         final WorksheetSpec.RowFactory<Object> factory = worksheetSpec.getFactory();
-        if(factory instanceof ServicesInjectorAware) {
-            final ServicesInjectorAware servicesInjectorAware = (ServicesInjectorAware) factory;
-            servicesInjectorAware.setServicesInjector(this.servicesInjector);
-
-        }
+        this.serviceInjector.injectServicesInto(factory);
 
         final Class<T> cls = (Class<T>) factory.getCls();
         final String sheetName = worksheetSpec.getSheetName();
@@ -393,7 +381,7 @@ class ExcelConverter {
                 for (final Cell cell : row) {
 
                     try{
-                        if (cell.getCellType() != Cell.CELL_TYPE_BLANK) {
+                        if (cell.getCellType() != CellType.BLANK) {
                             final int columnIndex = cell.getColumnIndex();
                             final String propertyName = cellMarshaller.getStringCellValue(cell);
                             final OneToOneAssociation property = getAssociation(objectSpec, propertyName);
@@ -419,7 +407,7 @@ class ExcelConverter {
 
                 // Let's require at least one column to be not null for detecting a blank row.
                 // Excel can have physical rows with cells empty that it seem do not existent for the user.
-                ObjectAdapter templateAdapter = null;
+                ManagedObject templateAdapter = null;
                 T imported = null;
                 for (final Cell cell : row) {
 
@@ -441,9 +429,9 @@ class ExcelConverter {
                                         importedEnhanced.setExcelSheetName(sheetName);
                                         imported = (T) importedEnhanced;
                                     }
-                                    templateAdapter = this.adapterManager.adapterFor(imported);
+                                    templateAdapter = this.objectManager.adapt(imported);
                                 }
-                                final ObjectAdapter valueAdapter = this.adapterManager.adapterFor(value);
+                                final ManagedObject valueAdapter = this.objectManager.adapt(value);
                                 otoa.set(templateAdapter, valueAdapter, InteractionInitiatedBy.USER);
                             }
                         } else {
@@ -462,13 +450,17 @@ class ExcelConverter {
                     }
                 }
 
-                // we need to remove the templateAdapter because earlier on we will have created an adapter (and corresponding OID)
-                // for a view model where the OID is initially computed on the incomplete (in fact, empty) view model.
-                // removing the adapter therefore removes the OID as well, so next time an adapter is needed for the view model
-                // the OID will be recomputed based on the fully populated view model pojo.
-                if(templateAdapter != null) {
-                    this.adapterManager.removeAdapter(templateAdapter);
-                }
+                //
+                // TODO: v2: to review... there is no longer an API to remove adapters.
+                //  However, my hope is that it isn't needed, because we no longer maintain an oid <-> adapter map.
+                //
+//                // we need to remove the templateAdapter because earlier on we will have created an adapter (and corresponding OID)
+//                // for a view model where the OID is initially computed on the incomplete (in fact, empty) view model.
+//                // removing the adapter therefore removes the OID as well, so next time an adapter is needed for the view model
+//                // the OID will be recomputed based on the fully populated view model pojo.
+//                if(templateAdapter != null) {
+//                    this.objectManager.removeAdapter(templateAdapter);
+//                }
 
                 if (imported != null) {
                     importedItems.add(imported);
@@ -518,18 +510,14 @@ class ExcelConverter {
     }
 
     private static OneToOneAssociation getAssociation(final ObjectSpecification objectSpec, final String propertyNameOrId) {
-        final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.INCLUDED);
-        for (final ObjectAssociation association : associations) {
-            if (association instanceof OneToOneAssociation) {
-                if (propertyNameOrId.equalsIgnoreCase(association.getName())) {
-                    return (OneToOneAssociation) association;
-                }
-                if (propertyNameOrId.equalsIgnoreCase(association.getId())) {
-                    return (OneToOneAssociation) association;
-                }
-            }
-        }
-        return null;
+        final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(Contributed.INCLUDED);
+        return associations
+                .filter(OneToOneAssociation.class::isInstance)
+                .map(OneToOneAssociation.class::cast)
+                .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getName())
+                                    || propertyNameOrId.equalsIgnoreCase(association.getId()))
+                .findFirst()
+                .orElse(null);
     }
 
     static class Property {
@@ -591,13 +579,13 @@ class ExcelConverter {
         final short dateFormat = createHelper.createDataFormat().getFormat("yyyy-mm-dd");
         final CellStyle dateCellStyle = wb.createCellStyle();
         dateCellStyle.setDataFormat(dateFormat);
-        dateCellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        dateCellStyle.setVerticalAlignment(VerticalAlignment.TOP);
         return dateCellStyle;
     }
 
     protected CellStyle defaultCellStyle(final Workbook wb) {
         final CellStyle defaultCellStyle = wb.createCellStyle();
-        defaultCellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        defaultCellStyle.setVerticalAlignment(VerticalAlignment.TOP);
         return defaultCellStyle;
     }
 

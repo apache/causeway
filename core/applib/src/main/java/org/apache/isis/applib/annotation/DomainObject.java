@@ -42,7 +42,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
  * 
  * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the 
  * annotated type. 
- * For more details see {@link org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring}.
+ * For more details see <code>org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring</code>
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })

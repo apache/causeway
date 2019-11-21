@@ -1,7 +1,13 @@
 package org.isisaddons.module.excel.dom;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+import javax.inject.Inject;
+
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.isisaddons.module.excel.dom.util.Mode;
 
 public class WorksheetSpec {
@@ -19,9 +25,11 @@ public class WorksheetSpec {
 
         Class<?> getCls();
 
-        static class Default<T> implements RowFactory<T>, ServicesInjectorAware {
+        static class Default<T> implements RowFactory<T> {
             private final Class<T> viewModelClass;
-            private ServicesInjector servicesInjector;
+
+            @Inject @Setter
+            private ServiceInjector servicesInjector;
 
             public Default(final Class<T> viewModelClass) {
                 this.viewModelClass = viewModelClass;
@@ -43,10 +51,6 @@ public class WorksheetSpec {
                 return viewModelClass;
             }
 
-            @Override
-            public void setServicesInjector(final ServicesInjector servicesInjector) {
-                this.servicesInjector = servicesInjector;
-            }
         }
 
     }

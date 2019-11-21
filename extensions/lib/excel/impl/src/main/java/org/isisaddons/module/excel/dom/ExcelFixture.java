@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResultList;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
@@ -27,6 +28,7 @@ import org.apache.isis.applib.value.Blob;
 import org.isisaddons.module.excel.dom.util.ExcelServiceImpl;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -36,6 +38,7 @@ import lombok.Setter;
 @DomainObject(
         objectType = "isisexcel.ExcelFixture"
 )
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public class ExcelFixture extends FixtureScript {
 
     private final List<Class> classes;
@@ -115,7 +118,7 @@ public class ExcelFixture extends FixtureScript {
     protected void execute(final ExecutionContext ec) {
 
         final ExcelServiceImpl excelServiceImpl = new ExcelServiceImpl();
-        serviceRegistry.injectServicesInto(excelServiceImpl);
+        serviceInjector.injectServicesInto(excelServiceImpl);
 
         if (blob == null){
             byte[] bytes = getBytes();
@@ -215,6 +218,6 @@ public class ExcelFixture extends FixtureScript {
     @javax.inject.Inject
     private BookmarkService bookmarkService;
     @javax.inject.Inject
-    private ServiceRegistry serviceRegistry;
+    private ServiceInjector serviceInjector;
 
 }

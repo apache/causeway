@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -33,7 +34,7 @@ public class SheetPivoterTest {
 
         // when
         Cell c = targetSheet.createRow(0).createCell(0);
-        c.setCellValue(Cell.CELL_TYPE_BLANK);
+        c.setBlank();
 
         // then
         // ************** NOTE ***************************************************************************
@@ -49,7 +50,7 @@ public class SheetPivoterTest {
 
         // then still
         Assertions.assertThat(targetSheet.getRow(0).getLastCellNum()).isEqualTo((short)1); // NOTE !!!!!!!
-        Assertions.assertThat(c.getCellType()).isEqualTo(Cell.CELL_TYPE_STRING);
+        Assertions.assertThat(c.getCellType()).isEqualTo(CellType.STRING);
 
         // and when
         targetSheet.getRow(0).createCell(1).setCellValue("b");
@@ -81,8 +82,8 @@ public class SheetPivoterTest {
         testRow(0, "fn3", null);
         testRow(1, "fn1", null);
         // last row is for summing
-        Assertions.assertThat(targetSheet.getRow(2).getCell(0).getCellType()).isEqualTo(Cell.CELL_TYPE_BLANK);
-        Assertions.assertThat(targetSheet.getRow(2).getCell(1).getCellType()).isEqualTo(Cell.CELL_TYPE_FORMULA);
+        Assertions.assertThat(targetSheet.getRow(2).getCell(0).getCellType()).isEqualTo(CellType.BLANK);
+        Assertions.assertThat(targetSheet.getRow(2).getCell(1).getCellType()).isEqualTo(CellType.FORMULA);
         Assertions.assertThat(targetSheet.getRow(2).getCell(1).getCellFormula()).isEqualTo("SUM(B3:B2)");
 
     }
@@ -435,7 +436,7 @@ public class SheetPivoterTest {
                 if (c == null) {
                     // OK skip
                 } else {
-                    if (c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if (c.getCellType() == CellType.NUMERIC) {
                         Assertions.assertThat(c.getNumericCellValue()).isEqualTo(null);
                     } else {
                         Assertions.assertThat(c.getStringCellValue()).isEqualTo("");

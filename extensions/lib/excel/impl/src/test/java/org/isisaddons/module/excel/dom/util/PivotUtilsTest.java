@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -100,9 +101,9 @@ public class PivotUtilsTest {
 
         // when (type not equal)
         c1 = r.createCell(0);
-        c1.setCellType(Cell.CELL_TYPE_BLANK);
+        c1.setCellType(CellType.BLANK);
         c2 = r.createCell(1);
-        c2.setCellType(Cell.CELL_TYPE_BOOLEAN);
+        c2.setCellType(CellType.BOOLEAN);
 
         // then
         Assertions.assertThat(PivotUtils.cellValueEquals(c1,c2)).isEqualTo(false);
@@ -142,7 +143,7 @@ public class PivotUtilsTest {
         c1 = r.createCell(0);
         c2 = r.createCell(1);
         c1.setCellValue("a");
-        c2.setCellType(Cell.CELL_TYPE_NUMERIC);
+        c2.setCellType(CellType.NUMERIC);
 
         // then
         Assertions.assertThat(PivotUtils.cellValueEquals(c1,c2)).isEqualTo(false);
@@ -173,7 +174,7 @@ public class PivotUtilsTest {
         // when 0 (false) 1 (true) value in boolean cell supported
         c1.setCellValue(true);
         c2.setCellValue(1);
-        c2.setCellType(Cell.CELL_TYPE_BOOLEAN);
+        c2.setCellType(CellType.BOOLEAN);
 
         // then
         Assertions.assertThat(PivotUtils.cellValueEquals(c1,c2)).isEqualTo(true);
@@ -255,7 +256,7 @@ public class PivotUtilsTest {
 
         // then
         Assertions.assertThat(cTarget).isEqualTo(cSource);
-        Assertions.assertThat(cTarget.getCellType()).isEqualTo(Cell.CELL_TYPE_BLANK);
+        Assertions.assertThat(cTarget.getCellType()).isEqualTo(CellType.BLANK);
 
         // given source has a value
         cSource = r.createCell(1);
