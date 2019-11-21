@@ -21,12 +21,14 @@ fi
 
 sh $SCRIPT_DIR/print-environment.sh "build-core"
 
-cd $PROJECT_ROOT_PATH/core-parent
-
 if [ ! -z "$REVISION" ]; then
+  cd $PROJECT_ROOT_PATH/core-parent
+  mvn versions:set -DnewVersion=$REVISION
+  cd $PROJECT_ROOT_PATH/starters
   mvn versions:set -DnewVersion=$REVISION
 fi
 
+cd $PROJECT_ROOT_PATH/core-parent
 mvn -s $SETTINGS_XML \
     --batch-mode \
     $MVN_STAGES \
@@ -34,6 +36,9 @@ mvn -s $SETTINGS_XML \
     $*
 
 if [ ! -z "$REVISION" ]; then
+  cd $PROJECT_ROOT_PATH/core-parent
+  mvn versions:revert
+  cd $PROJECT_ROOT_PATH/starters
   mvn versions:revert
 fi
 
