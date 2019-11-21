@@ -13,7 +13,7 @@ content:
 
 # core
     - url: .
-      start_path: core/plugins/jaxrs-resteasy-4/src/main/doc # vro
+      start_path: core/viewer-restfulobjects/jaxrs-resteasy-4/src/main/doc # vro
       branches: HEAD
     - url: .
       start_path: core/viewer-restfulobjects/src/main/doc # vro

@@ -16,6 +16,9 @@ content:
 
 # core
     - url: .
+      start_path: core/codegen-bytebuddy/src/main/doc # core
+      branches: HEAD
+    - url: .
       start_path: core/commons/src/main/doc # core
       branches: HEAD
     - url: .
@@ -23,9 +26,6 @@ content:
       branches: HEAD
     - url: .
       start_path: core/metamodel/src/main/doc # core
-      branches: HEAD
-    - url: .
-      start_path: core/plugins/codegen-bytebuddy/src/main/doc # core
       branches: HEAD
     - url: .
       start_path: core/runtime/src/main/doc # core
