@@ -29,8 +29,8 @@
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.plugins.jaxrs-resteasy-4</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/plugins/jaxrs-resteasy-4</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.jaxrs-resteasy-4</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/viewer-restfulobjects/jaxrs-resteasy-4</git-plugin.propertiesDir>
 	</properties>
 
 	<build>

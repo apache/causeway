@@ -1867,13 +1867,13 @@
 		<module>viewer-restfulobjects/applib</module>
 		<module>viewer-restfulobjects/rendering</module>
 		<module>viewer-restfulobjects/server</module>
+		<module>viewer-restfulobjects/jaxrs-resteasy-4</module>
 
 		<module>viewer-wicket/model</module>
 		<module>viewer-wicket/ui</module>
 		<module>viewer-wicket/impl</module>
 
 		<module>codegen-bytebuddy</module>
-		<module>plugins/jaxrs-resteasy-4</module>
 		<module>plugins/jdo/common</module>
 		<module>plugins/jdo/datanucleus-5</module>
 		<module>security/shiro</module>
