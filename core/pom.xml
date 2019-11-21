@@ -113,6 +113,7 @@
 
 		<findbugs-annotations.version>2.0.1</findbugs-annotations.version>
 
+		<git-commit-id-plugin.version>3.0.1</git-commit-id-plugin.version>
 		<guava.version>28.1-jre</guava.version>
 
 		<htmlparser.version>2.1</htmlparser.version>
@@ -142,6 +143,9 @@
 		<junit-legacy.version>4.12</junit-legacy.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
+
+		<maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
+		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 
 		<objenesis.version>2.2</objenesis.version>
 		<ognl.version>3.0.9</ognl.version>
@@ -274,7 +278,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-eclipse-plugin</artifactId>
-					<version>2.9</version>
+					<version>${maven-eclipse-plugin.version}</version>
 					<configuration>
 						<downloadSources>true</downloadSources>
 						<downloadJavadocs>true</downloadJavadocs>
@@ -283,20 +287,11 @@
 					<!-- use mvn eclipse:eclipse (no goals bound to phases) -->
 				</plugin>
 
-				<!-- Copies project resources to the output directory -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
-					<!-- goal:resources binds to phase:process-resources -->
-					<!-- goal:testResources binds to phase:process-test-resources -->
-				</plugin>
-
 				<!-- Compile -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.8.1</version>
+					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
 						<showDeprecation>false</showDeprecation>
 						<showWarnings>false</showWarnings>
@@ -329,87 +324,23 @@
 					<!-- goal:test binds to phase:test -->
 				</plugin>
 
-
 				<!-- Test Reporting -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-report-plugin</artifactId>
-					<version>2.22.2</version>
+					<version>${maven-surefire-plugin.version}</version>
 					<!-- goal:report is a report so is configured in the reporting section; 
 						invokes phase:test before running itself -->
 				</plugin>
 
 
-				<!-- Test coverage: cobertura -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>cobertura-maven-plugin</artifactId>
-					<version>2.6</version>
-					<inherited>true</inherited>
-					<!-- goal:check binds to phase:verify (not currently configured, can 
-						be used to break build if code coverage < threshold) -->
-					<!-- goal:cobertura is a report so is configured in the reporting section; 
-						invokes phase:test before running itself -->
-				</plugin>
-
-
-				<!-- Quality checks: checkstyle -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-checkstyle-plugin</artifactId>
-					<version>2.11</version>
-					<!-- goal:check binds to phase:verify (not currently configured, can 
-						be used to break build if any violations) -->
-					<!-- goal:checkstyle is a report so is configured in the reporting section -->
-				</plugin>
-
-				<!-- Quality checks: pmd -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-pmd-plugin</artifactId>
-					<version>3.0.1</version>
-					<!-- goal:check binds to phase:verify (not currently configured, can 
-						be used to break build if any violations) -->
-					<!-- goal:check-cpd binds to phase:verify (not currently configured, 
-						can be used to break build if any CPD violations) -->
-					<!-- goal:pmd is a report so is configured in the reporting section -->
-					<!-- goal:cpd is a report so is configured in the reporting section -->
-				</plugin>
-
-				<!-- Quality checks: NCSS (cyclomatic complexity) -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>javancss-maven-plugin</artifactId>
-					<version>2.0</version>
-					<!-- goal:check binds to phase:verify (not currently configured, can 
-						be used to break build if any violations) -->
-					<!-- goal:report is a report so is configured in the reporting section -->
-				</plugin>
-
-				<!-- Quality checks: jdepend -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>jdepend-maven-plugin</artifactId>
-					<version>2.0-beta-2</version>
-					<!-- goal:generate is a report so is configured in the reporting section -->
-				</plugin>
-
-				<!-- Artifacts derived from code: taglist -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>taglist-maven-plugin</artifactId>
-					<version>2.4</version>
-					<inherited>true</inherited>
-					<!-- goal:taglist is a report so is configured in the reporting section -->
-				</plugin>
-
-				<!-- Artifacts derived from code: javadoc; supports both build and report 
+				<!-- Artifacts derived from code: javadoc; supports both build and report
 					goals; not included as a build plugin except through profiles (to speed up 
 					the build) -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
+					<version>${maven-javadoc-plugin.version}</version>
 					<inherited>true</inherited>
 					<configuration>
 						<!-- as per http://stackoverflow.com/a/16743137/56880; only if using 
@@ -430,16 +361,16 @@
 						<splitindex>true</splitindex>
 						<encoding>${project.build.sourceEncoding}</encoding>
 						<links>
-							<link>http://docs.oracle.com/javase/7/docs/api/</link>
-							<link>http://docs.oracle.com/javase/6/docs/api/</link>
-							<link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
+							<link>https://docs.oracle.com/javase/8/docs/api/</link>
 						</links>
 						<linksource>true</linksource>
 						<!-- http://jira.codehaus.org/browse/MJAVADOC-268 and http://jira.codehaus.org/browse/MJAVADOC-284 -->
 						<detectOfflineLinks>false</detectOfflineLinks>
+<!--
 						<additionalparam>
 							-Xdoclint:none
 						</additionalparam>
+-->
 					</configuration>
 					<!-- goal:aggregate (for aggregator modules) has no binding; explicitly 
 						bound in profiles -->
@@ -448,25 +379,16 @@
 					<!-- goal:javadoc is a report so is configured in the reporting section -->
 				</plugin>
 
-				<!-- Artifacts derived from code: Java source x-ref -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jxr-plugin</artifactId>
-					<version>2.4</version>
-					<!-- goal:jxr is a report so is configured in the reporting section -->
-				</plugin>
-
-
 				<!-- Packaging: source jars of main and test code -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>2.2.1</version>
+					<version>${maven-source-plugin.version}</version>
 					<configuration>
 						<includePom>true</includePom>
 					</configuration>
 					<!-- goal:aggregate (for aggregator modules) binds to phase:package -->
-					<!-- goal:jar and goal:test-jar are meant to bind to phase:package, 
+					<!-- goal:jar and goal:test-jar are meant to bind to phase:package,
 						but doesn't seem to so bound explicitly -->
 					<executions>
 						<execution>
@@ -484,7 +406,7 @@
 				<plugin>
 					<groupId>pl.project13.maven</groupId>
 					<artifactId>git-commit-id-plugin</artifactId>
-					<version>2.2.3</version>
+					<version>${git-commit-id-plugin.version}</version>
 					<executions>
 						<execution>
 							<id>get-the-git-infos</id>
@@ -494,7 +416,6 @@
 							<phase>validate</phase>
 						</execution>
 					</executions>
-
 					<configuration>
 						<verbose>false</verbose>
 						<dotGitDirectory>${git-plugin.gitDir}</dotGitDirectory>
@@ -518,7 +439,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.4</version>
+					<version>${maven-jar-plugin}</version>
 					<!-- goal:jar binds to phase:package -->
 					<!-- goal:test-jar supposedly binds to phase:package, but seems to need 
 						this explicit binding. -->
@@ -566,7 +487,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>2.4</version>
+					<version>${maven-war-plugin}</version>
 					<configuration>
 						<warSourceExcludes>
 							WEB-INF/lib/*.jar
@@ -581,53 +502,12 @@
 					<!-- goal:war binds to phase:package -->
 				</plugin>
 
-				<!-- site (see also reporting and distributionManagement) -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.3</version>
-					<configuration>
-						<locales>en</locales>
-						<jarOutputDirectory>
-							${project.build.directory}/site
-						</jarOutputDirectory>
-						<finalName>isis-${project.version}</finalName>
-						<jarOutputDirectory>
-							${project.reporting.outputDirectory}
-						</jarOutputDirectory>
-						<generateReports>true</generateReports>
-						<generateSitemap>true</generateSitemap>
-					</configuration>
-					<!-- goal:jar binds to phase:package; override to bind to (site lifecycle) 
-						phase:site -->
-					<executions>
-						<execution>
-							<id>jar</id>
-							<phase>site</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-					<!-- goal:site binds to (site lifecycle) phase:site -->
-					<!-- goal:deploy binds to (site lifecycle) phase:site-deploy -->
-				</plugin>
-
-
-				<!-- maven reports (for site) -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-project-info-reports-plugin</artifactId>
-					<version>2.7</version>
-					<!-- main configuration in reporting section (in inheriting modules) -->
-				</plugin>
-
 
 				<!-- release (is also configured in descendant modules) -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.3</version>
+					<version>${maven-release-plugin.version}</version>
 					<configuration>
 						<!-- overriddes the default ('clean verify') as workaround -->
 						<preparationGoals>clean install</preparationGoals>
@@ -646,41 +526,10 @@
 				</plugin>
 
 
-				<!-- deploy (see also distributionManagement) -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>2.8.1</version>
-					<!-- goal:deploy binds to phase:deploy -->
-				</plugin>
-
-
-				<!-- other types of build: archetype -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-archetype-plugin</artifactId>
-					<version>2.2</version>
-					<extensions>true</extensions>
-					<!-- no goals bind to any lifecycle phases; use mvn archetype:generate -->
-				</plugin>
-
-
-				<!-- Runtime: jetty -->
-				<plugin>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-maven-plugin</artifactId>
-					<version>${jetty.version}</version>
-					<configuration>
-						<webAppConfig>
-							<contextPath>webapp</contextPath>
-						</webAppConfig>
-					</configuration>
-				</plugin>
-
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
-					<version>3.0.0-M1</version>
+					<version>${maven-enforcer-plugin.version}</version>
 					<configuration>
 						<rules>
 							<requireMavenVersion>
@@ -706,15 +555,6 @@
 							</goals>
 						</execution>
 					</executions>
-				</plugin>
-
-				<plugin>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.5</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>2.5.1</version>
 				</plugin>
 
 				<plugin>
@@ -817,7 +657,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 			</plugin>
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
