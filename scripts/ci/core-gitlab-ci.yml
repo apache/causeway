@@ -21,7 +21,7 @@ build all:
   variables:
      SHARED_VARS_FILE: /builds/apache-isis-committers/apache-isis/ci-env.txt
      MVN_STAGES: deploy
-     MVN_ADDITIONAL_OPTS: '-DaltDeploymentRepository=gcpappenginerepo-deploy.serverId::url=https://repo.incode.work'
+     MVN_ADDITIONAL_OPTS: '-DaltDeploymentRepository=gcpappenginerepo::https://repo.incode.work'
   script:
     # parent and mixins are built first because core (which includes extensions) depend upon them.
     - echo "REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)" > $SHARED_VARS_FILE

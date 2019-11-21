@@ -1829,7 +1829,7 @@
 						<version>1.6.8</version>
 						<extensions>true</extensions>
 						<configuration>
-							<serverId>nexus-deploy.serverId</serverId>
+							<serverId>nexus</serverId>
 							<skipStaging>true</skipStaging>
 						</configuration>
 					</plugin>
@@ -1837,7 +1837,7 @@
 			</build>
 			<distributionManagement>
 				<repository>
-					<id>nexus-deploy.serverId</id>
+					<id>nexus</id>
 					<url>${nexus-deploy.repositoryUrl}</url>
 				</repository>
 			</distributionManagement>
@@ -1852,7 +1852,7 @@
 			</activation>
 			<distributionManagement>
 				<repository>
-					<id>github-deploy.serverId</id>
+					<id>github</id>
 					<name>GitHub Apache Isis Maven Packages (Nightly)</name>
 					<url>${github-deploy.repositoryUrl}</url>
 				</repository>
@@ -1869,7 +1869,7 @@
 			</activation>
 			<distributionManagement>
 				<repository>
-					<id>gcpappenginerepo-deploy.serverId</id>
+					<id>gcpappenginerepo-deploy</id>
 					<url>${gcpappenginerepo-deploy.repositoryUrl}</url>
 				</repository>
 			</distributionManagement>
