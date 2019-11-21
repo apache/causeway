@@ -91,6 +91,7 @@
 		<commons-email.version>1.4</commons-email.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<commons-io.version>2.6</commons-io.version>
+		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-logging.version>1.2</commons-logging.version>
 
 		<cxf-rt-rs-client.version>3.3.4</cxf-rt-rs-client.version>
@@ -157,6 +158,7 @@
 		<quartz-scheduler.version>2.2.1</quartz-scheduler.version>
 
 		<resteasy4-jaxrs.version>4.0.0.Beta5</resteasy4-jaxrs.version> <!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
+		<reflections.version>0.9.11</reflections.version>
 
 		<select2.version>4.0.10</select2.version>
 		<shiro.version>1.4.1</shiro.version>
@@ -999,6 +1001,7 @@
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
 			</dependency>
+
 			<dependency>
 				<!-- required because resteasy-jaxrs declares as a test dependency whereas
 					httpclient4 needs it as a compile dependency -->
@@ -1210,6 +1213,12 @@
 						<artifactId>activation</artifactId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
 			</dependency>
 
 			<dependency>
@@ -1462,6 +1471,13 @@
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz-jobs</artifactId>
 				<version>${quartz-scheduler.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.reflections</groupId>
+				<artifactId>reflections</artifactId>
+				<version>${reflections.version}</version>
+				<scope>test</scope>
 			</dependency>
 
 			<dependency>

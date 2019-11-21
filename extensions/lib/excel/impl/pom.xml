@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
+        <version>2.0.0-M3-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.isisaddons.module.excel</groupId>
+    <artifactId>isis-module-excel-dom</artifactId>
+    <name>Incode Platform Lib Excel Impl</name>
+
+    <description>
+        A domain service for Apache Isis', allowing collections
+        of (view model) objects to be exported/imported to/from an
+        Excel spreadsheet.  Also support for excel-based fixtures.
+    </description>
+
+    <properties>
+        <jar-plugin.automaticModuleName>org.incode.platform.lib.excel</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/incode/platform/lib/excel</git-plugin.propertiesDir>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-applib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
+            <!-- so as not to pollute the classpath of the domain model in the IDE -->
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-fixtures</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
+        </dependency>
+
+        <!--
+                <dependency>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi</artifactId>
+                </dependency>
+        -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+             <artifactId>isis-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

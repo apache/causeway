@@ -234,6 +234,9 @@
 		<module>vw/exceldownload</module>
 		<module>vw/markdown</module>
 		<module>vw/sse</module>
+
+		<module>lib/base/impl</module>
+		<module>lib/excel/impl</module>
 	</modules>
 
 </project>

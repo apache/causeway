@@ -1,0 +1,13 @@
+# This is a bash script that runs nsgmls on a particular file to
+# validate it in XML mode on a Win95 PC. The combination of scripts,
+# environment settings, and ancillary files is designed to support
+# DSSSL processing in SGML mode.
+#
+# Typical invocation:
+#    for i in *.xml; do echo $i; vx $i; done
+
+SP_ENCODING=XML; export SP_ENCODING
+SGML_CATALOG_FILES=xml.soc; export SGML_CATALOG_FILES
+nsgmls -wxml -uegs $1
+SP_ENCODING=; export SP_ENCODING
+SGML_CATALOG_FILES=catalog; export SGML_CATALOG_FILES

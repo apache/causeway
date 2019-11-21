@@ -1,0 +1,167 @@
+<html>
+<head>
+<title>Shakespeare 2.00</title>
+</head>
+
+<body>
+<h1>Shakespeare 2.00</h1>
+
+<h2>Jon Bosak (bosak@eng.sun.com)<br>July 15, 1999</h2>
+
+<p>This is shaksper.200, a set of the plays of William Shakespeare
+marked up for electronic publication.  The set began as ASCII files
+put into the public domain by Moby Lexical Tools in 1992.  They were
+marked up in 1992 as a beginner's exercise in SGML DTD and stylesheet
+design (originally using the DynaText proprietary stylesheet language)
+and in 1996 were released along with a companion set of publicly
+available religious texts as the earliest examples of real documents
+marked up in (early) XML.  The current distribution conforms to the
+XML 1.0 Recommendation released February 8, 1998.</p>
+
+<h3>Caveat regarding Shakespeare scholarship</h3>
+
+<p>Every time I have occasion to compare the text of these files with
+a modern edition of Shakespeare (usually when someone points out a
+problem that requires me to check against a printed text), I wonder
+where in the world the Moby folks got the original.  They must have
+used OCR to scan in a printed edition that had gone out of copyright,
+which means that the source could have been published no later than
+World War I.  My guess is that it was a late Victorian edition, but it
+might have been much older.</p>
+
+<p>In any case, the editorial style of the set is very different from
+that of modern editions, and on general principles I strongly doubt
+the critical accuracy of the text.  The set is provided, as it always
+has been, purely as a learning exercise in SGML/XML markup, as a
+benchmark for comparing the performance of SGML/XML processors, and as
+a resource for testing stylesheet and search methodologies.  The text
+is enjoyable reading, but the present edition should not be relied
+upon for scholarly purposes.</p>
+
+<h3>Copyright</h3>
+
+<p>While the text has been in the public domain since 1992, the status
+of the markup hasn't been clear.  For purposes of legal simplicity (I
+think), I'm now asserting copyright over the markup to discourage the
+circulation of variant versions while still allowing free
+distribution.  Each play now includes the following notice:</p>
+
+<blockquote>
+ASCII text placed in the public domain by Moby Lexical Tools, 1992.<br>
+SGML markup by Jon Bosak, 1992-1994.<br>
+XML version by Jon Bosak, 1996-1999.<br>
+The XML markup in this version is Copyright &#169; 1999 Jon Bosak.
+This work may freely be distributed on condition that it not be
+modified or altered in any way.
+</blockquote>
+
+<h3>What's new</h3>
+
+<p>Unlike the companion 2.x version of the religious texts,
+Shakespeare 2.00 does not differ significantly from the previous
+release, version 1.10.  The main difference is that the DTD and the
+XML declarations have at last been revised to conform to the final XML
+1.0 Recommendation.  I've also corrected about 50 lines of bad tagging
+in Henry IV Part 2 (Act 2, Scene 1) and de-Americanized the spelling
+of the word "Labour" in the title "Love's Labour's Lost" (yes, there
+are properly two apostrophes!).  My thanks to Michael Kay for pointing
+out these errors.  None of the changes should significantly affect
+comparisons with processing tests run against earlier versions.</p>
+
+<p>I had originally intended to supply a set of DSSSL stylesheets for
+the plays just as I did for the religious texts -- hence the delay in
+making this set available.  I have given up on finding the time to do
+this right now.  Hopefully I will include stylesheets in a future
+release; I have left in a few small ancillary files in anticipation of
+this.</p>
+
+<h3>Manifest</h3>
+
+<p>This distribution includes the following files, all of which should
+be installed in the same directory:</p>
+
+<pre>
+  shaksper.htm     this file
+
+  play.dtd         DTD for testaments
+
+  scripts for batch validation using nsgmls:
+
+    vs              a bash script for validating a play as SGML
+    vx              a bash script for validating a play as XML
+
+  ancillary files left in for future DSSSL processing (these are
+  not needed for most generic XML processing):
+
+    catalog         SGML Open (OASIS) catalog for public identifiers
+    dsssl.dtd       DSSSL DTD
+    fot.dtd         FOT (flow object tree) DTD
+    style-sheet.dtd DTD for DSSSL stylesheets
+    xml.dcl         XML SGML declaration
+    xml.soc         XML catalog
+
+  the plays are the thing:
+
+    a_and_c.xml
+    all_well.xml
+    as_you.xml
+    com_err.xml
+    coriolan.xml
+    cymbelin.xml
+    dream.xml
+    hamlet.xml
+    hen_iv_1.xml
+    hen_iv_2.xml
+    hen_v.xml
+    hen_vi_1.xml
+    hen_vi_2.xml
+    hen_vi_3.xml
+    hen_viii.xml
+    j_caesar.xml
+    john.xml
+    lear.xml
+    lll.xml
+    m_for_m.xml
+    m_wives.xml
+    macbeth.xml
+    merchant.xml
+    much_ado.xml
+    othello.xml
+    pericles.xml
+    r_and_j.xml
+    rich_ii.xml
+    rich_iii.xml
+    t_night.xml
+    taming.xml
+    tempest.xml
+    timon.xml
+    titus.xml
+    troilus.xml
+    two_gent.xml
+    win_tale.xml
+</pre>
+
+<h3>Running the scripts</h3>
+
+<p>The files in this set were built and tested in Windows 95 using
+scripts running under the Gnu bash shell.  DOS batch files should work
+equally well, but I don't have the patience to deal with them.</p>
+
+<p>Assuming that nsgmls (part of the Jade distribution) has been
+installed and is in the search path, the scripts named vs and vx are
+typically run under bash like this:</p>
+
+<pre>
+   for i in *.xml; do echo $i; vs $i; done
+   for i in *.xml; do echo $i; vx $i; done
+</pre>
+
+<p>The first command line performs a validity check of all the plays
+as SGML files, and the second performs a validity check of all the
+plays as XML files.  Note that both scripts change the values of SP
+environment variables.</p>
+
+<address>Jon Bosak<br>Los Altos, California<br>July 1999</address>
+
+</body>
+</html>

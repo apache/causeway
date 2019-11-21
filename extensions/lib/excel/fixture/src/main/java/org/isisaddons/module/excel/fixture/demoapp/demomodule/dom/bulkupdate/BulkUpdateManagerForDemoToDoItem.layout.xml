@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid xsi:schemaLocation="http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd http://isis.apache.org/applib/layout/grid/bootstrap3 http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="http://isis.apache.org/applib/layout/component" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject>
+            </cpt:domainObject>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="4">
+            <cpt:fieldSet name="File" id="file" unreferencedProperties="true">
+                <cpt:action id="clearHints" position="PANEL_DROPDOWN"/>
+                <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
+                <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
+                <cpt:property id="fileName">
+                    <cpt:action id="changeFileName">
+                        <cpt:named>Change</cpt:named>
+                    </cpt:action>
+                </cpt:property>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Criteria" id="criteria">
+                <cpt:property id="category"/>
+                <cpt:property id="subcategory"/>
+                <cpt:property id="complete">
+                    <cpt:action id="select">
+                        <cpt:named>Change</cpt:named>
+                    </cpt:action>
+                </cpt:property>
+            </cpt:fieldSet>
+        </bs3:col>
+        <bs3:col span="8" unreferencedCollections="true">
+            <cpt:collection id="toDoItems" defaultView="table">
+                <cpt:action id="export"/>
+                <cpt:action id="import"/>
+            </cpt:collection>
+        </bs3:col>
+    </bs3:row>
+</bs3:grid>

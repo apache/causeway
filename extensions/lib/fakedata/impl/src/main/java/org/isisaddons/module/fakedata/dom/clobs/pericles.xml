@@ -1,0 +1,5421 @@
+<?xml version="1.0"?>
+<!DOCTYPE PLAY SYSTEM "play.dtd">
+
+<PLAY>
+<TITLE>Pericles, Prince of Tyre</TITLE>
+
+<FM>
+<P>ASCII text placed in the public domain by Moby Lexical Tools, 1992.</P>
+<P>SGML markup by Jon Bosak, 1992-1994.</P>
+<P>XML version by Jon Bosak, 1996-1999.</P>
+<P>The XML markup in this version is Copyright &#169; 1999 Jon Bosak.
+This work may freely be distributed on condition that it not be
+modified or altered in any way.</P>
+</FM>
+
+<PERSONAE>
+<TITLE>Dramatis Personae</TITLE>
+
+<PERSONA>ANTIOCHUS, king of Antioch.</PERSONA>
+<PERSONA>PERICLES, prince of Tyre.</PERSONA>
+
+<PGROUP>
+<PERSONA>HELICANUS</PERSONA>
+<PERSONA>ESCANES</PERSONA>
+<GRPDESCR>two lords of Tyre.</GRPDESCR>
+</PGROUP>
+
+<PERSONA>SIMONIDES, king of Pentapolis.</PERSONA>
+<PERSONA>CLEON, governor of Tarsus.</PERSONA>
+<PERSONA>LYSIMACHUS, governor of Mytilene.</PERSONA>
+<PERSONA>CERIMON, a lord of Ephesus.</PERSONA>
+<PERSONA>THALIARD, a lord of Antioch.</PERSONA>
+<PERSONA>PHILEMON, servant to Cerimon.</PERSONA>
+<PERSONA>LEONINE, servant to Dionyza.</PERSONA>
+<PERSONA>Marshal. </PERSONA>
+<PERSONA>A Pandar. </PERSONA>
+<PERSONA>BOULT, his servant.</PERSONA>
+<PERSONA>The Daughter of Antiochus. </PERSONA>
+<PERSONA>DIONYZA, wife to Cleon.</PERSONA>
+<PERSONA>THAISA, daughter to Simonides.</PERSONA>
+<PERSONA>MARINA, daughter to Pericles and Thaisa.</PERSONA>
+<PERSONA>LYCHORIDA, nurse to Marina.</PERSONA>
+<PERSONA>A Bawd. </PERSONA>
+<PERSONA>Lords, Knights, Gentlemen, Sailors, Pirates, Fishermen, and Messengers. </PERSONA>
+<PERSONA>DIANA</PERSONA>
+<PERSONA>GOWER, as Chorus.</PERSONA>
+</PERSONAE>
+
+<SCNDESCR>SCENE  Dispersedly in various countries.</SCNDESCR>
+
+<PLAYSUBT>PERICLES, PRINCE OF TYRE</PLAYSUBT>
+
+<ACT><TITLE>ACT I</TITLE>
+
+<PROLOGUE><TITLE>[Prologue]</TITLE>
+<STAGEDIR>Enter GOWER</STAGEDIR>
+<STAGEDIR>Before the palace of Antioch</STAGEDIR>
+<SPEECH><SPEAKER>[GOWER]</SPEAKER>
+<LINE>To sing a song that old was sung,</LINE>
+<LINE>From ashes ancient Gower is come;</LINE>
+<LINE>Assuming man's infirmities,</LINE>
+<LINE>To glad your ear, and please your eyes.</LINE>
+<LINE>It hath been sung at festivals,</LINE>
+<LINE>On ember-eves and holy-ales;</LINE>
+<LINE>And lords and ladies in their lives</LINE>
+<LINE>Have read it for restoratives:</LINE>
+<LINE>The purchase is to make men glorious;</LINE>
+<LINE>Et bonum quo antiquius, eo melius.</LINE>
+<LINE>If you, born in these latter times,</LINE>
+<LINE>When wit's more ripe, accept my rhymes.</LINE>
+<LINE>And that to hear an old man sing</LINE>
+<LINE>May to your wishes pleasure bring</LINE>
+<LINE>I life would wish, and that I might</LINE>
+<LINE>Waste it for you, like taper-light.</LINE>
+<LINE>This Antioch, then, Antiochus the Great</LINE>
+<LINE>Built up, this city, for his chiefest seat:</LINE>
+<LINE>The fairest in all Syria,</LINE>
+<LINE>I tell you what mine authors say:</LINE>
+<LINE>This king unto him took a fere,</LINE>
+<LINE>Who died and left a female heir,</LINE>
+<LINE>So buxom, blithe, and full of face,</LINE>
+<LINE>As heaven had lent her all his grace;</LINE>
+<LINE>With whom the father liking took,</LINE>
+<LINE>And her to incest did provoke:</LINE>
+<LINE>Bad child; worse father! to entice his own</LINE>
+<LINE>To evil should be done by none:</LINE>
+<LINE>But custom what they did begin</LINE>
+<LINE>Was with long use account no sin.</LINE>
+<LINE>The beauty of this sinful dame</LINE>
+<LINE>Made many princes thither frame,</LINE>
+<LINE>To seek her as a bed-fellow,</LINE>
+<LINE>In marriage-pleasures play-fellow:</LINE>
+<LINE>Which to prevent he made a law,</LINE>
+<LINE>To keep her still, and men in awe,</LINE>
+<LINE>That whoso ask'd her for his wife,</LINE>
+<LINE>His riddle told not, lost his life:</LINE>
+<LINE>So for her many a wight did die,</LINE>
+<LINE>As yon grim looks do testify.</LINE>
+<LINE>What now ensues, to the judgment of your eye</LINE>
+<LINE>I give, my cause who best can justify.</LINE>
+</SPEECH>
+<STAGEDIR>Exit</STAGEDIR>
+</PROLOGUE>
+
+<SCENE><TITLE>SCENE I.  Antioch. A room in the palace.</TITLE>
+<STAGEDIR>Enter ANTIOCHUS, Prince PERICLES, and followers</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>Young prince of Tyre, you have at large received</LINE>
+<LINE>The danger of the task you undertake.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I have, Antiochus, and, with a soul</LINE>
+<LINE>Embolden'd with the glory of her praise,</LINE>
+<LINE>Think death no hazard in this enterprise.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>Bring in our daughter, clothed like a bride,</LINE>
+<LINE>For the embracements even of Jove himself;</LINE>
+<LINE>At whose conception, till Lucina reign'd,</LINE>
+<LINE>Nature this dowry gave, to glad her presence,</LINE>
+<LINE>The senate-house of planets all did sit,</LINE>
+<LINE>To knit in her their best perfections.</LINE>
+</SPEECH>
+
+<STAGEDIR>Music. Enter the Daughter of ANTIOCHUS</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>See where she comes, apparell'd like the spring,</LINE>
+<LINE>Graces her subjects, and her thoughts the king</LINE>
+<LINE>Of every virtue gives renown to men!</LINE>
+<LINE>Her face the book of praises, where is read</LINE>
+<LINE>Nothing but curious pleasures, as from thence</LINE>
+<LINE>Sorrow were ever razed and testy wrath</LINE>
+<LINE>Could never be her mild companion.</LINE>
+<LINE>You gods that made me man, and sway in love,</LINE>
+<LINE>That have inflamed desire in my breast</LINE>
+<LINE>To taste the fruit of yon celestial tree,</LINE>
+<LINE>Or die in the adventure, be my helps,</LINE>
+<LINE>As I am son and servant to your will,</LINE>
+<LINE>To compass such a boundless happiness!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>Prince Pericles,--</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>That would be son to great Antiochus.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>Before thee stands this fair Hesperides,</LINE>
+<LINE>With golden fruit, but dangerous to be touch'd;</LINE>
+<LINE>For death-like dragons here affright thee hard:</LINE>
+<LINE>Her face, like heaven, enticeth thee to view</LINE>
+<LINE>Her countless glory, which desert must gain;</LINE>
+<LINE>And which, without desert, because thine eye</LINE>
+<LINE>Presumes to reach, all thy whole heap must die.</LINE>
+<LINE>Yon sometimes famous princes, like thyself,</LINE>
+<LINE>Drawn by report, adventurous by desire,</LINE>
+<LINE>Tell thee, with speechless tongues and semblance pale,</LINE>
+<LINE>That without covering, save yon field of stars,</LINE>
+<LINE>Here they stand martyrs, slain in Cupid's wars;</LINE>
+<LINE>And with dead cheeks advise thee to desist</LINE>
+<LINE>For going on death's net, whom none resist.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Antiochus, I thank thee, who hath taught</LINE>
+<LINE>My frail mortality to know itself,</LINE>
+<LINE>And by those fearful objects to prepare</LINE>
+<LINE>This body, like to them, to what I must;</LINE>
+<LINE>For death remember'd should be like a mirror,</LINE>
+<LINE>Who tells us life's but breath, to trust it error.</LINE>
+<LINE>I'll make my will then, and, as sick men do</LINE>
+<LINE>Who know the world, see heaven, but, feeling woe,</LINE>
+<LINE>Gripe not at earthly joys as erst they did;</LINE>
+<LINE>So I bequeath a happy peace to you</LINE>
+<LINE>And all good men, as every prince should do;</LINE>
+<LINE>My riches to the earth from whence they came;</LINE>
+<LINE>But my unspotted fire of love to you.</LINE>
+<STAGEDIR>To the Daughter of ANTIOCHUS</STAGEDIR>
+<LINE>Thus ready for the way of life or death,</LINE>
+<LINE>I wait the sharpest blow, Antiochus.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>Scorning advice, read the conclusion then:</LINE>
+<LINE>Which read and not expounded, 'tis decreed,</LINE>
+<LINE>As these before thee thou thyself shalt bleed.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Daughter</SPEAKER>
+<LINE>Of all say'd yet, mayst thou prove prosperous!</LINE>
+<LINE>Of all say'd yet, I wish thee happiness!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Like a bold champion, I assume the lists,</LINE>
+<LINE>Nor ask advice of any other thought</LINE>
+<LINE>But faithfulness and courage.</LINE>
+<STAGEDIR>He reads the riddle</STAGEDIR>
+<LINE>I am no viper, yet I feed</LINE>
+<LINE>On mother's flesh which did me breed.</LINE>
+<LINE>I sought a husband, in which labour</LINE>
+<LINE>I found that kindness in a father:</LINE>
+<LINE>He's father, son, and husband mild;</LINE>
+<LINE>I mother, wife, and yet his child.</LINE>
+<LINE>How they may be, and yet in two,</LINE>
+<LINE>As you will live, resolve it you.</LINE>
+<LINE>Sharp physic is the last: but, O you powers</LINE>
+<LINE>That give heaven countless eyes to view men's acts,</LINE>
+<LINE>Why cloud they not their sights perpetually,</LINE>
+<LINE>If this be true, which makes me pale to read it?</LINE>
+<LINE>Fair glass of light, I loved you, and could still,</LINE>
+<STAGEDIR>Takes hold of the hand of the Daughter of ANTIOCHUS</STAGEDIR>
+<LINE>Were not this glorious casket stored with ill:</LINE>
+<LINE>But I must tell you, now my thoughts revolt</LINE>
+<LINE>For he's no man on whom perfections wait</LINE>
+<LINE>That, knowing sin within, will touch the gate.</LINE>
+<LINE>You are a fair viol, and your sense the strings;</LINE>
+<LINE>Who, finger'd to make man his lawful music,</LINE>
+<LINE>Would draw heaven down, and all the gods, to hearken:</LINE>
+<LINE>But being play'd upon before your time,</LINE>
+<LINE>Hell only danceth at so harsh a chime.</LINE>
+<LINE>Good sooth, I care not for you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>Prince Pericles, touch not, upon thy life.</LINE>
+<LINE>For that's an article within our law,</LINE>
+<LINE>As dangerous as the rest. Your time's expired:</LINE>
+<LINE>Either expound now, or receive your sentence.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Great king,</LINE>
+<LINE>Few love to hear the sins they love to act;</LINE>
+<LINE>'Twould braid yourself too near for me to tell it.</LINE>
+<LINE>Who has a book of all that monarchs do,</LINE>
+<LINE>He's more secure to keep it shut than shown:</LINE>
+<LINE>For vice repeated is like the wandering wind.</LINE>
+<LINE>Blows dust in other's eyes, to spread itself;</LINE>
+<LINE>And yet the end of all is bought thus dear,</LINE>
+<LINE>The breath is gone, and the sore eyes see clear:</LINE>
+<LINE>To stop the air would hurt them. The blind mole casts</LINE>
+<LINE>Copp'd hills towards heaven, to tell the earth is throng'd</LINE>
+<LINE>By man's oppression; and the poor worm doth die for't.</LINE>
+<LINE>Kings are earth's gods; in vice their law's</LINE>
+<LINE>their will;</LINE>
+<LINE>And if Jove stray, who dares say Jove doth ill?</LINE>
+<LINE>It is enough you know; and it is fit,</LINE>
+<LINE>What being more known grows worse, to smother it.</LINE>
+<LINE>All love the womb that their first being bred,</LINE>
+<LINE>Then give my tongue like leave to love my head.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  Heaven, that I had thy head! he has found</LINE>
+<LINE>the meaning:</LINE>
+<LINE>But I will gloze with him.--Young prince of Tyre,</LINE>
+<LINE>Though by the tenor of our strict edict,</LINE>
+<LINE>Your exposition misinterpreting,</LINE>
+<LINE>We might proceed to cancel of your days;</LINE>
+<LINE>Yet hope, succeeding from so fair a tree</LINE>
+<LINE>As your fair self, doth tune us otherwise:</LINE>
+<LINE>Forty days longer we do respite you;</LINE>
+<LINE>If by which time our secret be undone,</LINE>
+<LINE>This mercy shows we'll joy in such a son:</LINE>
+<LINE>And until then your entertain shall be</LINE>
+<LINE>As doth befit our honour and your worth.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt all but PERICLES</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>How courtesy would seem to cover sin,</LINE>
+<LINE>When what is done is like an hypocrite,</LINE>
+<LINE>The which is good in nothing but in sight!</LINE>
+<LINE>If it be true that I interpret false,</LINE>
+<LINE>Then were it certain you were not so bad</LINE>
+<LINE>As with foul incest to abuse your soul;</LINE>
+<LINE>Where now you're both a father and a son,</LINE>
+<LINE>By your untimely claspings with your child,</LINE>
+<LINE>Which pleasure fits an husband, not a father;</LINE>
+<LINE>And she an eater of her mother's flesh,</LINE>
+<LINE>By the defiling of her parent's bed;</LINE>
+<LINE>And both like serpents are, who though they feed</LINE>
+<LINE>On sweetest flowers, yet they poison breed.</LINE>
+<LINE>Antioch, farewell! for wisdom sees, those men</LINE>
+<LINE>Blush not in actions blacker than the night,</LINE>
+<LINE>Will shun no course to keep them from the light.</LINE>
+<LINE>One sin, I know, another doth provoke;</LINE>
+<LINE>Murder's as near to lust as flame to smoke:</LINE>
+<LINE>Poison and treason are the hands of sin,</LINE>
+<LINE>Ay, and the targets, to put off the shame:</LINE>
+<LINE>Then, lest my lie be cropp'd to keep you clear,</LINE>
+<LINE>By flight I'll shun the danger which I fear.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+<STAGEDIR>Re-enter ANTIOCHUS</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>He hath found the meaning, for which we mean</LINE>
+<LINE>To have his head.</LINE>
+<LINE>He must not live to trumpet forth my infamy,</LINE>
+<LINE>Nor tell the world Antiochus doth sin</LINE>
+<LINE>In such a loathed manner;</LINE>
+<LINE>And therefore instantly this prince must die:</LINE>
+<LINE>For by his fall my honour must keep high.</LINE>
+<LINE>Who attends us there?</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter THALIARD</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>THALIARD</SPEAKER>
+<LINE>Doth your highness call?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>Thaliard,</LINE>
+<LINE>You are of our chamber, and our mind partakes</LINE>
+<LINE>Her private actions to your secrecy;</LINE>
+<LINE>And for your faithfulness we will advance you.</LINE>
+<LINE>Thaliard, behold, here's poison, and here's gold;</LINE>
+<LINE>We hate the prince of Tyre, and thou must kill him:</LINE>
+<LINE>It fits thee not to ask the reason why,</LINE>
+<LINE>Because we bid it. Say, is it done?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THALIARD</SPEAKER>
+<LINE>My lord,</LINE>
+<LINE>'Tis done.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>Enough.</LINE>
+<STAGEDIR>Enter a Messenger</STAGEDIR>
+<LINE>Let your breath cool yourself, telling your haste.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Messenger</SPEAKER>
+<LINE>My lord, prince Pericles is fled.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>As thou</LINE>
+<LINE>Wilt live, fly after: and like an arrow shot</LINE>
+<LINE>From a well-experienced archer hits the mark</LINE>
+<LINE>His eye doth level at, so thou ne'er return</LINE>
+<LINE>Unless thou say 'Prince Pericles is dead.'</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THALIARD</SPEAKER>
+<LINE>My lord,</LINE>
+<LINE>If I can get him within my pistol's length,</LINE>
+<LINE>I'll make him sure enough: so, farewell to your highness.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ANTIOCHUS</SPEAKER>
+<LINE>Thaliard, adieu!</LINE>
+<STAGEDIR>Exit THALIARD</STAGEDIR>
+<LINE>Till Pericles be dead,</LINE>
+<LINE>My heart can lend no succor to my head.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE II.  Tyre. A room in the palace.</TITLE>
+<STAGEDIR>Enter PERICLES</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE><STAGEDIR>To Lords without</STAGEDIR>  Let none disturb us.--Why should</LINE>
+<LINE>this change of thoughts,</LINE>
+<LINE>The sad companion, dull-eyed melancholy,</LINE>
+<LINE>Be my so used a guest as not an hour,</LINE>
+<LINE>In the day's glorious walk, or peaceful night,</LINE>
+<LINE>The tomb where grief should sleep, can breed me quiet?</LINE>
+<LINE>Here pleasures court mine eyes, and mine eyes shun them,</LINE>
+<LINE>And danger, which I fear'd, is at Antioch,</LINE>
+<LINE>Whose aim seems far too short to hit me here:</LINE>
+<LINE>Yet neither pleasure's art can joy my spirits,</LINE>
+<LINE>Nor yet the other's distance comfort me.</LINE>
+<LINE>Then it is thus: the passions of the mind,</LINE>
+<LINE>That have their first conception by mis-dread,</LINE>
+<LINE>Have after-nourishment and life by care;</LINE>
+<LINE>And what was first but fear what might be done,</LINE>
+<LINE>Grows elder now and cares it be not done.</LINE>
+<LINE>And so with me: the great Antiochus,</LINE>
+<LINE>'Gainst whom I am too little to contend,</LINE>
+<LINE>Since he's so great can make his will his act,</LINE>
+<LINE>Will think me speaking, though I swear to silence;</LINE>
+<LINE>Nor boots it me to say I honour him.</LINE>
+<LINE>If he suspect I may dishonour him:</LINE>
+<LINE>And what may make him blush in being known,</LINE>
+<LINE>He'll stop the course by which it might be known;</LINE>
+<LINE>With hostile forces he'll o'erspread the land,</LINE>
+<LINE>And with the ostent of war will look so huge,</LINE>
+<LINE>Amazement shall drive courage from the state;</LINE>
+<LINE>Our men be vanquish'd ere they do resist,</LINE>
+<LINE>And subjects punish'd that ne'er thought offence:</LINE>
+<LINE>Which care of them, not pity of myself,</LINE>
+<LINE>Who am no more but as the tops of trees,</LINE>
+<LINE>Which fence the roots they grow by and defend them,</LINE>
+<LINE>Makes both my body pine and soul to languish,</LINE>
+<LINE>And punish that before that he would punish.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter HELICANUS, with other Lords</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Lord</SPEAKER>
+<LINE>Joy and all comfort in your sacred breast!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Lord</SPEAKER>
+<LINE>And keep your mind, till you return to us,</LINE>
+<LINE>Peaceful and comfortable!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Peace, peace, and give experience tongue.</LINE>
+<LINE>They do abuse the king that flatter him:</LINE>
+<LINE>For flattery is the bellows blows up sin;</LINE>
+<LINE>The thing which is flatter'd, but a spark,</LINE>
+<LINE>To which that blast gives heat and stronger glowing;</LINE>
+<LINE>Whereas reproof, obedient and in order,</LINE>
+<LINE>Fits kings, as they are men, for they may err.</LINE>
+<LINE>When Signior Sooth here does proclaim a peace,</LINE>
+<LINE>He flatters you, makes war upon your life.</LINE>
+<LINE>Prince, pardon me, or strike me, if you please;</LINE>
+<LINE>I cannot be much lower than my knees.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>All leave us else; but let your cares o'erlook</LINE>
+<LINE>What shipping and what lading's in our haven,</LINE>
+<LINE>And then return to us.</LINE>
+<STAGEDIR>Exeunt Lords</STAGEDIR>
+<LINE>Helicanus, thou</LINE>
+<LINE>Hast moved us: what seest thou in our looks?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>An angry brow, dread lord.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>If there be such a dart in princes' frowns,</LINE>
+<LINE>How durst thy tongue move anger to our face?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>How dare the plants look up to heaven, from whence</LINE>
+<LINE>They have their nourishment?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Thou know'st I have power</LINE>
+<LINE>To take thy life from thee.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE><STAGEDIR>Kneeling</STAGEDIR></LINE>
+<LINE>I have ground the axe myself;</LINE>
+<LINE>Do you but strike the blow.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Rise, prithee, rise.</LINE>
+<LINE>Sit down: thou art no flatterer:</LINE>
+<LINE>I thank thee for it; and heaven forbid</LINE>
+<LINE>That kings should let their ears hear their</LINE>
+<LINE>faults hid!</LINE>
+<LINE>Fit counsellor and servant for a prince,</LINE>
+<LINE>Who by thy wisdom makest a prince thy servant,</LINE>
+<LINE>What wouldst thou have me do?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>To bear with patience</LINE>
+<LINE>Such griefs as you yourself do lay upon yourself.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Thou speak'st like a physician, Helicanus,</LINE>
+<LINE>That minister'st a potion unto me</LINE>
+<LINE>That thou wouldst tremble to receive thyself.</LINE>
+<LINE>Attend me, then: I went to Antioch,</LINE>
+<LINE>Where as thou know'st, against the face of death,</LINE>
+<LINE>I sought the purchase of a glorious beauty.</LINE>
+<LINE>From whence an issue I might propagate,</LINE>
+<LINE>Are arms to princes, and bring joys to subjects.</LINE>
+<LINE>Her face was to mine eye beyond all wonder;</LINE>
+<LINE>The rest--hark in thine ear--as black as incest:</LINE>
+<LINE>Which by my knowledge found, the sinful father</LINE>
+<LINE>Seem'd not to strike, but smooth: but thou</LINE>
+<LINE>know'st this,</LINE>
+<LINE>'Tis time to fear when tyrants seem to kiss.</LINE>
+<LINE>Such fear so grew in me, I hither fled,</LINE>
+<LINE>Under the covering of a careful night,</LINE>
+<LINE>Who seem'd my good protector; and, being here,</LINE>
+<LINE>Bethought me what was past, what might succeed.</LINE>
+<LINE>I knew him tyrannous; and tyrants' fears</LINE>
+<LINE>Decrease not, but grow faster than the years:</LINE>
+<LINE>And should he doubt it, as no doubt he doth,</LINE>
+<LINE>That I should open to the listening air</LINE>
+<LINE>How many worthy princes' bloods were shed,</LINE>
+<LINE>To keep his bed of blackness unlaid ope,</LINE>
+<LINE>To lop that doubt, he'll fill this land with arms,</LINE>
+<LINE>And make pretence of wrong that I have done him:</LINE>
+<LINE>When all, for mine, if I may call offence,</LINE>
+<LINE>Must feel war's blow, who spares not innocence:</LINE>
+<LINE>Which love to all, of which thyself art one,</LINE>
+<LINE>Who now reprovest me for it,--</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Alas, sir!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Drew sleep out of mine eyes, blood from my cheeks,</LINE>
+<LINE>Musings into my mind, with thousand doubts</LINE>
+<LINE>How I might stop this tempest ere it came;</LINE>
+<LINE>And finding little comfort to relieve them,</LINE>
+<LINE>I thought it princely charity to grieve them.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Well, my lord, since you have given me leave to speak.</LINE>
+<LINE>Freely will I speak. Antiochus you fear,</LINE>
+<LINE>And justly too, I think, you fear the tyrant,</LINE>
+<LINE>Who either by public war or private treason</LINE>
+<LINE>Will take away your life.</LINE>
+<LINE>Therefore, my lord, go travel for a while,</LINE>
+<LINE>Till that his rage and anger be forgot,</LINE>
+<LINE>Or till the Destinies do cut his thread of life.</LINE>
+<LINE>Your rule direct to any; if to me.</LINE>
+<LINE>Day serves not light more faithful than I'll be.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I do not doubt thy faith;</LINE>
+<LINE>But should he wrong my liberties in my absence?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>We'll mingle our bloods together in the earth,</LINE>
+<LINE>From whence we had our being and our birth.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Tyre, I now look from thee then, and to Tarsus</LINE>
+<LINE>Intend my travel, where I'll hear from thee;</LINE>
+<LINE>And by whose letters I'll dispose myself.</LINE>
+<LINE>The care I had and have of subjects' good</LINE>
+<LINE>On thee I lay whose wisdom's strength can bear it.</LINE>
+<LINE>I'll take thy word for faith, not ask thine oath:</LINE>
+<LINE>Who shuns not to break one will sure crack both:</LINE>
+<LINE>But in our orbs we'll live so round and safe,</LINE>
+<LINE>That time of both this truth shall ne'er convince,</LINE>
+<LINE>Thou show'dst a subject's shine, I a true prince.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE III.  Tyre. An ante-chamber in the palace.</TITLE>
+<STAGEDIR>Enter THALIARD</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>THALIARD</SPEAKER>
+<LINE>So, this is Tyre, and this the court. Here must I</LINE>
+<LINE>kill King Pericles; and if I do it not, I am sure to</LINE>
+<LINE>be hanged at home: 'tis dangerous. Well, I perceive</LINE>
+<LINE>he was a wise fellow, and had good discretion, that,</LINE>
+<LINE>being bid to ask what he would of the king, desired</LINE>
+<LINE>he might know none of his secrets: now do I see he</LINE>
+<LINE>had some reason for't; for if a king bid a man be a</LINE>
+<LINE>villain, he's bound by the indenture of his oath to</LINE>
+<LINE>be one! Hush! here come the lords of Tyre.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter HELICANUS and ESCANES, with other Lords of Tyre</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>You shall not need, my fellow peers of Tyre,</LINE>
+<LINE>Further to question me of your king's departure:</LINE>
+<LINE>His seal'd commission, left in trust with me,</LINE>
+<LINE>Doth speak sufficiently he's gone to travel.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THALIARD</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  How! the king gone!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>If further yet you will be satisfied,</LINE>
+<LINE>Why, as it were unlicensed of your loves,</LINE>
+<LINE>He would depart, I'll give some light unto you.</LINE>
+<LINE>Being at Antioch--</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THALIARD</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>          What from Antioch?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Royal Antiochus--on what cause I know not--</LINE>
+<LINE>Took some displeasure at him; at least he judged so:</LINE>
+<LINE>And doubting lest that he had err'd or sinn'd,</LINE>
+<LINE>To show his sorrow, he'ld correct himself;</LINE>
+<LINE>So puts himself unto the shipman's toil,</LINE>
+<LINE>With whom each minute threatens life or death.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THALIARD</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  Well, I perceive</LINE>
+<LINE>I shall not be hang'd now, although I would;</LINE>
+<LINE>But since he's gone, the king's seas must please:</LINE>
+<LINE>He 'scaped the land, to perish at the sea.</LINE>
+<LINE>I'll present myself. Peace to the lords of Tyre!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Lord Thaliard from Antiochus is welcome.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THALIARD</SPEAKER>
+<LINE>From him I come</LINE>
+<LINE>With message unto princely Pericles;</LINE>
+<LINE>But since my landing I have understood</LINE>
+<LINE>Your lord has betook himself to unknown travels,</LINE>
+<LINE>My message must return from whence it came.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>We have no reason to desire it,</LINE>
+<LINE>Commended to our master, not to us:</LINE>
+<LINE>Yet, ere you shall depart, this we desire,</LINE>
+<LINE>As friends to Antioch, we may feast in Tyre.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE IV.  Tarsus. A room in the Governor's house.</TITLE>
+<STAGEDIR>Enter CLEON, the governor of Tarsus, with DIONYZA,
+and others</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>My Dionyza, shall we rest us here,</LINE>
+<LINE>And by relating tales of others' griefs,</LINE>
+<LINE>See if 'twill teach us to forget our own?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>That were to blow at fire in hope to quench it;</LINE>
+<LINE>For who digs hills because they do aspire</LINE>
+<LINE>Throws down one mountain to cast up a higher.</LINE>
+<LINE>O my distressed lord, even such our griefs are;</LINE>
+<LINE>Here they're but felt, and seen with mischief's eyes,</LINE>
+<LINE>But like to groves, being topp'd, they higher rise.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>O Dionyza,</LINE>
+<LINE>Who wanteth food, and will not say he wants it,</LINE>
+<LINE>Or can conceal his hunger till he famish?</LINE>
+<LINE>Our tongues and sorrows do sound deep</LINE>
+<LINE>Our woes into the air; our eyes do weep,</LINE>
+<LINE>Till tongues fetch breath that may proclaim them louder;</LINE>
+<LINE>That, if heaven slumber while their creatures want,</LINE>
+<LINE>They may awake their helps to comfort them.</LINE>
+<LINE>I'll then discourse our woes, felt several years,</LINE>
+<LINE>And wanting breath to speak help me with tears.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>I'll do my best, sir.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>This Tarsus, o'er which I have the government,</LINE>
+<LINE>A city on whom plenty held full hand,</LINE>
+<LINE>For riches strew'd herself even in the streets;</LINE>
+<LINE>Whose towers bore heads so high they kiss'd the clouds,</LINE>
+<LINE>And strangers ne'er beheld but wondered at;</LINE>
+<LINE>Whose men and dames so jetted and adorn'd,</LINE>
+<LINE>Like one another's glass to trim them by:</LINE>
+<LINE>Their tables were stored full, to glad the sight,</LINE>
+<LINE>And not so much to feed on as delight;</LINE>
+<LINE>All poverty was scorn'd, and pride so great,</LINE>
+<LINE>The name of help grew odious to repeat.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>O, 'tis too true.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>But see what heaven can do! By this our change,</LINE>
+<LINE>These mouths, who but of late, earth, sea, and air,</LINE>
+<LINE>Were all too little to content and please,</LINE>
+<LINE>Although they gave their creatures in abundance,</LINE>
+<LINE>As houses are defiled for want of use,</LINE>
+<LINE>They are now starved for want of exercise:</LINE>
+<LINE>Those palates who, not yet two summers younger,</LINE>
+<LINE>Must have inventions to delight the taste,</LINE>
+<LINE>Would now be glad of bread, and beg for it:</LINE>
+<LINE>Those mothers who, to nousle up their babes,</LINE>
+<LINE>Thought nought too curious, are ready now</LINE>
+<LINE>To eat those little darlings whom they loved.</LINE>
+<LINE>So sharp are hunger's teeth, that man and wife</LINE>
+<LINE>Draw lots who first shall die to lengthen life:</LINE>
+<LINE>Here stands a lord, and there a lady weeping;</LINE>
+<LINE>Here many sink, yet those which see them fall</LINE>
+<LINE>Have scarce strength left to give them burial.</LINE>
+<LINE>Is not this true?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>Our cheeks and hollow eyes do witness it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>O, let those cities that of plenty's cup</LINE>
+<LINE>And her prosperities so largely taste,</LINE>
+<LINE>With their superfluous riots, hear these tears!</LINE>
+<LINE>The misery of Tarsus may be theirs.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter a Lord</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Lord</SPEAKER>
+<LINE>Where's the lord governor?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>Here.</LINE>
+<LINE>Speak out thy sorrows which thou bring'st in haste,</LINE>
+<LINE>For comfort is too far for us to expect.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Lord</SPEAKER>
+<LINE>We have descried, upon our neighbouring shore,</LINE>
+<LINE>A portly sail of ships make hitherward.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>I thought as much.</LINE>
+<LINE>One sorrow never comes but brings an heir,</LINE>
+<LINE>That may succeed as his inheritor;</LINE>
+<LINE>And so in ours: some neighbouring nation,</LINE>
+<LINE>Taking advantage of our misery,</LINE>
+<LINE>Hath stuff'd these hollow vessels with their power,</LINE>
+<LINE>To beat us down, the which are down already;</LINE>
+<LINE>And make a conquest of unhappy me,</LINE>
+<LINE>Whereas no glory's got to overcome.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Lord</SPEAKER>
+<LINE>That's the least fear; for, by the semblance</LINE>
+<LINE>Of their white flags display'd, they bring us peace,</LINE>
+<LINE>And come to us as favourers, not as foes.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>Thou speak'st like him's untutor'd to repeat:</LINE>
+<LINE>Who makes the fairest show means most deceit.</LINE>
+<LINE>But bring they what they will and what they can,</LINE>
+<LINE>What need we fear?</LINE>
+<LINE>The ground's the lowest, and we are half way there.</LINE>
+<LINE>Go tell their general we attend him here,</LINE>
+<LINE>To know for what he comes, and whence he comes,</LINE>
+<LINE>And what he craves.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Lord</SPEAKER>
+<LINE>I go, my lord.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>Welcome is peace, if he on peace consist;</LINE>
+<LINE>If wars, we are unable to resist.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter PERICLES with Attendants</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Lord governor, for so we hear you are,</LINE>
+<LINE>Let not our ships and number of our men</LINE>
+<LINE>Be like a beacon fired to amaze your eyes.</LINE>
+<LINE>We have heard your miseries as far as Tyre,</LINE>
+<LINE>And seen the desolation of your streets:</LINE>
+<LINE>Nor come we to add sorrow to your tears,</LINE>
+<LINE>But to relieve them of their heavy load;</LINE>
+<LINE>And these our ships, you happily may think</LINE>
+<LINE>Are like the Trojan horse was stuff'd within</LINE>
+<LINE>With bloody veins, expecting overthrow,</LINE>
+<LINE>Are stored with corn to make your needy bread,</LINE>
+<LINE>And give them life whom hunger starved half dead.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>All</SPEAKER>
+<LINE>The gods of Greece protect you!</LINE>
+<LINE>And we'll pray for you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Arise, I pray you, rise:</LINE>
+<LINE>We do not look for reverence, but to love,</LINE>
+<LINE>And harbourage for ourself, our ships, and men.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>The which when any shall not gratify,</LINE>
+<LINE>Or pay you with unthankfulness in thought,</LINE>
+<LINE>Be it our wives, our children, or ourselves,</LINE>
+<LINE>The curse of heaven and men succeed their evils!</LINE>
+<LINE>Till when,--the which I hope shall ne'er be seen,--</LINE>
+<LINE>Your grace is welcome to our town and us.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Which welcome we'll accept; feast here awhile,</LINE>
+<LINE>Until our stars that frown lend us a smile.</LINE>
+</SPEECH>
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+</ACT>
+
+<ACT><TITLE>ACT II</TITLE>
+
+<PROLOGUE><TITLE>[Prologue]</TITLE>
+<STAGEDIR>Enter GOWER</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>GOWER</SPEAKER>
+<LINE>Here have you seen a mighty king</LINE>
+<LINE>His child, I wis, to incest bring;</LINE>
+<LINE>A better prince and benign lord,</LINE>
+<LINE>That will prove awful both in deed and word.</LINE>
+<LINE>Be quiet then as men should be,</LINE>
+<LINE>Till he hath pass'd necessity.</LINE>
+<LINE>I'll show you those in troubles reign,</LINE>
+<LINE>Losing a mite, a mountain gain.</LINE>
+<LINE>The good in conversation,</LINE>
+<LINE>To whom I give my benison,</LINE>
+<LINE>Is still at Tarsus, where each man</LINE>
+<LINE>Thinks all is writ he speken can;</LINE>
+<LINE>And, to remember what he does,</LINE>
+<LINE>Build his statue to make him glorious:</LINE>
+<LINE>But tidings to the contrary</LINE>
+<LINE>Are brought your eyes; what need speak I?</LINE>
+<SUBHEAD>DUMB SHOW.</SUBHEAD>
+<STAGEDIR>Enter at one door PERICLES talking with CLEON; all
+the train with them. Enter at another door a
+Gentleman, with a letter to PERICLES; PERICLES
+shows the letter to CLEON; gives the Messenger a
+reward, and knights him. Exit PERICLES at one
+door, and CLEON at another</STAGEDIR>
+<LINE>Good Helicane, that stay'd at home,</LINE>
+<LINE>Not to eat honey like a drone</LINE>
+<LINE>From others' labours; for though he strive</LINE>
+<LINE>To killen bad, keep good alive;</LINE>
+<LINE>And to fulfil his prince' desire,</LINE>
+<LINE>Sends word of all that haps in Tyre:</LINE>
+<LINE>How Thaliard came full bent with sin</LINE>
+<LINE>And had intent to murder him;</LINE>
+<LINE>And that in Tarsus was not best</LINE>
+<LINE>Longer for him to make his rest.</LINE>
+<LINE>He, doing so, put forth to seas,</LINE>
+<LINE>Where when men been, there's seldom ease;</LINE>
+<LINE>For now the wind begins to blow;</LINE>
+<LINE>Thunder above and deeps below</LINE>
+<LINE>Make such unquiet, that the ship</LINE>
+<LINE>Should house him safe is wreck'd and split;</LINE>
+<LINE>And he, good prince, having all lost,</LINE>
+<LINE>By waves from coast to coast is tost:</LINE>
+<LINE>All perishen of man, of pelf,</LINE>
+<LINE>Ne aught escapen but himself;</LINE>
+<LINE>Till fortune, tired with doing bad,</LINE>
+<LINE>Threw him ashore, to give him glad:</LINE>
+<LINE>And here he comes. What shall be next,</LINE>
+<LINE>Pardon old Gower,--this longs the text.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+</PROLOGUE>
+
+<SCENE><TITLE>SCENE I.  Pentapolis. An open place by the sea-side.</TITLE>
+<STAGEDIR>Enter PERICLES, wet</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Yet cease your ire, you angry stars of heaven!</LINE>
+<LINE>Wind, rain, and thunder, remember, earthly man</LINE>
+<LINE>Is but a substance that must yield to you;</LINE>
+<LINE>And I, as fits my nature, do obey you:</LINE>
+<LINE>Alas, the sea hath cast me on the rocks,</LINE>
+<LINE>Wash'd me from shore to shore, and left me breath</LINE>
+<LINE>Nothing to think on but ensuing death:</LINE>
+<LINE>Let it suffice the greatness of your powers</LINE>
+<LINE>To have bereft a prince of all his fortunes;</LINE>
+<LINE>And having thrown him from your watery grave,</LINE>
+<LINE>Here to have death in peace is all he'll crave.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter three FISHERMEN</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>What, ho, Pilch!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>Ha, come and bring away the nets!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>What, Patch-breech, I say!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Fisherman</SPEAKER>
+<LINE>What say you, master?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Look how thou stirrest now! come away, or I'll</LINE>
+<LINE>fetch thee with a wanion.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Fisherman</SPEAKER>
+<LINE>Faith, master, I am thinking of the poor men that</LINE>
+<LINE>were cast away before us even now.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Alas, poor souls, it grieved my heart to hear what</LINE>
+<LINE>pitiful cries they made to us to help them, when,</LINE>
+<LINE>well-a-day, we could scarce help ourselves.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Fisherman</SPEAKER>
+<LINE>Nay, master, said not I as much when I saw the</LINE>
+<LINE>porpus how he bounced and tumbled? they say</LINE>
+<LINE>they're half fish, half flesh: a plague on them,</LINE>
+<LINE>they ne'er come but I look to be washed. Master, I</LINE>
+<LINE>marvel how the fishes live in the sea.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Why, as men do a-land; the great ones eat up the</LINE>
+<LINE>little ones: I can compare our rich misers to</LINE>
+<LINE>nothing so fitly as to a whale; a' plays and</LINE>
+<LINE>tumbles, driving the poor fry before him, and at</LINE>
+<LINE>last devours them all at a mouthful: such whales</LINE>
+<LINE>have I heard on o' the land, who never leave gaping</LINE>
+<LINE>till they've swallowed the whole parish, church,</LINE>
+<LINE>steeple, bells, and all.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  A pretty moral.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Fisherman</SPEAKER>
+<LINE>But, master, if I had been the sexton, I would have</LINE>
+<LINE>been that day in the belfry.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>Why, man?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Fisherman</SPEAKER>
+<LINE>Because he should have swallowed me too: and when I</LINE>
+<LINE>had been in his belly, I would have kept such a</LINE>
+<LINE>jangling of the bells, that he should never have</LINE>
+<LINE>left, till he cast bells, steeple, church, and</LINE>
+<LINE>parish up again. But if the good King Simonides</LINE>
+<LINE>were of my mind,--</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  Simonides!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Fisherman</SPEAKER>
+<LINE>We would purge the land of these drones, that rob</LINE>
+<LINE>the bee of her honey.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  How from the finny subject of the sea</LINE>
+<LINE>These fishers tell the infirmities of men;</LINE>
+<LINE>And from their watery empire recollect</LINE>
+<LINE>All that may men approve or men detect!</LINE>
+<LINE>Peace be at your labour, honest fishermen.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>Honest! good fellow, what's that? If it be a day</LINE>
+<LINE>fits you, search out of the calendar, and nobody</LINE>
+<LINE>look after it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>May see the sea hath cast upon your coast.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>What a drunken knave was the sea to cast thee in our</LINE>
+<LINE>way!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>A man whom both the waters and the wind,</LINE>
+<LINE>In that vast tennis-court, have made the ball</LINE>
+<LINE>For them to play upon, entreats you pity him:</LINE>
+<LINE>He asks of you, that never used to beg.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>No, friend, cannot you beg? Here's them in our</LINE>
+<LINE>country Greece gets more with begging than we can do</LINE>
+<LINE>with working.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>Canst thou catch any fishes, then?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I never practised it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>Nay, then thou wilt starve, sure; for here's nothing</LINE>
+<LINE>to be got now-a-days, unless thou canst fish for't.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>What I have been I have forgot to know;</LINE>
+<LINE>But what I am, want teaches me to think on:</LINE>
+<LINE>A man throng'd up with cold: my veins are chill,</LINE>
+<LINE>And have no more of life than may suffice</LINE>
+<LINE>To give my tongue that heat to ask your help;</LINE>
+<LINE>Which if you shall refuse, when I am dead,</LINE>
+<LINE>For that I am a man, pray see me buried.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Die quoth-a? Now gods forbid! I have a gown here;</LINE>
+<LINE>come, put it on; keep thee warm. Now, afore me, a</LINE>
+<LINE>handsome fellow! Come, thou shalt go home, and</LINE>
+<LINE>we'll have flesh for holidays, fish for</LINE>
+<LINE>fasting-days, and moreo'er puddings and flap-jacks,</LINE>
+<LINE>and thou shalt be welcome.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I thank you, sir.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>Hark you, my friend; you said you could not beg.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I did but crave.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>But crave! Then I'll turn craver too, and so I</LINE>
+<LINE>shall 'scape whipping.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Why, are all your beggars whipped, then?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>O, not all, my friend, not all; for if all your</LINE>
+<LINE>beggars were whipped, I would wish no better office</LINE>
+<LINE>than to be beadle. But, master, I'll go draw up the</LINE>
+<LINE>net.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit with Third Fisherman</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  How well this honest mirth becomes their labour!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Hark you, sir, do you know where ye are?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Not well.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Why, I'll tell you: this is called Pentapolis, and</LINE>
+<LINE>our king the good Simonides.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>The good King Simonides, do you call him.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Ay, sir; and he deserves so to be called for his</LINE>
+<LINE>peaceable reign and good government.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>He is a happy king, since he gains from his subjects</LINE>
+<LINE>the name of good by his government. How far is his</LINE>
+<LINE>court distant from this shore?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Marry, sir, half a day's journey: and I'll tell</LINE>
+<LINE>you, he hath a fair daughter, and to-morrow is her</LINE>
+<LINE>birth-day; and there are princes and knights come</LINE>
+<LINE>from all parts of the world to just and tourney for her love.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Were my fortunes equal to my desires, I could wish</LINE>
+<LINE>to make one there.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>O, sir, things must be as they may; and what a man</LINE>
+<LINE>cannot get, he may lawfully deal for--his wife's soul.</LINE>
+</SPEECH>
+
+<STAGEDIR>Re-enter Second and Third Fishermen, drawing up a net</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>Help, master, help! here's a fish hangs in the net,</LINE>
+<LINE>like a poor man's right in the law; 'twill hardly</LINE>
+<LINE>come out. Ha! bots on't, 'tis come at last, and</LINE>
+<LINE>'tis turned to a rusty armour.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>An armour, friends! I pray you, let me see it.</LINE>
+<LINE>Thanks, fortune, yet, that, after all my crosses,</LINE>
+<LINE>Thou givest me somewhat to repair myself;</LINE>
+<LINE>And though it was mine own, part of my heritage,</LINE>
+<LINE>Which my dead father did bequeath to me.</LINE>
+<LINE>With this strict charge, even as he left his life,</LINE>
+<LINE>'Keep it, my Pericles; it hath been a shield</LINE>
+<LINE>Twixt me and death;'--and pointed to this brace;--</LINE>
+<LINE>'For that it saved me, keep it; in like necessity--</LINE>
+<LINE>The which the gods protect thee from!--may</LINE>
+<LINE>defend thee.'</LINE>
+<LINE>It kept where I kept, I so dearly loved it;</LINE>
+<LINE>Till the rough seas, that spare not any man,</LINE>
+<LINE>Took it in rage, though calm'd have given't again:</LINE>
+<LINE>I thank thee for't: my shipwreck now's no ill,</LINE>
+<LINE>Since I have here my father's gift in's will.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>What mean you, sir?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>To beg of you, kind friends, this coat of worth,</LINE>
+<LINE>For it was sometime target to a king;</LINE>
+<LINE>I know it by this mark. He loved me dearly,</LINE>
+<LINE>And for his sake I wish the having of it;</LINE>
+<LINE>And that you'ld guide me to your sovereign's court,</LINE>
+<LINE>Where with it I may appear a gentleman;</LINE>
+<LINE>And if that ever my low fortune's better,</LINE>
+<LINE>I'll pay your bounties; till then rest your debtor.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Why, wilt thou tourney for the lady?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I'll show the virtue I have borne in arms.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Fisherman</SPEAKER>
+<LINE>Why, do 'e take it, and the gods give thee good on't!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>Ay, but hark you, my friend; 'twas we that made up</LINE>
+<LINE>this garment through the rough seams of the waters:</LINE>
+<LINE>there are certain condolements, certain vails. I</LINE>
+<LINE>hope, sir, if you thrive, you'll remember from</LINE>
+<LINE>whence you had it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Believe 't, I will.</LINE>
+<LINE>By your furtherance I am clothed in steel;</LINE>
+<LINE>And, spite of all the rapture of the sea,</LINE>
+<LINE>This jewel holds his building on my arm:</LINE>
+<LINE>Unto thy value I will mount myself</LINE>
+<LINE>Upon a courser, whose delightful steps</LINE>
+<LINE>Shall make the gazer joy to see him tread.</LINE>
+<LINE>Only, my friend, I yet am unprovided</LINE>
+<LINE>Of a pair of bases.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Fisherman</SPEAKER>
+<LINE>We'll sure provide: thou shalt have my best gown to</LINE>
+<LINE>make thee a pair; and I'll bring thee to the court myself.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Then honour be but a goal to my will,</LINE>
+<LINE>This day I'll rise, or else add ill to ill.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE II.  The same. A public way or platform leading to the lists. A pavilion by the side of it for the reception of King, Princess, Lords, &amp;c.</TITLE>
+
+<STAGEDIR>Enter SIMONIDES, THAISA, Lords, and Attendants</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Are the knights ready to begin the triumph?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Lord</SPEAKER>
+<LINE>They are, my liege;</LINE>
+<LINE>And stay your coming to present themselves.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Return them, we are ready; and our daughter,</LINE>
+<LINE>In honour of whose birth these triumphs are,</LINE>
+<LINE>Sits here, like beauty's child, whom nature gat</LINE>
+<LINE>For men to see, and seeing wonder at.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit a Lord</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>It pleaseth you, my royal father, to express</LINE>
+<LINE>My commendations great, whose merit's less.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>It's fit it should be so; for princes are</LINE>
+<LINE>A model which heaven makes like to itself:</LINE>
+<LINE>As jewels lose their glory if neglected,</LINE>
+<LINE>So princes their renowns if not respected.</LINE>
+<LINE>'Tis now your honour, daughter, to explain</LINE>
+<LINE>The labour of each knight in his device.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Which, to preserve mine honour, I'll perform.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter a Knight; he passes over, and his Squire
+presents his shield to the Princess</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Who is the first that doth prefer himself?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>A knight of Sparta, my renowned father;</LINE>
+<LINE>And the device he bears upon his shield</LINE>
+<LINE>Is a black Ethiope reaching at the sun</LINE>
+<LINE>The word, 'Lux tua vita mihi.'</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>He loves you well that holds his life of you.</LINE>
+<STAGEDIR>The Second Knight passes over</STAGEDIR>
+<LINE>Who is the second that presents himself?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>A prince of Macedon, my royal father;</LINE>
+<LINE>And the device he bears upon his shield</LINE>
+<LINE>Is an arm'd knight that's conquer'd by a lady;</LINE>
+<LINE>The motto thus, in Spanish, 'Piu por dulzura que por fuerza.'</LINE>
+</SPEECH>
+
+<STAGEDIR>The Third Knight passes over</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>And what's the third?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>The third of Antioch;</LINE>
+<LINE>And his device, a wreath of chivalry;</LINE>
+<LINE>The word, 'Me pompae provexit apex.'</LINE>
+</SPEECH>
+
+<STAGEDIR>The Fourth Knight passes over</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>What is the fourth?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>A burning torch that's turned upside down;</LINE>
+<LINE>The word, 'Quod me alit, me extinguit.'</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Which shows that beauty hath his power and will,</LINE>
+<LINE>Which can as well inflame as it can kill.</LINE>
+</SPEECH>
+
+<STAGEDIR>The Fifth Knight passes over</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>The fifth, an hand environed with clouds,</LINE>
+<LINE>Holding out gold that's by the touchstone tried;</LINE>
+<LINE>The motto thus, 'Sic spectanda fides.'</LINE>
+</SPEECH>
+
+<STAGEDIR>The Sixth Knight, PERICLES, passes over</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>And what's</LINE>
+<LINE>The sixth and last, the which the knight himself</LINE>
+<LINE>With such a graceful courtesy deliver'd?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>He seems to be a stranger; but his present is</LINE>
+<LINE>A wither'd branch, that's only green at top;</LINE>
+<LINE>The motto, 'In hac spe vivo.'</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>A pretty moral;</LINE>
+<LINE>From the dejected state wherein he is,</LINE>
+<LINE>He hopes by you his fortunes yet may flourish.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Lord</SPEAKER>
+<LINE>He had need mean better than his outward show</LINE>
+<LINE>Can any way speak in his just commend;</LINE>
+<LINE>For by his rusty outside he appears</LINE>
+<LINE>To have practised more the whipstock than the lance.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Lord</SPEAKER>
+<LINE>He well may be a stranger, for he comes</LINE>
+<LINE>To an honour'd triumph strangely furnished.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Lord</SPEAKER>
+<LINE>And on set purpose let his armour rust</LINE>
+<LINE>Until this day, to scour it in the dust.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Opinion's but a fool, that makes us scan</LINE>
+<LINE>The outward habit by the inward man.</LINE>
+<LINE>But stay, the knights are coming: we will withdraw</LINE>
+<LINE>Into the gallery.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+<STAGEDIR>Great shouts within and all cry 'The mean knight!'</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE III.  The same. A hall of state: a banquet prepared.</TITLE>
+<STAGEDIR>Enter SIMONIDES, THAISA, Lords, Attendants, and
+Knights, from tilting</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Knights,</LINE>
+<LINE>To say you're welcome were superfluous.</LINE>
+<LINE>To place upon the volume of your deeds,</LINE>
+<LINE>As in a title-page, your worth in arms,</LINE>
+<LINE>Were more than you expect, or more than's fit,</LINE>
+<LINE>Since every worth in show commends itself.</LINE>
+<LINE>Prepare for mirth, for mirth becomes a feast:</LINE>
+<LINE>You are princes and my guests.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>But you, my knight and guest;</LINE>
+<LINE>To whom this wreath of victory I give,</LINE>
+<LINE>And crown you king of this day's happiness.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>'Tis more by fortune, lady, than by merit.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Call it by what you will, the day is yours;</LINE>
+<LINE>And here, I hope, is none that envies it.</LINE>
+<LINE>In framing an artist, art hath thus decreed,</LINE>
+<LINE>To make some good, but others to exceed;</LINE>
+<LINE>And you are her labour'd scholar. Come, queen o'</LINE>
+<LINE>the feast,--</LINE>
+<LINE>For, daughter, so you are,--here take your place:</LINE>
+<LINE>Marshal the rest, as they deserve their grace.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>KNIGHTS</SPEAKER>
+<LINE>We are honour'd much by good Simonides.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Your presence glads our days: honour we love;</LINE>
+<LINE>For who hates honour hates the gods above.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Marshal</SPEAKER>
+<LINE>Sir, yonder is your place.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Some other is more fit.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Knight</SPEAKER>
+<LINE>Contend not, sir; for we are gentlemen</LINE>
+<LINE>That neither in our hearts nor outward eyes</LINE>
+<LINE>Envy the great nor do the low despise.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>You are right courteous knights.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Sit, sir, sit.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>By Jove, I wonder, that is king of thoughts,</LINE>
+<LINE>These cates resist me, she but thought upon.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>By Juno, that is queen of marriage,</LINE>
+<LINE>All viands that I eat do seem unsavoury.</LINE>
+<LINE>Wishing him my meat. Sure, he's a gallant gentleman.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>He's but a country gentleman;</LINE>
+<LINE>Has done no more than other knights have done;</LINE>
+<LINE>Has broken a staff or so; so let it pass.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>To me he seems like diamond to glass.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Yon king's to me like to my father's picture,</LINE>
+<LINE>Which tells me in that glory once he was;</LINE>
+<LINE>Had princes sit, like stars, about his throne,</LINE>
+<LINE>And he the sun, for them to reverence;</LINE>
+<LINE>None that beheld him, but, like lesser lights,</LINE>
+<LINE>Did vail their crowns to his supremacy:</LINE>
+<LINE>Where now his son's like a glow-worm in the night,</LINE>
+<LINE>The which hath fire in darkness, none in light:</LINE>
+<LINE>Whereby I see that Time's the king of men,</LINE>
+<LINE>He's both their parent, and he is their grave,</LINE>
+<LINE>And gives them what he will, not what they crave.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>What, are you merry, knights?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Knights</SPEAKER>
+<LINE>Who can be other in this royal presence?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Here, with a cup that's stored unto the brim,--</LINE>
+<LINE>As you do love, fill to your mistress' lips,--</LINE>
+<LINE>We drink this health to you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>KNIGHTS</SPEAKER>
+<LINE>We thank your grace.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Yet pause awhile:</LINE>
+<LINE>Yon knight doth sit too melancholy,</LINE>
+<LINE>As if the entertainment in our court</LINE>
+<LINE>Had not a show might countervail his worth.</LINE>
+<LINE>Note it not you, Thaisa?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>What is it</LINE>
+<LINE>To me, my father?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>O, attend, my daughter:</LINE>
+<LINE>Princes in this should live like gods above,</LINE>
+<LINE>Who freely give to every one that comes</LINE>
+<LINE>To honour them:</LINE>
+<LINE>And princes not doing so are like to gnats,</LINE>
+<LINE>Which make a sound, but kill'd are wonder'd at.</LINE>
+<LINE>Therefore to make his entrance more sweet,</LINE>
+<LINE>Here, say we drink this standing-bowl of wine to him.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Alas, my father, it befits not me</LINE>
+<LINE>Unto a stranger knight to be so bold:</LINE>
+<LINE>He may my proffer take for an offence,</LINE>
+<LINE>Since men take women's gifts for impudence.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>How!</LINE>
+<LINE>Do as I bid you, or you'll move me else.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  Now, by the gods, he could not please me better.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>And furthermore tell him, we desire to know of him,</LINE>
+<LINE>Of whence he is, his name and parentage.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>The king my father, sir, has drunk to you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I thank him.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Wishing it so much blood unto your life.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I thank both him and you, and pledge him freely.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>And further he desires to know of you,</LINE>
+<LINE>Of whence you are, your name and parentage.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>A gentleman of Tyre; my name, Pericles;</LINE>
+<LINE>My education been in arts and arms;</LINE>
+<LINE>Who, looking for adventures in the world,</LINE>
+<LINE>Was by the rough seas reft of ships and men,</LINE>
+<LINE>And after shipwreck driven upon this shore.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>He thanks your grace; names himself Pericles,</LINE>
+<LINE>A gentleman of Tyre,</LINE>
+<LINE>Who only by misfortune of the seas</LINE>
+<LINE>Bereft of ships and men, cast on this shore.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Now, by the gods, I pity his misfortune,</LINE>
+<LINE>And will awake him from his melancholy.</LINE>
+<LINE>Come, gentlemen, we sit too long on trifles,</LINE>
+<LINE>And waste the time, which looks for other revels.</LINE>
+<LINE>Even in your armours, as you are address'd,</LINE>
+<LINE>Will very well become a soldier's dance.</LINE>
+<LINE>I will not have excuse, with saying this</LINE>
+<LINE>Loud music is too harsh for ladies' heads,</LINE>
+<LINE>Since they love men in arms as well as beds.</LINE>
+<STAGEDIR>The Knights dance</STAGEDIR>
+<LINE>So, this was well ask'd,'twas so well perform'd.</LINE>
+<LINE>Come, sir;</LINE>
+<LINE>Here is a lady that wants breathing too:</LINE>
+<LINE>And I have heard, you knights of Tyre</LINE>
+<LINE>Are excellent in making ladies trip;</LINE>
+<LINE>And that their measures are as excellent.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>In those that practise them they are, my lord.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>O, that's as much as you would be denied</LINE>
+<LINE>Of your fair courtesy.</LINE>
+<STAGEDIR>The Knights and Ladies dance</STAGEDIR>
+<LINE>Unclasp, unclasp:</LINE>
+<LINE>Thanks, gentlemen, to all; all have done well.</LINE>
+<STAGEDIR>To PERICLES</STAGEDIR>
+<LINE>But you the best. Pages and lights, to conduct</LINE>
+<LINE>These knights unto their several lodgings!</LINE>
+<STAGEDIR>To PERICLES</STAGEDIR>
+<LINE>Yours, sir,</LINE>
+<LINE>We have given order to be next our own.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I am at your grace's pleasure.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Princes, it is too late to talk of love;</LINE>
+<LINE>And that's the mark I know you level at:</LINE>
+<LINE>Therefore each one betake him to his rest;</LINE>
+<LINE>To-morrow all for speeding do their best.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE IV.  Tyre. A room in the Governor's house.</TITLE>
+<STAGEDIR>Enter HELICANUS and ESCANES</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>No, Escanes, know this of me,</LINE>
+<LINE>Antiochus from incest lived not free:</LINE>
+<LINE>For which, the most high gods not minding longer</LINE>
+<LINE>To withhold the vengeance that they had in store,</LINE>
+<LINE>Due to this heinous capital offence,</LINE>
+<LINE>Even in the height and pride of all his glory,</LINE>
+<LINE>When he was seated in a chariot</LINE>
+<LINE>Of an inestimable value, and his daughter with him,</LINE>
+<LINE>A fire from heaven came and shrivell'd up</LINE>
+<LINE>Their bodies, even to loathing; for they so stunk,</LINE>
+<LINE>That all those eyes adored them ere their fall</LINE>
+<LINE>Scorn now their hand should give them burial.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ESCANES</SPEAKER>
+<LINE>'Twas very strange.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>And yet but justice; for though</LINE>
+<LINE>This king were great, his greatness was no guard</LINE>
+<LINE>To bar heaven's shaft, but sin had his reward.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>ESCANES</SPEAKER>
+<LINE>'Tis very true.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter two or three Lords</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Lord</SPEAKER>
+<LINE>See, not a man in private conference</LINE>
+<LINE>Or council has respect with him but he.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Lord</SPEAKER>
+<LINE>It shall no longer grieve without reproof.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Lord</SPEAKER>
+<LINE>And cursed be he that will not second it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Lord</SPEAKER>
+<LINE>Follow me, then. Lord Helicane, a word.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>With me? and welcome: happy day, my lords.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Lord</SPEAKER>
+<LINE>Know that our griefs are risen to the top,</LINE>
+<LINE>And now at length they overflow their banks.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Your griefs! for what? wrong not your prince you love.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Lord</SPEAKER>
+<LINE>Wrong not yourself, then, noble Helicane;</LINE>
+<LINE>But if the prince do live, let us salute him,</LINE>
+<LINE>Or know what ground's made happy by his breath.</LINE>
+<LINE>If in the world he live, we'll seek him out;</LINE>
+<LINE>If in his grave he rest, we'll find him there;</LINE>
+<LINE>And be resolved he lives to govern us,</LINE>
+<LINE>Or dead, give's cause to mourn his funeral,</LINE>
+<LINE>And leave us to our free election.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Lord</SPEAKER>
+<LINE>Whose death indeed's the strongest in our censure:</LINE>
+<LINE>And knowing this kingdom is without a head,--</LINE>
+<LINE>Like goodly buildings left without a roof</LINE>
+<LINE>Soon fall to ruin,--your noble self,</LINE>
+<LINE>That best know how to rule and how to reign,</LINE>
+<LINE>We thus submit unto,--our sovereign.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>All</SPEAKER>
+<LINE>Live, noble Helicane!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>For honour's cause, forbear your suffrages:</LINE>
+<LINE>If that you love Prince Pericles, forbear.</LINE>
+<LINE>Take I your wish, I leap into the seas,</LINE>
+<LINE>Where's hourly trouble for a minute's ease.</LINE>
+<LINE>A twelvemonth longer, let me entreat you to</LINE>
+<LINE>Forbear the absence of your king:</LINE>
+<LINE>If in which time expired, he not return,</LINE>
+<LINE>I shall with aged patience bear your yoke.</LINE>
+<LINE>But if I cannot win you to this love,</LINE>
+<LINE>Go search like nobles, like noble subjects,</LINE>
+<LINE>And in your search spend your adventurous worth;</LINE>
+<LINE>Whom if you find, and win unto return,</LINE>
+<LINE>You shall like diamonds sit about his crown.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Lord</SPEAKER>
+<LINE>To wisdom he's a fool that will not yield;</LINE>
+<LINE>And since Lord Helicane enjoineth us,</LINE>
+<LINE>We with our travels will endeavour us.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Then you love us, we you, and we'll clasp hands:</LINE>
+<LINE>When peers thus knit, a kingdom ever stands.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE V.  Pentapolis. A room in the palace.</TITLE>
+<STAGEDIR>Enter SIMONIDES, reading a letter, at one door:
+the Knights meet him</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Knight</SPEAKER>
+<LINE>Good morrow to the good Simonides.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Knights, from my daughter this I let you know,</LINE>
+<LINE>That for this twelvemonth she'll not undertake</LINE>
+<LINE>A married life.</LINE>
+<LINE>Her reason to herself is only known,</LINE>
+<LINE>Which yet from her by no means can I get.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Knight</SPEAKER>
+<LINE>May we not get access to her, my lord?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>'Faith, by no means; she has so strictly tied</LINE>
+<LINE>Her to her chamber, that 'tis impossible.</LINE>
+<LINE>One twelve moons more she'll wear Diana's livery;</LINE>
+<LINE>This by the eye of Cynthia hath she vow'd</LINE>
+<LINE>And on her virgin honour will not break it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Knight</SPEAKER>
+<LINE>Loath to bid farewell, we take our leaves.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt Knights</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>So,</LINE>
+<LINE>They are well dispatch'd; now to my daughter's letter:</LINE>
+<LINE>She tells me here, she'd wed the stranger knight,</LINE>
+<LINE>Or never more to view nor day nor light.</LINE>
+<LINE>'Tis well, mistress; your choice agrees with mine;</LINE>
+<LINE>I like that well: nay, how absolute she's in't,</LINE>
+<LINE>Not minding whether I dislike or no!</LINE>
+<LINE>Well, I do commend her choice;</LINE>
+<LINE>And will no longer have it be delay'd.</LINE>
+<LINE>Soft! here he comes: I must dissemble it.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter PERICLES</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>All fortune to the good Simonides!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>To you as much, sir! I am beholding to you</LINE>
+<LINE>For your sweet music this last night: I do</LINE>
+<LINE>Protest my ears were never better fed</LINE>
+<LINE>With such delightful pleasing harmony.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>It is your grace's pleasure to commend;</LINE>
+<LINE>Not my desert.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Sir, you are music's master.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>The worst of all her scholars, my good lord.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Let me ask you one thing:</LINE>
+<LINE>What do you think of my daughter, sir?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>A most virtuous princess.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>And she is fair too, is she not?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>As a fair day in summer, wondrous fair.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Sir, my daughter thinks very well of you;</LINE>
+<LINE>Ay, so well, that you must be her master,</LINE>
+<LINE>And she will be your scholar: therefore look to it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I am unworthy for her schoolmaster.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>She thinks not so; peruse this writing else.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  What's here?</LINE>
+<LINE>A letter, that she loves the knight of Tyre!</LINE>
+<LINE>'Tis the king's subtlety to have my life.</LINE>
+<LINE>O, seek not to entrap me, gracious lord,</LINE>
+<LINE>A stranger and distressed gentleman,</LINE>
+<LINE>That never aim'd so high to love your daughter,</LINE>
+<LINE>But bent all offices to honour her.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Thou hast bewitch'd my daughter, and thou art</LINE>
+<LINE>A villain.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>By the gods, I have not:</LINE>
+<LINE>Never did thought of mine levy offence;</LINE>
+<LINE>Nor never did my actions yet commence</LINE>
+<LINE>A deed might gain her love or your displeasure.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Traitor, thou liest.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Traitor!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Ay, traitor.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Even in his throat--unless it be the king--</LINE>
+<LINE>That calls me traitor, I return the lie.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE><STAGEDIR>Aside</STAGEDIR>  Now, by the gods, I do applaud his courage.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>My actions are as noble as my thoughts,</LINE>
+<LINE>That never relish'd of a base descent.</LINE>
+<LINE>I came unto your court for honour's cause,</LINE>
+<LINE>And not to be a rebel to her state;</LINE>
+<LINE>And he that otherwise accounts of me,</LINE>
+<LINE>This sword shall prove he's honour's enemy.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>No?</LINE>
+<LINE>Here comes my daughter, she can witness it.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter THAISA</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Then, as you are as virtuous as fair,</LINE>
+<LINE>Resolve your angry father, if my tongue</LINE>
+<LINE>Did ere solicit, or my hand subscribe</LINE>
+<LINE>To any syllable that made love to you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Why, sir, say if you had,</LINE>
+<LINE>Who takes offence at that would make me glad?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>Yea, mistress, are you so peremptory?</LINE>
+<STAGEDIR>Aside</STAGEDIR>
+<LINE>I am glad on't with all my heart.--</LINE>
+<LINE>I'll tame you; I'll bring you in subjection.</LINE>
+<LINE>Will you, not having my consent,</LINE>
+<LINE>Bestow your love and your affections</LINE>
+<LINE>Upon a stranger?</LINE>
+<STAGEDIR>Aside</STAGEDIR>
+<LINE>who, for aught I know,</LINE>
+<LINE>May be, nor can I think the contrary,</LINE>
+<LINE>As great in blood as I myself.--</LINE>
+<LINE>Therefore hear you, mistress; either frame</LINE>
+<LINE>Your will to mine,--and you, sir, hear you,</LINE>
+<LINE>Either be ruled by me, or I will make you--</LINE>
+<LINE>Man and wife:</LINE>
+<LINE>Nay, come, your hands and lips must seal it too:</LINE>
+<LINE>And being join'd, I'll thus your hopes destroy;</LINE>
+<LINE>And for a further grief,--God give you joy!--</LINE>
+<LINE>What, are you both pleased?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Yes, if you love me, sir.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Even as my life, or blood that fosters it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>What, are you both agreed?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOTH</SPEAKER>
+<LINE>Yes, if it please your majesty.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>SIMONIDES</SPEAKER>
+<LINE>It pleaseth me so well, that I will see you wed;</LINE>
+<LINE>And then with what haste you can get you to bed.</LINE>
+</SPEECH>
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+</ACT>
+
+<ACT><TITLE>ACT III</TITLE>
+
+<PROLOGUE><TITLE>[Prologue]</TITLE>
+<STAGEDIR>Enter GOWER</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>GOWER</SPEAKER>
+<LINE>Now sleep y-slaked hath the rout;</LINE>
+<LINE>No din but snores the house about,</LINE>
+<LINE>Made louder by the o'er-fed breast</LINE>
+<LINE>Of this most pompous marriage-feast.</LINE>
+<LINE>The cat, with eyne of burning coal,</LINE>
+<LINE>Now crouches fore the mouse's hole;</LINE>
+<LINE>And crickets sing at the oven's mouth,</LINE>
+<LINE>E'er the blither for their drouth.</LINE>
+<LINE>Hymen hath brought the bride to bed.</LINE>
+<LINE>Where, by the loss of maidenhead,</LINE>
+<LINE>A babe is moulded. Be attent,</LINE>
+<LINE>And time that is so briefly spent</LINE>
+<LINE>With your fine fancies quaintly eche:</LINE>
+<LINE>What's dumb in show I'll plain with speech.</LINE>
+<SUBHEAD>DUMB SHOW.</SUBHEAD>
+<STAGEDIR>Enter, PERICLES and SIMONIDES at one door, with
+Attendants; a Messenger meets them, kneels, and
+gives PERICLES a letter: PERICLES shows it
+SIMONIDES; the Lords kneel to him. Then enter
+THAISA with child, with LYCHORIDA a nurse. The
+KING shows her the letter; she rejoices: she and
+PERICLES takes leave of her father, and depart with
+LYCHORIDA and their Attendants. Then exeunt
+SIMONIDES and the rest</STAGEDIR>
+<LINE>By many a dern and painful perch</LINE>
+<LINE>Of Pericles the careful search,</LINE>
+<LINE>By the four opposing coigns</LINE>
+<LINE>Which the world together joins,</LINE>
+<LINE>Is made with all due diligence</LINE>
+<LINE>That horse and sail and high expense</LINE>
+<LINE>Can stead the quest. At last from Tyre,</LINE>
+<LINE>Fame answering the most strange inquire,</LINE>
+<LINE>To the court of King Simonides</LINE>
+<LINE>Are letters brought, the tenor these:</LINE>
+<LINE>Antiochus and his daughter dead;</LINE>
+<LINE>The men of Tyrus on the head</LINE>
+<LINE>Of Helicanus would set on</LINE>
+<LINE>The crown of Tyre, but he will none:</LINE>
+<LINE>The mutiny he there hastes t' oppress;</LINE>
+<LINE>Says to 'em, if King Pericles</LINE>
+<LINE>Come not home in twice six moons,</LINE>
+<LINE>He, obedient to their dooms,</LINE>
+<LINE>Will take the crown. The sum of this,</LINE>
+<LINE>Brought hither to Pentapolis,</LINE>
+<LINE>Y-ravished the regions round,</LINE>
+<LINE>And every one with claps can sound,</LINE>
+<LINE>'Our heir-apparent is a king!</LINE>
+<LINE>Who dream'd, who thought of such a thing?'</LINE>
+<LINE>Brief, he must hence depart to Tyre:</LINE>
+<LINE>His queen with child makes her desire--</LINE>
+<LINE>Which who shall cross?--along to go:</LINE>
+<LINE>Omit we all their dole and woe:</LINE>
+<LINE>Lychorida, her nurse, she takes,</LINE>
+<LINE>And so to sea. Their vessel shakes</LINE>
+<LINE>On Neptune's billow; half the flood</LINE>
+<LINE>Hath their keel cut: but fortune's mood</LINE>
+<LINE>Varies again; the grisly north</LINE>
+<LINE>Disgorges such a tempest forth,</LINE>
+<LINE>That, as a duck for life that dives,</LINE>
+<LINE>So up and down the poor ship drives:</LINE>
+<LINE>The lady shrieks, and well-a-near</LINE>
+<LINE>Does fall in travail with her fear:</LINE>
+<LINE>And what ensues in this fell storm</LINE>
+<LINE>Shall for itself itself perform.</LINE>
+<LINE>I nill relate, action may</LINE>
+<LINE>Conveniently the rest convey;</LINE>
+<LINE>Which might not what by me is told.</LINE>
+<LINE>In your imagination hold</LINE>
+<LINE>This stage the ship, upon whose deck</LINE>
+<LINE>The sea-tost Pericles appears to speak.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+</PROLOGUE>
+
+<SCENE><TITLE>SCENE I</TITLE>
+<STAGEDIR>Enter PERICLES, on shipboard</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Thou god of this great vast, rebuke these surges,</LINE>
+<LINE>Which wash both heaven and hell; and thou, that hast</LINE>
+<LINE>Upon the winds command, bind them in brass,</LINE>
+<LINE>Having call'd them from the deep! O, still</LINE>
+<LINE>Thy deafening, dreadful thunders; gently quench</LINE>
+<LINE>Thy nimble, sulphurous flashes! O, how, Lychorida,</LINE>
+<LINE>How does my queen? Thou stormest venomously;</LINE>
+<LINE>Wilt thou spit all thyself? The seaman's whistle</LINE>
+<LINE>Is as a whisper in the ears of death,</LINE>
+<LINE>Unheard. Lychorida!--Lucina, O</LINE>
+<LINE>Divinest patroness, and midwife gentle</LINE>
+<LINE>To those that cry by night, convey thy deity</LINE>
+<LINE>Aboard our dancing boat; make swift the pangs</LINE>
+<LINE>Of my queen's travails!</LINE>
+<STAGEDIR>Enter LYCHORIDA, with an Infant</STAGEDIR>
+<LINE>Now, Lychorida!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYCHORIDA</SPEAKER>
+<LINE>Here is a thing too young for such a place,</LINE>
+<LINE>Who, if it had conceit, would die, as I</LINE>
+<LINE>Am like to do: take in your arms this piece</LINE>
+<LINE>Of your dead queen.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>How, how, Lychorida!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYCHORIDA</SPEAKER>
+<LINE>Patience, good sir; do not assist the storm.</LINE>
+<LINE>Here's all that is left living of your queen,</LINE>
+<LINE>A little daughter: for the sake of it,</LINE>
+<LINE>Be manly, and take comfort.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>O you gods!</LINE>
+<LINE>Why do you make us love your goodly gifts,</LINE>
+<LINE>And snatch them straight away? We here below</LINE>
+<LINE>Recall not what we give, and therein may</LINE>
+<LINE>Use honour with you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYCHORIDA</SPEAKER>
+<LINE>Patience, good sir,</LINE>
+<LINE>Even for this charge.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Now, mild may be thy life!</LINE>
+<LINE>For a more blustrous birth had never babe:</LINE>
+<LINE>Quiet and gentle thy conditions! for</LINE>
+<LINE>Thou art the rudeliest welcome to this world</LINE>
+<LINE>That ever was prince's child. Happy what follows!</LINE>
+<LINE>Thou hast as chiding a nativity</LINE>
+<LINE>As fire, air, water, earth, and heaven can make,</LINE>
+<LINE>To herald thee from the womb: even at the first</LINE>
+<LINE>Thy loss is more than can thy portage quit,</LINE>
+<LINE>With all thou canst find here. Now, the good gods</LINE>
+<LINE>Throw their best eyes upon't!</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter two Sailors</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Sailor</SPEAKER>
+<LINE>What courage, sir? God save you!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Courage enough: I do not fear the flaw;</LINE>
+<LINE>It hath done to me the worst. Yet, for the love</LINE>
+<LINE>Of this poor infant, this fresh-new sea-farer,</LINE>
+<LINE>I would it would be quiet.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Sailor</SPEAKER>
+<LINE>Slack the bolins there! Thou wilt not, wilt thou?</LINE>
+<LINE>Blow, and split thyself.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Sailor</SPEAKER>
+<LINE>But sea-room, an the brine and cloudy billow kiss</LINE>
+<LINE>the moon, I care not.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Sailor</SPEAKER>
+<LINE>Sir, your queen must overboard: the sea works high,</LINE>
+<LINE>the wind is loud, and will not lie till the ship be</LINE>
+<LINE>cleared of the dead.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>That's your superstition.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Sailor</SPEAKER>
+<LINE>Pardon us, sir; with us at sea it hath been still</LINE>
+<LINE>observed: and we are strong in custom. Therefore</LINE>
+<LINE>briefly yield her; for she must overboard straight.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>As you think meet. Most wretched queen!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYCHORIDA</SPEAKER>
+<LINE>Here she lies, sir.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>A terrible childbed hast thou had, my dear;</LINE>
+<LINE>No light, no fire: the unfriendly elements</LINE>
+<LINE>Forgot thee utterly: nor have I time</LINE>
+<LINE>To give thee hallow'd to thy grave, but straight</LINE>
+<LINE>Must cast thee, scarcely coffin'd, in the ooze;</LINE>
+<LINE>Where, for a monument upon thy bones,</LINE>
+<LINE>And e'er-remaining lamps, the belching whale</LINE>
+<LINE>And humming water must o'erwhelm thy corpse,</LINE>
+<LINE>Lying with simple shells. O Lychorida,</LINE>
+<LINE>Bid Nestor bring me spices, ink and paper,</LINE>
+<LINE>My casket and my jewels; and bid Nicander</LINE>
+<LINE>Bring me the satin coffer: lay the babe</LINE>
+<LINE>Upon the pillow: hie thee, whiles I say</LINE>
+<LINE>A priestly farewell to her: suddenly, woman.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit LYCHORIDA</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Second Sailor</SPEAKER>
+<LINE>Sir, we have a chest beneath the hatches, caulked</LINE>
+<LINE>and bitumed ready.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I thank thee. Mariner, say what coast is this?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Sailor</SPEAKER>
+<LINE>We are near Tarsus.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Thither, gentle mariner.</LINE>
+<LINE>Alter thy course for Tyre. When canst thou reach it?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Sailor</SPEAKER>
+<LINE>By break of day, if the wind cease.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>O, make for Tarsus!</LINE>
+<LINE>There will I visit Cleon, for the babe</LINE>
+<LINE>Cannot hold out to Tyrus: there I'll leave it</LINE>
+<LINE>At careful nursing. Go thy ways, good mariner:</LINE>
+<LINE>I'll bring the body presently.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE II.  Ephesus. A room in CERIMON's house.</TITLE>
+<STAGEDIR>Enter CERIMON, with a Servant, and some Persons who
+have been shipwrecked</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Philemon, ho!</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter PHILEMON</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PHILEMON</SPEAKER>
+<LINE>Doth my lord call?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Get fire and meat for these poor men:</LINE>
+<LINE>'T has been a turbulent and stormy night.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Servant</SPEAKER>
+<LINE>I have been in many; but such a night as this,</LINE>
+<LINE>Till now, I ne'er endured.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Your master will be dead ere you return;</LINE>
+<LINE>There's nothing can be minister'd to nature</LINE>
+<LINE>That can recover him.</LINE>
+<STAGEDIR>To PHILEMON</STAGEDIR>
+<LINE>Give this to the 'pothecary,</LINE>
+<LINE>And tell me how it works.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt all but CERIMON</STAGEDIR>
+<STAGEDIR>Enter two Gentlemen</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>Good morrow.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>Good morrow to your lordship.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Gentlemen,</LINE>
+<LINE>Why do you stir so early?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>Sir,</LINE>
+<LINE>Our lodgings, standing bleak upon the sea,</LINE>
+<LINE>Shook as the earth did quake;</LINE>
+<LINE>The very principals did seem to rend,</LINE>
+<LINE>And all-to topple: pure surprise and fear</LINE>
+<LINE>Made me to quit the house.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>That is the cause we trouble you so early;</LINE>
+<LINE>'Tis not our husbandry.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>O, you say well.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>But I much marvel that your lordship, having</LINE>
+<LINE>Rich tire about you, should at these early hours</LINE>
+<LINE>Shake off the golden slumber of repose.</LINE>
+<LINE>'Tis most strange,</LINE>
+<LINE>Nature should be so conversant with pain,</LINE>
+<LINE>Being thereto not compell'd.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>I hold it ever,</LINE>
+<LINE>Virtue and cunning were endowments greater</LINE>
+<LINE>Than nobleness and riches: careless heirs</LINE>
+<LINE>May the two latter darken and expend;</LINE>
+<LINE>But immortality attends the former.</LINE>
+<LINE>Making a man a god. 'Tis known, I ever</LINE>
+<LINE>Have studied physic, through which secret art,</LINE>
+<LINE>By turning o'er authorities, I have,</LINE>
+<LINE>Together with my practise, made familiar</LINE>
+<LINE>To me and to my aid the blest infusions</LINE>
+<LINE>That dwell in vegetives, in metals, stones;</LINE>
+<LINE>And I can speak of the disturbances</LINE>
+<LINE>That nature works, and of her cures; which doth give me</LINE>
+<LINE>A more content in course of true delight</LINE>
+<LINE>Than to be thirsty after tottering honour,</LINE>
+<LINE>Or tie my treasure up in silken bags,</LINE>
+<LINE>To please the fool and death.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>Your honour has through Ephesus pour'd forth</LINE>
+<LINE>Your charity, and hundreds call themselves</LINE>
+<LINE>Your creatures, who by you have been restored:</LINE>
+<LINE>And not your knowledge, your personal pain, but even</LINE>
+<LINE>Your purse, still open, hath built Lord Cerimon</LINE>
+<LINE>Such strong renown as time shall ne'er decay.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter two or three Servants with a chest</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Servant</SPEAKER>
+<LINE>So; lift there.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>What is that?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Servant</SPEAKER>
+<LINE>Sir, even now</LINE>
+<LINE>Did the sea toss upon our shore this chest:</LINE>
+<LINE>'Tis of some wreck.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Set 't down, let's look upon't.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>'Tis like a coffin, sir.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Whate'er it be,</LINE>
+<LINE>'Tis wondrous heavy. Wrench it open straight:</LINE>
+<LINE>If the sea's stomach be o'ercharged with gold,</LINE>
+<LINE>'Tis a good constraint of fortune it belches upon us.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>'Tis so, my lord.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>How close 'tis caulk'd and bitumed!</LINE>
+<LINE>Did the sea cast it up?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Servant</SPEAKER>
+<LINE>I never saw so huge a billow, sir,</LINE>
+<LINE>As toss'd it upon shore.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Wrench it open;</LINE>
+<LINE>Soft! it smells most sweetly in my sense.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>A delicate odour.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>As ever hit my nostril. So, up with it.</LINE>
+<LINE>O you most potent gods! what's here? a corse!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>Most strange!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Shrouded in cloth of state; balm'd and entreasured</LINE>
+<LINE>With full bags of spices! A passport too!</LINE>
+<LINE>Apollo, perfect me in the characters!</LINE>
+<STAGEDIR>Reads from a scroll</STAGEDIR>
+<LINE>'Here I give to understand,</LINE>
+<LINE>If e'er this coffin drive a-land,</LINE>
+<LINE>I, King Pericles, have lost</LINE>
+<LINE>This queen, worth all our mundane cost.</LINE>
+<LINE>Who finds her, give her burying;</LINE>
+<LINE>She was the daughter of a king:</LINE>
+<LINE>Besides this treasure for a fee,</LINE>
+<LINE>The gods requite his charity!'</LINE>
+<LINE>If thou livest, Pericles, thou hast a heart</LINE>
+<LINE>That even cracks for woe! This chanced tonight.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>Most likely, sir.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Nay, certainly to-night;</LINE>
+<LINE>For look how fresh she looks! They were too rough</LINE>
+<LINE>That threw her in the sea. Make a fire within:</LINE>
+<LINE>Fetch hither all my boxes in my closet.</LINE>
+<STAGEDIR>Exit a Servant</STAGEDIR>
+<LINE>Death may usurp on nature many hours,</LINE>
+<LINE>And yet the fire of life kindle again</LINE>
+<LINE>The o'erpress'd spirits. I heard of an Egyptian</LINE>
+<LINE>That had nine hours lien dead,</LINE>
+<LINE>Who was by good appliance recovered.</LINE>
+<STAGEDIR>Re-enter a Servant, with boxes, napkins, and fire</STAGEDIR>
+<LINE>Well said, well said; the fire and cloths.</LINE>
+<LINE>The rough and woeful music that we have,</LINE>
+<LINE>Cause it to sound, beseech you.</LINE>
+<LINE>The viol once more: how thou stirr'st, thou block!</LINE>
+<LINE>The music there!--I pray you, give her air.</LINE>
+<LINE>Gentlemen.</LINE>
+<LINE>This queen will live: nature awakes; a warmth</LINE>
+<LINE>Breathes out of her: she hath not been entranced</LINE>
+<LINE>Above five hours: see how she gins to blow</LINE>
+<LINE>Into life's flower again!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>The heavens,</LINE>
+<LINE>Through you, increase our wonder and set up</LINE>
+<LINE>Your fame forever.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>She is alive; behold,</LINE>
+<LINE>Her eyelids, cases to those heavenly jewels</LINE>
+<LINE>Which Pericles hath lost,</LINE>
+<LINE>Begin to part their fringes of bright gold;</LINE>
+<LINE>The diamonds of a most praised water</LINE>
+<LINE>Do appear, to make the world twice rich. Live,</LINE>
+<LINE>And make us weep to hear your fate, fair creature,</LINE>
+<LINE>Rare as you seem to be.</LINE>
+</SPEECH>
+
+<STAGEDIR>She moves</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>O dear Diana,</LINE>
+<LINE>Where am I? Where's my lord? What world is this?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>Is not this strange?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>Most rare.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Hush, my gentle neighbours!</LINE>
+<LINE>Lend me your hands; to the next chamber bear her.</LINE>
+<LINE>Get linen: now this matter must be look'd to,</LINE>
+<LINE>For her relapse is mortal. Come, come;</LINE>
+<LINE>And AEsculapius guide us!</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt, carrying her away</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE III.  Tarsus. A room in CLEON's house.</TITLE>
+<STAGEDIR>Enter PERICLES, CLEON, DIONYZA, and LYCHORIDA with
+MARINA in her arms</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Most honour'd Cleon, I must needs be gone;</LINE>
+<LINE>My twelve months are expired, and Tyrus stands</LINE>
+<LINE>In a litigious peace. You, and your lady,</LINE>
+<LINE>Take from my heart all thankfulness! The gods</LINE>
+<LINE>Make up the rest upon you!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>Your shafts of fortune, though they hurt you mortally,</LINE>
+<LINE>Yet glance full wanderingly on us.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>O your sweet queen!</LINE>
+<LINE>That the strict fates had pleased you had brought her hither,</LINE>
+<LINE>To have bless'd mine eyes with her!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>We cannot but obey</LINE>
+<LINE>The powers above us. Could I rage and roar</LINE>
+<LINE>As doth the sea she lies in, yet the end</LINE>
+<LINE>Must be as 'tis. My gentle babe Marina, whom,</LINE>
+<LINE>For she was born at sea, I have named so, here</LINE>
+<LINE>I charge your charity withal, leaving her</LINE>
+<LINE>The infant of your care; beseeching you</LINE>
+<LINE>To give her princely training, that she may be</LINE>
+<LINE>Manner'd as she is born.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>Fear not, my lord, but think</LINE>
+<LINE>Your grace, that fed my country with your corn,</LINE>
+<LINE>For which the people's prayers still fall upon you,</LINE>
+<LINE>Must in your child be thought on. If neglection</LINE>
+<LINE>Should therein make me vile, the common body,</LINE>
+<LINE>By you relieved, would force me to my duty:</LINE>
+<LINE>But if to that my nature need a spur,</LINE>
+<LINE>The gods revenge it upon me and mine,</LINE>
+<LINE>To the end of generation!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I believe you;</LINE>
+<LINE>Your honour and your goodness teach me to't,</LINE>
+<LINE>Without your vows. Till she be married, madam,</LINE>
+<LINE>By bright Diana, whom we honour, all</LINE>
+<LINE>Unscissor'd shall this hair of mine remain,</LINE>
+<LINE>Though I show ill in't. So I take my leave.</LINE>
+<LINE>Good madam, make me blessed in your care</LINE>
+<LINE>In bringing up my child.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>I have one myself,</LINE>
+<LINE>Who shall not be more dear to my respect</LINE>
+<LINE>Than yours, my lord.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Madam, my thanks and prayers.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>We'll bring your grace e'en to the edge o' the shore,</LINE>
+<LINE>Then give you up to the mask'd Neptune and</LINE>
+<LINE>The gentlest winds of heaven.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I will embrace</LINE>
+<LINE>Your offer. Come, dearest madam. O, no tears,</LINE>
+<LINE>Lychorida, no tears:</LINE>
+<LINE>Look to your little mistress, on whose grace</LINE>
+<LINE>You may depend hereafter. Come, my lord.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE IV.  Ephesus. A room in CERIMON's house.</TITLE>
+<STAGEDIR>Enter CERIMON and THAISA</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Madam, this letter, and some certain jewels,</LINE>
+<LINE>Lay with you in your coffer: which are now</LINE>
+<LINE>At your command. Know you the character?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>It is my lord's.</LINE>
+<LINE>That I was shipp'd at sea, I well remember,</LINE>
+<LINE>Even on my eaning time; but whether there</LINE>
+<LINE>Deliver'd, by the holy gods,</LINE>
+<LINE>I cannot rightly say. But since King Pericles,</LINE>
+<LINE>My wedded lord, I ne'er shall see again,</LINE>
+<LINE>A vestal livery will I take me to,</LINE>
+<LINE>And never more have joy.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Madam, if this you purpose as ye speak,</LINE>
+<LINE>Diana's temple is not distant far,</LINE>
+<LINE>Where you may abide till your date expire.</LINE>
+<LINE>Moreover, if you please, a niece of mine</LINE>
+<LINE>Shall there attend you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>My recompense is thanks, that's all;</LINE>
+<LINE>Yet my good will is great, though the gift small.</LINE>
+</SPEECH>
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+</ACT>
+
+<ACT><TITLE>ACT IV</TITLE>
+
+<PROLOGUE><TITLE>[Prologue]</TITLE>
+<STAGEDIR>Enter GOWER</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>GOWER</SPEAKER>
+<LINE>Imagine Pericles arrived at Tyre,</LINE>
+<LINE>Welcomed and settled to his own desire.</LINE>
+<LINE>His woeful queen we leave at Ephesus,</LINE>
+<LINE>Unto Diana there a votaress.</LINE>
+<LINE>Now to Marina bend your mind,</LINE>
+<LINE>Whom our fast-growing scene must find</LINE>
+<LINE>At Tarsus, and by Cleon train'd</LINE>
+<LINE>In music, letters; who hath gain'd</LINE>
+<LINE>Of education all the grace,</LINE>
+<LINE>Which makes her both the heart and place</LINE>
+<LINE>Of general wonder. But, alack,</LINE>
+<LINE>That monster envy, oft the wrack</LINE>
+<LINE>Of earned praise, Marina's life</LINE>
+<LINE>Seeks to take off by treason's knife.</LINE>
+<LINE>And in this kind hath our Cleon</LINE>
+<LINE>One daughter, and a wench full grown,</LINE>
+<LINE>Even ripe for marriage-rite; this maid</LINE>
+<LINE>Hight Philoten: and it is said</LINE>
+<LINE>For certain in our story, she</LINE>
+<LINE>Would ever with Marina be:</LINE>
+<LINE>Be't when she weaved the sleided silk</LINE>
+<LINE>With fingers long, small, white as milk;</LINE>
+<LINE>Or when she would with sharp needle wound</LINE>
+<LINE>The cambric, which she made more sound</LINE>
+<LINE>By hurting it; or when to the lute</LINE>
+<LINE>She sung, and made the night-bird mute,</LINE>
+<LINE>That still records with moan; or when</LINE>
+<LINE>She would with rich and constant pen</LINE>
+<LINE>Vail to her mistress Dian; still</LINE>
+<LINE>This Philoten contends in skill</LINE>
+<LINE>With absolute Marina: so</LINE>
+<LINE>With the dove of Paphos might the crow</LINE>
+<LINE>Vie feathers white. Marina gets</LINE>
+<LINE>All praises, which are paid as debts,</LINE>
+<LINE>And not as given. This so darks</LINE>
+<LINE>In Philoten all graceful marks,</LINE>
+<LINE>That Cleon's wife, with envy rare,</LINE>
+<LINE>A present murderer does prepare</LINE>
+<LINE>For good Marina, that her daughter</LINE>
+<LINE>Might stand peerless by this slaughter.</LINE>
+<LINE>The sooner her vile thoughts to stead,</LINE>
+<LINE>Lychorida, our nurse, is dead:</LINE>
+<LINE>And cursed Dionyza hath</LINE>
+<LINE>The pregnant instrument of wrath</LINE>
+<LINE>Prest for this blow. The unborn event</LINE>
+<LINE>I do commend to your content:</LINE>
+<LINE>Only I carry winged time</LINE>
+<LINE>Post on the lame feet of my rhyme;</LINE>
+<LINE>Which never could I so convey,</LINE>
+<LINE>Unless your thoughts went on my way.</LINE>
+<LINE>Dionyza does appear,</LINE>
+<LINE>With Leonine, a murderer.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+</PROLOGUE>
+
+<SCENE><TITLE>SCENE I.  Tarsus. An open place near the sea-shore.</TITLE>
+<STAGEDIR>Enter DIONYZA and LEONINE</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>Thy oath remember; thou hast sworn to do't:</LINE>
+<LINE>'Tis but a blow, which never shall be known.</LINE>
+<LINE>Thou canst not do a thing in the world so soon,</LINE>
+<LINE>To yield thee so much profit. Let not conscience,</LINE>
+<LINE>Which is but cold, inflaming love i' thy bosom,</LINE>
+<LINE>Inflame too nicely; nor let pity, which</LINE>
+<LINE>Even women have cast off, melt thee, but be</LINE>
+<LINE>A soldier to thy purpose.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>I will do't; but yet she is a goodly creature.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>The fitter, then, the gods should have her. Here</LINE>
+<LINE>she comes weeping for her only mistress' death.</LINE>
+<LINE>Thou art resolved?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>I am resolved.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter MARINA, with a basket of flowers</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>No, I will rob Tellus of her weed,</LINE>
+<LINE>To strew thy green with flowers: the yellows, blues,</LINE>
+<LINE>The purple violets, and marigolds,</LINE>
+<LINE>Shall as a carpet hang upon thy grave,</LINE>
+<LINE>While summer-days do last. Ay me! poor maid,</LINE>
+<LINE>Born in a tempest, when my mother died,</LINE>
+<LINE>This world to me is like a lasting storm,</LINE>
+<LINE>Whirring me from my friends.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>How now, Marina! why do you keep alone?</LINE>
+<LINE>How chance my daughter is not with you? Do not</LINE>
+<LINE>Consume your blood with sorrowing: you have</LINE>
+<LINE>A nurse of me. Lord, how your favour's changed</LINE>
+<LINE>With this unprofitable woe!</LINE>
+<LINE>Come, give me your flowers, ere the sea mar it.</LINE>
+<LINE>Walk with Leonine; the air is quick there,</LINE>
+<LINE>And it pierces and sharpens the stomach. Come,</LINE>
+<LINE>Leonine, take her by the arm, walk with her.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>No, I pray you;</LINE>
+<LINE>I'll not bereave you of your servant.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>Come, come;</LINE>
+<LINE>I love the king your father, and yourself,</LINE>
+<LINE>With more than foreign heart. We every day</LINE>
+<LINE>Expect him here: when he shall come and find</LINE>
+<LINE>Our paragon to all reports thus blasted,</LINE>
+<LINE>He will repent the breadth of his great voyage;</LINE>
+<LINE>Blame both my lord and me, that we have taken</LINE>
+<LINE>No care to your best courses. Go, I pray you,</LINE>
+<LINE>Walk, and be cheerful once again; reserve</LINE>
+<LINE>That excellent complexion, which did steal</LINE>
+<LINE>The eyes of young and old. Care not for me</LINE>
+<LINE>I can go home alone.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Well, I will go;</LINE>
+<LINE>But yet I have no desire to it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>Come, come, I know 'tis good for you.</LINE>
+<LINE>Walk half an hour, Leonine, at the least:</LINE>
+<LINE>Remember what I have said.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>I warrant you, madam.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>I'll leave you, my sweet lady, for a while:</LINE>
+<LINE>Pray, walk softly, do not heat your blood:</LINE>
+<LINE>What! I must have a care of you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>My thanks, sweet madam.</LINE>
+<STAGEDIR>Exit DIONYZA</STAGEDIR>
+<LINE>Is this wind westerly that blows?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>South-west.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>When I was born, the wind was north.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>Was't so?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>My father, as nurse said, did never fear,</LINE>
+<LINE>But cried 'Good seaman!' to the sailors, galling</LINE>
+<LINE>His kingly hands, haling ropes;</LINE>
+<LINE>And, clasping to the mast, endured a sea</LINE>
+<LINE>That almost burst the deck.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>When was this?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>When I was born:</LINE>
+<LINE>Never was waves nor wind more violent;</LINE>
+<LINE>And from the ladder-tackle washes off</LINE>
+<LINE>A canvas-climber. 'Ha!' says one, 'wilt out?'</LINE>
+<LINE>And with a dropping industry they skip</LINE>
+<LINE>From stem to stern: the boatswain whistles, and</LINE>
+<LINE>The master calls, and trebles their confusion.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>Come, say your prayers.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>What mean you?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>If you require a little space for prayer,</LINE>
+<LINE>I grant it: pray; but be not tedious,</LINE>
+<LINE>For the gods are quick of ear, and I am sworn</LINE>
+<LINE>To do my work with haste.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Why will you kill me?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>To satisfy my lady.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Why would she have me kill'd?</LINE>
+<LINE>Now, as I can remember, by my troth,</LINE>
+<LINE>I never did her hurt in all my life:</LINE>
+<LINE>I never spake bad word, nor did ill turn</LINE>
+<LINE>To any living creature: believe me, la,</LINE>
+<LINE>I never kill'd a mouse, nor hurt a fly:</LINE>
+<LINE>I trod upon a worm against my will,</LINE>
+<LINE>But I wept for it. How have I offended,</LINE>
+<LINE>Wherein my death might yield her any profit,</LINE>
+<LINE>Or my life imply her any danger?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>My commission</LINE>
+<LINE>Is not to reason of the deed, but do it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>You will not do't for all the world, I hope.</LINE>
+<LINE>You are well favour'd, and your looks foreshow</LINE>
+<LINE>You have a gentle heart. I saw you lately,</LINE>
+<LINE>When you caught hurt in parting two that fought:</LINE>
+<LINE>Good sooth, it show'd well in you: do so now:</LINE>
+<LINE>Your lady seeks my life; come you between,</LINE>
+<LINE>And save poor me, the weaker.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>I am sworn,</LINE>
+<LINE>And will dispatch.</LINE>
+</SPEECH>
+
+<STAGEDIR>He seizes her</STAGEDIR>
+<STAGEDIR>Enter Pirates</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Pirate</SPEAKER>
+<LINE>Hold, villain!</LINE>
+</SPEECH>
+
+<STAGEDIR>LEONINE runs away</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Second Pirate</SPEAKER>
+<LINE>A prize! a prize!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Third Pirate</SPEAKER>
+<LINE>Half-part, mates, half-part.</LINE>
+<LINE>Come, let's have her aboard suddenly.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt Pirates with MARINA</STAGEDIR>
+<STAGEDIR>Re-enter LEONINE</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>LEONINE</SPEAKER>
+<LINE>These roguing thieves serve the great pirate Valdes;</LINE>
+<LINE>And they have seized Marina. Let her go:</LINE>
+<LINE>There's no hope she will return. I'll swear</LINE>
+<LINE>she's dead,</LINE>
+<LINE>And thrown into the sea. But I'll see further:</LINE>
+<LINE>Perhaps they will but please themselves upon her,</LINE>
+<LINE>Not carry her aboard. If she remain,</LINE>
+<LINE>Whom they have ravish'd must by me be slain.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE II.  Mytilene. A room in a brothel.</TITLE>
+<STAGEDIR>Enter Pandar, Bawd, and BOULT</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>Boult!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Sir?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>Search the market narrowly; Mytilene is full of</LINE>
+<LINE>gallants. We lost too much money this mart by being</LINE>
+<LINE>too wenchless.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>We were never so much out of creatures. We have but</LINE>
+<LINE>poor three, and they can do no more than they can</LINE>
+<LINE>do; and they with continual action are even as good as rotten.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>Therefore let's have fresh ones, whate'er we pay for</LINE>
+<LINE>them. If there be not a conscience to be used in</LINE>
+<LINE>every trade, we shall never prosper.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Thou sayest true: 'tis not our bringing up of poor</LINE>
+<LINE>bastards,--as, I think, I have brought up some eleven--</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Ay, to eleven; and brought them down again. But</LINE>
+<LINE>shall I search the market?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>What else, man? The stuff we have, a strong wind</LINE>
+<LINE>will blow it to pieces, they are so pitifully sodden.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>Thou sayest true; they're too unwholesome, o'</LINE>
+<LINE>conscience. The poor Transylvanian is dead, that</LINE>
+<LINE>lay with the little baggage.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Ay, she quickly pooped him; she made him roast-meat</LINE>
+<LINE>for worms. But I'll go search the market.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>Three or four thousand chequins were as pretty a</LINE>
+<LINE>proportion to live quietly, and so give over.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Why to give over, I pray you? is it a shame to get</LINE>
+<LINE>when we are old?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>O, our credit comes not in like the commodity, nor</LINE>
+<LINE>the commodity wages not with the danger: therefore,</LINE>
+<LINE>if in our youths we could pick up some pretty</LINE>
+<LINE>estate, 'twere not amiss to keep our door hatched.</LINE>
+<LINE>Besides, the sore terms we stand upon with the gods</LINE>
+<LINE>will be strong with us for giving over.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Come, other sorts offend as well as we.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>As well as we! ay, and better too; we offend worse.</LINE>
+<LINE>Neither is our profession any trade; it's no</LINE>
+<LINE>calling. But here comes Boult.</LINE>
+</SPEECH>
+
+<STAGEDIR>Re-enter BOULT, with the Pirates and MARINA</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE><STAGEDIR>To MARINA</STAGEDIR>  Come your ways. My masters, you say</LINE>
+<LINE>she's a virgin?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Pirate</SPEAKER>
+<LINE>O, sir, we doubt it not.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Master, I have gone through for this piece, you see:</LINE>
+<LINE>if you like her, so; if not, I have lost my earnest.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Boult, has she any qualities?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>She has a good face, speaks well, and has excellent</LINE>
+<LINE>good clothes: there's no further necessity of</LINE>
+<LINE>qualities can make her be refused.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>What's her price, Boult?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>I cannot be bated one doit of a thousand pieces.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>Well, follow me, my masters, you shall have your</LINE>
+<LINE>money presently. Wife, take her in; instruct her</LINE>
+<LINE>what she has to do, that she may not be raw in her</LINE>
+<LINE>entertainment.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt Pandar and Pirates</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Boult, take you the marks of her, the colour of her</LINE>
+<LINE>hair, complexion, height, age, with warrant of her</LINE>
+<LINE>virginity; and cry 'He that will give most shall</LINE>
+<LINE>have her first.' Such a maidenhead were no cheap</LINE>
+<LINE>thing, if men were as they have been. Get this done</LINE>
+<LINE>as I command you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Performance shall follow.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Alack that Leonine was so slack, so slow!</LINE>
+<LINE>He should have struck, not spoke; or that these pirates,</LINE>
+<LINE>Not enough barbarous, had not o'erboard thrown me</LINE>
+<LINE>For to seek my mother!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Why lament you, pretty one?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>That I am pretty.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Come, the gods have done their part in you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>I accuse them not.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>You are light into my hands, where you are like to live.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>The more my fault</LINE>
+<LINE>To scape his hands where I was like to die.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Ay, and you shall live in pleasure.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>No.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Yes, indeed shall you, and taste gentlemen of all</LINE>
+<LINE>fashions: you shall fare well; you shall have the</LINE>
+<LINE>difference of all complexions. What! do you stop your ears?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Are you a woman?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>What would you have me be, an I be not a woman?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>An honest woman, or not a woman.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Marry, whip thee, gosling: I think I shall have</LINE>
+<LINE>something to do with you. Come, you're a young</LINE>
+<LINE>foolish sapling, and must be bowed as I would have</LINE>
+<LINE>you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>The gods defend me!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>If it please the gods to defend you by men, then men</LINE>
+<LINE>must comfort you, men must feed you, men must stir</LINE>
+<LINE>you up. Boult's returned.</LINE>
+<STAGEDIR>Re-enter BOULT</STAGEDIR>
+<LINE>Now, sir, hast thou cried her through the market?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>I have cried her almost to the number of her hairs;</LINE>
+<LINE>I have drawn her picture with my voice.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>And I prithee tell me, how dost thou find the</LINE>
+<LINE>inclination of the people, especially of the younger sort?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>'Faith, they listened to me as they would have</LINE>
+<LINE>hearkened to their father's testament. There was a</LINE>
+<LINE>Spaniard's mouth so watered, that he went to bed to</LINE>
+<LINE>her very description.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>We shall have him here to-morrow with his best ruff on.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>To-night, to-night. But, mistress, do you know the</LINE>
+<LINE>French knight that cowers i' the hams?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Who, Monsieur Veroles?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Ay, he: he offered to cut a caper at the</LINE>
+<LINE>proclamation; but he made a groan at it, and swore</LINE>
+<LINE>he would see her to-morrow.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Well, well; as for him, he brought his disease</LINE>
+<LINE>hither: here he does but repair it. I know he will</LINE>
+<LINE>come in our shadow, to scatter his crowns in the</LINE>
+<LINE>sun.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Well, if we had of every nation a traveller, we</LINE>
+<LINE>should lodge them with this sign.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE><STAGEDIR>To MARINA</STAGEDIR>  Pray you, come hither awhile. You</LINE>
+<LINE>have fortunes coming upon you. Mark me: you must</LINE>
+<LINE>seem to do that fearfully which you commit</LINE>
+<LINE>willingly, despise profit where you have most gain.</LINE>
+<LINE>To weep that you live as ye do makes pity in your</LINE>
+<LINE>lovers: seldom but that pity begets you a good</LINE>
+<LINE>opinion, and that opinion a mere profit.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>I understand you not.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>O, take her home, mistress, take her home: these</LINE>
+<LINE>blushes of hers must be quenched with some present practise.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Thou sayest true, i' faith, so they must; for your</LINE>
+<LINE>bride goes to that with shame which is her way to go</LINE>
+<LINE>with warrant.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>'Faith, some do, and some do not. But, mistress, if</LINE>
+<LINE>I have bargained for the joint,--</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Thou mayst cut a morsel off the spit.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>I may so.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Who should deny it? Come, young one, I like the</LINE>
+<LINE>manner of your garments well.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Ay, by my faith, they shall not be changed yet.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Boult, spend thou that in the town: report what a</LINE>
+<LINE>sojourner we have; you'll lose nothing by custom.</LINE>
+<LINE>When nature flamed this piece, she meant thee a good</LINE>
+<LINE>turn; therefore say what a paragon she is, and thou</LINE>
+<LINE>hast the harvest out of thine own report.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>I warrant you, mistress, thunder shall not so awake</LINE>
+<LINE>the beds of eels as my giving out her beauty stir up</LINE>
+<LINE>the lewdly-inclined. I'll bring home some to-night.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Come your ways; follow me.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>If fires be hot, knives sharp, or waters deep,</LINE>
+<LINE>Untied I still my virgin knot will keep.</LINE>
+<LINE>Diana, aid my purpose!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>What have we to do with Diana? Pray you, will you go with us?</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE III.  Tarsus. A room in CLEON's house.</TITLE>
+<STAGEDIR>Enter CLEON and DIONYZA</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>Why, are you foolish? Can it be undone?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>O Dionyza, such a piece of slaughter</LINE>
+<LINE>The sun and moon ne'er look'd upon!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>I think</LINE>
+<LINE>You'll turn a child again.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>Were I chief lord of all this spacious world,</LINE>
+<LINE>I'ld give it to undo the deed. O lady,</LINE>
+<LINE>Much less in blood than virtue, yet a princess</LINE>
+<LINE>To equal any single crown o' the earth</LINE>
+<LINE>I' the justice of compare! O villain Leonine!</LINE>
+<LINE>Whom thou hast poison'd too:</LINE>
+<LINE>If thou hadst drunk to him, 't had been a kindness</LINE>
+<LINE>Becoming well thy fact: what canst thou say</LINE>
+<LINE>When noble Pericles shall demand his child?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>That she is dead. Nurses are not the fates,</LINE>
+<LINE>To foster it, nor ever to preserve.</LINE>
+<LINE>She died at night; I'll say so. Who can cross it?</LINE>
+<LINE>Unless you play the pious innocent,</LINE>
+<LINE>And for an honest attribute cry out</LINE>
+<LINE>'She died by foul play.'</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>O, go to. Well, well,</LINE>
+<LINE>Of all the faults beneath the heavens, the gods</LINE>
+<LINE>Do like this worst.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>Be one of those that think</LINE>
+<LINE>The petty wrens of Tarsus will fly hence,</LINE>
+<LINE>And open this to Pericles. I do shame</LINE>
+<LINE>To think of what a noble strain you are,</LINE>
+<LINE>And of how coward a spirit.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>To such proceeding</LINE>
+<LINE>Who ever but his approbation added,</LINE>
+<LINE>Though not his prime consent, he did not flow</LINE>
+<LINE>From honourable sources.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>Be it so, then:</LINE>
+<LINE>Yet none does know, but you, how she came dead,</LINE>
+<LINE>Nor none can know, Leonine being gone.</LINE>
+<LINE>She did disdain my child, and stood between</LINE>
+<LINE>Her and her fortunes: none would look on her,</LINE>
+<LINE>But cast their gazes on Marina's face;</LINE>
+<LINE>Whilst ours was blurted at and held a malkin</LINE>
+<LINE>Not worth the time of day. It pierced me through;</LINE>
+<LINE>And though you call my course unnatural,</LINE>
+<LINE>You not your child well loving, yet I find</LINE>
+<LINE>It greets me as an enterprise of kindness</LINE>
+<LINE>Perform'd to your sole daughter.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>Heavens forgive it!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>And as for Pericles,</LINE>
+<LINE>What should he say? We wept after her hearse,</LINE>
+<LINE>And yet we mourn: her monument</LINE>
+<LINE>Is almost finish'd, and her epitaphs</LINE>
+<LINE>In glittering golden characters express</LINE>
+<LINE>A general praise to her, and care in us</LINE>
+<LINE>At whose expense 'tis done.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CLEON</SPEAKER>
+<LINE>Thou art like the harpy,</LINE>
+<LINE>Which, to betray, dost, with thine angel's face,</LINE>
+<LINE>Seize with thine eagle's talons.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>DIONYZA</SPEAKER>
+<LINE>You are like one that superstitiously</LINE>
+<LINE>Doth swear to the gods that winter kills the flies:</LINE>
+<LINE>But yet I know you'll do as I advise.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE IV</TITLE>
+
+<STAGEDIR>Enter GOWER, before the monument of MARINA at Tarsus</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>GOWER</SPEAKER>
+<LINE>Thus time we waste, and longest leagues make short;</LINE>
+<LINE>Sail seas in cockles, have an wish but for't;</LINE>
+<LINE>Making, to take your imagination,</LINE>
+<LINE>From bourn to bourn, region to region.</LINE>
+<LINE>By you being pardon'd, we commit no crime</LINE>
+<LINE>To use one language in each several clime</LINE>
+<LINE>Where our scenes seem to live. I do beseech you</LINE>
+<LINE>To learn of me, who stand i' the gaps to teach you,</LINE>
+<LINE>The stages of our story. Pericles</LINE>
+<LINE>Is now again thwarting the wayward seas,</LINE>
+<LINE>Attended on by many a lord and knight.</LINE>
+<LINE>To see his daughter, all his life's delight.</LINE>
+<LINE>Old Escanes, whom Helicanus late</LINE>
+<LINE>Advanced in time to great and high estate,</LINE>
+<LINE>Is left to govern. Bear you it in mind,</LINE>
+<LINE>Old Helicanus goes along behind.</LINE>
+<LINE>Well-sailing ships and bounteous winds have brought</LINE>
+<LINE>This king to Tarsus,--think his pilot thought;</LINE>
+<LINE>So with his steerage shall your thoughts grow on,--</LINE>
+<LINE>To fetch his daughter home, who first is gone.</LINE>
+<LINE>Like motes and shadows see them move awhile;</LINE>
+<LINE>Your ears unto your eyes I'll reconcile.</LINE>
+<SUBHEAD>DUMB SHOW.</SUBHEAD>
+<STAGEDIR>Enter PERICLES, at one door, with all his train;
+CLEON and DIONYZA, at the other. CLEON shows
+PERICLES the tomb; whereat PERICLES makes
+lamentation, puts on sackcloth, and in a mighty
+passion departs. Then exeunt CLEON and DIONYZA</STAGEDIR>
+<LINE>See how belief may suffer by foul show!</LINE>
+<LINE>This borrow'd passion stands for true old woe;</LINE>
+<LINE>And Pericles, in sorrow all devour'd,</LINE>
+<LINE>With sighs shot through, and biggest tears</LINE>
+<LINE>o'ershower'd,</LINE>
+<LINE>Leaves Tarsus and again embarks. He swears</LINE>
+<LINE>Never to wash his face, nor cut his hairs:</LINE>
+<LINE>He puts on sackcloth, and to sea. He bears</LINE>
+<LINE>A tempest, which his mortal vessel tears,</LINE>
+<LINE>And yet he rides it out. Now please you wit.</LINE>
+<LINE>The epitaph is for Marina writ</LINE>
+<LINE>By wicked Dionyza.</LINE>
+<STAGEDIR>Reads the inscription on MARINA's monument</STAGEDIR>
+<LINE>'The fairest, sweet'st, and best lies here,</LINE>
+<LINE>Who wither'd in her spring of year.</LINE>
+<LINE>She was of Tyrus the king's daughter,</LINE>
+<LINE>On whom foul death hath made this slaughter;</LINE>
+<LINE>Marina was she call'd; and at her birth,</LINE>
+<LINE>Thetis, being proud, swallow'd some part o' the earth:</LINE>
+<LINE>Therefore the earth, fearing to be o'erflow'd,</LINE>
+<LINE>Hath Thetis' birth-child on the heavens bestow'd:</LINE>
+<LINE>Wherefore she does, and swears she'll never stint,</LINE>
+<LINE>Make raging battery upon shores of flint.'</LINE>
+<LINE>No visor does become black villany</LINE>
+<LINE>So well as soft and tender flattery.</LINE>
+<LINE>Let Pericles believe his daughter's dead,</LINE>
+<LINE>And bear his courses to be ordered</LINE>
+<LINE>By Lady Fortune; while our scene must play</LINE>
+<LINE>His daughter's woe and heavy well-a-day</LINE>
+<LINE>In her unholy service. Patience, then,</LINE>
+<LINE>And think you now are all in Mytilene.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE V.  Mytilene. A street before the brothel.</TITLE>
+<STAGEDIR>Enter, from the brothel, two Gentlemen</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>Did you ever hear the like?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>No, nor never shall do in such a place as this, she</LINE>
+<LINE>being once gone.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>But to have divinity preached there! did you ever</LINE>
+<LINE>dream of such a thing?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Second Gentleman</SPEAKER>
+<LINE>No, no. Come, I am for no more bawdy-houses:</LINE>
+<LINE>shall's go hear the vestals sing?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>I'll do any thing now that is virtuous; but I</LINE>
+<LINE>am out of the road of rutting for ever.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE VI.  The same. A room in the brothel.</TITLE>
+<STAGEDIR>Enter Pandar, Bawd, and BOULT</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>Well, I had rather than twice the worth of her she</LINE>
+<LINE>had ne'er come here.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Fie, fie upon her! she's able to freeze the god</LINE>
+<LINE>Priapus, and undo a whole generation. We must</LINE>
+<LINE>either get her ravished, or be rid of her. When she</LINE>
+<LINE>should do for clients her fitment, and do me the</LINE>
+<LINE>kindness of our profession, she has me her quirks,</LINE>
+<LINE>her reasons, her master reasons, her prayers, her</LINE>
+<LINE>knees; that she would make a puritan of the devil,</LINE>
+<LINE>if he should cheapen a kiss of her.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>'Faith, I must ravish her, or she'll disfurnish us</LINE>
+<LINE>of all our cavaliers, and make our swearers priests.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Pandar</SPEAKER>
+<LINE>Now, the pox upon her green-sickness for me!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>'Faith, there's no way to be rid on't but by the</LINE>
+<LINE>way to the pox. Here comes the Lord Lysimachus disguised.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>We should have both lord and lown, if the peevish</LINE>
+<LINE>baggage would but give way to customers.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter LYSIMACHUS</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>How now! How a dozen of virginities?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Now, the gods to-bless your honour!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>I am glad to see your honour in good health.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>You may so; 'tis the better for you that your</LINE>
+<LINE>resorters stand upon sound legs. How now!</LINE>
+<LINE>wholesome iniquity have you that a man may deal</LINE>
+<LINE>withal, and defy the surgeon?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>We have here one, sir, if she would--but there never</LINE>
+<LINE>came her like in Mytilene.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>If she'ld do the deed of darkness, thou wouldst say.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Your honour knows what 'tis to say well enough.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Well, call forth, call forth.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>For flesh and blood, sir, white and red, you shall</LINE>
+<LINE>see a rose; and she were a rose indeed, if she had but--</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>What, prithee?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>O, sir, I can be modest.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>That dignifies the renown of a bawd, no less than it</LINE>
+<LINE>gives a good report to a number to be chaste.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit BOULT</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Here comes that which grows to the stalk; never</LINE>
+<LINE>plucked yet, I can assure you.</LINE>
+<STAGEDIR>Re-enter BOULT with MARINA</STAGEDIR>
+<LINE>Is she not a fair creature?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>'Faith, she would serve after a long voyage at sea.</LINE>
+<LINE>Well, there's for you: leave us.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>I beseech your honour, give me leave: a word, and</LINE>
+<LINE>I'll have done presently.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>I beseech you, do.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE><STAGEDIR>To MARINA</STAGEDIR>  First, I would have you note, this is</LINE>
+<LINE>an honourable man.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>I desire to find him so, that I may worthily note him.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Next, he's the governor of this country, and a man</LINE>
+<LINE>whom I am bound to.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>If he govern the country, you are bound to him</LINE>
+<LINE>indeed; but how honourable he is in that, I know not.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Pray you, without any more virginal fencing, will</LINE>
+<LINE>you use him kindly? He will line your apron with gold.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>What he will do graciously, I will thankfully receive.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Ha' you done?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>My lord, she's not paced yet: you must take some</LINE>
+<LINE>pains to work her to your manage. Come, we will</LINE>
+<LINE>leave his honour and her together. Go thy ways.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt Bawd, Pandar, and BOULT</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Now, pretty one, how long have you been at this trade?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>What trade, sir?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Why, I cannot name't but I shall offend.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>I cannot be offended with my trade. Please you to name it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>How long have you been of this profession?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>E'er since I can remember.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Did you go to 't so young? Were you a gamester at</LINE>
+<LINE>five or at seven?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Earlier too, sir, if now I be one.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Why, the house you dwell in proclaims you to be a</LINE>
+<LINE>creature of sale.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Do you know this house to be a place of such resort,</LINE>
+<LINE>and will come into 't? I hear say you are of</LINE>
+<LINE>honourable parts, and are the governor of this place.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Why, hath your principal made known unto you who I am?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Who is my principal?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Why, your herb-woman; she that sets seeds and roots</LINE>
+<LINE>of shame and iniquity. O, you have heard something</LINE>
+<LINE>of my power, and so stand aloof for more serious</LINE>
+<LINE>wooing. But I protest to thee, pretty one, my</LINE>
+<LINE>authority shall not see thee, or else look friendly</LINE>
+<LINE>upon thee. Come, bring me to some private place:</LINE>
+<LINE>come, come.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>If you were born to honour, show it now;</LINE>
+<LINE>If put upon you, make the judgment good</LINE>
+<LINE>That thought you worthy of it.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>How's this? how's this? Some more; be sage.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>For me,</LINE>
+<LINE>That am a maid, though most ungentle fortune</LINE>
+<LINE>Have placed me in this sty, where, since I came,</LINE>
+<LINE>Diseases have been sold dearer than physic,</LINE>
+<LINE>O, that the gods</LINE>
+<LINE>Would set me free from this unhallow'd place,</LINE>
+<LINE>Though they did change me to the meanest bird</LINE>
+<LINE>That flies i' the purer air!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>I did not think</LINE>
+<LINE>Thou couldst have spoke so well; ne'er dream'd thou couldst.</LINE>
+<LINE>Had I brought hither a corrupted mind,</LINE>
+<LINE>Thy speech had alter'd it. Hold, here's gold for thee:</LINE>
+<LINE>Persever in that clear way thou goest,</LINE>
+<LINE>And the gods strengthen thee!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>The good gods preserve you!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>For me, be you thoughten</LINE>
+<LINE>That I came with no ill intent; for to me</LINE>
+<LINE>The very doors and windows savour vilely.</LINE>
+<LINE>Fare thee well. Thou art a piece of virtue, and</LINE>
+<LINE>I doubt not but thy training hath been noble.</LINE>
+<LINE>Hold, here's more gold for thee.</LINE>
+<LINE>A curse upon him, die he like a thief,</LINE>
+<LINE>That robs thee of thy goodness! If thou dost</LINE>
+<LINE>Hear from me, it shall be for thy good.</LINE>
+</SPEECH>
+
+<STAGEDIR>Re-enter BOULT</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>I beseech your honour, one piece for me.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Avaunt, thou damned door-keeper!</LINE>
+<LINE>Your house, but for this virgin that doth prop it,</LINE>
+<LINE>Would sink and overwhelm you. Away!</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>How's this? We must take another course with you.</LINE>
+<LINE>If your peevish chastity, which is not worth a</LINE>
+<LINE>breakfast in the cheapest country under the cope,</LINE>
+<LINE>shall undo a whole household, let me be gelded like</LINE>
+<LINE>a spaniel. Come your ways.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Whither would you have me?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>I must have your maidenhead taken off, or the common</LINE>
+<LINE>hangman shall execute it. Come your ways. We'll</LINE>
+<LINE>have no more gentlemen driven away. Come your ways, I say.</LINE>
+</SPEECH>
+
+<STAGEDIR>Re-enter Bawd</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>How now! what's the matter?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Worse and worse, mistress; she has here spoken holy</LINE>
+<LINE>words to the Lord Lysimachus.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>O abominable!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>She makes our profession as it were to stink afore</LINE>
+<LINE>the face of the gods.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Marry, hang her up for ever!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>The nobleman would have dealt with her like a</LINE>
+<LINE>nobleman, and she sent him away as cold as a</LINE>
+<LINE>snowball; saying his prayers too.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>Boult, take her away; use her at thy pleasure:</LINE>
+<LINE>crack the glass of her virginity, and make the rest malleable.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>An if she were a thornier piece of ground than she</LINE>
+<LINE>is, she shall be ploughed.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Hark, hark, you gods!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Bawd</SPEAKER>
+<LINE>She conjures: away with her! Would she had never</LINE>
+<LINE>come within my doors! Marry, hang you! She's born</LINE>
+<LINE>to undo us. Will you not go the way of women-kind?</LINE>
+<LINE>Marry, come up, my dish of chastity with rosemary and bays!</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Come, mistress; come your ways with me.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Whither wilt thou have me?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>To take from you the jewel you hold so dear.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Prithee, tell me one thing first.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Come now, your one thing.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>What canst thou wish thine enemy to be?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Why, I could wish him to be my master, or rather, my mistress.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Neither of these are so bad as thou art,</LINE>
+<LINE>Since they do better thee in their command.</LINE>
+<LINE>Thou hold'st a place, for which the pained'st fiend</LINE>
+<LINE>Of hell would not in reputation change:</LINE>
+<LINE>Thou art the damned doorkeeper to every</LINE>
+<LINE>Coistrel that comes inquiring for his Tib;</LINE>
+<LINE>To the choleric fisting of every rogue</LINE>
+<LINE>Thy ear is liable; thy food is such</LINE>
+<LINE>As hath been belch'd on by infected lungs.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>What would you have me do? go to the wars, would</LINE>
+<LINE>you? where a man may serve seven years for the loss</LINE>
+<LINE>of a leg, and have not money enough in the end to</LINE>
+<LINE>buy him a wooden one?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Do any thing but this thou doest. Empty</LINE>
+<LINE>Old receptacles, or common shores, of filth;</LINE>
+<LINE>Serve by indenture to the common hangman:</LINE>
+<LINE>Any of these ways are yet better than this;</LINE>
+<LINE>For what thou professest, a baboon, could he speak,</LINE>
+<LINE>Would own a name too dear. O, that the gods</LINE>
+<LINE>Would safely deliver me from this place!</LINE>
+<LINE>Here, here's gold for thee.</LINE>
+<LINE>If that thy master would gain by thee,</LINE>
+<LINE>Proclaim that I can sing, weave, sew, and dance,</LINE>
+<LINE>With other virtues, which I'll keep from boast:</LINE>
+<LINE>And I will undertake all these to teach.</LINE>
+<LINE>I doubt not but this populous city will</LINE>
+<LINE>Yield many scholars.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>But can you teach all this you speak of?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Prove that I cannot, take me home again,</LINE>
+<LINE>And prostitute me to the basest groom</LINE>
+<LINE>That doth frequent your house.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>Well, I will see what I can do for thee: if I can</LINE>
+<LINE>place thee, I will.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>But amongst honest women.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>BOULT</SPEAKER>
+<LINE>'Faith, my acquaintance lies little amongst them.</LINE>
+<LINE>But since my master and mistress have bought you,</LINE>
+<LINE>there's no going but by their consent: therefore I</LINE>
+<LINE>will make them acquainted with your purpose, and I</LINE>
+<LINE>doubt not but I shall find them tractable enough.</LINE>
+<LINE>Come, I'll do for thee what I can; come your ways.</LINE>
+</SPEECH>
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+</ACT>
+
+<ACT><TITLE>ACT V</TITLE>
+
+<PROLOGUE><TITLE>[Prologue]</TITLE>
+<STAGEDIR>Enter GOWER</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>GOWER</SPEAKER>
+<LINE>Marina thus the brothel 'scapes, and chances</LINE>
+<LINE>Into an honest house, our story says.</LINE>
+<LINE>She sings like one immortal, and she dances</LINE>
+<LINE>As goddess-like to her admired lays;</LINE>
+<LINE>Deep clerks she dumbs; and with her needle composes</LINE>
+<LINE>Nature's own shape, of bud, bird, branch, or berry,</LINE>
+<LINE>That even her art sisters the natural roses;</LINE>
+<LINE>Her inkle, silk, twin with the rubied cherry:</LINE>
+<LINE>That pupils lacks she none of noble race,</LINE>
+<LINE>Who pour their bounty on her; and her gain</LINE>
+<LINE>She gives the cursed bawd. Here we her place;</LINE>
+<LINE>And to her father turn our thoughts again,</LINE>
+<LINE>Where we left him, on the sea. We there him lost;</LINE>
+<LINE>Whence, driven before the winds, he is arrived</LINE>
+<LINE>Here where his daughter dwells; and on this coast</LINE>
+<LINE>Suppose him now at anchor. The city strived</LINE>
+<LINE>God Neptune's annual feast to keep: from whence</LINE>
+<LINE>Lysimachus our Tyrian ship espies,</LINE>
+<LINE>His banners sable, trimm'd with rich expense;</LINE>
+<LINE>And to him in his barge with fervor hies.</LINE>
+<LINE>In your supposing once more put your sight</LINE>
+<LINE>Of heavy Pericles; think this his bark:</LINE>
+<LINE>Where what is done in action, more, if might,</LINE>
+<LINE>Shall be discover'd; please you, sit and hark.</LINE>
+</SPEECH>
+<STAGEDIR>Exit</STAGEDIR>
+</PROLOGUE>
+
+<SCENE><TITLE>SCENE I.  On board PERICLES' ship, off Mytilene. A close pavilion on deck, with a curtain before it; PERICLES within it, reclined on a couch. A barge lying beside the Tyrian vessel.</TITLE>
+
+<STAGEDIR>Enter two Sailors, one belonging to the Tyrian
+vessel, the other to the barge; to them HELICANUS</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Tyrian Sailor</SPEAKER>
+<LINE><STAGEDIR>To the Sailor of Mytilene</STAGEDIR>  Where is lord Helicanus?</LINE>
+<LINE>he can resolve you.</LINE>
+<LINE>O, here he is.</LINE>
+<LINE>Sir, there's a barge put off from Mytilene,</LINE>
+<LINE>And in it is Lysimachus the governor,</LINE>
+<LINE>Who craves to come aboard. What is your will?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>That he have his. Call up some gentlemen.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>Tyrian Sailor</SPEAKER>
+<LINE>Ho, gentlemen! my lord calls.</LINE>
+</SPEECH>
+
+<STAGEDIR>Enter two or three Gentlemen</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>First Gentleman</SPEAKER>
+<LINE>Doth your lordship call?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Gentlemen, there's some of worth would come aboard;</LINE>
+<LINE>I pray ye, greet them fairly.</LINE>
+</SPEECH>
+
+<STAGEDIR>The Gentlemen and the two Sailors descend, and go
+on board the barge</STAGEDIR>
+<STAGEDIR>Enter, from thence, LYSIMACHUS and Lords; with the
+Gentlemen and the two Sailors</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>Tyrian Sailor</SPEAKER>
+<LINE>Sir,</LINE>
+<LINE>This is the man that can, in aught you would,</LINE>
+<LINE>Resolve you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Hail, reverend sir! the gods preserve you!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>And you, sir, to outlive the age I am,</LINE>
+<LINE>And die as I would do.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>You wish me well.</LINE>
+<LINE>Being on shore, honouring of Neptune's triumphs,</LINE>
+<LINE>Seeing this goodly vessel ride before us,</LINE>
+<LINE>I made to it, to know of whence you are.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>First, what is your place?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>I am the governor of this place you lie before.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Sir,</LINE>
+<LINE>Our vessel is of Tyre, in it the king;</LINE>
+<LINE>A man who for this three months hath not spoken</LINE>
+<LINE>To any one, nor taken sustenance</LINE>
+<LINE>But to prorogue his grief.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Upon what ground is his distemperature?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>'Twould be too tedious to repeat;</LINE>
+<LINE>But the main grief springs from the loss</LINE>
+<LINE>Of a beloved daughter and a wife.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>May we not see him?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>You may;</LINE>
+<LINE>But bootless is your sight: he will not speak To any.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Yet let me obtain my wish.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Behold him.</LINE>
+<STAGEDIR>PERICLES discovered</STAGEDIR>
+<LINE>This was a goodly person,</LINE>
+<LINE>Till the disaster that, one mortal night,</LINE>
+<LINE>Drove him to this.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Sir king, all hail! the gods preserve you!</LINE>
+<LINE>Hail, royal sir!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>It is in vain; he will not speak to you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>First Lord</SPEAKER>
+<LINE>Sir,</LINE>
+<LINE>We have a maid in Mytilene, I durst wager,</LINE>
+<LINE>Would win some words of him.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>'Tis well bethought.</LINE>
+<LINE>She questionless with her sweet harmony</LINE>
+<LINE>And other chosen attractions, would allure,</LINE>
+<LINE>And make a battery through his deafen'd parts,</LINE>
+<LINE>Which now are midway stopp'd:</LINE>
+<LINE>She is all happy as the fairest of all,</LINE>
+<LINE>And, with her fellow maids is now upon</LINE>
+<LINE>The leafy shelter that abuts against</LINE>
+<LINE>The island's side.</LINE>
+</SPEECH>
+
+<STAGEDIR>Whispers a Lord, who goes off in the barge of
+LYSIMACHUS</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Sure, all's effectless; yet nothing we'll omit</LINE>
+<LINE>That bears recovery's name. But, since your kindness</LINE>
+<LINE>We have stretch'd thus far, let us beseech you</LINE>
+<LINE>That for our gold we may provision have,</LINE>
+<LINE>Wherein we are not destitute for want,</LINE>
+<LINE>But weary for the staleness.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>O, sir, a courtesy</LINE>
+<LINE>Which if we should deny, the most just gods</LINE>
+<LINE>For every graff would send a caterpillar,</LINE>
+<LINE>And so afflict our province. Yet once more</LINE>
+<LINE>Let me entreat to know at large the cause</LINE>
+<LINE>Of your king's sorrow.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Sit, sir, I will recount it to you:</LINE>
+<LINE>But, see, I am prevented.</LINE>
+</SPEECH>
+
+<STAGEDIR>Re-enter, from the barge, Lord, with MARINA, and a
+young Lady</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>O, here is</LINE>
+<LINE>The lady that I sent for. Welcome, fair one!</LINE>
+<LINE>Is't not a goodly presence?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>She's a gallant lady.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>She's such a one, that, were I well assured</LINE>
+<LINE>Came of a gentle kind and noble stock,</LINE>
+<LINE>I'ld wish no better choice, and think me rarely wed.</LINE>
+<LINE>Fair one, all goodness that consists in bounty</LINE>
+<LINE>Expect even here, where is a kingly patient:</LINE>
+<LINE>If that thy prosperous and artificial feat</LINE>
+<LINE>Can draw him but to answer thee in aught,</LINE>
+<LINE>Thy sacred physic shall receive such pay</LINE>
+<LINE>As thy desires can wish.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Sir, I will use</LINE>
+<LINE>My utmost skill in his recovery, Provided</LINE>
+<LINE>That none but I and my companion maid</LINE>
+<LINE>Be suffer'd to come near him.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Come, let us leave her;</LINE>
+<LINE>And the gods make her prosperous!</LINE>
+</SPEECH>
+
+<STAGEDIR>MARINA sings</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Mark'd he your music?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>No, nor look'd on us.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>See, she will speak to him.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Hail, sir! my lord, lend ear.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Hum, ha!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>I am a maid,</LINE>
+<LINE>My lord, that ne'er before invited eyes,</LINE>
+<LINE>But have been gazed on like a comet: she speaks,</LINE>
+<LINE>My lord, that, may be, hath endured a grief</LINE>
+<LINE>Might equal yours, if both were justly weigh'd.</LINE>
+<LINE>Though wayward fortune did malign my state,</LINE>
+<LINE>My derivation was from ancestors</LINE>
+<LINE>Who stood equivalent with mighty kings:</LINE>
+<LINE>But time hath rooted out my parentage,</LINE>
+<LINE>And to the world and awkward casualties</LINE>
+<LINE>Bound me in servitude.</LINE>
+<STAGEDIR>Aside</STAGEDIR>
+<LINE>I will desist;</LINE>
+<LINE>But there is something glows upon my cheek,</LINE>
+<LINE>And whispers in mine ear, 'Go not till he speak.'</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>My fortunes--parentage--good parentage--</LINE>
+<LINE>To equal mine!--was it not thus? what say you?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>I said, my lord, if you did know my parentage,</LINE>
+<LINE>You would not do me violence.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I do think so. Pray you, turn your eyes upon me.</LINE>
+<LINE>You are like something that--What country-woman?</LINE>
+<LINE>Here of these shores?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>No, nor of any shores:</LINE>
+<LINE>Yet I was mortally brought forth, and am</LINE>
+<LINE>No other than I appear.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I am great with woe, and shall deliver weeping.</LINE>
+<LINE>My dearest wife was like this maid, and such a one</LINE>
+<LINE>My daughter might have been: my queen's square brows;</LINE>
+<LINE>Her stature to an inch; as wand-like straight;</LINE>
+<LINE>As silver-voiced; her eyes as jewel-like</LINE>
+<LINE>And cased as richly; in pace another Juno;</LINE>
+<LINE>Who starves the ears she feeds, and makes them hungry,</LINE>
+<LINE>The more she gives them speech. Where do you live?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Where I am but a stranger: from the deck</LINE>
+<LINE>You may discern the place.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Where were you bred?</LINE>
+<LINE>And how achieved you these endowments, which</LINE>
+<LINE>You make more rich to owe?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>If I should tell my history, it would seem</LINE>
+<LINE>Like lies disdain'd in the reporting.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Prithee, speak:</LINE>
+<LINE>Falseness cannot come from thee; for thou look'st</LINE>
+<LINE>Modest as Justice, and thou seem'st a palace</LINE>
+<LINE>For the crown'd Truth to dwell in: I will</LINE>
+<LINE>believe thee,</LINE>
+<LINE>And make my senses credit thy relation</LINE>
+<LINE>To points that seem impossible; for thou look'st</LINE>
+<LINE>Like one I loved indeed. What were thy friends?</LINE>
+<LINE>Didst thou not say, when I did push thee back--</LINE>
+<LINE>Which was when I perceived thee--that thou camest</LINE>
+<LINE>From good descending?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>So indeed I did.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Report thy parentage. I think thou said'st</LINE>
+<LINE>Thou hadst been toss'd from wrong to injury,</LINE>
+<LINE>And that thou thought'st thy griefs might equal mine,</LINE>
+<LINE>If both were open'd.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Some such thing</LINE>
+<LINE>I said, and said no more but what my thoughts</LINE>
+<LINE>Did warrant me was likely.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Tell thy story;</LINE>
+<LINE>If thine consider'd prove the thousandth part</LINE>
+<LINE>Of my endurance, thou art a man, and I</LINE>
+<LINE>Have suffer'd like a girl: yet thou dost look</LINE>
+<LINE>Like Patience gazing on kings' graves, and smiling</LINE>
+<LINE>Extremity out of act. What were thy friends?</LINE>
+<LINE>How lost thou them? Thy name, my most kind virgin?</LINE>
+<LINE>Recount, I do beseech thee: come, sit by me.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>My name is Marina.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>O, I am mock'd,</LINE>
+<LINE>And thou by some incensed god sent hither</LINE>
+<LINE>To make the world to laugh at me.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Patience, good sir,</LINE>
+<LINE>Or here I'll cease.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Nay, I'll be patient.</LINE>
+<LINE>Thou little know'st how thou dost startle me,</LINE>
+<LINE>To call thyself Marina.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>The name</LINE>
+<LINE>Was given me by one that had some power,</LINE>
+<LINE>My father, and a king.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>How! a king's daughter?</LINE>
+<LINE>And call'd Marina?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>You said you would believe me;</LINE>
+<LINE>But, not to be a troubler of your peace,</LINE>
+<LINE>I will end here.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>But are you flesh and blood?</LINE>
+<LINE>Have you a working pulse? and are no fairy?</LINE>
+<LINE>Motion! Well; speak on. Where were you born?</LINE>
+<LINE>And wherefore call'd Marina?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Call'd Marina</LINE>
+<LINE>For I was born at sea.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>At sea! what mother?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>My mother was the daughter of a king;</LINE>
+<LINE>Who died the minute I was born,</LINE>
+<LINE>As my good nurse Lychorida hath oft</LINE>
+<LINE>Deliver'd weeping.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>O, stop there a little!</LINE>
+<STAGEDIR>Aside</STAGEDIR>
+<LINE>This is the rarest dream that e'er dull sleep</LINE>
+<LINE>Did mock sad fools withal: this cannot be:</LINE>
+<LINE>My daughter's buried. Well: where were you bred?</LINE>
+<LINE>I'll hear you more, to the bottom of your story,</LINE>
+<LINE>And never interrupt you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>You scorn: believe me, 'twere best I did give o'er.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I will believe you by the syllable</LINE>
+<LINE>Of what you shall deliver. Yet, give me leave:</LINE>
+<LINE>How came you in these parts? where were you bred?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>The king my father did in Tarsus leave me;</LINE>
+<LINE>Till cruel Cleon, with his wicked wife,</LINE>
+<LINE>Did seek to murder me: and having woo'd</LINE>
+<LINE>A villain to attempt it, who having drawn to do't,</LINE>
+<LINE>A crew of pirates came and rescued me;</LINE>
+<LINE>Brought me to Mytilene. But, good sir,</LINE>
+<LINE>Whither will you have me? Why do you weep?</LINE>
+<LINE>It may be,</LINE>
+<LINE>You think me an impostor: no, good faith;</LINE>
+<LINE>I am the daughter to King Pericles,</LINE>
+<LINE>If good King Pericles be.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Ho, Helicanus!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Calls my lord?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Thou art a grave and noble counsellor,</LINE>
+<LINE>Most wise in general: tell me, if thou canst,</LINE>
+<LINE>What this maid is, or what is like to be,</LINE>
+<LINE>That thus hath made me weep?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>I know not; but</LINE>
+<LINE>Here is the regent, sir, of Mytilene</LINE>
+<LINE>Speaks nobly of her.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>She would never tell</LINE>
+<LINE>Her parentage; being demanded that,</LINE>
+<LINE>She would sit still and weep.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>O Helicanus, strike me, honour'd sir;</LINE>
+<LINE>Give me a gash, put me to present pain;</LINE>
+<LINE>Lest this great sea of joys rushing upon me</LINE>
+<LINE>O'erbear the shores of my mortality,</LINE>
+<LINE>And drown me with their sweetness. O, come hither,</LINE>
+<LINE>Thou that beget'st him that did thee beget;</LINE>
+<LINE>Thou that wast born at sea, buried at Tarsus,</LINE>
+<LINE>And found at sea again! O Helicanus,</LINE>
+<LINE>Down on thy knees, thank the holy gods as loud</LINE>
+<LINE>As thunder threatens us: this is Marina.</LINE>
+<LINE>What was thy mother's name? tell me but that,</LINE>
+<LINE>For truth can never be confirm'd enough,</LINE>
+<LINE>Though doubts did ever sleep.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>First, sir, I pray,</LINE>
+<LINE>What is your title?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I am Pericles of Tyre: but tell me now</LINE>
+<LINE>My drown'd queen's name, as in the rest you said</LINE>
+<LINE>Thou hast been godlike perfect,</LINE>
+<LINE>The heir of kingdoms and another like</LINE>
+<LINE>To Pericles thy father.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>Is it no more to be your daughter than</LINE>
+<LINE>To say my mother's name was Thaisa?</LINE>
+<LINE>Thaisa was my mother, who did end</LINE>
+<LINE>The minute I began.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Now, blessing on thee! rise; thou art my child.</LINE>
+<LINE>Give me fresh garments. Mine own, Helicanus;</LINE>
+<LINE>She is not dead at Tarsus, as she should have been,</LINE>
+<LINE>By savage Cleon: she shall tell thee all;</LINE>
+<LINE>When thou shalt kneel, and justify in knowledge</LINE>
+<LINE>She is thy very princess. Who is this?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Sir, 'tis the governor of Mytilene,</LINE>
+<LINE>Who, hearing of your melancholy state,</LINE>
+<LINE>Did come to see you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>I embrace you.</LINE>
+<LINE>Give me my robes. I am wild in my beholding.</LINE>
+<LINE>O heavens bless my girl! But, hark, what music?</LINE>
+<LINE>Tell Helicanus, my Marina, tell him</LINE>
+<LINE>O'er, point by point, for yet he seems to doubt,</LINE>
+<LINE>How sure you are my daughter. But, what music?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>My lord, I hear none.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>None!</LINE>
+<LINE>The music of the spheres! List, my Marina.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>It is not good to cross him; give him way.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Rarest sounds! Do ye not hear?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>My lord, I hear.</LINE>
+</SPEECH>
+
+<STAGEDIR>Music</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Most heavenly music!</LINE>
+<LINE>It nips me unto listening, and thick slumber</LINE>
+<LINE>Hangs upon mine eyes: let me rest.</LINE>
+</SPEECH>
+
+<STAGEDIR>Sleeps</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>A pillow for his head:</LINE>
+<LINE>So, leave him all. Well, my companion friends,</LINE>
+<LINE>If this but answer to my just belief,</LINE>
+<LINE>I'll well remember you.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt all but PERICLES</STAGEDIR>
+<STAGEDIR>DIANA appears to PERICLES as in a vision</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>DIANA</SPEAKER>
+<LINE>My temple stands in Ephesus: hie thee thither,</LINE>
+<LINE>And do upon mine altar sacrifice.</LINE>
+<LINE>There, when my maiden priests are met together,</LINE>
+<LINE>Before the people all,</LINE>
+<LINE>Reveal how thou at sea didst lose thy wife:</LINE>
+<LINE>To mourn thy crosses, with thy daughter's, call</LINE>
+<LINE>And give them repetition to the life.</LINE>
+<LINE>Or perform my bidding, or thou livest in woe;</LINE>
+<LINE>Do it, and happy; by my silver bow!</LINE>
+<LINE>Awake, and tell thy dream.</LINE>
+</SPEECH>
+
+<STAGEDIR>Disappears</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Celestial Dian, goddess argentine,</LINE>
+<LINE>I will obey thee. Helicanus!</LINE>
+</SPEECH>
+
+<STAGEDIR>Re-enter HELICANUS, LYSIMACHUS, and MARINA</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Sir?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>My purpose was for Tarsus, there to strike</LINE>
+<LINE>The inhospitable Cleon; but I am</LINE>
+<LINE>For other service first: toward Ephesus</LINE>
+<LINE>Turn our blown sails; eftsoons I'll tell thee why.</LINE>
+<STAGEDIR>To LYSIMACHUS</STAGEDIR>
+<LINE>Shall we refresh us, sir, upon your shore,</LINE>
+<LINE>And give you gold for such provision</LINE>
+<LINE>As our intents will need?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Sir,</LINE>
+<LINE>With all my heart; and, when you come ashore,</LINE>
+<LINE>I have another suit.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>You shall prevail,</LINE>
+<LINE>Were it to woo my daughter; for it seems</LINE>
+<LINE>You have been noble towards her.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>LYSIMACHUS</SPEAKER>
+<LINE>Sir, lend me your arm.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Come, my Marina.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE II</TITLE>
+<STAGEDIR>Enter GOWER, before the temple of DIANA at Ephesus</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>GOWER</SPEAKER>
+<LINE>Now our sands are almost run;</LINE>
+<LINE>More a little, and then dumb.</LINE>
+<LINE>This, my last boon, give me,</LINE>
+<LINE>For such kindness must relieve me,</LINE>
+<LINE>That you aptly will suppose</LINE>
+<LINE>What pageantry, what feats, what shows,</LINE>
+<LINE>What minstrelsy, and pretty din,</LINE>
+<LINE>The regent made in Mytilene</LINE>
+<LINE>To greet the king. So he thrived,</LINE>
+<LINE>That he is promised to be wived</LINE>
+<LINE>To fair Marina; but in no wise</LINE>
+<LINE>Till he had done his sacrifice,</LINE>
+<LINE>As Dian bade: whereto being bound,</LINE>
+<LINE>The interim, pray you, all confound.</LINE>
+<LINE>In feather'd briefness sails are fill'd,</LINE>
+<LINE>And wishes fall out as they're will'd.</LINE>
+<LINE>At Ephesus, the temple see,</LINE>
+<LINE>Our king and all his company.</LINE>
+<LINE>That he can hither come so soon,</LINE>
+<LINE>Is by your fancy's thankful doom.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+</SCENE>
+
+<SCENE><TITLE>SCENE III.  The temple of Diana at Ephesus; THAISA standing near the altar, as high priestess; a number of Virgins on each side; CERIMON and other Inhabitants of Ephesus attending.</TITLE>
+
+<STAGEDIR>Enter PERICLES, with his train; LYSIMACHUS,
+HELICANUS, MARINA, and a Lady</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Hail, Dian! to perform thy just command,</LINE>
+<LINE>I here confess myself the king of Tyre;</LINE>
+<LINE>Who, frighted from my country, did wed</LINE>
+<LINE>At Pentapolis the fair Thaisa.</LINE>
+<LINE>At sea in childbed died she, but brought forth</LINE>
+<LINE>A maid-child call'd Marina; who, O goddess,</LINE>
+<LINE>Wears yet thy silver livery. She at Tarsus</LINE>
+<LINE>Was nursed with Cleon; who at fourteen years</LINE>
+<LINE>He sought to murder: but her better stars</LINE>
+<LINE>Brought her to Mytilene; 'gainst whose shore</LINE>
+<LINE>Riding, her fortunes brought the maid aboard us,</LINE>
+<LINE>Where, by her own most clear remembrance, she</LINE>
+<LINE>Made known herself my daughter.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Voice and favour!</LINE>
+<LINE>You are, you are--O royal Pericles!</LINE>
+</SPEECH>
+
+<STAGEDIR>Faints</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>What means the nun? she dies! help, gentlemen!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Noble sir,</LINE>
+<LINE>If you have told Diana's altar true,</LINE>
+<LINE>This is your wife.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Reverend appearer, no;</LINE>
+<LINE>I threw her overboard with these very arms.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Upon this coast, I warrant you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>'Tis most certain.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Look to the lady; O, she's but o'erjoy'd.</LINE>
+<LINE>Early in blustering morn this lady was</LINE>
+<LINE>Thrown upon this shore. I oped the coffin,</LINE>
+<LINE>Found there rich jewels; recover'd her, and placed her</LINE>
+<LINE>Here in Diana's temple.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>May we see them?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>Great sir, they shall be brought you to my house,</LINE>
+<LINE>Whither I invite you. Look, Thaisa is recovered.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>O, let me look!</LINE>
+<LINE>If he be none of mine, my sanctity</LINE>
+<LINE>Will to my sense bend no licentious ear,</LINE>
+<LINE>But curb it, spite of seeing. O, my lord,</LINE>
+<LINE>Are you not Pericles? Like him you spake,</LINE>
+<LINE>Like him you are: did you not name a tempest,</LINE>
+<LINE>A birth, and death?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>The voice of dead Thaisa!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>That Thaisa am I, supposed dead</LINE>
+<LINE>And drown'd.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Immortal Dian!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Now I know you better.</LINE>
+<LINE>When we with tears parted Pentapolis,</LINE>
+<LINE>The king my father gave you such a ring.</LINE>
+</SPEECH>
+
+<STAGEDIR>Shows a ring</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>This, this: no more, you gods! your present kindness</LINE>
+<LINE>Makes my past miseries sports: you shall do well,</LINE>
+<LINE>That on the touching of her lips I may</LINE>
+<LINE>Melt and no more be seen. O, come, be buried</LINE>
+<LINE>A second time within these arms.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>MARINA</SPEAKER>
+<LINE>My heart</LINE>
+<LINE>Leaps to be gone into my mother's bosom.</LINE>
+</SPEECH>
+
+<STAGEDIR>Kneels to THAISA</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Look, who kneels here! Flesh of thy flesh, Thaisa;</LINE>
+<LINE>Thy burden at the sea, and call'd Marina</LINE>
+<LINE>For she was yielded there.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Blest, and mine own!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>HELICANUS</SPEAKER>
+<LINE>Hail, madam, and my queen!</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>I know you not.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>You have heard me say, when I did fly from Tyre,</LINE>
+<LINE>I left behind an ancient substitute:</LINE>
+<LINE>Can you remember what I call'd the man?</LINE>
+<LINE>I have named him oft.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>'Twas Helicanus then.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Still confirmation:</LINE>
+<LINE>Embrace him, dear Thaisa; this is he.</LINE>
+<LINE>Now do I long to hear how you were found;</LINE>
+<LINE>How possibly preserved; and who to thank,</LINE>
+<LINE>Besides the gods, for this great miracle.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Lord Cerimon, my lord; this man,</LINE>
+<LINE>Through whom the gods have shown their power; that can</LINE>
+<LINE>From first to last resolve you.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Reverend sir,</LINE>
+<LINE>The gods can have no mortal officer</LINE>
+<LINE>More like a god than you. Will you deliver</LINE>
+<LINE>How this dead queen re-lives?</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>CERIMON</SPEAKER>
+<LINE>I will, my lord.</LINE>
+<LINE>Beseech you, first go with me to my house,</LINE>
+<LINE>Where shall be shown you all was found with her;</LINE>
+<LINE>How she came placed here in the temple;</LINE>
+<LINE>No needful thing omitted.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Pure Dian, bless thee for thy vision! I</LINE>
+<LINE>Will offer night-oblations to thee. Thaisa,</LINE>
+<LINE>This prince, the fair-betrothed of your daughter,</LINE>
+<LINE>Shall marry her at Pentapolis. And now,</LINE>
+<LINE>This ornament</LINE>
+<LINE>Makes me look dismal will I clip to form;</LINE>
+<LINE>And what this fourteen years no razor touch'd,</LINE>
+<LINE>To grace thy marriage-day, I'll beautify.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>THAISA</SPEAKER>
+<LINE>Lord Cerimon hath letters of good credit, sir,</LINE>
+<LINE>My father's dead.</LINE>
+</SPEECH>
+
+<SPEECH>
+<SPEAKER>PERICLES</SPEAKER>
+<LINE>Heavens make a star of him! Yet there, my queen,</LINE>
+<LINE>We'll celebrate their nuptials, and ourselves</LINE>
+<LINE>Will in that kingdom spend our following days:</LINE>
+<LINE>Our son and daughter shall in Tyrus reign.</LINE>
+<LINE>Lord Cerimon, we do our longing stay</LINE>
+<LINE>To hear the rest untold: sir, lead's the way.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exeunt</STAGEDIR>
+
+<STAGEDIR>Enter GOWER</STAGEDIR>
+
+<SPEECH>
+<SPEAKER>GOWER</SPEAKER>
+<LINE>In Antiochus and his daughter you have heard</LINE>
+<LINE>Of monstrous lust the due and just reward:</LINE>
+<LINE>In Pericles, his queen and daughter, seen,</LINE>
+<LINE>Although assail'd with fortune fierce and keen,</LINE>
+<LINE>Virtue preserved from fell destruction's blast,</LINE>
+<LINE>Led on by heaven, and crown'd with joy at last:</LINE>
+<LINE>In Helicanus may you well descry</LINE>
+<LINE>A figure of truth, of faith, of loyalty:</LINE>
+<LINE>In reverend Cerimon there well appears</LINE>
+<LINE>The worth that learned charity aye wears:</LINE>
+<LINE>For wicked Cleon and his wife, when fame</LINE>
+<LINE>Had spread their cursed deed, and honour'd name</LINE>
+<LINE>Of Pericles, to rage the city turn,</LINE>
+<LINE>That him and his they in his palace burn;</LINE>
+<LINE>The gods for murder seemed so content</LINE>
+<LINE>To punish them; although not done, but meant.</LINE>
+<LINE>So, on your patience evermore attending,</LINE>
+<LINE>New joy wait on you! Here our play has ending.</LINE>
+</SPEECH>
+
+<STAGEDIR>Exit</STAGEDIR>
+</SCENE>
+</ACT>
+</PLAY>

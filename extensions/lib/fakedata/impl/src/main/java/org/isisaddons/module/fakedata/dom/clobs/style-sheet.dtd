@@ -1,0 +1,41 @@
+<!-- A DTD for DSSSL Style Sheets.  The public identifier for this is
+
+     "-//James Clark//DTD DSSSL Style Sheet//EN"
+-->
+
+<!element style-sheet o o (style-specification,
+			   (external-specification|style-specification)*)>
+<!element style-specification o o (style-specification-body)>
+<!attlist style-specification
+  id id #implied
+  use idrefs #implied
+>
+<!element style-specification-body o o (#pcdata)>
+<!attlist style-specification-body
+  content entity #conref
+>
+<!element external-specification - o empty>
+<!attlist external-specification
+  id id #required
+  document entity #required
+  specid name #implied
+>
+<?IS10744 ArcBase DSSSL>
+<!NOTATION DSSSL   PUBLIC "ISO/IEC 10179:1996//NOTATION
+                   DSSSL Architecture Definition Document//EN"
+                -- A document architecture conforming to the
+                   Architectural Form Definition Requirements of
+                   ISO/IEC 10744.     --
+>
+
+<!ATTLIST #NOTATION DSSSL
+                            -- Support attributes for all architectures --
+  ArcQuant CDATA #FIXED "NAMELEN 64"
+  ArcDTD CDATA #FIXED "%DSSSLDTD"
+  ArcDocF NAME #FIXED dsssl-specification
+  ArcDataF NAME #FIXED dsssl-specification
+>
+
+<!ENTITY % DSSSLDTD PUBLIC
+ "ISO/IEC 10179:1996//DTD DSSSL Architecture//EN"
+>
