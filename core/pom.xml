@@ -86,7 +86,7 @@
 
 		<assertj-guava.version>3.1.0</assertj-guava.version>
 
-		<camel.version>2.14.2</camel.version>
+		<camel.version>2.24.2</camel.version>
 
 		<commons-email.version>1.4</commons-email.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
