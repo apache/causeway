@@ -1872,7 +1872,7 @@
 		<module>viewer-wicket/ui</module>
 		<module>viewer-wicket/impl</module>
 
-		<module>plugins/codegen-bytebuddy</module>
+		<module>codegen-bytebuddy</module>
 		<module>plugins/jaxrs-resteasy-4</module>
 		<module>plugins/jdo/common</module>
 		<module>plugins/jdo/datanucleus-5</module>
