@@ -17,7 +17,13 @@ if [ -z "$REVISION" ]; then
   export REVISION="SNAPSHOT"
 fi
 
+
 SITE_CONFIG=$1
+
+
+##
+## run groovy
+##
 GROOVY_CMD=`command -v groovy`
 
 bash $SCRIPT_DIR/print-environment.sh "build-site"
@@ -29,18 +35,23 @@ echo ""
  
 # for now meant to run with nightly builds only 
 if [ -z "${GROOVY_CMD}" ]; then
-  echo "no groovy: skipping automated site content script(s)"
+  echo "doc gen: no groovy, skipping"
 else
   if [ ! -f "$PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json" ]; then
-    echo "no spring-configuration-metadata.json to parse: skipping"
+    echo "doc gen: no spring-configuration-metadata.json to parse: skipping"
   else
     # generate automated site content (adoc files)
+    echo "doc gen: generating config .adoc from Spring metadata ..."
     ${GROOVY_CMD} $SCRIPT_DIR/../generateConfigDocs.groovy \
       -f $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json \
       -o $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
   fi
 fi
 
+
+##
+## copy over examples
+##
 echo "copying over examples ..."
 for examples_sh in $(find $PROJECT_ROOT_PATH -name examples.sh -print)
 do
@@ -48,8 +59,14 @@ do
   sh $examples_sh
 done
 
+
+##
 ## run antora
-$(npm bin)/antora --stacktrace $SITE_CONFIG
+##
+echo "running antora ..."
+#ANTORA_CMD=$(npm bin)/antora
+ANTORA_CMD=antora
+$ANTORA_CMD --stacktrace $SITE_CONFIG
 
 # add a marker, that tells github not to use jekyll on the github pages folder
 touch ${PROJECT_ROOT_PATH}/antora/target/site/.nojekyll
