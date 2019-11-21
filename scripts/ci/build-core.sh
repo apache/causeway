@@ -22,10 +22,15 @@ fi
 sh $SCRIPT_DIR/print-environment.sh "build-core"
 
 if [ ! -z "$REVISION" ]; then
+
   cd $PROJECT_ROOT_PATH/core-parent
+  echo "updating version in isis-parent ..."
   mvn versions:set -DnewVersion=$REVISION
+
   cd $PROJECT_ROOT_PATH/starters
-  mvn versions:set -DnewVersion=$REVISION
+  echo "updating version in isis-app-starter-parent ..."
+  cat pom.xml
+  mvn versions:set -DnewVersion=$REVISION -o
 fi
 
 cd $PROJECT_ROOT_PATH/core-parent
