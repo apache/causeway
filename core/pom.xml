@@ -1859,6 +1859,7 @@
 			</distributionManagement>
 		</profile>
 	
+<!--
 		<profile>
 			<id>gcpappenginerepo-deploy</id>
 			<activation>
@@ -1873,6 +1874,7 @@
 				</repository>
 			</distributionManagement>
 		</profile>
+-->
 
 		<profile>
 			<id>owasp</id>
