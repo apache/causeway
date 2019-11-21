@@ -64,7 +64,7 @@ done
 ## run antora
 ##
 echo "running antora ..."
-which antora 2>&1 >/dev/null
+whence antora 2>&1 >/dev/null
 if [ $? -eq 0 ]; then
   ANTORA_CMD=antora
 else
