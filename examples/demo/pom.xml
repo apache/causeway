@@ -47,7 +47,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
+			<artifactId>isis-codegen-bytebuddy</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

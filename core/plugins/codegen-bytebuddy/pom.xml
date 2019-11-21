@@ -21,7 +21,7 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
+	<artifactId>isis-codegen-bytebuddy</artifactId>
 
 	<name>Apache Isis Core Plugin - Code Generation (ByteBuddy)</name>
 	<description>

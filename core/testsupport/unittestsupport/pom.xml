@@ -46,7 +46,7 @@
 		<!-- framework default core-codegen-plugin for tests -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
+			<artifactId>isis-codegen-bytebuddy</artifactId>
 		</dependency>
 
 		<!-- SPRING -->
