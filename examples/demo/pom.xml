@@ -18,7 +18,7 @@
 		<groupId>org.apache.isis.app</groupId>
 		<artifactId>isis-app-starter-parent</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../../starters/pom.xml</relativePath>
+		<relativePath>../../starters/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.examples.apps</groupId>
@@ -29,6 +29,7 @@
 	<packaging>${packaging.type}</packaging>
 
 	<properties>
+		<packaging.type>jar</packaging.type>
 
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 
@@ -39,84 +40,59 @@
 
 	<dependencies>
 
-		<!-- ISIS WEB-APP BUNDLE -->
-
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-webapp</artifactId>
 			<type>pom</type>
 		</dependency>
-
-		<!-- ISIS CORE PLUGINS -->
-
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-security-shiro</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-asciidoc</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
-		</dependency>
-
-		<!-- ISIS EXTENSIONS -->
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-incubator</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-sse</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-exceldownload</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-asciidoc</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-model</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-realm-shiro</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->
@@ -158,7 +134,6 @@
 					<plugin>
 						<groupId>org.springframework.boot</groupId>
 						<artifactId>spring-boot-maven-plugin</artifactId>
-						<version>${spring-boot.version}</version>
 						<executions>
 							<execution>
 								<goals>

@@ -15,10 +15,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.examples</groupId>
-		<artifactId>isis-examples</artifactId>
+		<groupId>org.apache.isis.app</groupId>
+		<artifactId>isis-app-starter-parent</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+		<relativePath>../../starters/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>smoketests</artifactId>
@@ -32,92 +32,59 @@
 
 	<dependencies>
 
-		<!-- ISIS WEB-APP BUNDLE -->
-
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-webapp</artifactId>
 			<type>pom</type>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-security-bypass</artifactId>
+			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
 		</dependency>
-
-		<!-- ISIS CORE PLUGINS -->
-
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-security-shiro</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
-		</dependency>
-
-		<!-- ISIS EXTENSIONS -->
-		
-		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-incubator</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-fixtures</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-restclient</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-model</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-realm-shiro</artifactId>
-			<version>2.0.0-M3-SNAPSHOT</version>
 		</dependency>
 
+
 		<!-- TEST DEPENDENCIES -->
-		
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 		    <groupId>javax.ws.rs</groupId>
 		    <artifactId>javax.ws.rs-api</artifactId>
