@@ -20,7 +20,7 @@
 		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
+	<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
 
 	<name>Apache Isis Core Plugin - JDO (Datanucleus 5)</name>
 	<description>
@@ -113,7 +113,7 @@
 		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jdo-common</artifactId>
+			<artifactId>isis-persistence-jdo-common</artifactId>
 			<scope>compile</scope>
 		</dependency>
 		

@@ -20,7 +20,7 @@
 		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-plugins-jdo-common</artifactId>
+	<artifactId>isis-persistence-jdo-common</artifactId>
 
 	<name>Apache Isis Core Plugin - JDO (Common)</name>
 	<description>

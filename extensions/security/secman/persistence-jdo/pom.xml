@@ -42,7 +42,7 @@
 	
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
+			<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
