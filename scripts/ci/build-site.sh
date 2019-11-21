@@ -64,11 +64,7 @@ done
 ## run antora
 ##
 echo "running antora ..."
-whence antora 2>&1 >/dev/null
-if [ $? -eq 0 ]; then
-  ANTORA_CMD=antora
-else
-  # this fails on Windows (git-bash), which is why try to use antora from path
+if [ -z "$ANTORA_CMD" ]; then
   ANTORA_CMD=$(npm bin)/antora
 fi
 

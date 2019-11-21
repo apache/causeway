@@ -6,6 +6,7 @@ if [[ $# -gt 0 ]]; then
 fi
 
 echo "building ..."
+export ANTORA_CMD=antora
 sh build-site.sh $PLAYBOOK_FILE
 
 echo "serving ..."
