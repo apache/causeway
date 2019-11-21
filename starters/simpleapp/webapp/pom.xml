@@ -34,9 +34,7 @@
     <packaging>jar</packaging>
 
     <properties>
-
         <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
-
     </properties>
 
     <dependencies>
@@ -60,11 +58,10 @@
         </dependency>
 
         <!-- test -->
-
         <dependency>
-            <groupId>com.approvaltests</groupId>
-            <artifactId>approvaltests</artifactId>
-            <version>2.0.0</version>
+            <groupId>org.apache.isis.mavendeps</groupId>
+            <artifactId>isis-mavendeps-testing</artifactId>
+            <type>pom</type>
             <scope>test</scope>
         </dependency>
 
@@ -222,8 +219,6 @@
                 </plugins>
             </build>
         </profile>
-
-
     </profiles>
 
 </project>
