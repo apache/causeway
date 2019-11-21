@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.plugins.codegen;
+package org.apache.isis.codegen.bytebuddy;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

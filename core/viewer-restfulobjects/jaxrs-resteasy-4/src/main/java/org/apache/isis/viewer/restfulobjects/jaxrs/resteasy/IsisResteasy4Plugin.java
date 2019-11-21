@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.plugins.jaxrs.resteasy;
+package org.apache.isis.viewer.restfulobjects.jaxrs.resteasy;
 
 import javax.ws.rs.core.UriBuilder;
 
@@ -27,7 +27,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.client.UriBuilderPlugin;
 import org.apache.isis.viewer.restfulobjects.server.IsisJaxrsServerPlugin;
-import org.apache.isis.viewer.restfulobjects.server.conneg.RestfulObjectsJaxbWriterForXml;
+import org.apache.isis.viewer.restfulobjects.jaxrs.resteasy.conneg.RestfulObjectsJaxbWriterForXml;
 
 public class IsisResteasy4Plugin implements UriBuilderPlugin, IsisJaxrsServerPlugin {
 
