@@ -1849,6 +1849,7 @@
 		<module>../supplemental-model</module>
 
 		<module>schema</module>
+		<module>codegen-bytebuddy</module>
 		<module>commons</module>
 		<module>config</module>
 		<module>applib</module>
@@ -1858,26 +1859,26 @@
 		<module>runtime-extensions</module>
 		<module>runtime-web</module>
 
-		<module>security/api</module>
-		<module>security/bypass</module>
-
 		<module>testsupport/unittestsupport</module>
 		<module>testsupport/integtestsupport</module>
 
-		<module>viewer-restfulobjects/applib</module>
-		<module>viewer-restfulobjects/rendering</module>
-		<module>viewer-restfulobjects/server</module>
-		<module>viewer-restfulobjects/jaxrs-resteasy-4</module>
+		<module>security/api</module>
+		<module>security/bypass</module>
+		<module>security/shiro</module>
+		<module>security/keycloak</module>
+
+		<module>viewers/restfulobjects/applib</module>
+		<module>viewers/restfulobjects/rendering</module>
+		<module>viewers/restfulobjects/server</module>
+		<module>viewers/restfulobjects/jaxrs-resteasy-4</module>
 
 		<module>viewers/wicket/model</module>
 		<module>viewers/wicket/ui</module>
 		<module>viewers/wicket/impl</module>
 
-		<module>codegen-bytebuddy</module>
 		<module>persistence/jdo/common</module>
 		<module>persistence/jdo/datanucleus-5</module>
-		<module>security/shiro</module>
-		<module>security/keycloak</module>
+		
 
 		<!-- to break cyclic dependencies some tests needed to be moved to their 
 			own modules -->

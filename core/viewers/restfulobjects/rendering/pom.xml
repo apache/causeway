@@ -18,60 +18,47 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
         <version>2.0.0-M3-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-	<artifactId>isis-viewer-restfulobjects-applib</artifactId>
-	<name>Apache Isis Core - RO Viewer (AppLib)</name>
+    <artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+
+	<name>Apache Isis Viewer - RO (Rendering)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.applib</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/viewer/restfulobjects/applib</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.rendering</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/restfulobjects/rendering</git-plugin.propertiesDir>
     </properties>
 
+
     <dependencies>
-
-		
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-
-        <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-metamodel</artifactId>
-            <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-viewer-restfulobjects-applib</artifactId>
+        </dependency>
+        
+        <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
-    </dependencies>
+	</dependencies>
 
-    <repositories>
-        <!-- The artifact in the maven repository has been moved and causes a build failure. Using this setting gets the artifact allowing the build to work.  This fix should hopefully be temporary -->
-        <repository>
-          <id>java.net</id>
-          <url>http://repo1.maven.org/maven2</url>
-            <snapshots>
-              <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
 </project>

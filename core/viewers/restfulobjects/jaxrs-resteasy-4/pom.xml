@@ -18,12 +18,12 @@
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
+		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
 
-	<name>Apache Isis Core - RO Viewer (JAX-RS Resteasy v4)</name>
+	<name>Apache Isis Viewer - RO (JAX-RS Resteasy v4)</name>
 	<description>
         JAX-RS plugin using jboss resteasy.
     </description>
