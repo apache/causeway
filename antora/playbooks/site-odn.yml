@@ -13,7 +13,7 @@ content:
 
 # core
     - url: .
-      start_path: core/plugins/jdo/src/main/doc # odn
+      start_path: core/persistence/jdo/src/main/doc # odn
       branches: HEAD
 
 

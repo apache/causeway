@@ -1874,8 +1874,8 @@
 		<module>viewer-wicket/impl</module>
 
 		<module>codegen-bytebuddy</module>
-		<module>plugins/jdo/common</module>
-		<module>plugins/jdo/datanucleus-5</module>
+		<module>persistence/jdo/common</module>
+		<module>persistence/jdo/datanucleus-5</module>
 		<module>security/shiro</module>
 		<module>security/keycloak</module>
 
