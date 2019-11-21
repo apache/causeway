@@ -25,11 +25,11 @@
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
         <version>2.0.0-M3-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../../../pom.xml</relativePath>
     </parent>
 
     <artifactId>isis-viewer-wicket-model</artifactId>
-    <name>Apache Isis Core - Wicket Viewer (Model)</name>
+    <name>Apache Isis Viewer - Wicket (Model)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.model</jar-plugin.automaticModuleName>

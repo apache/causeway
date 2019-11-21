@@ -91,7 +91,7 @@ content:
       start_path: core/viewer-restfulobjects/src/main/doc # vro
       branches: HEAD
     - url: .
-      start_path: core/viewer-wicket/src/main/doc # vw
+      start_path: core/viewers/wicket/src/main/doc # vw
       branches: HEAD
 
 # examples
