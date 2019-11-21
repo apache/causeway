@@ -89,7 +89,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
+            <artifactId>isis-jaxrs-resteasy-4</artifactId>
         </dependency>
         
         <!-- PERSISTENCE -->
