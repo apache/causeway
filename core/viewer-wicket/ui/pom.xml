@@ -30,7 +30,7 @@
     </parent>
 
     <artifactId>isis-viewer-wicket-ui</artifactId>
-    <name>Apache Isis Wicket Viewer UI Components</name>
+    <name>Apache Isis Core - Wicket Viewer (UI Components)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.ui</jar-plugin.automaticModuleName>

@@ -28,7 +28,7 @@
     </parent>
 
 	<artifactId>isis-viewer-restfulobjects-applib</artifactId>
-	<name>Apache Isis RestfulObjects Viewer AppLib</name>
+	<name>Apache Isis Core - RO Viewer (AppLib)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.applib</jar-plugin.automaticModuleName>

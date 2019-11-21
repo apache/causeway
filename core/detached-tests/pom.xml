@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-detached-tests</artifactId>
-	<name>Apache Isis Detached Tests (tests only)</name>
+	<name>Apache Isis Core - Detached Tests (tests only)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.detached-tests</jar-plugin.automaticModuleName>

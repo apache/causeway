@@ -22,7 +22,7 @@
 	</parent>
 
 	<artifactId>isis-unittestsupport</artifactId>
-	<name>Apache Isis Unit Test Support</name>
+	<name>Apache Isis Core - Unit Test Support</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.unittestsupport</jar-plugin.automaticModuleName>

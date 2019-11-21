@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-security-bypass</artifactId>
-    <name>Apache Isis Security - Bypass Implementation</name>
+    <name>Apache Isis Core - Security (Bypass Implementation)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.security.bypass</jar-plugin.automaticModuleName>

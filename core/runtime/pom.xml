@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-runtime</artifactId>
-    <name>Apache Isis Runtime</name>
+    <name>Apache Isis Core - Runtime</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.runtime</jar-plugin.automaticModuleName>

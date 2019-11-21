@@ -22,7 +22,7 @@
 	</parent>
 
 	<artifactId>isis-integtestsupport</artifactId>
-	<name>Apache Isis Integration Testing Support</name>
+	<name>Apache Isis Core - Integration Testing Support</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.integtestsupport</jar-plugin.automaticModuleName>

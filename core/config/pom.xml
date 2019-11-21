@@ -28,7 +28,7 @@
 
     <artifactId>isis-config</artifactId>
 
-    <name>Apache Isis Configuration</name>
+    <name>Apache Isis Core - Configuration</name>
     <description>
         Isis configuration library for framework internal use.
     </description>

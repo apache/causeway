@@ -22,7 +22,7 @@
 
 	<artifactId>isis-plugins-jdo-common</artifactId>
 
-	<name>Apache Isis Plugin for JDO (Common)</name>
+	<name>Apache Isis Core Plugin - JDO (Common)</name>
 	<description>
         Common base for JDO plugins.
     </description>

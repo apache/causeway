@@ -792,11 +792,6 @@ under the License.
 					<name>Apache Release Distribution Repository</name>
 					<url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
 				</repository>
-				<snapshotRepository>
-					<id>apache.snapshots.https</id>
-					<name>${distMgmtSnapshotsName}</name>
-					<url>${distMgmtSnapshotsUrl}</url>
-				</snapshotRepository>
 			</distributionManagement>
 		</profile>
 

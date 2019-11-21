@@ -23,7 +23,7 @@
 	<artifactId>isis-schema</artifactId>
 
 	<packaging>jar</packaging>
-	<name>Apache Isis Schemas</name>
+	<name>Apache Isis Core - Schemas</name>
 	<description>
         Apache Isis schemas, for conversion into canonical DTOs (for use in integration scenarios).
     </description>

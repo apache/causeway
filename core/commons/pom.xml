@@ -22,7 +22,7 @@
 
 	<artifactId>isis-commons</artifactId>
 
-	<name>Apache Isis Commons</name>
+	<name>Apache Isis Core - Commons</name>
 	<description>
         Isis library, defining utilities required by both Applib and Unittestsupport.
     </description>

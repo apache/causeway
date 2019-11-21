@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-runtime-web</artifactId>
-    <name>Apache Isis Runtime Web</name>
+    <name>Apache Isis Core - Runtime Web</name>
     <description>Introduced to keep the 'runtime' package concise. 
     Bundles all the web specific classes a srequired by viewers.</description>
 

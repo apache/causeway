@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-runtime-services</artifactId>
-    <name>Apache Isis Runtime Services</name>
+    <name>Apache Isis Core - Runtime Services</name>
     <description>Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.</description>
 
     <properties>

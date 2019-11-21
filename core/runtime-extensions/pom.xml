@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-runtime-extensions</artifactId>
-    <name>Apache Isis Runtime Extensions</name>
+    <name>Apache Isis Core - Runtime Extensions</name>
     <description>Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.</description>
 
     <properties>
