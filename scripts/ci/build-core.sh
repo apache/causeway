@@ -29,8 +29,8 @@ if [ ! -z "$REVISION" ]; then
 
   cd $PROJECT_ROOT_PATH/starters
   echo "updating version in isis-app-starter-parent ..."
-  cat pom.xml
-  mvn versions:set -DnewVersion=$REVISION -o
+  CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
+  sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
 fi
 
 cd $PROJECT_ROOT_PATH/core-parent
@@ -42,9 +42,11 @@ mvn -s $SETTINGS_XML \
 
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/core-parent
+  echo "reverting version in isis-parent ..."
   mvn versions:revert
   cd $PROJECT_ROOT_PATH/starters
-  mvn versions:revert
+  echo "reverting version in isis-app-starter-parent ..."
+  sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
 fi
 
 cd $PROJECT_ROOT_PATH
