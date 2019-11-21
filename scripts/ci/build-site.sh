@@ -64,8 +64,14 @@ done
 ## run antora
 ##
 echo "running antora ..."
-#ANTORA_CMD=$(npm bin)/antora
-ANTORA_CMD=antora
+#which antora 2>&1 >/dev/null
+#if [ $? = 0 ]; then
+#  ANTORA_CMD=antora
+#else
+#  ANTORA_CMD=$(npm bin)/antora
+#fi
+ANTORA_CMD=`command -v antora`
+
 $ANTORA_CMD --stacktrace $SITE_CONFIG
 
 # add a marker, that tells github not to use jekyll on the github pages folder
