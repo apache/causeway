@@ -96,16 +96,18 @@ content:
 
 # examples
     - url: .
-      start_path: examples/apps/demo/src/main/doc # demoapp
-      branches: HEAD
-    - url: .
-      start_path: examples/apps/helloworld/src/main/doc # helloworld
-      branches: HEAD
-    - url: .
-      start_path: examples/apps/simpleapp/src/main/doc # simpleapp
+      start_path: examples/demo/src/main/doc # demoapp
       branches: HEAD
     - url: .
       start_path: examples/smoketests/src/main/doc # core
+      branches: HEAD
+
+# starters
+    - url: .
+      start_path: starters/helloworld/src/main/doc # helloworld
+      branches: HEAD
+    - url: .
+      start_path: starters/simpleapp/src/main/doc # simpleapp
       branches: HEAD
 
 # extensions
@@ -161,11 +163,6 @@ content:
 # mavendeps
     - url: .
       start_path: mavendeps/src/main/doc
-      branches: HEAD
-
-# mixins
-    - url: .
-      start_path: mixins/src/main/doc
       branches: HEAD
 
 

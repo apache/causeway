@@ -272,6 +272,7 @@ under the License.
 	</developers>
 	<!-- APACHE ISIS customisation 3/5: end -->
 
+	<!-- ORG.APACHE:APACHE : commented out : start
 	<distributionManagement>
 		<repository>
 			<id>apache.releases.https</id>
@@ -284,6 +285,7 @@ under the License.
 			<url>${distMgmtSnapshotsUrl}</url>
 		</snapshotRepository>
 	</distributionManagement>
+	ORG.APACHE:APACHE : commented out : end -->
 
 	<properties>
 		<distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
@@ -314,7 +316,7 @@ under the License.
 	<build>
 		<pluginManagement>
 			<plugins>
-				<!-- set versions of common plugins for reproducibility, ordered alphabetically -->
+            <!-- set versions of common plugins for reproducibility, ordered alphabetically -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
@@ -777,6 +779,27 @@ under the License.
 		<!-- END SNIPPET: release-profile -->
 
 		<!-- APACHE ISIS customisation 5/5: start -->
+		<profile>
+			<id>apache-deploy</id>
+			<activation>
+				<property>
+					<name>!gcpappenginerepo-deploy.repositoryUrl</name>
+				</property>
+			</activation>
+			<distributionManagement>
+				<repository>
+					<id>apache.releases.https</id>
+					<name>Apache Release Distribution Repository</name>
+					<url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
+				</repository>
+				<snapshotRepository>
+					<id>apache.snapshots.https</id>
+					<name>${distMgmtSnapshotsName}</name>
+					<url>${distMgmtSnapshotsUrl}</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+
 		<profile>
 			<id>gcpappenginerepo-deploy</id>
 			<activation>

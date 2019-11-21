@@ -65,7 +65,6 @@ include::_attributes.adoc[]
 
 * xref:toc:devguide:about.adoc[Developers' Guide]
 * xref:toc:mavendeps:about.adoc[Maven dependencies]
-* xref:toc:mixins:about.adoc[Maven mixins]
 
 _Mailing Lists_
 

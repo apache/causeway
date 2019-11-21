@@ -11,22 +11,17 @@ content:
       start_path: antora/components/toc
       branches: HEAD
 
-# examples
+# starters
     - url: .
-      start_path: examples/apps/helloworld/src/main/doc # helloworld
+      start_path: starters/helloworld/src/main/doc # helloworld
       branches: HEAD
     - url: .
-      start_path: examples/apps/simpleapp/src/main/doc # simpleapp
+      start_path: starters/simpleapp/src/main/doc # simpleapp
       branches: HEAD
 
 # mavendeps
     - url: .
       start_path: mavendeps/src/main/doc
-      branches: HEAD
-
-# mixins
-    - url: .
-      start_path: mixins/src/main/doc
       branches: HEAD
 
 
