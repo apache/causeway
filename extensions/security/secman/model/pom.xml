@@ -32,7 +32,7 @@
     <description></description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman-model</jar-plugin.automaticModuleName>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.model</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/extensions/secman-model</git-plugin.propertiesDir>
     </properties>
 

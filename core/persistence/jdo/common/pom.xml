@@ -28,7 +28,7 @@
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo-common</jar-plugin.automaticModuleName>
+		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.common</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo-common</git-plugin.propertiesDir>
 	</properties>
 

@@ -29,7 +29,7 @@
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.jaxrs-resteasy-4</jar-plugin.automaticModuleName>
+		<jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.jaxrsresteasy4</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/viewer-restfulobjects/jaxrs-resteasy-4</git-plugin.propertiesDir>
 	</properties>
 

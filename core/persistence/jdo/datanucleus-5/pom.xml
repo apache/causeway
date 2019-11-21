@@ -28,7 +28,7 @@
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo-datanucleus-5</jar-plugin.automaticModuleName>
+		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.datanucleus5</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo-datanucleus-5</git-plugin.propertiesDir>
 	</properties>
 

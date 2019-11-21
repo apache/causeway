@@ -31,7 +31,7 @@
     <description>Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.runtime-extensions</jar-plugin.automaticModuleName>
+        <jar-plugin.automaticModuleName>org.apache.isis.runtime.extensions</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/runtime-extensions</git-plugin.propertiesDir>
     </properties>
 

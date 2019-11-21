@@ -32,7 +32,7 @@
     Bundles all the web specific classes a srequired by viewers.</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.runtime-web</jar-plugin.automaticModuleName>
+        <jar-plugin.automaticModuleName>org.apache.isis.runtime.web</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/runtime-web</git-plugin.propertiesDir>
     </properties>
 
