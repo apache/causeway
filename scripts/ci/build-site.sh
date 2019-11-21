@@ -64,13 +64,13 @@ done
 ## run antora
 ##
 echo "running antora ..."
-#which antora 2>&1 >/dev/null
-#if [ $? = 0 ]; then
-#  ANTORA_CMD=antora
-#else
-#  ANTORA_CMD=$(npm bin)/antora
-#fi
-ANTORA_CMD=`command -v antora`
+which antora 2>&1 >/dev/null
+if [ $? -eq 0 ]; then
+  ANTORA_CMD=antora
+else
+  # this fails on Windows (git-bash), which is why try to use antora from path
+  ANTORA_CMD=$(npm bin)/antora
+fi
 
 $ANTORA_CMD --stacktrace $SITE_CONFIG
 
