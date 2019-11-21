@@ -439,7 +439,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>${maven-jar-plugin}</version>
+					<version>${maven-jar-plugin.version}</version>
 					<!-- goal:jar binds to phase:package -->
 					<!-- goal:test-jar supposedly binds to phase:package, but seems to need 
 						this explicit binding. -->
