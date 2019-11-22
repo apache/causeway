@@ -127,7 +127,8 @@ class ColumnFactory {
                 headerSort = false,
                 cellClick = { evt, cell ->
                     evt.stopPropagation()
-                    buildContextMenu(evt, cell)
+                    val cm = buildContextMenu(evt, cell)
+                    UiManager.push(cm)
                 })
     }
 

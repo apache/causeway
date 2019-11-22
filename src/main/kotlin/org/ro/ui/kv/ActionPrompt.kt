@@ -1,7 +1,7 @@
 package org.ro.ui.kv
 
 import org.ro.core.Utils
-import org.ro.org.ro.ui.kv.RoDialog
+import org.ro.ui.kv.RoDialog
 import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Parameter

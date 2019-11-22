@@ -1,7 +1,7 @@
 package org.ro.ui
 
 import org.ro.core.event.LogEntry
-import org.ro.org.ro.ui.kv.RoDialog
+import org.ro.ui.kv.RoDialog
 import org.ro.to.HttpError
 import org.ro.ui.uicomp.FormItem
 

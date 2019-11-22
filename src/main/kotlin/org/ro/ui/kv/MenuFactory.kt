@@ -7,7 +7,6 @@ import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.dropdown.cmLink
 import pl.treksoft.kvision.dropdown.header
 import pl.treksoft.kvision.i18n.tr
-import pl.treksoft.kvision.utils.ESC_KEY
 
 object MenuFactory {
 
@@ -26,12 +25,6 @@ object MenuFactory {
                             e.stopPropagation()
                             ActionAggregator().invoke(link)
                             this@ContextMenu.hide()
-                        }
-                        keydown = { k ->
-                            k.stopPropagation()
-                            if (k.keyCode == ESC_KEY) {
-                                this@ContextMenu.hide()
-                            }
                         }
                     }
                 }

@@ -1,9 +1,8 @@
-package org.ro.org.ro.ui.kv
+package org.ro.ui.kv
 
 import org.ro.ui.Command
 import org.ro.ui.IconManager
 import org.ro.ui.Point
-import org.ro.ui.kv.UiManager
 import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.core.VerticalAlign
@@ -28,9 +27,7 @@ class RoDialog(
         val command: Command) :
         Window(caption, 600.px, 300.px, closeButton = true) {
 
-    // set Button.text to something specific like Connect, Back, etc.
-    //  loginButton.focus
-    private val loginButton = Button("OK", "fas fa-check", ButtonStyle.SUCCESS).onClick {
+    private val okButton = Button(caption, "fas fa-check", ButtonStyle.SUCCESS).onClick {
         execute()
     }
     private val cancelButton = Button("Cancel", "fas fa-times", ButtonStyle.OUTLINEINFO).onClick {
@@ -81,7 +78,7 @@ class RoDialog(
         val buttonBar = HPanel(spacing = 10) {
             margin = 10.px
         }
-        buttonBar.add(loginButton)
+        buttonBar.add(okButton)
         buttonBar.add(cancelButton)
         add(buttonBar)
     }

@@ -1,6 +1,6 @@
 package org.ro
 
-import org.ro.org.ro.ui.kv.RoApp
+import org.ro.ui.kv.RoApp
 import pl.treksoft.kvision.Application
 import pl.treksoft.kvision.pace.Pace
 import pl.treksoft.kvision.panel.root

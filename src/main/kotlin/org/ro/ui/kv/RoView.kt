@@ -1,6 +1,5 @@
 package org.ro.ui.kv
 
-import org.ro.org.ro.ui.kv.RoDialog
 import org.ro.ui.IconManager
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.panel.SimplePanel

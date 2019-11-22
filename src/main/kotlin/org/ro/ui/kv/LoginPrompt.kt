@@ -1,6 +1,5 @@
 package org.ro.ui.kv
 
-import org.ro.org.ro.ui.kv.RoDialog
 import org.ro.to.Link
 import org.ro.ui.Command
 import org.ro.ui.Point
