@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.commons.StringExtensions;
-import org.glassfish.pfl.dynamic.generator.Factory;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

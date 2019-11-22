@@ -3,6 +3,7 @@ package org.incode.module.base.dom.with;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
+
 import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
 
@@ -10,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.reflections.Reflections;
 
-public class WithFieldUniqueContractTestAllAbstract<T> {
+public abstract class WithFieldUniqueContractTestAllAbstract<T> {
     protected final Class<T> interfaceType;
     protected final String fieldName;
     protected final String prefix;

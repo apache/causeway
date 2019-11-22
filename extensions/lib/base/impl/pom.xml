@@ -58,6 +58,11 @@
             <artifactId>isis-metamodel</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>javax.jdo</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!--
         <dependency>

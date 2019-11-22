@@ -4,7 +4,11 @@ import java.util.List;
 
 import org.apache.isis.unittestsupport.comparable.ComparableContractTester;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ComparableByCodeContractTester<T extends WithCodeComparable<T>> {
     protected final Class<T> cls;
@@ -21,17 +25,17 @@ public class ComparableByCodeContractTester<T extends WithCodeComparable<T>> {
         System.out.println("ComparableByCodeContractTester: " + cls.getName());
         new ComparableContractTester<>(orderedTuples()).test();
 
-        // testToString();
+         testToString();
     }
 
-//    protected void testToString() {
-//        final String str = "ABC";
-//
-//        final T withCode = newWithCode(str);
-//        String expectedToString = Objects.toStringHelper(withCode).add("code", "ABC").toString();
-//
-//        assertThat(withCode.toString(), is(expectedToString));
-//    }
+    protected void testToString() {
+        final String str = "ABC";
+
+        final T withCode = newWithCode(str);
+        String expectedToString = MoreObjects.toStringHelper(withCode).add("code", "ABC").toString();
+
+        assertThat(withCode.toString(), is(expectedToString));
+    }
 
     @SuppressWarnings("unchecked")
     protected List<List<T>> orderedTuples() {

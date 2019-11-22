@@ -10,7 +10,7 @@ import org.reflections.Reflections;
 
 import org.incode.module.unittestsupport.dom.with.ComparableByReferenceContractTester;
 
-public class ComparableByReferenceContractTestAbstract_compareTo {
+public abstract class ComparableByReferenceContractTestAbstract_compareTo {
     protected final String packagePrefix;
     protected Map<Class<?>, Class<?>> noninstantiableSubstitutes;
 

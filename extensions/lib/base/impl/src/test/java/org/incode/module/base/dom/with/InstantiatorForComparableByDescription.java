@@ -1,6 +1,7 @@
 package org.incode.module.base.dom.with;
 
-import org.apache.isis.core.unittestsupport.bidir.Instantiator;
+
+import org.apache.isis.unittestsupport.bidir.Instantiator;
 
 public class InstantiatorForComparableByDescription implements Instantiator {
     public final Class<? extends WithDescriptionComparable<?>> cls;

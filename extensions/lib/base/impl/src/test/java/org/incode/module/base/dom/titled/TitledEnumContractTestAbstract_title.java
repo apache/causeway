@@ -8,7 +8,7 @@ import org.reflections.Reflections;
 import org.incode.module.base.dom.TitledEnum;
 import org.incode.module.unittestsupport.dom.titled.TitledEnumContractTester;
 
-public class TitledEnumContractTestAbstract_title {
+public abstract class TitledEnumContractTestAbstract_title {
     protected final String prefix;
 
     public TitledEnumContractTestAbstract_title(final String prefix) {

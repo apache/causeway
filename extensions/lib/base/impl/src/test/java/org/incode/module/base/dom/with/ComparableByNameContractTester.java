@@ -2,10 +2,12 @@ package org.incode.module.base.dom.with;
 
 import java.util.List;
 
+import org.apache.isis.unittestsupport.comparable.ComparableContractTester;
+
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.unittestsupport.comparable.ComparableContractTester;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -33,7 +35,7 @@ public class ComparableByNameContractTester<T extends WithNameComparable<T>> {
         final String str = "ABC";
 
         final T withName = newWithName(str);
-        String expectedToString = Objects.toStringHelper(withName).add("name", "ABC").toString();
+        String expectedToString = MoreObjects.toStringHelper(withName).add("name", "ABC").toString();
 
         assertThat(withName.toString(), is(expectedToString));
     }

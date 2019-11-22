@@ -8,13 +8,13 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.reflections.Reflections;
 
-import org.incode.module.unittestsupport.dom.with.ComparableByNameContractTester;
+import org.incode.module.unittestsupport.dom.with.ComparableByTitleContractTester;
 
-public class ComparableByNameContractTestAbstract_compareTo {
+public abstract class ComparableByTitleContractTestAbstract_compareTo {
     protected final String packagePrefix;
     protected Map<Class<?>, Class<?>> noninstantiableSubstitutes;
 
-    public ComparableByNameContractTestAbstract_compareTo(
+    public ComparableByTitleContractTestAbstract_compareTo(
             String packagePrefix, ImmutableMap<Class<?>, Class<?>> noninstantiableSubstitutes) {
         this.packagePrefix = packagePrefix;
         this.noninstantiableSubstitutes = noninstantiableSubstitutes;
@@ -25,9 +25,9 @@ public class ComparableByNameContractTestAbstract_compareTo {
     public void searchAndTest() {
         Reflections reflections = new Reflections(packagePrefix);
 
-        Set<Class<? extends WithNameComparable>> subtypes =
-                reflections.getSubTypesOf(WithNameComparable.class);
-        for (Class<? extends WithNameComparable> subtype : subtypes) {
+        Set<Class<? extends WithTitleComparable>> subtypes =
+                reflections.getSubTypesOf(WithTitleComparable.class);
+        for (Class<? extends WithTitleComparable> subtype : subtypes) {
             if(subtype.isInterface() || subtype.isAnonymousClass() || subtype.isLocalClass() || subtype.isMemberClass()) {
                 // skip (probably a testing class)
                 continue;
@@ -38,12 +38,12 @@ public class ComparableByNameContractTestAbstract_compareTo {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private Class<? extends WithNameComparable> instantiable(Class<? extends WithNameComparable> cls) {
+    private Class<? extends WithTitleComparable> instantiable(Class<? extends WithTitleComparable> cls) {
         final Class<?> substitute = noninstantiableSubstitutes.get(cls);
-        return (Class<? extends WithNameComparable>) (substitute!=null?substitute:cls);
+        return (Class<? extends WithTitleComparable>) (substitute!=null?substitute:cls);
     }
 
-    private <T extends WithNameComparable<T>> void test(Class<T> cls) {
-        new ComparableByNameContractTester<>(cls).test();
+    private <T extends WithTitleComparable<T>> void test(Class<T> cls) {
+        new ComparableByTitleContractTester<>(cls).test();
     }
 }

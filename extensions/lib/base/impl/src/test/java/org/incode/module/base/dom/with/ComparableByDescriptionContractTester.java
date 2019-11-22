@@ -2,10 +2,10 @@ package org.incode.module.base.dom.with;
 
 import java.util.List;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import org.apache.isis.unittestsupport.comparable.ComparableContractTester;
 
-import org.apache.isis.core.unittestsupport.comparable.ComparableContractTester;
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Lists;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -32,7 +32,7 @@ public class ComparableByDescriptionContractTester<T extends WithDescriptionComp
         final String str = "ABC";
 
         final T withDescription = newWithDescription(str);
-        String expectedToString = Objects.toStringHelper(withDescription).add("description", "ABC").toString();
+        String expectedToString = MoreObjects.toStringHelper(withDescription).add("description", "ABC").toString();
 
         assertThat(withDescription.toString(), is(expectedToString));
     }
