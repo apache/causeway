@@ -9,7 +9,7 @@ public class CreditCards extends AbstractRandomValueGenerator {
 
     CreditCards(final FakeDataService fakeDataService, final FakeValuesService fakeValuesService) {
         super(fakeDataService);
-        javaFakerBusiness = new com.github.javafaker.Business(fakeValuesService);
+        javaFakerBusiness = fakeDataService.javaFaker().business();
     }
 
     @Programmatic

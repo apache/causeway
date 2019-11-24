@@ -13,6 +13,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.joda.time.DateTime;
@@ -22,13 +24,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,7 +40,7 @@ public class FakeDataServiceTest {
     FakeDataService fakeDataService;
 
     @Mock
-    DomainObjectContainer mockContainer;
+    RepositoryService mockRepositoryService;
 
     @Mock
     ClockService mockClockService;
@@ -48,7 +48,7 @@ public class FakeDataServiceTest {
     @Before
     public void setUp() throws Exception {
         fakeDataService = new FakeDataService();
-        fakeDataService.container = mockContainer;
+        fakeDataService.repositoryService = mockRepositoryService;
         fakeDataService.clockService = mockClockService;
         fakeDataService.init();
 

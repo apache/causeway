@@ -7,7 +7,7 @@ public class Names extends AbstractRandomValueGenerator {
 
     Names(final FakeDataService fakeDataService) {
         super(fakeDataService);
-        javaFakerName = new com.github.javafaker.Name(fakeDataService.fakeValuesService);
+        javaFakerName = fakeDataService.javaFaker().name();
     }
 
     @Programmatic

@@ -3,8 +3,7 @@ package org.isisaddons.module.fakedata.dom;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -46,19 +45,19 @@ public class Collections extends AbstractRandomValueGenerator{
     @Deprecated
     @Programmatic
     public <T> T randomBounded(final Class<T> cls) {
-        final List<T> list = fake.container.allInstances(cls);
+        final List<T> list = fake.repositoryService.allInstances(cls);
         return anyOf(list);
     }
 
     @Programmatic
     public <T> T anyBounded(final Class<T> cls) {
-        final List<T> list = fake.container.allInstances(cls);
+        final List<T> list = fake.repositoryService.allInstances(cls);
         return anyOf(list);
     }
 
     @Programmatic
     public <T> T anyBoundedExcept(final Class<T> cls, final Predicate<T> except) {
-        final List<T> list = fake.container.allInstances(cls);
+        final List<T> list = fake.repositoryService.allInstances(cls);
         return anyOfExcept(list, except);
     }
 
@@ -264,7 +263,7 @@ public class Collections extends AbstractRandomValueGenerator{
             } catch (Exception e1) {
                 throw new RuntimeException("Problem finding candidate values");
             }
-            if(!except.apply(e)) {
+            if(!except.test(e)) {
                 return e;
             }
         }

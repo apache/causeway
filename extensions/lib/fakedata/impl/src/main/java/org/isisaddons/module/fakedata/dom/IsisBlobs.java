@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.io.ByteSource;
-import com.google.common.io.Resources;
+import java.util.stream.Collectors;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.Blob;
+
+import com.google.common.io.ByteSource;
+import com.google.common.io.Resources;
 
 public class IsisBlobs extends AbstractRandomValueGenerator{
 
@@ -49,16 +49,9 @@ public class IsisBlobs extends AbstractRandomValueGenerator{
     }
 
     private static List<String> fileNamesEndingWith(final String suffix) {
-        return Lists.newArrayList(Iterables.filter(IsisBlobs.fileNames, endsWith(suffix)));
-    }
-
-    private static Predicate<String> endsWith(final String suffix) {
-        return new Predicate<String>() {
-            @Override
-            public boolean apply(final String input) {
-                return input.endsWith(suffix);
-            }
-        };
+        return IsisBlobs.fileNames.stream()
+                .filter(input -> input.endsWith(suffix))
+                .collect(Collectors.toList());
     }
 
 

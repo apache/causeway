@@ -237,6 +237,7 @@
 
 		<module>lib/base/impl</module>
 		<module>lib/excel/impl</module>
+		<module>lib/fakedata/impl</module>
 	</modules>
 
 </project>

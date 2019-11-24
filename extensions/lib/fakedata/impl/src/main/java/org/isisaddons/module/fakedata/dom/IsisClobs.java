@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.io.CharSource;
 import com.google.common.io.Resources;
-import org.apache.isis.applib.annotation.Programmatic;
+
 import org.apache.isis.applib.value.Clob;
 
 public class IsisClobs extends AbstractRandomValueGenerator{
@@ -62,33 +64,23 @@ public class IsisClobs extends AbstractRandomValueGenerator{
             "sample.rtf",
             "testrtf.rtf");
 
-    @Programmatic
     public Clob any() {
         final List<String> fileNames = IsisClobs.fileNames;
         return asClob(fileNames);
     }
 
-    @Programmatic
     public Clob anyXml() {
         return asClob(fileNamesEndingWith(".xml"));
     }
 
-    @Programmatic
     public Clob anyRtf() {
         return asClob(fileNamesEndingWith(".rtf"));
     }
 
     private static List<String> fileNamesEndingWith(final String suffix) {
-        return Lists.newArrayList(Iterables.filter(IsisClobs.fileNames, endsWith(suffix)));
-    }
-
-    private static Predicate<String> endsWith(final String suffix) {
-        return new Predicate<String>() {
-            @Override
-            public boolean apply(final String input) {
-                return input.endsWith(suffix);
-            }
-        };
+        return IsisClobs.fileNames.stream()
+                .filter(input -> input.endsWith(suffix))
+                .collect(Collectors.toList());
     }
 
     private Clob asClob(final List<String> fileNames) {

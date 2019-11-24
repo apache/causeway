@@ -1,6 +1,6 @@
 package org.isisaddons.module.fakedata.dom;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.isis.applib.annotation.Programmatic;
 
 public class Floats extends AbstractRandomValueGenerator{
@@ -11,6 +11,6 @@ public class Floats extends AbstractRandomValueGenerator{
 
     @Programmatic
     public float any() {
-        return RandomUtils.nextFloat(fake.random);
+        return RandomUtils.nextFloat();
     }
 }

@@ -9,40 +9,33 @@ public class Lorem extends AbstractRandomValueGenerator {
 
     Lorem(final FakeDataService fakeDataService) {
         super(fakeDataService);
-        javaFakerLorem = new com.github.javafaker.Lorem(fakeDataService.fakeValuesService, fakeDataService.randomService);
+        javaFakerLorem = fakeDataService.javaFaker().lorem();
     }
 
-    @Programmatic
     public List<String> words(int num) {
         return javaFakerLorem.words(num);
     }
 
-    @Programmatic
     public List<String> words() {
         return javaFakerLorem.words();
     }
 
-    @Programmatic
     public String sentence(int wordCount) {
         return javaFakerLorem.sentence(wordCount);
     }
 
-    @Programmatic
     public String sentence() {
         return javaFakerLorem.sentence();
     }
 
-    @Programmatic
     public String paragraph(int sentenceCount) {
         return javaFakerLorem.paragraph(sentenceCount);
     }
 
-    @Programmatic
     public String paragraph() {
         return javaFakerLorem.paragraph();
     }
 
-    @Programmatic
     public List<String> paragraphs(int paragraphCount) {
         return javaFakerLorem.paragraphs(paragraphCount);
     }

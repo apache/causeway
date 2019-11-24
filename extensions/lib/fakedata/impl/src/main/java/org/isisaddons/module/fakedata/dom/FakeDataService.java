@@ -7,12 +7,13 @@ import javax.inject.Inject;
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
-import org.apache.commons.lang.math.RandomUtils;
-import org.apache.isis.applib.DomainObjectContainer;
+
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.repository.RepositoryService;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -29,7 +30,7 @@ public class FakeDataService {
     @PostConstruct
     public void init() {
 
-        random = RandomUtils.JVM_RANDOM;
+        random = new Random();
         javaFaker = new Faker(random);
 
         randomService = new RandomService(random);
@@ -116,186 +117,135 @@ public class FakeDataService {
     /**
      * Access to the full API of the underlying javafaker library.
      */
-    @Programmatic
     public Faker javaFaker() { return javaFaker; }
 
-    // //////////////////////////////////////
 
-    @Programmatic
     public Names name() {
         return names;
     }
 
-    @Programmatic
     public Comms comms() {
         return comms;
     }
 
-    @Programmatic
     public Lorem lorem() {
         return lorem;
     }
 
-    @Programmatic
     public Addresses addresses() {
         return addresses;
     }
 
-    @Programmatic
     public CreditCards creditCards() {
         return creditCards;
     }
 
-    @Programmatic
     public Books books() {
         return books;
     }
 
-    // //////////////////////////////////////
-
-    @Programmatic
     public Bytes bytes() {
         return bytes;
     }
 
-    @Programmatic
     public Shorts shorts() {
         return shorts;
     }
 
-    @Programmatic
     public Integers ints() {
         return integers;
     }
 
-    @Programmatic
     public Longs longs() {
         return longs;
     }
 
-    @Programmatic
     public Floats floats() {
         return floats;
     }
 
-    @Programmatic
     public Doubles doubles() {
         return doubles;
     }
 
-    @Programmatic
     public Chars chars() {
         return chars;
     }
 
-    @Programmatic
     public Booleans booleans() {
         return booleans;
     }
 
-    // //////////////////////////////////////
-
-    @Programmatic
     public Strings strings() {
         return strings;
     }
 
-    // //////////////////////////////////////
-
-    @Programmatic
     public Collections collections() {
         return collections;
     }
 
-    @Programmatic
     public Enums enums() {
         return enums;
     }
 
-    // //////////////////////////////////////
-
-    @Programmatic
     public JavaUtilDates javaUtilDates() {
         return javaUtilDates;
     }
 
-    @Programmatic
     public JavaSqlDates javaSqlDates() {
         return javaSqlDates;
     }
 
-    @Programmatic
     public JavaSqlTimestamps javaSqlTimestamps() {
         return javaSqlTimestamps;
     }
 
-    @Programmatic
     public JodaLocalDates jodaLocalDates() {
         return jodaLocalDates;
     }
 
-    @Programmatic
     public JodaDateTimes jodaDateTimes() {
         return jodaDateTimes;
     }
 
-    @Programmatic
     public JodaPeriods jodaPeriods() {
         return jodaPeriods;
     }
 
-    // //////////////////////////////////////
-
-    @Programmatic
     public BigDecimals bigDecimals() {
         return bigDecimals;
     }
 
-    @Programmatic
     public BigIntegers bigIntegers() {
         return bigIntegers;
     }
 
-    @Programmatic
     public Urls urls() {
         return urls;
     }
 
-    @Programmatic
     public Uuids uuids() {
         return uuids;
     }
 
-    // //////////////////////////////////////
-
-    @Programmatic
     public IsisPasswords isisPasswords() {
         return isisPasswords;
     }
 
-    @Programmatic
     public IsisMoneys isisMoneys() {
         return isisMoneys;
     }
 
-    @Programmatic
     public IsisBlobs isisBlobs() {
         return isisBlobs;
     }
 
-    @Programmatic
     public IsisClobs isisClobs() {
         return isisClobs;
     }
 
-    // //////////////////////////////////////
+    @Inject ClockService clockService;
 
-    // //////////////////////////////////////
-
-    @Inject
-    ClockService clockService;
-
-    @Inject
-    DomainObjectContainer container;
+    @Inject RepositoryService repositoryService;
 
 }
