@@ -33,26 +33,28 @@ public class Favicon extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject private WebAppConfiguration webAppConfigBean;
+    @Inject private transient WebAppConfiguration webAppConfigBean;
 
+    private String url;
+    private String contentType;
+    
     public Favicon(String id) {
         super(id);
+        if(webAppConfigBean!=null) {
+            url = webAppConfigBean.getFaviconUrl();
+            contentType = webAppConfigBean.getFaviconContentType();
+        }
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
-
-        String url = webAppConfigBean.getFaviconUrl();
         setVisible(!Strings.isEmpty(url));
     }
 
     @Override
     protected void onComponentTag(ComponentTag tag) {
         super.onComponentTag(tag);
-
-        String url = webAppConfigBean.getFaviconUrl();
-        String contentType = webAppConfigBean.getFaviconContentType();
 
         tag.put("href", url);
 

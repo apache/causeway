@@ -34,8 +34,12 @@ public class BrandName extends Label {
 
     private final Placement placement;
 
-    @Inject private WebAppConfiguration webAppConfigBean;
+    @Inject private transient WebAppConfiguration webAppConfigBean;
 
+    private String logoHeaderUrl;
+    private String logoSigninUrl;
+    private String applicationName;
+    
     /**
      * Constructor.
      *
@@ -45,8 +49,12 @@ public class BrandName extends Label {
     public BrandName(final String id, final Placement placement) {
         super(id);
         this.placement = placement;
-
-        String applicationName = webAppConfigBean.getApplicationName();
+        
+        if(webAppConfigBean!=null) {
+            applicationName = webAppConfigBean.getApplicationName();
+            logoHeaderUrl = webAppConfigBean.getBrandLogoHeader();
+            logoSigninUrl = webAppConfigBean.getBrandLogoSignin();
+        }
 
         setDefaultModel(Model.of(applicationName));
     }
@@ -54,9 +62,6 @@ public class BrandName extends Label {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-
-        String logoHeaderUrl = webAppConfigBean.getBrandLogoHeader();
-        String logoSigninUrl = webAppConfigBean.getBrandLogoSignin();
 
         setVisible(placement.urlFor(logoHeaderUrl, logoSigninUrl) == null);
     }
