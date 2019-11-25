@@ -825,11 +825,74 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean wicketSourcePlugin = false;
-
+            
+            //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
+            private final Application application = new Application();
+            @Data
+            public static class Application {
+                
+                /**
+                 * Label used on the about page. If not specified, then {@link Application#name} 
+                 * is used instead.
+                 */
+                private String about;
+                
+                /**
+                 * Either the location of the image file (relative to the class-path resource root), 
+                 * or an absolute URL.
+                 * This is rendered on the header panel. An image with a size of 160x40 works well.
+                 * If not specified, the application.name is used instead.
+                 */
+                private String brandLogoHeader;
+                
+                /**
+                 * Either the location of the image file (relative to the class-path resource root), 
+                 * or an absolute URL. 
+                 * This is rendered on the sign-in page. An image with a size of 400x40 works well. 
+                 * If not specified, the {@link Application#name} is used instead.
+                 */
+                private String brandLogoSignin;
+                
+                /**
+                 * URL of file to read any custom CSS, relative to relative to the class-path resource 
+                 * root.
+                 */
+                private String css;
+                
+                // since 2.0
+                private String faviconContentType;
+                
+                // since 2.0
+                private String faviconUrl;
+                
+                /**
+                 * URL of file to read any custom Javascript, relative to the class-path resource root.
+                 */
+                private String js;
+                
+                // since 2.0
+                private String menubarsLayoutXml = "menubars.layout.xml"; 
+                
+                /**
+                 * Identifies the application on the sign-in page
+                 * (unless a {@link Application#brandLogoSignin} image is configured) and 
+                 * on top-left in the header 
+                 * (unless a {@link Application#brandLogoHeader} image is configured).
+                 */
+                private String name = "Apache Isis ™";
+                
+                /**
+                 * The version of the application, eg 1.0, 1.1, etc.
+                 * If present, then this will be shown in the footer on every page as well as on the 
+                 * about page.
+                 */
+                private String version;
+                
+            }
+            
             private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
             @Data
             public static class BookmarkedPages {
-
                 /**
                  * Determines whether the bookmarks should be available in the header.
                  */
@@ -922,12 +985,37 @@ public class IsisConfiguration {
                  */
                 private boolean showChooser = false;
             }
+
+            //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
+            private final Welcome welcome = new Welcome();
+            @Data
+            public static class Welcome {
+
+//TODO not sure whether this was ever implemented                
+//                /**
+//                 * Location of the HTML file (relative to the class-path resource root) whose contents 
+//                 * should be displayed on the application’s home page.
+//                 * If a @HomePage action exists, then that will take precedence. 
+//                 * If no welcome file exists, then the value of {@link Welcome.text} is shown as a fallback.
+//                 */
+//                private String file;
+                
+                /**
+                 * Text to be displayed on the application’s home page, used as a fallback if 
+                 * welcome.file is not specified. If a @HomePage action exists, then that will take 
+                 * precedence.
+                 */
+                private String text;
+            }
+            
+            
             private final WhereAmI whereAmI = new WhereAmI();
             @Data
             public static class WhereAmI {
                 private boolean enabled = true;
                 private int maxParentChainLength = 64;
             }
+
             
             
         }
