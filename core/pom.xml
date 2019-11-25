@@ -1554,44 +1554,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<dependencies>
-		<!-- COMPILE DEPENDENCIES -->
-
-		<!-- TEST DEPENDENCIES -->
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-junit4</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit-dep</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
-
 	<profiles>
 		<profile>
 			<id>apache-release</id>
@@ -1797,9 +1759,15 @@
 		<profile>
 			<id>datanucleusenhance</id>
 			<activation>
+				<property>
+					<name>isis-app-starter-datanucleusenhance</name>
+					<value>true</value>
+				</property>
+<!--
 				<file>
 					<exists>${basedir}/logging-dn-enhance.properties</exists>
 				</file>
+-->
 			</activation>
 			<properties>
 				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>

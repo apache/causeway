@@ -8,33 +8,53 @@ import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
 
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-)
+@DomainService(nature = NatureOfService.DOMAIN)
 public class FakeDataService {
 
-    private Faker javaFaker;
+    private final Faker javaFaker;
 
-    Random random;
-    RandomService randomService;
-    FakeValuesService fakeValuesService;
+    final RandomService randomService;
+    final FakeValuesService fakeValuesService;
 
-    @Programmatic
+    public FakeDataService() {
+        this(new Random());
+    }
+
+    FakeDataService(
+            final Random random) {
+        this(random, new Faker(random));
+    }
+
+    FakeDataService(
+            final Random random,
+            final Faker javaFaker) {
+        this(random, javaFaker, new RandomService(random));
+    }
+
+    FakeDataService(
+            final Random random,
+            final Faker javaFaker,
+            final RandomService randomService) {
+        this(random, javaFaker, randomService, new FakeValuesService(Locale.ENGLISH, randomService));
+    }
+
+    FakeDataService(
+            final Random random,
+            final Faker javaFaker,
+            final RandomService randomService,
+            final FakeValuesService fakeValuesService) {
+        this.javaFaker = javaFaker;
+        this.randomService = randomService;
+        this.fakeValuesService = fakeValuesService;
+    }
+
     @PostConstruct
     public void init() {
-
-        random = new Random();
-        javaFaker = new Faker(random);
-
-        randomService = new RandomService(random);
-        fakeValuesService = new FakeValuesService(Locale.ENGLISH, randomService);
 
         // (slightly refactored) wrappers for the javafaker subclasses
         this.names = new Names(this);

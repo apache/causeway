@@ -1,8 +1,8 @@
 package org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.isisaddons.module.fakedata.dom.FakeDataService;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAllMenu;

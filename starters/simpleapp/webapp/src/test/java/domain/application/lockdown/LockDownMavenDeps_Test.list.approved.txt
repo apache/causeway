@@ -2,8 +2,8 @@
    args4j:args4j:jar:2.0.26:compile
    cglib:cglib-nodep:jar:3.2.12:compile
    cglib:cglib:jar:3.2.8:runtime
-   com.approvaltests:approvaltests-util:jar:2.0.0:test
-   com.approvaltests:approvaltests:jar:2.0.0:test
+   com.approvaltests:approvaltests-util:jar:4.0.2:test
+   com.approvaltests:approvaltests:jar:4.0.2:test
    com.fasterxml.jackson.core:jackson-annotations:jar:2.10.0:compile
    com.fasterxml.jackson.core:jackson-core:jar:2.10.0:compile
    com.fasterxml.jackson.core:jackson-databind:jar:2.10.0:compile
@@ -75,22 +75,25 @@
    org.apache.httpcomponents:httpclient:jar:4.5.10:compile
    org.apache.httpcomponents:httpcore:jar:4.4.12:compile
    org.apache.isis.core:isis-applib:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-codegen-bytebuddy:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-commons:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-config:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-integtestsupport:jar:2.0.0-M3-SNAPSHOT:test
    org.apache.isis.core:isis-metamodel:jar:2.0.0-M3-SNAPSHOT:compile
-   org.apache.isis.core:isis-plugins-codegen-bytebuddy:jar:2.0.0-M3-SNAPSHOT:compile
-   org.apache.isis.core:isis-plugins-jaxrs-resteasy-4:jar:2.0.0-M3-SNAPSHOT:compile
-   org.apache.isis.core:isis-plugins-jdo-common:jar:2.0.0-M3-SNAPSHOT:compile
-   org.apache.isis.core:isis-plugins-jdo-datanucleus-5:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-persistence-jdo-common:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-persistence-jdo-datanucleus5:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-runtime-extensions:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-runtime-services:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-runtime-web:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-runtime:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-schema:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-security-bypass:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-security-keycloak:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-security-shiro:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-security:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-unittestsupport:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-viewer-restfulobjects-applib:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-viewer-restfulobjects-jaxrsresteasy4:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-viewer-restfulobjects-rendering:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-viewer-restfulobjects-server:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-viewer-wicket-impl:jar:2.0.0-M3-SNAPSHOT:compile
@@ -101,6 +104,7 @@
    org.apache.isis.extensions:isis-extensions-fixtures:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.extensions:isis-extensions-specsupport:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.extensions:isis-extensions-spring:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.mavendeps:isis-mavendeps-testing:pom:2.0.0-M3-SNAPSHOT:test
    org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:2.0.0-M3-SNAPSHOT:compile
    org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
    org.apache.logging.log4j:log4j-core:jar:2.12.1:compile
@@ -147,6 +151,7 @@
    org.hamcrest:hamcrest-library:jar:2.1:compile
    org.hamcrest:hamcrest:jar:2.1:compile
    org.hibernate.validator:hibernate-validator:jar:6.0.17.Final:compile
+   org.hsqldb:hsqldb:jar:2.5.0:test
    org.jboss.logging:jboss-logging:jar:3.4.1.Final:compile
    org.jboss.resteasy:resteasy-jackson-provider:jar:4.0.0.Beta5:compile
    org.jboss.resteasy:resteasy-jaxb-provider:jar:4.0.0.Beta5:compile
@@ -174,7 +179,6 @@
    org.ow2.asm:asm-analysis:jar:7.1:compile
    org.ow2.asm:asm-tree:jar:7.1:compile
    org.ow2.asm:asm-util:jar:7.1:compile
-   org.ow2.asm:asm:jar:6.2.1:compile
    org.picocontainer:picocontainer:jar:2.15:compile
    org.projectlombok:lombok:jar:1.18.10:provided
    org.reactivestreams:reactive-streams:jar:1.0.3:compile

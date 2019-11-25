@@ -7,11 +7,11 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Money;
@@ -23,6 +23,8 @@ import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.EnumOf3;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.inject.Inject;
 
 public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript {
 
@@ -190,6 +192,5 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
         executionContext.addResult(this, this.fakeDataDemoObject);
     }
 
-    @javax.inject.Inject
-    FakeDataService fakeDataService;
+    @Inject FakeDataService fakeDataService;
 }

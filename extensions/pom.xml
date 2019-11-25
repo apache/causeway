@@ -217,7 +217,49 @@
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.incode.module.base</groupId>
+				<artifactId>incode-module-base-dom</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
 
+			<dependency>
+				<groupId>org.isisaddons.module.excel</groupId>
+				<artifactId>isis-module-excel-dom</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.isisaddons.module.excel</groupId>
+				<artifactId>isis-module-excel-fixtures</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.isisaddons.module.excel</groupId>
+				<artifactId>isis-module-excel-integtests</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.isisaddons.module.fakedata</groupId>
+				<artifactId>isis-module-fakedata-dom</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.isisaddons.module.fakedata</groupId>
+				<artifactId>isis-module-fakedata-fixtures</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.isisaddons.module.fakedata</groupId>
+				<artifactId>isis-module-fakedata-integtests</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.incode.module.unittestsupport</groupId>
+				<artifactId>incode-module-unittestsupport-dom</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
@@ -238,6 +280,8 @@
 		<module>lib/base/impl</module>
 		<module>lib/excel/impl</module>
 		<module>lib/fakedata/impl</module>
+		<module>lib/unittestsupport/impl</module>
+		<module>lib/fakedata/fixture</module>
 	</modules>
 
 </project>

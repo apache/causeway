@@ -1,14 +1,10 @@
 package org.isisaddons.module.fakedata.fixture;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.apache.isis.applib.ModuleAbstract;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.modules.Module;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_tearDown;
 
-@XmlRootElement(name = "module")
-public class FakeDataFixturesModule extends ModuleAbstract {
+public class FakeDataFixturesModule implements Module {
 
     @Override public FixtureScript getTeardownFixture() {
         return new FakeDataDemoObjectWithAll_tearDown();

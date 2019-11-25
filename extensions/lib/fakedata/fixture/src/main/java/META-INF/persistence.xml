@@ -3,6 +3,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
 
-    <persistence-unit name="org-isisaddons-module-fakedata-fixture">
+    <persistence-unit name="org-apache-isis-ext-fakedata-fixtures">
     </persistence-unit>
 </persistence>

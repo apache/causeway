@@ -5,14 +5,16 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.isisaddons.module.fakedata.dom.FakeDataService;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_create_withFakeData;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.inject.Inject;
 
 @lombok.experimental.Accessors(chain = true)
 public class FakeDataDemoObjectWithAll_create3 extends FixtureScript {
@@ -39,6 +41,5 @@ public class FakeDataDemoObjectWithAll_create3 extends FixtureScript {
 
     }
 
-    @javax.inject.Inject
-    FakeDataService fakeDataService;
+    @Inject FakeDataService fakeDataService;
 }

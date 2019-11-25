@@ -23,9 +23,12 @@
 
 	<artifactId>smoketests</artifactId>
 
-	<name>Apache Isis - Smoketests</name>
+	<name>Apache Isis App - Smoketests</name>
 
 	<properties>
+		<!--  mvn clean install -Dskip.smokeTests=true -->
+		<skip.smokeTests>false</skip.smokeTests>
+		<skipTests>${skip.smokeTests}</skipTests>
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 	</properties>
 

@@ -62,6 +62,7 @@
                             <jsonFiles>
                                 <param>**/*.json</param>
                             </jsonFiles>
+                            <skip>${skipBSs}</skip>
                         </configuration>
                     </execution>
                 </executions>

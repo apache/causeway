@@ -1,8 +1,11 @@
 package org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom;
 
+import lombok.val;
+
 import java.util.List;
 
-import org.apache.isis.applib.DomainObjectContainer;
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -11,14 +14,14 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.repository.RepositoryService;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "libFakeDataFixture.FakeDataDemoObjectWithAllMenu"
 )
 @DomainServiceLayout(
-        named = "Demo",
-        menuOrder = "10.2"
+        named = "Demo"
 )
 public class FakeDataDemoObjectWithAllMenu {
 
@@ -27,7 +30,7 @@ public class FakeDataDemoObjectWithAllMenu {
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
     @MemberOrder(sequence = "1")
     public List<FakeDataDemoObjectWithAll> listAllDemoObjectsWithAll() {
-        return container.allInstances(FakeDataDemoObjectWithAll.class);
+        return repositoryService.allInstances(FakeDataDemoObjectWithAll.class);
     }
 
 
@@ -42,8 +45,7 @@ public class FakeDataDemoObjectWithAllMenu {
             final long someLong,
             final float someFloat,
             final double someDouble) {
-        final FakeDataDemoObjectWithAll obj = container.newTransientInstance(FakeDataDemoObjectWithAll.class);
-        obj.setName(name);
+        val obj = new FakeDataDemoObjectWithAll(name);
         obj.setSomeBoolean(someBoolean);
         obj.setSomeChar(someChar);
         obj.setSomeByte(someByte);
@@ -52,12 +54,11 @@ public class FakeDataDemoObjectWithAllMenu {
         obj.setSomeLong(someLong);
         obj.setSomeFloat(someFloat);
         obj.setSomeDouble(someDouble);
-        container.persistIfNotAlready(obj);
+        repositoryService.persist(obj);
         return obj;
     }
 
 
-    @javax.inject.Inject 
-    DomainObjectContainer container;
+    @Inject RepositoryService repositoryService;
 
 }

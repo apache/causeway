@@ -66,25 +66,25 @@
    org.apache.httpcomponents:httpclient:jar:4.5.10:compile
    org.apache.httpcomponents:httpcore:jar:4.4.12:compile
    org.apache.isis.core:isis-applib:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-codegen-bytebuddy:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-commons:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-config:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-integtestsupport:jar:2.0.0-M3-SNAPSHOT:test
    org.apache.isis.core:isis-metamodel:jar:2.0.0-M3-SNAPSHOT:compile
-   org.apache.isis.core:isis-plugins-codegen-bytebuddy:jar:2.0.0-M3-SNAPSHOT:compile
-   org.apache.isis.core:isis-plugins-jaxrs-resteasy-4:jar:2.0.0-M3-SNAPSHOT:compile
-   org.apache.isis.core:isis-plugins-jdo-common:jar:2.0.0-M3-SNAPSHOT:compile
-   org.apache.isis.core:isis-plugins-jdo-datanucleus-5:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-persistence-jdo-common:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-persistence-jdo-datanucleus5:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-runtime-extensions:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-runtime-services:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-runtime-web:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-runtime:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-schema:jar:2.0.0-M3-SNAPSHOT:compile
-   org.apache.isis.core:isis-security-bypass:jar:2.0.0-M3-SNAPSHOT:test
+   org.apache.isis.core:isis-security-bypass:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-security-keycloak:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-security-shiro:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-security:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-unittestsupport:jar:2.0.0-M3-SNAPSHOT:test
    org.apache.isis.core:isis-viewer-restfulobjects-applib:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.core:isis-viewer-restfulobjects-jaxrsresteasy4:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-viewer-restfulobjects-rendering:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-viewer-restfulobjects-server:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-viewer-wicket-impl:jar:2.0.0-M3-SNAPSHOT:compile

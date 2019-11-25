@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
+        <version>2.0.0-M3-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.incode.module.unittestsupport</groupId>
+    <artifactId>incode-module-unittestsupport-dom</artifactId>
+
+    <packaging>jar</packaging>
+
+    <name>Incode Platform Lib Unit TestingSupport Impl</name>
+    <description>
+        A module providing test utilities for unit testing of domain modules
+    </description>
+
+    <properties>
+        <jar-plugin.automaticModuleName>org.incode.platform.lib.unittestsupport</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/incode/platform/lib/unittestsupport</git-plugin.propertiesDir>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-applib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- note that this is *not* a test dependency -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-unittestsupport</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

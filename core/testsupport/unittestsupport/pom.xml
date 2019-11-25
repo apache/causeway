@@ -87,7 +87,6 @@
 			<artifactId>spring-test</artifactId>
 		</dependency>
 
-<!--
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -100,14 +99,6 @@
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit-legacy.version}</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
--->
 
 		<dependency>
 			<groupId>net.bytebuddy</groupId>

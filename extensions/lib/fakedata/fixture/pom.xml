@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.incode</groupId>
-        <artifactId>incode-parent</artifactId>
-        <version>${revision}</version>
-        <relativePath>../../../pom.xml</relativePath>
+        <groupId>org.apache.isis.app</groupId>
+        <artifactId>isis-app-starter-parent</artifactId>
+        <version>2.0.0-M3-SNAPSHOT</version>
+        <relativePath>../../../../starters/pom.xml</relativePath>
     </parent>
 
     <groupId>org.isisaddons.module.fakedata</groupId>
@@ -46,82 +46,50 @@
                 </excludes>
             </testResource>
         </testResources>
-        <plugins>
-            <plugin>
-                <groupId>com.github.odavid.maven.plugins</groupId>
-                <artifactId>mixin-maven-plugin</artifactId>
-                <version>0.1-alpha-39</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <mixins>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>datanucleusenhance</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>enforcerrelaxed</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>sourceandjavadoc</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>standard</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>staticanalysis</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>surefire</artifactId>
-                        </mixin>
-<!--
-TODO: to reinstate, think that FixturesManifest needs some attention.
-                        <mixin>
-                            <groupId>org.incode.mavenmixin</groupId>
-                            <artifactId>incode-mavenmixin-validate</artifactId>
-                        </mixin>
--->
-                    </mixins>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 
     <dependencies>
+
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
+            <groupId>org.isisaddons.module.fakedata</groupId>
+            <artifactId>isis-module-fakedata-dom</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-wrapper</artifactId>
+            <artifactId>isis-applib</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.incode.module.fixturesupport</groupId>
-            <artifactId>incode-module-fixturesupport-dom</artifactId>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-fixtures</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-persistence-jdo-datanucleus5</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.axonframework</groupId>
-            <artifactId>axon-core</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
 
+        <!--
+                <dependency>
+                    <groupId>org.hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                </dependency>
+        -->
+
+<!--
         <dependency>
             <groupId>org.togglz</groupId>
             <artifactId>togglz-core</artifactId>
         </dependency>
+-->
 
+<!--
         <dependency>
             <groupId>org.isisaddons.module.docx</groupId>
             <artifactId>isis-module-docx-dom</artifactId>
@@ -137,10 +105,6 @@ TODO: to reinstate, think that FixturesManifest needs some attention.
             <artifactId>isis-module-excel-dom</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.isisaddons.module.fakedata</groupId>
-            <artifactId>isis-module-fakedata-dom</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.isisaddons.module.poly</groupId>
@@ -219,6 +183,7 @@ TODO: to reinstate, think that FixturesManifest needs some attention.
             <groupId>org.isisaddons.wicket.wickedcharts</groupId>
             <artifactId>isis-wicket-wickedcharts-cpt</artifactId>
         </dependency>
+-->
 
 
         <!-- test -->

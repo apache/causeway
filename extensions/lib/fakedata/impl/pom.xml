@@ -52,12 +52,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-<!--
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-        </dependency>
--->
 
         <!-- test -->
         <dependency>
@@ -66,5 +60,32 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>resolve-conflicts</id>
+            <activation>
+                <property>
+                    <name>!skip.resolve-conflicts</name>
+                </property>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.javafaker</groupId>
+                        <artifactId>javafaker</artifactId>
+                        <version>${javafaker.version}</version>
+                        <exclusions>
+                            <!-- dependency convergence with spring-boot-starter -->
+                            <exclusion>
+                                <groupId>org.yaml</groupId>
+                                <artifactId>snakeyaml</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        </profile>
+    </profiles>
 
 </project>
