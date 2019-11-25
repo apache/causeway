@@ -24,7 +24,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
 
 /**
  * A component for application favorite icon
@@ -33,7 +33,7 @@ public class Favicon extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject private WebAppConfigBean webAppConfigBean;
+    @Inject private WebAppConfiguration webAppConfigBean;
 
     public Favicon(String id) {
         super(id);

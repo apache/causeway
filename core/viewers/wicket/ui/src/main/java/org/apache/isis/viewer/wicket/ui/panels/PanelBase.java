@@ -27,7 +27,6 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.MessageBroker;
@@ -35,6 +34,7 @@ import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
@@ -51,7 +51,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     private static final long serialVersionUID = 1L;
 
     private transient WicketViewerSettings wicketViewerSettings;
-    private transient WebAppConfigBean webAppConfigBean;
+    private transient WebAppConfiguration webAppConfigBean;
     private transient PageClassRegistry pageClassRegistry;
     private transient ImageResourceCache imageCache;
     private transient MetaModelContext metaModelContext;
@@ -79,8 +79,8 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
         return wicketViewerSettings = computeIfAbsent(WicketViewerSettings.class, wicketViewerSettings);
     }
     
-    public WebAppConfigBean getWebAppConfigBean() {
-        return webAppConfigBean = computeIfAbsent(WebAppConfigBean.class, webAppConfigBean);
+    public WebAppConfiguration getWebAppConfigBean() {
+        return webAppConfigBean = computeIfAbsent(WebAppConfiguration.class, webAppConfigBean);
     }
     
     public PageClassRegistry getPageClassRegistry() {

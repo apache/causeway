@@ -18,13 +18,9 @@
  */
 package org.apache.isis.mavenplugin.spring;
 
-import javax.inject.Singleton;
-
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.IsisBootSecurityBypass;
 
@@ -37,13 +33,5 @@ import org.apache.isis.security.IsisBootSecurityBypass;
     IsisBoot.class, 
     IsisBootSecurityBypass.class})
 public class IsisMavenPlugin_SpringContextConfig {
-
-    @Bean @Singleton
-    public WebAppConfigBean webAppConfigBean() {
-        // just empty        
-        return WebAppConfigBean.builder()
-                //.menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-                .build();
-    }
 
 }

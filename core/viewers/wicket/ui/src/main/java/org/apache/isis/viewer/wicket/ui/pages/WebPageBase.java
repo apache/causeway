@@ -22,9 +22,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
+import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 /**
@@ -35,7 +35,7 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
 
     private static final long serialVersionUID = 1L;
     
-    private transient WebAppConfigBean webAppConfigBean;
+    private transient WebAppConfiguration webAppConfigBean;
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisWebAppCommonContext commonContext;
     private transient IsisSessionFactory isisSessionFactory;
@@ -53,8 +53,8 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     
-    public WebAppConfigBean getWebAppConfigBean() {
-        return webAppConfigBean = computeIfAbsent(WebAppConfigBean.class, webAppConfigBean);
+    public WebAppConfiguration getWebAppConfigBean() {
+        return webAppConfigBean = computeIfAbsent(WebAppConfiguration.class, webAppConfigBean);
     }
     
     public PageClassRegistry getPageClassRegistry() {

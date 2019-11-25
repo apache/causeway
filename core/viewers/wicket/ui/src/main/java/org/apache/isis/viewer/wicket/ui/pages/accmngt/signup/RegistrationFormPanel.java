@@ -34,8 +34,8 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
@@ -55,7 +55,7 @@ public class RegistrationFormPanel extends PanelBase<Void> {
     @Inject private transient EmailNotificationService emailNotificationService;
     @Inject private transient EmailVerificationUrlService emailVerificationUrlService;
     @Inject private transient PageNavigationService pageNavigationService;
-    @Inject private transient WebAppConfigBean webAppConfigBean;
+    @Inject private transient WebAppConfiguration webAppConfigBean;
 
     /**
      * Constructor

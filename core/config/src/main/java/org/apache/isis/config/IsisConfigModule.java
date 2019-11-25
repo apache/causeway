@@ -28,12 +28,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
 
 @Configuration
 @Import({
     //IsisConfiguration.class // not required
     IsisConfiguration.PatternsConverter.class,
-    IsisSystemEnvironment.class
+    IsisSystemEnvironment.class,
+    WebAppConfiguration.class
 })
 @EnableConfigurationProperties(IsisConfiguration.class)
 public class IsisConfigModule {

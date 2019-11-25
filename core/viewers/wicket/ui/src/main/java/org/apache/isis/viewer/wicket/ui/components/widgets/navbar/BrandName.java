@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
 
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar
@@ -34,7 +34,7 @@ public class BrandName extends Label {
 
     private final Placement placement;
 
-    @Inject private WebAppConfigBean webAppConfigBean;
+    @Inject private WebAppConfiguration webAppConfigBean;
 
     /**
      * Constructor.

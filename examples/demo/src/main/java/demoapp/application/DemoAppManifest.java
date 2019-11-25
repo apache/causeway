@@ -26,10 +26,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.ExtFixturesModule;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
@@ -82,19 +80,6 @@ import demoapp.utils.LibraryPreloadingService;
         }
 )
 public class DemoAppManifest {
-
-    @Bean @Singleton
-    public WebAppConfigBean webAppConfigBean() {
-        
-        return WebAppConfigBean.builder()
-                .applicationName("Isis Demo App")
-                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-                .brandLogoHeader("/images/gift_48.png")
-                .applicationCss("css/application.css")
-                .applicationJs("scripts/application.js")
-                .faviconUrl("/images/favicon.png")
-                .build();
-    }
 
     @Bean @Singleton
     public SecurityModuleConfig securityModuleConfigBean() {

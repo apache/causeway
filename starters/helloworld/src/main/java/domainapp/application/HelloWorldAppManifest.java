@@ -18,18 +18,13 @@
  */
 package domainapp.application;
 
-import javax.inject.Singleton;
-
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
@@ -60,17 +55,5 @@ import domainapp.dom.HelloWorldModule;
                 HelloWorldModule.class
         })
 public class HelloWorldAppManifest {
-
-    @Bean @Singleton
-    public WebAppConfigBean webAppConfigBean() {
-        return WebAppConfigBean.builder()
-                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-                .brandLogoHeader("/images/apache-isis/logo-48x48.png")
-                .applicationCss("css/application.css")
-                .applicationJs("scripts/application.js")
-                .applicationName("Apache Isis Hello World App")
-                .faviconUrl("/images/favicon.png")
-                .build();
-    }
 
 }

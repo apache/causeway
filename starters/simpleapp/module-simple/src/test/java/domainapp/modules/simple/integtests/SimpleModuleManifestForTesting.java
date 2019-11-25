@@ -18,9 +18,6 @@
  */
 package domainapp.modules.simple.integtests;
 
-import javax.inject.Singleton;
-
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,7 +25,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.ExtFixturesModule;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
@@ -57,11 +53,5 @@ import domainapp.modules.simple.SimpleModule;
                 SimpleModule.class
         })
 public class SimpleModuleManifestForTesting {
-
-    @Bean @Singleton
-    public WebAppConfigBean webAppConfigBean() {
-        return WebAppConfigBean.builder()
-                .build();
-    }
 
 }

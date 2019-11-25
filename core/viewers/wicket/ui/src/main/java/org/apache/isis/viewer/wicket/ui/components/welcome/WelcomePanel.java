@@ -23,8 +23,8 @@ import javax.inject.Inject;
 
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
+import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -38,7 +38,7 @@ public class WelcomePanel extends PanelAbstract<WelcomeModel> {
 
     private static final String ID_MESSAGE = "message";
 
-    @Inject private WebAppConfigBean webAppConfigBean;
+    @Inject private transient WebAppConfiguration webAppConfigBean;
 
     public WelcomePanel(final String id, final WelcomeModel model) {
         super(id, model);

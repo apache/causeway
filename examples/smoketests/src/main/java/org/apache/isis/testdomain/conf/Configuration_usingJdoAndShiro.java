@@ -28,7 +28,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.ExtFixturesModule;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
@@ -58,13 +57,6 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
     @PropertySource(IsisPresets.NoTranslations),
 })
 public class Configuration_usingJdoAndShiro {
-
-    @Bean @Singleton
-    public WebAppConfigBean webAppConfigBean() {
-        return WebAppConfigBean.builder()
-                //.menubarsLayoutXml(new ClassPathResource(path, clazz))
-                .build();
-    }
 
     @Bean @Singleton
     public SecurityModuleConfig securityModuleConfigBean() {

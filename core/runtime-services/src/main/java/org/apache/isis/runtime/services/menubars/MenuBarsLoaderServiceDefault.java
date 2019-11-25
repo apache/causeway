@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -42,7 +42,7 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private JaxbService jaxbService;
-    @Autowired(required = false) private WebAppConfigBean webAppConfigBean;
+    @Autowired(required = false) private WebAppConfiguration webAppConfigBean;
     
     @Override
     public boolean supportsReloading() {
@@ -53,7 +53,7 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     public BS3MenuBars menuBars() {
 
         val menubarsLayoutResource = Optional.ofNullable(webAppConfigBean)
-                .map(WebAppConfigBean::getMenubarsLayoutXml)
+                .map(WebAppConfiguration::getMenubarsLayoutXml)
                 .orElse(null);
 
         if(menubarsLayoutResource==null) {
@@ -99,7 +99,7 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
         log.warn( 
                 String.format("Configured '%s' failes to provide a readable resource for "
                         + "the Menubars-Layout.", 
-                        WebAppConfigBean.class.getName()));
+                        WebAppConfiguration.class.getName()));
         warnedOnce = true; 
     }
 
@@ -108,7 +108,7 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
         log.error(
                 String.format("Configured '%s' failes to provide a readable resource for "
                         + "the Menubars-Layout.", 
-                        WebAppConfigBean.class.getName()), 
+                        WebAppConfiguration.class.getName()), 
                 cause);
     }
 
