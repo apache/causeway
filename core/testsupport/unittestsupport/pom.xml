@@ -183,7 +183,7 @@
 	<profiles>
 
 		<profile>
-			<id>jdk11</id>
+			<id>jdk11-supplemental</id>
 			<activation>
 				<jdk>[11,)</jdk>
 			</activation>

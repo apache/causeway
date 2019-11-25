@@ -123,8 +123,8 @@
 		<javafaker.version>1.0.1</javafaker.version>
 		<javassist.version>3.19.0-GA</javassist.version>
 		<javax-servlet.version>3.1.0</javax-servlet.version>
-		<jaxb-core.version>2.3.0.1</jaxb-core.version>
-		<jaxb-impl.version>2.3.0.1</jaxb-impl.version>
+		<jaxb-core.version>2.3.0.1</jaxb-core.version> <!-- 2.3.2 is not yet available -->
+		<jaxb-impl.version>2.3.2</jaxb-impl.version>
 		<jaxws-ri.version>2.3.2</jaxws-ri.version>
 
 		<jbcrypt.version>0.4</jbcrypt.version>
@@ -139,7 +139,7 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<junit.jupiter.version>5.3.2</junit.jupiter.version>
+		<junit.jupiter.version>5.5.2</junit.jupiter.version>
 		<junit-legacy.version>4.12</junit-legacy.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>

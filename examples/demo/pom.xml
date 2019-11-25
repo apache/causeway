@@ -40,27 +40,23 @@
 
 	<dependencies>
 
+		<!-- WEB APPLICATION DEPENDENCY BUNDLE -->
+		
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-webapp</artifactId>
 			<type>pom</type>
 		</dependency>
+		
+		<!-- JDK11+ SUPPORT -->
+		
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-codegen-bytebuddy</artifactId>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-jdk11</artifactId>
+			<type>pom</type>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-security-shiro</artifactId>
-		</dependency>
+
+		<!-- EXTENSIONS -->
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>

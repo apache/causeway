@@ -38,6 +38,12 @@
 			<artifactId>isis-mavendeps-webapp</artifactId>
 			<type>pom</type>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-jdk11</artifactId>
+			<type>pom</type>
+		</dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -130,20 +136,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-
-		<profile>
-			<id>jdk11</id>
-			<activation>
-				<jdk>[11,)</jdk>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.apache.isis.mavendeps</groupId>
-					<artifactId>isis-mavendeps-jdk11</artifactId>
-					<type>pom</type>
-				</dependency>
-			</dependencies>
 		</profile>
 
 		<profile>

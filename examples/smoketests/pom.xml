@@ -37,18 +37,13 @@
 			<artifactId>isis-mavendeps-webapp</artifactId>
 			<type>pom</type>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-codegen-bytebuddy</artifactId>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-jdk11</artifactId>
+			<type>pom</type>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-security-shiro</artifactId>
@@ -94,7 +89,7 @@
 		<dependency>
 		    <groupId>org.glassfish.jersey.core</groupId>
 		    <artifactId>jersey-client</artifactId>
-		    <version>2.25.1</version>
+<!-- 		    <version>2.25.1</version> -->
 		    <scope>test</scope>
 		</dependency>
 		<dependency>
@@ -120,20 +115,5 @@
 
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>jdk11</id>
-			<activation>
-				<jdk>[11,)</jdk>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.apache.isis.mavendeps</groupId>
-					<artifactId>isis-mavendeps-jdk11</artifactId>
-					<type>pom</type>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
 
 </project>
