@@ -280,8 +280,11 @@
 		<module>lib/base/impl</module>
 		<module>lib/excel/impl</module>
 		<module>lib/fakedata/impl</module>
-		<module>lib/unittestsupport/impl</module>
 		<module>lib/fakedata/fixture</module>
+<!--
+		<module>lib/fakedata/integtests</module>
+-->
+		<module>lib/unittestsupport/impl</module>
 	</modules>
 
 </project>

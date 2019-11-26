@@ -16,29 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.modules.simple.integtests;
+package org.isisaddons.module.fakedata.integtests;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.extensions.fixtures.ExtFixturesModule;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.IsisBootSecurityBypass;
-
-import domainapp.modules.simple.SimpleModule;
-
+import org.springframework.context.annotation.*;
 
 /**
- * Makes the integral parts of the 'module-simple' integration tests.
+ * Makes the integral parts of the 'simple app' web application.
  */
 @Configuration
 @PropertySources({
     @PropertySource(IsisPresets.H2InMemory),
+    @PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.DataNucleusAutoCreate),
 })
 @Import({
@@ -49,8 +43,8 @@ import domainapp.modules.simple.SimpleModule;
 })
 @ComponentScan(
         basePackageClasses= {
-                SimpleModule.class
+                FakeDataModuleIntegTestModule.class
         })
-public class SimpleModuleManifestForTesting {
+public class AppConfigurationForTesting {
 
 }

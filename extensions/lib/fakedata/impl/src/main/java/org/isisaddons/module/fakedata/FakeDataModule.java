@@ -1,5 +1,9 @@
 package org.isisaddons.module.fakedata;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+@Configuration
 public class FakeDataModule {
 
     public abstract static class ActionDomainEvent<S> extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}

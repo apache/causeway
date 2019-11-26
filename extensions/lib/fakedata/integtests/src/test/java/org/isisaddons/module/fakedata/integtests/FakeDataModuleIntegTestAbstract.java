@@ -1,9 +1,15 @@
 package org.isisaddons.module.fakedata.integtests;
 
-import org.apache.isis.applib.ModuleAbstract;
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract3;
 
-public abstract class FakeDataModuleIntegTestAbstract extends IntegrationTestAbstract3 {
+import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstractWithFixtures;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest(
+        classes = SimpleModuleManifestForTesting.class,
+        properties = {
+                "isis.objects.editing=false"
+        })
+public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
 
     public static ModuleAbstract module() {
         return new FakeDataModuleIntegTestModule();
