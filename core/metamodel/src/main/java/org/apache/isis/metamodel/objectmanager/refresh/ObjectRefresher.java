@@ -59,7 +59,7 @@ public interface ObjectRefresher {
         return request -> chainOfRespo
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "ObjectLoader failed to handle request %s", request));
+                        "ObjectRefresher failed to handle request %s", request));
         
     }
     

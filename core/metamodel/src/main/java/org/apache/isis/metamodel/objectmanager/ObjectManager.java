@@ -36,6 +36,7 @@ import lombok.val;
  * - object creation ... init defaults <br>
  * - object loading ... given a specific object identifier (id) <br>
  * - object identification ... given a domain object (pojo) <br>
+ * - object refreshing ... given a domain object (pojo) <br>
  *  
  * @since 2.0
  */
@@ -61,18 +62,37 @@ public interface ObjectManager {
     
     // -- SHORTCUTS
 
+    /**
+     * Creates and initializes an instance conforming to given request parameters.
+     * @param objectCreateRequest
+     * @return
+     */
     public default ManagedObject createObject(ObjectCreator.Request objectCreateRequest) {
         return getObjectCreator().createObject(objectCreateRequest);
     }
     
+    /**
+     * Loads an instance identified with given request parameters.
+     * @param objectLoadRequest
+     * @return
+     */
     public default ManagedObject loadObject(ObjectLoader.Request objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
     }
     
+    /**
+     * Returns an object identifier for the instance.
+     * @param managedObject
+     * @return
+     */
     public default RootOid identifyObject(ManagedObject managedObject) {
         return getObjectIdentifier().identifyObject(managedObject);
     }
     
+    /**
+     * Reloads the state of the (entity) instance from the data store.
+     * @param managedObject
+     */
     public default void refreshObject(ManagedObject managedObject) {
         getObjectRefresher().refreshObject(managedObject);
     }

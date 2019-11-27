@@ -78,6 +78,9 @@ final class ObjectRefresher_builtinHandlers {
             
             entityFacet.refresh(request.getPojo());
             
+            // we assume that we don't need to inject services again, because this should 
+            // already have been done, when the entity object got fetched with the ObjectLoader
+            
             return null;
         }
         
