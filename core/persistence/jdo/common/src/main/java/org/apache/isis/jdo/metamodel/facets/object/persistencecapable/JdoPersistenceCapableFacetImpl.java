@@ -93,6 +93,12 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     }
     
     @Override
+    public void refresh(Object pojo) {
+        val persistenceSession = super.getPersistenceSessionJdo();
+        persistenceSession.refreshRoot(pojo);
+    }
+    
+    @Override
     public EntityState getEntityState(Object pojo) {
         val persistenceSession = super.getPersistenceSessionJdo();
         return persistenceSession.getEntityState(pojo);
@@ -118,8 +124,6 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     public boolean isProxyEnhancement(Method method) {
         return IsisJdoMetamodelPlugin.get().isMethodProvidedByEnhancement(method);
     }
-
-
 
 
 }

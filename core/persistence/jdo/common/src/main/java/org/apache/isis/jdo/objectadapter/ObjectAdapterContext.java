@@ -69,7 +69,6 @@ final public class ObjectAdapterContext {
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
-    private final ObjectAdapterContext_ObjectAdapterByIdProvider objectAdapterByIdProviderMixin;
     private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
     private final ServiceInjector serviceInjector;
     final ObjectAdapterContext_ObjectCreation objectCreationMixin;
@@ -85,7 +84,6 @@ final public class ObjectAdapterContext {
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, runtimeContext);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(persistenceSession, runtimeContext.getSpecificationLoader());
-        this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, runtimeContext);
         this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(runtimeContext);
         this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, runtimeContext);
         this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(runtimeContext);

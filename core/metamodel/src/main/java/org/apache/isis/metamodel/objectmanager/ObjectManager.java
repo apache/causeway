@@ -25,6 +25,7 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.metamodel.objectmanager.refresh.ObjectRefresher;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
@@ -44,6 +45,7 @@ public interface ObjectManager {
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
     ObjectIdentifier getObjectIdentifier();
+    ObjectRefresher getObjectRefresher();
 
     // -- FACTORY
     
@@ -51,8 +53,9 @@ public interface ObjectManager {
         val objectCreator = ObjectCreator.createDefault(metaModelContext);
         val objectLoader = ObjectLoader.createDefault(metaModelContext);
         val objectIdentifier = ObjectIdentifier.createDefault();
+        val objectRefresher = ObjectRefresher.createDefault();
         val objectManager = new ObjectManager_default(
-                metaModelContext, objectLoader, objectCreator, objectIdentifier);
+                metaModelContext, objectLoader, objectCreator, objectIdentifier, objectRefresher);
         return objectManager;
     }
     
@@ -68,6 +71,10 @@ public interface ObjectManager {
     
     public default RootOid identifyObject(ManagedObject managedObject) {
         return getObjectIdentifier().identifyObject(managedObject);
+    }
+    
+    public default void refreshObject(ManagedObject managedObject) {
+        getObjectRefresher().refreshObject(managedObject);
     }
     
     @Nullable
