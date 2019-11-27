@@ -464,7 +464,7 @@ final class CellMarshaller {
         }
         final String bookmarkStr = commentRts.getString();
         final Bookmark bookmark = new Bookmark(bookmarkStr);
-        return bookmarkService.lookup(bookmark, BookmarkService.FieldResetPolicy.DONT_REFRESH, requiredType);
+        return bookmarkService.lookup(bookmark, requiredType);
     }
     
 
