@@ -58,7 +58,6 @@ import org.apache.isis.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 import org.apache.isis.jdo.objectadapter.ObjectAdapterContext;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.PojoRefreshException;
@@ -874,11 +873,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return false;
     }
 
-    @Override
-    public ObjectAdapter adapterFor(final RootOid rootOid) {
-        return objectAdapterContext.getObjectAdapterByIdProvider().adapterFor(rootOid);
-    }
-
     // -- MEMENTO SUPPORT
 
     @Override
@@ -889,11 +883,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public ObjectAdapter adapterFor(Object pojo) {
         return objectAdapterContext.getObjectAdapterProvider().adapterFor(pojo);
-    }
-
-    @Override
-    public ObjectAdapterByIdProvider getObjectAdapterByIdProvider() {
-        return objectAdapterContext.getObjectAdapterByIdProvider();
     }
 
     // -- HELPER

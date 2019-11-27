@@ -27,7 +27,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.PojoRecreationException;
@@ -37,10 +36,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -49,13 +46,12 @@ import lombok.extern.log4j.Log4j2;
  * </p> 
  * @since 2.0
  */
-@Log4j2
-class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByIdProvider {
+@Deprecated // remove once bulk loading works
+class ObjectAdapterContext_ObjectAdapterByIdProvider  {
 
     private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
     private final SpecificationLoader specificationLoader;
-    private final AuthenticationSession authenticationSession;
 
     ObjectAdapterContext_ObjectAdapterByIdProvider(
             ObjectAdapterContext objectAdapterContext,
@@ -65,8 +61,6 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         this.objectAdapterContext = objectAdapterContext;
         this.persistenceSession = persistenceSession;
         this.specificationLoader = runtimeContext.getSpecificationLoader();
-        this.authenticationSession = runtimeContext.getAuthenticationSession();
-
     }
 
     /**
@@ -96,8 +90,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
      *
      * @throws {@link org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException} if the object does not exist.
      */
-    @Override
-    public ObjectAdapter adapterFor(final RootOid rootOid) {
+     public ObjectAdapter adapterFor(final RootOid rootOid) {
 
         /* FIXME[ISIS-1976] SPI for adapterFor(RootOid)
          * https://github.com/apache/isis/pull/121#discussion_r215889748
@@ -145,7 +138,6 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
 
     }
 
-    @Override
     public Map<RootOid,ObjectAdapter> adaptersFor(final Stream<RootOid> rootOids) {
 
         final Map<RootOid, ObjectAdapter> adapterByOid = _Maps.newLinkedHashMap();

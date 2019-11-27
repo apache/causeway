@@ -28,7 +28,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -41,7 +40,6 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.Transactional
 public interface PersistenceSession 
 extends 
 ObjectAdapterProvider,
-ObjectAdapterByIdProvider.Delegating,
 TransactionalResource, 
 SessionScopedComponent {
 
@@ -105,15 +103,10 @@ SessionScopedComponent {
     // -------------------------------------------------------------------------------------------------
     // -- API NOT STABLE YET - SUBJECT TO REFACTORING
     // -------------------------------------------------------------------------------------------------
-
-    // -- MEMENTO SUPPORT
-
-    ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data);
-
+    
     // -- TODO remove ObjectAdapter references from API
-
-    @Override
-    ObjectAdapter adapterFor(RootOid rootOid);
+    
+    ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data);
 
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
     <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
