@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.conf;
+package domainapp.application;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

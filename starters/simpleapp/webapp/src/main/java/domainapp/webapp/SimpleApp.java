@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application;
+package domainapp.webapp;
+
+import domainapp.application.SimpleAppManifest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,8 +26,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.config.IsisPresets;
-
-import domainapp.conf.SimpleAppManifest;
 
 /**
  * Bootstrap the application.
