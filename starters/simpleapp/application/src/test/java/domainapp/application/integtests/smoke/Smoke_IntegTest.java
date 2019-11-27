@@ -39,7 +39,6 @@ class Smoke_IntegTest extends SpringIntegrationTest {
 
     @Inject SimpleObjects menu;
     @Inject TransactionService transactionService;
-    @Inject WrapperFactory wrapperFactory;
 
     @Test
     void create() {

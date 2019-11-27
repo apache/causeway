@@ -24,7 +24,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.extensions.fixtures.ExtFixturesModule;
+import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
@@ -49,7 +49,7 @@ import domainapp.application.fixture.scenarios.DomainAppDemo;
     IsisBootDataNucleus.class,
     IsisBootViewerRestfulObjects.class,
     IsisBootViewerWicket.class,
-    ExtFixturesModule.class,
+    IsisExtFixturesModule.class,
 
     DomainAppApplicationModule.class,
 
@@ -60,7 +60,7 @@ import domainapp.application.fixture.scenarios.DomainAppDemo;
 //                DomainAppApplicationModule.class,
 //                SimpleModule.class
 //        })
-public class SimpleAppConfiguration {   // this is somewhat akin to the old AppManifest
+public class SimpleAppManifest {
 
 
 }

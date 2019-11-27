@@ -30,7 +30,7 @@ import domainapp.conf.SimpleAppConfigurationForTesting;
 @SpringBootTest(
         classes = SimpleAppConfigurationForTesting.class,
         properties = {
-         
+                "logging.config=log4j2-test.xml",
         })
 @ContextConfiguration
 public abstract class SpringIntegrationTest {

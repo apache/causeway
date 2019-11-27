@@ -38,6 +38,6 @@ import org.apache.isis.extensions.spring.ExtSpringModule;
     ModuleService.class,
     ModuleFixtureService.class
 })
-public class ExtFixturesModule {
+public class IsisExtFixturesModule {
 
 }
