@@ -29,8 +29,6 @@ import org.apache.isis.metamodel.objectmanager.refresh.ObjectRefresher;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 /**
  * Bundles all domain object state related responsibilities:<br>
  * - object creation ... init defaults <br>
@@ -43,23 +41,12 @@ import lombok.val;
 public interface ObjectManager {
 
     MetaModelContext getMetaModelContext();
+    
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
     ObjectIdentifier getObjectIdentifier();
     ObjectRefresher getObjectRefresher();
 
-    // -- FACTORY
-    
-    public static ObjectManager of(MetaModelContext metaModelContext) {
-        val objectCreator = ObjectCreator.createDefault(metaModelContext);
-        val objectLoader = ObjectLoader.createDefault(metaModelContext);
-        val objectIdentifier = ObjectIdentifier.createDefault();
-        val objectRefresher = ObjectRefresher.createDefault();
-        val objectManager = new ObjectManager_default(
-                metaModelContext, objectLoader, objectCreator, objectIdentifier, objectRefresher);
-        return objectManager;
-    }
-    
     // -- SHORTCUTS
 
     /**

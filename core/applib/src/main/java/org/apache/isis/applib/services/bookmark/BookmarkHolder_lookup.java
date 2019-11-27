@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.bookmark.BookmarkService.FieldResetPolicy;
 
 @Mixin(method = "act")
 public class BookmarkHolder_lookup {
@@ -48,7 +47,7 @@ public class BookmarkHolder_lookup {
             cssClassFa = "fa-bookmark"
             )
     public Object act() {
-        return bookmarkService.lookup(bookmarkHolder, FieldResetPolicy.RESET);
+        return bookmarkService.lookup(bookmarkHolder);
     }
 
     @Inject private BookmarkService bookmarkService;

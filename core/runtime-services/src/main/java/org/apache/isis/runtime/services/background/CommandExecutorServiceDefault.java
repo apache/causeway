@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.bookmark.BookmarkService.FieldResetPolicy;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -181,7 +180,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                     for (OidDto targetOidDto : targetOidDtos) {
 
                         final Bookmark bookmark = Bookmark.from(targetOidDto);
-                        final Object targetObject = bookmarkService.lookup(bookmark, FieldResetPolicy.RESET);
+                        final Object targetObject = bookmarkService.lookup(bookmark);
 
                         val targetAdapter = adapterFor(targetObject);
 

@@ -28,7 +28,6 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -38,15 +37,11 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
-import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
-
-import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import lombok.val;
 
@@ -59,44 +54,54 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
 
     @Inject private SpecificationLoader specificationLoader;
     @Inject private WrapperFactory wrapperFactory;
+    @Inject private ObjectManager objectManager;
     
     @Override
-    public Object lookup(
-            final BookmarkHolder bookmarkHolder,
-            final BookmarkService.FieldResetPolicy fieldResetPolicy) {
+    public Object lookup(BookmarkHolder bookmarkHolder) {
+        
         Bookmark bookmark = bookmarkHolder.bookmark();
-        return bookmark != null? lookup(bookmark, fieldResetPolicy): null;
+        return bookmark != null? lookup(bookmark): null;
     }
 
-    private Object lookupInternal(
-            final Bookmark bookmark,
-            final FieldResetPolicy fieldResetPolicy) {
+    private Object lookupInternal(Bookmark bookmark, boolean denyRefresh) {
+        
         if(bookmark == null) {
             return null;
         }
         try {
-            val rootOid = Factory.ofBookmark(bookmark);
-            val ps = getPersistenceSession();
-            final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
-
-            if(rootOid.isViewModel()) {
-                final ObjectAdapter adapter = ps.adapterFor(rootOid);
-                final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
-
-                return pojo;
-
-            } else if(denyRefresh) {
-
-                val pojo = ps.fetchPersistentPojoInTransaction(rootOid);
-                return pojo;            
-
-            } else {
-                val adapter = ps.adapterFor(rootOid);
-
-                val pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
-                acceptIfPresent(pojo, ps::refreshRootInTransaction);
-                return pojo;
-            }
+            
+            val spec = specificationLoader.loadSpecification(bookmark.getClass());
+            val identifier = bookmark.getIdentifier();
+            val objectLoadRequest = ObjectLoader.Request.of(spec, identifier);
+            
+            val adapter = objectManager.loadObject(objectLoadRequest);
+            
+            return adapter.getPojo();
+            
+            //legacy of
+            
+//            val rootOid = Factory.ofBookmark(bookmark);
+//
+//            if(rootOid.isViewModel()) {
+//                final ObjectAdapter adapter = ps.adapterFor(rootOid);
+//                final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
+//
+//                return pojo;
+//
+//            } 
+//            if(denyRefresh) {
+//
+//                val pojo = ps.fetchPersistentPojoInTransaction(rootOid);
+//                return pojo;            
+//
+//            } 
+//            
+//            val adapter = ps.adapterFor(rootOid);
+//
+//            val pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
+//            acceptIfPresent(pojo, ps::refreshRootInTransaction);
+//            return pojo;
+            
         } catch(ObjectNotFoundException ex) {
             return null;
         }
@@ -104,9 +109,8 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
     
 
     @Override
-    public Object lookup(
-            final Bookmark bookmark,
-            final FieldResetPolicy fieldResetPolicy) {
+    public Object lookup(Bookmark bookmark) {
+        
         if(bookmark == null) {
             return null;
         }
@@ -116,15 +120,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         //        if(service != null) {
         //            return service;
         //        }
-        return lookupInternal(bookmark, fieldResetPolicy);
-    }
-
-    @Override
-    public <T> T lookup(
-            final Bookmark bookmark,
-            final FieldResetPolicy fieldResetPolicy,
-            Class<T> cls) {
-        return _Casts.uncheckedCast(lookup(bookmark, fieldResetPolicy));
+        return lookupInternal(bookmark, true);
     }
 
     @Override
@@ -132,18 +128,13 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         if(domainObject == null) {
             return null;
         }
-        val adapter = getPersistenceSession().adapterFor(unwrapped(domainObject));
-        if(adapter.getOid().isValue()) {
-            // values cannot be bookmarked
+        val adapter = objectManager.adapt(unwrapped(domainObject)); 
+        if(!ManagedObject.isBookmarkable(adapter)){
+            // eg values cannot be bookmarked
             return null;
         }
-        val oid = adapter.getOid();
-        if(!(oid instanceof RootOid)) {
-            // must be root
-            return null;
-        }
-        val rootOid = (RootOid) oid;
-        return rootOid.asBookmark();
+        return objectManager.identifyObject(adapter)
+                .asBookmark();
     }
 
     private Object unwrapped(Object domainObject) {
@@ -188,7 +179,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
 
         if(Bookmark.class.isAssignableFrom(value.getClass())) {
             final Bookmark valueBookmark = (Bookmark) value;
-            return _Casts.uncheckedCast(lookup(valueBookmark, FieldResetPolicy.RESET));
+            return _Casts.uncheckedCast(lookup(valueBookmark));
         }
 
         return _Casts.uncheckedCast(value);
@@ -243,12 +234,6 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
             return true;
         }
         return serializableTypes.stream().anyMatch(t->t.isAssignableFrom(cls));
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return PersistenceSession.current(PersistenceSession.class)
-                .getFirst()
-                .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
     }
     
 

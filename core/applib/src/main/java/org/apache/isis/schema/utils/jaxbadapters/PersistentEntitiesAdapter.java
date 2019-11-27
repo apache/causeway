@@ -29,13 +29,15 @@ import org.apache.isis.schema.common.v1.OidsDto;
 
 public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>> {
 
+    @Inject private BookmarkService bookmarkService;
+    
     @Override
     public List<Object> unmarshal(final OidsDto oidsDto) {
 
         List<Object> domainObjects = _Lists.newArrayList();
         for (final OidDto oidDto : oidsDto.getOid()) {
             final Bookmark bookmark = Bookmark.from(oidDto);
-            Object domainObject = bookmarkService.lookup(bookmark, BookmarkService.FieldResetPolicy.DONT_REFRESH);
+            Object domainObject = bookmarkService.lookup(bookmark);
             domainObjects.add(domainObject);
         }
         return domainObjects;
@@ -54,12 +56,8 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
         return oidsDto;
     }
 
-
-
     protected BookmarkService getBookmarkService() {
         return bookmarkService;
     }
-
-    @Inject
-    BookmarkService bookmarkService;
+    
 }

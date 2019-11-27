@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.bookmark.BookmarkService.FieldResetPolicy;
 
 @Mixin(method = "prop")
 public class BookmarkHolder_object {
@@ -47,7 +46,7 @@ public class BookmarkHolder_object {
             contributed = Contributed.AS_ASSOCIATION
             )
     public Object prop() {
-        return bookmarkService.lookup(bookmarkHolder, FieldResetPolicy.RESET);
+        return bookmarkService.lookup(bookmarkHolder);
     }
 
 

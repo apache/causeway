@@ -18,54 +18,27 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.base._Casts;
 
 /**
- * This service enables a serializable &quot;bookmark&quot; to be created for an entity.
+ * This service enables a serializable 'bookmark' to be created for an entity.
  *
- * <p>
- * Because an implementation of this service (<tt>BookmarkServiceDefault</tt>) is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService} and is implemented in the core.metamodel, it is
- * automatically registered and available for use; no configuration is required.
- * </p>
  */
 public interface BookmarkService {
 
-    @Programmatic
     Bookmark bookmarkFor(Object domainObject);
 
-    @Programmatic
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 
-    @Programmatic
-    Object lookup(BookmarkHolder bookmarkHolder, FieldResetPolicy fieldResetPolicy);
+    Object lookup(BookmarkHolder bookmarkHolder);
 
-    @Programmatic
-    Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
+    Object lookup(Bookmark bookmark);
 
     /**
-     * As {@link #lookup(Bookmark, FieldResetPolicy)}, but down-casting to the specified type.
+     * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
-    @Programmatic <T> T lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy, Class<T> cls);
-
-    enum FieldResetPolicy {
-        /**
-         * Will cause all fields of an object to be re-initialized.
-         *
-         * If the object is unresolved then the object's missing data should be retrieved from the persistence
-         * mechanism and be used to set up the value objects and associations.
-         *
-         * If the object is a view model, then is ignored; the behaviour is as for {@link #DONT_REFRESH}
-         *
-         * @deprecated - retained for backwards compatibility with previous behaviour, but in most/all cases {@link #DONT_REFRESH} makes more sense/is less surprising.
-         */
-        @Deprecated
-        RESET,
-        /*p*
-         * Required in order to recreate view models.
-         */
-        DONT_REFRESH
+    default <T> T lookup(Bookmark bookmark, Class<T> cls) {
+        return _Casts.uncheckedCast(lookup(bookmark));
     }
-
 
 }

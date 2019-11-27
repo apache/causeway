@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -64,8 +63,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         }
         this.delegate = delegate;
         this.wrapperFactory = serviceRegistry.lookupServiceElseFail(WrapperFactory.class);
-        this.objectManager = serviceRegistry.lookupServiceElseFail(MetaModelContext.class)
-                .getObjectManager();
+        this.objectManager = serviceRegistry.lookupServiceElseFail(ObjectManager.class);
         this.executionMode = executionMode;
 
         try {
