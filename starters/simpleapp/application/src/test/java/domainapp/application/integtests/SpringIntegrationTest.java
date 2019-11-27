@@ -25,10 +25,10 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
-import domainapp.conf.SimpleAppConfigurationForTesting;
+import domainapp.conf.SimpleAppManifestForTesting;
 
 @SpringBootTest(
-        classes = SimpleAppConfigurationForTesting.class,
+        classes = SimpleAppManifestForTesting.class,
         properties = {
                 "logging.config=log4j2-test.xml",
         })

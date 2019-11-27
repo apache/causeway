@@ -40,7 +40,7 @@ import domainapp.application.fixture.scenarios.DomainAppDemo;
 @Configuration
 @PropertySources({
     @PropertySource(IsisPresets.H2InMemory),
-    //@PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.DataNucleusAutoCreate),
 })
 @Import({
@@ -55,11 +55,6 @@ import domainapp.application.fixture.scenarios.DomainAppDemo;
 
     DomainAppDemo.class // register this fixture
 })
-//@ComponentScan(
-//        basePackageClasses= {
-//                DomainAppApplicationModule.class,
-//                SimpleModule.class
-//        })
 public class SimpleAppManifest {
 
 

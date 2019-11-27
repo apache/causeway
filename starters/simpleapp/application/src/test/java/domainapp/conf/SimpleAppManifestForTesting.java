@@ -44,15 +44,11 @@ import domainapp.modules.simple.SimpleModule;
 })
 @Import({
     IsisBoot.class,
-    IsisBootSecurityBypass.class,
     IsisBootDataNucleus.class,
-    IsisExtFixturesModule.class
+    IsisBootSecurityBypass.class,
+    IsisExtFixturesModule.class,
+    DomainAppApplicationModule.class
 })
-@ComponentScan(
-        basePackageClasses= {
-                DomainAppApplicationModule.class,
-                SimpleModule.class
-        })
-public class SimpleAppConfigurationForTesting {
+public class SimpleAppManifestForTesting {
 
 }

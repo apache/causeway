@@ -35,7 +35,6 @@ public class DomainAppDemo extends FixtureScript {
 
     @Override
     protected void execute(final ExecutionContext ec) {
-        // TODO: use Module support instead...
         ec.executeChild(this, new TeardownFixtureAbstract2() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
