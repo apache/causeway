@@ -16,65 +16,52 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.metamodel.objectmanager.load;
+package org.apache.isis.metamodel.objectmanager.refresh;
 
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.MetaModelContextAware;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-import lombok.Value;
 import lombok.val;
 
 /**
+ * 
  * @since 2.0
+ *
  */
-public interface ObjectLoader {
+public interface ObjectRefresher {
 
-    ManagedObject loadObject(Request objectLoadRequest);
-    
-    // -- REQUEST (VALUE) TYPE
-    
-    @Value(staticConstructor = "of")
-    public static class Request {
-        ObjectSpecification objectSpecification;
-        String objectIdentifier;
-    }
+    /**
+     * Reloads the state of the instance from the data store.
+     * @param objectLoadRequest
+     */
+    void refreshObject(ManagedObject managedObject);
     
     // -- HANDLER
     
     static interface Handler 
     extends 
-        MetaModelContextAware, 
-        ChainOfResponsibility.Handler<ObjectLoader.Request, ManagedObject> {
-        
+        ChainOfResponsibility.Handler<ManagedObject, Void> {
     }
 
     // -- FACTORY
     
-    public static ObjectLoader createDefault(MetaModelContext metaModelContext) {
+    public static ObjectRefresher createDefault() {
         
         val chainOfHandlers = _Lists.of(
-                new ObjectLoader_builtinHandlers.GuardAgainstNull(),
-                new ObjectLoader_builtinHandlers.LoadService(),
-                new ObjectLoader_builtinHandlers.LoadValue(),
-                new ObjectLoader_builtinHandlers.LoadViewModel(),
-                new ObjectLoader_builtinHandlers.LoadEntity(),
-                new ObjectLoader_builtinHandlers.LoadOther());
-        
-        chainOfHandlers.forEach(h->h.setMetaModelContext(metaModelContext));
+                new ObjectRefresher_builtinHandlers.GuardAgainstNull(),
+                new ObjectRefresher_builtinHandlers.RefreshEntity(),
+                new ObjectRefresher_builtinHandlers.RefreshOther());
         
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
         
         return request -> chainOfRespo
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "ObjectLoader failed to handle request %s", request));
+                        "ObjectRefresher failed to handle request %s", request));
         
     }
+    
     
 }

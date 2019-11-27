@@ -25,6 +25,7 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.metamodel.objectmanager.refresh.ObjectRefresher;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
@@ -35,6 +36,7 @@ import lombok.val;
  * - object creation ... init defaults <br>
  * - object loading ... given a specific object identifier (id) <br>
  * - object identification ... given a domain object (pojo) <br>
+ * - object refreshing ... given a domain object (pojo) <br>
  *  
  * @since 2.0
  */
@@ -44,6 +46,7 @@ public interface ObjectManager {
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
     ObjectIdentifier getObjectIdentifier();
+    ObjectRefresher getObjectRefresher();
 
     // -- FACTORY
     
@@ -51,23 +54,47 @@ public interface ObjectManager {
         val objectCreator = ObjectCreator.createDefault(metaModelContext);
         val objectLoader = ObjectLoader.createDefault(metaModelContext);
         val objectIdentifier = ObjectIdentifier.createDefault();
+        val objectRefresher = ObjectRefresher.createDefault();
         val objectManager = new ObjectManager_default(
-                metaModelContext, objectLoader, objectCreator, objectIdentifier);
+                metaModelContext, objectLoader, objectCreator, objectIdentifier, objectRefresher);
         return objectManager;
     }
     
     // -- SHORTCUTS
 
+    /**
+     * Creates and initializes an instance conforming to given request parameters.
+     * @param objectCreateRequest
+     * @return
+     */
     public default ManagedObject createObject(ObjectCreator.Request objectCreateRequest) {
         return getObjectCreator().createObject(objectCreateRequest);
     }
     
+    /**
+     * Loads an instance identified with given request parameters.
+     * @param objectLoadRequest
+     * @return
+     */
     public default ManagedObject loadObject(ObjectLoader.Request objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
     }
     
+    /**
+     * Returns an object identifier for the instance.
+     * @param managedObject
+     * @return
+     */
     public default RootOid identifyObject(ManagedObject managedObject) {
         return getObjectIdentifier().identifyObject(managedObject);
+    }
+    
+    /**
+     * Reloads the state of the (entity) instance from the data store.
+     * @param managedObject
+     */
+    public default void refreshObject(ManagedObject managedObject) {
+        getObjectRefresher().refreshObject(managedObject);
     }
     
     @Nullable

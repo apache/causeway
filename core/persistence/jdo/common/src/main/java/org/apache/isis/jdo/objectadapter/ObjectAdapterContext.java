@@ -26,7 +26,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.jdo.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
@@ -70,7 +69,6 @@ final public class ObjectAdapterContext {
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
-    private final ObjectAdapterContext_ObjectAdapterByIdProvider objectAdapterByIdProviderMixin;
     private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
     private final ServiceInjector serviceInjector;
     final ObjectAdapterContext_ObjectCreation objectCreationMixin;
@@ -86,7 +84,6 @@ final public class ObjectAdapterContext {
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, runtimeContext);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(persistenceSession, runtimeContext.getSpecificationLoader());
-        this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, runtimeContext);
         this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(runtimeContext);
         this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, runtimeContext);
         this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(runtimeContext);
@@ -122,12 +119,6 @@ final public class ObjectAdapterContext {
 
     public RootOid createPersistentOrViewModelOid(Object pojo) {
         return newIdentifierMixin.createPersistentOid(pojo);
-    }
-
-    // -- BY-ID SUPPORT
-
-    public ObjectAdapterByIdProvider getObjectAdapterByIdProvider() {
-        return objectAdapterByIdProviderMixin;
     }
 
     // -- DEPENDENCY INJECTION

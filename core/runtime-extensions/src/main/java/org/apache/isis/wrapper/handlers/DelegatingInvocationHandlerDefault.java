@@ -28,20 +28,30 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
 
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
 
-    private final T delegate;
-    protected final WrapperFactory wrapperFactory;
-    private final EnumSet<ExecutionMode> executionMode;
+    private ObjectManager objectManager;
+    
+    // getter is API
+    @Getter(onMethod = @__(@Override)) private final T delegate;
+    @Getter protected final WrapperFactory wrapperFactory;
+    @Getter private final EnumSet<ExecutionMode> executionMode;
 
     protected final Method equalsMethod;
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
+    // getter and setter are API
+    @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
     private boolean resolveObjectChangedEnabled;
 
     public DelegatingInvocationHandlerDefault(
@@ -54,6 +64,8 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         }
         this.delegate = delegate;
         this.wrapperFactory = serviceRegistry.lookupServiceElseFail(WrapperFactory.class);
+        this.objectManager = serviceRegistry.lookupServiceElseFail(MetaModelContext.class)
+                .getObjectManager();
         this.executionMode = executionMode;
 
         try {
@@ -67,37 +79,32 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         }
     }
 
-    @Override
-    public boolean isResolveObjectChangedEnabled() {
-        return resolveObjectChangedEnabled;
-    }
+    
+    
+    protected void resolveIfRequired(final ManagedObject adapter) {
 
-    @Override
-    public void setResolveObjectChangedEnabled(final boolean resolveObjectChangedEnabled) {
-        this.resolveObjectChangedEnabled = resolveObjectChangedEnabled;
-    }
-
-    protected void resolveIfRequired(final ManagedObject targetAdapter) {
-        resolveIfRequired(targetAdapter.getPojo());
-    }
-
-    protected void resolveIfRequired(final Object domainObject) {
-        if (resolveObjectChangedEnabled) {
-            getPersistenceSession().refreshRootInTransaction(domainObject);
+        if(!resolveObjectChangedEnabled) {
+            return;
         }
+        if(adapter==null) {
+            return;
+        }
+        if(!ManagedObject.isEntity(adapter)) {
+            return;
+        }
+        
+        val rootOid = objectManager.identifyObject(adapter);
+        
+        val loadRequest = ObjectLoader.Request.of(adapter.getSpecification(), rootOid.getIdentifier());
+        
+        objectManager.loadObject(loadRequest);
+        
+        //legacy of 
+        //getPersistenceSession().refreshRootInTransaction(domainObject);
     }
-
-    public WrapperFactory getWrapperFactory() {
-        return wrapperFactory;
-    }
-
-    @Override
-    public T getDelegate() {
-        return delegate;
-    }
-
-    public EnumSet<ExecutionMode> getExecutionMode() {
-        return executionMode;
+    
+    protected void resolveIfRequired(final Object domainObject) {
+        resolveIfRequired(objectManager.adapt(domainObject));
     }
 
     protected Object delegate(final Method method, final Object[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
@@ -117,11 +124,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     protected InteractionEvent notifyListeners(final InteractionEvent interactionEvent) {
         wrapperFactory.notifyListeners(interactionEvent);
         return interactionEvent;
-    }
-
-
-    private PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession().orElse(null);
     }
 
 }

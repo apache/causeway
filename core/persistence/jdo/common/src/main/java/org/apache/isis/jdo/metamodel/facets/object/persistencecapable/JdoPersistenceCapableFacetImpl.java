@@ -25,6 +25,7 @@ import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.jdo.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -47,13 +48,16 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     @Override
     public Object fetchByIdentifier(ObjectSpecification spec, String identifier) {
         
-        //TODO simplify, spec is already loaded
+        if(!spec.isEntity()) {
+            throw _Exceptions.unexpectedCodeReach();
+        }
         
         val persistenceSession = super.getPersistenceSessionJdo();
-        val adapter = persistenceSession.getObjectAdapterByIdProvider()
-                .adapterFor(Oid.Factory.persistentOf(spec.getSpecId(), identifier)); 
+        val rootOid = Oid.Factory.persistentOf(spec.getSpecId(), identifier);
         
-        return adapter.getPojo();
+        val pojo = persistenceSession.fetchPersistentPojo(rootOid);
+        
+        return pojo;
     }
     
     @Override
@@ -89,6 +93,12 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     }
     
     @Override
+    public void refresh(Object pojo) {
+        val persistenceSession = super.getPersistenceSessionJdo();
+        persistenceSession.refreshRoot(pojo);
+    }
+    
+    @Override
     public EntityState getEntityState(Object pojo) {
         val persistenceSession = super.getPersistenceSessionJdo();
         return persistenceSession.getEntityState(pojo);
@@ -114,8 +124,6 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     public boolean isProxyEnhancement(Method method) {
         return IsisJdoMetamodelPlugin.get().isMethodProvidedByEnhancement(method);
     }
-
-
 
 
 }
