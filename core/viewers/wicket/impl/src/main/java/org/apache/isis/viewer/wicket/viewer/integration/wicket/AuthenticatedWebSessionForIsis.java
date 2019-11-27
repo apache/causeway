@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
-import org.apache.isis.core.runtime.web.AuthenticationSessionWormhole;
+import java.util.Objects;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -28,6 +29,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.core.runtime.web.AuthenticationSessionWormhole;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;
@@ -41,9 +43,6 @@ import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.Getter;
 import lombok.val;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -62,7 +61,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         return (AuthenticatedWebSessionForIsis) Session.get();
     }
 
-    @Getter protected IsisWebAppCommonContext commonContext; 
+    @Getter protected transient IsisWebAppCommonContext commonContext; 
     
     private BreadcrumbModel breadcrumbModel;
     private BookmarkedPagesModel bookmarkedPagesModel;

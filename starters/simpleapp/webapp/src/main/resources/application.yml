@@ -134,5 +134,5 @@ isis:
               mode: ENABLE_SELECTIVE
 
       standaloneCollection:
-        bulkLoad: true
+        bulkLoad: false
 
