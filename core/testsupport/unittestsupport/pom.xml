@@ -30,61 +30,14 @@
 	</properties>
 
 	<description>
-        Support for writing unit tests; should be added as a dependency with scope=test only
+        Support for writing unit tests in either JUnit 4 or JUnit 5; should be added as a dependency with scope=test only
     </description>
 
 	<dependencies>
 
-		<!-- core plugin loading -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<!-- convergence issues from spring-boot-starter-log4j2 -->
-			<version>${slf4j-api.version}</version>
-		</dependency>
-		
-		<!-- framework default core-codegen-plugin for tests -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-codegen-bytebuddy</artifactId>
-		</dependency>
-
-		<!-- SPRING -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.ow2.asm</groupId>
-					<artifactId>asm</artifactId>
-				</exclusion>
-				<exclusion>
-					<!-- when spring-boot release lags behind spring-core release explicitly 
-						spring-test added below -->
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-test</artifactId>
-				</exclusion>
-				<exclusion>
-					<!-- when spring-boot release lags behind spring-core release explicitly 
-						spring-test added below -->
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<!-- we use log4j-2 instead -->
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
+			<artifactId>isis-commons</artifactId>
 		</dependency>
 
 		<dependency>
@@ -98,6 +51,11 @@
 		<dependency>
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
 		</dependency>
 
 		<dependency>
@@ -120,10 +78,71 @@
 			</exclusions>
 		</dependency>
 
+		<!-- framework default codegen for tests -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-codegen-bytebuddy</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
 			<scope>compile</scope>
+		</dependency>
+
+		<!-- JDO API (non transient, provided by plugin) -->
+		<dependency>
+			<groupId>javax.jdo</groupId>
+			<artifactId>jdo-api</artifactId>
+			<version>${jdo-api.version}</version>
+			<!-- provided by plugins -->
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<!-- convergence issues from spring-boot-starter-log4j2 -->
+			<version>${slf4j-api.version}</version>
+		</dependency>
+
+
+		<!-- SPRING -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- when spring-boot release lags behind spring-core release explicitly
+						spring-test added below -->
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-test</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- when spring-boot release lags behind spring-core release explicitly
+						spring-test added below -->
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- we use log4j-2 instead -->
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 		</dependency>
 
 		<dependency>
@@ -161,14 +180,6 @@
 			</exclusions>
 		</dependency>
 
-		<!-- JDO API (non transient, provided by plugin) -->
-		<dependency>
-			<groupId>javax.jdo</groupId>
-			<artifactId>jdo-api</artifactId>
-			<version>${jdo-api.version}</version>
-			<!-- provided by plugins -->
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 
 	<profiles>

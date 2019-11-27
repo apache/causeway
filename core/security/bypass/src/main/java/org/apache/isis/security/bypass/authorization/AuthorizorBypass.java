@@ -16,19 +16,42 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.security.bypass.authorization;
 
-import org.apache.isis.extensions.fixtures.modules.Module;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.security.authorization.standard.Authorizor;
 
-import domainapp.modules.simple.SimpleModule;
+public class AuthorizorBypass implements Authorizor {
 
-@Configuration
-@Import(SimpleModule.class)
-@ComponentScan
-public class DomainAppApplicationModule implements Module {
+    @Override
+    public void init() {
+        // does nothing
+    }
+
+    @Override
+    public void shutdown() {
+        // does nothing
+    }
+
+    @Override
+    public boolean isUsableInRole(final String role, final Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isVisibleInRole(final String user, final Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isVisibleInAnyRole(Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isUsableInAnyRole(Identifier identifier) {
+        return true;
+    }
 
 }

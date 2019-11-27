@@ -29,7 +29,57 @@
 		<git-plugin.propertiesDir>org/apache/isis/integtestsupport</git-plugin.propertiesDir>
 	</properties>
 
+	<description>
+        Support for writing integ tests in JUnit 5; should be added as a dependency with scope=test only
+    </description>
+
 	<dependencies>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>net.bytebuddy</groupId>
+					<artifactId>byte-buddy</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.bytebuddy</groupId>
+					<artifactId>byte-buddy-agent</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- framework default codegen for tests -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-codegen-bytebuddy</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<scope>compile</scope>
+		</dependency>
 
 		<!-- JDO API (non transient, provided by plugin) -->
 		<dependency>
@@ -41,42 +91,49 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-unittestsupport</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<!-- convergence issues from spring-boot-starter-log4j2 -->
+			<version>${slf4j-api.version}</version>
 		</dependency>
 
-		<!-- JUPITER -->
-		<dependency>
-			<!-- JUnit API for writing tests and extensions -->
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-		</dependency>
-		<dependency>
-			<!-- implementation of the JUnit Jupiter test engine -->
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-		</dependency>
-		<dependency>
-			<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-		</dependency>
 
+		<!-- SPRING -->
 		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-junit4</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
 			<exclusions>
 				<exclusion>
-					<!-- for dependency convergence -->
-					<groupId>junit</groupId>
-					<artifactId>junit-dep</artifactId>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- when spring-boot release lags behind spring-core release explicitly
+						spring-test added below -->
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-test</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- when spring-boot release lags behind spring-core release explicitly
+						spring-test added below -->
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- we use log4j-2 instead -->
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 		</dependency>
 
 		<dependency>
@@ -103,8 +160,38 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-runtime-extensions</artifactId>
 		</dependency>
-
-
 	</dependencies>
+
+	<profiles>
+
+		<profile>
+			<id>jdk11-supplemental</id>
+			<activation>
+				<jdk>[11,)</jdk>
+			</activation>
+			<!--
+			These dependencies are required in order to build on jdk11
+			-->
+			<dependencies>
+				<dependency>
+					<groupId>com.sun.xml.ws</groupId>
+					<artifactId>jaxws-ri</artifactId>
+					<type>pom</type>
+				</dependency>
+				<dependency>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 </project>

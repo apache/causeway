@@ -90,7 +90,7 @@ isis:
   viewer:
     wicket:
       application:
-        menubarsLayoutXml: domainapp/application/layout/menubars.layout.xml
+        menubarsLayoutXml: domainapp/webapp/layout/menubars.layout.xml
         brandLogoHeader: /images/apache-isis/logo-48x48.png")
         faviconUrl: /images/favicon.png")
         name: Simple App

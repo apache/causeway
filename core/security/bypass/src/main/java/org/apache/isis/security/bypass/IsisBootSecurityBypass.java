@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security;
+package org.apache.isis.security.bypass;
 
 import javax.inject.Singleton;
 
@@ -25,10 +25,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.runtime.services.auth.AuthorizationManagerStandard;
-import org.apache.isis.security.authentication.bypass.AuthenticatorBypass;
+import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
 import org.apache.isis.security.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.security.authentication.standard.Authenticator;
-import org.apache.isis.security.authorization.bypass.AuthorizorBypass;
+import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
 import org.apache.isis.security.authorization.standard.Authorizor;
 
 /**
@@ -49,7 +49,7 @@ public class IsisBootSecurityBypass {
     }
 
     @Bean @Singleton
-    public Authorizor autorizor() {
+    public Authorizor authorizor() {
         return new AuthorizorBypass();
     }
 

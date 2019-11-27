@@ -151,7 +151,7 @@
                                     <goal>list</goal>
                                 </goals>
                                 <configuration>
-                                    <outputFile>${project.build.directory}/test-classes/domain/application/lockdown/LockDownMavenDeps_Test.list.actual.txt</outputFile>
+                                    <outputFile>${project.build.directory}/test-classes/domain/webapp/lockdown/LockDownMavenDeps_Test.list.actual.txt</outputFile>
                                 </configuration>
                             </execution>
                             <execution>
@@ -161,7 +161,7 @@
                                     <goal>tree</goal>
                                 </goals>
                                 <configuration>
-                                    <outputFile>${project.build.directory}/test-classes/domain/application/lockdown/LockDownMavenDeps_Test.tree.actual.txt</outputFile>
+                                    <outputFile>${project.build.directory}/test-classes/domain/webapp/lockdown/LockDownMavenDeps_Test.tree.actual.txt</outputFile>
                                 </configuration>
                             </execution>
                         </executions>

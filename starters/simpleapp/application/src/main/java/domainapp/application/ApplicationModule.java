@@ -16,28 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package domainapp.application;
 
-package org.apache.isis.security.authentication.bypass;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import org.apache.isis.security.authentication.AuthenticationRequest;
-import org.apache.isis.security.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.extensions.fixtures.modules.Module;
 
-/**
- * Implementation that bypasses authentication.
- *
- * <p>
- * Intended for testing use only.
- */
-public class AuthenticatorBypass extends AuthenticatorAbstract {
+import domainapp.modules.simple.SimpleModule;
 
-    @Override
-    public boolean isValid(final AuthenticationRequest request) {
-        return true;
-    }
-
-    @Override
-    public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
-        return true;
-    }
+@Configuration
+@Import(SimpleModule.class)
+@ComponentScan
+public class ApplicationModule implements Module {
 
 }

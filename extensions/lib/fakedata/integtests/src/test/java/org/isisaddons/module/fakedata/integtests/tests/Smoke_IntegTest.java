@@ -9,13 +9,11 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.assertj.core.api.Assertions;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
 
-import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Money;
@@ -28,8 +26,11 @@ import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.EnumOf3;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_create3;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_update_withFakeData;
 import org.isisaddons.module.fakedata.integtests.FakeDataModuleIntegTestAbstract;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Transactional;
 
-public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstract {
+public class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
     @Inject
     FixtureScripts fixtureScripts;
@@ -40,8 +41,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
     @Inject
     FakeDataService fakeDataService;
 
-
-    public static class FakeDataDemoObjectsScenarioTest extends FakeDataDemoObjects_IntegTest {
+    public static class FakeDataDemoObjectsScenarioTest extends Smoke_IntegTest {
 
         @Test
         public void happyCase() throws Exception {
@@ -57,7 +57,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(scenario, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -101,12 +101,12 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
     }
 
 
-    public static class FakeDataDemoObjectUpdateTest extends FakeDataDemoObjects_IntegTest {
+    public static class FakeDataDemoObjectUpdateTest extends Smoke_IntegTest {
 
         FakeDataDemoObjectWithAll fakeDataDemoObject;
         FakeDataDemoObjectWithAll_update_withFakeData updateScript;
 
-        @Before
+        @BeforeEach
         public void setUp() throws Exception {
 
             //
@@ -119,7 +119,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(fs, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
             final List<FakeDataDemoObjectWithAll> all = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll();
             fakeDataDemoObject = all.get(0);
@@ -137,7 +137,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setFakeDataDemoObject(fakeDataDemoObject);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -191,7 +191,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeBoolean(true);
 
             fixtureScripts.runFixtureScript(updateScript, null);
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -209,7 +209,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeBoolean(false);
 
             fixtureScripts.runFixtureScript(updateScript, null);
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -240,7 +240,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeChar(theChar);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -270,7 +270,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeByte(theByte);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -301,7 +301,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeShort(theShort);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -333,7 +333,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeInt(theInt);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -364,7 +364,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeLong(theLong);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -394,7 +394,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeFloat(theFloat);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -426,7 +426,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeDouble(theDouble);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -457,7 +457,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeString(theString);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -487,7 +487,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomePassword(thePassword);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -518,7 +518,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeBigDecimal(theBigDecimal);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -548,7 +548,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
             updateScript.setSomeBigInteger(theBigInteger);
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -578,7 +578,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -609,7 +609,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -639,7 +639,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -670,7 +670,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -701,7 +701,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -732,7 +732,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -762,7 +762,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -793,7 +793,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -824,7 +824,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -858,7 +858,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //
@@ -891,7 +891,7 @@ public class FakeDataDemoObjects_IntegTest extends FakeDataModuleIntegTestAbstra
 
             fixtureScripts.runFixtureScript(updateScript, null);
 
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
 
             //

@@ -20,9 +20,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
         nature = NatureOfService.VIEW,
         objectType = "libFakeDataFixture.FakeDataDemoObjectWithAllMenu"
 )
-@DomainServiceLayout(
-        named = "Demo"
-)
+@DomainServiceLayout(named = "Demo")
 public class FakeDataDemoObjectWithAllMenu {
 
 
@@ -57,7 +55,6 @@ public class FakeDataDemoObjectWithAllMenu {
         repositoryService.persist(obj);
         return obj;
     }
-
 
     @Inject RepositoryService repositoryService;
 

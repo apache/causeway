@@ -61,6 +61,12 @@
             <artifactId>isis-mavendeps-testing</artifactId>
             <type>pom</type>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.isis.core</groupId>
+                    <artifactId>isis-unittestsupport</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 <!--

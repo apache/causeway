@@ -90,6 +90,7 @@
    org.apache.isis.core:isis-viewer-wicket-impl:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-viewer-wicket-model:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.core:isis-viewer-wicket-ui:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.mavendeps:isis-mavendeps-jdk11:pom:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.mavendeps:isis-mavendeps-testing:pom:2.0.0-M3-SNAPSHOT:test
    org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:2.0.0-M3-SNAPSHOT:compile
    org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
@@ -184,16 +185,16 @@
    org.springframework.boot:spring-boot-test-autoconfigure:jar:2.2.0.RELEASE:test
    org.springframework.boot:spring-boot-test:jar:2.2.0.RELEASE:test
    org.springframework.boot:spring-boot:jar:2.2.0.RELEASE:compile
-   org.springframework:spring-aop:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-beans:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-context:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-core:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-expression:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-jcl:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-test:jar:5.2.0.RELEASE:test
-   org.springframework:spring-tx:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-web:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-webmvc:jar:5.2.0.RELEASE:compile
+   org.springframework:spring-aop:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-beans:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-context:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-core:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-expression:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-jcl:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-test:jar:5.2.1.RELEASE:test
+   org.springframework:spring-tx:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-web:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-webmvc:jar:5.2.1.RELEASE:compile
    org.webjars.bower:momentjs:jar:2.24.0:compile
    org.webjars.bower:summernote:jar:0.8.11:compile
    org.webjars:Eonasdan-bootstrap-datetimepicker:jar:4.17.37-1:compile

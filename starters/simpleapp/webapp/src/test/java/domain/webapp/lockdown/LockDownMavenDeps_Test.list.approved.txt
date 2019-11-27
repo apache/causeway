@@ -12,7 +12,7 @@
    com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.10.0:compile
    com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.10.0:compile
    com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.10.0:compile
-   com.fasterxml:classmate:jar:1.5.0:compile
+   com.fasterxml:classmate:jar:1.5.1:compile
    com.github.openjson:openjson:jar:1.0.10:compile
    com.google.code.findbugs:annotations:jar:2.0.1:compile
    com.google.code.findbugs:jsr305:jar:3.0.2:compile
@@ -25,7 +25,7 @@
    com.google.javascript:closure-compiler-externs:jar:v20190325:compile
    com.google.javascript:closure-compiler-unshaded:jar:v20190325:compile
    com.google.jsinterop:jsinterop-annotations:jar:1.0.0:compile
-   com.h2database:h2:jar:1.4.199:compile
+   com.h2database:h2:jar:1.4.200:compile
    com.jayway.jsonpath:json-path:jar:2.4.0:compile
    com.sun.mail:javax.mail:jar:1.6.0:compile
    com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1:compile
@@ -61,9 +61,9 @@
    javax.json.bind:javax.json.bind-api:jar:1.0:compile
    javax.transaction:transaction-api:jar:1.1:compile
    javax:javaee-api:jar:8.0:compile
-   joda-time:joda-time:jar:2.10.4:compile
+   joda-time:joda-time:jar:2.10.5:compile
    junit:junit:jar:4.12:compile
-   net.bytebuddy:byte-buddy:jar:1.10.1:compile
+   net.bytebuddy:byte-buddy:jar:1.10.2:compile
    net.ftlines.wicket-source:wicket-source:jar:7.0.0:compile
    net.jcip:jcip-annotations:jar:1.0:compile
    net.minidev:accessors-smart:jar:1.2:compile
@@ -104,6 +104,7 @@
    org.apache.isis.extensions:isis-extensions-fixtures:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.extensions:isis-extensions-specsupport:jar:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.extensions:isis-extensions-spring:jar:2.0.0-M3-SNAPSHOT:compile
+   org.apache.isis.mavendeps:isis-mavendeps-jdk11:pom:2.0.0-M3-SNAPSHOT:compile
    org.apache.isis.mavendeps:isis-mavendeps-testing:pom:2.0.0-M3-SNAPSHOT:test
    org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:2.0.0-M3-SNAPSHOT:compile
    org.apache.logging.log4j:log4j-api:jar:2.12.1:compile
@@ -150,7 +151,7 @@
    org.hamcrest:hamcrest-core:jar:2.1:compile
    org.hamcrest:hamcrest-library:jar:2.1:compile
    org.hamcrest:hamcrest:jar:2.1:compile
-   org.hibernate.validator:hibernate-validator:jar:6.0.17.Final:compile
+   org.hibernate.validator:hibernate-validator:jar:6.0.18.Final:compile
    org.hsqldb:hsqldb:jar:2.5.0:test
    org.jboss.logging:jboss-logging:jar:3.4.1.Final:compile
    org.jboss.resteasy:resteasy-jackson-provider:jar:4.0.0.Beta5:compile
@@ -183,31 +184,31 @@
    org.projectlombok:lombok:jar:1.18.10:provided
    org.reactivestreams:reactive-streams:jar:1.0.3:compile
    org.skyscreamer:jsonassert:jar:1.5.0:compile
-   org.slf4j:jul-to-slf4j:jar:1.7.28:compile
-   org.slf4j:slf4j-api:jar:1.7.28:compile
-   org.springframework.boot:spring-boot-actuator-autoconfigure:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-actuator:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-autoconfigure:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-starter-json:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-starter-log4j2:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-starter-test:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-starter-tomcat:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-starter-validation:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-starter-web:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-starter:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-test-autoconfigure:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot-test:jar:2.2.0.RELEASE:compile
-   org.springframework.boot:spring-boot:jar:2.2.0.RELEASE:compile
-   org.springframework:spring-aop:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-beans:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-context:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-core:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-expression:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-jcl:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-test:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-tx:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-web:jar:5.2.0.RELEASE:compile
-   org.springframework:spring-webmvc:jar:5.2.0.RELEASE:compile
+   org.slf4j:jul-to-slf4j:jar:1.7.29:compile
+   org.slf4j:slf4j-api:jar:1.7.29:compile
+   org.springframework.boot:spring-boot-actuator-autoconfigure:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-actuator:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-autoconfigure:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-starter-json:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-starter-log4j2:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-starter-test:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-starter-tomcat:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-starter-validation:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-starter-web:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-starter:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-test-autoconfigure:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot-test:jar:2.2.1.RELEASE:compile
+   org.springframework.boot:spring-boot:jar:2.2.1.RELEASE:compile
+   org.springframework:spring-aop:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-beans:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-context:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-core:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-expression:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-jcl:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-test:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-tx:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-web:jar:5.2.1.RELEASE:compile
+   org.springframework:spring-webmvc:jar:5.2.1.RELEASE:compile
    org.webjars.bower:momentjs:jar:2.24.0:compile
    org.webjars.bower:summernote:jar:0.8.11:compile
    org.webjars:Eonasdan-bootstrap-datetimepicker:jar:4.17.37-1:compile

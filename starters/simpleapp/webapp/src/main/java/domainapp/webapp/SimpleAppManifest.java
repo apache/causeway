@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application;
+package domainapp.webapp;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -31,7 +31,7 @@ import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.viewer.restfulobjects.IsisBootViewerRestfulObjects;
 import org.apache.isis.viewer.wicket.viewer.IsisBootViewerWicket;
 
-import domainapp.application.DomainAppApplicationModule;
+import domainapp.application.ApplicationModule;
 import domainapp.application.fixture.scenarios.DomainAppDemo;
 
 /**
@@ -51,7 +51,7 @@ import domainapp.application.fixture.scenarios.DomainAppDemo;
     IsisBootViewerWicket.class,
     IsisExtFixturesModule.class,
 
-    DomainAppApplicationModule.class,
+    ApplicationModule.class,
 
     DomainAppDemo.class // register this fixture
 })

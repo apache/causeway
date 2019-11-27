@@ -19,7 +19,6 @@
 package domainapp.conf;
 
 import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
@@ -28,10 +27,9 @@ import org.springframework.context.annotation.PropertySources;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.IsisBootSecurityBypass;
+import org.apache.isis.security.bypass.IsisBootSecurityBypass;
 
-import domainapp.application.DomainAppApplicationModule;
-import domainapp.modules.simple.SimpleModule;
+import domainapp.application.ApplicationModule;
 
 /**
  * Makes the integral parts of the 'simple app' web application.
@@ -47,7 +45,7 @@ import domainapp.modules.simple.SimpleModule;
     IsisBootDataNucleus.class,
     IsisBootSecurityBypass.class,
     IsisExtFixturesModule.class,
-    DomainAppApplicationModule.class
+    ApplicationModule.class
 })
 public class SimpleAppManifestForTesting {
 

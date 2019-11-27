@@ -17,40 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.security.authorization.bypass;
+package org.apache.isis.security.bypass.authentication;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.security.authorization.standard.Authorizor;
+import org.apache.isis.security.authentication.AuthenticationRequest;
+import org.apache.isis.security.authentication.standard.AuthenticatorAbstract;
 
-public class AuthorizorBypass implements Authorizor {
-
-    @Override
-    public void init() {
-        // does nothing
-    }
-
-    @Override
-    public void shutdown() {
-        // does nothing
-    }
+/**
+ * Implementation that bypasses authentication.
+ *
+ * <p>
+ * Intended for testing use only.
+ */
+public class AuthenticatorBypass extends AuthenticatorAbstract {
 
     @Override
-    public boolean isUsableInRole(final String role, final Identifier identifier) {
+    public boolean isValid(final AuthenticationRequest request) {
         return true;
     }
 
     @Override
-    public boolean isVisibleInRole(final String user, final Identifier identifier) {
-        return true;
-    }
-
-    @Override
-    public boolean isVisibleInAnyRole(Identifier identifier) {
-        return true;
-    }
-
-    @Override
-    public boolean isUsableInAnyRole(Identifier identifier) {
+    public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
         return true;
     }
 

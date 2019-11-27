@@ -28,7 +28,7 @@ import org.apache.isis.config.IsisPresets;
 import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.IsisBootSecurityBypass;
+import org.apache.isis.security.bypass.IsisBootSecurityBypass;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 
 @Configuration

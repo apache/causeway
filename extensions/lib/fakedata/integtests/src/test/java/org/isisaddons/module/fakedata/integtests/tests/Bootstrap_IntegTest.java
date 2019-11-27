@@ -16,21 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.isisaddons.module.fakedata.integtests;
+package org.isisaddons.module.fakedata.integtests.tests;
 
-import javax.inject.Inject;
+import org.isisaddons.module.fakedata.integtests.FakeDataModuleIntegTestAbstract;
+import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-
-@SpringBootTest(
-        classes = AppConfigurationForTesting.class,
-        properties = {
-        })
-@ContextConfiguration
-public class FakeDataModuleBootstrapIntegTest extends FakeDataModuleIntegTestAbstract {
+@Transactional
+public class Bootstrap_IntegTest extends FakeDataModuleIntegTestAbstract {
 
     @Test
     public void bootstraps_ok() throws Exception {
