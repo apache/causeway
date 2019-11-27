@@ -109,6 +109,11 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     private final HomePageResolverService homePageResolverService =
     getSingletonElseFail(HomePageResolverService.class);
 
+    @Getter(lazy=true) 
+    private final ObjectManager objectManager =
+    getSingletonElseFail(ObjectManager.class);
+    
+    
     @Override
     public final TransactionState getTransactionState() {
         return getTransactionService().currentTransactionState();
@@ -137,11 +142,6 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     public <T> T getSingletonElseFail(Class<T> type) {
         return iocContainer.getSingletonElseFail(type);
     }
-
-    // -- OBJECT LOADING
-    
-    @Getter(onMethod = @__(@Override))
-    final ObjectManager objectManager = ObjectManager.of(this);    
 
     
     // -- HELPER

@@ -38,6 +38,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.config.registry.types.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
@@ -246,7 +247,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     @Override
     public ObjectManager getObjectManager() {
         if(objectManager==null) {
-            objectManager = ObjectManager.of((MetaModelContext)this);
+            objectManager = ObjectManagerDefault.forTesting((MetaModelContext)this);
         }
         return objectManager;
     }

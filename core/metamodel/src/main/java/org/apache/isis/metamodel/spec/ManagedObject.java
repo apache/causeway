@@ -34,7 +34,6 @@ import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ListExtensions;
@@ -471,12 +470,6 @@ public interface ManagedObject {
     }
     
     // -- DEPRECATIONS (REFACTORING)
-
-    class Util {
-    
-
-    
-    }
 
     static MetaModelContext _mmc(ManagedObject adapter) {
         return adapter.getSpecification().getMetaModelContext();

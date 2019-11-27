@@ -34,7 +34,7 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 
         val bookmark = Bookmark.from(oidDto);
 
-        return bookmarkService.lookup(bookmark, BookmarkService.FieldResetPolicy.DONT_REFRESH);
+        return bookmarkService.lookup(bookmark);
     }
 
     @Override

@@ -21,13 +21,17 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
+
+import lombok.val;
 
 /**
  * Implementation of a Wicket {@link IConverter} for {@link ManagedObject}s,
@@ -37,14 +41,26 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
+    @Inject private transient ObjectManager objectManager;
+    
     /**
      * Converts string representation of {@link Oid} to
      * {@link ManagedObject}.
      */
     @Override
     public ManagedObject convertToObject(final String value, final Locale locale) {
-        final RootOid rootOid = RootOid.deStringEncoded(value);
-        return getPersistenceSession().adapterFor(rootOid);
+        val rootOid = RootOid.deStringEncoded(value);
+        val objectSpecId = rootOid.getObjectSpecId(); 
+        val spec = objectManager.getMetaModelContext()
+                .getSpecificationLoader()
+                .lookupBySpecIdElseLoad(objectSpecId);
+        
+        val objectLoadRequest = ObjectLoader.Request.of(spec, rootOid.getIdentifier());
+        
+        return objectManager.loadObject(objectLoadRequest);
+        
+        // legacy of
+        //return getPersistenceSession().adapterFor(rootOid);
     }
 
     /**
@@ -52,21 +68,18 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public String convertToString(final ManagedObject adapter, final Locale locale) {
-        final Oid oid = ManagedObject._identify(adapter);
-        if (oid == null) {
-            // values don't have an Oid
+        
+        if(!ManagedObject.isBookmarkable(adapter)) {
+            // eg. values don't have an Oid
             return null;
         }
-
-        return oid.enString();
+        
+        val rootOid = ManagedObject._identify(adapter);
+        
+        return rootOid!=null
+                ? rootOid.enString()
+                        : null;
     }
-
-    // -- DEPENDENCIES
-
-    PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession().orElse(null);
-    }
-
     
 
 }
