@@ -1,10 +1,10 @@
-package org.incode.module.unittestsupport.dom.bean;
+package org.apache.isis.extensions.unittestsupport.dom.bean;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import org.incode.module.unittestsupport.dom.bean.PojoTester;
+import org.apache.isis.extensions.unittestsupport.dom.bean.PojoTester;
 
 import static org.hamcrest.Matchers.containsString;
 

@@ -1,4 +1,4 @@
-package org.incode.module.unittestsupport.dom.assertions;
+package org.apache.isis.extensions.unittestsupport.dom.assertions;
 
 public final class Asserting {
 

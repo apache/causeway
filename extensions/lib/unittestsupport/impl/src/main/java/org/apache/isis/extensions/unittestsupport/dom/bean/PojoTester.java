@@ -1,4 +1,4 @@
-package org.incode.module.unittestsupport.dom.bean;
+package org.apache.isis.extensions.unittestsupport.dom.bean;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;

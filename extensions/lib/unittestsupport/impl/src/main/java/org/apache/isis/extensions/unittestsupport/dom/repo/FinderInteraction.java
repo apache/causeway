@@ -1,4 +1,4 @@
-package org.incode.module.unittestsupport.dom.repo;
+package org.apache.isis.extensions.unittestsupport.dom.repo;
 
 import java.util.Map;
 

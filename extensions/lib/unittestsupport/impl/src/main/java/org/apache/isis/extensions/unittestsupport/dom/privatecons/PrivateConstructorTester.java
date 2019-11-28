@@ -1,4 +1,4 @@
-package org.incode.module.unittestsupport.dom.privatecons;
+package org.apache.isis.extensions.unittestsupport.dom.privatecons;
 
 import java.lang.reflect.Constructor;
 

@@ -1,4 +1,4 @@
-package org.incode.module.unittestsupport.dom.bean;
+package org.apache.isis.extensions.unittestsupport.dom.bean;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;

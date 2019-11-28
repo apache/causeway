@@ -1,4 +1,4 @@
-package org.incode.module.unittestsupport.dom.bean;
+package org.apache.isis.extensions.unittestsupport.dom.bean;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;

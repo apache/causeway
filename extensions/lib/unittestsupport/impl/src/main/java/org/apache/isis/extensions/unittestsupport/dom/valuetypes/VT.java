@@ -1,4 +1,4 @@
-package org.incode.module.unittestsupport.dom.valuetypes;
+package org.apache.isis.extensions.unittestsupport.dom.valuetypes;
 
 //import org.incode.module.base.dom.valuetypes.AbstractInterval;
 //import org.incode.module.base.dom.valuetypes.LocalDateInterval;
