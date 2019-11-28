@@ -47,11 +47,9 @@
 		<git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
 		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
-		<compileSource>8</compileSource>
-		<compileTarget>8</compileTarget>
-		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.arg>-parameters</maven.compiler.arg>
 
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -297,10 +295,10 @@
 					<configuration>
 						<showDeprecation>false</showDeprecation>
 						<showWarnings>false</showWarnings>
-						<source>${compileSource}</source>
-						<target>${compileTarget}</target>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
 						<compilerArgs>
-					        <arg>${compiler-plugin.compilerArgument}</arg>
+					        <arg>${maven.compiler.arg}</arg>
 					    </compilerArgs>
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
