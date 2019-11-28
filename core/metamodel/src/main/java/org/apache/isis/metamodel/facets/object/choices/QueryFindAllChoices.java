@@ -42,9 +42,10 @@ implements Predicate<ManagedObject> {
     public QueryFindAllChoices(
             final String string, 
             final Predicate<ManagedObject> visibilityFilter, 
-            final long ... range) {
+            final long start,
+            final long count) {
 
-        super(string, range);
+        super(string, start, count);
         this.visibilityFilter = visibilityFilter;
     }
 

@@ -18,7 +18,7 @@
   	<artifactId>supplemental-model</artifactId>
   	<version>1.0</version>
   	
-  	<name>Apache Isis Supplemental (Legal Info)</name>
+  	<name>Apache Isis Supplemental - Legal Info</name>
   	<description>
   	For example, the templates used by many Apache distributions assemble a listing of project dependencies 
   	according to their organization name (and URL), along with the URL each project's website. When dependency 

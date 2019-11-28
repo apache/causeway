@@ -1,10 +1,18 @@
+#
+# Recommend use for static configuration that does not change between environments.
+#
+# See also config/application.properties
+#
 isis:
   reflector:
+    explicit-annotations:
+      action: true
     validator:
       allowDeprecated: false
       noParamsOnly: true
       explicitObjectType: true
       serviceActionsOnly: true
+
       mixinsOnly: true
 
     facet:
@@ -67,3 +75,6 @@ isis:
             level2:
               type: none
               mode: ENABLE_SELECTIVE
+spring:
+  banner:
+    location: banner.txt

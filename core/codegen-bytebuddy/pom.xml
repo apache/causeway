@@ -22,9 +22,9 @@
 
 	<artifactId>isis-codegen-bytebuddy</artifactId>
 
-	<name>Apache Isis Core Plugin - Code Generation (ByteBuddy)</name>
+	<name>Apache Isis Core - Code Gen (ByteBuddy)</name>
 	<description>
-        Code generation plugin using ByteBuddy.
+        Code generation using ByteBuddy.
     </description>
 
 	<properties>

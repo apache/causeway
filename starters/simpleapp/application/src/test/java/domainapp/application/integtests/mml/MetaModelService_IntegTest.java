@@ -41,9 +41,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assume.assumeThat;
 
-import domainapp.application.integtests.SpringIntegrationTest;
+import domainapp.application.integtests.ApplicationIntegTestAbstract;
 
-class MetaModelService_IntegTest extends SpringIntegrationTest {
+class MetaModelService_IntegTest extends ApplicationIntegTestAbstract {
 
     @Inject MetaModelService metaModelService;
     @Inject JaxbService jaxbService;

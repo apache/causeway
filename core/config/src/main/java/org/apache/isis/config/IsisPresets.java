@@ -28,8 +28,9 @@ public final class IsisPresets  {
 
     public static final String NoTranslations = "classpath:/presets/NoTranslations.properties";
     
+    public static final String Log4j2Test = "classpath:/presets/Log4j2Test.properties";
     public static final String H2InMemory = "classpath:/presets/H2InMemory.properties";
-    
+
     /** randomized (unique) database name, eg. to allow for concurrent testing */
     public static final String H2InMemory_withUniqueSchema = "classpath:/presets/H2InMemory_withUniqueSchema.properties";
     

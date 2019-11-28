@@ -29,7 +29,7 @@
 
     <artifactId>isis-security-shiro</artifactId>
 
-    <name>Apache Isis Core - Security (Shiro Implementation)</name>
+    <name>Apache Isis Security - Shiro</name>
 	<description>
         Authentication and Authorization using Apache Shiro.
     </description>
@@ -74,12 +74,13 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
-	
+
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>

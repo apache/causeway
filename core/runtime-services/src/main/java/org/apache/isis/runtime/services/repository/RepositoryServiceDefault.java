@@ -21,6 +21,7 @@ package org.apache.isis.runtime.services.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -64,15 +65,11 @@ public class RepositoryServiceDefault implements RepositoryService {
         this.autoFlush = !disableAutoFlush;
     }
 
-    // //////////////////////////////////////
-
 
     @Override
     public <T> T instantiate(final Class<T> domainClass) {
         return factoryService.instantiate(domainClass);
     }
-
-    // //////////////////////////////////////
 
     @Override
     public boolean isPersistent(final Object domainObject) {
@@ -156,27 +153,32 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
 
-    // //////////////////////////////////////
-
 
     // -- allInstances, allMatches, uniqueMatch, firstMatch
 
-
     @Override
-    public <T> List<T> allInstances(final Class<T> type, long... range) {
-        return allMatches(new QueryFindAllInstances<T>(type, range));
+    public <T> List<T> allInstances(final Class<T> type) {
+        return allMatches(new QueryFindAllInstances<T>(type, 0L, Long.MAX_VALUE));
     }
 
-    // //////////////////////////////////////
+    @Override
+    public <T> List<T> allInstances(final Class<T> type, long start, long count) {
+        return allMatches(new QueryFindAllInstances<T>(type, start, count));
+    }
 
 
     @Override
-    public <T> List<T> allMatches(Class<T> ofType, final Predicate<? super T> predicate, long... range) {
-        return _NullSafe.stream(allInstances(ofType, range))
+    public <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate) {
+        return allMatches(ofType, predicate, 0L, Long.MAX_VALUE);
+    }
+
+
+    @Override
+    public <T> List<T> allMatches(Class<T> ofType, final Predicate<? super T> predicate, long start, long count) {
+        return _NullSafe.stream(allInstances(ofType, start, count))
                 .filter(predicate)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
@@ -192,33 +194,43 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
 
-    // //////////////////////////////////////
-
 
     @Override
-    public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
+    public <T> Optional<T> uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
         final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
         if (instances.size() > 1) {
             throw new RepositoryException("Found more than one instance of " + type + " matching filter " + predicate);
         }
-        return firstInstanceElseNull(instances);
+        return firstInstanceElseEmpty(instances);
     }
 
 
-
     @Override
-    public <T> T uniqueMatch(final Query<T> query) {
+    public <T> Optional<T> uniqueMatch(final Query<T> query) {
         final List<T> instances = allMatches(query); // No need to fetch more than 2.
         if (instances.size() > 1) {
             throw new RepositoryException("Found more that one instance for query:" + query.getDescription());
         }
-        return firstInstanceElseNull(instances);
+        return firstInstanceElseEmpty(instances);
     }
 
-    // //////////////////////////////////////
+    @Override
+    public <T> Optional<T> firstMatch(final Class<T> type, final Predicate<T> predicate) {
+        final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
+        return firstInstanceElseEmpty(instances);
+    }
 
-    private static <T> T firstInstanceElseNull(final List<T> instances) {
-        return instances.size() == 0 ? null : instances.get(0);
+
+    @Override
+    public <T> Optional<T> firstMatch(final Query<T> query) {
+        final List<T> instances = allMatches(query); // No need to fetch more than 2.
+        return firstInstanceElseEmpty(instances);
+    }
+
+    private static <T> Optional<T> firstInstanceElseEmpty(final List<T> instances) {
+        return instances.size() == 0
+                ? Optional.empty()
+                : Optional.of(instances.get(0));
     }
 
 

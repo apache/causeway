@@ -26,9 +26,9 @@ import org.junit.jupiter.api.Test;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-import domainapp.application.integtests.SpringIntegrationTest;
+import domainapp.application.integtests.ApplicationIntegTestAbstract;
 
-class DomainModel_IntegTest extends SpringIntegrationTest {
+class DomainModel_IntegTest extends ApplicationIntegTestAbstract {
     
     @Inject protected SpecificationLoader specificationLoader;
 

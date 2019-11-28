@@ -1,3 +1,8 @@
+#
+# Recommend use for static configuration that does not change between environments.
+#
+# See also config/application.properties
+#
 isis:
   reflector:
     validator:
@@ -90,7 +95,7 @@ isis:
   viewer:
     wicket:
       application:
-        menubarsLayoutXml: domainapp/conf/menubars.layout.xml
+        menubarsLayoutXml: domainapp/webapp/layout/menubars.layout.xml
         brandLogoHeader: /images/apache-isis/logo-48x48.png")
         faviconUrl: /images/favicon.png")
         name: Simple App
@@ -135,4 +140,6 @@ isis:
 
       standaloneCollection:
         bulkLoad: false
-
+spring:
+  banner:
+    location: banner.txt

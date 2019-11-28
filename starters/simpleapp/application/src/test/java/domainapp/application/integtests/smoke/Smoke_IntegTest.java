@@ -25,21 +25,19 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import domainapp.application.integtests.SpringIntegrationTest;
+import domainapp.application.integtests.ApplicationIntegTestAbstract;
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
 
 @Transactional
-class Smoke_IntegTest extends SpringIntegrationTest {
+class Smoke_IntegTest extends ApplicationIntegTestAbstract {
 
     @Inject SimpleObjects menu;
     @Inject TransactionService transactionService;
-    @Inject WrapperFactory wrapperFactory;
 
     @Test
     void create() {

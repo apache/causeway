@@ -1,0 +1,881 @@
+
+
+##############################################################################
+#
+# .pot file
+#
+# Translate this file to each required language and place in WEB-INF, eg:
+#
+#     /WEB-INF/translations-en_US.po
+#     /WEB-INF/translations-en.po
+#     /WEB-INF/translations-fr_FR.po
+#     /WEB-INF/translations-fr.po
+#     /WEB-INF/translations.po
+#
+# If the app uses TranslatableString (eg for internationalized validation
+# messages), or if the app calls the TranslationService directly, then ensure
+# that all text to be translated has been captured by running a full
+# integration test suite that exercises all relevant behaviour
+#
+##############################################################################
+
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2019-10-03 15:38:43+\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel(java.lang.String)
+msgid ".csv file name"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations(java.lang.String)
+msgid ".pot file name"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModelXml(java.util.List,java.lang.String)
+msgid ".xml file name"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup#act()
+#: org.apache.isis.applib.services.dto.Dto_downloadXml#act()
+#: org.apache.isis.applib.services.dto.Dto_downloadXsd#act()
+#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml#act()
+#: org.apache.isis.applib.services.layout.Object_openRestApi#act()
+#: org.apache.isis.applib.services.layout.Object_rebuildMetamodel#act()
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.contributions.ExcelDemoToDoItem_export#act()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.contributions.ExcelDemoToDoItem_export2#act()
+msgid "Act"
+msgstr ""
+
+
+#: org.apache.isis.applib.domain.DomainObjectList#actionArguments
+msgid "Action Arguments"
+msgstr ""
+
+
+#: org.apache.isis.applib.domain.DomainObjectList#actionId
+msgid "Action Id"
+msgstr ""
+
+
+#: org.apache.isis.applib.domain.DomainObjectList#actionOwningType
+msgid "Action Owning Type"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#add()
+msgid "Add"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#allMyToDoItems()
+msgid "All My To Do Items"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#apply()
+msgid "Apply"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
+msgid "Are you sure?"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#attachment
+msgid "Attachment"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#AUDIT_ENTRY
+msgid "Audit Entry"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem#bulkUpdateManager()
+msgid "Bulk Update Manager"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem
+msgid "Bulk update line item"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
+msgid "Cancel"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#category
+msgid "Category"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#changeFileName()
+msgid "Change File Name"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Chores
+msgid "Chores"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetClass
+msgid "Class"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#resetTranslationCache()
+msgid "Clear translation cache"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#COMMAND
+msgid "Command"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#COMPLETE
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#complete
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#complete
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#complete
+msgid "Complete"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#completed()
+msgid "Completed"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#select(org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category,org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory,boolean)
+msgid "Completed?"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.config.ConfigurationServiceMenu#configuration()
+msgid "Configuration"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
+msgid "Confirm"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Consulting
+msgid "Consulting"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#cost
+msgid "Cost"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#CURRENT
+msgid "Current"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#daysFromToday
+msgid "Days From Today"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.menu.MenuBarsService$Type#DEFAULT
+msgid "Default"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#delete()
+msgid "Delete"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#dependencies
+msgid "Dependencies"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#description
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#description
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#description
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#description
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#description
+msgid "Description"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "Detail"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "Domain Change"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category$2#Domestic
+msgid "Domestic"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategoryMenu#downloadDemoPivotsheet()
+msgid "Download Demo Pivotsheet"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#downloadJdoMetadata()
+msgid "Download Jdo Metadata"
+msgstr ""
+
+
+#: org.apache.isis.applib.AbstractViewModel#downloadLayoutXml()
+#: org.apache.isis.applib.ViewModel#downloadLayoutXml()
+#: org.apache.isis.applib.domain.DomainObjectList#downloadLayoutXml()
+#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript#downloadLayoutXml()
+#: org.apache.isis.applib.fixturescripts.FixtureResult#downloadLayoutXml()
+#: org.apache.isis.applib.fixturescripts.FixtureScript#downloadLayoutXml()
+#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#downloadLayoutXml()
+#: org.apache.isis.applib.services.config.ConfigurationProperty#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture2#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2#downloadLayoutXml()
+msgid "Download Layout Xml"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutServiceMenu#downloadMenuBarsLayout()
+msgid "Download Menu Bars Layout (XML)"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel()
+msgid "Download Meta Model (CSV)"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModelXml()
+msgid "Download Meta Model (XML)"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutServiceMenu#downloadLayouts()
+msgid "Download Object Layouts (ZIP)"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSchemaDefinition()
+msgid "Download Swagger Schema Definition"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations()
+msgid "Download Translations"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#dueBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#dueBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#dueBy
+msgid "Due By"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu
+msgid "Dummy"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Education
+msgid "Education"
+msgstr ""
+
+
+#: org.apache.isis.applib.domain.DomainObjectList#elementObjectType
+msgid "Element Object Type"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategoryMenu
+msgid "Excel"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#excelRowNumber
+msgid "Excel Row Number"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#excelSheetName
+msgid "Excel Sheet Name"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#importBlob(org.apache.isis.applib.value.Blob)
+msgid "Excel spreadsheet"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem#uploadSpreadsheet(org.apache.isis.applib.value.Blob,java.lang.String)
+msgid "ExcelFixture parameters"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#export()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#export()
+msgid "Export"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#export2()
+msgid "Export2"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.menu.MenuBarsService$Type#FALLBACK
+msgid "Fallback"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#fileName
+msgid "File Name"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.dto.Dto_downloadXml#act(java.lang.String)
+#: org.apache.isis.applib.services.dto.Dto_downloadXsd#act(java.lang.String,org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas)
+#: org.apache.isis.applib.services.layout.LayoutServiceMenu#downloadMenuBarsLayout(java.lang.String,org.apache.isis.applib.services.menu.MenuBarsService$Type)
+#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml#act(java.lang.String,org.apache.isis.applib.services.layout.LayoutService$Style)
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act(java.lang.String)
+msgid "File name"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSchemaDefinition(java.lang.String,org.apache.isis.applib.services.swagger.SwaggerService$Visibility,org.apache.isis.applib.services.swagger.SwaggerService$Format)
+msgid "Filename"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#fixtureScriptClassName
+msgid "Fixture script"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Garden
+msgid "Garden"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.hsqldb.HsqlDbManagerMenu#hsqlDbManager()
+msgid "HSQL DB Manager"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#handleRow()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#handleRow()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#handleRow()
+msgid "Handle Row"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Housework
+msgid "Housework"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong#prop()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusIdLong()
+msgid "Id"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "Identifiers"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas#IGNORE
+msgid "Ignore"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#importBlob()
+msgid "Import"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem
+msgid "Import/export manager"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas#INCLUDE
+msgid "Include"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Format#JSON
+msgid "Json"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.config.ConfigurationProperty#key
+msgid "Key"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#location
+msgid "Location"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Marketing
+msgid "Marketing"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetAction
+msgid "Member"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp
+msgid "Metadata"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#MINIMAL
+msgid "Minimal"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#newToDoItem()
+msgid "New To Do Item"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#NORMALIZED
+msgid "Normalized"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#notYetCompleted()
+msgid "Not Yet Completed"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#notes
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#notes
+msgid "Notes"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetStr
+msgid "Object"
+msgstr ""
+
+
+#: org.apache.isis.applib.domain.DomainObjectList#objects
+msgid "Objects"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#openTargetObject()
+msgid "Open"
+msgstr ""
+
+
+#: org.apache.isis.applib.AbstractViewModel#openRestApi()
+#: org.apache.isis.applib.ViewModel#openRestApi()
+#: org.apache.isis.applib.domain.DomainObjectList#openRestApi()
+#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript#openRestApi()
+#: org.apache.isis.applib.fixturescripts.FixtureResult#openRestApi()
+#: org.apache.isis.applib.fixturescripts.FixtureScript#openRestApi()
+#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#openRestApi()
+#: org.apache.isis.applib.services.config.ConfigurationProperty#openRestApi()
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#openRestApi()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture#openRestApi()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture2#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2#openRestApi()
+msgid "Open Rest Api"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#openSwaggerUi()
+msgid "Open Swagger Ui"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#OpenSource
+msgid "Opensource"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category$3#Other
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Other
+msgid "Other"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#ownedBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#ownedBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#ownedBy
+msgid "Owned By"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModelXml(java.util.List,java.lang.String)
+msgid "Packages"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+msgid "Parameters"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#postValue
+msgid "Post Value"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#preValue
+msgid "Pre Value"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#previousCost
+msgid "Previous Cost"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PRIVATE
+msgid "Private"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PRIVATE_WITH_PROTOTYPING
+msgid "Private With Prototyping"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category$1#Professional
+msgid "Professional"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.bookmark.BookmarkHolder_object#prop()
+msgid "Prop"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#propertyId
+msgid "Property Id"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault
+#: org.apache.isis.applib.services.hsqldb.HsqlDbManagerMenu
+#: org.apache.isis.applib.services.layout.LayoutServiceMenu
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem
+msgid "Prototyping"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PUBLIC
+msgid "Public"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_EVENT
+msgid "Published Event"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_INTERACTION
+msgid "Published Interaction"
+msgstr ""
+
+
+#: org.apache.isis.applib.AbstractViewModel#rebuildMetamodel()
+#: org.apache.isis.applib.ViewModel#rebuildMetamodel()
+#: org.apache.isis.applib.domain.DomainObjectList#rebuildMetamodel()
+#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript#rebuildMetamodel()
+#: org.apache.isis.applib.fixturescripts.FixtureResult#rebuildMetamodel()
+#: org.apache.isis.applib.fixturescripts.FixtureScript#rebuildMetamodel()
+#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#rebuildMetamodel()
+#: org.apache.isis.applib.services.config.ConfigurationProperty#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture2#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2#rebuildMetamodel()
+msgid "Rebuild Metamodel"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#recreateObjectsAndReturnFirst()
+msgid "Recreate Objects And Return First"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#remove()
+msgid "Remove"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#object
+msgid "Result"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#className
+msgid "Result class"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#key
+msgid "Result key"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript()
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript()
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete()
+msgid "Run Fixture Script"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript
+#: org.apache.isis.applib.fixturescripts.FixtureScript
+#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript
+#: org.apache.isis.extensions.excel.dom.ExcelFixture
+#: org.apache.isis.extensions.excel.dom.ExcelFixture2
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2
+msgid "Script"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+msgid "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#select()
+msgid "Select"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Shopping
+msgid "Shopping"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#subCategory
+msgid "Sub Category"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#subcategory
+msgid "Subcategory"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToReadingTranslations()
+msgid "Switch To Reading Translations"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToWritingTranslations()
+msgid "Switch To Writing Translations"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "Target"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "TargetStr"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#timestamp
+msgid "Timestamp"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#toDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem
+msgid "To Do Item"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#toDoItems
+msgid "To Do Items"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#toDoItemsComplete()
+msgid "To Do Items Complete"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#toDoItemsNotYetComplete()
+msgid "To Do Items Not Yet Complete"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#transactionId
+msgid "Transaction Id"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#type
+msgid "Type"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#updateCosts()
+msgid "Update Costs"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#updateLocation()
+msgid "Update Location"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem#uploadSpreadsheet()
+msgid "Upload Spreadsheet"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#user
+msgid "User"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.config.ConfigurationProperty#value
+msgid "Value"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong#prop()
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp#prop()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusVersionLong()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusVersionTimestamp()
+msgid "Version"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Format#YAML
+msgid "Yaml"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml
+#: org.apache.isis.applib.services.layout.Object_openRestApi
+#: org.apache.isis.applib.services.layout.Object_rebuildMetamodel
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata
+msgid "datanucleusIdLong"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem
+msgid "location"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem#uploadSpreadsheet(org.apache.isis.applib.value.Blob,java.lang.String)
+msgid "spreadsheet"
+msgstr ""
+
+
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem
+msgid "toDoItems"
+msgstr ""
+
+
+
+
+
+##############################################################################
+# end of .pot file
+##############################################################################
+

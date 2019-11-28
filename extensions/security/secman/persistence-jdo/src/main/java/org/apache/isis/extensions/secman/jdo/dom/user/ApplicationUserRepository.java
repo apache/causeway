@@ -86,7 +86,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     public ApplicationUser findByUsername(final String username) {
         return repository.uniqueMatch(new QueryDefault<>(
                 ApplicationUser.class,
-                "findByUsername", "username", username));
+                "findByUsername", "username", username)).orElse(null);
     }
 
     // -- findByEmailAddress (programmatic)
@@ -102,7 +102,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     public ApplicationUser findByEmailAddress(final String emailAddress) {
         return repository.uniqueMatch(new QueryDefault<>(
                 ApplicationUser.class,
-                "findByEmailAddress", "emailAddress", emailAddress));
+                "findByEmailAddress", "emailAddress", emailAddress))
+                .orElse(null);
     }
 
     // -- findByName

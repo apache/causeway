@@ -162,6 +162,7 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-unittestsupport</artifactId>
 			<scope>test</scope>
+<!--
 			<exclusions>
 				<exclusion>
 					<groupId>javax.xml.bind</groupId>
@@ -172,6 +173,7 @@
 					<artifactId>jaxb-runtime</artifactId>
 				</exclusion>
 			</exclusions>
+-->
 		</dependency>
 
 		<dependency>

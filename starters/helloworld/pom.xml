@@ -101,44 +101,6 @@
 		</profile>
 
 		<profile>
-			<id>lockdown</id>
-			<activation>
-				<property>
-					<name>lockdown</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>list</id>
-								<phase>generate-test-resources</phase>
-								<goals>
-									<goal>list</goal>
-								</goals>
-								<configuration>
-									<outputFile>${project.build.directory}/test-classes/domainapp/dom/impl/lockdown/LockDownMavenDeps_Test.list.actual.txt</outputFile>
-								</configuration>
-							</execution>
-							<execution>
-								<id>tree</id>
-								<phase>generate-test-resources</phase>
-								<goals>
-									<goal>tree</goal>
-								</goals>
-								<configuration>
-									<outputFile>${project.build.directory}/test-classes/domainapp/dom/impl/lockdown/LockDownMavenDeps_Test.tree.actual.txt</outputFile>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
 			<id>docker</id>
 			<activation>
 				<property>

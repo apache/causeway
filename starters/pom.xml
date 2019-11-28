@@ -31,7 +31,7 @@ under the License.
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.0.RELEASE</version>
+		<version>2.2.1.RELEASE</version>
 		<relativePath/>
 	</parent>
 
@@ -43,10 +43,36 @@ under the License.
 	<url>https://isis.apache.org</url>
 
 	<properties>
-		<spring-boot.version>2.2.0.RELEASE</spring-boot.version>
+
+        <maven.compiler.arg>-parameters</maven.compiler.arg>
+
+		<spring-boot.version>2.2.1.RELEASE</spring-boot.version>
 		<approvaltests.version>4.0.2</approvaltests.version>
 	</properties>
 
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Compile -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<showDeprecation>false</showDeprecation>
+						<showWarnings>false</showWarnings>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+						<compilerArgs>
+							<arg>${maven.compiler.arg}</arg>
+						</compilerArgs>
+					</configuration>
+					<!-- goal:compile binds to phase:compile -->
+					<!-- goal:testCompile binds to phase:test-compile -->
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

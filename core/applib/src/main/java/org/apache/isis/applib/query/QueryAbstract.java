@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.query;
 
+import lombok.Getter;
+
 import org.apache.isis.commons.internal.context._Context;
 
 /**
@@ -29,34 +31,44 @@ import org.apache.isis.commons.internal.context._Context;
  */
 public abstract class QueryAbstract<T> implements Query<T> {
 
-    protected long start;
-    protected long count;
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The start index within the retrieved result set.
+     */
+    @Getter
+    protected long start;
+
+    /**
+     * The number of items to return
+     */
+    @Getter
+    protected long count;
+
+    @Getter
     private final String resultTypeName;
+
     /**
      * Derived from {@link #getResultTypeName()}, with respect to the
      * {@link Thread#getContextClassLoader() current thread's class loader}.
      */
     private transient Class<T> resultType;
 
-
     /**
      * Base query based on Class type.
      *
      * @param type
-     * @param range optional start and count of the range of dataset. 0
      */
-    public QueryAbstract(final Class<T> type, final long ... range) {
+    public QueryAbstract(final Class<T> type, final long start, final long count) {
         this.resultTypeName = type.getName();
-        this.start = range.length > 0 ? range[0]:0;
-        this.count = range.length > 1 ? range[1]:0;
+        this.start = start;
+        this.count = count;
     }
 
-    public QueryAbstract(final String typeName, final long ... range) {
+    public QueryAbstract(final String typeName, final long start, final long count) {
         this.resultTypeName = typeName;
-        this.start = range.length > 0 ? range[0]:0;
-        this.count = range.length > 1 ? range[1]:0;
+        this.start = start;
+        this.count = count;
     }
 
     /**
@@ -77,26 +89,4 @@ public abstract class QueryAbstract<T> implements Query<T> {
         return resultType;
     }
 
-    public String getResultTypeName() {
-        return resultTypeName;
-    }
-
-    /**
-     * The start index into the set table
-     * @return
-     */
-    @Override
-    public long getStart() {
-        return start;
-    }
-
-
-    /**
-     * The number of items to return, starting at {@link QueryFindAllPaged#getStart()}
-     * @return
-     */
-    @Override
-    public long getCount() {
-        return count;
-    }
 }

@@ -22,9 +22,9 @@
 
 	<artifactId>isis-persistence-jdo-common</artifactId>
 
-	<name>Apache Isis Core Plugin - JDO (Common)</name>
+	<name>Apache Isis Persistence - JDO (Common)</name>
 	<description>
-        Common base for JDO plugins.
+        Common base for JDO persistence.
     </description>
 
 	<properties>
@@ -106,7 +106,7 @@
             <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
 	</dependencies>
 
 

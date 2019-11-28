@@ -82,9 +82,9 @@ org.apache.isis.runtime.system.session.IsisSessionFactoryDefault
 org.apache.isis.runtime.system.transaction.AuditingServiceInternal
 org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal
 org.apache.isis.runtime.system.transaction.PersistenceSessionServiceInternalDefault
-org.apache.isis.security.authentication.bypass.AuthenticatorBypass
+org.apache.isis.security.bypass.authentication.AuthenticatorBypass
 org.apache.isis.security.authentication.manager.AuthorizationManagerStandard
 org.apache.isis.security.authentication.standard.AuthenticationManagerStandard
-org.apache.isis.security.authorization.bypass.AuthorizorBypass
+org.apache.isis.security.bypass.authorization.AuthorizorBypass
 org.apache.isis.testdomain.jdo.InventoryResource
 org.apache.isis.wrapper.WrapperFactoryDefault

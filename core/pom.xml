@@ -47,11 +47,9 @@
 		<git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
 		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
-		<compileSource>8</compileSource>
-		<compileTarget>8</compileTarget>
-		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.arg>-parameters</maven.compiler.arg>
 
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -91,6 +89,7 @@
 		<commons-email.version>1.4</commons-email.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<commons-io.version>2.6</commons-io.version>
+		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-logging.version>1.2</commons-logging.version>
 
 		<cxf-rt-rs-client.version>3.3.4</cxf-rt-rs-client.version>
@@ -157,6 +156,7 @@
 		<quartz-scheduler.version>2.2.1</quartz-scheduler.version>
 
 		<resteasy4-jaxrs.version>4.0.0.Beta5</resteasy4-jaxrs.version> <!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
+		<reflections.version>0.9.11</reflections.version>
 
 		<select2.version>4.0.10</select2.version>
 		<shiro.version>1.4.1</shiro.version>
@@ -295,10 +295,10 @@
 					<configuration>
 						<showDeprecation>false</showDeprecation>
 						<showWarnings>false</showWarnings>
-						<source>${compileSource}</source>
-						<target>${compileTarget}</target>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
 						<compilerArgs>
-					        <arg>${compiler-plugin.compilerArgument}</arg>
+					        <arg>${maven.compiler.arg}</arg>
 					    </compilerArgs>
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
@@ -999,6 +999,7 @@
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
 			</dependency>
+
 			<dependency>
 				<!-- required because resteasy-jaxrs declares as a test dependency whereas
 					httpclient4 needs it as a compile dependency -->
@@ -1210,6 +1211,12 @@
 						<artifactId>activation</artifactId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
 			</dependency>
 
 			<dependency>
@@ -1465,6 +1472,13 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.reflections</groupId>
+				<artifactId>reflections</artifactId>
+				<version>${reflections.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j-api.version}</version>
@@ -1537,44 +1551,6 @@
 
 		</dependencies>
 	</dependencyManagement>
-
-	<dependencies>
-		<!-- COMPILE DEPENDENCIES -->
-
-		<!-- TEST DEPENDENCIES -->
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-junit4</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit-dep</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
 
 	<profiles>
 		<profile>
@@ -1781,9 +1757,15 @@
 		<profile>
 			<id>datanucleusenhance</id>
 			<activation>
+				<property>
+					<name>isis-app-starter-datanucleusenhance</name>
+					<value>true</value>
+				</property>
+<!--
 				<file>
 					<exists>${basedir}/logging-dn-enhance.properties</exists>
 				</file>
+-->
 			</activation>
 			<properties>
 				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>

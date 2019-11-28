@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-detached-tests</artifactId>
-	<name>Apache Isis Core - Detached Tests (tests only)</name>
+	<name>Apache Isis Core - Detached Tests</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.detachedtests</jar-plugin.automaticModuleName>
@@ -54,7 +54,7 @@
             <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-metamodel</artifactId>

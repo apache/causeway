@@ -40,6 +40,7 @@
     <build>
         <testResources>
             <testResource>
+                <filtering>false</filtering>
                 <directory>src/test/java</directory>
             </testResource>
         </testResources>
@@ -62,6 +63,7 @@
                             <jsonFiles>
                                 <param>**/*.json</param>
                             </jsonFiles>
+                            <skip>${skipBSs}</skip>
                         </configuration>
                     </execution>
                 </executions>
@@ -98,6 +100,12 @@
             <artifactId>isis-mavendeps-testing</artifactId>
             <type>pom</type>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>
