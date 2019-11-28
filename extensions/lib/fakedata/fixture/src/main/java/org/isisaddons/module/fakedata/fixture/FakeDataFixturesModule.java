@@ -2,7 +2,7 @@ package org.isisaddons.module.fakedata.fixture;
 
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.modules.Module;
-import org.isisaddons.module.fakedata.FakeDataModule;
+import org.apache.isis.extensions.fakedata.FakeDataModule;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_tearDown;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

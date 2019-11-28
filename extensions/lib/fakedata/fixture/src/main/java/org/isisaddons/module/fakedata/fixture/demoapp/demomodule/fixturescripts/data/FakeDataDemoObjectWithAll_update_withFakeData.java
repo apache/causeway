@@ -17,7 +17,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
 
-import org.isisaddons.module.fakedata.dom.FakeDataService;
+import org.apache.isis.extensions.fakedata.dom.FakeDataService;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.EnumOf3;
 
