@@ -10,7 +10,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-module-fakedata-integtests</artifactId>
+    <artifactId>isis-extensions-fakedata-integtests</artifactId>
     <name>Incode Platform Lib FakeData IntegTests</name>
 
     <build>
@@ -45,13 +45,13 @@
 
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-module-fakedata-fixtures</artifactId>
+            <artifactId>isis-extensions-fakedata-fixtures</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-module-fakedata-dom</artifactId>
+            <artifactId>isis-extensions-fakedata-dom</artifactId>
             <scope>test</scope>
         </dependency>
 

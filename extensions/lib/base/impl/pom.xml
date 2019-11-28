@@ -9,7 +9,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 	
-    <artifactId>incode-module-base-dom</artifactId>
+    <artifactId>isis-extensions-base-dom</artifactId>
 
     <packaging>jar</packaging>
 

@@ -10,7 +10,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-module-excel-integtests</artifactId>
+    <artifactId>isis-extensions-excel-integtests</artifactId>
     <name>Incode Platform Lib Excel IntegTests</name>
 
     <properties>
@@ -50,13 +50,13 @@
 
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-module-excel-fixtures</artifactId>
+            <artifactId>isis-extensions-excel-fixtures</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-module-fakedata-dom</artifactId>
+            <artifactId>isis-extensions-fakedata-dom</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -80,7 +80,7 @@
 <!--
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>incode-module-base-dom</artifactId>
+            <artifactId>isis-extensions-base-dom</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

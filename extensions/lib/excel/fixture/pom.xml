@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-module-excel-fixtures</artifactId>
+    <artifactId>isis-extensions-excel-fixtures</artifactId>
     <name>Incode Platform Lib Excel Fixtures</name>
 
     <build>
@@ -52,7 +52,7 @@
 
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-module-excel-dom</artifactId>
+            <artifactId>isis-extensions-excel-dom</artifactId>
         </dependency>
 
         <dependency>
@@ -74,7 +74,7 @@
 
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-module-fakedata-dom</artifactId>
+            <artifactId>isis-extensions-fakedata-dom</artifactId>
         </dependency>
 -->
 

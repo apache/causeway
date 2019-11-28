@@ -9,7 +9,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>incode-module-unittestsupport-dom</artifactId>
+    <artifactId>isis-extensions-unittestsupport-dom</artifactId>
 
     <packaging>jar</packaging>
 

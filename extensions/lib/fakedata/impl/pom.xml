@@ -9,7 +9,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-module-fakedata-dom</artifactId>
+    <artifactId>isis-extensions-fakedata-dom</artifactId>
     <name>Incode Platform Lib FakeData Impl</name>
 
     <description>
