@@ -9,7 +9,6 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.incode.module.unittestsupport</groupId>
     <artifactId>incode-module-unittestsupport-dom</artifactId>
 
     <packaging>jar</packaging>

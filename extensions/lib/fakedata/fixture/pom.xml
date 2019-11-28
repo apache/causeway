@@ -9,7 +9,7 @@
         <relativePath>../../../../starters/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.isisaddons.module.fakedata</groupId>
+    <groupId>org.apache.isis.extensions</groupId>
     <artifactId>isis-module-fakedata-fixtures</artifactId>
     <name>Incode Platform Lib FakeData Fixtures</name>
 
@@ -51,7 +51,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.isisaddons.module.fakedata</groupId>
+            <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-module-fakedata-dom</artifactId>
         </dependency>
 

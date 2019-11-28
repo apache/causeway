@@ -9,7 +9,6 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.isisaddons.module.excel</groupId>
     <artifactId>isis-module-excel-dom</artifactId>
     <name>Incode Platform Lib Excel Impl</name>
 

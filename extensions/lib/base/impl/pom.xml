@@ -9,7 +9,6 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 	
-    <groupId>org.incode.module.base</groupId>
     <artifactId>incode-module-base-dom</artifactId>
 
     <packaging>jar</packaging>
