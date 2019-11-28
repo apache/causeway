@@ -37,6 +37,21 @@
         <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
     </properties>
 
+    <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+
     <dependencies>
     
     	<!-- this app -->
