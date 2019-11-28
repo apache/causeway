@@ -73,12 +73,12 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     private Map<String, ManagedBeanAdapter> enumerateManagedBeans() {
         
-        val filter = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
+        val beanTypeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
         val managedBeanAdapterByName = _Maps.<String, ManagedBeanAdapter>newHashMap();
 
         isisSystemEnvironment.getIocContainer().streamAllBeans()
         .filter(_NullSafe::isPresent)
-        .filter(bean->filter.isManagedBean(bean.getBeanClass())) // do not register unknown sort
+        .filter(bean->beanTypeRegistry.isManagedBean(bean.getBeanClass())) // do not register unknown sort
         .forEach(bean->{
             val id = bean.getId();
             managedBeanAdapterByName.put(id, bean);

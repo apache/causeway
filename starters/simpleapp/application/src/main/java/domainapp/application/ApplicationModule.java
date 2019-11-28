@@ -18,11 +18,10 @@
  */
 package domainapp.application;
 
+import org.apache.isis.extensions.fixtures.modules.Module;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-import org.apache.isis.extensions.fixtures.modules.Module;
 
 import domainapp.modules.simple.SimpleModule;
 

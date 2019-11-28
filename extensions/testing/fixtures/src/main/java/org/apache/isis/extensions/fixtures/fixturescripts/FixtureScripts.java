@@ -19,12 +19,9 @@
 package org.apache.isis.extensions.fixtures.fixturescripts;
 
 import java.io.PrintStream;
-import java.lang.reflect.Constructor;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -230,14 +227,10 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     private List<FixtureScript> findAndInstantiateFixtureScripts() {
-        return findFixtureScriptSubTypesInPackage().stream()
-                .filter(fixtureScriptCls -> {
-                    val packageName = fixtureScriptCls.getPackage().getName();
-                    // redundant check if ClassDiscoveryService2 in use because already filtered out
-                    return packageName.startsWith(getPackagePrefix());
-                })
-                .map(this::newFixtureScript)
+        val packagePrefix = getPackagePrefix();
+        return serviceRegistry.select(FixtureScript.class).stream()
                 .filter(Objects::nonNull)
+                .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
                 .sorted(Comparator
                         .comparing(FixtureScript::getFriendlyName)
                         .thenComparing(FixtureScript::getQualifiedName)
@@ -245,35 +238,6 @@ public abstract class FixtureScripts extends AbstractService {
                 .collect(Collectors.toList());
     }
 
-    private Set<Class<? extends FixtureScript>> findFixtureScriptSubTypesInPackage() {
-
-        val packagePrefix = getPackagePrefix();
-        
-        return serviceRegistry.streamRegisteredBeansOfType(FixtureScript.class)
-                .map(beanAdapter->beanAdapter.getBeanClass())
-                .map(type->_Casts.<Class<? extends FixtureScript>>uncheckedCast(type))
-                .filter(type->type.getPackage().getName().startsWith(packagePrefix))
-                .collect(Collectors.toCollection(HashSet::new));
-    }
-
-    private FixtureScript newFixtureScript(final Class<? extends FixtureScript> fixtureScriptCls) {
-        try {
-            final Constructor<? extends FixtureScript> constructor = fixtureScriptCls.getConstructor();
-            final FixtureScript template = constructor.newInstance();
-            if(!template.isDiscoverable()) {
-                return null;
-            }
-
-            final FixtureScript instance = factoryService.instantiate(fixtureScriptCls);
-            instance.setParentPath(template.getParentPath());
-
-            return instance;
-
-        } catch(final Exception ex) {
-            // ignore if does not have a no-arg constructor or cannot be instantiated
-            return null;
-        }
-    }
 
 
     // -- fixtureTracing (thread-local)
@@ -298,9 +262,7 @@ public abstract class FixtureScripts extends AbstractService {
      * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or
      * {@link #autoComplete0RunFixtureScript(String)} with <tt>public</tt> visibility</tt>.
      */
-    @Action(
-            restrictTo = RestrictTo.PROTOTYPING
-            )
+    @Action(restrictTo = RestrictTo.PROTOTYPING)
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(
             final FixtureScript fixtureScript,
@@ -330,9 +292,7 @@ public abstract class FixtureScripts extends AbstractService {
         final Predicate<String> contains = str -> str != null && str.contains(arg);
 
         return _NullSafe.stream(getFixtureScriptList())
-                .filter(script->{
-                    return contains.test(script.getFriendlyName()) || contains.test(script.getLocalName());
-                })
+                .filter(script-> contains.test(script.getFriendlyName()) || contains.test(script.getLocalName()))
                 .collect(Collectors.toList());
     }
     public String disableRunFixtureScript() {
