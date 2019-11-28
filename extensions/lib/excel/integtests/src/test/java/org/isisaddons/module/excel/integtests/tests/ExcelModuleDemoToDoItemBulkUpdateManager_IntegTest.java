@@ -1,5 +1,7 @@
 package org.isisaddons.module.excel.integtests.tests;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -9,12 +11,10 @@ import javax.inject.Inject;
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
 
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 import org.apache.isis.applib.value.Blob;
 
@@ -25,15 +25,17 @@ import org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.Bul
 import org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem;
 import org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelModuleIntegTestAbstract {
 
-    @Before
+    @BeforeEach
     public void setUpData() throws Exception {
-        runFixtureScript(new DemoToDoItem_recreate_usingExcelFixture());
+        fixtureScripts.run(new DemoToDoItem_recreate_usingExcelFixture());
     }
 
     @Inject
@@ -44,7 +46,7 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
 
     private BulkUpdateManagerForDemoToDoItem bulkUpdateManager;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         bulkUpdateManager = exportImportService.bulkUpdateManager();
     }
@@ -53,7 +55,7 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
      * Can't do in two steps because the exported XLSX references the ToDoItem's OID which would change if reset db.
      * @throws Exception
      */
-    @Ignore("TODO - reinstate")
+    @Disabled("TODO - reinstate")
     @Test
     public void export_then_import() throws Exception {
 
@@ -76,13 +78,13 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
                 bulkUpdateManager.importBlob(new Blob("toDoItems-updated.xlsx", ExcelService.XSLX_MIME_TYPE, updatedBytes));
 
         // then
-        assertThat(lineItems.size(), is(2));
+        Assertions.assertThat(lineItems.size()).isEqualTo(2);
 
         final BulkUpdateLineItemForDemoToDoItem lineItem1 = lineItems.get(0);
         final BulkUpdateLineItemForDemoToDoItem lineItem2 = lineItems.get(1);
 
-        assertThat(lineItem1.getDescription(), is("Buy milk - updated!"));
-        assertThat(lineItem2.getNotes(), is("Get sliced brown if possible."));
+        Assertions.assertThat(lineItem1.getDescription()).isEqualTo("Buy milk - updated!");
+        Assertions.assertThat(lineItem2.getNotes()).isEqualTo("Get sliced brown if possible.");
     }
 
     private static byte[] getBytes(final Class<?> contextClass, final String name) throws IOException {

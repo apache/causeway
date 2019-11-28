@@ -5,12 +5,16 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 import org.isisaddons.module.excel.dom.ExcelFixture;
@@ -27,6 +31,17 @@ import lombok.Setter;
         objectType = "libExcelFixture.ExcelUploadRowHandler4ToDoItem",
         nature = Nature.VIEW_MODEL
 )
+@XmlRootElement(name = "BulkUpdateLineItemForDemoToDoItem")
+@XmlType(
+        propOrder = {
+                "description",
+                "subcategory",
+                "ownedBy",
+                "dueBy",
+                "cost",
+        }
+)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ExcelUploadRowHandler4ToDoItem implements ExcelFixtureRowHandler {
 
     @Getter @Setter
@@ -46,7 +61,6 @@ public class ExcelUploadRowHandler4ToDoItem implements ExcelFixtureRowHandler {
 
     @Override
     public List<Object> handleRow(final FixtureScript.ExecutionContext executionContext, final ExcelFixture excelFixture, final Object previousRow) {
-        //final ExcelModuleDemoToDoItem toDoItem = wrapperFactory.wrap(toDoItems).newToDo(
         final ExcelDemoToDoItem toDoItem = toDoItems.newToDoItem(
                 description,
                 Category.Professional,

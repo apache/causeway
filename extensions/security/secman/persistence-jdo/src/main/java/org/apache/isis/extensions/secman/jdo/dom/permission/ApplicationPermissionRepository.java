@@ -186,7 +186,8 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
                                 "role", role,
                                 "rule", rule,
                                 "featureType", type,
-                                "featureFqn", featureFqn ));
+                                "featureFqn", featureFqn ))
+                .orElse(null);
     }
 
 

@@ -1,24 +1,24 @@
 package org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-import org.joda.time.LocalDate;
+import javax.inject.Inject;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
+import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.isisaddons.module.excel.dom.ExcelFixture;
 import org.isisaddons.module.excel.dom.ExcelFixtureRowHandler;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Category;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.joda.time.LocalDate;
 
 public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
 
@@ -52,7 +52,7 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
 
         final LocalDate dueBy = daysFromToday(daysFromToday);
         final String user = executionContext.getParameter("user");
-        final String username = user != null && user.length() > 0 ? user : container.getUser().getName();
+        final String username = user != null && user.length() > 0 ? user : userService.getUser().getName();
         ExcelDemoToDoItem toDoItem = toDoItemRepository.findToDoItemsByDescription(description);
         if(toDoItem != null) {
             toDoItem.setCategory(category);
@@ -76,9 +76,6 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
     }
 
 
-    @javax.inject.Inject
-    private ExcelDemoToDoItemMenu toDoItemRepository;
-
-    @javax.inject.Inject
-    private DomainObjectContainer container;
+    @Inject private ExcelDemoToDoItemMenu toDoItemRepository;
+    @Inject private UserService userService;
 }

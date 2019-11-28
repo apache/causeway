@@ -55,7 +55,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
         if(name == null) {
             return null;
         }
-        return repository.uniqueMatch(new QueryDefault<>(ApplicationRole.class, "findByName", "name", name));
+        return repository.uniqueMatch(new QueryDefault<>(ApplicationRole.class, "findByName", "name", name)).orElse(null);
     }
 
     @Override

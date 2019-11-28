@@ -4,15 +4,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.incode</groupId>
-        <artifactId>incode-parent</artifactId>
-        <version>${revision}</version>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
+        <version>2.0.0-M3-SNAPSHOT</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
     <groupId>org.isisaddons.module.excel</groupId>
     <artifactId>isis-module-excel-integtests</artifactId>
     <name>Incode Platform Lib Excel IntegTests</name>
+
+    <properties>
+
+        <skipTests>true</skipTests>
+    </properties>
 
     <build>
         <resources>
@@ -40,26 +45,6 @@
                 </excludes>
             </testResource>
         </testResources>
-        <plugins>
-            <plugin>
-                <groupId>com.github.odavid.maven.plugins</groupId>
-                <artifactId>mixin-maven-plugin</artifactId>
-                <version>0.1-alpha-39</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <mixins>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>standard</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>surefire</artifactId>
-                        </mixin>
-                    </mixins>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 
     <dependencies>
@@ -81,27 +66,28 @@
             <artifactId>isis-mavendeps-testing</artifactId>
             <type>pom</type>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.isis.core</groupId>
+                    <artifactId>isis-unittestsupport</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-wrapper</artifactId>
-            <scope>test</scope>
-        </dependency>
-
+<!--
         <dependency>
             <groupId>org.incode.module.base</groupId>
             <artifactId>incode-module-base-dom</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+-->
 
-        <dependency>
-            <groupId>org.incode.module.integtestsupport</groupId>
-            <artifactId>incode-module-integtestsupport-dom</artifactId>
-            <scope>test</scope>
-        </dependency>
-
+<!--
         <dependency>
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-core</artifactId>
@@ -119,6 +105,7 @@
             <artifactId>isis-core-applib</artifactId>
             <scope>test</scope>
         </dependency>
+-->
 
         <dependency>
             <groupId>org.hsqldb</groupId>

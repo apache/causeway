@@ -2,8 +2,7 @@ package org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.d
 
 import java.math.BigDecimal;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.isisaddons.module.excel.dom.ExcelFixture2;
 import org.isisaddons.module.excel.dom.ExcelMetaDataEnabled;
 import org.isisaddons.module.excel.dom.FixtureAwareRowHandler;

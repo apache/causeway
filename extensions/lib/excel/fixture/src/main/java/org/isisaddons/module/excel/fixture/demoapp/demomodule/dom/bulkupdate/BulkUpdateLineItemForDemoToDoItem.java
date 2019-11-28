@@ -1,74 +1,67 @@
 package org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
-import org.joda.time.LocalDate;
+import javax.inject.Inject;
+import javax.jdo.annotations.Column;
+import javax.xml.bind.annotation.*;
 
 import org.apache.isis.applib.AbstractViewModel;
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.InvokeOn;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
-
+import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.user.UserService;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Category;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory;
+import org.joda.time.LocalDate;
 
 @DomainObject(
+        nature = Nature.VIEW_MODEL,
         objectType = "libExcelFixture.BulkUpdateLineItemForDemoToDoItem"
 )
 @DomainObjectLayout(
         named = "Bulk update line item",
         bookmarking = BookmarkPolicy.AS_ROOT
 )
+@XmlRootElement(name = "BulkUpdateLineItemForDemoToDoItem")
+@XmlType(
+        propOrder = {
+                "description",
+                "category",
+                "subcategory",
+                "ownedBy",
+                "dueBy",
+                "complete",
+                "cost",
+                "notes",
+        }
+)
+@XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class BulkUpdateLineItemForDemoToDoItem
-        extends AbstractViewModel 
         implements Comparable<BulkUpdateLineItemForDemoToDoItem> {
 
+    public BulkUpdateLineItemForDemoToDoItem(ExcelDemoToDoItem toDoItem) {
+        modifyToDoItem(toDoItem);
+    }
 
     public String title() {
         final ExcelDemoToDoItem existingItem = getToDoItem();
         if(existingItem != null) {
-            return "EXISTING: " + getContainer().titleOf(existingItem);
+            return "EXISTING: " + titleService.titleOf(existingItem);
         }
         return "NEW: " + getDescription();
     }
     
-    
-    // //////////////////////////////////////
-    // ViewModel implementation
-    // //////////////////////////////////////
-    
-
-    @Override
-    public String viewModelMemento() {
-        return toDoItemExportImportService.mementoFor(this);
-    }
-
-    @Override
-    public void viewModelInit(final String mementoStr) {
-        toDoItemExportImportService.init(mementoStr, this);
-    }
-
-    
-    // //////////////////////////////////////
-    // ToDoItem (optional property)
-    // //////////////////////////////////////
-    
+    @Getter @Setter
     private ExcelDemoToDoItem toDoItem;
 
-    @MemberOrder(sequence="1")
-    public ExcelDemoToDoItem getToDoItem() {
-        return toDoItem;
-    }
-    public void setToDoItem(final ExcelDemoToDoItem toDoItem) {
-        this.toDoItem = toDoItem;
-    }
     public void modifyToDoItem(final ExcelDemoToDoItem toDoItem) {
         setToDoItem(toDoItem);
         setDescription(toDoItem.getDescription());
@@ -82,142 +75,40 @@ public class BulkUpdateLineItemForDemoToDoItem
     }
 
     
-    // //////////////////////////////////////
-    // Description (property)
-    // //////////////////////////////////////
-    
+    @Getter @Setter
     private String description;
 
-    @MemberOrder(sequence="2")
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    // //////////////////////////////////////
-    // Category and Subcategory (property)
-    // //////////////////////////////////////
-
+    @Getter @Setter
     private Category category;
 
-    @MemberOrder(sequence="3")
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(final Category category) {
-        this.category = category;
-    }
-
-    // //////////////////////////////////////
-
+    @Getter @Setter
     private Subcategory subcategory;
 
-    @MemberOrder(sequence="4")
-    public Subcategory getSubcategory() {
-        return subcategory;
-    }
-    public void setSubcategory(final Subcategory subcategory) {
-        this.subcategory = subcategory;
-    }
-
-    // //////////////////////////////////////
-    // OwnedBy (property)
-    // //////////////////////////////////////
-    
+    @Getter @Setter
     private String ownedBy;
 
-    @MemberOrder(sequence="5")
-    public String getOwnedBy() {
-        return ownedBy;
-    }
-
-    public void setOwnedBy(final String ownedBy) {
-        this.ownedBy = ownedBy;
-    }
-
-
-    // //////////////////////////////////////
-    // DueBy (property)
-    // //////////////////////////////////////
-
+    @Getter @Setter
     private LocalDate dueBy;
 
-    @MemberOrder(sequence="6")
-    public LocalDate getDueBy() {
-        return dueBy;
-    }
-
-    public void setDueBy(final LocalDate dueBy) {
-        this.dueBy = dueBy;
-    }
-
-    
-    // //////////////////////////////////////
-    // Complete (property), 
-    // Done (action), Undo (action)
-    // //////////////////////////////////////
-
+    @Getter @Setter
     private boolean complete;
 
-    @MemberOrder(sequence="7")
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public void setComplete(final boolean complete) {
-        this.complete = complete;
-    }
-
-
-    // //////////////////////////////////////
-    // Cost (property), UpdateCost (action)
-    // //////////////////////////////////////
-
+    @Getter @Setter
+    @Column(length = 8, scale = 2)
     private BigDecimal cost;
 
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(final BigDecimal cost) {
-        this.cost = cost!=null?cost.setScale(2, BigDecimal.ROUND_HALF_EVEN):null;
-    }
-    
-
-    // //////////////////////////////////////
-    // Notes (property)
-    // //////////////////////////////////////
-
+    @Getter @Setter
     private String notes;
 
-    public String getNotes() {
-        return notes;
-    }
 
-    public void setNotes(final String notes) {
-        this.notes = notes;
-    }
-
-
-    // //////////////////////////////////////
-    // apply
-    // //////////////////////////////////////
-
-    @Action(
-            semantics = SemanticsOf.IDEMPOTENT,
-            invokeOn = InvokeOn.OBJECT_AND_COLLECTION
-    )
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
     public ExcelDemoToDoItem apply() {
         ExcelDemoToDoItem item = getToDoItem();
         if(item == null) {
             // description must be unique, so check
             item = toDoItems.findToDoItemsByDescription(getDescription());
             if(item != null) {
-                getContainer().warnUser("Item already exists with description '" + getDescription() + "'");
+                messageService.warnUser("Item already exists with description '" + getDescription() + "'");
             } else {
                 // create new item
                 // (since this is just a demo, haven't bothered to validate new values)
@@ -238,30 +129,19 @@ public class BulkUpdateLineItemForDemoToDoItem
             item.setOwnedBy(getOwnedBy());
             item.setComplete(isComplete());
         }
-        return actionInvocationContext.getInvokedOn().isCollection()? null: item;
+        return item;
     }
-
-    
-    // //////////////////////////////////////
-    // compareTo
-    // //////////////////////////////////////
 
     @Override
     public int compareTo(final BulkUpdateLineItemForDemoToDoItem other) {
         return this.toDoItem.compareTo(other.toDoItem);
     }
 
-    
-    // //////////////////////////////////////
-    // injected services
-    // //////////////////////////////////////
-    
-    @javax.inject.Inject
-    private BulkUpdateMenuForDemoToDoItem toDoItemExportImportService;
-    
-    @javax.inject.Inject
-    private ExcelDemoToDoItemMenu toDoItems;
 
-    @javax.inject.Inject
-    private ActionInvocationContext actionInvocationContext;
+    @XmlTransient @Inject BulkUpdateMenuForDemoToDoItem toDoItemExportImportService;
+    @XmlTransient @Inject ExcelDemoToDoItemMenu toDoItems;
+    @XmlTransient @Inject UserService userService;
+    @XmlTransient @Inject MessageService messageService;
+    @XmlTransient @Inject TitleService titleService;
+
 }

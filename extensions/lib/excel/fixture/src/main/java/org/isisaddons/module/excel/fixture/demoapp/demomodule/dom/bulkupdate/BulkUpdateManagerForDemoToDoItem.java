@@ -1,14 +1,15 @@
 package org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.xml.bind.annotation.*;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
-import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -21,6 +22,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
 
 import org.isisaddons.module.excel.dom.ExcelService;
@@ -32,6 +36,9 @@ import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
+
+import static org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.*;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
@@ -41,8 +48,17 @@ import lombok.Setter;
         named ="Import/export manager",
         bookmarking = BookmarkPolicy.AS_ROOT
 )
+@XmlRootElement(name = "BulkUpdateManagerForDemoToDoItem")
+@XmlType(
+        propOrder = {
+                "fileName",
+                "category",
+                "subcategory",
+                "complete",
+        }
+)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BulkUpdateManagerForDemoToDoItem {
-
 
     public static final WorksheetSpec WORKSHEET_SPEC =
             new WorksheetSpec(BulkUpdateLineItemForDemoToDoItem.class, "line-items");
@@ -50,13 +66,10 @@ public class BulkUpdateManagerForDemoToDoItem {
     public BulkUpdateManagerForDemoToDoItem(){
     }
 
-
     public String title() {
         return "Import/export manager";
     }
     
-
-
     @Getter @Setter @Nullable
     private String fileName;
 
@@ -70,17 +83,14 @@ public class BulkUpdateManagerForDemoToDoItem {
     private boolean complete;
 
 
-    @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-    )
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
     public BulkUpdateManagerForDemoToDoItem changeFileName(final String fileName) {
         setFileName(fileName);
-        return bulkUpdateMenuForDemoToDoItem.newBulkUpdateManager(this);
+        return this;
     }
     public String default0ChangeFileName() {
         return getFileName();
     }
-
 
 
     @Action
@@ -93,7 +103,7 @@ public class BulkUpdateManagerForDemoToDoItem {
         setCategory(category);
         setSubcategory(subcategory);
         setComplete(completed);
-        return bulkUpdateMenuForDemoToDoItem.newBulkUpdateManager(this);
+        return this;
     }
     public Category default0Select() {
         return getCategory();
@@ -116,28 +126,20 @@ public class BulkUpdateManagerForDemoToDoItem {
     }
 
     private String currentUserName() {
-        return container.getUser().getName();
+        return userService.getUser().getName();
     }
 
-
-
-    //region > toDoItems (derived collection)
 
     @SuppressWarnings("unchecked")
     @Collection
     @CollectionLayout(defaultView = "table")
     public List<ExcelDemoToDoItem> getToDoItems() {
-        return container.allMatches(ExcelDemoToDoItem.class,
-                Predicates.and(
-                    //ExcelDemoToDoItem.Predicates.thoseOwnedBy(currentUserName()),
-                    ExcelDemoToDoItem.Predicates.thoseCompleted(isComplete()),
-                    ExcelDemoToDoItem.Predicates.thoseCategorised(getCategory(), getSubcategory())));
+        return repositoryService.allMatches(ExcelDemoToDoItem.class,
+                thoseCompleted(isComplete()).and(thoseCategorised(getCategory(), getSubcategory())));
     }
 
 
-    @Action(
-            semantics = SemanticsOf.SAFE
-    )
+    @Action(semantics = SemanticsOf.SAFE)
     public Blob export() {
         final String fileName = withExtension(getFileName(), ".xlsx");
         final List<ExcelDemoToDoItem> items = getToDoItems();
@@ -153,22 +155,14 @@ public class BulkUpdateManagerForDemoToDoItem {
     }
 
     private Blob toExcel(final String fileName, final List<ExcelDemoToDoItem> items) {
-        final List<BulkUpdateLineItemForDemoToDoItem> toDoItemViewModels = Lists.transform(items, toLineItem());
+        val toDoItemViewModels = items.stream()
+                .map(BulkUpdateLineItemForDemoToDoItem::new)
+                .collect(Collectors.toList());
         return excelService.toExcel(new WorksheetContent(toDoItemViewModels, WORKSHEET_SPEC), fileName);
     }
 
-    private Function<ExcelDemoToDoItem, BulkUpdateLineItemForDemoToDoItem> toLineItem() {
-        return toDoItem -> {
-            final BulkUpdateLineItemForDemoToDoItem template = new BulkUpdateLineItemForDemoToDoItem();
-            template.modifyToDoItem(toDoItem);
-            return bulkUpdateMenuForDemoToDoItem.newLineItem(template);
-        };
-    }
-
     @Action
-    @ActionLayout(
-            named = "Import"
-    )
+    @ActionLayout(named = "Import")
     @MemberOrder(name="toDoItems", sequence="2")
     public List<BulkUpdateLineItemForDemoToDoItem> importBlob(
             @Parameter(fileAccept = ".xlsx")
@@ -176,20 +170,14 @@ public class BulkUpdateManagerForDemoToDoItem {
             final Blob spreadsheet) {
         final List<BulkUpdateLineItemForDemoToDoItem> lineItems =
                 excelService.fromExcel(spreadsheet, WORKSHEET_SPEC);
-        container.informUser(lineItems.size() + " items imported");
+        messageService.informUser(lineItems.size() + " items imported");
         return lineItems;
     }
 
-
-
-    @javax.inject.Inject
-    DomainObjectContainer container;
-
-    @javax.inject.Inject
-    ExcelService excelService;
-
-    @javax.inject.Inject
-    BulkUpdateMenuForDemoToDoItem bulkUpdateMenuForDemoToDoItem;
-
+    @XmlTransient @Inject MessageService messageService;
+    @XmlTransient @Inject RepositoryService repositoryService;
+    @XmlTransient @Inject UserService userService;
+    @XmlTransient @Inject ExcelService excelService;
+    @XmlTransient @Inject BulkUpdateMenuForDemoToDoItem bulkUpdateMenuForDemoToDoItem;
 
 }

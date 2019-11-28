@@ -70,7 +70,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     }
 
     public ApplicationTenancy findByName(final String name) {
-        return repository.uniqueMatch(new QueryDefault<>(ApplicationTenancy.class, "findByName", "name", name));
+        return repository.uniqueMatch(new QueryDefault<>(ApplicationTenancy.class, "findByName", "name", name)).orElse(null);
     }
 
 
@@ -89,7 +89,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
         if (path == null) {
             return null;
         }
-        return repository.uniqueMatch(new QueryDefault<>(ApplicationTenancy.class, "findByPath", "path", path));
+        return repository.uniqueMatch(new QueryDefault<>(ApplicationTenancy.class, "findByPath", "path", path)).orElse(null);
     }
 
 

@@ -7,35 +7,29 @@ import javax.inject.Inject;
 
 import com.google.common.io.Resources;
 
-import org.junit.Before;
-import org.junit.Test;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.value.Blob;
 
+import org.assertj.core.api.Assertions;
 import org.isisaddons.module.excel.dom.util.ExcelFileBlobConverter;
 import org.isisaddons.module.excel.integtests.ExcelModuleIntegTestAbstract;
 import org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTestAbstract {
 
     @Inject
     private ExcelUploadServiceForDemoToDoItem uploadService;
 
-    @Before
+    @BeforeEach
     public void setUpData() throws Exception {
-        runFixtureScript(new ExcelDemoToDoItem_tearDown());
-    }
-
-    @Before
-    public void setUp() throws Exception {
-
+        fixtureScripts.run(new ExcelDemoToDoItem_tearDown());
     }
 
     @Test
@@ -51,14 +45,11 @@ public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTest
         // Then
         final List<ExcelDemoToDoItem> all = toDoItems.allInstances();
 
-        assertThat(all.size(), is(8));
+        Assertions.assertThat(all.size()).isEqualTo(8);
     }
 
     @Inject
     private ExcelDemoToDoItemMenu toDoItems;
-
-    @Inject
-    DomainObjectContainer container;
 
 
 }

@@ -1,16 +1,45 @@
 package org.isisaddons.module.excel.integtests;
 
-import org.apache.isis.applib.ModuleAbstract;
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract3;
+import org.apache.isis.config.IsisPresets;
+import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
+import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstractWithFixtures;
+import org.apache.isis.jdo.IsisBootDataNucleus;
+import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.security.bypass.IsisBootSecurityBypass;
+import org.isisaddons.module.excel.fixture.ExcelFixturesModule;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-public abstract class ExcelModuleIntegTestAbstract extends IntegrationTestAbstract3 {
+@SpringBootTest(classes = ExcelModuleIntegTestAbstract.AppManifest.class)
+@ContextConfiguration
+@Transactional
+public abstract class ExcelModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
 
-    public static ModuleAbstract module() {
-        return new ExcelModuleIntegTestModule();
-    }
+    @Configuration
+    @PropertySources({
+            @PropertySource(IsisPresets.Log4j2Test),
+            @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
+            @PropertySource(IsisPresets.NoTranslations),
+            @PropertySource(IsisPresets.DataNucleusAutoCreate),
+    })
+    @Import({
+            IsisBoot.class,
+            IsisBootSecurityBypass.class,
+            IsisBootDataNucleus.class,
+            IsisExtFixturesModule.class,
 
-    protected ExcelModuleIntegTestAbstract() {
-        super(module());
+            /*
+                new ExcelFixturesModule(),
+            FakeDataModule.class
+             */
+            ExcelFixturesModule.class
+    })
+    public static class AppManifest {
     }
 
 }

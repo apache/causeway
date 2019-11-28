@@ -2,11 +2,11 @@ package org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts;
 
 import java.math.BigDecimal;
 
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Category;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem;
@@ -76,7 +76,7 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
 
     private ExcelDemoToDoItem createToDoItemForUser(final String description, final Category category, Subcategory subcategory, String user, final LocalDate dueBy, final BigDecimal cost, ExecutionContext executionContext) {
         final ExcelDemoToDoItem toDoItem = demoToDoItemMenu.newToDoItem(description, category, subcategory, user, dueBy, cost);
-        executionContext.add(this, toDoItem);
+        executionContext.addResult(this, toDoItem);
         return toDoItem;
     }
 

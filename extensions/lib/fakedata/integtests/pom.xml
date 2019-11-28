@@ -66,25 +66,12 @@
                     <groupId>org.apache.isis.core</groupId>
                     <artifactId>isis-unittestsupport</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
-
-<!--
-        <dependency>
-            <groupId>org.incode.module.base</groupId>
-            <artifactId>incode-module-base-dom</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
--->
-
-<!--
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-            <scope>test</scope>
-        </dependency>
--->
 
         <dependency>
             <groupId>org.hsqldb</groupId>

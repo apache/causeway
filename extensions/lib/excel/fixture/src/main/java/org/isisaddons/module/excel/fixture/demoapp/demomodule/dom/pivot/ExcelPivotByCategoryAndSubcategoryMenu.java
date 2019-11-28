@@ -3,44 +3,24 @@ package org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.pivot;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
-
 import org.isisaddons.module.excel.dom.ExcelService;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "libExcelFixture.ExcelPivotByCategoryAndSubcategoryMenu"
 )
 @DomainServiceLayout(
-        named = "Excel",
-        menuOrder = "60.1.2"
+        named = "Excel"
 )
 public class ExcelPivotByCategoryAndSubcategoryMenu {
 
-    public ExcelPivotByCategoryAndSubcategoryMenu() {
-    }
-
-    @PostConstruct
-    public void init() {
-        if(excelService == null) {
-            throw new IllegalStateException("Require ExcelService to be configured");
-        }
-    }
-
-    @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-    )
-    @MemberOrder(sequence="90.2")
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
     public Blob downloadDemoPivotsheet(){
         return excelService.toExcelPivot(vm1list(), ExcelPivotByCategoryAndSubcategory.class, "pivot-example", "demo-pivots.xlsx");
     }
@@ -60,13 +40,10 @@ public class ExcelPivotByCategoryAndSubcategoryMenu {
     }
 
     private List<ExcelDemoToDoItem> getToDoItems() {
-        return container.allInstances(ExcelDemoToDoItem.class);
+        return repositoryService.allInstances(ExcelDemoToDoItem.class);
     }
 
-    @javax.inject.Inject
-    private ExcelService excelService;
-
-    @javax.inject.Inject
-    private DomainObjectContainer container;
+    @Inject ExcelService excelService;
+    @Inject RepositoryService repositoryService;
 
 }

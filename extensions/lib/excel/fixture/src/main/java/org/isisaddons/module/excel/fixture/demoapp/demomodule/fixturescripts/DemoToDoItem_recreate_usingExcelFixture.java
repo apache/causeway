@@ -1,7 +1,11 @@
 package org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 
+import javax.inject.Inject;
+
+import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2;
 
 public class DemoToDoItem_recreate_usingExcelFixture extends FixtureScript {
@@ -19,12 +23,15 @@ public class DemoToDoItem_recreate_usingExcelFixture extends FixtureScript {
     @Override
     public void execute(ExecutionContext executionContext) {
 
-        final String ownedBy = this.user != null ? this.user : getContainer().getUser().getName();
+        final String ownedBy = this.user != null ? this.user : userService.getUser().getName();
 
         executionContext.executeChild(this, new ExcelDemoToDoItem_tearDown2(ownedBy));
         executionContext.executeChild(this, new DemoToDoItem_create_usingExcelFixture(ownedBy));
 
-        getContainer().flush();
+        transactionService.flushTransaction();
     }
+
+    @Inject UserService userService;
+    @Inject TransactionService transactionService;
 
 }

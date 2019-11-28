@@ -1,5 +1,8 @@
 package org.isisaddons.module.excel.fixture.demoapp.todomodule.dom;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.SortedSet;
@@ -10,39 +13,22 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
-
-import org.joda.time.LocalDate;
-
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.InvokeOn;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
+import org.joda.time.LocalDate;
 
-import org.isisaddons.wicket.fullcalendar2.cpt.applib.CalendarEvent;
-import org.isisaddons.wicket.fullcalendar2.cpt.applib.CalendarEventable;
-import org.isisaddons.wicket.gmap3.cpt.applib.Locatable;
-import org.isisaddons.wicket.gmap3.cpt.applib.Location;
-import org.isisaddons.wicket.summernote.cpt.applib.SummernoteEditor;
-
-import lombok.Getter;
-import lombok.Setter;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ComparisonChain;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
@@ -104,7 +90,7 @@ import lombok.Setter;
         bookmarking = BookmarkPolicy.AS_ROOT
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem>, CalendarEventable, Locatable {
+public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, CalendarEventable, Locatable*/ {
 
     //region > title, iconName
 
@@ -176,7 +162,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem>, Calenda
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
     private String notes;
     @Property(editing = Editing.ENABLED)
-    @SummernoteEditor(height = 100, maxHeight = 300)
+    // @SummernoteEditor(height = 100, maxHeight = 300)
     public String getNotes() {
         return notes;
     }
@@ -332,13 +318,10 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem>, Calenda
 
     //region > delete (action)
 
-    @Action(
-            invokeOn = InvokeOn.OBJECT_AND_COLLECTION,
-            semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
-    )
+    @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     public List<ExcelDemoToDoItem> delete() {
-        container.removeIfNotAlready(this);
-        container.informUser("Deleted " + container.titleOf(this));
+        repositoryService.remove(this);
+        messageService.informUser("Deleted " + titleService.titleOf(this));
         // invalid to return 'this' (cannot render a deleted object)
         return toDoItems.toDoItemsNotYetComplete();
     }
@@ -386,72 +369,81 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem>, Calenda
     //region > toString,compareTo
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "description","complete","dueBy","ownedBy");
+        return MoreObjects.toStringHelper(this)
+                .add("description", getDescription())
+                .add("complete", isComplete())
+                .add("dueBy", getDueBy())
+                .add("ownedBy", getOwnedBy())
+                .toString();
     }
         
 
     @Override
     public int compareTo(final ExcelDemoToDoItem other) {
-        return ObjectContracts.compare(this, other, "complete","dueBy","description");
+        return ComparisonChain.start().compareTrueFirst(this.isComplete(), other.isComplete())
+                .compare(this.getDueBy(), other.getDueBy())
+                .compare(this.getDescription(), other.getDescription())
+                .result();
     }
 
     //endregion
 
-    //region > dependencies
 
     @javax.inject.Inject
-    DomainObjectContainer container;
+    UserService userService;
+
+    @javax.inject.Inject
+    MessageService messageService;
+
+    @javax.inject.Inject
+    RepositoryService repositoryService;
+
+    @javax.inject.Inject
+    TitleService titleService;
 
     @javax.inject.Inject
     ExcelDemoToDoItemMenu toDoItems;
-    //endregion
 
 
 
 
 
-    //region > fullcalendar2: CalendarEventable impl
 
-    @Programmatic
-    @Override
-    public String getCalendarName() {
-        return getCategory().name();
-    }
-
-    @Programmatic
-    @Override
-    public CalendarEvent toCalendarEvent() {
-        if(getDueBy() == null) {
-            return null;
-        }
-        return new CalendarEvent(getDueBy().toDateTimeAtStartOfDay(), getCalendarName(), container.titleOf(this));
-    }
-
-    //endregion
-
-    //region > gmap3: location (derived property) / updateLocation (action)
-    @Property(
-            optionality = Optionality.OPTIONAL,
-            editing = Editing.DISABLED
-    )
-    @MemberOrder(sequence="3")
-    public Location getLocation() {
-        return locationLatitude != null && locationLongitude != null? new Location(locationLatitude, locationLongitude): null;
-    }
-    public void setLocation(final Location location) {
-        locationLongitude = location != null ? location.getLongitude() : null;
-        locationLatitude = location != null ? location.getLatitude() : null;
-    }
-
-    @MemberOrder(name="location", sequence="1")
-    public ExcelDemoToDoItem updateLocation(final Double longitude, final Double latitude) {
-        locationLatitude = latitude;
-        locationLongitude = longitude;
-        return this;
-    }
+//    @Programmatic
+//    @Override
+//    public String getCalendarName() {
+//        return getCategory().name();
+//    }
+//
+//    @Programmatic
+//    @Override
+//    public CalendarEvent toCalendarEvent() {
+//        if(getDueBy() == null) {
+//            return null;
+//        }
+//        return new CalendarEvent(getDueBy().toDateTimeAtStartOfDay(), getCalendarName(), container.titleOf(this));
+//    }
 
 
-    //endregion
+//    @Property(
+//            optionality = Optionality.OPTIONAL,
+//            editing = Editing.DISABLED
+//    )
+//    @MemberOrder(sequence="3")
+//    public Location getLocation() {
+//        return locationLatitude != null && locationLongitude != null? new Location(locationLatitude, locationLongitude): null;
+//    }
+//    public void setLocation(final Location location) {
+//        locationLongitude = location != null ? location.getLongitude() : null;
+//        locationLatitude = location != null ? location.getLatitude() : null;
+//    }
+//
+//    @MemberOrder(name="location", sequence="1")
+//    public ExcelDemoToDoItem updateLocation(final Double longitude, final Double latitude) {
+//        locationLatitude = latitude;
+//        locationLongitude = longitude;
+//        return this;
+//    }
 
 
 }

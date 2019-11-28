@@ -25,18 +25,11 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
 
-import org.isisaddons.wicket.gmap3.cpt.applib.Location;
-
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "libExcelFixture.ExcelDemoToDoItemMenu"
 )
-@DomainServiceLayout(
-        named = "Dummy",
-        menuOrder = "20.7"
-)
 public class ExcelDemoToDoItemMenu {
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
@@ -49,7 +42,6 @@ public class ExcelDemoToDoItemMenu {
         return items;
     }
 
-    @Programmatic
     public List<ExcelDemoToDoItem> notYetCompleteNoUi() {
         return repositoryService.allMatches(
                 new QueryDefault<>(ExcelDemoToDoItem.class,
@@ -57,16 +49,14 @@ public class ExcelDemoToDoItemMenu {
                         "ownedBy", currentUserName()));
     }
 
-    @Programmatic
     public ExcelDemoToDoItem findToDoItemsByDescription(final String description) {
         return repositoryService.firstMatch(
                 new QueryDefault<>(ExcelDemoToDoItem.class,
                         "findByDescription",
                         "description", description,
-                        "ownedBy", currentUserName()));
+                        "ownedBy", currentUserName()))
+                .orElse(null);
     }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @MemberOrder(sequence = "3")
@@ -160,8 +150,8 @@ public class ExcelDemoToDoItemMenu {
         toDoItem.setDueBy(dueBy);
         toDoItem.setCost(cost);
 
-        toDoItem.setLocation(
-                new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
+//        toDoItem.setLocation(
+//                new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
 
         LocalDate today = clockService.now();
         toDoItem.setDueBy(today.plusDays(random(10)-2));
