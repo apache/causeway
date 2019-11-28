@@ -52,8 +52,8 @@ msgstr ""
 #: org.apache.isis.applib.services.layout.Object_openRestApi#act()
 #: org.apache.isis.applib.services.layout.Object_rebuildMetamodel#act()
 #: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.contributions.ExcelDemoToDoItem_export#act()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.contributions.ExcelDemoToDoItem_export2#act()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.contributions.ExcelDemoToDoItem_export#act()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.contributions.ExcelDemoToDoItem_export2#act()
 msgid "Act"
 msgstr ""
 
@@ -73,17 +73,17 @@ msgid "Action Owning Type"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#add()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#add()
 msgid "Add"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#allMyToDoItems()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#allMyToDoItems()
 msgid "All My To Do Items"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#apply()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#apply()
 msgid "Apply"
 msgstr ""
 
@@ -93,7 +93,7 @@ msgid "Are you sure?"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#attachment
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#attachment
 msgid "Attachment"
 msgstr ""
 
@@ -103,12 +103,12 @@ msgid "Audit Entry"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem#bulkUpdateManager()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem#bulkUpdateManager()
 msgid "Bulk Update Manager"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem
 msgid "Bulk update line item"
 msgstr ""
 
@@ -118,22 +118,22 @@ msgid "Cancel"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#category
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#category
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#category
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#category
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#category
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#category
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#category
 msgid "Category"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#changeFileName()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#changeFileName()
 msgid "Change File Name"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory#Chores
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Chores
 msgid "Chores"
 msgstr ""
 
@@ -154,19 +154,19 @@ msgstr ""
 
 
 #: org.apache.isis.applib.services.layout.LayoutService$Style#COMPLETE
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#complete
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#complete
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#complete
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#complete
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#complete
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#complete
 msgid "Complete"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#completed()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#completed()
 msgid "Completed"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#select(org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Category,org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory,boolean)
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#select(org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category,org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory,boolean)
 msgid "Completed?"
 msgstr ""
 
@@ -181,17 +181,17 @@ msgid "Confirm"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory#Consulting
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Consulting
 msgid "Consulting"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#cost
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#cost
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#cost
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#cost
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#cost
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#cost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#cost
 msgid "Cost"
 msgstr ""
 
@@ -201,7 +201,7 @@ msgid "Current"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#daysFromToday
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#daysFromToday
 msgid "Days From Today"
 msgstr ""
 
@@ -211,21 +211,21 @@ msgid "Default"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#delete()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#delete()
 msgid "Delete"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#dependencies
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#dependencies
 msgid "Dependencies"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#description
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#description
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#description
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#description
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#description
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#description
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#description
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#description
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#description
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#description
 msgid "Description"
 msgstr ""
 
@@ -240,17 +240,17 @@ msgid "Domain Change"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Category$2#Domestic
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category$2#Domestic
 msgid "Domestic"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategoryMenu#downloadDemoPivotsheet()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategoryMenu#downloadDemoPivotsheet()
 msgid "Download Demo Pivotsheet"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#downloadJdoMetadata()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#downloadJdoMetadata()
 msgid "Download Jdo Metadata"
 msgstr ""
 
@@ -263,19 +263,19 @@ msgstr ""
 #: org.apache.isis.applib.fixturescripts.FixtureScript#downloadLayoutXml()
 #: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#downloadLayoutXml()
 #: org.apache.isis.applib.services.config.ConfigurationProperty#downloadLayoutXml()
-#: org.isisaddons.module.excel.dom.ExcelFixture#downloadLayoutXml()
-#: org.isisaddons.module.excel.dom.ExcelFixture2#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven#downloadLayoutXml()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture2#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven#downloadLayoutXml()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2#downloadLayoutXml()
 msgid "Download Layout Xml"
 msgstr ""
 
@@ -310,19 +310,19 @@ msgid "Download Translations"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#dueBy
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#dueBy
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#dueBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#dueBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#dueBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#dueBy
 msgid "Due By"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItemMenu
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu
 msgid "Dummy"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory#Education
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Education
 msgid "Education"
 msgstr ""
 
@@ -332,39 +332,39 @@ msgid "Element Object Type"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategoryMenu
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategoryMenu
 msgid "Excel"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#excelRowNumber
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#excelRowNumber
 msgid "Excel Row Number"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#excelSheetName
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#excelSheetName
 msgid "Excel Sheet Name"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#importBlob(org.apache.isis.applib.value.Blob)
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#importBlob(org.apache.isis.applib.value.Blob)
 msgid "Excel spreadsheet"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem#uploadSpreadsheet(org.apache.isis.applib.value.Blob,java.lang.String)
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem#uploadSpreadsheet(org.apache.isis.applib.value.Blob,java.lang.String)
 msgid "ExcelFixture parameters"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#export()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#export()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#export()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#export()
 msgid "Export"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#export2()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#export2()
 msgid "Export2"
 msgstr ""
 
@@ -374,7 +374,7 @@ msgid "Fallback"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#fileName
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#fileName
 msgid "File Name"
 msgstr ""
 
@@ -398,7 +398,7 @@ msgid "Fixture script"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory#Garden
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Garden
 msgid "Garden"
 msgstr ""
 
@@ -408,20 +408,20 @@ msgid "HSQL DB Manager"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#handleRow()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#handleRow()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#handleRow()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#handleRow()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#handleRow()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#handleRow()
 msgid "Handle Row"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory#Housework
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Housework
 msgid "Housework"
 msgstr ""
 
 
 #: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong#prop()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusIdLong()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusIdLong()
 msgid "Id"
 msgstr ""
 
@@ -436,12 +436,12 @@ msgid "Ignore"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#importBlob()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#importBlob()
 msgid "Import"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem
 msgid "Import/export manager"
 msgstr ""
 
@@ -461,12 +461,12 @@ msgid "Key"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#location
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#location
 msgid "Location"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory#Marketing
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Marketing
 msgid "Marketing"
 msgstr ""
 
@@ -488,7 +488,7 @@ msgid "Minimal"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#newToDoItem()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#newToDoItem()
 msgid "New To Do Item"
 msgstr ""
 
@@ -498,13 +498,13 @@ msgid "Normalized"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#notYetCompleted()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#notYetCompleted()
 msgid "Not Yet Completed"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#notes
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#notes
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#notes
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#notes
 msgid "Notes"
 msgstr ""
 
@@ -533,19 +533,19 @@ msgstr ""
 #: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#openRestApi()
 #: org.apache.isis.applib.services.config.ConfigurationProperty#openRestApi()
 #: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#openRestApi()
-#: org.isisaddons.module.excel.dom.ExcelFixture#openRestApi()
-#: org.isisaddons.module.excel.dom.ExcelFixture2#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven#openRestApi()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2#openRestApi()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture#openRestApi()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture2#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven#openRestApi()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2#openRestApi()
 msgid "Open Rest Api"
 msgstr ""
 
@@ -555,20 +555,20 @@ msgid "Open Swagger Ui"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory#OpenSource
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#OpenSource
 msgid "Opensource"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Category$3#Other
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory#Other
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category$3#Other
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Other
 msgid "Other"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#ownedBy
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#ownedBy
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#ownedBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#ownedBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#ownedBy
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#ownedBy
 msgid "Owned By"
 msgstr ""
 
@@ -595,7 +595,7 @@ msgid "Pre Value"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#previousCost
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#previousCost
 msgid "Previous Cost"
 msgstr ""
 
@@ -610,7 +610,7 @@ msgid "Private With Prototyping"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Category$1#Professional
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category$1#Professional
 msgid "Professional"
 msgstr ""
 
@@ -631,7 +631,7 @@ msgstr ""
 #: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu
 #: org.apache.isis.applib.services.swagger.SwaggerServiceMenu
 #: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem
 msgid "Prototyping"
 msgstr ""
 
@@ -659,19 +659,19 @@ msgstr ""
 #: org.apache.isis.applib.fixturescripts.FixtureScript#rebuildMetamodel()
 #: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#rebuildMetamodel()
 #: org.apache.isis.applib.services.config.ConfigurationProperty#rebuildMetamodel()
-#: org.isisaddons.module.excel.dom.ExcelFixture#rebuildMetamodel()
-#: org.isisaddons.module.excel.dom.ExcelFixture2#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven#rebuildMetamodel()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.dom.ExcelFixture2#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven#rebuildMetamodel()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2#rebuildMetamodel()
 msgid "Rebuild Metamodel"
 msgstr ""
 
@@ -681,7 +681,7 @@ msgid "Recreate Objects And Return First"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#remove()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#remove()
 msgid "Remove"
 msgstr ""
 
@@ -711,14 +711,14 @@ msgstr ""
 #: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript
 #: org.apache.isis.applib.fixturescripts.FixtureScript
 #: org.apache.isis.applib.fixturescripts.SimpleFixtureScript
-#: org.isisaddons.module.excel.dom.ExcelFixture
-#: org.isisaddons.module.excel.dom.ExcelFixture2
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2
+#: org.apache.isis.extensions.excel.dom.ExcelFixture
+#: org.apache.isis.extensions.excel.dom.ExcelFixture2
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_for
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_recreate5_forSven
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2
 msgid "Script"
 msgstr ""
 
@@ -730,27 +730,27 @@ msgid "Script-specific parameters (if any).  The format depends on the script im
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#select()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#select()
 msgid "Select"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.Subcategory#Shopping
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Shopping
 msgid "Shopping"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#subCategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadRowHandler4ToDoItem#subCategory
 msgid "Sub Category"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#subcategory
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#subcategory
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#subcategory
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#subcategory
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#subcategory
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2#subcategory
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#subcategory
 msgid "Subcategory"
 msgstr ""
 
@@ -780,23 +780,23 @@ msgid "Timestamp"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#toDoItem
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#toDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem
 msgid "To Do Item"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#toDoItems
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#toDoItems
 msgid "To Do Items"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#toDoItemsComplete()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#toDoItemsComplete()
 msgid "To Do Items Complete"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#toDoItemsNotYetComplete()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu#toDoItemsNotYetComplete()
 msgid "To Do Items Not Yet Complete"
 msgstr ""
 
@@ -811,17 +811,17 @@ msgid "Type"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#updateCosts()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#updateCosts()
 msgid "Update Costs"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#updateLocation()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#updateLocation()
 msgid "Update Location"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem#uploadSpreadsheet()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem#uploadSpreadsheet()
 msgid "Upload Spreadsheet"
 msgstr ""
 
@@ -838,8 +838,8 @@ msgstr ""
 
 #: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong#prop()
 #: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp#prop()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusVersionLong()
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusVersionTimestamp()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusVersionLong()
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusVersionTimestamp()
 msgid "Version"
 msgstr ""
 
@@ -857,17 +857,17 @@ msgid "datanucleusIdLong"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.todomodule.dom.ExcelDemoToDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem
 msgid "location"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem#uploadSpreadsheet(org.apache.isis.applib.value.Blob,java.lang.String)
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem#uploadSpreadsheet(org.apache.isis.applib.value.Blob,java.lang.String)
 msgid "spreadsheet"
 msgstr ""
 
 
-#: org.isisaddons.module.excel.fixture.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem
+#: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem
 msgid "toDoItems"
 msgstr ""
 
