@@ -26,8 +26,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -41,7 +39,9 @@ import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.springframework.stereotype.Service;
 
 import lombok.val;
 
@@ -70,7 +70,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         }
         try {
             
-            val spec = specificationLoader.loadSpecification(bookmark.getClass());
+            val spec = specificationLoader.loadSpecification(ObjectSpecId.of(bookmark.getObjectType()));
             val identifier = bookmark.getIdentifier();
             val objectLoadRequest = ObjectLoader.Request.of(spec, identifier);
             
