@@ -25,7 +25,7 @@
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis Maven Dependencies for Testing</name>
+	<name>Apache Isis Maven Deps - Testing</name>
 	<description>
         Defines a module that can be used as a single dependency for a set of common testing libraries.
     </description>

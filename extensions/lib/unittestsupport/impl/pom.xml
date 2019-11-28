@@ -13,7 +13,7 @@
 
     <packaging>jar</packaging>
 
-    <name>Incode Platform Lib Unit TestingSupport Impl</name>
+    <name>Apache Isis Ext - Unit Test Support</name>
     <description>
         A module providing test utilities for unit testing of domain modules
     </description>

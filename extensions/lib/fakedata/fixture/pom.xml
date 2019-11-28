@@ -11,7 +11,7 @@
 
     <groupId>org.apache.isis.extensions</groupId>
     <artifactId>isis-extensions-fakedata-fixtures</artifactId>
-    <name>Incode Platform Lib FakeData Fixtures</name>
+    <name>Apache Isis Ext - FakeData (fixtures)</name>
 
     <build>
         <resources>

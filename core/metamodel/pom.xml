@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-metamodel</artifactId>
-    <name>Apache Isis MetaModel</name>
+    <name>Apache Isis Core - MetaModel</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.metamodel</jar-plugin.automaticModuleName>

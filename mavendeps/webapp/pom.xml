@@ -25,7 +25,7 @@
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis Maven Dependencies for Webapp</name>
+	<name>Apache Isis Maven Deps - Webapp</name>
 	<description>
         Defines a module that can be used as a single dependency for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security)
     </description>

@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>isis-extensions-excel-integtests</artifactId>
-    <name>Incode Platform Lib Excel IntegTests</name>
+    <name>Apache Isis Ext - Excel (integ tests)</name>
 
     <properties>
 

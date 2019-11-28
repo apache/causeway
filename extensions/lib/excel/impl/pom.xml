@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>isis-extensions-excel-dom</artifactId>
-    <name>Incode Platform Lib Excel Impl</name>
+    <name>Apache Isis Ext - Excel</name>
 
     <description>
         A domain service for Apache Isis', allowing collections

@@ -13,7 +13,7 @@
 
     <packaging>jar</packaging>
 
-    <name>Incode Platform Lib Base Impl</name>
+    <name>Apache Isis Ext - Base</name>
     <description>
         A module providing Base utilities for domain modules
     </description>

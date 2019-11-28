@@ -11,7 +11,7 @@
 
     <groupId>org.apache.isis.extensions</groupId>
     <artifactId>isis-extensions-excel-fixtures</artifactId>
-    <name>Incode Platform Lib Excel Fixtures</name>
+    <name>Apache Isis Ext - Excel (fixtures)</name>
 
     <build>
         <resources>

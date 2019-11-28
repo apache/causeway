@@ -25,7 +25,7 @@
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis Maven Dependencies for JDK11</name>
+	<name>Apache Isis Maven Deps - JDK11</name>
 	<description>
         Defines a module to bring in dependencies that were part of JDK 8 but
         had been removed with JDK 11+. These dependencies are activated when the 

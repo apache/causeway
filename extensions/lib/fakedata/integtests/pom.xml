@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>isis-extensions-fakedata-integtests</artifactId>
-    <name>Incode Platform Lib FakeData IntegTests</name>
+    <name>Apache Isis Ext - FakeData (integ tests)</name>
 
     <build>
         <resources>

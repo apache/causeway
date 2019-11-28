@@ -24,7 +24,7 @@
 	<groupId>org.apache.isis.mavendeps</groupId>
 	<artifactId>isis-mavendeps</artifactId>
 
-	<name>Apache Isis Maven Dependency Bundles</name>
+	<name>Apache Isis Maven Deps</name>
 	<description>
         Collection of Apache Isis Maven Dependency Bundles.
     </description>

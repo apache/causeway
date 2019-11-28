@@ -22,7 +22,7 @@
 
 	<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
 
-	<name>Apache Isis Core Plugin - JDO (Datanucleus 5)</name>
+	<name>Apache Isis Persistence - JDO (Datanucleus 5)</name>
 	<description>
         JDO plugin using datanucleus.
     </description>

@@ -29,7 +29,7 @@
 
     <artifactId>isis-security-keycloak</artifactId>
 
-    <name>Apache Isis Core - Security (Keycloak Implementation)</name>
+    <name>Apache Isis Security - Keycloak</name>
 	<description>
         Authentication and Authorization using Keycloak
     </description>
