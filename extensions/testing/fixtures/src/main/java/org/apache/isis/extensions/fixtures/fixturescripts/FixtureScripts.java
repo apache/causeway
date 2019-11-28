@@ -443,7 +443,8 @@ public abstract class FixtureScripts extends AbstractService {
                 throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
             }
         }
-        final FixtureResult fixtureResult = new FixtureResult();
+        final FixtureResult fixtureResult = serviceInjector.injectServicesInto(
+                                                                new FixtureResult());
         fixtureResult.setFixtureScriptClassName(firstTime ? script.getClass().getName() : null);
         fixtureResult.setFixtureScriptQualifiedName(script.getQualifiedName());
         fixtureResult.setKey(script.pathWith(subkey));

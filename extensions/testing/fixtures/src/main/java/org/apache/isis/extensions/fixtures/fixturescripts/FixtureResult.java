@@ -19,6 +19,11 @@
 package org.apache.isis.extensions.fixtures.fixturescripts;
 
 import javax.inject.Inject;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -29,93 +34,63 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "isisApplib.FixtureResult"
+        objectType = "extFixture.FixtureResult"
         )
 @ViewModelLayout(paged=500)
+@XmlRootElement(name = "fixtureResult")
+@XmlType(
+        propOrder = {
+                "fixtureScriptClassName",
+                "fixtureScriptQualifiedName",
+                "key",
+                "objectBookmark"
+        }
+)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FixtureResult {
-
-
-    // -- fixtureScriptClassName (property)
-
-    private String fixtureScriptClassName;
 
     @PropertyLayout(named="Fixture script")
     @Property(optionality = Optionality.OPTIONAL)
-    @MemberOrder(sequence="1")
-    public String getFixtureScriptClassName() {
-        return fixtureScriptClassName;
-    }
-    public void setFixtureScriptClassName(String fixtureScriptClassName) {
-        this.fixtureScriptClassName = fixtureScriptClassName;
-    }
+    @Getter @Setter
+    private String fixtureScriptClassName;
 
-
-
-    // -- fixtureScriptQualifiedName (programmatic)
-
+    @Getter(onMethod = @__(@Programmatic)) @Setter
     private String fixtureScriptQualifiedName;
-
-    @Programmatic
-    String getFixtureScriptQualifiedName() {
-        return fixtureScriptQualifiedName;
-    }
-
-    void setFixtureScriptQualifiedName(String fixtureScriptQualifiedName) {
-        this.fixtureScriptQualifiedName = fixtureScriptQualifiedName;
-    }
-
-
-
-    // -- key (property)
-
-    private String key;
 
     @PropertyLayout(named="Result key")
     @Title(sequence="1", append=": ")
-    @MemberOrder(sequence="1")
-    public String getKey() {
-        return key;
-    }
-    public void setKey(String key) {
-        this.key = key;
-    }
+    @Getter @Setter
+    private String key;
 
-
-
-    // -- object (property)
-
-    private Object object;
+    @Getter(onMethod = @__(@Programmatic)) @Setter
+    private String objectBookmark;
 
     @PropertyLayout(named="Result")
     @Title(sequence="2")
-    @MemberOrder(sequence="1")
     public Object getObject() {
-        return object;
+        return bookmarkService.lookup(new Bookmark(objectBookmark));
     }
+
     public void setObject(Object object) {
-        this.object = object;
+        this.objectBookmark = bookmarkService.bookmarkFor(object).toString();
     }
-
-
-
-    // -- className (derived property)
-
 
     @PropertyLayout(named="Result class")
     @MemberOrder(sequence="3")
     public String getClassName() {
-        return object != null? object.getClass().getName(): null;
+        return getObjectBookmark() != null? getObject().getClass().getName(): null;
     }
 
 
-
-    // -- injected services
-
-    @Inject FixtureScripts fixtureScripts;
-
+    @XmlTransient @Inject BookmarkService bookmarkService;
 
 
 }
