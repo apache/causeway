@@ -20,6 +20,7 @@
 package org.apache.isis.applib.services.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.query.Query;
@@ -51,12 +52,6 @@ public interface RepositoryService {
     /**
      * Persist the specified object (or do nothing if already persistent).
      *
-     * <p>
-     * It is recommended that the object be initially instantiated using
-     * {@link org.apache.isis.applib.DomainObjectContainer#newTransientInstance(Class)}.  However, the framework will also
-     * handle the case when the object is simply <i>new()</i>ed up.
-     *
-     * @see org.apache.isis.applib.DomainObjectContainer#newTransientInstance(Class)
      * @see #isPersistent(Object)
      */
     <T> T persist(T domainObject);
@@ -83,6 +78,12 @@ public interface RepositoryService {
     void removeAndFlush(Object domainObject);
 
     /**
+     * As {@link #allInstances(Class, long, long)}, but but returning all instances rather than just those
+     *      * within the specified range..
+     */
+    <T> List<T> allInstances(Class<T> ofType);
+
+    /**
      * Returns all the instances of the specified type (including subtypes).
      * If the optional range parameters are used, the dataset returned starts
      * from (0 based) index, and consists of only up to count items.
@@ -100,9 +101,19 @@ public interface RepositoryService {
      * specified. The range parameters are "start" and "count".
      * </p>
      *
-     * @param range 2 longs, specifying 0-based start and count.
+     * @param ofType
+     * @param start
+     * @param count
+     * @param <T>
+     * @return
      */
-    <T> List<T> allInstances(Class<T> ofType, long... range);
+    <T> List<T> allInstances(Class<T> ofType, long start, long count);
+
+    /**
+     * As {@link #allMatches(Class, Predicate, long, long)}, but returning all instances rather than just those
+     * within the specified range.
+     */
+    <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate);
 
     /**
      * Returns all the instances of the specified type (including subtypes) that
@@ -123,11 +134,14 @@ public interface RepositoryService {
      * instances.  Use {@link #allMatches(Query)} for production code.
      * </p>
      *
-     * @see #allMatches(Class, Predicate, long...)
-     *
-     * @param range 2 longs, specifying 0-based start and count.
+     * @param ofType
+     * @param predicate
+     * @param start
+     * @param count
+     * @param <T>
+     * @return
      */
-    <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
+    <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long start, long count);
 
     /**
      * Returns all the instances that match the given {@link Query}.
@@ -150,7 +164,7 @@ public interface RepositoryService {
      * has the specified title.
      *
      * <p>
-     * If no instance is found then <tt>null</tt> will be return, while if there
+     * If no instance is found then {@link Optional#empty()} will be return, while if there
      * is more that one instances a run-time exception will be thrown.
      *
      * <p>
@@ -159,13 +173,13 @@ public interface RepositoryService {
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
      */
-    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> Optional<T> uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
 
     /**
      * Find the only instance that matches the provided query.
      *
      * <p>
-     * If no instance is found then null will be return, while if there is more
+     * If no instance is found then {@link Optional#empty()} will be return, while if there is more
      * that one instances a run-time exception will be thrown.
      * </p>
      *
@@ -175,7 +189,35 @@ public interface RepositoryService {
      *
      * @see #firstMatch(Query)
      */
-    <T> T uniqueMatch(Query<T> query);
+    <T> Optional<T> uniqueMatch(Query<T> query);
+
+    /**
+     * Find the only instance of the specified type (including subtypes) that
+     * has the specified title.
+     *
+     * <p>
+     * If no instance is found then {@link Optional#empty()} will be return, while if there
+     * is more that one instances then the first will be returned.
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #firstMatch(Query)} for production code.
+     * </p>
+     */
+    <T> Optional<T> firstMatch(final Class<T> ofType, final Predicate<T> predicate);
+
+    /**
+     * Find the only instance that matches the provided query, if any..
+     *
+     * <p>
+     * If no instance is found then {@link Optional#empty()} will be return, while if there is more
+     * that one instances then the first will be returned.
+     * </p>
+     *
+     * @see #firstMatch(Query)
+     */
+    <T> Optional<T> firstMatch(Query<T> query);
 
 
 }

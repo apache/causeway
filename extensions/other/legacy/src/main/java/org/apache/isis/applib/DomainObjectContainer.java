@@ -23,8 +23,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.common.base.Predicate;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -45,7 +43,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 
-import static org.apache.isis.commons.internal.collections._Lists.lastElementIfAny;
+import com.google.common.base.Predicate;
 
 @DomainService(nature=NatureOfService.DOMAIN)
 @Deprecated
@@ -252,7 +250,7 @@ public class DomainObjectContainer {
 
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#injectServicesInto(Object)} instead.
+     * @deprecated - use {@link ServiceInjector#injectServicesInto(Object)} instead.
      */
     @Deprecated
     @Programmatic
@@ -270,7 +268,7 @@ public class DomainObjectContainer {
     }
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#streamServices(Class)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#lookupService(Class)} instead.
      */
     @Deprecated
     @Programmatic
@@ -453,21 +451,27 @@ public class DomainObjectContainer {
     }
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allInstances(Class, long...)} instead
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allInstances(Class, long, long)} instead
      */
     @Deprecated
     @Programmatic
     public <T> List<T> allInstances(Class<T> ofType, long... range){
-    	return repositoryService.allInstances(ofType, range);
+    	return
+            range.length >= 2
+                ? repositoryService.allInstances(ofType, range[0], range[1])
+                : repositoryService.allInstances(ofType);
     }
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, Predicate, long...)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, java.util.function.Predicate)} instead.
      */
     @Deprecated
     @Programmatic
     public <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range){
-    	return repositoryService.allMatches(ofType, predicate::apply, range);
+    	return
+            range.length >= 2
+                ? repositoryService.allMatches(ofType, predicate::apply, range[0], range[1])
+                : repositoryService.allMatches(ofType, predicate::apply);
     }
     
     /**
@@ -476,7 +480,10 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range) {
-    	return repositoryService.allMatches(ofType, filter::accept, range);
+    	return
+            range.length >= 2
+                ? repositoryService.allMatches(ofType, filter::accept, range[0], range[1])
+                : repositoryService.allMatches(ofType, filter::accept);
     }
 
     /**
@@ -500,12 +507,16 @@ public class DomainObjectContainer {
      *
      * @param range 2 longs, specifying 0-based start and count.
      *
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, Predicate, long...)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, java.util.function.Predicate, long, long)} instead.
      */
     @Deprecated
     @Programmatic
     public <T> List<T> allMatches(Class<T> ofType, String title, long... range) {
-    	return repositoryService.allMatches(ofType, obj->title.equals(titleService.titleOf(obj)), range);
+    	return
+            range.length >= 2
+                ? repositoryService.allMatches(ofType, obj->title.equals(titleService.titleOf(obj)), range[0], range[1])
+                : repositoryService.allMatches(ofType, obj->title.equals(titleService.titleOf(obj)));
+
     }
 
     /**
@@ -530,7 +541,7 @@ public class DomainObjectContainer {
      *
      * @param range 2 longs, specifying 0-based start and count.
      *
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, Predicate, long...)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, java.util.function.Predicate, long, long)} instead.
      */
     @Deprecated
     @Programmatic
@@ -550,21 +561,21 @@ public class DomainObjectContainer {
     // //////////////////////////////////////
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, java.util.function.Predicate)} instead.
      */
     @Deprecated
     @Programmatic
     public <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate) {
-    	return lastElementIfAny(repositoryService.allMatches(ofType, predicate::apply, 0L, 1L));
+    	return repositoryService.firstMatch(ofType, predicate::apply).orElse(null);
     }
     
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, java.util.function.Predicate)}  instead.
      */
     @Deprecated
     @Programmatic
     public <T> T firstMatch(final Class<T> ofType, final Filter<T> filter) {
-    	return lastElementIfAny(repositoryService.allMatches(ofType, filter::accept, 0L, 1L));
+    	return repositoryService.firstMatch(ofType, filter::accept).orElse(null);
     }
 
     /**
@@ -577,12 +588,12 @@ public class DomainObjectContainer {
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
      *
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, java.util.function.Predicate)}  instead.
      */
     @Deprecated
     @Programmatic
     public <T> T firstMatch(Class<T> ofType, String title) {
-    	return lastElementIfAny(repositoryService.allMatches(ofType, obj->title.equals(titleService.titleOf(obj)), 0L, 1L));
+    	return repositoryService.firstMatch(ofType, obj->title.equals(titleService.titleOf(obj))).orElse(null);
     }
 
     /**
@@ -595,7 +606,7 @@ public class DomainObjectContainer {
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
      *
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, java.util.function.Predicate)}  instead.
      */
     @Deprecated
     @Programmatic
@@ -616,21 +627,21 @@ public class DomainObjectContainer {
     // //////////////////////////////////////
 
     /**
-     * @deprecated  - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead.
+     * @deprecated  - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, java.util.function.Predicate)}  instead.
      */
     @Deprecated
     @Programmatic
     public <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate) {
-    	return repositoryService.uniqueMatch(ofType, predicate::apply);
+    	return repositoryService.uniqueMatch(ofType, predicate::apply).orElse(null);
     }
 
     /**
-     * @deprecated  - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead.
+     * @deprecated  - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, java.util.function.Predicate)}  instead.
      */
     @Programmatic
     @Deprecated
     public <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter) {
-    	return repositoryService.uniqueMatch(ofType, filter::accept);
+    	return repositoryService.uniqueMatch(ofType, filter::accept).orElse(null);
     }
     
     /**
@@ -647,12 +658,12 @@ public class DomainObjectContainer {
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
      *
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, java.util.function.Predicate)}  instead.
      */
     @Deprecated
     @Programmatic
     public <T> T uniqueMatch(Class<T> ofType, String title) {
-    	return repositoryService.uniqueMatch(ofType, obj->title.equals(titleService.titleOf(obj)));
+    	return repositoryService.uniqueMatch(ofType, obj->title.equals(titleService.titleOf(obj))).orElse(null);
     }
 
     /**
@@ -672,7 +683,7 @@ public class DomainObjectContainer {
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
      *
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, java.util.function.Predicate)}  instead.
      */
     @Deprecated
     @Programmatic
@@ -686,7 +697,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public <T> T uniqueMatch(Query<T> query) {
-    	return repositoryService.uniqueMatch(query);
+    	return repositoryService.uniqueMatch(query).orElse(null);
     }
 
 	

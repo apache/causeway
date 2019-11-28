@@ -26,20 +26,17 @@ import java.io.Serializable;
  * Although implements {@link Query} and thus is intended to be (and indeed is)
  * {@link Serializable}, it will be converted into a <tt>PersistenceQuery</tt>
  * in the runtime for remoting purposes.
- *
- * <p>
- * See discussion in {@link QueryBuiltInAbstract} for further details.
  */
 public class QueryFindAllInstances<T> extends QueryAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public QueryFindAllInstances(final Class<T> type, final long ... range) {
-        super(type, range);
+    public QueryFindAllInstances(final Class<T> type, final long start, final long count) {
+        super(type, start, count);
     }
 
-    public QueryFindAllInstances(final String typeName, final long ... range) {
-        super(typeName, range);
+    public QueryFindAllInstances(final String typeName, final long start, final long count) {
+        super(typeName, start, count);
     }
 
     @Override
