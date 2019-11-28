@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.bdd.specs;
+package domainapp.application.bdd.glue;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +33,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import domainapp.application.fixture.scenarios.DomainAppDemo;
-import domainapp.application.integtests.SpringIntegrationTest;
+import domainapp.application.integtests.ApplicationIntegTestAbstract;
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
 import domainapp.modules.simple.fixture.SimpleObject_persona;
@@ -43,9 +43,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import lombok.val;
 
-@Ignore("not a JUnit test")
-public class SimpleObjectsStepDef extends SpringIntegrationTest {
-
+public class SimpleObjectsStepDef extends ApplicationIntegTestAbstract {
 
     @Given("^there are.* (\\d+) simple objects$")
     public void there_are_N_simple_objects(int n) throws Throwable {

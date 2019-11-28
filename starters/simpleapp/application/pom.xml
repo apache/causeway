@@ -40,6 +40,7 @@
     <build>
         <testResources>
             <testResource>
+                <filtering>false</filtering>
                 <directory>src/test/java</directory>
             </testResource>
         </testResources>

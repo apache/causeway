@@ -1,28 +1,42 @@
 package org.isisaddons.module.fakedata.integtests;
 
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
-import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.config.IsisPresets;
+import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
 import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstractWithFixtures;
+import org.apache.isis.jdo.IsisBootDataNucleus;
+import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.security.bypass.IsisBootSecurityBypass;
+import org.isisaddons.module.fakedata.fixture.FakeDataFixturesModule;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(
-        classes = FakeDataModuleAppManifestForTesting.class,
-        properties = {
-                "logging.config=log4j2-test.xml",
-        })
+@SpringBootTest(classes = FakeDataModuleIntegTestAbstract.AppManifest.class)
 @ContextConfiguration
 @Transactional
 public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
+
+        @Configuration
+        @PropertySources({
+                @PropertySource(IsisPresets.Log4j2Test),
+                @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
+                @PropertySource(IsisPresets.NoTranslations),
+                @PropertySource(IsisPresets.DataNucleusAutoCreate),
+        })
+        @Import({
+                IsisBoot.class,
+                IsisBootSecurityBypass.class,
+                IsisBootDataNucleus.class,
+                IsisExtFixturesModule.class,
+
+                FakeDataFixturesModule.class
+        })
+        public static class AppManifest {
+        }
 
 }

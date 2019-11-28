@@ -1,3 +1,8 @@
+#
+# Recommend use for static configuration that does not change between environments.
+#
+# See also config/application.properties
+#
 isis:
   reflector:
     validator:
@@ -135,4 +140,6 @@ isis:
 
       standaloneCollection:
         bulkLoad: false
-
+spring:
+  banner:
+    location: banner.txt
