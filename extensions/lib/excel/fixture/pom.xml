@@ -11,11 +11,11 @@
 
     <groupId>org.apache.isis.extensions</groupId>
     <artifactId>isis-extensions-excel-fixtures</artifactId>
-    <name>Apache Isis Ext - Excel (fixtures)</name>
+    <name>Apache Isis Ext - Excel (Fixtures)</name>
     
     <properties>
-    	<jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.excel-fixtures</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/excel-fixtures</git-plugin.propertiesDir>
+    	<jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.excel.fixtures</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/excel/fixtures</git-plugin.propertiesDir>
     </properties>
 
     <build>

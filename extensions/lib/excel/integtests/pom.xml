@@ -11,11 +11,11 @@
     </parent>
 
     <artifactId>isis-extensions-excel-integtests</artifactId>
-    <name>Apache Isis Ext - Excel (integ tests)</name>
+    <name>Apache Isis Ext - Excel (Integ Tests)</name>
 
 	<properties>
-    	<jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.excel-integtests</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/excel-integtests</git-plugin.propertiesDir>
+    	<jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.excel.integtests</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/excel/integtests</git-plugin.propertiesDir>
         
         <skipTests>true</skipTests>
     </properties>

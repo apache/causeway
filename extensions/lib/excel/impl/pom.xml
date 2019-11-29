@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>isis-extensions-excel-dom</artifactId>
-    <name>Apache Isis Ext - Excel</name>
+    <name>Apache Isis Ext - Excel (Domain)</name>
 
     <description>
         A domain service for Apache Isis', allowing collections
@@ -19,8 +19,8 @@
     </description>
 
     <properties>
-    	<jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.excel-dom</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/excel-dom</git-plugin.propertiesDir>
+    	<jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.excel.dom</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/excel/dom</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

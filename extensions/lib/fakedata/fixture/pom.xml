@@ -11,11 +11,11 @@
 
     <groupId>org.apache.isis.extensions</groupId>
     <artifactId>isis-extensions-fakedata-fixtures</artifactId>
-    <name>Apache Isis Ext - FakeData (fixtures)</name>
+    <name>Apache Isis Ext - FakeData (Fixtures)</name>
 
 	<properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.fakedata-fixtures</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/fakedata-fixtures</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.fakedata.fixtures</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/fakedata/fixtures</git-plugin.propertiesDir>
     </properties>
 
     <build>

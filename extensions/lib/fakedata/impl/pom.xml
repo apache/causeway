@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>isis-extensions-fakedata-dom</artifactId>
-    <name>Apache Isis Ext - FakeData (fixtures)</name>
+    <name>Apache Isis Ext - FakeData (Domain)</name>
 
     <description>
         A module providing a domain service to generate fake random data
@@ -18,8 +18,8 @@
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.fakedata-dom</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/fakedata-dom</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.fakedata.dom</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/fakedata/dom</git-plugin.propertiesDir>
     </properties>
 
     <build>
