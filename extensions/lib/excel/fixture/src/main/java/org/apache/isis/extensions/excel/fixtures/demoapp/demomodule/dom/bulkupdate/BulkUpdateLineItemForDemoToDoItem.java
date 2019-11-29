@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
@@ -18,7 +19,6 @@ import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
-import org.joda.time.LocalDate;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,

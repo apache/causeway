@@ -10,6 +10,7 @@ logs/
 .project
 .classpath
 .idea
+.factorypath
 *.iml
 
 JArchitectOut/
@@ -47,3 +48,4 @@ rebel.xml
 **/.DS_Store
 
 .flattened-pom.xml
+

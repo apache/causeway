@@ -2,24 +2,22 @@ package org.apache.isis.extensions.fakedata.dom;
 
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,6 +27,8 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,14 +52,14 @@ public class FakeDataServiceTest {
         fakeDataService.clockService = mockClockService;
         fakeDataService.init();
 
-        final DateTime now = new DateTime();
+        final OffsetDateTime now = OffsetDateTime.now();
         final LocalDate nowAsLocalDate = now.toLocalDate();
-        final long nowAsMillis = now.toDate().getTime();
+        final long nowAsMillis = now.toInstant().toEpochMilli();
         final LocalDateTime nowAsLocalDateTime = now.toLocalDateTime();
-        final Timestamp nowAsJavaSqlTimestamp = new Timestamp(now.toDate().getTime());
+        final Timestamp nowAsJavaSqlTimestamp = new Timestamp(nowAsMillis);
 
         context.checking(new Expectations() {{
-            allowing(mockClockService).nowAsDateTime();
+            allowing(mockClockService).nowAsOffsetDateTime();
             will(returnValue(now));
 
             allowing(mockClockService).now();
@@ -221,7 +221,7 @@ public class FakeDataServiceTest {
 
     @Test
     public void jodaDateTimes_any() throws Exception {
-        final DateTime any = fakeDataService.jodaDateTimes().any();
+        final OffsetDateTime any = fakeDataService.jodaDateTimes().any();
         assertThat(any).isNotNull();
     }
 
@@ -267,8 +267,8 @@ public class FakeDataServiceTest {
         @Test
         public void anyOfObject() throws Exception {
 
-           final Set<Object> seen = Sets.newHashSet();
-           final ArrayList<Object> ints = Lists.newArrayList(Arrays.asList(new Object(), new Object(), new Object()));
+           final Set<Object> seen = _Sets.newHashSet();
+           final ArrayList<Object> ints = _Lists.newArrayList(Arrays.asList(new Object(), new Object(), new Object()));
 
            for (int i = 0; i < 1000; i++) {
                final Object rand = fakeDataService.collections().anyOf(ints);
@@ -285,13 +285,13 @@ public class FakeDataServiceTest {
         public void anyOfObjectExcept() throws Exception {
 
             final Object thisOne = new Object();
-            final Set<Object> seen = Sets.newHashSet();
-            final Collection<Object> ints = Lists.newArrayList(Arrays.asList(new Object(), thisOne, new Object()));
+            final Set<Object> seen = _Sets.newHashSet();
+            final Collection<Object> ints = _Lists.newArrayList(Arrays.asList(new Object(), thisOne, new Object()));
 
             for (int i = 0; i < 1000; i++) {
                 final Object rand = fakeDataService.collections().anyOfExcept(ints, new Predicate<Object>() {
                     @Override
-                    public boolean apply(final Object obj) {
+                    public boolean test(final Object obj) {
                         return obj == thisOne;
                     }
                 });
@@ -307,8 +307,8 @@ public class FakeDataServiceTest {
         @Test
         public void anyInt() throws Exception {
 
-           final Set<Integer> seen = Sets.newHashSet();
-           final Collection<Integer> ints = Lists.newArrayList(Arrays.asList(1, 2, 3, 4));
+           final Set<Integer> seen = _Sets.newHashSet();
+           final Collection<Integer> ints = _Lists.newArrayList(Arrays.asList(1, 2, 3, 4));
 
            for (int i = 0; i < 1000; i++) {
                final int rand = fakeDataService.collections().anyOf(ints);
@@ -323,13 +323,13 @@ public class FakeDataServiceTest {
         @Test
         public void anyIntExcept() throws Exception {
 
-           final Set<Integer> seen = Sets.newHashSet();
-           final Collection<Integer> ints = Lists.newArrayList(Arrays.asList(1, 2, 3, 4));
+           final Set<Integer> seen = _Sets.newHashSet();
+           final Collection<Integer> ints = _Lists.newArrayList(Arrays.asList(1, 2, 3, 4));
 
            for (int i = 0; i < 1000; i++) {
                final int rand = fakeDataService.collections().anyOfExcept(ints, new Predicate<Integer>() {
                    @Override
-                   public boolean apply(final Integer integer) {
+                   public boolean test(final Integer integer) {
                        return integer == 2;
                    }
                });

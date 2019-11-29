@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
+import java.util.Date;
 import java.util.Objects;
 
 import org.apache.wicket.Session;
@@ -244,7 +245,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         final Runnable loggingTask = ()->{
             // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
             int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-            sessionLoggingService.log(type, username, Clock.getTimeAsDateTime().toDate(), causedBy, Integer.toString(sessionHashCode));
+            sessionLoggingService.log(type, username, new Date(Clock.getEpochMillis()), causedBy, Integer.toString(sessionHashCode));
         };
 
         if(isisSessionFactory!=null) {

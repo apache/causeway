@@ -1,8 +1,8 @@
 package org.apache.isis.extensions.base.services.calendar;
 
-import javax.inject.Inject;
+import java.time.LocalDate;
 
-import org.joda.time.LocalDate;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -56,7 +56,7 @@ public class CalendarService {
     
     static LocalDate beginningOfQuarter(final LocalDate date) {
         final LocalDate beginningOfMonth = beginningOfMonth(date);
-        final int monthOfYear = beginningOfMonth.getMonthOfYear();
+        final int monthOfYear = beginningOfMonth.getMonthValue();
         final int quarter = (monthOfYear-1)/MONTHS_IN_QUARTER; // 0, 1, 2, 3
         final int monthStartOfQuarter = quarter*MONTHS_IN_QUARTER+1;
         return beginningOfMonth.minusMonths(monthOfYear-monthStartOfQuarter);

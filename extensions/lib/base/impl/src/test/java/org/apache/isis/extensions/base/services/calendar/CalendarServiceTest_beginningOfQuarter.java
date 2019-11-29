@@ -1,9 +1,9 @@
 package org.apache.isis.extensions.base.services.calendar;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,24 +29,24 @@ public class CalendarServiceTest_beginningOfQuarter {
     public static Collection<Object[]> data() {
       return Arrays.asList(
               new Object[][] { 
-                      { new LocalDate(2013,1,15), new LocalDate(2013,1,1)}, 
-                      { new LocalDate(2013,1,1),  new LocalDate(2013,1,1)}, 
-                      { new LocalDate(2013,1,31),  new LocalDate(2013,1,1)}, 
-                      { new LocalDate(2013,2,15), new LocalDate(2013,1,1)}, 
-                      { new LocalDate(2013,2,1),  new LocalDate(2013,1,1)}, 
-                      { new LocalDate(2013,2,28),  new LocalDate(2013,1,1)}, 
-                      { new LocalDate(2013,3,15), new LocalDate(2013,1,1)}, 
-                      { new LocalDate(2013,3,1),  new LocalDate(2013,1,1)}, 
-                      { new LocalDate(2013,3,31),  new LocalDate(2013,1,1)}, 
-                      { new LocalDate(2013,4,15), new LocalDate(2013,4,1)}, 
-                      { new LocalDate(2013,4,1),  new LocalDate(2013,4,1)}, 
-                      { new LocalDate(2013,4,30),  new LocalDate(2013,4,1)}, 
-                      { new LocalDate(2013,5,15),  new LocalDate(2013,4,1)}, 
-                      { new LocalDate(2013,5,1),  new LocalDate(2013,4,1)}, 
-                      { new LocalDate(2013,5,31),  new LocalDate(2013,4,1)}, 
-                      { new LocalDate(2013,6,15),  new LocalDate(2013,4,1)}, 
-                      { new LocalDate(2013,6,1),  new LocalDate(2013,4,1)}, 
-                      { new LocalDate(2013,6,30),  new LocalDate(2013,4,1)}, 
+                      { LocalDate.of(2013,1,15), LocalDate.of(2013,1,1)}, 
+                      { LocalDate.of(2013,1,1),  LocalDate.of(2013,1,1)}, 
+                      { LocalDate.of(2013,1,31), LocalDate.of(2013,1,1)}, 
+                      { LocalDate.of(2013,2,15), LocalDate.of(2013,1,1)}, 
+                      { LocalDate.of(2013,2,1),  LocalDate.of(2013,1,1)}, 
+                      { LocalDate.of(2013,2,28), LocalDate.of(2013,1,1)}, 
+                      { LocalDate.of(2013,3,15), LocalDate.of(2013,1,1)}, 
+                      { LocalDate.of(2013,3,1),  LocalDate.of(2013,1,1)}, 
+                      { LocalDate.of(2013,3,31), LocalDate.of(2013,1,1)}, 
+                      { LocalDate.of(2013,4,15), LocalDate.of(2013,4,1)}, 
+                      { LocalDate.of(2013,4,1),  LocalDate.of(2013,4,1)}, 
+                      { LocalDate.of(2013,4,30), LocalDate.of(2013,4,1)}, 
+                      { LocalDate.of(2013,5,15), LocalDate.of(2013,4,1)}, 
+                      { LocalDate.of(2013,5,1),  LocalDate.of(2013,4,1)}, 
+                      { LocalDate.of(2013,5,31), LocalDate.of(2013,4,1)}, 
+                      { LocalDate.of(2013,6,15), LocalDate.of(2013,4,1)}, 
+                      { LocalDate.of(2013,6,1),  LocalDate.of(2013,4,1)}, 
+                      { LocalDate.of(2013,6,30), LocalDate.of(2013,4,1)}, 
               });
     }
     

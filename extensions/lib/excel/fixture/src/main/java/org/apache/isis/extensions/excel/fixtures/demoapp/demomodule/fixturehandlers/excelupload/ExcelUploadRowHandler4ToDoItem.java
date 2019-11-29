@@ -1,6 +1,7 @@
 package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;

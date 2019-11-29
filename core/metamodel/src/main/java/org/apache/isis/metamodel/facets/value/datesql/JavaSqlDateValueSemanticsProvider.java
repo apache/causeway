@@ -82,7 +82,7 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
 
     @Override
     protected Date now() {
-        return new Date(Clock.getTime());
+        return new Date(Clock.getEpochMillis());
     }
 
     @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default

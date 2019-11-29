@@ -85,7 +85,7 @@ public final class Responses {
     private static Date now(ReprRenderer<?, ?> renderer) {
         if(renderer instanceof ReprRendererAbstract) {
             ((ReprRendererAbstract<?, ?>)renderer).getResourceContext().getServiceRegistry()
-            .lookupServiceElseFail(ClockService.class).nowAsDateTime().toDate();
+            .lookupServiceElseFail(ClockService.class).nowAsJavaUtilDate();
         }
         return new Date();
     }

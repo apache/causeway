@@ -84,7 +84,7 @@ public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProvide
 
     @Override
     protected Time now() {
-        return new java.sql.Time(Clock.getTime());
+        return new java.sql.Time(Clock.getEpochMillis());
     }
 
     @Override

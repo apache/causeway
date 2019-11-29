@@ -80,9 +80,9 @@ public class FakeDataService {
         this.javaUtilDates = new JavaUtilDates(this);
         this.javaSqlDates = new JavaSqlDates(this);
         this.javaSqlTimestamps = new JavaSqlTimestamps(this);
-        this.jodaDateTimes = new JodaDateTimes(this);
-        this.jodaLocalDates = new JodaLocalDates(this);
-        this.jodaPeriods = new JodaPeriods(this);
+        this.jodaDateTimes = new J8DateTimes(this);
+        this.jodaLocalDates = new J8LocalDates(this);
+        this.jodaPeriods = new J8Periods(this);
 
         this.bigDecimals = new BigDecimals(this);
         this.bigIntegers = new BigIntegers(this);
@@ -119,9 +119,9 @@ public class FakeDataService {
     private JavaSqlDates javaSqlDates;
     private JavaSqlTimestamps javaSqlTimestamps;
 
-    private JodaDateTimes jodaDateTimes;
-    private JodaLocalDates jodaLocalDates;
-    private JodaPeriods jodaPeriods;
+    private J8DateTimes jodaDateTimes;
+    private J8LocalDates jodaLocalDates;
+    private J8Periods jodaPeriods;
 
     private BigDecimals bigDecimals;
     private BigIntegers bigIntegers;
@@ -220,15 +220,15 @@ public class FakeDataService {
         return javaSqlTimestamps;
     }
 
-    public JodaLocalDates jodaLocalDates() {
+    public J8LocalDates jodaLocalDates() {
         return jodaLocalDates;
     }
 
-    public JodaDateTimes jodaDateTimes() {
+    public J8DateTimes jodaDateTimes() {
         return jodaDateTimes;
     }
 
-    public JodaPeriods jodaPeriods() {
+    public J8Periods jodaPeriods() {
         return jodaPeriods;
     }
 

@@ -1,10 +1,10 @@
 package org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.clock.Clock;
 
@@ -81,7 +81,7 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
     }
 
     private static LocalDate daysFromToday(final int i) {
-        final LocalDate date = new LocalDate(Clock.getTimeAsDateTime());
+        final LocalDate date = Clock.getTimeAsLocalDate();
         return date.plusDays(i);
     }
 

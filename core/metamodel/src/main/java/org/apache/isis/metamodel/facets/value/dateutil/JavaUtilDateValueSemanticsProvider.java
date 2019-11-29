@@ -75,7 +75,7 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
 
     @Override
     protected Date now() {
-        return new Date(Clock.getTime());
+        return new Date(Clock.getEpochMillis());
     }
 
     @Override

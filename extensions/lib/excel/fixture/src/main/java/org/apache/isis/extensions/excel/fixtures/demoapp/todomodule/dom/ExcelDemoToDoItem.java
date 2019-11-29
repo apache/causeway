@@ -1,33 +1,41 @@
 package org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
-import org.joda.time.LocalDate;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ComparisonChain;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
@@ -89,8 +97,20 @@ import com.google.common.collect.ComparisonChain;
         bookmarking = BookmarkPolicy.AS_ROOT
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+@ToString(of = {
+        "description",
+        "complete",
+        "dueBy",
+        "ownedBy"
+})
 public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, CalendarEventable, Locatable*/ {
 
+    //@Inject private UserService userService;
+    @Inject private MessageService messageService;
+    @Inject private RepositoryService repositoryService;
+    @Inject private TitleService titleService;
+    @Inject private ExcelDemoToDoItemMenu toDoItems;
+    
     //region > title, iconName
 
     public String title() {
@@ -137,9 +157,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @Property(editing = Editing.DISABLED)
     @Getter @Setter
     private boolean complete;
-    public boolean isComplete() {
-        return complete;
-    }
+
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
     @javax.validation.constraints.Digits(integer=10, fraction=2)
@@ -159,14 +177,9 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
     @Getter @Setter
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
-    private String notes;
     @Property(editing = Editing.ENABLED)
     // @SummernoteEditor(height = 100, maxHeight = 300)
-    public String getNotes() {
-        return notes;
-    }
-
-
+    private String notes;
 
     @Getter @Setter
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
@@ -331,7 +344,11 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
     private static boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
-        return dueBy.toDateTimeAtStartOfDay().getMillis() < Clock.getTime() - ONE_WEEK_IN_MILLIS;
+        
+        long epochMillisAtStartOfDay = 
+                dueBy.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+                
+        return epochMillisAtStartOfDay < (Clock.getEpochMillis() - ONE_WEEK_IN_MILLIS);
     }
 
     //endregion
@@ -339,74 +356,45 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     public static class Predicates {
         
         public static Predicate<ExcelDemoToDoItem> thoseOwnedBy(final String currentUser) {
-            return toDoItem -> Objects.equal(toDoItem.getOwnedBy(), currentUser);
+            return toDoItem -> Objects.equals(toDoItem.getOwnedBy(), currentUser);
         }
 
         public static Predicate<ExcelDemoToDoItem> thoseCompleted(
                 final boolean completed) {
-            return t -> Objects.equal(t.isComplete(), completed);
+            return t -> Objects.equals(t.isComplete(), completed);
         }
 
         public static Predicate<ExcelDemoToDoItem> thoseCategorised(final Category category) {
-            return toDoItem -> Objects.equal(toDoItem.getCategory(), category);
+            return toDoItem -> Objects.equals(toDoItem.getCategory(), category);
         }
 
         public static Predicate<ExcelDemoToDoItem> thoseSubcategorised(
                 final Subcategory subcategory) {
-            return t -> Objects.equal(t.getSubcategory(), subcategory);
+            return t -> Objects.equals(t.getSubcategory(), subcategory);
         }
 
         public static Predicate<ExcelDemoToDoItem> thoseCategorised(
                 final Category category, final Subcategory subcategory) {
-            return com.google.common.base.Predicates.and(
-                    thoseCategorised(category), 
-                    thoseSubcategorised(subcategory)); 
+            
+            return 
+                    thoseCategorised(category)
+                    .and(thoseSubcategorised(subcategory)); 
         }
 
     }
-
-    //region > toString,compareTo
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("description", getDescription())
-                .add("complete", isComplete())
-                .add("dueBy", getDueBy())
-                .add("ownedBy", getOwnedBy())
-                .toString();
-    }
-        
+       
+    private final static Comparator<ExcelDemoToDoItem> comparator = 
+            Comparator.comparing(ExcelDemoToDoItem::isComplete).reversed() // true first
+                .thenComparing(ExcelDemoToDoItem::getDueBy)
+                .thenComparing(ExcelDemoToDoItem::getDescription);
+                
 
     @Override
     public int compareTo(final ExcelDemoToDoItem other) {
-        return ComparisonChain.start().compareTrueFirst(this.isComplete(), other.isComplete())
-                .compare(this.getDueBy(), other.getDueBy())
-                .compare(this.getDescription(), other.getDescription())
-                .result();
+        return comparator.compare(this, other);
     }
 
     //endregion
-
-
-    @javax.inject.Inject
-    UserService userService;
-
-    @javax.inject.Inject
-    MessageService messageService;
-
-    @javax.inject.Inject
-    RepositoryService repositoryService;
-
-    @javax.inject.Inject
-    TitleService titleService;
-
-    @javax.inject.Inject
-    ExcelDemoToDoItemMenu toDoItems;
-
-
-
-
-
 
 //    @Programmatic
 //    @Override

@@ -1,12 +1,12 @@
 package org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
-
-import org.joda.time.LocalDate;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -29,6 +29,11 @@ import org.apache.isis.applib.services.user.UserService;
         objectType = "libExcelFixture.ExcelDemoToDoItemMenu"
 )
 public class ExcelDemoToDoItemMenu {
+    
+    @Inject private MessageService messageService;
+    @Inject private RepositoryService repositoryService;
+    @Inject private UserService userService;
+    @Inject private ClockService clockService;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
@@ -182,23 +187,6 @@ public class ExcelDemoToDoItemMenu {
     private String currentUserName() {
         return userService.getUser().getName();
     }
-
-
-
-
-
-    @javax.inject.Inject
-    MessageService messageService;
-
-    @javax.inject.Inject
-    RepositoryService repositoryService;
-
-    @javax.inject.Inject
-    UserService userService;
-
-    @javax.inject.Inject
-    ClockService clockService;
-
 
 
 }

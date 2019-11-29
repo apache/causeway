@@ -19,10 +19,10 @@
 package org.apache.isis.applib.services.clock;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.clock.Clock;
@@ -44,8 +44,8 @@ public class ClockService {
         return Clock.getTimeAsLocalDateTime();
     }
 
-    public DateTime nowAsDateTime() {
-        return Clock.getTimeAsDateTime();
+    public OffsetDateTime nowAsOffsetDateTime() {
+        return Clock.getTimeAsOffsetDateTime();
     }
 
     public Timestamp nowAsJavaSqlTimestamp() {
@@ -53,7 +53,11 @@ public class ClockService {
     }
 
     public long nowAsMillis() {
-        return Clock.getTime();
+        return Clock.getEpochMillis();
+    }
+
+    public java.util.Date nowAsJavaUtilDate() {
+        return new java.util.Date(nowAsMillis());
     }
 
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,7 +19,6 @@ import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
-import org.joda.time.LocalDate;
 
 public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
 
@@ -71,7 +71,7 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
         if(i == null) {
             return null;
         }
-        final LocalDate date = new LocalDate(Clock.getTimeAsDateTime());
+        final LocalDate date = Clock.getTimeAsLocalDate();
         return date.plusDays(i);
     }
 

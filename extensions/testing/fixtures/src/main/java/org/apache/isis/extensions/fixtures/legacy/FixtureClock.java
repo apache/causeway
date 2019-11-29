@@ -19,6 +19,7 @@
 
 package org.apache.isis.extensions.fixtures.legacy;
 
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -99,11 +100,11 @@ public class FixtureClock extends Clock {
      * {@link #setTime(int, int)} (or one of the overloads) has been called.
      */
     @Override
-    protected long time() {
+    protected Instant now() {
         if (calendar == null) {
-            return System.currentTimeMillis();
+            return Instant.now();
         }
-        return calendar.getTime().getTime();
+        return calendar.toInstant();
     }
 
     // //////////////////////////////////////////////////
@@ -207,7 +208,7 @@ public class FixtureClock extends Clock {
 
     @Override
     public String toString() {
-        return (calendar == null ? "System" : "Explicitly set") + ": " + Clock.getTimeAsDateTime().toString();
+        return (calendar == null ? "System" : "Explicitly set") + ": " + Clock.getTimeAsOffsetDateTime().toString();
     }
 
 }

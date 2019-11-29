@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.fixtures.legacy;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -55,7 +56,7 @@ public class TickingFixtureClock extends Clock {
             return (TickingFixtureClock) instance;
         }
 
-        final long time = Clock.getTime();
+        final long time = Clock.getEpochMillis();
         existingInstance = Clock.instance;
 
         // installs as the singleton
@@ -97,8 +98,8 @@ public class TickingFixtureClock extends Clock {
      * {@link #setTime(int, int)} (or one of the overloads) has been called.
      */
     @Override
-    protected long time() {
-        return calendar.getTime().getTime() + getOffset();
+    protected Instant now() {
+        return Instant.ofEpochMilli(calendar.getTime().getTime() + getOffset());
     }
 
     // //////////////////////////////////////////////////
@@ -176,7 +177,7 @@ public class TickingFixtureClock extends Clock {
 
     @Override
     public String toString() {
-        return Clock.getTimeAsDateTime().toString();
+        return Clock.getTimeAsOffsetDateTime().toString();
     }
 
 }

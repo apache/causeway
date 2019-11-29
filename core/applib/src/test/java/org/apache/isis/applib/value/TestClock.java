@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.value;
 
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -48,7 +49,7 @@ public class TestClock extends Clock {
      * Always return the time as 2003/8/17 21:30:25
      */
     @Override
-    protected long time() {
+    protected Instant now() {
         final Calendar c = Calendar.getInstance();
         c.setTimeZone(timeZone);
 
@@ -62,7 +63,7 @@ public class TestClock extends Clock {
         c.set(Calendar.MINUTE, 30);
         c.set(Calendar.SECOND, 25);
 
-        return c.getTime().getTime();
+        return Instant.ofEpochMilli(c.getTime().getTime());
     }
 
 }
