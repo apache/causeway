@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.IsisBootSecurityBypass;
+import org.apache.isis.security.bypass.IsisBootSecurityBypass;
 
 /**
  * @since 2.0
