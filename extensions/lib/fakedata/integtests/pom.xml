@@ -12,6 +12,11 @@
 
     <artifactId>isis-extensions-fakedata-integtests</artifactId>
     <name>Apache Isis Ext - FakeData (integ tests)</name>
+    
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.fakedata-integtests</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/fakedata-integtests</git-plugin.propertiesDir>
+    </properties>
 
     <build>
         <resources>

@@ -13,8 +13,10 @@
     <artifactId>isis-extensions-excel-integtests</artifactId>
     <name>Apache Isis Ext - Excel (integ tests)</name>
 
-    <properties>
-
+	<properties>
+    	<jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.excel-integtests</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/excel-integtests</git-plugin.propertiesDir>
+        
         <skipTests>true</skipTests>
     </properties>
 

@@ -18,8 +18,8 @@
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.incode.platform.lib.fakedata</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/incode/platform/lib/fakedata</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.fakedata-dom</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/fakedata-dom</git-plugin.propertiesDir>
     </properties>
 
     <build>
