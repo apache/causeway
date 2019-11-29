@@ -11,8 +11,11 @@ import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcateg
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-public class DemoToDoItemRowHandler2 implements FixtureAwareRowHandler<DemoToDoItemRowHandler2>, ExcelMetaDataEnabled {
+@ToString
+public class DemoToDoItemRowHandler2 
+implements FixtureAwareRowHandler<DemoToDoItemRowHandler2>, ExcelMetaDataEnabled {
 
     @Getter @Setter
     private String excelSheetName;

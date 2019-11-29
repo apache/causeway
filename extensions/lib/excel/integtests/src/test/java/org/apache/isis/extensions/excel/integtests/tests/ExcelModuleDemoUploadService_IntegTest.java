@@ -7,25 +7,22 @@ import javax.inject.Inject;
 
 import com.google.common.io.Resources;
 
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.value.Blob;
-
-import org.assertj.core.api.Assertions;
 import org.apache.isis.extensions.excel.dom.util.ExcelFileBlobConverter;
-import org.apache.isis.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.hamcrest.core.Is.is;
+import org.apache.isis.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 
 public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTestAbstract {
 
-    @Inject
-    private ExcelUploadServiceForDemoToDoItem uploadService;
+    @Inject private ExcelUploadServiceForDemoToDoItem uploadService;
+    @Inject private ExcelDemoToDoItemMenu toDoItems;
 
     @BeforeEach
     public void setUpData() throws Exception {
@@ -47,9 +44,6 @@ public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTest
 
         Assertions.assertThat(all.size()).isEqualTo(8);
     }
-
-    @Inject
-    private ExcelDemoToDoItemMenu toDoItems;
 
 
 }

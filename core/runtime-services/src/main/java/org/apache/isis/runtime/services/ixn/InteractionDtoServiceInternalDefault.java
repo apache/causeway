@@ -50,7 +50,11 @@ import org.apache.isis.schema.utils.InteractionDtoUtils;
         )
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 
-
+    @Inject CommandDtoServiceInternal commandDtoServiceInternal;
+    @Inject private BookmarkService bookmarkService;
+    @Inject private InteractionContext interactionContext;
+    @Inject private UserService userService;
+    
     @Override
     public ActionInvocationDto asActionInvocationDto(
             final ObjectAction objectAction,
@@ -126,10 +130,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
                 );
     }
 
-    @Inject CommandDtoServiceInternal commandDtoServiceInternal;
-    @Inject private BookmarkService bookmarkService;
-    @Inject private InteractionContext interactionContext;
-    @Inject private UserService userService;
+
 
 
 }

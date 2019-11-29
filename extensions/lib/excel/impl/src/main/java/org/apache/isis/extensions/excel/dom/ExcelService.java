@@ -4,24 +4,20 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Blob;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.excel.dom.util.ExcelServiceImpl;
 import org.apache.isis.extensions.excel.dom.util.Mode;
 
@@ -50,9 +46,8 @@ public class ExcelService {
     public ExcelService() {
     }
 
-    @Programmatic
     @PostConstruct
-    public void init(final Map<String,String> properties) {
+    public void init() {
         excelServiceImpl = new ExcelServiceImpl();
         serviceInjector.injectServicesInto(excelServiceImpl);
     }
@@ -89,14 +84,12 @@ public class ExcelService {
         return excelServiceImpl.toExcel(domainObjects, cls, sheetName, fileName, in);
     }
 
-    @Programmatic
     public <T> Blob toExcel(
             final WorksheetContent worksheetContent,
             final String fileName) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(worksheetContent, fileName);
     }
     
-    @Programmatic
     public <T> Blob toExcel(
             final WorksheetContent worksheetContent,
             final String fileName,
@@ -104,14 +97,12 @@ public class ExcelService {
         return excelServiceImpl.toExcel(worksheetContent, fileName, in);
     }
 
-    @Programmatic
     public Blob toExcel(
             final List<WorksheetContent> worksheetContents,
             final String fileName) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(worksheetContents, fileName);
     }
     
-    @Programmatic
     public Blob toExcel(
             final List<WorksheetContent> worksheetContents,
             final String fileName,
@@ -119,7 +110,6 @@ public class ExcelService {
         return excelServiceImpl.toExcel(worksheetContents, fileName, in);
     }    
 
-    @Programmatic
     public <T> Blob toExcelPivot(
             final List<T> domainObjects,
             final Class<T> cls,
@@ -135,14 +125,12 @@ public class ExcelService {
         return excelServiceImpl.toExcelPivot(domainObjects, cls, sheetName, fileName);
     }
 
-    @Programmatic
     public <T> Blob toExcelPivot(
             final WorksheetContent worksheetContent,
             final String fileName) throws ExcelService.Exception {
         return excelServiceImpl.toExcelPivot(worksheetContent, fileName);
     }
 
-    @Programmatic
     public Blob toExcelPivot(
             final List<WorksheetContent> worksheetContents,
             final String fileName) throws ExcelService.Exception {
@@ -158,7 +146,6 @@ public class ExcelService {
      *     view model memento); otherwise the objects will be simple transient objects.
      * </p>
      */
-    @Programmatic
     public <T> List<T> fromExcel(
             final Blob excelBlob,
             final Class<T> cls,
@@ -166,7 +153,6 @@ public class ExcelService {
         return fromExcel(excelBlob, new WorksheetSpec(cls, sheetName));
     }
 
-    @Programmatic
     public <T> List<T> fromExcel(
             final Blob excelBlob,
             final Class<T> cls,
@@ -175,21 +161,18 @@ public class ExcelService {
         return fromExcel(excelBlob, new WorksheetSpec(cls, sheetName, mode));
     }
 
-    @Programmatic
     public <T> List<T> fromExcel(
             final Blob excelBlob,
             final WorksheetSpec worksheetSpec) throws ExcelService.Exception {
         return excelServiceImpl.fromExcel(excelBlob, worksheetSpec);
     }
 
-    @Programmatic
     public List<List<?>> fromExcel(
             final Blob excelBlob,
             final List<WorksheetSpec> worksheetSpecs) throws ExcelService.Exception {
         return excelServiceImpl.fromExcel(excelBlob, worksheetSpecs);
     }
 
-    @Programmatic
     public List<List<?>> fromExcel(
             final Blob excelBlob,
             final WorksheetSpec.Matcher matcher) throws ExcelService.Exception {
@@ -197,13 +180,12 @@ public class ExcelService {
         return fromExcel(excelBlob, matcher, null);
     }
 
-    @Programmatic
     public List<List<?>> fromExcel(
             final Blob excelBlob,
             final WorksheetSpec.Matcher matcher,
             final WorksheetSpec.Sequencer sequencer) throws ExcelService.Exception {
 
-        List<WorksheetSpec> worksheetSpecs = Lists.newArrayList();
+        List<WorksheetSpec> worksheetSpecs = _Lists.newArrayList();
         try (ByteArrayInputStream bais = new ByteArrayInputStream(excelBlob.getBytes())) {
             final Workbook wb = org.apache.poi.ss.usermodel.WorkbookFactory.create(bais);
             final int numberOfSheets = wb.getNumberOfSheets();
@@ -225,7 +207,7 @@ public class ExcelService {
         return fromExcel(excelBlob, worksheetSpecs);
     }
 
-    @Inject BookmarkService bookmarkService;
-    @Inject ServiceInjector serviceInjector;
+    @Inject private BookmarkService bookmarkService;
+    @Inject private ServiceInjector serviceInjector;
 
 }

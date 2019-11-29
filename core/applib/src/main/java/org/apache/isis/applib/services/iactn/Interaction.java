@@ -173,7 +173,7 @@ public class Interaction implements HasUniqueId {
                 execution.setReturned(result);
                 return result;
             } catch (Exception ex) {
-
+                
                 // just because an exception has thrown, does not mean it is that significant; it could be that
                 // it is recognized by an ExceptionRecognizer and is not severe, eg unique index violation in the DB.
                 currentExecution.setThrew(ex);

@@ -1,7 +1,5 @@
 package org.apache.isis.extensions.excel.dom.util;
 
-import lombok.SneakyThrows;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,24 +7,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
-import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.value.Blob;
 
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.excel.dom.ExcelService;
 import org.apache.isis.extensions.excel.dom.PivotColumn;
 import org.apache.isis.extensions.excel.dom.PivotRow;
 import org.apache.isis.extensions.excel.dom.PivotValue;
 import org.apache.isis.extensions.excel.dom.WorksheetContent;
 import org.apache.isis.extensions.excel.dom.WorksheetSpec;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
+import org.apache.isis.runtime.system.session.IsisSession;
+
+import lombok.SneakyThrows;
 
 public class ExcelServiceImpl {
 
@@ -46,7 +45,6 @@ public class ExcelServiceImpl {
      *
      * @param sheetName - must be 31 chars or less
      */
-    @Programmatic
     public <T> Blob toExcel(
             final List<T> domainObjects,
             final Class<T> cls,
@@ -62,7 +60,6 @@ public class ExcelServiceImpl {
      * @param sheetName - must be 31 chars or less
      * @param in - an existing excel workbook to which this sheet will be appended
      */
-    @Programmatic
     public <T> Blob toExcel(
             final List<T> domainObjects,
             final Class<T> cls,
@@ -76,7 +73,6 @@ public class ExcelServiceImpl {
      * As {@link #toExcel(List, Class, String, String)}, but with the domain objects, class and sheet name provided using a
      * {@link WorksheetContent}.
      */
-    @Programmatic
     public <T> Blob toExcel(WorksheetContent worksheetContent, final String fileName) {
         return toExcel(Collections.singletonList(worksheetContent), fileName);
     }
@@ -85,7 +81,6 @@ public class ExcelServiceImpl {
      * As {@link #toExcel(List, Class, String, String)}, but with the domain objects, class and sheet name provided using a
      * {@link WorksheetContent} and with an input stream.
      */
-    @Programmatic
     public <T> Blob toExcel(WorksheetContent worksheetContent, final String fileName, final InputStream in) {
         return toExcel(Collections.singletonList(worksheetContent), fileName, in);
     }
@@ -93,7 +88,6 @@ public class ExcelServiceImpl {
     /**
      * As {@link #toExcel(WorksheetContent, String)}, but with multiple sheets.
      */
-    @Programmatic
     public Blob toExcel(final List<WorksheetContent> worksheetContents, final String fileName) {
         try {
             final File file = newExcelConverter().appendSheet(worksheetContents, new XSSFWorkbook());
@@ -106,7 +100,6 @@ public class ExcelServiceImpl {
     /**
      * As {@link #toExcel(WorksheetContent, String)}, but with multiple sheets and an input stream.
      */
-    @Programmatic
     public Blob toExcel(final List<WorksheetContent> worksheetContents, final String fileName, final InputStream in) {
         try {
             final File file = newExcelConverter().appendSheet(worksheetContents, new XSSFWorkbook(in));
@@ -137,7 +130,6 @@ public class ExcelServiceImpl {
      *     </li>
      * </ul>
      */
-    @Programmatic
     public <T> Blob toExcelPivot(
             final List<T> domainObjects,
             final Class<T> cls,
@@ -145,7 +137,6 @@ public class ExcelServiceImpl {
         return toExcelPivot(domainObjects, cls, null, fileName);
     }
 
-    @Programmatic
     public <T> Blob toExcelPivot(
             final List<T> domainObjects,
             final Class<T> cls,
@@ -154,12 +145,10 @@ public class ExcelServiceImpl {
         return toExcelPivot(new WorksheetContent(domainObjects, new WorksheetSpec(cls, sheetName)), fileName);
     }
 
-    @Programmatic
     public <T> Blob toExcelPivot(WorksheetContent worksheetContent, final String fileName) {
         return toExcelPivot(Collections.singletonList(worksheetContent), fileName);
     }
 
-    @Programmatic
     public <T> Blob toExcelPivot(final List<WorksheetContent> worksheetContents, final String fileName) {
         try {
             final File file = newExcelConverter().appendPivotSheet(worksheetContents);
@@ -184,7 +173,6 @@ public class ExcelServiceImpl {
      *  @param sheetName - must be 30 characters or less
      *
      */
-    @Programmatic
     public <T> List<T> fromExcel(
             final Blob excelBlob,
             final Class<T> cls,
@@ -197,7 +185,6 @@ public class ExcelServiceImpl {
      * As {@link #fromExcel(Blob, Class, String)}, but specifying the class name and sheet name by way of a
      * {@link WorksheetSpec}.
      */
-    @Programmatic
     public <T> List<T> fromExcel(
             final Blob excelBlob,
             final WorksheetSpec worksheetSpec) throws ExcelService.Exception {
@@ -210,7 +197,6 @@ public class ExcelServiceImpl {
      * As {@link #fromExcel(Blob, WorksheetSpec)}, but reading multiple sheets (and returning a list of lists of
      * domain objects).
      */
-    @Programmatic
     public List<List<?>> fromExcel(
             final Blob excelBlob,
             final List<WorksheetSpec> worksheetSpecs) throws ExcelService.Exception {
@@ -240,15 +226,5 @@ public class ExcelServiceImpl {
     @javax.inject.Inject
     ServiceInjector serviceInjector;
 
-//    @javax.inject.Inject
-//    IsisSessionFactory isisSessionFactory;
-//
-//    private SpecificationLoader getSpecificationLoader() {
-//        return isisSessionFactory.getSpecificationLoader();
-//    }
-//
-//    private PersistenceSession getPersistenceSession() {
-//        return isisSessionFactory.getCurrentSession().getPersistenceSession();
-//    }
 
 }
