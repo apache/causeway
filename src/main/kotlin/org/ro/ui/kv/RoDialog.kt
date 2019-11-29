@@ -81,6 +81,7 @@ class RoDialog(
         buttonBar.add(okButton)
         buttonBar.add(cancelButton)
         add(buttonBar)
+        okButton.focus()
     }
 
     private fun execute() {

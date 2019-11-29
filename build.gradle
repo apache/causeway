@@ -36,12 +36,6 @@ repositories {
     maven { url = 'https://dl.bintray.com/gbaldeck/kotlin' }
     maven { url = 'https://dl.bintray.com/rjaros/kotlin' }
     maven { url = 'https://plugins.gradle.org/m2/' }
-    maven {
-        url = uri("https://dl.bintray.com/gbaldeck/kotlin")
-        metadataSources {
-            artifact()
-        }
-    }
     mavenLocal()
     mavenCentral()
 }
@@ -65,6 +59,7 @@ dependencies {
     compile "pl.treksoft:kvision-tabulator:${kvisionVersion}"
     compile "pl.treksoft:kvision-moment:${kvisionVersion}"
     compile "pl.treksoft:kvision-pace:${kvisionVersion}"
+    testCompile "com.github.snabbdom:snabbdom-kotlin:0.1.1"
     testCompile "org.jetbrains.kotlin:kotlin-test-js:${kotlinVersion}"
     testCompile "pl.treksoft:kvision-testutils:${kvisionVersion}:tests"
 }

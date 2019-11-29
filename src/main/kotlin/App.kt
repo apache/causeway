@@ -8,6 +8,7 @@ import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.require
 import pl.treksoft.kvision.startApplication
 import pl.treksoft.kvision.utils.px
+import kotlin.browser.window
 
 class App : Application() {
 
@@ -31,5 +32,7 @@ class App : Application() {
 }
 
 fun main() {
+    //TODO workaround according to https://github.com/rjaros/kvision/issues/113
+    if (window.asDynamic().__karma__) return
     startApplication(::App)
 }
