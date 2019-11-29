@@ -3,7 +3,6 @@ buildscript {
     ext.production = (findProperty('prod') ?: 'false') == 'true'
 
     repositories {
-        maven { url = "http://bintray.com/" }
         maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
         maven { url = 'https://plugins.gradle.org/m2/' }
         maven { url = 'https://kotlin.bintray.com/kotlinx' }
