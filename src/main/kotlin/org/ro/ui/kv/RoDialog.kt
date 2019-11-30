@@ -16,7 +16,6 @@ import pl.treksoft.kvision.form.text.TextArea
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.HPanel
-import pl.treksoft.kvision.utils.ENTER_KEY
 import pl.treksoft.kvision.utils.px
 import pl.treksoft.kvision.window.Window
 
@@ -35,6 +34,7 @@ class RoDialog(
     }
 
     var panel: FormPanel<String>?
+
     init {
         init?.invoke(this)
         icon = IconManager.find(caption)
@@ -64,13 +64,6 @@ class RoDialog(
                             preSelectedValue = list.first().first
                         }
                         add(Select(label = fi.label, options = list, value = preSelectedValue))
-                    }
-                }
-            }
-            setEventListener {
-                keydown = {
-                    if (it.keyCode == ENTER_KEY) {
-                        execute()
                     }
                 }
             }
