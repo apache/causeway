@@ -23,6 +23,7 @@ import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrateg
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResultList;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScriptsDefault;
 
 /**
  * Pulls together the various state that influences the behaviour of {@link FixtureScripts} service.

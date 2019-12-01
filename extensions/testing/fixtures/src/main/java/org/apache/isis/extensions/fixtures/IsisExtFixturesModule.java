@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService;
-import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScriptsDefault;
 import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlInternal;
 import org.apache.isis.extensions.fixtures.modules.ModuleFixtureService;
 import org.apache.isis.extensions.fixtures.modules.ModuleService;

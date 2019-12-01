@@ -20,6 +20,7 @@ package org.apache.isis.extensions.fixtures.fixturespec;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScriptsDefault;
 
 /**
  * Rather than subclassing {@link FixtureScripts} class, you can instead implement this interface as a service.

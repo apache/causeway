@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.fixturespec;
+package org.apache.isis.extensions.fixtures.fixturescripts;
 
 import java.util.List;
 
@@ -39,9 +39,8 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
 import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecification;
+import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecificationProvider;
 
 import lombok.val;
 
