@@ -32,14 +32,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -47,22 +52,30 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
+import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
+import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
 import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecification;
+import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecificationProvider;
 
+import lombok.Getter;
 import lombok.val;
 
 
-/**
- * Rather than sub-classing, instead implement
- * {@link org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecificationProvider}.  
- * The framework will
- * automatically provide a default implementation configured using that provider service.
- */
-public abstract class FixtureScripts extends AbstractService {
+@DomainService(
+        nature = NatureOfService.VIEW,
+        objectType = "isisApplib.FixtureScripts"
+)
+@DomainServiceLayout(
+        named="Prototyping",
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY
+)
+public class FixtureScripts extends AbstractService {
+
 
     // -- Specification, nonPersistedObjectsStrategy, multipleExecutionStrategy enums
 
@@ -159,6 +172,13 @@ public abstract class FixtureScripts extends AbstractService {
 
     // -- constructors
 
+    // -- constructor, init
+    /**
+     * The package prefix to search for fixture scripts.  This default value will result in
+     * no fixture scripts being found.  However, normally it will be overridden.
+     */
+    public static final String PACKAGE_PREFIX = FixtureScripts.class.getPackage().getName();
+
     /**
      * @param specification - specifies how the service will find instances and execute them.
      */
@@ -166,33 +186,20 @@ public abstract class FixtureScripts extends AbstractService {
         this.specification = specification;
     }
 
+    public FixtureScripts() {
+        this(FixtureScriptsSpecification.builder(PACKAGE_PREFIX)
+                .build());
+    }
+
+
     // -- packagePrefix, nonPersistedObjectsStrategy, multipleExecutionStrategy
 
+    @Getter
     private FixtureScriptsSpecification specification;
 
-    @Programmatic
-    public FixtureScriptsSpecification getSpecification() {
-        return specification;
-    }
-
-    /**
-     * Allows the specification to be overridden if required.
-     *
-     * <p>
-     *     This is used by {@link FixtureScriptsDefault}.
-     * </p>
-     *
-     * @param specification
-     */
-    protected void setSpecification(final FixtureScriptsSpecification specification) {
-        this.specification = specification;
-    }
-
-    @Programmatic
     public String getPackagePrefix() {
         return specification.getPackagePrefix();
     }
-    @Programmatic
     public NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() {
         return specification.getNonPersistedObjectsStrategy();
     }
@@ -208,10 +215,19 @@ public abstract class FixtureScripts extends AbstractService {
 
     // -- init
 
-    @Programmatic
+    Can<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider;
+
     @PostConstruct
     public void init() {
+        if(fixtureScriptsSpecificationProvider == null) {
+            fixtureScriptsSpecificationProvider =
+                    serviceRegistry.select(FixtureScriptsSpecificationProvider.class);
+        }
+        fixtureScriptsSpecificationProvider.getFirst().ifPresent(
+                provider -> this.specification = provider.getSpecification()
+        );
     }
+
 
     // -- fixtureScriptList (lazily built)
 
@@ -255,37 +271,62 @@ public abstract class FixtureScripts extends AbstractService {
         this.fixtureTracing.set(fixtureTracing);
     }
 
-    // -- runFixtureScript (prototype action)
+    // -- runFixtureScript (using choices as the drop-down policy)
 
-    /**
-     * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or
-     * {@link #autoComplete0RunFixtureScript(String)} with <tt>public</tt> visibility</tt>.
-     */
-    @Action(restrictTo = RestrictTo.PROTOTYPING)
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa="fa fa-chevron-right"
+    )
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(
             final FixtureScript fixtureScript,
             @ParameterLayout(
-                    named="Parameters",
-                    describedAs="Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
-                    multiLine = 10
-                    )
+                    named = "Parameters",
+                    describedAs =
+                            "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
+                    multiLine = 10)
             @Parameter(optionality = Optionality.OPTIONAL)
             final String parameters) {
+        try {
+            eventBusService.post(new FixturesInstallingEvent(this));
 
-        // if this method is called programmatically, the caller may have simply new'd up the fixture script
-        // (rather than use container.newTransientInstance(...).  To allow this use case, we need to ensure that
-        // domain services are injected into the fixture script.
-        serviceInjector.injectServicesInto(fixtureScript);
+            // if this method is called programmatically, the caller may have simply new'd up the fixture script
+            // (rather than use container.newTransientInstance(...).  To allow this use case, we need to ensure that
+            // domain services are injected into the fixture script.
+            serviceInjector.injectServicesInto(fixtureScript);
 
-        return fixtureScript.withTracing(fixtureTracing.get()).run(parameters);
+            return fixtureScript.withTracing(fixtureTracing.get()).run(parameters);
+        } finally {
+            eventBusService.post(new FixturesInstalledEvent(this));
+        }
     }
+
+
+    /**
+     * Hide the actions of this service if no configuring {@link FixtureScriptsSpecificationProvider} was provided or is available.
+     */
+    public boolean hideRunFixtureScript() {
+        return hideIfPolicyNot(FixtureScriptsSpecification.DropDownPolicy.CHOICES);
+    }
+    public String disableRunFixtureScript() {
+        return getFixtureScriptList().isEmpty()? "No fixture scripts found under package '" + getPackagePrefix() + "'": null;
+    }
+
+
     public FixtureScript default0RunFixtureScript() {
-        return getFixtureScriptList().isEmpty() ? null: getFixtureScriptList().get(0);
+        Class<? extends FixtureScript> defaultScript = getSpecification().getRunScriptDefaultScriptClass();
+        if(defaultScript == null) {
+            return null;
+        }
+        return findFixtureScriptFor(defaultScript);
     }
-    protected List<FixtureScript> choices0RunFixtureScript() {
+
+    public List<FixtureScript> choices0RunFixtureScript() {
         return getFixtureScriptList();
     }
+
     protected List<FixtureScript> autoComplete0RunFixtureScript(final @MinLength(1) String arg) {
 
         final Predicate<String> contains = str -> str != null && str.contains(arg);
@@ -294,15 +335,91 @@ public abstract class FixtureScripts extends AbstractService {
                 .filter(script-> contains.test(script.getFriendlyName()) || contains.test(script.getLocalName()))
                 .collect(Collectors.toList());
     }
-    public String disableRunFixtureScript() {
-        return getFixtureScriptList().isEmpty()? "No fixture scripts found under package '" + getPackagePrefix() + "'": null;
-    }
     public String validateRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {
         return fixtureScript.validateRun(parameters);
     }
 
     protected List<FixtureResult> runScript(final FixtureScript fixtureScript, final String parameters) {
         return fixtureScript.run(parameters);
+    }
+
+
+
+
+    // -- runFixtureScript (using autoComplete as drop-down policy)
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            named = "Run Fixture Script"
+    )
+    @MemberOrder(sequence="10")
+    public List<FixtureResult> runFixtureScriptWithAutoComplete(
+            final FixtureScript fixtureScript,
+            @ParameterLayout(
+                    named = "Parameters",
+                    describedAs =
+                            "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
+                    multiLine = 10)
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final String parameters) {
+        return this.runFixtureScript(fixtureScript, parameters);
+    }
+
+    public boolean hideRunFixtureScriptWithAutoComplete() {
+        return hideIfPolicyNot(FixtureScriptsSpecification.DropDownPolicy.AUTO_COMPLETE);
+    }
+
+    public String disableRunFixtureScriptWithAutoComplete() {
+        return disableRunFixtureScript();
+    }
+
+    public FixtureScript default0RunFixtureScriptWithAutoComplete() {
+        return default0RunFixtureScript();
+    }
+
+    public List<FixtureScript> autoComplete0RunFixtureScriptWithAutoComplete(final @MinLength(1) String arg) {
+        return autoComplete0RunFixtureScript(arg);
+    }
+
+    public String validateRunFixtureScriptWithAutoComplete(final FixtureScript fixtureScript, final String parameters) {
+        return validateRunFixtureScript(fixtureScript, parameters);
+    }
+
+
+    // -- recreateObjectsAndReturnFirst
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa="fa fa-refresh"
+    )
+    @MemberOrder(sequence="20")
+    public Object recreateObjectsAndReturnFirst() {
+        val recreateScriptClass =  getSpecification().getRecreateScriptClass();
+        val recreateScript = findFixtureScriptFor(recreateScriptClass);
+        if(recreateScript == null) {
+            return null;
+        }
+        final List<FixtureResult> results = runScript(recreateScript, null);
+        if(results.isEmpty()) {
+            return null;
+        }
+        return results.get(0).getObject();
+    }
+
+    public boolean hideRecreateObjectsAndReturnFirst() {
+        return getSpecification().getRecreateScriptClass() == null;
+    }
+
+
+
+
+    // -- HELPER
+
+    private boolean hideIfPolicyNot(final FixtureScriptsSpecification.DropDownPolicy requiredPolicy) {
+        return fixtureScriptsSpecificationProvider.isEmpty() || getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
     }
 
     // -- programmatic API
@@ -487,7 +604,10 @@ public abstract class FixtureScripts extends AbstractService {
     @Inject RepositoryService repositoryService;
     @Inject TransactionService transactionService;
     @Inject ExecutionParametersService executionParametersService;
-    
+
+    @Inject EventBusService eventBusService;
+
+
     // -- DEPRECATIONS
  
     /**
@@ -513,5 +633,8 @@ public abstract class FixtureScripts extends AbstractService {
     public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
         return runBuilder(builderScript);
     }
+
+
+
 
 }

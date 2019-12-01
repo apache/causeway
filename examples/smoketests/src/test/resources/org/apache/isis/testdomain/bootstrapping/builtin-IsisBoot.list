@@ -20,7 +20,7 @@ org.apache.isis.config.beans.WebAppConfigBean
 org.apache.isis.extensions.fixtures.FixturesEventService
 org.apache.isis.extensions.fixtures.FixturesLifecyleService
 org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService
-org.apache.isis.extensions.fixtures.fixturescripts.FixtureScriptsDefault
+org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts
 org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlInternal
 org.apache.isis.jdo.jdosupport.IsisJdoSupportDN5
 org.apache.isis.jdo.metrics.MetricsServiceDefault

@@ -23,7 +23,6 @@ import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrateg
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResultList;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScriptsDefault;
 
 /**
  * Pulls together the various state that influences the behaviour of {@link FixtureScripts} service.
@@ -54,7 +53,7 @@ public class FixtureScriptsSpecification {
      * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times
      * @param runScriptDefaultScriptClass - the fixture script to provide as a default in {@link FixtureScripts#runFixtureScript(FixtureScript, String)} action.
      * @param runScriptDropDownPolicy - whether the {@link FixtureScripts#runFixtureScript(FixtureScript, String)} should use a choices or an autoComplete.
-     * @param recreateScriptClass - if specified, then make the {@link FixtureScriptsDefault#recreateObjectsAndReturnFirst()} action visible.
+     * @param recreateScriptClass - if specified, then make the {@link FixtureScripts#recreateObjectsAndReturnFirst()} action visible.
      */
     public FixtureScriptsSpecification(
             final String packagePrefix,
