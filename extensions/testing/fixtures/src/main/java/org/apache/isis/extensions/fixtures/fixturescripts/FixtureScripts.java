@@ -67,7 +67,7 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isisApplib.FixtureScripts"
+        objectType = "isisApplib.FixtureScriptsDefault"
 )
 @DomainServiceLayout(
         named="Prototyping",
