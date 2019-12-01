@@ -19,9 +19,6 @@
 
 package org.apache.isis.commons.internal.reflection;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -44,12 +41,13 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 
-import org.springframework.core.annotation.AnnotationUtils;
-
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import lombok.val;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>
@@ -158,7 +156,7 @@ public final class _Reflect {
             @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
-        return streamTypeHierarchy(type, /*includeInterfaces*/ false) // interfaces don't have fields
+        return streamTypeHierarchy(type, /*includeInterfaces*/  InterfacePolicy.EXCLUDE) // interfaces don't have fields
                 .filter(Object.class::equals) // do not process Object class.
                 .flatMap(t->streamFields(t, ignoreAccess));
     }
@@ -194,20 +192,29 @@ public final class _Reflect {
             final boolean ignoreAccess
             ) {
 
-        return streamTypeHierarchy(type, /*includeInterfaces*/ true)
+        return streamTypeHierarchy(type, /*includeInterfaces*/  InterfacePolicy.INCLUDE)
                 .filter(t->!t.equals(Object.class)) // do not process Object class.
                 .flatMap(t->streamMethods(t, ignoreAccess));
     }
 
     // -- SUPER CLASSES
 
+    public enum InterfacePolicy {
+        INCLUDE,
+        EXCLUDE
+    }
+
     /**
      * Stream all types of given {@code type}, up the super class hierarchy starting with self
      * @param type (nullable)
-     * @param includeInterfaces - whether to include all interfaces implemented by given {@code type}.
+     * @param interfacePolicy - whether to include all interfaces implemented by given {@code type}.
      * @return non-null
      */
-    public static Stream<Class<?>> streamTypeHierarchy(@Nullable Class<?> type, boolean includeInterfaces) {
+    public static Stream<Class<?>> streamTypeHierarchy(
+            @Nullable Class<?> type,
+            final InterfacePolicy interfacePolicy) {
+
+        val includeInterfaces = interfacePolicy == InterfacePolicy.INCLUDE;
 
         // https://stackoverflow.com/questions/40240450/java8-streaming-a-class-hierarchy?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
         // Java 9+ will allow ...

@@ -22,19 +22,29 @@
         <bs3:col span="12" unreferencedActions="true">
             <cpt:domainObject/>
             <cpt:action id="clearHints"/>
-            <cpt:action id="downloadLayoutXml"/>
-            <cpt:action id="rebuildMetamodel"/>
         </bs3:col>
     </bs3:row>
     <bs3:row>
-        <bs3:col span="4">
-            <cpt:fieldSet name="General" id="general" unreferencedProperties="true">
-                <cpt:property id="className"/>
-                <cpt:property id="fixtureScriptClassName"/>
+        <bs3:col span="6">
+            <cpt:fieldSet name="Identity" id="general" unreferencedProperties="true">
+                <cpt:action id="clearHints" position="PANEL_DROPDOWN"/>
+                <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
+                <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
+                <cpt:action id="downloadMetaModelXml" position="PANEL_DROPDOWN"/>
+                <cpt:action id="openRestApi" position="PANEL_DROPDOWN"/>
                 <cpt:property id="key"/>
-                <cpt:property id="object"/>
+                <cpt:property id="fixtureScriptClassName" hidden="OBJECT_FORMS"/>
             </cpt:fieldSet>
         </bs3:col>
-        <bs3:col span="8" unreferencedCollections="true"/>
+        <bs3:col span="6">
+            <cpt:fieldSet name="Result" id="result">
+                <cpt:property id="object"/>
+                <cpt:property id="className"/>
+            </cpt:fieldSet>
+        </bs3:col>
+        <bs3:col span="0" unreferencedCollections="true">
+            <cpt:fieldSet name="hidden">
+            </cpt:fieldSet>
+        </bs3:col>
     </bs3:row>
 </bs3:grid>

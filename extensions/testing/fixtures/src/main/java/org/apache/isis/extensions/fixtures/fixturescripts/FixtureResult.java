@@ -65,7 +65,6 @@ public class FixtureResult {
     @Getter(onMethod = @__(@Programmatic)) @Setter
     private String fixtureScriptQualifiedName;
 
-    @PropertyLayout(named="Result key")
     @Title(sequence="1", append=": ")
     @Getter @Setter
     private String key;

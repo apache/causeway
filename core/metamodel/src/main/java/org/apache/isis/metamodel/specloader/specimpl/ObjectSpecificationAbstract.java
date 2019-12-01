@@ -41,7 +41,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.config.registry.types.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.commons.ClassExtensions;
@@ -89,12 +88,13 @@ import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamTypeHierarchy;
 
 @Log4j2 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
@@ -199,10 +199,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final static Set<String> exclusionsFromMetamodel = _Sets.of( 
             //TODO[2133] make this configurable, or find an alternative, 
             // perhaps a specific type annotation? ... @Programmatic
-            "org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult",
             "org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript"
             );
-    
+
 
     // -- Constructor
     public ObjectSpecificationAbstract(
@@ -216,8 +215,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.shortName = shortName;
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
-        this.excludedFromMetamodel = _Reflect
-                .streamTypeHierarchy(introspectedClass, /*includeInterfaces*/ false)
+        this.excludedFromMetamodel = streamTypeHierarchy(introspectedClass, InterfacePolicy.EXCLUDE)
                 .anyMatch(type->exclusionsFromMetamodel.contains(type.getName())); 
 
         this.identifier = Identifier.classIdentifier(introspectedClass);

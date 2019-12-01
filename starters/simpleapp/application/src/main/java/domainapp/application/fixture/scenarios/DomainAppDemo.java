@@ -18,9 +18,6 @@
  */
 package domainapp.application.fixture.scenarios;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.legacy.teardown.TeardownFixtureAbstract2;
 import org.springframework.stereotype.Component;
@@ -46,6 +43,4 @@ public class DomainAppDemo extends FixtureScript {
         ec.executeChild(this, new SimpleObject_persona.PersistAll());
     }
 
-    @Inject
-    MetaModelService metaModelService;
 }

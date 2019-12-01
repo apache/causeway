@@ -26,8 +26,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Blackhole;
@@ -56,12 +54,12 @@ import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecif
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.schema.utils.CommonDtoUtils;
-
-import static org.apache.isis.commons.internal.base._With.requires;
+import org.springframework.stereotype.Service;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <p>
@@ -271,7 +269,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Override
     public void reloadSpecification(Class<?> domainType) {
         invalidateCache(domainType);
-        loadSpecification(domainType);
+        loadSpecification(domainType, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
 
     @Override @Nullable

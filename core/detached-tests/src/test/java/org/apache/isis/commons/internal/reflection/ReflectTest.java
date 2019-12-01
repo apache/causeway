@@ -32,10 +32,11 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
 import org.apache.isis.metamodel.services.user.UserServiceDefault;
 
+import static org.apache.isis.commons.internal.reflection._Reflect.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-//TODO we are using real word classes from the framework, we could instead isolate these tests
+//TODO we are using real world classes from the framework, we could instead isolate these tests
 // if we provide some custom classes for hierarchy traversal here (could be nested); 
 // then move this test to the 'commons' module, where it belongs
 class ReflectTest {
@@ -45,8 +46,8 @@ class ReflectTest {
 
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
 
-        String typeListLiteral = _Reflect.streamTypeHierarchy(type, false)
-                .map(t->t.getName())
+        String typeListLiteral = streamTypeHierarchy(type, InterfacePolicy.EXCLUDE)
+                .map(Class::getName)
                 .collect(Collectors.joining(",\n"));
 
         assertEquals(""
@@ -61,8 +62,8 @@ class ReflectTest {
 
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
 
-        String typeListLiteral = _Reflect.streamTypeHierarchy(type, true)
-                .map(t->t.getName())
+        String typeListLiteral = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
+                .map(Class::getName)
                 .collect(Collectors.joining(",\n"));
 
         assertEquals(
@@ -78,7 +79,7 @@ class ReflectTest {
 
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
 
-        String typeListLiteral = _Reflect.streamAllMethods(type, true)
+        String typeListLiteral = streamAllMethods(type, true)
                 .map(m->m.toString())
                 .sorted()
                 .collect(Collectors.joining(",\n"));
@@ -99,7 +100,7 @@ class ReflectTest {
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
         Method method = type.getMethod("runAs", new Class[] {String.class, List.class});
 
-        Programmatic annot = _Reflect.getAnnotation(method, Programmatic.class, true, true);
+        Programmatic annot = getAnnotation(method, Programmatic.class, true, true);
 
         assertNotNull(annot);
     }
@@ -109,7 +110,7 @@ class ReflectTest {
 
         Class<?> type = JaxbServiceDefault.class;
 
-        String typeListLiteral = _Reflect.streamTypeHierarchy(type, true)
+        String typeListLiteral = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .map(t->t.getName())
                 .collect(Collectors.joining(",\n"));
 
@@ -129,7 +130,7 @@ class ReflectTest {
         Class<?> type = JaxbServiceDefault.class;
         Method method = type.getMethod("fromXml", new Class[] {JAXBContext.class, String.class, Map.class});
 
-        Programmatic annot = _Reflect.getAnnotation(method, Programmatic.class, true, true);
+        Programmatic annot = getAnnotation(method, Programmatic.class, true, true);
 
         assertNotNull(annot);
 
