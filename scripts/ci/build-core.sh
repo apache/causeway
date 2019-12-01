@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -e
+set -e
 
 SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
@@ -39,13 +39,6 @@ mvn -s $SETTINGS_XML \
     $MVN_STAGES \
     $MVN_ADDITIONAL_OPTS \
     $*
-
-if [ $? -ne 0 ]; then
-  find . -name QExcelDemoToDoItem.java -print
-  cat $(find . -name QExcelDemoToDoItem.java -print)
-
-  exit 1
-fi
 
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/core-parent
