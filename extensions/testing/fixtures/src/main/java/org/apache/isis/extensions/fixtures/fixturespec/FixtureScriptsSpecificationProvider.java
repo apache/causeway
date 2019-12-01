@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.fixtures.fixturespec;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 
 public interface FixtureScriptsSpecificationProvider {
 

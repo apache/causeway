@@ -18,14 +18,13 @@
  */
 package org.apache.isis.extensions.fixtures.fixturescripts;
 
-import java.io.PrintStream;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -52,7 +51,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -63,6 +61,7 @@ import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecificati
 import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecificationProvider;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 
@@ -179,17 +178,11 @@ public class FixtureScripts extends AbstractService {
      */
     public static final String PACKAGE_PREFIX = FixtureScripts.class.getPackage().getName();
 
-    /**
-     * @param specification - specifies how the service will find instances and execute them.
-     */
-    public FixtureScripts(final FixtureScriptsSpecification specification) {
-        this.specification = specification;
+
+    public FixtureScripts(Optional<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider) {
+        this.specification = fixtureScriptsSpecificationProvider.orElse(() -> FixtureScriptsSpecification.builder(PACKAGE_PREFIX).build()).getSpecification();
     }
 
-    public FixtureScripts() {
-        this(FixtureScriptsSpecification.builder(PACKAGE_PREFIX)
-                .build());
-    }
 
 
     // -- packagePrefix, nonPersistedObjectsStrategy, multipleExecutionStrategy
@@ -197,7 +190,7 @@ public class FixtureScripts extends AbstractService {
     @Getter
     private FixtureScriptsSpecification specification;
 
-    public String getPackagePrefix() {
+    private String getPackagePrefix() {
         return specification.getPackagePrefix();
     }
     public NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() {
@@ -215,32 +208,25 @@ public class FixtureScripts extends AbstractService {
 
     // -- init
 
-    Can<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider;
-
-    @PostConstruct
-    public void init() {
-        if(fixtureScriptsSpecificationProvider == null) {
-            fixtureScriptsSpecificationProvider =
-                    serviceRegistry.select(FixtureScriptsSpecificationProvider.class);
-        }
-        fixtureScriptsSpecificationProvider.getFirst().ifPresent(
-                provider -> this.specification = provider.getSpecification()
-        );
-    }
+//    @Inject List<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider;
+//
+//    @PostConstruct
+//    public void init() {
+//        fixtureScriptsSpecificationProvider.stream().findFirst().ifPresent(
+//                provider -> this.specification = provider.getSpecification()
+//        );
+//    }
 
 
     // -- fixtureScriptList (lazily built)
 
     private List<FixtureScript> fixtureScriptList;
-    
-    @Programmatic
-    public List<FixtureScript> getFixtureScriptList() {
+    private List<FixtureScript> getFixtureScriptList() {
         if(fixtureScriptList == null) {
             fixtureScriptList = findAndInstantiateFixtureScripts();
         }
         return fixtureScriptList;
     }
-
     private List<FixtureScript> findAndInstantiateFixtureScripts() {
         val packagePrefix = getPackagePrefix();
         return serviceRegistry.select(FixtureScript.class).stream()
@@ -255,21 +241,6 @@ public class FixtureScripts extends AbstractService {
 
 
 
-    // -- fixtureTracing (thread-local)
-
-    private final ThreadLocal<PrintStream> fixtureTracing = new ThreadLocal<PrintStream>(){{
-        set(System.out);
-    }};
-
-    @Programmatic
-    public PrintStream getFixtureTracing() {
-        return fixtureTracing.get();
-    }
-
-    @Programmatic
-    public void setFixtureTracing(PrintStream fixtureTracing) {
-        this.fixtureTracing.set(fixtureTracing);
-    }
 
     // -- runFixtureScript (using choices as the drop-down policy)
 
@@ -297,7 +268,7 @@ public class FixtureScripts extends AbstractService {
             // domain services are injected into the fixture script.
             serviceInjector.injectServicesInto(fixtureScript);
 
-            return fixtureScript.withTracing(fixtureTracing.get()).run(parameters);
+            return fixtureScript.run(parameters);
         } finally {
             eventBusService.post(new FixturesInstalledEvent(this));
         }
@@ -419,7 +390,7 @@ public class FixtureScripts extends AbstractService {
     // -- HELPER
 
     private boolean hideIfPolicyNot(final FixtureScriptsSpecification.DropDownPolicy requiredPolicy) {
-        return fixtureScriptsSpecificationProvider.isEmpty() || getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
+        return getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
     }
 
     // -- programmatic API
@@ -428,7 +399,7 @@ public class FixtureScripts extends AbstractService {
     public void run(final FixtureScript... fixtureScriptList) {
     	
     	val singleScript = toSingleScript(fixtureScriptList);
-    	val parameters = (String)null;
+    	String parameters = null;
     	
     	transactionService.executeWithinTransaction(()->{
     		runFixtureScript(singleScript, parameters);	
@@ -503,29 +474,14 @@ public class FixtureScripts extends AbstractService {
                 return FixtureScript.ExecutionContext.create(executionParameters, this);
     }
 
-    // -- hooks
-
-    /**
-     * Optional hook.
-     */
-    protected FixtureScript findFixtureScriptFor(final String qualifiedName) {
-        final List<FixtureScript> fixtureScripts = getFixtureScriptList();
-        for (final FixtureScript fs : fixtureScripts) {
-            if(fs.getQualifiedName().contains(qualifiedName)) {
-                return fs;
-            }
-        }
-        return null;
-    }
 
 
     // -- memento support for FixtureScript
 
-    @XmlRootElement(name = "fixtureScript")
+    @XmlRootElement(name = "fixtureScriptMemento")
     public static class FixtureScriptMemento {
+        @Getter @Setter
         private String path;
-        public String getPath() { return path; }
-        public void setPath(String path) { this.path = path; }
     }
 
     String mementoFor(final FixtureScript fs) {
