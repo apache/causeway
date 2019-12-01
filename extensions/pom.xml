@@ -198,8 +198,10 @@
 		<module>vw/sse</module>
 
 		<module>lib/base/impl</module>
+<!--
 		<module>lib/excel/fixture</module>
 		<module>lib/excel/integtests</module>
+-->
 		<module>lib/excel/impl</module>
 		<module>lib/fakedata/impl</module>
 		<module>lib/fakedata/fixture</module>
