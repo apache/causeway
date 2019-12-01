@@ -39,7 +39,6 @@ public class DomainAppFixtureScriptsSpecificationProvider implements FixtureScri
                 .builder(DomainAppFixtureScriptsSpecificationProvider.class)
                 .with(FixtureScripts.MultipleExecutionStrategy.EXECUTE)
                 .withRunScriptDefault(DomainAppDemo.class)
-                .withRunScriptDropDown(FixtureScriptsSpecification.DropDownPolicy.CHOICES)
                 .withRecreate(DomainAppDemo.class)
                 .build();
     }

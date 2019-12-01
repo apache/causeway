@@ -93,8 +93,6 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
-import static org.apache.isis.commons.internal.reflection._Reflect.streamTypeHierarchy;
 
 @Log4j2 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
@@ -183,7 +181,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final Identifier identifier;
     private final boolean isAbstract;
 
-    @Getter(onMethod=@__({@Override})) private final boolean excludedFromMetamodel;
+    @Getter(onMethod=@__({@Override})) private final boolean excludedFromMetamodel = false;
+
     // derived lazily, cached since immutable
     protected ObjectSpecId specId;
 
@@ -195,12 +194,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private CssClassFacet cssClassFacet;
 
     private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
-
-    private final static Set<String> exclusionsFromMetamodel = _Sets.of( 
-            //TODO[2133] make this configurable, or find an alternative, 
-            // perhaps a specific type annotation? ... @Programmatic
-            "org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript"
-            );
 
 
     // -- Constructor
@@ -215,8 +208,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.shortName = shortName;
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
-        this.excludedFromMetamodel = streamTypeHierarchy(introspectedClass, InterfacePolicy.EXCLUDE)
-                .anyMatch(type->exclusionsFromMetamodel.contains(type.getName())); 
 
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
@@ -550,7 +541,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                     .map(superSpec->superSpec.getFacet(facetType));
     
             val facetsCombined = _Streams.concat(facets1, facets2, facets3);
-    
+
             val notANoopFacetFilter = new NotANoopFacetFilter<Q>();
     
             return facetsCombined

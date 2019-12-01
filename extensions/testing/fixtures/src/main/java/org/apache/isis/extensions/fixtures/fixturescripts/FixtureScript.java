@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.fixtures.fixturescripts;
 
-import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -34,15 +33,8 @@ import javax.inject.Inject;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
-import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.ViewModelLayout;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -59,11 +51,13 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.api.WithPrereqs;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
-@ViewModelLayout(named="Script")
-public abstract class FixtureScript
-extends AbstractViewModel {
+import lombok.Getter;
+import lombok.Setter;
+
+public abstract class FixtureScript {
 
     public static final FixtureScript NOOP = new FixtureScript() {
         @Override
@@ -76,59 +70,23 @@ extends AbstractViewModel {
     // -- constructors
 
     /**
-     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture, with
+     * Initializes a fixture, with
      * {@link #getFriendlyName()} and {@link #getLocalName()} derived from the class name.
-     *
-     * <p>
-     * Use {@link #withDiscoverability(Discoverability)} to override.
      */
     public FixtureScript() {
         this(null, null);
     }
 
     /**
-     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture.
-     *
-     * <p>
-     * Use {@link #withDiscoverability(Discoverability)} to override.
+     * Initializes a fixture.
      *
      * @param friendlyName - if null, will be derived from class name
      * @param localName - if null, will be derived from class name
      */
     public FixtureScript(final String friendlyName, final String localName) {
-        this(friendlyName, localName, Discoverability.NON_DISCOVERABLE);
-    }
-    public FixtureScript(final String friendlyName, final String localName, final PrintStream printStream) {
-        this(friendlyName, localName, Discoverability.NON_DISCOVERABLE, printStream);
-    }
-
-    /**
-     * @param friendlyName - if null, will be derived from class name
-     * @param localName - if null, will be derived from class name
-     * @param discoverability - whether this fixture script can be rendered as a choice to execute through {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts#runFixtureScript(FixtureScript, String)}}.
-     */
-    public FixtureScript(
-            final String friendlyName,
-            final String localName,
-            final Discoverability discoverability) {
-        this(friendlyName, localName, discoverability, /* no tracing */ null);
-    }
-    /**
-     * @param friendlyName - if null, will be derived from class name
-     * @param localName - if null, will be derived from class name
-     * @param discoverability - whether this fixture script can be rendered as a choice to execute through {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts#runFixtureScript(FixtureScript, String)}}.
-     */
-    public FixtureScript(
-            final String friendlyName,
-            final String localName,
-            final Discoverability discoverability,
-            final PrintStream printStream) {
         this.localName = localNameElseDerived(localName);
         this.friendlyName = friendlyNameElseDerived(friendlyName);
         this.parentPath = "";
-        this.discoverability = discoverability;
-
-        withTracing(printStream);
     }
 
     protected String localNameElseDerived(final String str) {
@@ -141,145 +99,36 @@ extends AbstractViewModel {
 
 
 
-    // -- tracing
-
-    private PrintStream tracePrintStream;
-
-    /**
-     * Enable tracing of the execution to the provided {@link java.io.PrintStream}.
-     */
-    @Programmatic
-    public FixtureScript withTracing(final PrintStream tracePrintStream) {
-        this.tracePrintStream = tracePrintStream;
-        return this;
-    }
-
-    /**
-     * Enable tracing of the execution to stdout.
-     */
-    @Programmatic
-    public FixtureScript withTracing() {
-        return withTracing(System.out);
-    }
-
-
-
-    // -- viewModel impl
-
-    @Programmatic
-    @Override
-    public String viewModelMemento() {
-        return fixtureScripts.mementoFor(this);
-    }
-
-    @Programmatic
-    @Override
-    public void viewModelInit(final String mementoStr) {
-        fixtureScripts.initOf(mementoStr, this);
-    }
-
-
-
     // -- qualifiedName
 
-    @Programmatic
     public String getQualifiedName() {
         return getParentPath() + getLocalName();
     }
 
 
 
-    // -- friendlyName (property)
-
+    @Getter @Setter
     private String friendlyName;
 
-    @Title
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    public String getFriendlyName() {
-        return friendlyName;
-    }
-    public void setFriendlyName(final String friendlyName) {
-        this.friendlyName = friendlyName;
-    }
 
 
-
-    // -- localName
-
-    private String localName;
     /**
      * Will always be populated, initially by the default name, but can be
      * {@link #setLocalName(String) overridden}.
      */
-    @Programmatic
-    public String getLocalName() {
-        return localName;
-    }
-    public void setLocalName(final String localName) {
-        this.localName = localName;
-    }
+    @Getter( onMethod = @__(@Programmatic)) @Setter
+    private String localName;
 
 
-
-    // -- parentPath
-
-    private String parentPath;
 
     /**
      * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
-    @Programmatic
-    public String getParentPath() {
-        return parentPath;
-    }
-    @Programmatic
-    public void setParentPath(final String parentPath) {
-        this.parentPath = parentPath;
-    }
+    @Getter( onMethod = @__(@Programmatic)) @Setter( onMethod = @__(@Programmatic))
+    private String parentPath;
 
 
 
-    // -- discoverability
-
-
-    /**
-     * Whether this fixture script should be automatically discoverable or not.
-     */
-    public enum Discoverability {
-        /**
-         * the fixture script is discoverable and so will be listed by the
-         * {@link FixtureScripts#runFixtureScript(FixtureScript,String) run fixture script} action
-         */
-        DISCOVERABLE,
-        /**
-         * The fixture script is non-discoverable and so will <i>not</i> be listed by the
-         * {@link FixtureScripts#runFixtureScript(FixtureScript,String) run fixture script} action
-         */
-        NON_DISCOVERABLE
-    }
-
-
-    private Discoverability discoverability;
-
-    /**
-     * Whether this fixture script is {@link Discoverability discoverable} (in other words
-     * whether it will be listed to be run in the {@link FixtureScripts#runFixtureScript(FixtureScript, String) run fixture script} action.
-     *
-     * <p>
-     * By default {@link DiscoverableFixtureScript}s are {@link Discoverability#DISCOVERABLE discoverable}, all other
-     * {@link FixtureScript}s are {@link Discoverability#NON_DISCOVERABLE not}.  This can be overridden in the
-     * constructor, however or by calling the {@link #withDiscoverability(org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.Discoverability) setter}.
-     */
-    @Programmatic
-    public boolean isDiscoverable() {
-        return discoverability == Discoverability.DISCOVERABLE;
-    }
-
-    @Programmatic
-    public FixtureScript withDiscoverability(final Discoverability discoverability) {
-        this.discoverability = discoverability;
-        return this;
-    }
 
 
 
@@ -633,7 +482,6 @@ extends AbstractViewModel {
                 final T childFixtureScript) {
 
             childFixtureScript.setParentPath(callingFixtureScript.pathWith(""));
-            childFixtureScript.withTracing(callingFixtureScript.tracePrintStream); // cascade down
 
             if(localNameOverride != null) {
                 childFixtureScript.setLocalName(localNameOverride);
@@ -668,13 +516,11 @@ extends AbstractViewModel {
                 // the prereqs might now result in a match, so we check again.
                 previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
                 if (previouslyExecutedScript == null) {
-                    trace(childFixtureScript, As.EXEC);
                     childFixtureScript.execute(this);
                     this.previouslyExecuted.add(childFixtureScript);
                     fixtureScriptByClass.put(childFixtureScript.getClass(), childFixtureScript);
                     return childFixtureScript;
                 } else {
-                    trace(childFixtureScript, As.SKIP);
                     return _Casts.uncheckedCast(previouslyExecutedScript);
                 }
 
@@ -682,7 +528,6 @@ extends AbstractViewModel {
                 return executeChildIfNotAlreadyWithValueSemantics(childFixtureScript);
 
             case EXECUTE:
-                trace(childFixtureScript, As.EXEC);
                 childFixtureScript.execute(this);
                 this.previouslyExecuted.add(childFixtureScript);
                 return childFixtureScript;
@@ -716,13 +561,11 @@ extends AbstractViewModel {
             // the prereqs might now result in a match, so we check again.
             previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
             if (previouslyExecutedScript == null) {
-                trace(childFixtureScript, As.EXEC);
                 childFixtureScript.execute(this);
                 this.previouslyExecuted.add(childFixtureScript);
                 fixtureScriptByValue.put(childFixtureScript, childFixtureScript);
                 return childFixtureScript;
             } else {
-                trace(childFixtureScript, As.SKIP);
                 return _Casts.uncheckedCast(previouslyExecutedScript);
             }
         }
@@ -766,56 +609,13 @@ extends AbstractViewModel {
 
 
 
-        // -- tracing
-
-        private int traceHighwatermark = 40;
-        private PrintStream tracePrintStream;
-
-        @Programmatic
-        public ExecutionContext withTracing(final PrintStream tracePrintStream) {
-            this.tracePrintStream = tracePrintStream;
-            return this;
-        }
-
-        private void trace(final FixtureScript fixtureScript, final As as) {
-            if(tracePrintStream == null) {
-                return;
-            }
-            final String qualifiedName = fixtureScript.getQualifiedName();
-            final String trace = String.format("%1s: %2s %3s\n", pad(qualifiedName), as, fixtureScript.getClass().getName());
-            tracePrintStream.print(trace);
-            tracePrintStream.flush();
-        }
-
-        void trace(final FixtureResult fixtureResult) {
-            if(tracePrintStream == null) {
-                return;
-            }
-            final String key = fixtureResult.getKey();
-            final String trace = String.format("%1s: %2s\n", pad(key), fixtureScripts.titleOf(fixtureResult));
-            tracePrintStream.print(trace);
-            tracePrintStream.flush();
-        }
-
-        private String pad(final String key) {
-            traceHighwatermark = Math.max(key.length(), traceHighwatermark);
-            return _Strings.padEnd(key, roundup(traceHighwatermark, 20), ' ');
-        }
-
         static int roundup(final int n, final int roundTo) {
             return ((n / roundTo) + 1) * roundTo;
         }
 
 
+        @Getter @Setter
         private Map<Class<?>, Object> userData = _Maps.newHashMap();
-        @Programmatic
-        public void setUserData(final Object object) {
-            userData.put(object.getClass(), object);
-        }
-        @Programmatic
-        public <T> T getUserData(final Class<T> cls) {
-            return _Casts.uncheckedCast(userData.get(cls));
-        }
         @Programmatic
         public <T> T clearUserData(final Class<T> cls) {
             return _Casts.uncheckedCast(userData.remove(cls));
@@ -915,7 +715,7 @@ extends AbstractViewModel {
      * </p>
      */
     final List<FixtureResult> run(final String parameters) {
-        executionContext = fixtureScripts.newExecutionContext(parameters).withTracing(this.tracePrintStream);
+        executionContext = fixtureScripts.newExecutionContext(parameters);
         executionContext.executeChildIfNotAlready(this);
         return executionContext.getResults();
     }
@@ -1017,9 +817,6 @@ extends AbstractViewModel {
         return wrapMixin(mixinClass, mixedIn);
     }
 
-    /**
-     * Convenience method, simply delegates to {@link IsisContext#createTransactionTemplate}.
-     */
     protected TransactionTemplate transactionTemplate() {
         return new TransactionTemplate(txMan);
     }

@@ -18,11 +18,14 @@
  */
 package org.apache.isis.extensions.fixtures.fixturescripts;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -35,7 +38,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -52,7 +54,6 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
@@ -172,6 +173,7 @@ public class FixtureScripts extends AbstractService {
     // -- constructors
 
     // -- constructor, init
+
     /**
      * The package prefix to search for fixture scripts.  This default value will result in
      * no fixture scripts being found.  However, normally it will be overridden.
@@ -179,20 +181,34 @@ public class FixtureScripts extends AbstractService {
     public static final String PACKAGE_PREFIX = FixtureScripts.class.getPackage().getName();
 
 
-    public FixtureScripts(Optional<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider) {
+    @Getter
+    private final FixtureScriptsSpecification specification;
+
+    @Getter
+    private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
+
+    public FixtureScripts(
+            @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+            final Optional<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider,
+            final ServiceRegistry serviceRegistry) {
+
         this.specification = fixtureScriptsSpecificationProvider.orElse(() -> FixtureScriptsSpecification.builder(PACKAGE_PREFIX).build()).getSpecification();
+        this.serviceRegistry = serviceRegistry;
+
+        val packagePrefix = specification.getPackagePrefix();
+        fixtureScriptByFriendlyName =
+                serviceRegistry.select(FixtureScript.class).stream()
+                .filter(Objects::nonNull)
+                .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
+                .collect(Collectors.toMap(FixtureScript::getFriendlyName, Function.identity(),
+                        (v1,v2) ->{ throw new RuntimeException(String.format("Duplicate key for values %s and %s", v1, v2));},
+                        TreeMap::new));
     }
 
 
 
     // -- packagePrefix, nonPersistedObjectsStrategy, multipleExecutionStrategy
 
-    @Getter
-    private FixtureScriptsSpecification specification;
-
-    private String getPackagePrefix() {
-        return specification.getPackagePrefix();
-    }
     public NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() {
         return specification.getNonPersistedObjectsStrategy();
     }
@@ -206,38 +222,6 @@ public class FixtureScripts extends AbstractService {
         return specification.getMultipleExecutionStrategy();
     }
 
-    // -- init
-
-//    @Inject List<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider;
-//
-//    @PostConstruct
-//    public void init() {
-//        fixtureScriptsSpecificationProvider.stream().findFirst().ifPresent(
-//                provider -> this.specification = provider.getSpecification()
-//        );
-//    }
-
-
-    // -- fixtureScriptList (lazily built)
-
-    private List<FixtureScript> fixtureScriptList;
-    private List<FixtureScript> getFixtureScriptList() {
-        if(fixtureScriptList == null) {
-            fixtureScriptList = findAndInstantiateFixtureScripts();
-        }
-        return fixtureScriptList;
-    }
-    private List<FixtureScript> findAndInstantiateFixtureScripts() {
-        val packagePrefix = getPackagePrefix();
-        return serviceRegistry.select(FixtureScript.class).stream()
-                .filter(Objects::nonNull)
-                .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
-                .sorted(Comparator
-                        .comparing(FixtureScript::getFriendlyName)
-                        .thenComparing(FixtureScript::getQualifiedName)
-                        )
-                .collect(Collectors.toList());
-    }
 
 
 
@@ -252,7 +236,10 @@ public class FixtureScripts extends AbstractService {
     )
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(
-            final FixtureScript fixtureScript,
+            @ParameterLayout(
+                    named = "Fixture script"
+            )
+            final String fixtureScriptName,
             @ParameterLayout(
                     named = "Parameters",
                     describedAs =
@@ -266,48 +253,40 @@ public class FixtureScripts extends AbstractService {
             // if this method is called programmatically, the caller may have simply new'd up the fixture script
             // (rather than use container.newTransientInstance(...).  To allow this use case, we need to ensure that
             // domain services are injected into the fixture script.
-            serviceInjector.injectServicesInto(fixtureScript);
+            serviceInjector.injectServicesInto(fixtureScriptName);
 
-            return fixtureScript.run(parameters);
+            return fixtureScriptByFriendlyName.get(fixtureScriptName).run(parameters);
         } finally {
             eventBusService.post(new FixturesInstalledEvent(this));
         }
     }
 
 
-    /**
-     * Hide the actions of this service if no configuring {@link FixtureScriptsSpecificationProvider} was provided or is available.
-     */
-    public boolean hideRunFixtureScript() {
-        return hideIfPolicyNot(FixtureScriptsSpecification.DropDownPolicy.CHOICES);
-    }
     public String disableRunFixtureScript() {
-        return getFixtureScriptList().isEmpty()? "No fixture scripts found under package '" + getPackagePrefix() + "'": null;
+        return getFixtureScriptByFriendlyName().isEmpty()? "No fixture scripts found under package '" + specification
+                .getPackagePrefix() + "'": null;
     }
 
 
-    public FixtureScript default0RunFixtureScript() {
+    public String default0RunFixtureScript() {
         Class<? extends FixtureScript> defaultScript = getSpecification().getRunScriptDefaultScriptClass();
         if(defaultScript == null) {
             return null;
         }
-        return findFixtureScriptFor(defaultScript);
+        return findFixtureScriptNameFor(defaultScript);
     }
 
-    public List<FixtureScript> choices0RunFixtureScript() {
-        return getFixtureScriptList();
+    public Set<String> choices0RunFixtureScript() {
+        return fixtureScriptByFriendlyName.keySet();
     }
 
-    protected List<FixtureScript> autoComplete0RunFixtureScript(final @MinLength(1) String arg) {
-
-        final Predicate<String> contains = str -> str != null && str.contains(arg);
-
-        return _NullSafe.stream(getFixtureScriptList())
-                .filter(script-> contains.test(script.getFriendlyName()) || contains.test(script.getLocalName()))
-                .collect(Collectors.toList());
+    public String validateRunFixtureScript(final String fixtureScriptName, final String parameters) {
+        return fixtureScriptByFriendlyName.get(fixtureScriptName).validateRun(parameters);
     }
-    public String validateRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {
-        return fixtureScript.validateRun(parameters);
+
+    protected List<FixtureResult> runScript(final String fixtureScriptName, final String parameters) {
+        final FixtureScript fixtureScript = fixtureScriptByFriendlyName.get(fixtureScriptName);
+        return runScript(fixtureScript, parameters);
     }
 
     protected List<FixtureResult> runScript(final FixtureScript fixtureScript, final String parameters) {
@@ -316,46 +295,6 @@ public class FixtureScripts extends AbstractService {
 
 
 
-
-    // -- runFixtureScript (using autoComplete as drop-down policy)
-    @Action(
-            restrictTo = RestrictTo.PROTOTYPING
-    )
-    @ActionLayout(
-            named = "Run Fixture Script"
-    )
-    @MemberOrder(sequence="10")
-    public List<FixtureResult> runFixtureScriptWithAutoComplete(
-            final FixtureScript fixtureScript,
-            @ParameterLayout(
-                    named = "Parameters",
-                    describedAs =
-                            "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
-                    multiLine = 10)
-            @Parameter(optionality = Optionality.OPTIONAL)
-            final String parameters) {
-        return this.runFixtureScript(fixtureScript, parameters);
-    }
-
-    public boolean hideRunFixtureScriptWithAutoComplete() {
-        return hideIfPolicyNot(FixtureScriptsSpecification.DropDownPolicy.AUTO_COMPLETE);
-    }
-
-    public String disableRunFixtureScriptWithAutoComplete() {
-        return disableRunFixtureScript();
-    }
-
-    public FixtureScript default0RunFixtureScriptWithAutoComplete() {
-        return default0RunFixtureScript();
-    }
-
-    public List<FixtureScript> autoComplete0RunFixtureScriptWithAutoComplete(final @MinLength(1) String arg) {
-        return autoComplete0RunFixtureScript(arg);
-    }
-
-    public String validateRunFixtureScriptWithAutoComplete(final FixtureScript fixtureScript, final String parameters) {
-        return validateRunFixtureScript(fixtureScript, parameters);
-    }
 
 
     // -- recreateObjectsAndReturnFirst
@@ -369,7 +308,7 @@ public class FixtureScripts extends AbstractService {
     @MemberOrder(sequence="20")
     public Object recreateObjectsAndReturnFirst() {
         val recreateScriptClass =  getSpecification().getRecreateScriptClass();
-        val recreateScript = findFixtureScriptFor(recreateScriptClass);
+        val recreateScript = findFixtureScriptNameFor(recreateScriptClass);
         if(recreateScript == null) {
             return null;
         }
@@ -387,12 +326,6 @@ public class FixtureScripts extends AbstractService {
 
 
 
-    // -- HELPER
-
-    private boolean hideIfPolicyNot(final FixtureScriptsSpecification.DropDownPolicy requiredPolicy) {
-        return getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
-    }
-
     // -- programmatic API
 
     @Programmatic
@@ -402,7 +335,7 @@ public class FixtureScripts extends AbstractService {
     	String parameters = null;
     	
     	transactionService.executeWithinTransaction(()->{
-    		runFixtureScript(singleScript, parameters);	
+    		runScript(singleScript, parameters);
     	});
     }
 
@@ -455,11 +388,11 @@ public class FixtureScripts extends AbstractService {
     }
 
     @Programmatic
-    public FixtureScript findFixtureScriptFor(final Class<? extends FixtureScript> fixtureScriptClass) {
-        val fixtureScripts = getFixtureScriptList();
-        for (final FixtureScript fs : fixtureScripts) {
-            if(fixtureScriptClass.isAssignableFrom(fs.getClass())) {
-                return fs;
+    public String findFixtureScriptNameFor(final Class<? extends FixtureScript> fixtureScriptClass) {
+        val fixtureScripts = getFixtureScriptByFriendlyName().entrySet();
+        for (final Map.Entry<String,FixtureScript> fs : fixtureScripts) {
+            if(fixtureScriptClass.isAssignableFrom(fs.getValue().getClass())) {
+                return fs.getKey();
             }
         }
         return null;

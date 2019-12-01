@@ -91,7 +91,6 @@ public class FixtureResultList {
         if(fixtureResult != null) {
             list.add(fixtureResult);
             fixtureResultByKey.put(fixtureResult.getKey(), fixtureResult);
-            executionContext.trace(fixtureResult);
             if(firstTime) {
                 fixtureScriptList.add(fixtureScript);
             }

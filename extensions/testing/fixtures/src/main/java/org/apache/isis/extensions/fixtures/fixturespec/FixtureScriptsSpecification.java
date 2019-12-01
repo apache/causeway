@@ -30,29 +30,12 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 public class FixtureScriptsSpecification {
 
     /**
-     * In Whether to show available {@link FixtureScript}s using a choices or an autocomplete.
-     */
-    public enum DropDownPolicy {
-        AUTO_COMPLETE,
-        CHOICES;
-
-        public boolean isAutoComplete() {
-            return this == AUTO_COMPLETE;
-        }
-
-        public boolean isChoices() {
-            return this == CHOICES;
-        }
-    }
-
-    /**
      * Typically preferable to use the create using the {@link FixtureScriptsSpecification.Builder}
      * (obtained from {@link #builder(Class)}).
-     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany".    Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
-     * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link FixtureResultList}.
+     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany".
+     * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are added to a {@link FixtureResultList}.
      * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times
-     * @param runScriptDefaultScriptClass - the fixture script to provide as a default in {@link FixtureScripts#runFixtureScript(FixtureScript, String)} action.
-     * @param runScriptDropDownPolicy - whether the {@link FixtureScripts#runFixtureScript(FixtureScript, String)} should use a choices or an autoComplete.
+     * @param runScriptDefaultScriptClass - the fixture script to provide as a default in {@link FixtureScripts#runFixtureScript(String, String)} action.
      * @param recreateScriptClass - if specified, then make the {@link FixtureScripts#recreateObjectsAndReturnFirst()} action visible.
      */
     public FixtureScriptsSpecification(
@@ -60,14 +43,12 @@ public class FixtureScriptsSpecification {
             final FixtureScripts.NonPersistedObjectsStrategy nonPersistedObjectsStrategy,
             final FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy,
             final Class<? extends FixtureScript> runScriptDefaultScriptClass,
-            final DropDownPolicy runScriptDropDownPolicy,
             final Class<? extends FixtureScript> recreateScriptClass) {
         this.packagePrefix = packagePrefix;
         this.nonPersistedObjectsStrategy = nonPersistedObjectsStrategy;
         this.multipleExecutionStrategy = multipleExecutionStrategy;
         this.recreateScriptClass = recreateScriptClass;
         this.runScriptDefaultScriptClass = runScriptDefaultScriptClass;
-        this.dropDownPolicy = runScriptDropDownPolicy;
     }
 
     private final String packagePrefix;
@@ -76,11 +57,7 @@ public class FixtureScriptsSpecification {
 
     private final Class<? extends FixtureScript> recreateScriptClass;
     private final Class<? extends FixtureScript> runScriptDefaultScriptClass;
-    private final DropDownPolicy dropDownPolicy;
 
-    /**
-     * Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
-     */
     @Programmatic
     public String getPackagePrefix() {
         return packagePrefix;
@@ -106,11 +83,6 @@ public class FixtureScriptsSpecification {
     }
 
     @Programmatic
-    public DropDownPolicy getRunScriptDropDownPolicy() {
-        return dropDownPolicy;
-    }
-
-    @Programmatic
     public Class<? extends FixtureScript> getRecreateScriptClass() {
         return recreateScriptClass;
     }
@@ -121,7 +93,6 @@ public class FixtureScriptsSpecification {
         private FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy = FixtureScripts.MultipleExecutionStrategy.EXECUTE_ONCE_BY_CLASS;
         private Class<? extends FixtureScript> recreateScriptClass = null;
         private Class<? extends FixtureScript> defaultScriptClass = null;
-        private DropDownPolicy dropDownPolicy = DropDownPolicy.CHOICES;
 
         public Builder(final Class<?> contextClass) {
             this(contextClass.getPackage().getName());
@@ -151,16 +122,12 @@ public class FixtureScriptsSpecification {
             this.defaultScriptClass = defaultScriptClass;
             return this;
         }
-        public Builder withRunScriptDropDown(DropDownPolicy dropDownPolicy) {
-            this.dropDownPolicy = dropDownPolicy;
-            return this;
-        }
 
         public FixtureScriptsSpecification build() {
             return new FixtureScriptsSpecification(
                     packagePrefix,
                     nonPersistedObjectsStrategy, multipleExecutionStrategy,
-                    defaultScriptClass, dropDownPolicy, recreateScriptClass
+                    defaultScriptClass, recreateScriptClass
                     );
         }
     }

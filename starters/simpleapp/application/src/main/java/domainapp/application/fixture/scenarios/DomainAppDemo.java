@@ -20,17 +20,11 @@ package domainapp.application.fixture.scenarios;
 
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.legacy.teardown.TeardownFixtureAbstract2;
-import org.springframework.stereotype.Component;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.fixture.SimpleObject_persona;
 
-@Component
 public class DomainAppDemo extends FixtureScript {
-
-    public DomainAppDemo() {
-        withDiscoverability(Discoverability.DISCOVERABLE);
-    }
 
     @Override
     protected void execute(final ExecutionContext ec) {

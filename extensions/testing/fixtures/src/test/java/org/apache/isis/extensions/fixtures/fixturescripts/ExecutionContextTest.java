@@ -125,18 +125,5 @@ public class ExecutionContextTest {
 
     }
 
-    public static class RoundUp extends ExecutionContextTest {
-
-        @Test
-        public void happyCase() throws Exception {
-            Assert.assertThat(FixtureScript.ExecutionContext.roundup(5, 20), Matchers.is(20));
-            Assert.assertThat(FixtureScript.ExecutionContext.roundup(19, 20), Matchers.is(20));
-            Assert.assertThat(FixtureScript.ExecutionContext.roundup(20, 20), Matchers.is(40));
-            Assert.assertThat(FixtureScript.ExecutionContext.roundup(21, 20), Matchers.is(40));
-            Assert.assertThat(FixtureScript.ExecutionContext.roundup(39, 20), Matchers.is(40));
-            Assert.assertThat(FixtureScript.ExecutionContext.roundup(40, 20), Matchers.is(60));
-        }
-
-    }
 
 }
