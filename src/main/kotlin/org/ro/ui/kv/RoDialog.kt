@@ -74,7 +74,6 @@ class RoDialog(
         buttonBar.add(okButton)
         buttonBar.add(cancelButton)
         add(buttonBar)
-        okButton.focus()
     }
 
     private fun execute() {
@@ -84,7 +83,9 @@ class RoDialog(
 
     fun show(at: Point): Widget {
         UiManager.openDialog(this, at)
-        return super.show()
+        super.show()
+        okButton.focus()
+        return this
     }
 
     override fun close() {
