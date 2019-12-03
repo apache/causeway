@@ -53,18 +53,6 @@ public class TaggerTest {
         }
 
         @Test
-        public void isisAddons() throws Exception {
-            String tag = new TaggerDefault().tagForObjectType("org.isisaddons.module.security.app.feature.ApplicationClass", null);
-            assertThat(tag, is(equalTo("isisaddons.org security")));
-        }
-
-        @Test
-        public void incodeCatalog() throws Exception {
-            String tag = new TaggerDefault().tagForObjectType("org.incode.module.communications.foo.bar.FooBar", null);
-            assertThat(tag, is(equalTo("catalog.incode.org communications")));
-        }
-
-        @Test
         public void internals() throws Exception {
             String tag = new TaggerDefault().tagForObjectType("org.apache.isis.applib.fixturescripts.FixtureResult", null);
             assertThat(tag, is(equalTo("> apache isis internals")));
