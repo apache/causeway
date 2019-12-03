@@ -18,7 +18,9 @@
  */
 package org.apache.isis.metamodel.specloader;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -272,6 +274,18 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         loadSpecification(domainType, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
 
+    @Override
+    public boolean loadSpecifications(Class<?>... domainTypes) {
+        // ensure that all types are loadable
+        if (Arrays.stream(domainTypes)
+                .map(domainType -> classSubstitutor.getClass(domainType))
+                .anyMatch(Objects::isNull)) {
+            return false;
+        }
+        Arrays.stream(domainTypes).forEach(this::loadSpecification);
+        return true;
+    }
+
     @Override @Nullable
     public ObjectSpecification loadSpecification(@Nullable final Class<?> type, final IntrospectionState upTo) {
 
@@ -332,6 +346,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     public Class<?> lookupType(ObjectSpecId objectSpecId) {
         return cache.resolveType(objectSpecId);
     }
+
 
     // -- HELPER
     

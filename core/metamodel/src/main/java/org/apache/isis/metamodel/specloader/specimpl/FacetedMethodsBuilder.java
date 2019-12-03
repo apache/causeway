@@ -45,7 +45,6 @@ import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -187,12 +186,6 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
 
-    public void introspectObjectSpecId() {
-        if (log.isDebugEnabled()) {
-            log.debug("introspecting {}: objectSpecId", getClassName());
-        }
-        getFacetProcessor().processObjectSpecId(introspectedClass, inspectedTypeSpec);
-    }
     public void introspectClass() {
         if (log.isDebugEnabled()) {
             log.debug("introspecting {}: class-level details", getClassName());
@@ -514,19 +507,7 @@ public class FacetedMethodsBuilder {
     }
 
     private boolean loadParamSpecs(final Method actionMethod) {
-        final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
-        return loadParamSpecs(parameterTypes);
-    }
-
-    private boolean loadParamSpecs(final Class<?>[] parameterTypes) {
-        final int numParameters = parameterTypes.length;
-        for (int j = 0; j < numParameters; j++) {
-            final ObjectSpecification paramSpec = getSpecificationLoader().loadSpecification(parameterTypes[j]);
-            if (paramSpec == null) {
-                return false;
-            }
-        }
-        return true;
+        return getSpecificationLoader().loadSpecifications(actionMethod.getParameterTypes());
     }
 
 

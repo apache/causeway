@@ -94,14 +94,20 @@ public interface SpecificationLoader {
      *
      * <p>
      * It is possible for this method to return <tt>null</tt>, for example if
-     * the configured {@link ClassSubstitutor}
-     * has filtered out the class.
+     * the configured {@link ClassSubstitutor} has filtered out the class.
      * 
-     * @return {@code null} if {@code domainType==null}
+     * @return {@code null} if {@code domainType==null}, or if the type should be ignored.
      */
     ObjectSpecification loadSpecification(@Nullable Class<?> domainType, IntrospectionState upTo);
-    
+
+    /**
+     * @param domainTypes
+     * @return true if a specification could be loaded for all types, false otherwise
+     */
+    boolean loadSpecifications(final Class<?>... domainTypes);
+
     Class<?> lookupType(ObjectSpecId objectSpecId);
+
 
     // -- SHORTCUTS
 
