@@ -185,7 +185,6 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>other/incubator</module>
 		<module>other/legacy</module>
 		<module>other/spring</module>
 		<module>security/secman</module>

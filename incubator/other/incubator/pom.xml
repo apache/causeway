@@ -15,14 +15,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>isis-extensions</artifactId>
+		<groupId>org.apache.isis.incubator</groupId>
+		<artifactId>isis-incubator</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-incubator</artifactId>
-	<name>Apache Isis Ext - Incubator</name>
+	<artifactId>isis-incubator-incubator</artifactId>
+	<name>Apache Isis Inc - Incubator</name>
 	<description>
 		Provides experimental features.
 	</description>
