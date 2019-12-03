@@ -290,6 +290,7 @@ public class FixtureScripts extends AbstractService {
     }
 
     protected List<FixtureResult> runScript(final FixtureScript fixtureScript, final String parameters) {
+        serviceInjector.injectServicesInto(fixtureScript);
         return fixtureScript.run(parameters);
     }
 
