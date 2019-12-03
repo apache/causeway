@@ -28,6 +28,7 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
         ignoreCglib();
         ignoreJavassist();
+        ignoreApacheIsisInternals();
         ignoreSpringFramework();
         ignoreJacksonAndGson();
         skipDataNucleusProxy();
@@ -47,6 +48,12 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
     protected void ignoreSpringFramework() {
         ignoreClass("org.springframework.aop.framework.autoproxy.InfrastructureAdvisorAutoProxyCreator");
+        ignorePackage("org.springframework.");
+    }
+
+    private void ignoreApacheIsisInternals() {
+        // can't ignoring this class ... will result in NPEs...
+        // ignoreClass("org.apache.isis.commons.internal.ioc.spring.BeanAdapterSpring");
     }
 
     protected void ignoreJacksonAndGson() {
