@@ -42,30 +42,38 @@ public final class Util {
     private Util(){}
 
     static boolean isVisibleForPublic(final ObjectAction objectAction) {
+
         final ObjectSpecification specification = objectAction.getReturnType();
-        boolean visible = isVisibleForPublic(specification);
-        if(!visible) {
-            final TypeOfFacet typeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-            if(typeOfFacet != null) {
-                ObjectSpecification elementSpec = typeOfFacet.valueSpec();
-                if(!isVisibleForPublic(elementSpec)) {
-                    return false;
-                }
-            }
+        return ( isVisibleForPublic(specification) || isTypeOfVisibleForPublic(objectAction) )
+                && isVisibleForPublic(objectAction.getParameterTypes());
+    }
+
+    private static boolean isTypeOfVisibleForPublic(ObjectAction objectAction) {
+        final TypeOfFacet typeOfFacet = objectAction.getFacet(TypeOfFacet.class);
+        if (typeOfFacet == null) {
+            return false;
         }
-        List<ObjectSpecification> parameterTypes = objectAction.getParameterTypes();
-        for (ObjectSpecification parameterType : parameterTypes) {
-            boolean paramVisible = isVisibleForPublic(parameterType);
-            if(!paramVisible) {
-                return false;
-            }
-        }
-        return true;
+        return isVisibleForPublic(typeOfFacet.valueSpec());
+    }
+
+    private static boolean isVisibleForPublic(List<ObjectSpecification> parameterTypes) {
+
+        final boolean atLeastOneParamNotVisible =
+                parameterTypes.stream()
+                    .map(Util::isNotVisibleForPublic)
+                    .findAny()
+                    .isPresent();
+
+        return !atLeastOneParamNotVisible;
     }
 
     static boolean isVisibleForPublic(final ObjectAssociation objectAssociation) {
         final ObjectSpecification specification = objectAssociation.getSpecification();
         return isVisibleForPublic(specification);
+    }
+
+    static boolean isNotVisibleForPublic(final ObjectSpecification specification) {
+        return ! isVisibleForPublic(specification);
     }
 
     static boolean isVisibleForPublic(final ObjectSpecification specification) {
