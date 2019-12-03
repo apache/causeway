@@ -14,6 +14,9 @@ content:
       start_path: antora/components/extensions # extensions
       branches: HEAD
     - url: .
+      start_path: antora/components/incubator # incubator
+      branches: HEAD
+    - url: .
       start_path: antora/components/refguide # refguide
       branches: HEAD
     - url: .
@@ -107,10 +110,12 @@ content:
       start_path: starters/src/main/doc
       branches: HEAD
 
-# extensions
+# incubator
     - url: .
-      start_path: extensions/other/incubator/src/main/doc # other
+      start_path: incubator/core/model/src/main/doc # other
       branches: HEAD
+
+# extensions
     - url: .
       start_path: extensions/other/legacy/src/main/doc # other
       branches: HEAD
