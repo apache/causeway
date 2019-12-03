@@ -17,22 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.specloader.traverser;
+package org.apache.isis.metamodel.commons;
 
-import java.lang.reflect.Method;
-import java.util.function.Consumer;
-
-public class SpecificationTraverser {
-
-    /**
-     * Traverses the return types of each method.
-     *
-     * <p>
-     * It's possible for there to be multiple return types: the generic type,
-     * and the parameterized type.
-     */
-    public void traverseTypes(final Method method, final Consumer<Class<?>> onTypeDiscovered) {
-        new TypeExtractorMethodReturn(method).forEach(onTypeDiscovered);
-    }
-
+public enum CanBeVoid {
+    TRUE,
+    FALSE
 }

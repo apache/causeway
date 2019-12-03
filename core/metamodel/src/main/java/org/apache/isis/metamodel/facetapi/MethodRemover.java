@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facetapi;
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
 
+import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 /**
@@ -33,27 +34,27 @@ public interface MethodRemover {
      * Locate all methods (that the implementation should somehow know about)
      * that match the criteria and remove them from the implementation's list so
      * that they are not considered for subsequent scans.
-     *
      * @param methodScope
      *            - whether looking for <tt>static</tt> (class) or
      *            instance-level methods.
+     * @param canBeVoid
      * @param onRemoval receives any methods that were removed
      */
     void removeMethods(
-            MethodScope methodScope, 
-            String prefix, 
-            Class<?> returnType, 
-            boolean canBeVoid, 
+            MethodScope methodScope,
+            String prefix,
+            Class<?> returnType,
+            CanBeVoid canBeVoid,
             int paramCount,
             Consumer<Method> onRemoval
-            );
+    );
 
     /*variant with noop consumer*/
     default void removeMethods(
-            MethodScope methodScope, 
-            String prefix, 
-            Class<?> returnType, 
-            boolean canBeVoid, 
+            MethodScope methodScope,
+            String prefix,
+            Class<?> returnType,
+            CanBeVoid canBeVoid,
             int paramCount) {
         
         removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount, removedMethod -> {});

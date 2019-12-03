@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.properties.accessor;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -98,7 +99,7 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
     }
 
     private static void appendMatchingMethods(final MethodRemover methodRemover, final String prefix, final Class<?> returnType, final List<Method> methodListToAppendTo) {
-        methodRemover.removeMethods(MethodScope.OBJECT, prefix, returnType, false, 0, methodListToAppendTo::add);
+        methodRemover.removeMethods(MethodScope.OBJECT, prefix, returnType, CanBeVoid.FALSE, 0, methodListToAppendTo::add);
     }
 
     @Override

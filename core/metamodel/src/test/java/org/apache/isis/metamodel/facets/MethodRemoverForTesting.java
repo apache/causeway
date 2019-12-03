@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
@@ -77,14 +78,14 @@ public class MethodRemoverForTesting implements MethodRemover {
         public MethodScope methodScope;
         public String prefix;
         public Class<?> returnType;
-        public boolean canBeVoid;
+        public CanBeVoid canBeVoid;
         public int paramCount;
     }
 
-    private final List<RemoveMethodsArgs> removeMethodsArgs = new ArrayList<RemoveMethodsArgs>();
+    private final List<RemoveMethodsArgs> removeMethodsArgs = new ArrayList<>();
 
     @Override
-    public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
+    public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
         removeMethodsArgs.add(new RemoveMethodsArgs(methodScope, prefix, returnType, canBeVoid, paramCount));
     }
 

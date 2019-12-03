@@ -155,11 +155,13 @@ public final class ClassExtensions {
         return ClassUtil.defaultByPrimitiveType.get(type);
     }
 
-    public static boolean isCompatibleAsReturnType(final Class<?> returnTypeExtendee, final boolean canBeVoid, final Class<?> type) {
+    public static boolean isCompatibleAsReturnType(final Class<?> returnTypeExtendee, final CanBeVoid canBeVoid, final Class<?> type) {
+        boolean mayBeVoid = canBeVoid == CanBeVoid.TRUE;
+
         if (returnTypeExtendee == null) {
             return true;
         }
-        if (canBeVoid && (type == void.class)) {
+        if (mayBeVoid && (type == void.class)) {
             return true;
         }
 

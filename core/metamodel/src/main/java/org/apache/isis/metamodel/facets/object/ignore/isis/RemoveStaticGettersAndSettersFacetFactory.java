@@ -19,6 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.ignore.isis;
 
+import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.methodutils.MethodScope;
@@ -35,8 +36,8 @@ public class RemoveStaticGettersAndSettersFacetFactory extends FacetFactoryAbstr
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        processClassContext.removeMethods(MethodScope.CLASS, "get", null, false, 0);
-        processClassContext.removeMethods(MethodScope.CLASS, "set", null, false, 0);
+        processClassContext.removeMethods(MethodScope.CLASS, "get", null, CanBeVoid.FALSE, 0);
+        processClassContext.removeMethods(MethodScope.CLASS, "set", null, CanBeVoid.FALSE, 0);
     }
 
 }

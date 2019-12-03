@@ -153,13 +153,14 @@ public class MethodUtil {
      * </ul>
      * If the returnType is specified as null then the return type is ignored.
      *
-     * @param forClass
      * @param name
-     * @param returnType
-     * @param onRemoval 
+     * @param onRemoval
      * @param paramTypes
      *            the set of parameters the method should have, if null then is
      *            ignored
+     * @param forClass
+     * @param returnType
+     * @param canBeVoid
      * @return Method
      */
     public static void removeMethods(
@@ -167,24 +168,24 @@ public class MethodUtil {
             MethodScope forClass,
             String prefix,
             Class<?> returnType,
-            boolean canBeVoid,
-            int paramCount, 
+            CanBeVoid canBeVoid,
+            int paramCount,
             Consumer<Method> onMatch) {
 
         methods.removeIf(method -> 
             matches(method, forClass, prefix, returnType, canBeVoid, paramCount, onMatch));
         
     }
-    
+
     private static boolean matches(
             Method method,
             MethodScope forClass,
             String prefix,
             Class<?> returnType,
-            boolean canBeVoid,
+            CanBeVoid canBeVoid,
             int paramCount,
             Consumer<Method> onMatch) {
-        
+
         if (!inScope(method, forClass)) {
             return false;
         }

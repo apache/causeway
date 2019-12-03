@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -113,7 +114,7 @@ public interface FacetFactory {
 
 
         @Override
-        public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
+        public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
             methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount, onRemoval);
         }
 
@@ -171,7 +172,7 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
+        public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
             methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount, onRemoval);
         }
 

@@ -20,10 +20,7 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -34,6 +31,7 @@ import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
@@ -51,7 +49,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
-import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverser;
+import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodReturn;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -92,7 +90,7 @@ public class FacetedMethodsBuilder {
                 MethodScope methodScope,
                 String prefix,
                 Class<?> returnType,
-                boolean canBeVoid,
+                CanBeVoid canBeVoid,
                 int paramCount,
                 Consumer<Method> onRemoval) {
             
@@ -137,7 +135,6 @@ public class FacetedMethodsBuilder {
 
     private final FacetProcessor facetProcessor;
 
-    private final SpecificationTraverser specificationTraverser = new SpecificationTraverser();
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private final SpecificationLoader specificationLoader;
@@ -252,7 +249,7 @@ public class FacetedMethodsBuilder {
         // Ensure all return types are known
         val typesToLoad = _Sets.<Class<?>>newHashSet();
         for (val method : associationCandidateMethods) {
-            specificationTraverser.traverseTypes(method, typesToLoad::add);
+            new TypeExtractorMethodReturn(method).forEach(typesToLoad::add);
         }
         typesToLoad.remove(introspectedClass);
 
@@ -464,13 +461,13 @@ public class FacetedMethodsBuilder {
         }
 
         val typesToLoad = _Sets.<Class<?>>newHashSet();
-        specificationTraverser.traverseTypes(actionMethod, typesToLoad::add);
+        new TypeExtractorMethodReturn(actionMethod).forEach(typesToLoad::add);
 
         val specLoader = getSpecificationLoader();
 
         val anyLoadedAsNull = typesToLoad.stream()
                 .map(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
-                .anyMatch(spec->spec==null);
+                .anyMatch(Objects::isNull);
 
         if (anyLoadedAsNull) {
             return false;
@@ -535,8 +532,12 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * As per {@link #findAndRemovePrefixedNonVoidMethods(org.apache.isis.metamodel.methodutils.MethodScope, String, Class, int, java.util.List)},
-     * but appends to provided {@link List} (collecting parameter pattern).
+     *
+     * @param methodScope
+     * @param prefix
+     * @param returnType
+     * @param paramCount
+     * @param onRemoved - collecting parameter
      */
     private void findAndRemovePrefixedNonVoidMethods(
             final MethodScope methodScope,
@@ -545,24 +546,19 @@ public class FacetedMethodsBuilder {
             final int paramCount,
             final Consumer<Method> onRemoved) {
         
-        findAndRemovePrefixedMethods(methodScope, prefix, returnType, false, paramCount, onRemoved);
+        findAndRemovePrefixedMethods(methodScope, prefix, returnType, CanBeVoid.FALSE, paramCount, onRemoved);
     }
 
-    /**
-     * Searches for all methods matching the prefix and returns them, also
-     * removing it from the {@link #methodsRemaining array of methods} if found.
-     * @param onMatch 
-     */
     private void findAndRemovePrefixedMethods(
             final MethodScope methodScope,
             final String prefix,
             final Class<?> returnType,
-            final boolean canBeVoid,
-            final int paramCount, 
+            final CanBeVoid canBeVoid,
+            final int paramCount,
             Consumer<Method> onMatch) {
         
         methodRemover.acceptRemaining(methodsRemaining->{
-            MethodUtil.removeMethods(methodsRemaining, methodScope, prefix, returnType, canBeVoid, paramCount, onMatch);    
+            MethodUtil.removeMethods(methodsRemaining, methodScope, prefix, returnType, canBeVoid, paramCount, onMatch);
         });
         
     }
