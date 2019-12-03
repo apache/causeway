@@ -49,12 +49,6 @@ import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateA
 import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -89,7 +83,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -114,7 +108,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -592,81 +586,5 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     static class Order {
     }
 
-    public static class CustomerStatic {
-        public Collection<Order> getOrders() {
-            return null;
-        }
-
-        public static String nameOrders() {
-            return "Most Recent Orders";
-        };
-
-        public static String descriptionOrders() {
-            return "Some old description";
-        }
-
-        public static boolean alwaysHideOrders() {
-            return true;
-        }
-
-        public static boolean protectOrders() {
-            return true;
-        }
-
-        public static boolean hideOrders(final UserMemento userMemento) {
-            return true;
-        }
-
-        public static String disableOrders(final UserMemento userMemento) {
-            return "disabled for this user";
-        }
-
-        public static void getOtherOrders() {
-        }
-
-        public static boolean alwaysHideOtherOrders() {
-            return false;
-        }
-
-        public static boolean protectOtherOrders() {
-            return false;
-        }
-    }
-
-    public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
-        val facetFactory = new HideForSessionFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-
-        final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
-        final Method hideMethod = findMethod(CustomerStatic.class, "hideOrders", new Class[] { UserMemento.class });
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(HideForSessionFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HideForSessionFacetViaMethod);
-        final HideForSessionFacetViaMethod hideForSessionFacetViaMethod = (HideForSessionFacetViaMethod) facet;
-        assertEquals(hideMethod, hideForSessionFacetViaMethod.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hideMethod));
-    }
-
-    public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
-        val facetFactory = new DisableForSessionFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-
-        final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
-        final Method disableMethod = findMethod(CustomerStatic.class, "disableOrders", new Class[] { UserMemento.class });
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DisableForSessionFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisableForSessionFacetViaMethod);
-        final DisableForSessionFacetViaMethod disableForSessionFacetViaMethod = (DisableForSessionFacetViaMethod) facet;
-        assertEquals(disableMethod, disableForSessionFacetViaMethod.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(disableMethod));
-    }
 
 }

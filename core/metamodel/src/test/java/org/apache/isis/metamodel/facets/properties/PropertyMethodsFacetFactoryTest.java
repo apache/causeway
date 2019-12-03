@@ -19,24 +19,17 @@
 
 package org.apache.isis.metamodel.facets.properties;
 
+import lombok.val;
+
 import java.lang.reflect.Method;
 
-import org.jmock.auto.Mock;
-
-import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.isis.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.isis.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.members.hidden.method.HideForContextFacet;
 import org.apache.isis.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
 import org.apache.isis.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
@@ -70,8 +63,7 @@ import org.apache.isis.metamodel.facets.properties.validating.method.PropertyVal
 import org.apache.isis.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-
-import lombok.val;
+import org.jmock.auto.Mock;
 
 public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -101,7 +93,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -673,93 +665,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().get(0));
     }
 
-    public static class CustomerStatic {
-        public String getFirstName() {
-            return null;
-        }
-
-        // required otherwise marked as DisabledFacetAlways
-        public void setFirstName(final String firstName) {
-        }
-
-        public static String nameFirstName() {
-            return "Given name";
-        };
-
-        public static String descriptionFirstName() {
-            return "Some old description";
-        }
-
-        public static boolean alwaysHideFirstName() {
-            return true;
-        }
-
-        public static boolean protectFirstName() {
-            return true;
-        }
-
-        public static boolean hideFirstName(final UserMemento userMemento) {
-            return true;
-        }
-
-        public static String disableFirstName(final UserMemento userMemento) {
-            return "disabled for this user";
-        }
-
-        public String getLastName() {
-            return null;
-        }
-
-        // required otherwise marked as DisabledFacetAlways
-        public void setLastName(final String firstName) {
-        }
-
-        public static boolean alwaysHideLastName() {
-            return false;
-        }
-
-        public static boolean protectLastName() {
-            return false;
-        }
-    }
 
 
-
-    public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
-        val facetFactory = new HideForSessionFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-
-        final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
-        final Method hideMethod = findMethod(CustomerStatic.class, "hideFirstName", new Class[] { UserMemento.class });
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(HideForSessionFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HideForSessionFacetViaMethod);
-        final HideForSessionFacetViaMethod hideForSessionFacetViaMethod = (HideForSessionFacetViaMethod) facet;
-        assertEquals(hideMethod, hideForSessionFacetViaMethod.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hideMethod));
-
-    }
-
-    public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
-        val facetFactory = new DisableForSessionFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-
-        final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
-        final Method disableMethod = findMethod(CustomerStatic.class, "disableFirstName", new Class[] { UserMemento.class });
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DisableForSessionFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisableForSessionFacetViaMethod);
-        final DisableForSessionFacetViaMethod disableForSessionFacetViaMethod = (DisableForSessionFacetViaMethod) facet;
-        assertEquals(disableMethod, disableForSessionFacetViaMethod.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(disableMethod));
-    }
 
 }

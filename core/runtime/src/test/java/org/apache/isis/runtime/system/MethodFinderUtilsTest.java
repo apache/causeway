@@ -41,48 +41,13 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class MethodFinderUtilsTest {
 
-    private static Method staticMethod;
-    private static Method instanceMethod;
-
-    static {
-        staticMethod = ClassExtensions.getMethodElseNull(MethodFinderUtilsTest.class, "someStaticMethod");
-        instanceMethod = ClassExtensions.getMethodElseNull(MethodFinderUtilsTest.class, "someInstanceMethod");
-    }
-
-    private final MethodScope methodScope;
-    private final Method method;
-    private final boolean result;
-
-    @Before
-    public void setUp() {
-        assertThat(staticMethod, is(not(nullValue())));
-        assertThat(instanceMethod, is(not(nullValue())));
-    }
-
-    @Parameters
-    public static Collection<?> parameters() {
-        return Arrays.asList(new Object[][] { 
-            { MethodScope.OBJECT, staticMethod, false }, 
-            { MethodScope.CLASS, staticMethod, true }, 
-            { MethodScope.OBJECT, instanceMethod, true }, 
-            { MethodScope.CLASS, instanceMethod, false }, });
-    }
-
-    public static void someStaticMethod() {
-    }
-
     public void someInstanceMethod() {
-    }
-
-    public MethodFinderUtilsTest(final MethodScope methodScope, final Method method, final boolean result) {
-        this.methodScope = methodScope;
-        this.method = method;
-        this.result = result;
     }
 
     @Test
     public void all() {
-        assertThat(MethodUtil.inScope(method, methodScope), is(result));
+        Method instanceMethod = ClassExtensions.getMethodElseNull(MethodFinderUtilsTest.class, "someInstanceMethod");
+        assertThat(MethodUtil.inScope(instanceMethod, MethodScope.OBJECT), is(true));
     }
 
 }

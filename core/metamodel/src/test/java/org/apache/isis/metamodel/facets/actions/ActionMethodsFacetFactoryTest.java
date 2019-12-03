@@ -19,15 +19,14 @@
 
 package org.apache.isis.metamodel.facets.actions;
 
+import lombok.val;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jmock.Expectations;
-
-import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -38,12 +37,6 @@ import org.apache.isis.metamodel.facets.actions.defaults.method.ActionDefaultsFa
 import org.apache.isis.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod;
 import org.apache.isis.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
@@ -60,8 +53,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.testspec.ObjectSpecificationStub;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-
-import lombok.val;
+import org.jmock.Expectations;
 
 public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -302,88 +294,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNull(facet);
     }
 
-    public static class CustomerStatic {
-        public void someAction(final int x, final Long y) {
-        }
 
-        public static String nameSomeAction() {
-            return "Another Name";
-        }
-
-        public static String descriptionSomeAction() {
-            return "Some old description";
-        }
-
-        public static boolean alwaysHideSomeAction() {
-            return true;
-        }
-
-        public static boolean protectSomeAction() {
-            return true;
-        }
-
-        public static boolean hideSomeAction(final UserMemento userMemento) {
-            return true;
-        }
-
-        public static String disableSomeAction(final UserMemento userMemento) {
-            return "disabled for this user";
-        }
-
-        public static void otherAction(final int x, final Long y) {
-        }
-
-        public static boolean alwaysHideOtherAction() {
-            return false;
-        }
-
-        public static boolean protectOtherAction() {
-            return false;
-        }
-    }
-
-
-    public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
-
-        val facetFactory = new HideForSessionFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
-        final Method hideMethod = findMethod(CustomerStatic.class, "hideSomeAction", new Class[] { UserMemento.class });
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(HideForSessionFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HideForSessionFacetViaMethod);
-        final HideForSessionFacetViaMethod hideForSessionFacetViaMethod = (HideForSessionFacetViaMethod) facet;
-        assertEquals(hideMethod, hideForSessionFacetViaMethod.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hideMethod));
-    }
-
-    public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
-        val facetFactory = new DisableForSessionFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
-        final Method disableMethod = findMethod(CustomerStatic.class, "disableSomeAction", new Class[] { UserMemento.class });
-
-        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DisableForSessionFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisableForSessionFacetViaMethod);
-        final DisableForSessionFacetViaMethod disableForSessionFacetViaMethod = (DisableForSessionFacetViaMethod) facet;
-        assertEquals(disableMethod, disableForSessionFacetViaMethod.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(disableMethod));
-    }
 
     public void testInstallsParameterDefaultsMethodAndRemovesMethod() {
         val facetFactory = new ActionParameterDefaultsFacetViaMethodFactory();

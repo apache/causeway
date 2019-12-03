@@ -41,19 +41,12 @@ import org.apache.isis.metamodel.facets.jaxb.JaxbFacetFactory;
 import org.apache.isis.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
 import org.apache.isis.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
 import org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 import org.apache.isis.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
-import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
-import org.apache.isis.metamodel.facets.object.callbacks.LoadCallbackFacetFactory;
-import org.apache.isis.metamodel.facets.object.callbacks.PersistCallbackFacetFactory;
-import org.apache.isis.metamodel.facets.object.callbacks.PersistCallbackViaSaveMethodFacetFactory;
-import org.apache.isis.metamodel.facets.object.callbacks.RemoveCallbackFacetFactory;
-import org.apache.isis.metamodel.facets.object.callbacks.UpdateCallbackFacetFactory;
+import org.apache.isis.metamodel.facets.object.callbacks.*;
 import org.apache.isis.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 import org.apache.isis.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
@@ -67,7 +60,6 @@ import org.apache.isis.metamodel.facets.object.grid.GridFacetFactory;
 import org.apache.isis.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.object.icon.method.IconFacetMethodFactory;
 import org.apache.isis.metamodel.facets.object.ignore.annotation.RemoveAnnotatedMethodsFacetFactory;
-import org.apache.isis.metamodel.facets.object.ignore.isis.RemoveStaticGettersAndSettersFacetFactory;
 import org.apache.isis.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.isis.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.metamodel.facets.object.layout.LayoutFacetFactory;
@@ -167,8 +159,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, RemoveMethodsFacetFactory.class);
 
-        addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, RemoveStaticGettersAndSettersFacetFactory.class, Marker.DEPRECATED);
-
         addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, RemoveAnnotatedMethodsFacetFactory.class);
 
         // must be before any other FacetFactories that install MandatoryFacet.class facets
@@ -209,10 +199,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionParameterDefaultsFacetViaMethodFactory.class);
 
         // members in general
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DisableForSessionFacetViaMethodFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DisableForContextFacetViaMethodFactory.class);
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HideForSessionFacetViaMethodFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HideForContextFacetViaMethodFactory.class);
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, CreatedCallbackFacetFactory.class);
