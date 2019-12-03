@@ -44,6 +44,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * {@link de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel}
  * for Bootstrap styled error messages
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public class IsisSignInPanel extends SignInPanel {
 
     private static final long serialVersionUID = 1L;

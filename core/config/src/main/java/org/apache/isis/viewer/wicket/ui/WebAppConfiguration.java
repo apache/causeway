@@ -76,7 +76,7 @@ public class WebAppConfiguration {
         this.brandLogoHeader = Optional.ofNullable(honorContextPath(application.getBrandLogoHeader()))
                 .orElse(this.applicationName);
         this.brandLogoSignin = Optional.ofNullable(honorContextPath(application.getBrandLogoSignin()))
-                .orElse(this.applicationName);
+                .orElse(null);
         this.faviconUrl = honorContextPath(application.getFaviconUrl());
         
         this.faviconContentType = application.getFaviconContentType();
