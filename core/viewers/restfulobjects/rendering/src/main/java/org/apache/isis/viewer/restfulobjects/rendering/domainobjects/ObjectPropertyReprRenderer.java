@@ -85,10 +85,10 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
     // ///////////////////////////////////////////////////
 
     private Object addValue(final LinkFollowSpecs linkFollower) {
-        val valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
+        val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
         // use the runtime type if we have a value, else the compile time type of the member otherwise
-        val spec = valueAdapter != null? valueAdapter.getSpecification(): objectMember.getSpecification();
+        val spec = valueAdapterIfAny != null? valueAdapterIfAny.getSpecification(): objectMember.getSpecification();
 
         val valueFacet = spec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
@@ -99,7 +99,7 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
                 final BigDecimalValueFacet bigDecimalValueFacet =
                         getFacet(BigDecimalValueFacet.class,
                                 objectMember,
-                                valueAdapter != null? valueAdapter.getSpecification(): null);
+                                valueAdapterIfAny != null? valueAdapterIfAny.getSpecification(): null);
                 if(bigDecimalValueFacet != null) {
                     final Integer precision = bigDecimalValueFacet.getPrecision();
                     final Integer scale = bigDecimalValueFacet.getScale();
@@ -110,31 +110,31 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
                 final BigIntegerValueFacet bigIntegerValueFacet =
                         getFacet(BigIntegerValueFacet.class,
                                 objectMember,
-                                valueAdapter != null? valueAdapter.getSpecification(): null);
+                                valueAdapterIfAny != null? valueAdapterIfAny.getSpecification(): null);
                 if(bigIntegerValueFacet != null) {
                     format = String.format("big-integer");
                 }
             }
-            return jsonValueEncoder.appendValueAndFormat(valueAdapter, representation, format, resourceContext.suppressMemberExtensions());
+            return jsonValueEncoder.appendValueAndFormat(valueAdapterIfAny, spec, representation, format, resourceContext.suppressMemberExtensions());
         }
 
         boolean eagerlyRender =
-                (renderEagerly() && resourceContext.canEagerlyRender(valueAdapter))
+                (renderEagerly() && resourceContext.canEagerlyRender(valueAdapterIfAny))
                 || (linkFollower != null && !linkFollower.isTerminated());
 
-        if(valueAdapter == null) {
+        if(valueAdapterIfAny == null) {
             final NullNode value = NullNode.getInstance();
             representation.mapPut("value", value);
             return value;
         } else {
             final TitleFacet titleFacet = spec.getFacet(TitleFacet.class);
-            final String title = titleFacet.title(valueAdapter);
+            final String title = titleFacet.title(valueAdapterIfAny);
 
-            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, valueAdapter).withTitle(title);
+            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, valueAdapterIfAny).withTitle(title);
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = 
                         new DomainObjectReprRenderer(resourceContext, linkFollower, JsonRepresentation.newMap());
-                renderer.with(valueAdapter);
+                renderer.with(valueAdapterIfAny);
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
                 }

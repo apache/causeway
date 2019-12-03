@@ -125,17 +125,17 @@ public class JsonValueEncoder {
     }
 
     public Object appendValueAndFormat(
-            ManagedObject objectAdapter, 
-            JsonRepresentation repr, 
-            String format, 
+            ManagedObject objectAdapter,
+            ObjectSpecification objectSpecification,
+            JsonRepresentation repr,
+            String format,
             boolean suppressExtensions) {
 
-        val spec = objectAdapter.getSpecification();
-        val jsonValueConverter = converterBySpecId.get(spec.getSpecId());
+        val jsonValueConverter = converterBySpecId.get(objectSpecification.getSpecId());
         if(jsonValueConverter != null) {
             return jsonValueConverter.appendValueAndFormat(objectAdapter, format, repr, suppressExtensions);
         } else {
-            val encodableFacet = spec.getFacet(EncodableFacet.class);
+            val encodableFacet = objectSpecification.getFacet(EncodableFacet.class);
             if (encodableFacet == null) {
                 throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
             }
