@@ -69,7 +69,7 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>other/incubator</module>
+		<module>core/model</module>
 	</modules>
 
 </project>

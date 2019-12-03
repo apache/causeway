@@ -788,6 +788,7 @@ under the License.
 				<module>../core</module>
 				<module>../mavendeps</module>
 				<module>../extensions</module>
+				<module>../incubator</module>
 				<module>../starters</module>
 			</modules>
 		</profile>
@@ -816,18 +817,6 @@ under the License.
 			</modules>
 		</profile>
 
-		<profile>
-			<id>starter-apps-module</id>
-			<activation>
-				<property>
-					<name>starter-apps-modules</name>
-				</property>
-			</activation>
-			<modules>
-				<module>../starters/helloworld</module>
-				<module>../starters/simpleapp</module>
-			</modules>
-		</profile>
 		<!-- APACHE ISIS customisation 5/5: end -->
 
 	</profiles>
