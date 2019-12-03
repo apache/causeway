@@ -65,11 +65,9 @@ public class TranslationServicePo implements TranslationService {
             return;
         }
 
-        final boolean prototypeOrTest = isPrototypeOrTest();
-
         final boolean forceRead = (Mode.READ == translationMode);
 
-        if(prototypeOrTest && !forceRead) {
+        if(!forceRead) {
             // remain in write mode
             return;
         }
@@ -86,9 +84,7 @@ public class TranslationServicePo implements TranslationService {
 
     @PreDestroy
     public void shutdown() {
-        if(systemEnvironment.isPrototyping() && !systemEnvironment.isUnitTesting()) {
-            po.logTranslations();  
-        }
+        po.logTranslations();
     }
 
     @Override
