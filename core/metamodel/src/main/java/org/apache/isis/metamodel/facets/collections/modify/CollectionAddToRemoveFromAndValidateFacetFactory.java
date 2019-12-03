@@ -33,7 +33,6 @@ import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 /**
  * TODO: should probably split out into two {@link FacetFactory}s, one for
@@ -64,11 +63,11 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         final Class<?> cls = processMethodContext.getCls();
 
         // add
-        final Method addToMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.ADD_TO_PREFIX + capitalizedName, void.class);
+        final Method addToMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.ADD_TO_PREFIX + capitalizedName, void.class);
         processMethodContext.removeMethod(addToMethod);
 
         // remove
-        final Method removeFromMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.REMOVE_FROM_PREFIX + capitalizedName, void.class);
+        final Method removeFromMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.REMOVE_FROM_PREFIX + capitalizedName, void.class);
         processMethodContext.removeMethod(removeFromMethod);
 
         // add facets
@@ -133,7 +132,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);
         Method validateAddToMethod = MethodFinderUtils.findMethod_returningText(
-                cls, MethodScope.OBJECT,
+                cls,
                 MethodLiteralConstants.VALIDATE_ADD_TO_PREFIX + capitalizedName,
                 paramTypes);
         if (validateAddToMethod == null) {
@@ -158,7 +157,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);
         Method validateRemoveFromMethod = MethodFinderUtils.findMethod_returningText(
-                cls, MethodScope.OBJECT,
+                cls,
                 MethodLiteralConstants.VALIDATE_REMOVE_FROM_PREFIX + capitalizedName,
                 paramTypes);
         if (validateRemoveFromMethod == null) {

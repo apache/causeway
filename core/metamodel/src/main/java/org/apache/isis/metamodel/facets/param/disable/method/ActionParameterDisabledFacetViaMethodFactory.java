@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facets.param.disable.method;
 
+import lombok.val;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -32,9 +34,6 @@ import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.param.disable.ActionParameterDisabledFacet;
-import org.apache.isis.metamodel.methodutils.MethodScope;
-
-import lombok.val;
 
 /**
  * Sets up {@link ActionParameterDisabledFacet}.
@@ -58,7 +57,6 @@ public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBa
 
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
-        final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
         final String hideName = MethodLiteralConstants.DISABLE_PREFIX + paramNum + capitalizedName;
 
@@ -68,7 +66,7 @@ public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBa
 
         for(int i=0; i< numParamTypes+1; i++) {
             val disableMethod = MethodFinderUtils.findMethod_returningText(
-                    cls, onClass,
+                    cls,
                     hideName,
                     NO_PARAMETERS_TYPES);
 

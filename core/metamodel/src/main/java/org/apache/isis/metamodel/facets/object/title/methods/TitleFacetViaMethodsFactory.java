@@ -30,7 +30,6 @@ import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.TITLE;
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.TO_STRING;
@@ -53,7 +52,7 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         Method method = MethodFinderUtils.findMethod_returningText(
-                cls, MethodScope.OBJECT,
+                cls,
                 TITLE,
                 NO_PARAMETERS_TYPES);
         if (method != null) {
@@ -74,7 +73,7 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
         }
 
         try {
-            method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TO_STRING, String.class, null);
+            method = MethodFinderUtils.findMethod(cls, TO_STRING, String.class, null);
             if (method == null) {
                 return;
             }

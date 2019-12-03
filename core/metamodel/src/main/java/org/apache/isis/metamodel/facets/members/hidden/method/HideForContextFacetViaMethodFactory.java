@@ -29,7 +29,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -59,13 +58,13 @@ public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetF
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        Method hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
+        Method hideMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
         if (hideMethod == null) {
 
             boolean noParamsOnly = getConfiguration().getReflector().getValidator().isNoParamsOnly();
             boolean searchExactMatch = !noParamsOnly;
             if(searchExactMatch) {
-                hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, getMethod.getParameterTypes());
+                hideMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, getMethod.getParameterTypes());
             }
         }
 

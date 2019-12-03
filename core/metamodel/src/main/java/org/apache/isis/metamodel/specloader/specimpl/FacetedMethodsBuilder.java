@@ -44,7 +44,6 @@ import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -74,19 +73,17 @@ public class FacetedMethodsBuilder {
 
         @Override
         public void removeMethod(
-                MethodScope methodScope,
                 String methodName,
                 Class<?> returnType,
                 Class<?>[] parameterTypes) {
             
             //synchronized($lock) {
-                MethodUtil.removeMethod(methodsRemaining, methodScope, methodName, returnType, parameterTypes);
+                MethodUtil.removeMethod(methodsRemaining, methodName, returnType, parameterTypes);
             //}
         }
 
         @Override
         public void removeMethods(
-                MethodScope methodScope,
                 String prefix,
                 Class<?> returnType,
                 CanBeVoid canBeVoid,
@@ -94,7 +91,7 @@ public class FacetedMethodsBuilder {
                 Consumer<Method> onRemoval) {
             
             //synchronized($lock) {
-                MethodUtil.removeMethods(methodsRemaining, methodScope, prefix, returnType, canBeVoid, paramCount, onRemoval);
+                MethodUtil.removeMethods(methodsRemaining, prefix, returnType, canBeVoid, paramCount, onRemoval);
             //}
         }
 
@@ -276,8 +273,8 @@ public class FacetedMethodsBuilder {
         val propertyAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
-        findAndRemovePrefixedNonVoidMethods(MethodScope.OBJECT, GET_PREFIX, Object.class, 0, propertyAccessors::add);
-        findAndRemovePrefixedNonVoidMethods(MethodScope.OBJECT, IS_PREFIX, Boolean.class, 0, propertyAccessors::add);
+        findAndRemovePrefixedNonVoidMethods(GET_PREFIX, Object.class, 0, propertyAccessors::add);
+        findAndRemovePrefixedNonVoidMethods(IS_PREFIX, Boolean.class, 0, propertyAccessors::add);
 
         createPropertyFacetedMethodsFromAccessors(propertyAccessors, onNewField);
     }
@@ -358,32 +355,30 @@ public class FacetedMethodsBuilder {
      */
     public List<FacetedMethod> getActionFacetedMethods() {
         if (actionFacetedMethods == null) {
-            actionFacetedMethods = findActionFacetedMethods(MethodScope.OBJECT);
+            actionFacetedMethods = findActionFacetedMethods();
         }
         return actionFacetedMethods;
     }
 
-    private List<FacetedMethod> findActionFacetedMethods(
-            final MethodScope methodScope) {
+    private List<FacetedMethod> findActionFacetedMethods() {
         
         if (log.isDebugEnabled()) {
             log.debug("introspecting {}: actions", getClassName());
         }
         val actionFacetedMethods = _Lists.<FacetedMethod>newArrayList();
-        collectActionFacetedMethods(actionFacetedMethods::add, methodScope);
+        collectActionFacetedMethods(actionFacetedMethods::add);
         return actionFacetedMethods;
     }
 
     private void collectActionFacetedMethods(
-            final Consumer<FacetedMethod> onActionFacetedMethod,
-            final MethodScope methodScope) {
+            final Consumer<FacetedMethod> onActionFacetedMethod) {
 
         if (log.isDebugEnabled()) {
             log.debug("  looking for action methods");
         }
 
         methodRemover.removeIf(method->{
-            val actionPeer = findActionFacetedMethod(methodScope, method);
+            val actionPeer = findActionFacetedMethod(method);
             if (actionPeer != null) {
                 onActionFacetedMethod.accept(actionPeer);
                 return true;
@@ -394,10 +389,9 @@ public class FacetedMethodsBuilder {
     }
 
     private FacetedMethod findActionFacetedMethod(
-            final MethodScope methodScope,
             final Method actionMethod) {
 
-        if (!representsAction(actionMethod, methodScope)) {
+        if (!representsAction(actionMethod)) {
             return null;
         }
 
@@ -442,8 +436,7 @@ public class FacetedMethodsBuilder {
     }
 
     private boolean representsAction(
-            final Method actionMethod,
-            final MethodScope methodScope) {
+            final Method actionMethod) {
 
         // try to short-circuit as much as possible
         if(explicitActionAnnotationConfigured()) {
@@ -452,7 +445,7 @@ public class FacetedMethodsBuilder {
             }
         }
 
-        if (!MethodUtil.inScope(actionMethod, methodScope)) {
+        if (MethodUtil.isStatic(actionMethod)) {
             return false;
         }
 
@@ -517,24 +510,21 @@ public class FacetedMethodsBuilder {
 
     /**
      *
-     * @param methodScope
      * @param prefix
      * @param returnType
      * @param paramCount
      * @param onRemoved - collecting parameter
      */
     private void findAndRemovePrefixedNonVoidMethods(
-            final MethodScope methodScope,
             final String prefix,
             final Class<?> returnType,
             final int paramCount,
             final Consumer<Method> onRemoved) {
         
-        findAndRemovePrefixedMethods(methodScope, prefix, returnType, CanBeVoid.FALSE, paramCount, onRemoved);
+        findAndRemovePrefixedMethods(prefix, returnType, CanBeVoid.FALSE, paramCount, onRemoved);
     }
 
     private void findAndRemovePrefixedMethods(
-            final MethodScope methodScope,
             final String prefix,
             final Class<?> returnType,
             final CanBeVoid canBeVoid,
@@ -542,7 +532,7 @@ public class FacetedMethodsBuilder {
             Consumer<Method> onMatch) {
         
         methodRemover.acceptRemaining(methodsRemaining->{
-            MethodUtil.removeMethods(methodsRemaining, methodScope, prefix, returnType, canBeVoid, paramCount, onMatch);
+            MethodUtil.removeMethods(methodsRemaining, prefix, returnType, canBeVoid, paramCount, onMatch);
         });
         
     }

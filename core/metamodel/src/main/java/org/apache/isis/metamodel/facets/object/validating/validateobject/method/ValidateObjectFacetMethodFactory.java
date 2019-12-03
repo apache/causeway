@@ -28,7 +28,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.VALIDATE_PREFIX;
 
@@ -46,7 +45,7 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod_returningText(
-                cls, MethodScope.OBJECT,
+                cls,
                 VALIDATE_PREFIX,
                 NO_PARAMETERS_TYPES);
         if (method != null) {

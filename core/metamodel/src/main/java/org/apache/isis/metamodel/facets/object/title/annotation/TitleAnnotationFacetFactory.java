@@ -36,7 +36,6 @@ import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.fallback.FallbackFacetFactory;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
 public class TitleAnnotationFacetFactory extends FacetFactoryAbstract
@@ -153,7 +152,7 @@ implements MetaModelRefiner {
 
             final Class<?> cls = objectSpec.getCorrespondingClass();
 
-            final Method titleMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TITLE_METHOD_NAME, String.class, null);
+            final Method titleMethod = MethodFinderUtils.findMethod(cls, TITLE_METHOD_NAME, String.class, null);
             if (titleMethod == null) {
                 return true;
             }
@@ -182,7 +181,7 @@ implements MetaModelRefiner {
     }
 
     private static List<Method> methodsWithTitleAnnotation(final Class<?> cls) {
-        return MethodFinderUtils.findMethodsWithAnnotation(cls, MethodScope.OBJECT, Title.class);
+        return MethodFinderUtils.findMethodsWithAnnotation(cls, Title.class);
     }
 
 }

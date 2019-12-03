@@ -28,7 +28,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -52,7 +51,7 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
-        final Method autoCompleteMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.AUTO_COMPLETE_PREFIX + capitalizedName, (Class<?>)null, new Class[]{String.class});
+        final Method autoCompleteMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.AUTO_COMPLETE_PREFIX + capitalizedName, (Class<?>)null, new Class[]{String.class});
         if (autoCompleteMethod == null) {
             return;
         }

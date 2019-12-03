@@ -29,7 +29,6 @@ import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -54,7 +53,7 @@ public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final Class<?>[] paramTypes = new Class[] { returnType };
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method modifyMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.MODIFY_PREFIX + capitalizedName, void.class, paramTypes);
+        final Method modifyMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.MODIFY_PREFIX + capitalizedName, void.class, paramTypes);
 
         if (modifyMethod == null) {
             return;

@@ -19,16 +19,13 @@
 
 package org.apache.isis.metamodel.commons;
 
+import lombok.val;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import org.apache.isis.metamodel.methodutils.MethodScope;
-
-import lombok.val;
 
 public class MethodUtil {
 
@@ -46,22 +43,17 @@ public class MethodUtil {
      * <p>
      * Any methods that do not meet the search criteria are left in the array of
      * methods.
-     *
-     * <p>
-     * The search algorithm is as specified in
-     * {@link MethodUtil#findMethodIndex(List, MethodScope, String, Class, Class[])}.
      */
     public static Method removeMethod(
-            final Set<Method> methods, 
-            final MethodScope methodScope, 
-            final String name, 
-            final Class<?> returnType, 
+            final Set<Method> methods,
+            final String name,
+            final Class<?> returnType,
             final Class<?>[] paramTypes) {
         
         val methodIterator = methods.iterator();
         while(methodIterator.hasNext()) {
             val method = methodIterator.next();
-            if(matches(method, methodScope, name, returnType, paramTypes)){
+            if(matches(method, name, returnType, paramTypes)){
                 methodIterator.remove();
                 return method;
             }
@@ -85,10 +77,9 @@ public class MethodUtil {
      * If the returnType is specified as null then the return type is ignored.
      */
     private static boolean matches(
-            final Method method, 
-            final MethodScope methodScope, 
-            final String name, 
-            final Class<?> returnType, 
+            final Method method,
+            final String name,
+            final Class<?> returnType,
             final Class<?>[] paramTypes) {
         
         final int modifiers = method.getModifiers();
@@ -98,8 +89,7 @@ public class MethodUtil {
             return false;
         }
 
-        // check for static modifier
-        if (!inScope(method, methodScope)) {
+        if (isStatic(method)) {
             return false;
         }
 
@@ -130,10 +120,6 @@ public class MethodUtil {
         return true;
     }
 
-    public static boolean inScope(final Method extendee, final MethodScope methodScope) {
-        final boolean isStatic = MethodExtensions.isStatic(extendee);
-        return isStatic && methodScope == MethodScope.CLASS || !isStatic && methodScope == MethodScope.OBJECT;
-    }
 
     /**
      * Searches the supplied array of methods for all specific methods and
@@ -158,14 +144,12 @@ public class MethodUtil {
      * @param paramTypes
      *            the set of parameters the method should have, if null then is
      *            ignored
-     * @param forClass
      * @param returnType
      * @param canBeVoid
      * @return Method
      */
     public static void removeMethods(
             Set<Method> methods,
-            MethodScope forClass,
             String prefix,
             Class<?> returnType,
             CanBeVoid canBeVoid,
@@ -173,20 +157,19 @@ public class MethodUtil {
             Consumer<Method> onMatch) {
 
         methods.removeIf(method -> 
-            matches(method, forClass, prefix, returnType, canBeVoid, paramCount, onMatch));
+            matches(method, prefix, returnType, canBeVoid, paramCount, onMatch));
         
     }
 
     private static boolean matches(
             Method method,
-            MethodScope forClass,
             String prefix,
             Class<?> returnType,
             CanBeVoid canBeVoid,
             int paramCount,
             Consumer<Method> onMatch) {
 
-        if (!inScope(method, forClass)) {
+        if (isStatic(method)) {
             return false;
         }
 
@@ -205,5 +188,9 @@ public class MethodUtil {
     }
 
 
-
+    public static boolean isStatic(final Method method) {
+        final int modifiers = method.getModifiers();
+        final boolean isStatic = Modifier.isStatic(modifiers);
+        return isStatic;
+    }
 }

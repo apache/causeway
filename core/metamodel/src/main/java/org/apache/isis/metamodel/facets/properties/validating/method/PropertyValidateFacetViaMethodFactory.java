@@ -27,7 +27,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.VALIDATE_PREFIX;
 
@@ -55,7 +54,7 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
 
         final Class<?> cls = processMethodContext.getCls();
         final Method method = MethodFinderUtils.findMethod_returningText(
-                cls, MethodScope.OBJECT,
+                cls,
                 VALIDATE_PREFIX + capitalizedName,
                 paramTypes);
         if (method == null) {

@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.internal.reflection._MethodCache;
+import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import lombok.val;
 
@@ -36,10 +36,10 @@ public final class MethodFinderUtils {
     private MethodFinderUtils() {
     }
 
-    public static Method findMethodWithOrWithoutParameters(final Class<?> type, final MethodScope classMethod, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
-        Method method = MethodFinderUtils.findMethod(type, classMethod, name, returnType, paramTypes);
+    public static Method findMethodWithOrWithoutParameters(final Class<?> type, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
+        Method method = MethodFinderUtils.findMethod(type, name, returnType, paramTypes);
         if (method == null) {
-            method = MethodFinderUtils.findMethod(type, classMethod, name, returnType, MethodPrefixBasedFacetFactoryAbstract.NO_PARAMETERS_TYPES);
+            method = MethodFinderUtils.findMethod(type, name, returnType, MethodPrefixBasedFacetFactoryAbstract.NO_PARAMETERS_TYPES);
         }
         return method;
     }
@@ -58,12 +58,10 @@ public final class MethodFinderUtils {
      */
     public static Method findMethod(
             final Class<?> type,
-            final MethodScope methodScope,
             final String name,
             final Class<?> returnType,
             final Class<?>[] paramTypes) {
-        
-        
+
         val methodCache = _MethodCache.getInstance();
         
         val method = methodCache.lookupMethod(type, name, paramTypes);
@@ -77,8 +75,7 @@ public final class MethodFinderUtils {
             return null;
         }
 
-        // check for scope modifier
-        if (!methodScope.matchesScopeOf(method)) {
+        if(MethodUtil.isStatic(method)) {
             return null;
         }
 
@@ -109,12 +106,11 @@ public final class MethodFinderUtils {
     public static Method findMethod_returningAnyOf(
             final Class<?>[] returnTypes,
             final Class<?> type,
-            final MethodScope methodScope,
             final String name,
             final Class<?>[] paramTypes) {
         
         for (val returnType : returnTypes) {
-            val method = findMethod(type, methodScope, name, returnType, paramTypes);
+            val method = findMethod(type, name, returnType, paramTypes);
             if(method != null) {
                 return method;
             }
@@ -122,11 +118,7 @@ public final class MethodFinderUtils {
         return null;
     }
 
-    protected static boolean doesNotMatchScope(final MethodScope methodScope, final Method method) {
-        return methodScope.doesNotMatchScope(method);
-    }
-
-    public static Method findMethod(final Class<?> type, final MethodScope methodScope, final String name, final Class<?> returnType) {
+    public static Method findMethod(final Class<?> type, final String name, final Class<?> returnType) {
         try {
             final Method[] methods = type.getMethods();
             for (final Method method2 : methods) {
@@ -137,8 +129,7 @@ public final class MethodFinderUtils {
                     continue;
                 }
 
-                // check correct scope (static vs instance)
-                if (!methodScope.matchesScopeOf(method)) {
+                if(MethodUtil.isStatic(method)) {
                     continue;
                 }
 
@@ -159,18 +150,18 @@ public final class MethodFinderUtils {
         return null;
     }
 
-    public static List<Method> findMethodsWithAnnotation(final Class<?> type, final MethodScope methodScope, final Class<? extends Annotation> annotationClass) {
+    public static List<Method> findMethodsWithAnnotation(final Class<?> type, final Class<? extends Annotation> annotationClass) {
 
         final List<Method> methods = new ArrayList<Method>();
 
         // Validate arguments
-        if ((type == null) || (methodScope == null) || (annotationClass == null)) {
+        if (type == null || annotationClass == null) {
             throw new IllegalArgumentException("One or more arguments are 'null' valued");
         }
 
         // Find methods annotated with the specified annotation
         for (final Method method : type.getMethods()) {
-            if (!methodScope.matchesScopeOf(method)) {
+            if(MethodUtil.isStatic(method)) {
                 continue;
             }
 
@@ -244,10 +235,9 @@ public final class MethodFinderUtils {
     
     public static Method findMethod_returningText(
             final Class<?> type,
-            final MethodScope methodScope,
             final String name,
             final Class<?>[] paramTypes) {
-        return findMethod_returningAnyOf(TEXT_TYPES, type, methodScope, name, paramTypes);
+        return findMethod_returningAnyOf(TEXT_TYPES, type, name, paramTypes);
     }
 
 }

@@ -49,9 +49,9 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -415,8 +415,8 @@ public final class Annotations  {
             final Consumer<Evaluator<T>> visitor) {
 
         for (Method method : cls.getDeclaredMethods()) {
-            if(MethodScope.OBJECT.matchesScopeOf(method) &&
-                    method.getParameterTypes().length == 0) {
+            if(! MethodUtil.isStatic(method) &&
+                 method.getParameterTypes().length == 0) {
                 final Annotation annotation = method.getAnnotation(annotationClass);
                 if(annotation != null) {
                     visitor.accept(new MethodEvaluator(method, annotation));

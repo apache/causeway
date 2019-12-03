@@ -27,7 +27,6 @@ import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.disabled.DisabledObjectFacet;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 
@@ -61,7 +60,7 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
         val paramTypes = new Class<?>[] {Identifier.Type.class};
 
         val method = MethodFinderUtils.findMethod_returningText(
-                cls, MethodScope.OBJECT, DISABLED,
+                cls, DISABLED,
                 paramTypes);
         if (method == null) {
             return;

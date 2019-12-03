@@ -19,13 +19,6 @@
 
 package org.apache.isis.runtime.system;
 
-import org.datanucleus.enhancement.Persistable;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
@@ -38,11 +31,9 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
-import org.apache.isis.metamodel.facets.members.disabled.forsession.DisableForSessionFacetAbstract;
 import org.apache.isis.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.metamodel.facets.members.hidden.HiddenFacetAbstractAlwaysEverywhere;
 import org.apache.isis.metamodel.facets.members.hidden.HiddenFacetAbstractImpl;
-import org.apache.isis.metamodel.facets.members.hidden.forsession.HideForSessionFacetAbstract;
 import org.apache.isis.metamodel.facets.members.hidden.method.HideForContextFacetNone;
 import org.apache.isis.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.metamodel.interactions.PropertyVisibilityContext;
@@ -60,15 +51,15 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.datanucleus.enhancement.Persistable;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class ObjectMemberAbstractTest {
 
@@ -141,19 +132,6 @@ public class ObjectMemberAbstractTest {
     }
 
     @Test
-    public void testAvailableForUser() throws Exception {
-        testMember.addFacet(new DisableForSessionFacetAbstract(testMember) {
-            @Override
-            public String disabledReason(final AuthenticationSession session) {
-                return null;
-            }
-        });
-        final Consent usable = testMember.isUsable(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        final boolean allowed = usable.isAllowed();
-        assertTrue(allowed);
-    }
-
-    @Test
     public void testVisibleWhenHiddenFacetSetToAlways() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstract(Where.ANYWHERE, testMember) {
@@ -185,28 +163,6 @@ public class ObjectMemberAbstractTest {
     public void testVisibleForSessionByDefault() {
         final Consent visible = testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertTrue(visible.isAllowed());
-    }
-
-    @Test
-    public void testVisibleForSession() {
-        testMember.addFacet(new HideForSessionFacetAbstract(testMember) {
-            @Override
-            public String hiddenReason(final AuthenticationSession session) {
-                return "Hidden";
-            }
-        });
-        assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
-    }
-
-    @Test
-    public void testVisibleForSessionFails() {
-        testMember.addFacet(new HideForSessionFacetAbstract(testMember) {
-            @Override
-            public String hiddenReason(final AuthenticationSession session) {
-                return "hidden";
-            }
-        });
-        assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
     }
 
     @Test

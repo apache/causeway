@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facets.param.hide.method;
 
+import lombok.val;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -31,9 +33,6 @@ import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.param.hide.ActionParameterHiddenFacet;
-import org.apache.isis.metamodel.methodutils.MethodScope;
-
-import lombok.val;
 
 /**
  * Sets up {@link ActionParameterHiddenFacet}.
@@ -57,7 +56,6 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
 
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
-        final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
         final String hideName = MethodLiteralConstants.HIDE_PREFIX + paramNum + capitalizedName;
 
@@ -65,7 +63,7 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
 
         for(int i=0; i< numParamTypes+1; i++) {
             val hideMethod = MethodFinderUtils.findMethod(
-                    cls, onClass,
+                    cls,
                     hideName,
                     boolean.class,
                     NO_PARAMETERS_TYPES);

@@ -33,7 +33,6 @@ import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFac
 import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -66,7 +65,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };
-        final Method setMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
+        final Method setMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
         processMethodContext.removeMethod(setMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
@@ -92,7 +91,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         final FacetHolder property = processMethodContext.getFacetHolder();
 
         final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
-        final Method clearMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.CLEAR_PREFIX + capitalizedName, void.class, NO_PARAMETERS_TYPES);
+        final Method clearMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.CLEAR_PREFIX + capitalizedName, void.class, NO_PARAMETERS_TYPES);
 
         if (clearMethod == null) {
             return null;

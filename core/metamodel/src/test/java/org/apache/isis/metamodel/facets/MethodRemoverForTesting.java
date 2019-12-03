@@ -26,7 +26,6 @@ import java.util.function.Consumer;
 
 import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +38,6 @@ public class MethodRemoverForTesting implements MethodRemover {
     // ////////////////////////////////////////////////////////////
     @Value
     static class RemoveMethodArgs {
-        public MethodScope methodScope;
         public String methodName;
         public Class<?> returnType;
         public Class<?>[] parameterTypes;
@@ -49,13 +47,9 @@ public class MethodRemoverForTesting implements MethodRemover {
     private final List<RemoveMethodArgs> removeMethodArgsCalls = new ArrayList<>();
 
     @Override
-    public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-        removeMethodArgsCalls.add(new RemoveMethodArgs(methodScope, methodName, returnType, parameterTypes));
+    public void removeMethod(final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
+        removeMethodArgsCalls.add(new RemoveMethodArgs( methodName, returnType, parameterTypes));
     }
-
-    // ////////////////////////////////////////////////////////////
-    // removeMethod(Method): void
-    // ////////////////////////////////////////////////////////////
 
     @Getter
     private final List<Method> removedMethodMethodCalls = new ArrayList<Method>();
@@ -65,17 +59,11 @@ public class MethodRemoverForTesting implements MethodRemover {
         removedMethodMethodCalls.add(method);
     }
 
-    // ////////////////////////////////////////////////////////////
-    // removeMethods(...):List
-    // ////////////////////////////////////////////////////////////
-
     @Setter
     private List<Method> removeMethodsReturn;
 
-
     @Value
     static class RemoveMethodsArgs {
-        public MethodScope methodScope;
         public String prefix;
         public Class<?> returnType;
         public CanBeVoid canBeVoid;
@@ -85,8 +73,8 @@ public class MethodRemoverForTesting implements MethodRemover {
     private final List<RemoveMethodsArgs> removeMethodsArgs = new ArrayList<>();
 
     @Override
-    public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
-        removeMethodsArgs.add(new RemoveMethodsArgs(methodScope, prefix, returnType, canBeVoid, paramCount));
+    public void removeMethods(final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
+        removeMethodsArgs.add(new RemoveMethodsArgs(prefix, returnType, canBeVoid, paramCount));
     }
 
 

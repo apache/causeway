@@ -33,7 +33,6 @@ import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import lombok.val;
 
@@ -111,9 +110,8 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
         for(;;) {
             val method = MethodFinderUtils.findMethod(
-                    cls, 
-                    MethodScope.OBJECT, 
-                    capitalizedName, 
+                    cls,
+                    capitalizedName,
                     returnType, 
                     paramTypes);
             

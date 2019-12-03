@@ -27,7 +27,6 @@ import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 /**
  * Removes all methods inherited from <tt>javax.jdo.spi.PersistenceCapable</tt> (if JDO is on the classpath).
@@ -59,7 +58,7 @@ public class RemoveJdoEnhancementTypesFacetFactory extends FacetFactoryAbstract 
     @Override
     public void process(final ProcessClassContext processClassContext) {
         for (final RemoveMethodsFacetFactory.MethodAndParameterTypes mapt : jdoEnhancementmethodsToIgnore) {
-            processClassContext.removeMethod(MethodScope.OBJECT, mapt.methodName, null, mapt.methodParameters);
+            processClassContext.removeMethod(mapt.methodName, null, mapt.methodParameters);
         }
     }
 

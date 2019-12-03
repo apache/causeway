@@ -23,7 +23,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import lombok.val;
 
@@ -40,7 +39,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        val method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        val method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             super.addFacet(new CreatedCallbackFacetViaMethod(method, facetHolder));
             processClassContext.removeMethod(method);

@@ -29,7 +29,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
@@ -99,7 +98,7 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
     }
 
     private static void appendMatchingMethods(final MethodRemover methodRemover, final String prefix, final Class<?> returnType, final List<Method> methodListToAppendTo) {
-        methodRemover.removeMethods(MethodScope.OBJECT, prefix, returnType, CanBeVoid.FALSE, 0, methodListToAppendTo::add);
+        methodRemover.removeMethods(prefix, returnType, CanBeVoid.FALSE, 0, methodListToAppendTo::add);
     }
 
     @Override

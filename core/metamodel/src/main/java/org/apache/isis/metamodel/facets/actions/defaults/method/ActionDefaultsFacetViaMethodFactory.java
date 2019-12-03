@@ -30,7 +30,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
@@ -82,7 +81,7 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
         final String name = MethodLiteralConstants.DEFAULT_PREFIX + capitalizedName;
 
         final Class<?> cls = processMethodContext.getCls();
-        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnType, _Constants.emptyClasses);
+        return MethodFinderUtils.findMethod(cls, name, returnType, _Constants.emptyClasses);
     }
 
 }

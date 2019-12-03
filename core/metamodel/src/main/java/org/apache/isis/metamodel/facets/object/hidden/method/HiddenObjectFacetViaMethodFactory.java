@@ -28,7 +28,6 @@ import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.hidden.HiddenObjectFacet;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 
@@ -78,7 +77,7 @@ public class HiddenObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFac
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, HIDDEN_PREFIX, returnType, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(cls, HIDDEN_PREFIX, returnType, NO_PARAMETERS_TYPES);
         if (method == null) {
             return false;
         }

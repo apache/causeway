@@ -28,7 +28,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import lombok.val;
 
@@ -47,7 +46,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
         val facets = new ArrayList<Facet>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.SAVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.SAVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
             val facet = facetHolder.getFacet(PersistingCallbackFacet.class);
@@ -58,7 +57,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.SAVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.SAVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
             val facet = facetHolder.getFacet(PersistedCallbackFacet.class);

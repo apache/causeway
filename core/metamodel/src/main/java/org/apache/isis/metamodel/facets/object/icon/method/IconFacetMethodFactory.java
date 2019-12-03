@@ -26,7 +26,6 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class IconFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -43,7 +42,7 @@ public class IconFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstrac
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, ICON_NAME_PREFIX, String.class, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(cls, ICON_NAME_PREFIX, String.class, NO_PARAMETERS_TYPES);
         if (method == null) {
             return;
         }

@@ -30,7 +30,6 @@ import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class CollectionAccessorFacetViaAccessorFactory
@@ -96,7 +95,6 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
             final List<Method> methodListToAppendTo) {
 
         methodRemover.removeMethods(
-                MethodScope.OBJECT, 
                 MethodLiteralConstants.GET_PREFIX,
                 Collection.class,
                 CanBeVoid.FALSE,

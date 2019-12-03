@@ -33,7 +33,6 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
 
@@ -77,8 +76,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
                 defaultFor(adaptedClass));
 
         titleMethod = MethodFinderUtils.findMethod_returningText(
-                getAdaptedClass(), 
-                MethodScope.OBJECT,
+                getAdaptedClass(),
                 TITLE,
                 null);
 

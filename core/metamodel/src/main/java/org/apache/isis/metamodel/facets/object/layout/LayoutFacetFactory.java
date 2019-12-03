@@ -25,7 +25,6 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -42,7 +41,7 @@ public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, LAYOUT_METHOD_NAME, String.class, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(cls, LAYOUT_METHOD_NAME, String.class, NO_PARAMETERS_TYPES);
 
         final LayoutFacet facet;
         if (method == null) {

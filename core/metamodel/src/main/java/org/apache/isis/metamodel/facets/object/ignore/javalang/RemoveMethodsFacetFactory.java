@@ -29,7 +29,6 @@ import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
@@ -106,11 +105,11 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
         // removeJavaLangObjectMethods(processClassContext);
         for (final MethodAndParameterTypes mapt : javaLangObjectMethodsToIgnore) {
-            processClassContext.removeMethod(MethodScope.OBJECT, mapt.methodName, null, mapt.methodParameters);
+            processClassContext.removeMethod(mapt.methodName, null, mapt.methodParameters);
         }
 
         // removeInitMethod(processClassContext);
-        processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, _Constants.emptyClasses);
+        processClassContext.removeMethod("init", void.class, _Constants.emptyClasses);
     }
 
     private void removeSuperclassMethods(Class<?> type, final ProcessClassContext processClassContext) {

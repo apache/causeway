@@ -28,7 +28,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import lombok.val;
 
@@ -47,13 +46,13 @@ public class UpdateCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         val facets = new ArrayList<Facet>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.UPDATING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.UPDATING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
             facets.add(new UpdatingCallbackFacetViaMethod(method, facetHolder));
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.UPDATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.UPDATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
             facets.add(new UpdatedCallbackFacetViaMethod(method, facetHolder));

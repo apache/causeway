@@ -26,12 +26,10 @@ import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -91,11 +89,10 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
         final Class<?> cls = processMethodContext.getCls();
 
         final Method actionMethod = processMethodContext.getMethod();
-        final MethodScope methodScope = MethodScope.scopeFor(actionMethod);
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
         final String name = MethodLiteralConstants.CHOICES_PREFIX + capitalizedName;
-        choicesMethod = MethodFinderUtils.findMethod(cls, methodScope, name, returnType2, _Constants.emptyClasses);
+        choicesMethod = MethodFinderUtils.findMethod(cls, name, returnType2, _Constants.emptyClasses);
         return choicesMethod;
     }
 

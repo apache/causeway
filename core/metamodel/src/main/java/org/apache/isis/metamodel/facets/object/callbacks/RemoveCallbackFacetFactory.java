@@ -27,7 +27,6 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.REMOVED_PREFIX;
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.REMOVING_PREFIX;
@@ -49,7 +48,7 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         val facets = new ArrayList<Facet>();
 
         Method method = MethodFinderUtils
-                .findMethod(cls, MethodScope.OBJECT, REMOVING_PREFIX, void.class,
+                .findMethod(cls, REMOVING_PREFIX, void.class,
                         NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
@@ -61,7 +60,7 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, REMOVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, REMOVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
             val facet = facetHolder.getFacet(RemovedCallbackFacet.class);

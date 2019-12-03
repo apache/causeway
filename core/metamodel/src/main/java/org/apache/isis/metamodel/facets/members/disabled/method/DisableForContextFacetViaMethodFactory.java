@@ -30,7 +30,6 @@ import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
@@ -68,14 +67,14 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
         if(searchExactMatch) {
             // search for exact match
             disableMethod = MethodFinderUtils.findMethod_returningText(
-                    cls, MethodScope.OBJECT,
+                    cls,
                     MethodLiteralConstants.DISABLE_PREFIX + capitalizedName,
                     method.getParameterTypes());
         }
         if (disableMethod == null) {
             // search for no-arg version
             disableMethod = MethodFinderUtils.findMethod_returningText(
-                    cls, MethodScope.OBJECT,
+                    cls,
                     MethodLiteralConstants.DISABLE_PREFIX + capitalizedName,
                     new Class<?>[0]);
         }

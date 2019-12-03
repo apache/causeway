@@ -25,7 +25,6 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodFilteringFacetFactory;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 /**
  * Designed to simply filter out {@link Iterable#iterator()} method if it
@@ -42,7 +41,7 @@ public class IteratorFilteringFacetFactory extends FacetFactoryAbstract implemen
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        processClassContext.removeMethod(MethodScope.OBJECT, "iterator", java.util.Iterator.class, new Class[] {});
+        processClassContext.removeMethod("iterator", java.util.Iterator.class, new Class[] {});
     }
 
     @Override

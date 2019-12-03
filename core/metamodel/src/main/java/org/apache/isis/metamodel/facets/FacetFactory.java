@@ -34,7 +34,6 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import lombok.Getter;
 
@@ -114,13 +113,13 @@ public interface FacetFactory {
 
 
         @Override
-        public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
-            methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount, onRemoval);
+        public void removeMethods(final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
+            methodRemover.removeMethods(prefix, returnType, canBeVoid, paramCount, onRemoval);
         }
 
         @Override
-        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-            methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
+        public void removeMethod(final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
+            methodRemover.removeMethod(methodName, returnType, parameterTypes);
         }
 
         @Override
@@ -172,13 +171,13 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
-            methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount, onRemoval);
+        public void removeMethods(final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
+            methodRemover.removeMethods(prefix, returnType, canBeVoid, paramCount, onRemoval);
         }
 
         @Override
-        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-            methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
+        public void removeMethod(final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
+            methodRemover.removeMethod(methodName, returnType, parameterTypes);
         }
 
     }
