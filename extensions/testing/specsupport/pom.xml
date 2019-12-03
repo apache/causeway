@@ -43,7 +43,7 @@
 
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime-extensions</artifactId>
+            <artifactId>isis-runtime-spring</artifactId>
         </dependency>
         
         <!-- ISIS EXTENSIONS -->
