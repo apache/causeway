@@ -38,9 +38,6 @@
 
 		<module>examples/demo</module>
 		<module>examples/smoketests</module>
-
-		<module>starters/helloworld</module>
-		<module>starters/simpleapp</module>
 	</modules>
 
 	<profiles>
