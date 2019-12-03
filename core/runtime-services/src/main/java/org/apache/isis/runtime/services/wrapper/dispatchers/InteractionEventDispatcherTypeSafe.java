@@ -17,16 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.wrapper.handlers;
+package org.apache.isis.runtime.services.wrapper.dispatchers;
 
-import java.lang.reflect.InvocationHandler;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.commons.internal.base._Casts;
 
-public interface DelegatingInvocationHandler<T> extends InvocationHandler {
+public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent> 
+implements InteractionEventDispatcher {
 
-    T getDelegate();
+    public abstract void dispatchTypeSafe(T interactionEvent);
 
-    public boolean isResolveObjectChangedEnabled();
-
-    public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled);
+    @Override
+    public void dispatch(final InteractionEvent interactionEvent) {
+        dispatchTypeSafe(_Casts.<T>uncheckedCast(interactionEvent));
+    }
 
 }

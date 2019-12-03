@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.runtime.services.wrapper;
 
-package org.apache.isis.progmodel.wrapper.dom.claims;
-
-public interface Approver {
+public final class IsisWrapperModule {
 
 }

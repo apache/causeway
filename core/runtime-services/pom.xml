@@ -85,6 +85,13 @@
             <scope>test</scope>
         </dependency>
 
+		<!-- HSQL-DB -->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -17,11 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.dom.employees;
+package org.apache.isis.runtime.services.wrapper.dom.employees;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.progmodel.wrapper.dom.claims.Approver;
-import org.apache.isis.progmodel.wrapper.dom.claims.Claimant;
+import org.apache.isis.runtime.services.wrapper.dom.claims.Approver;
+import org.apache.isis.runtime.services.wrapper.dom.claims.Claimant;
 
 public class Employee implements Claimant, Approver {
 

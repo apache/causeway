@@ -17,19 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.dom.employees;
+package org.apache.isis.runtime.services.wrapper.dispatchers;
 
-import java.util.List;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
-public class EmployeeRepositoryImpl implements EmployeeRepository {
+public interface InteractionEventDispatcher {
 
-    @Override
-    public List<Employee> allEmployees() {
-        return null;
-    }
+    void dispatch(InteractionEvent interactionEvent);
 
-    @Override
-    public List<Employee> findEmployees(final String name) {
-        return null;
-    }
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.wrapper.handlers;
+package org.apache.isis.runtime.services.wrapper.handlers;
 
 import java.util.Map;
 

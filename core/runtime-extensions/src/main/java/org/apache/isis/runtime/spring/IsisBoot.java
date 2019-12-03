@@ -31,15 +31,12 @@ import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import org.apache.isis.applib.IsisApplibModule;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfigModule;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.metamodel.IsisMetamodelModule;
-import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.MetaModelContexts;
 import org.apache.isis.runtime.IsisRuntimeModule;
 import org.apache.isis.runtime.services.IsisRuntimeServicesModule;
-import org.apache.isis.wrapper.IsisWrapperModule;
+import org.apache.isis.runtime.services.wrapper.IsisWrapperModule;
 
 @Configuration
 @Import({

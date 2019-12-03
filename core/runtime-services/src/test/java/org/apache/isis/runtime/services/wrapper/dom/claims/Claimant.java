@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.wrapper.dispatchers;
+package org.apache.isis.runtime.services.wrapper.dom.claims;
 
-import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+public interface Claimant {
 
-public interface InteractionEventDispatcher {
-
-    void dispatch(InteractionEvent interactionEvent);
+    Approver getApprover();
 
 }

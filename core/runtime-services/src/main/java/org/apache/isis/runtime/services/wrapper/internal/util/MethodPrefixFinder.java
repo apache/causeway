@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.wrapper.internal.util;
+package org.apache.isis.runtime.services.wrapper.internal.util;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;

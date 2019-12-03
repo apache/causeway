@@ -17,10 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.dom.claims;
+package org.apache.isis.runtime.services.wrapper.dom.employees;
 
-public interface Claimant {
+import java.util.List;
 
-    Approver getApprover();
+public class EmployeeRepositoryImpl implements EmployeeRepository {
 
+    @Override
+    public List<Employee> allEmployees() {
+        return null;
+    }
+
+    @Override
+    public List<Employee> findEmployees(final String name) {
+        return null;
+    }
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.wrapper;
+package org.apache.isis.runtime.services.wrapper;
 
 
 import java.util.ArrayList;
@@ -61,10 +61,10 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
-import org.apache.isis.wrapper.dispatchers.InteractionEventDispatcher;
-import org.apache.isis.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
-import org.apache.isis.wrapper.handlers.ProxyContextHandler;
-import org.apache.isis.wrapper.proxy.ProxyCreator;
+import org.apache.isis.runtime.services.wrapper.dispatchers.InteractionEventDispatcher;
+import org.apache.isis.runtime.services.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
+import org.apache.isis.runtime.services.wrapper.handlers.ProxyContextHandler;
+import org.apache.isis.runtime.services.wrapper.proxy.ProxyCreator;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

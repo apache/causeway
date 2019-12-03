@@ -87,4 +87,4 @@ org.apache.isis.security.authentication.manager.AuthorizationManagerStandard
 org.apache.isis.security.authentication.standard.AuthenticationManagerStandard
 #org.apache.isis.security.bypass.authorization.AuthorizorBypass
 org.apache.isis.testdomain.jdo.InventoryResource
-org.apache.isis.wrapper.WrapperFactoryDefault
+org.apache.isis.runtime.services.wrapper.WrapperFactoryDefault

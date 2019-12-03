@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.dom.employees;
+package org.apache.isis.runtime.services.wrapper.dom.employees;
 
 import java.util.List;
 

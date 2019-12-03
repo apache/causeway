@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.wrapper.proxy;
+package org.apache.isis.runtime.services.wrapper.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -30,7 +30,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
-import org.apache.isis.wrapper.handlers.DelegatingInvocationHandler;
+import org.apache.isis.runtime.services.wrapper.handlers.DelegatingInvocationHandler;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
