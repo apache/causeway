@@ -21,7 +21,6 @@
     <bs3:row>
         <bs3:col span="12" unreferencedActions="true">
             <cpt:domainObject/>
-            <cpt:action id="clearHints"/>
         </bs3:col>
     </bs3:row>
     <bs3:row>
