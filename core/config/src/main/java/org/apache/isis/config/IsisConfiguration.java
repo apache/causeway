@@ -641,7 +641,6 @@ public class IsisConfiguration {
 
             @Data
             public static class Po {
-
                 TranslationService.Mode mode = TranslationService.Mode.WRITE;
             }
 

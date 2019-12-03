@@ -104,10 +104,7 @@ content:
 
 # starters
     - url: .
-      start_path: starters/helloworld/src/main/doc # helloworld
-      branches: HEAD
-    - url: .
-      start_path: starters/simpleapp/src/main/doc # simpleapp
+      start_path: starters/src/main/doc
       branches: HEAD
 
 # extensions
@@ -168,8 +165,8 @@ content:
 
 ui:
   bundle:
-#    url: ../isis-antora/build/ui-bundle.zip
-    url: https://github.com/apache/isis-antora/blob/master/build/ui-bundle.zip?raw=true
+    url: ../isis-antora/build/ui-bundle.zip
+#    url: https://github.com/apache/isis-antora/blob/master/build/ui-bundle.zip?raw=true
     snapshot: true
   supplemental_files: antora/supplemental-ui
 

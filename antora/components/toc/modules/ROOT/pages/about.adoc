@@ -22,8 +22,8 @@ include::_attributes.adoc[]
 [discrete]
 == Starter Apps
 
-* xref:helloworld:ROOT:about.adoc[Hello World]
-* xref:simpleapp:ROOT:about.adoc[SimpleApp]
+* xref:starters:helloworld:about.adoc[Hello World]
+* xref:starters:simpleapp:about.adoc[SimpleApp]
 
 |
 [discrete]

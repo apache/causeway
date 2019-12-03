@@ -51,7 +51,7 @@ The class is immutable but it has a builder (obtained using `FixturescriptsSpeci
 
 == Implementation
 
-The xref:simpleapp:ROOT:about.adoc[SimpleApp archetype] has a simple implementation of this service:
+The xref:starters:simpleapp:about.adoc[SimpleApp archetype] has a simple implementation of this service:
 
 [source,java]
 ----

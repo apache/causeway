@@ -1,8 +1,0 @@
-.gradle
-translations.pot
-*.jar
-gradle/wrapper
-!gradle-wrapper.jar
-/.apt_generated/
-/.factorypath
-/.apt_generated_tests/

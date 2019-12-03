@@ -459,7 +459,7 @@ Ensure the following is defined in the dom project's `pom.xml`:
 </resources>
 ----
 
-If using an Apache Isis xref:helloworld:ROOT:about.adoc[HelloWorld] xref:simpleapp:ROOT:about.adoc[SimpleApp] archetypes, then the POM is already correctly configured.
+If using an Apache Isis xref:starters:helloworld:about.adoc[HelloWorld] xref:starters:simpleapp:about.adoc[SimpleApp] archetypes, then the POM is already correctly configured.
 
 
 

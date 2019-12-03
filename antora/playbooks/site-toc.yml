@@ -13,10 +13,7 @@ content:
 
 # starters
     - url: .
-      start_path: starters/helloworld/src/main/doc # helloworld
-      branches: HEAD
-    - url: .
-      start_path: starters/simpleapp/src/main/doc # simpleapp
+      start_path: starters/src/main/doc # starters
       branches: HEAD
 
 # mavendeps

@@ -1,6 +1,0 @@
-name: simpleapp
-title: "Starter App - SimpleApp"
-version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc

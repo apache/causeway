@@ -7,8 +7,8 @@
 
 * Starter Apps
 
-** xref:helloworld:ROOT:about.adoc[HelloWorld]
-** xref:simpleapp:ROOT:about.adoc[SimpleApp]
+** xref:starters:helloworld:about.adoc[HelloWorld]
+** xref:starters:simpleapp:about.adoc[SimpleApp]
 
 * Demos & Tutorials
 

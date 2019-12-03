@@ -29,7 +29,7 @@ To specify the `AppManifest` as a configuration property, use:
 |`o.a.i.applib.AppManifest` +
 
 By convention this implementation resides in an `myapp-app` Maven module (as opposed to `myapp-dom` or `myapp-fixture`).
-See the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype] for details.
+See the xref:starters:simpleapp:about.adoc[SimpleApp archetype] for details.
 
 |===
 

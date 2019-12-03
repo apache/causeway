@@ -9,7 +9,7 @@ DataNucleus will for itself also and read the `META-INF/persistence.xml`.
 In theory it can hold mappings and even connection strings.
 However, with Apache Isis we tend to use annotations instead and externalize connection strings. so its definition is extremely simply, specifying just the name of the "persistence unit".
 
-Here's the one provided by the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]:
+Here's the one provided by the xref:starters:simpleapp:about.adoc[SimpleApp archetype]:
 
 [source,xml]
 ----
