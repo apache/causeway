@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.annotation.Model;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -114,8 +115,7 @@ implements MetaModelRefiner {
         //val type = spec.getCorrespondingClass();
         val unmetContraints = _Lists.<String>newArrayList();
 
-        final int modifiers = method.getModifiers();
-        if (!Modifier.isPublic(modifiers)) {
+        if (!MethodUtil.isPublic(method)) {
             unmetContraints.add("method must be 'public'");
             return unmetContraints; // don't check any further
         } 

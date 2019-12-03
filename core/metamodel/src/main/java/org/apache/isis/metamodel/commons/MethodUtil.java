@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.commons;
 
 import lombok.val;
 
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -82,10 +83,7 @@ public class MethodUtil {
             final Class<?> returnType,
             final Class<?>[] paramTypes) {
         
-        final int modifiers = method.getModifiers();
-
-        // check for public modifier
-        if (!Modifier.isPublic(modifiers)) {
+        if (!isPublic(method)) {
             return false;
         }
 
@@ -188,9 +186,17 @@ public class MethodUtil {
     }
 
 
+    public static boolean isNotStatic(final Method method) {
+        return !isStatic(method);
+    }
+
     public static boolean isStatic(final Method method) {
         final int modifiers = method.getModifiers();
-        final boolean isStatic = Modifier.isStatic(modifiers);
-        return isStatic;
+        return Modifier.isStatic(modifiers);
+    }
+
+    public static boolean isPublic(Member method) {
+        final int modifiers = method.getModifiers();
+        return Modifier.isPublic(modifiers);
     }
 }

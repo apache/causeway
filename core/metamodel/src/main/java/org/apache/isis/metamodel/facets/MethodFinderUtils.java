@@ -20,11 +20,10 @@ package org.apache.isis.metamodel.facets;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;import org.apache.isis.applib.services.i18n.TranslatableString;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.internal.reflection._MethodCache;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
@@ -36,14 +35,6 @@ public final class MethodFinderUtils {
     private MethodFinderUtils() {
     }
 
-    public static Method findMethodWithOrWithoutParameters(final Class<?> type, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
-        Method method = MethodFinderUtils.findMethod(type, name, returnType, paramTypes);
-        if (method == null) {
-            method = MethodFinderUtils.findMethod(type, name, returnType, MethodPrefixBasedFacetFactoryAbstract.NO_PARAMETERS_TYPES);
-        }
-        return method;
-    }
-    
     /**
      * Returns a specific public methods that: have the specified prefix; have
      * the specified return type (or some subtype), and has the
@@ -69,9 +60,7 @@ public final class MethodFinderUtils {
             return null;
         }
 
-        final int modifiers = method.getModifiers();
-
-        if (!Modifier.isPublic(modifiers)) {
+        if (!MethodUtil.isPublic(method)) {
             return null;
         }
 
@@ -102,7 +91,8 @@ public final class MethodFinderUtils {
 
         return method;
     }
-    
+
+
     public static Method findMethod_returningAnyOf(
             final Class<?>[] returnTypes,
             final Class<?> type,
@@ -121,38 +111,21 @@ public final class MethodFinderUtils {
     public static Method findMethod(final Class<?> type, final String name, final Class<?> returnType) {
         try {
             final Method[] methods = type.getMethods();
-            for (final Method method2 : methods) {
-                final Method method = method2;
-                final int modifiers = method.getModifiers();
-                // check for public modifier
-                if (!Modifier.isPublic(modifiers)) {
-                    continue;
-                }
+            return Arrays.stream(methods)
+                    .filter(MethodUtil::isPublic)
+                    .filter(MethodUtil::isNotStatic)
+                    .filter(method -> method.getName().equals(name))
+                    .filter(method -> returnType == null ||
+                                      returnType == method.getReturnType())
+                    .findFirst()
+                    .orElse(null);
 
-                if(MethodUtil.isStatic(method)) {
-                    continue;
-                }
-
-                // check for name
-                if (!method.getName().equals(name)) {
-                    continue;
-                }
-
-                // check for return type
-                if (returnType != null && returnType != method.getReturnType()) {
-                    continue;
-                }
-                return method;
-            }
         } catch (final SecurityException e) {
             return null;
         }
-        return null;
     }
 
     public static List<Method> findMethodsWithAnnotation(final Class<?> type, final Class<? extends Annotation> annotationClass) {
-
-        final List<Method> methods = new ArrayList<Method>();
 
         // Validate arguments
         if (type == null || annotationClass == null) {
@@ -160,17 +133,10 @@ public final class MethodFinderUtils {
         }
 
         // Find methods annotated with the specified annotation
-        for (final Method method : type.getMethods()) {
-            if(MethodUtil.isStatic(method)) {
-                continue;
-            }
-
-            if (method.isAnnotationPresent(annotationClass)) {
-                methods.add(method);
-            }
-        }
-
-        return methods;
+        return Arrays.stream(type.getMethods())
+                .filter(method -> !MethodUtil.isStatic(method))
+                .filter(method -> method.isAnnotationPresent(annotationClass))
+                .collect(Collectors.toList());
     }
 
     public static void removeMethod(final MethodRemover methodRemover, final Method method) {
