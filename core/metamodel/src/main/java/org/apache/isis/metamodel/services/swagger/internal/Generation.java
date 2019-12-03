@@ -18,11 +18,7 @@
  */
 package org.apache.isis.metamodel.services.swagger.internal;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -76,26 +72,16 @@ class Generation {
     public Generation(
             final String basePath,
             final SwaggerService.Visibility visibility,
-            final SpecificationLoader specificationLoader) {
+            final SpecificationLoader specificationLoader,
+            final Tagger tagger,
+            final ClassExcluder classExcluder,
+            final ValuePropertyFactory valuePropertyFactory) {
         this.basePath = basePath;
         this.visibility = visibility;
         this.specificationLoader = specificationLoader;
-
-        this.valuePropertyFactory = newValuePropertyFactory();
-        this.tagger = newTagger();
-        this.classExcluder = newClassExcluder();
-    }
-
-    protected ValuePropertyFactory newValuePropertyFactory() {
-        return new ValuePropertyFactory();
-    }
-
-    protected ClassExcluder newClassExcluder() {
-        return new ClassExcluder();
-    }
-
-    protected Tagger newTagger() {
-        return new Tagger();
+        this.tagger = tagger;
+        this.classExcluder = classExcluder;
+        this.valuePropertyFactory = valuePropertyFactory;
     }
 
     Swagger generate() {
@@ -121,12 +107,36 @@ class Generation {
 
         appendDefinitionsForOrphanedReferences();
 
+        swagger.setPaths(sorted(swagger.getPaths()));
+
         return swagger;
     }
 
+    private Map<String, Path> sorted(Map<String, Path> paths) {
+
+        final List<Map.Entry<String, Path>> entries = new ArrayList<>(paths.entrySet());
+        entries.sort(new Comparator<Map.Entry<String, Path>>() {
+            @Override
+            public int compare(Map.Entry<String, Path> o1, Map.Entry<String, Path> o2) {
+                final String tag1 = tagFor(o1);
+                final String tag2 = tagFor(o2);
+                final int tag = tag1.compareTo(tag2);
+                return tag != 0 ? tag : o1.getKey().compareTo(o2.getKey());
+            }
+
+            protected String tagFor(Map.Entry<String, Path> o1) {
+                return o1.getValue().getOperations().stream().findFirst().map(operation -> operation.getTags().stream().findFirst().orElse("(no tag)")).orElse("(no tag)");
+            }
+        });
+
+        final LinkedHashMap<String, Path> sorted = new LinkedHashMap<>();
+        entries.forEach(entry -> sorted.put(entry.getKey(), entry.getValue()));
+
+        return sorted;
+    }
+
     void appendServicePathsAndDefinitions() {
-        // (previously we took a protective copy to avoid a concurrent modification exception,
-        // but this is now done by SpecificationLoader itself)
+
         for (val spec : specificationLoader.snapshotSpecifications()) {
 
             val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
@@ -166,15 +176,6 @@ class Generation {
         }
     }
 
-    //    @SuppressWarnings("unused")
-    //    private void debugAllLoadedClasses(final Collection<ObjectSpecification> allSpecs) {
-    //        final ImmutableList<String> specs = FluentIterable.from(allSpecs)
-    //                .transform((final ObjectSpecification objectSpecification)->
-    //                        objectSpecification.getCorrespondingClass().getName())
-    //                .toSortedList(Ordering.natural());
-    //        final String all = Joiner.on(",").join(specs);
-    //        System .out.println(all);
-    //    }
 
     void appendObjectPathsAndDefinitions() {
         // (previously we took a protective copy to avoid a concurrent modification exception,

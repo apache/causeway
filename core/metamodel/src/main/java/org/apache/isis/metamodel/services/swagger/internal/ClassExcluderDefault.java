@@ -18,31 +18,19 @@
  */
 package org.apache.isis.metamodel.services.swagger.internal;
 
+import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.springframework.stereotype.Component;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertThat;
+@Component
+public class ClassExcluderDefault extends ClassExcluderAbstract {
 
-public class GenerationTest {
-
-    @Test
-    public void testAddReference() throws Exception {
-
-        Generation context = new Generation(null, null, null, new TaggerDefault(), new ClassExcluderDefault(), new ValuePropertyFactoryDefault());
-
-        context.addSwaggerReference("foo");
-        context.addSwaggerReference("bar");
-        context.addSwaggerReference("baz");
-
-        context.addSwaggerDefinition("foo");
-        context.addSwaggerDefinition("box");
-
-        Set<String> referencesWithoutDefinition = context.getReferencesWithoutDefinition();
-        assertThat(referencesWithoutDefinition.size(), is(2));
-        assertThat(referencesWithoutDefinition, contains("bar", "baz"));
-
+    public ClassExcluderDefault() {
+        ignorePackage("org.apache.isis.commons.internal");
     }
+
 }

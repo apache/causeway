@@ -22,17 +22,32 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.springframework.stereotype.Component;
 
 import io.swagger.models.Swagger;
 import io.swagger.util.Json;
 import io.swagger.util.Yaml;
 
+import javax.inject.Inject;
+
+@Component
 public class SwaggerSpecGenerator {
 
     private final SpecificationLoader specificationLoader;
+    private final Tagger tagger;
+    private final ClassExcluder classExcluder;
+    private final ValuePropertyFactory valuePropertyFactory;
 
-    public SwaggerSpecGenerator(final SpecificationLoader specificationLoader) {
+    @Inject
+    public SwaggerSpecGenerator(
+            final SpecificationLoader specificationLoader,
+            final Tagger tagger,
+            final ClassExcluder classExcluder,
+            final ValuePropertyFactory valuePropertyFactory) {
         this.specificationLoader = specificationLoader;
+        this.tagger = tagger;
+        this.classExcluder = classExcluder;
+        this.valuePropertyFactory = valuePropertyFactory;
     }
 
     public String generate(
@@ -58,7 +73,12 @@ public class SwaggerSpecGenerator {
     }
 
     protected Generation newGeneration(final String basePath, final SwaggerService.Visibility visibility) {
-        return new Generation(basePath, visibility, specificationLoader);
+        return new Generation(
+                basePath, visibility,
+                specificationLoader,
+                tagger,
+                classExcluder,
+                valuePropertyFactory);
     }
 
 }

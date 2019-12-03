@@ -19,7 +19,6 @@
 package org.apache.isis.metamodel.services.swagger;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 
@@ -37,13 +36,17 @@ import static org.apache.isis.commons.internal.resources._Resources.prependConte
 public class SwaggerServiceDefault implements SwaggerService {
 
     @Inject SpecificationLoader specificationLoader;
+    private final SwaggerSpecGenerator swaggerSpecGenerator;
+
+    public SwaggerServiceDefault(SwaggerSpecGenerator swaggerSpecGenerator) {
+        this.swaggerSpecGenerator = swaggerSpecGenerator;
+    }
 
     @Override
     public String generateSwaggerSpec(
             final Visibility visibility,
             final Format format) {
 
-        final SwaggerSpecGenerator swaggerSpecGenerator = new SwaggerSpecGenerator(specificationLoader);
         final String swaggerSpec = swaggerSpecGenerator.generate(basePath.get(), visibility, format);
         return swaggerSpec;
     }

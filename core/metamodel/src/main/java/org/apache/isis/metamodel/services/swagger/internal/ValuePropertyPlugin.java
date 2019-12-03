@@ -23,15 +23,15 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.services.swagger.internal.ValuePropertyFactory.Factory;
+import org.apache.isis.metamodel.services.swagger.internal.ValuePropertyFactoryDefault.Factory;
 
 public interface ValuePropertyPlugin {
 
     // -- CONTRACT
 
     public static interface ValuePropertyCollector {
-        public void addValueProperty(final Class<?> cls, final ValuePropertyFactory.Factory factory);
-        public void visitEntries(BiConsumer<Class<?>, ValuePropertyFactory.Factory> visitor);
+        public void addValueProperty(final Class<?> cls, final ValuePropertyFactoryDefault.Factory factory);
+        public void visitEntries(BiConsumer<Class<?>, ValuePropertyFactoryDefault.Factory> visitor);
     }
 
     public static ValuePropertyCollector collector() {

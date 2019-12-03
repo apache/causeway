@@ -30,49 +30,49 @@ public class TaggerTest {
 
         @Test
         public void fullyQualifiedClass() throws Exception {
-            String tag = new Tagger().tagForObjectType("foo.bar.Abc", null);
+            String tag = new TaggerDefault().tagForObjectType("foo.bar.Abc", null);
             assertThat(tag, is(equalTo("bar")));
         }
 
         @Test
         public void jaxb() throws Exception {
-            String tag = new Tagger().tagForObjectType("todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto", null);
+            String tag = new TaggerDefault().tagForObjectType("todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto", null);
             assertThat(tag, is(equalTo("todoitem")));
         }
 
         @Test
         public void schemaClass() throws Exception {
-            String tag = new Tagger().tagForObjectType("bar.Abc", null);
+            String tag = new TaggerDefault().tagForObjectType("bar.Abc", null);
             assertThat(tag, is(equalTo("bar")));
         }
 
         @Test
         public void noPackage() throws Exception {
-            String tag = new Tagger().tagForObjectType("Abc", null);
+            String tag = new TaggerDefault().tagForObjectType("Abc", null);
             assertThat(tag, is(equalTo("Abc")));
         }
 
         @Test
         public void isisAddons() throws Exception {
-            String tag = new Tagger().tagForObjectType("org.isisaddons.module.security.app.feature.ApplicationClass", null);
+            String tag = new TaggerDefault().tagForObjectType("org.isisaddons.module.security.app.feature.ApplicationClass", null);
             assertThat(tag, is(equalTo("isisaddons.org security")));
         }
 
         @Test
         public void incodeCatalog() throws Exception {
-            String tag = new Tagger().tagForObjectType("org.incode.module.communications.foo.bar.FooBar", null);
+            String tag = new TaggerDefault().tagForObjectType("org.incode.module.communications.foo.bar.FooBar", null);
             assertThat(tag, is(equalTo("catalog.incode.org communications")));
         }
 
         @Test
         public void internals() throws Exception {
-            String tag = new Tagger().tagForObjectType("org.apache.isis.applib.fixturescripts.FixtureResult", null);
+            String tag = new TaggerDefault().tagForObjectType("org.apache.isis.applib.fixturescripts.FixtureResult", null);
             assertThat(tag, is(equalTo("> apache isis internals")));
         }
 
         @Test
         public void applib() throws Exception {
-            String tag = new Tagger().tagForObjectType("isisApplib.ConfigurationServiceMenu", null);
+            String tag = new TaggerDefault().tagForObjectType("isisApplib.ConfigurationServiceMenu", null);
             assertThat(tag, is(equalTo("> apache isis applib")));
         }
 
