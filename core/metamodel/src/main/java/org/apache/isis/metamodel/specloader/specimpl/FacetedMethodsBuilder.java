@@ -452,6 +452,13 @@ public class FacetedMethodsBuilder {
             final Method actionMethod,
             final MethodScope methodScope) {
 
+        // try to short-circuit as much as possible
+        if(explicitActionAnnotationConfigured()) {
+            if(!_Annotations.isPresent(actionMethod, Action.class)) {
+                return false;
+            }
+        }
+
         if (!MethodUtil.inScope(actionMethod, methodScope)) {
             return false;
         }
