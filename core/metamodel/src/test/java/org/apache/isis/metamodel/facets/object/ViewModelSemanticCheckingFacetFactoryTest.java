@@ -52,7 +52,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
 
-    @Mock
+    @Mock @JUnitRuleMockery2.Ignoring
     private ServiceInjector mockServicesInjector;
 
     private MetaModelContext metaModelContext;
@@ -60,7 +60,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
     private ValidationFailures processThenValidate(final Class<?> cls) {
         
-        val programmingModel = new ProgrammingModelAbstract() {};
+        val programmingModel = new ProgrammingModelAbstract(mockServicesInjector) {};
         facetFactory.refineProgrammingModel(programmingModel);
         programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
         

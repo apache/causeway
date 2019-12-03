@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.SetMultimap;
@@ -44,9 +45,15 @@ import lombok.val;
 
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
+    private final ServiceInjector serviceInjector;
+
     private List<FacetFactory> unmodifiableFactories;
     private List<MetaModelValidator> unmodifiableValidators;
     private List<ObjectSpecificationPostProcessor> unmodifiablePostProcessors;
+
+    public ProgrammingModelAbstract(final ServiceInjector serviceInjector) {
+        this.serviceInjector = serviceInjector;
+    }
 
     /**
      * Finalizes the factory collection, can not be modified afterwards.
@@ -84,6 +91,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             Marker ... markers) {
         
         assertNotInitialized();
+        serviceInjector.injectServicesInto(instance);
         val factoryEntry = ProgrammingModelEntry.of(instance, markers);
         factoryEntriesByOrder.putElement(order, factoryEntry);
     }
@@ -95,6 +103,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             Marker... markers) {
         
         assertNotInitialized();
+        serviceInjector.injectServicesInto(instance);
         val validatorEntry = ProgrammingModelEntry.of(instance, markers);
         validatorEntriesByOrder.putElement(order, validatorEntry);
     }

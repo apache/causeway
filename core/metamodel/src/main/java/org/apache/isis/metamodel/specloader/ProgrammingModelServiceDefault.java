@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.specloader;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -44,6 +45,7 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
     
     // -- HELPER
 
+    @Inject private ServiceInjector serviceInjector;
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private ProgrammingModelInitFilter programmingModelInitFilter;
     @Inject private MetaModelContext metaModelContext;
@@ -55,7 +57,7 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         
         log.info("About to create the ProgrammingModel.");
 
-        val programmingModel = new ProgrammingModelFacetsJava8();
+        val programmingModel = new ProgrammingModelFacetsJava8(serviceInjector);
 
         // from all plugins out there, add their contributed FacetFactories, Validators 
         // and PostProcessors to the programming model

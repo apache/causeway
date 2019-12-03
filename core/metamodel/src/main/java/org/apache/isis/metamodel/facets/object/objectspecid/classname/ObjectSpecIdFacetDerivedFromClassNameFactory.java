@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.facets.object.objectspecid.classname;
 
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -33,20 +34,23 @@ import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
+import lombok.Setter;
 import lombok.val;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner, ObjectSpecIdFacetFactory {
 
-    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
+    @Inject
+    private ClassSubstitutor classSubstitutor = new ClassSubstitutorDefault(); // default for testing purposes only, overwritten in prod
 
     public ObjectSpecIdFacetDerivedFromClassNameFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -61,6 +65,9 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
         }
         final Class<?> cls = processClassContext.getCls();
         final Class<?> substitutedClass = classSubstitutor.getClass(cls);
+        if(substitutedClass == null) {
+            return;
+        }
 
         final ObjectSpecIdFacet objectSpecIdFacet = createObjectSpecIdFacet(facetHolder, substitutedClass);
         FacetUtil.addFacet(objectSpecIdFacet);

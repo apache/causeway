@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.specloader.classsubstitutor;
 
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,7 +32,7 @@ public class ClassSubstitutorTest_getClass {
 
     @Before
     public void setUp() throws Exception {
-        classSubstitutor = new ClassSubstitutor();
+        classSubstitutor = new ClassSubstitutorDefault();
     }
 
     public static class SomeDomainObject {

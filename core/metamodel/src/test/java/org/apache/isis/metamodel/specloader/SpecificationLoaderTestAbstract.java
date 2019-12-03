@@ -82,8 +82,7 @@ abstract class SpecificationLoaderTestAbstract {
         }
 
         TitleService mockTitleService() {
-            val mock = Mockito.mock(TitleService.class);
-            return mock;
+            return Mockito.mock(TitleService.class);
         }
         
         TranslationService mockTranslationService() {
@@ -92,12 +91,12 @@ abstract class SpecificationLoaderTestAbstract {
             return mock;
         }
 
-        ServiceInjector getServiceInjector() {
+        ServiceInjector mockServiceInjector() {
             return Mockito.mock(ServiceInjector.class);
         }
-        
+
         ProgrammingModel getProgrammingModel() {
-            return new ProgrammingModelFacetsJava8();
+            return new ProgrammingModelFacetsJava8(mockServiceInjector());
         }
         
     }
@@ -130,6 +129,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .authenticationSessionProvider(mockAuthenticationSessionProvider = producers.mockAuthenticationSessionProvider())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())
+                .serviceInjector(producers.mockServiceInjector())
                 .build();
         
         specificationLoader = metaModelContext.getSpecificationLoader();

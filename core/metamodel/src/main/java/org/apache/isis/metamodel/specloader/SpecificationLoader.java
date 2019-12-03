@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
@@ -93,7 +94,7 @@ public interface SpecificationLoader {
      *
      * <p>
      * It is possible for this method to return <tt>null</tt>, for example if
-     * the configured {@link org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor}
+     * the configured {@link ClassSubstitutor}
      * has filtered out the class.
      * 
      * @return {@code null} if {@code domainType==null}

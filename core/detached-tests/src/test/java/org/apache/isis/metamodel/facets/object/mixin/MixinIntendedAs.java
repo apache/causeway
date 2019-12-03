@@ -20,6 +20,10 @@ package org.apache.isis.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import org.apache.isis.applib.Identifier;
@@ -39,9 +43,9 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.title.TitleServiceDefault;
 
-import static org.mockito.Mockito.when;
-
 import lombok.val;
+
+import static org.mockito.Mockito.*;
 
 abstract class MixinIntendedAs {
     
@@ -50,8 +54,10 @@ abstract class MixinIntendedAs {
 
     protected void setUp() throws Exception {
 
-        programmingModel = new ProgrammingModelFacetsJava8();
-        
+        val mockServiceInjector = Mockito.mock(ServiceInjector.class);
+        when(mockServiceInjector.injectServicesInto(ArgumentMatchers.any())).thenAnswer(i -> i.getArguments()[0]);
+        programmingModel = new ProgrammingModelFacetsJava8(mockServiceInjector);
+
         val mockTranslationService = Mockito.mock(TranslationService.class);
         when(mockTranslationService.getMode()).thenReturn(Mode.DISABLED);
         
@@ -62,6 +68,7 @@ abstract class MixinIntendedAs {
                 .programmingModel(programmingModel)
                 .translationService(mockTranslationService)
                 .titleService(new TitleServiceDefault())
+                .serviceInjector(mockServiceInjector)
                 .build();
         
         ((ProgrammingModelAbstract)programmingModel)

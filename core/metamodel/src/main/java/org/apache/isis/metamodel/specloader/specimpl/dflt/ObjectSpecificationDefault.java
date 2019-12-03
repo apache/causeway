@@ -57,7 +57,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.metamodel.specloader.specimpl.FacetedMethodsBuilder;
@@ -75,8 +75,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {
 
-    private static final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
-
     private static String determineShortName(final Class<?> introspectedClass) {
         final String name = introspectedClass.getName();
         return name.substring(name.lastIndexOf('.') + 1);
@@ -90,7 +88,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private Map<Method, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
-    
+    private final ClassSubstitutor classSubstitutor;
+
+
     /**
      * available only for managed-beans
      */
@@ -101,13 +101,15 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final MetaModelContext metaModelContext,
             final FacetProcessor facetProcessor,
             final String nameIfIsManagedBean,
-            final PostProcessor postProcessor) {
+            final PostProcessor postProcessor,
+            final ClassSubstitutor classSubstitutor) {
         super(correspondingClass, determineShortName(correspondingClass), facetProcessor, postProcessor);
 
         setMetaModelContext(metaModelContext);
-        
+
         this.nameIfIsManagedBean = nameIfIsManagedBean;
-        this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor);
+        this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutor);
+        this.classSubstitutor = classSubstitutor;
 
         facetProcessor.processObjectSpecId(correspondingClass, this);
         

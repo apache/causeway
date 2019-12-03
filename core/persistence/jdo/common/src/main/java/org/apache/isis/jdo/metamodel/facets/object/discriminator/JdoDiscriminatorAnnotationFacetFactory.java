@@ -19,6 +19,7 @@
 
 package org.apache.isis.jdo.metamodel.facets.object.discriminator;
 
+import javax.inject.Inject;
 import javax.jdo.annotations.Discriminator;
 
 import org.apache.isis.commons.internal.base._Strings;
@@ -31,13 +32,14 @@ import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 
 public class JdoDiscriminatorAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements ObjectSpecIdFacetFactory {
 
-    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
+    @Inject
+    private ClassSubstitutor classSubstitutor;
 
     public JdoDiscriminatorAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -59,13 +61,17 @@ implements ObjectSpecIdFacetFactory {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final String annotationValue = annotation.value();
-        final ObjectSpecIdFacet facet =
-                !_Strings.isNullOrEmpty(annotationValue)
-                ? new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(
-                        annotationValue, facetHolder)
-                        : new ObjectSpecIdFacetDerivedFromClassName(
-                                classSubstitutor.getClass(cls).getCanonicalName(), facetHolder);
-                        FacetUtil.addFacet(facet);
+        final ObjectSpecIdFacet facet;
+        if (!_Strings.isNullOrEmpty(annotationValue)) {
+            facet = new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(
+                    annotationValue, facetHolder);
+        } else {
+            final Class<?> substitutedClass = classSubstitutor.getClass(cls);
+            facet = substitutedClass != null
+                        ? new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder)
+                        : null;
+        }
+        FacetUtil.addFacet(facet);
     }
 
 

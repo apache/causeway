@@ -17,6 +17,7 @@
 
 package org.apache.isis.metamodel.progmodels.dflt;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
@@ -151,9 +152,10 @@ import org.apache.isis.metamodel.services.title.TitlesAndTranslationsValidator;
 
 @SuppressWarnings("deprecation")
 public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
-    
-    public ProgrammingModelFacetsJava8() {
-        
+
+    public ProgrammingModelFacetsJava8(ServiceInjector serviceInjector) {
+        super(serviceInjector);
+
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, FallbackFacetFactory.class);

@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.facets.param.name;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +34,7 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -49,7 +51,10 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
 
     @Before
     public void setUp() throws Exception {
-        programmingModel = new ProgrammingModelFacetsJava8();
+
+        val mockServiceInjector = Mockito.mock(ServiceInjector.class);
+
+        programmingModel = new ProgrammingModelFacetsJava8(mockServiceInjector);
         
         val metaModelContext = MetaModelContext_forTesting.builder().build();
         

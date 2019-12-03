@@ -41,10 +41,11 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
@@ -85,8 +86,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
-    
-    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
+    @Inject private ClassSubstitutor classSubstitutor = new ClassSubstitutorDefault();  // default for testing purposes only, overwritten in prod
 
     private ProgrammingModel programmingModel;
     private FacetProcessor facetProcessor;
@@ -358,7 +358,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                     metaModelContext,
                     facetProcessor, 
                     managedBeanNameIfAny, 
-                    postProcessor);
+                    postProcessor, classSubstitutor);
         }
 
         return objectSpec;

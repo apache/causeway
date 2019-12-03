@@ -47,7 +47,7 @@ import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodReturn;
 
@@ -135,7 +135,7 @@ public class FacetedMethodsBuilder {
 
     private final FacetProcessor facetProcessor;
 
-    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
+    private final ClassSubstitutor classSubstitutor;
 
     private final SpecificationLoader specificationLoader;
 
@@ -148,21 +148,24 @@ public class FacetedMethodsBuilder {
 
     public FacetedMethodsBuilder(
             final ObjectSpecificationAbstract inspectedTypeSpec,
-            final FacetProcessor facetProcessor) {
-        
+            final FacetProcessor facetProcessor,
+            final ClassSubstitutor classSubstitutor) {
+
         if (log.isDebugEnabled()) {
             log.debug("creating JavaIntrospector for {}", inspectedTypeSpec.getFullIdentifier());
         }
-        
+
+        this.facetProcessor = facetProcessor;
+        this.classSubstitutor = classSubstitutor;
+
         val mmContext = inspectedTypeSpec.getMetaModelContext();
 
         this.inspectedTypeSpec = inspectedTypeSpec;
         this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
-        
+
         val methodsRemaining = introspectedClass.getMethods();
         this.methodRemover = new FacetedMethodsMethodRemover(introspectedClass, methodsRemaining);
 
-        this.facetProcessor = facetProcessor;
         this.specificationLoader = mmContext.getSpecificationLoader();
 
         val isisConfiguration = mmContext.getConfiguration();
