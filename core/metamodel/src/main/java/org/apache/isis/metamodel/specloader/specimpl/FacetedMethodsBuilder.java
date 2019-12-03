@@ -488,8 +488,8 @@ public class FacetedMethodsBuilder {
         if (getFacetProcessor().recognizes(actionMethod)) {
             return false;
         }
+
         // we have a valid action candidate, so fall through
-        
         log.debug("  identified action {}", actionMethod);
         return true;
     }

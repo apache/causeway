@@ -19,12 +19,20 @@
 
 package org.apache.isis.metamodel.facets;
 
+import lombok.val;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.Contributed;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
@@ -51,60 +59,51 @@ implements MethodPrefixBasedFacetFactory {
     }
 
  
-    
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-    
-        
-//XXX[2161] replaced by SupportingMethodValidatorRefinerFactory, which changes behavior!     
-        
-//        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
-//            return;
-//        }
-//
-//        val noParamsOnly = _Config.getConfiguration().getBoolean(
-//                ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
-//                ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
-//
-//        programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
-//
-//            @Override
-//            public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
-//
-//                
-//                val objectActionStream = objectSpec.streamObjectActions(Contributed.EXCLUDED);
-//                
-//                objectActionStream.forEach(objectAction->{
-//                    for (final String prefix : prefixes) {
-//                        String actionId = objectAction.getId();
-//
-//                        if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
-//
-//                            val explanation =
-//                                    objectAction.getParameterCount() > 0 && 
-//                                    noParamsOnly &&
-//                                    (Objects.equals(prefix, MethodLiteralConstants.HIDE_PREFIX) || 
-//                                            Objects.equals(prefix, MethodLiteralConstants.DISABLE_PREFIX))
-//                                    ? " (note that such methods must have no parameters, '"
-//                                        + ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY
-//                                        + "' config property)"
-//                                            : "";
-//
-//                            val message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
-//                            validationFailures.add(
-//                                    objectSpec.getIdentifier(),
-//                                    message,
-//                                    objectSpec.getIdentifier().getClassName(),
-//                                    actionId,
-//                                    prefix,
-//                                    explanation);
-//                        }
-//                    }
-//                });
-//
-//                return true;
-//            
-//        });
+
+        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
+            return;
+        }
+
+        val noParamsOnly = getConfiguration().getReflector().getValidator().isNoParamsOnly();
+
+        programmingModel.addValidator((objectSpec, metaModelValidator) -> {
+
+            val objectActionStream = objectSpec.streamObjectActions(Contributed.EXCLUDED);
+
+            objectActionStream.forEach(objectAction->{
+                for (final String prefix : prefixes) {
+                    String actionId = objectAction.getId();
+
+                    if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
+
+                        val explanation =
+                                objectAction.getParameterCount() > 0 &&
+                                noParamsOnly &&
+                                (Objects.equals(prefix, MethodLiteralConstants.HIDE_PREFIX) ||
+                                        Objects.equals(prefix, MethodLiteralConstants.DISABLE_PREFIX))
+                                ? " (note that such methods must have no parameters, '"
+                                    + "isis.reflector.validator.no-params-only"
+                                    + "' config property)"
+                                        : "";
+
+                        val message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
+                        metaModelValidator.onFailure(
+                                objectSpec,
+                                objectSpec.getIdentifier(),
+                                message,
+                                objectSpec.getIdentifier().getClassName(),
+                                actionId,
+                                prefix,
+                                explanation);
+                    }
+                }
+            });
+
+            return true;
+
+        });
     }
 
 }
