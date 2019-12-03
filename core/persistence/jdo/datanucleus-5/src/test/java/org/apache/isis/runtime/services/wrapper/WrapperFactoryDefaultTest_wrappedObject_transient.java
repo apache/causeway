@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.wrapper;
+package org.apache.isis.runtime.services.wrapper;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
