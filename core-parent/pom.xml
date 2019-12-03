@@ -789,6 +789,7 @@ under the License.
 				<module>../mavendeps</module>
 				<module>../extensions</module>
 				<module>../incubator</module>
+				<module>../legacy</module>
 				<module>../starters</module>
 			</modules>
 		</profile>

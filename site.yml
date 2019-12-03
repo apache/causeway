@@ -11,10 +11,13 @@ content:
       start_path: antora/components/core # core
       branches: HEAD
     - url: .
-      start_path: antora/components/extensions # extensions
+      start_path: antora/components/extensions # other
       branches: HEAD
     - url: .
-      start_path: antora/components/incubator # incubator
+      start_path: antora/components/incubator # other
+      branches: HEAD
+    - url: .
+      start_path: antora/components/legacy # other
       branches: HEAD
     - url: .
       start_path: antora/components/refguide # refguide
@@ -115,12 +118,20 @@ content:
       start_path: incubator/core/model/src/main/doc # other
       branches: HEAD
 
-# extensions
+# legacy
     - url: .
-      start_path: extensions/other/legacy/src/main/doc # other
+      start_path: legacy/core/applib/src/main/doc # other
       branches: HEAD
     - url: .
-      start_path: extensions/other/spring/src/main/doc # other
+      start_path: legacy/core/commons/src/main/doc # other
+      branches: HEAD
+    - url: .
+      start_path: legacy/core/runtime/src/main/doc # other
+      branches: HEAD
+
+# extensions
+    - url: .
+      start_path: extensions/core/spring/src/main/doc # other
       branches: HEAD
     - url: .
       start_path: extensions/security/secman/src/main/doc # security secman

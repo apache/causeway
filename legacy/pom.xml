@@ -21,19 +21,19 @@
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.incubator</groupId>
-	<artifactId>isis-incubator</artifactId>
+	<groupId>org.apache.isis.legacy</groupId>
+	<artifactId>isis-legacy</artifactId>
 
-	<name>Apache Isis Incubator</name>
+	<name>Apache Isis Legacy</name>
 	<description>
-        Collection of Apache Isis extensions, currently incubating.
+        Collection of deprecated Apache Isis functionality, for removal.
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.incubator</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/incubator</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.legacy</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/legacy</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -61,15 +61,27 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.apache.isis.incubator</groupId>
-				<artifactId>isis-incubator-model</artifactId>
+				<groupId>org.apache.isis.legacy</groupId>
+				<artifactId>isis-legacy-applib</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.legacy</groupId>
+				<artifactId>isis-legacy-commons</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.legacy</groupId>
+				<artifactId>isis-legacy-runtime</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<modules>
-		<module>core/model</module>
+		<module>core/applib</module>
+		<module>core/commons</module>
+		<module>core/runtime</module>
 	</modules>
 
 </project>

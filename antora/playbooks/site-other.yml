@@ -8,18 +8,37 @@ content:
 
 # antora
     - url: .
+      start_path: antora/components/extensions # other
+      branches: HEAD
+    - url: .
+      start_path: antora/components/incubator # other
+      branches: HEAD
+    - url: .
+      start_path: antora/components/legacy # other
+      branches: HEAD
+    - url: .
       start_path: antora/components/toc
+      branches: HEAD
+
+# incubator
+    - url: .
+      start_path: incubator/core/model/src/main/doc # other
+      branches: HEAD
+
+# legacy
+    - url: .
+      start_path: legacy/core/applib/src/main/doc # other
+      branches: HEAD
+    - url: .
+      start_path: legacy/core/commons/src/main/doc # other
+      branches: HEAD
+    - url: .
+      start_path: legacy/core/runtime/src/main/doc # other
       branches: HEAD
 
 # extensions
     - url: .
-      start_path: extensions/other/incubator/src/main/doc # other
-      branches: HEAD
-    - url: .
-      start_path: extensions/other/legacy/src/main/doc # other
-      branches: HEAD
-    - url: .
-      start_path: extensions/other/spring/src/main/doc # other
+      start_path: extensions/core/spring/src/main/doc # other
       branches: HEAD
 
 

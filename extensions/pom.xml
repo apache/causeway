@@ -185,8 +185,7 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>other/legacy</module>
-		<module>other/spring</module>
+		<module>core/spring</module>
 		<module>security/secman</module>
 		<module>testing/fixtures</module>
 		<module>testing/specsupport</module>

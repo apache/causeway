@@ -1,0 +1,2 @@
+include::legacy:ROOT:partial$module-nav.adoc[]
+
