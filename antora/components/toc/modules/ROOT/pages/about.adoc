@@ -55,9 +55,11 @@ include::_attributes.adoc[]
 
 |
 [discrete]
-== Extensions
+== Catalogs
 
 *  xref:extensions:ROOT:about.adoc[Extensions Catalog]
+*  xref:incubator:ROOT:about.adoc[Incubator Catalog]
+*  xref:legacy:ROOT:about.adoc[Legacy Catalog]
 
 |
 [discrete]

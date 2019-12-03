@@ -1,5 +1,5 @@
-name: incubator
-title: "Incubator Catalog"
+name: legacy
+title: "Legacy Catalog"
 version: master
 start_page: ROOT:about.adoc
 nav:
