@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.jaxrs.resteasy.conneg;
+package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.conneg;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
