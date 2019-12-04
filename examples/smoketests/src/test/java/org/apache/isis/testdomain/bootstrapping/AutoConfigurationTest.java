@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.metamodel.MetaModelContexts;

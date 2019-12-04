@@ -26,14 +26,13 @@ import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
@@ -42,8 +41,6 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryp
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.shiro.WebModuleShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;

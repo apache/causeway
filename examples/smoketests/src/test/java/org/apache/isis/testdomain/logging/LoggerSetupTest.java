@@ -25,7 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.presets.IsisPresets;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 

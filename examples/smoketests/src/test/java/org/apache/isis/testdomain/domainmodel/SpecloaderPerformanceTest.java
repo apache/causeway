@@ -28,7 +28,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;

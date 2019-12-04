@@ -31,7 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.ldap.LdapConstants;

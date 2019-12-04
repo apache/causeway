@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
-import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;

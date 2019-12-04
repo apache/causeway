@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Smoketest;

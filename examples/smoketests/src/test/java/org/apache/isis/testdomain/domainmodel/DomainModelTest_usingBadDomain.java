@@ -27,7 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.config.metamodel.specloader.IntrospectionMode;

@@ -1050,6 +1050,14 @@ public class IsisConfiguration {
             private LabelPosition label = LabelPosition.NOT_SPECIFIED;
         }
 
+        public interface ConfigPropsForPropertyOrParameterLayout {
+            public LabelPosition getLabelPosition();
+
+            /**
+             * Alias for {@link #getLabelPosition()}
+             */
+            public LabelPosition getLabel();
+        }
     }
 
     @Component

@@ -38,7 +38,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.runtime.services.message.MessageServiceDefault;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;

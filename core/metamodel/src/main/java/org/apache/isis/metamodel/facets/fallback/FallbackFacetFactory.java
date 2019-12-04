@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.config.ConfigPropsForPropertyOrParameterLayout;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -129,12 +129,12 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     }
 
-    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, IsisConfiguration.Viewers.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
         final LabelPosition labelPosition = from(configPropsHolder);
         return new LabelAtFacetFromLayoutConfiguration(labelPosition, facetHolder);
     }
 
-    private static LabelPosition from(ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+    private static LabelPosition from(IsisConfiguration.Viewers.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
         final LabelPosition labelPosition = configPropsHolder.getLabelPosition();
         if(labelPosition != LabelPosition.NOT_SPECIFIED) {
             return labelPosition;
