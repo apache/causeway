@@ -22,7 +22,7 @@ package org.apache.isis.runtime.persistence.objectstore.transaction;
 import java.util.Iterator;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.jdo.persistence.PersistenceSession5;
+import org.apache.isis.persistence.jdo.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;

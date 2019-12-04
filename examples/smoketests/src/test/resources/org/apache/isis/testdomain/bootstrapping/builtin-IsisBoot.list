@@ -22,9 +22,9 @@ org.apache.isis.extensions.fixtures.FixturesLifecyleService
 org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService
 org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts
 org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlInternal
-org.apache.isis.jdo.jdosupport.IsisJdoSupportDN5
-org.apache.isis.jdo.metrics.MetricsServiceDefault
-org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo
+org.apache.isis.persistence.jdo.jdosupport.IsisJdoSupportDN5
+org.apache.isis.persistence.jdo.metrics.MetricsServiceDefault
+org.apache.isis.persistence.jdo.persistence.IsisPlatformTransactionManagerForJdo
 org.apache.isis.metamodel.services.ServiceInjectorDefault
 org.apache.isis.metamodel.services.appfeat.ApplicationFeatureFactory
 org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault
