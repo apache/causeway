@@ -51,7 +51,7 @@ import lombok.NoArgsConstructor;
 import lombok.val;
 
 
-public class ObjectAdapterMementoDefault implements Serializable {
+final class ObjectAdapterMementoDefault implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

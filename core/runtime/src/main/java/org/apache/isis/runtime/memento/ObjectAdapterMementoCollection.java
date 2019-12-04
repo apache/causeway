@@ -51,7 +51,7 @@ final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
         
         //TODO[2112] we don't need the persistence layer to do that!
         val listOfPojos = getContainer().stream()
-              .map(memento->((ObjectAdapterMementoDefault)memento).getObjectAdapter(mementoStore, specificationLoader))
+              .map(memento->memento.reconstructObject(mementoStore, specificationLoader))
               .filter(_NullSafe::isPresent)
               .map(ManagedObject::getPojo)
               .filter(_NullSafe::isPresent)

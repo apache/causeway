@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  * held, avoiding the need for serializing the whole object graph.
  */
 @Log4j2
-public class Memento implements Serializable {
+class Memento implements Serializable {
 
     private final static long serialVersionUID = 1L;
 

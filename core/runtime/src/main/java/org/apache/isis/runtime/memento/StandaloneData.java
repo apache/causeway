@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -35,7 +34,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 
-public class StandaloneData extends Data {
+final class StandaloneData extends Data {
 
     private static final long serialVersionUID = 1L;
 

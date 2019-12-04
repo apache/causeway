@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 
-public class CollectionData extends Data {
+final class CollectionData extends Data {
 
     private final static long serialVersionUID = 1L;
     private final Data[] elements;

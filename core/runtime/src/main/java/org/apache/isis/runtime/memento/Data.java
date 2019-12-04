@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 
-public class Data implements Encodable, Serializable {
+class Data implements Encodable, Serializable {
 
     private final static long serialVersionUID = 1L;
 

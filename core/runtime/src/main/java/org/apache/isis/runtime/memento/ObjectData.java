@@ -28,7 +28,7 @@ import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 
-public class ObjectData extends Data {
+final class ObjectData extends Data {
 
     private static final long serialVersionUID = 7121411963269613347L;
     private final static Encodable NO_ENTRY = new Null();
