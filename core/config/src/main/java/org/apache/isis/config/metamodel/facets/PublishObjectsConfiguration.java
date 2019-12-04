@@ -16,9 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.facets.properties.property.publishing;
+package org.apache.isis.config.metamodel.facets;
 
-public enum PublishPropertiesConfiguration {
+import org.apache.isis.config.IsisConfiguration;
+
+public enum PublishObjectsConfiguration {
     ALL,
     NONE;
+
+    public static PublishObjectsConfiguration from(IsisConfiguration configuration) {
+        return configuration.getServices().getPublish().getObjects();
+    }
 }

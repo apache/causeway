@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.isis.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;

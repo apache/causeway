@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.specloader;
+package org.apache.isis.config.metamodel.specloader;
 
 import org.apache.isis.commons.internal.environment.DeploymentType;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;

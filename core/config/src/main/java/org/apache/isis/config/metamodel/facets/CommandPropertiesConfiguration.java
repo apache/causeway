@@ -16,21 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.facets.actions.action.command;
+package org.apache.isis.config.metamodel.facets;
 
-import org.apache.isis.config.IsisConfiguration;
-
-public enum CommandActionsConfiguration {
+public enum CommandPropertiesConfiguration {
     ALL,
-    IGNORE_SAFE,
-    /**
-     * Alias for {@link #IGNORE_SAFE}
-     */
-    IGNORE_QUERY_ONLY,
     NONE;
-
-    public static CommandActionsConfiguration from(final IsisConfiguration configuration) {
-        return configuration.getServices().getCommand().getActions();
-    }
 
 }

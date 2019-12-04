@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
+import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

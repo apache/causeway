@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.facets.properties.property.command;
+package org.apache.isis.config.metamodel.facets;
 
-public enum CommandPropertiesConfiguration {
-    ALL,
-    NONE;
-
+public enum EditingObjectsConfiguration {
+    TRUE,
+    FALSE;
 }

@@ -16,16 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.facets.object.domainobject.auditing;
+package org.apache.isis.config.metamodel.facets;
 
 import org.apache.isis.config.IsisConfiguration;
 
-public enum AuditObjectsConfiguration {
+public enum CommandActionsConfiguration {
     ALL,
+    IGNORE_SAFE,
+    /**
+     * Alias for {@link #IGNORE_SAFE}
+     */
+    IGNORE_QUERY_ONLY,
     NONE;
 
-    public static AuditObjectsConfiguration from(IsisConfiguration configuration) {
-        return configuration.getServices().getAudit().getObjects();
+    public static CommandActionsConfiguration from(final IsisConfiguration configuration) {
+        return configuration.getServices().getCommand().getActions();
     }
 
 }

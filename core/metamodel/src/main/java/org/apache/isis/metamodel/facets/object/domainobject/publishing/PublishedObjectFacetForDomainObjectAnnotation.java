@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.metamodel.facets.PublishObjectsConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacetAbstract;

@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.metamodel.facets.PublishPropertiesConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacetAbstract;

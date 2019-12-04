@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.viewer.wicket.ui.WebAppConfiguration;
+import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar

@@ -16,26 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.facets.object.domainobject;
+package org.apache.isis.config.viewer.wicket;
 
-public final class Util {
+public enum DialogMode {
 
-    private Util(){}
-
-    static boolean parse(final String value, final String... matches) {
-        for (String match : matches) {
-            if(match.equalsIgnoreCase(value))
-                return true;
-        }
-        return false;
-    }
-
-    public static boolean parseYes(final String value) {
-        return parse(value, "all", "yes", "y", "true", "1", "enable", "enabled");
-    }
-
-    public static boolean parseNo(final String value) {
-        return parse(value, "none", "no", "n", "false", "0", "disable", "disabled");
-    }
+    MODAL,
+    SIDEBAR
 
 }

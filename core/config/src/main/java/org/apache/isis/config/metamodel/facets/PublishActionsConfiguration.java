@@ -16,11 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui;
+package org.apache.isis.config.metamodel.facets;
 
-public enum DialogMode {
+import org.apache.isis.config.IsisConfiguration;
 
-    MODAL,
-    SIDEBAR
+public enum PublishActionsConfiguration {
+    ALL,
+    IGNORE_SAFE,
+    /**
+     * alias for {@link #IGNORE_SAFE}
+     */
+    IGNORE_QUERY_ONLY,
+    NONE;
+
+    public static PublishActionsConfiguration from(IsisConfiguration configuration) {
+        return configuration.getServices().getPublish().getActions();
+    }
 
 }

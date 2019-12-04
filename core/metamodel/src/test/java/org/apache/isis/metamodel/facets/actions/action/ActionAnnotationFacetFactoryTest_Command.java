@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
+import org.apache.isis.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetForActionAnnotationAsConfigured;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;

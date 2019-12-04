@@ -44,17 +44,17 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
-import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
-import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditObjectsConfiguration;
-import org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration;
-import org.apache.isis.metamodel.facets.object.domainobject.editing.EditingObjectsConfiguration;
-import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
-import org.apache.isis.metamodel.facets.properties.property.command.CommandPropertiesConfiguration;
-import org.apache.isis.metamodel.facets.properties.property.publishing.PublishPropertiesConfiguration;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeaturesInitConfiguration;
-import org.apache.isis.metamodel.specloader.IntrospectionMode;
-import org.apache.isis.viewer.wicket.ui.DialogMode;
+import org.apache.isis.config.metamodel.facets.CommandActionsConfiguration;
+import org.apache.isis.config.metamodel.facets.PublishActionsConfiguration;
+import org.apache.isis.config.metamodel.facets.AuditObjectsConfiguration;
+import org.apache.isis.config.metamodel.facets.DefaultViewConfiguration;
+import org.apache.isis.config.metamodel.facets.EditingObjectsConfiguration;
+import org.apache.isis.config.metamodel.facets.PublishObjectsConfiguration;
+import org.apache.isis.config.metamodel.facets.CommandPropertiesConfiguration;
+import org.apache.isis.config.metamodel.facets.PublishPropertiesConfiguration;
+import org.apache.isis.config.metamodel.services.ApplicationFeaturesInitConfiguration;
+import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.config.viewer.wicket.DialogMode;
 
 import lombok.Data;
 

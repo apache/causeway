@@ -1,4 +1,4 @@
-package org.apache.isis.metamodel.services.appfeat;
+package org.apache.isis.config.metamodel.services;
 
 public enum ApplicationFeaturesInitConfiguration {
     EAGER,

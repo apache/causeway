@@ -30,7 +30,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.spec.DomainModelException;
-import org.apache.isis.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
