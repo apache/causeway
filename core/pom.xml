@@ -1838,8 +1838,8 @@
 		<module>metamodel</module>
 		<module>runtime</module>
 		<module>runtime-services</module>
-		<module>runtime-spring</module>
 		<module>webapp</module>
+		<module>webboot-springboot</module>
 
 		<module>testsupport/unittestsupport</module>
 		<module>testsupport/integtestsupport</module>
