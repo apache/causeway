@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.schema.utils;
+package org.apache.isis.applib.util.schema;
 
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.jmock.auto.Mock;

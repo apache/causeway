@@ -26,12 +26,12 @@ import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
 import lombok.Getter;
 import lombok.Setter;

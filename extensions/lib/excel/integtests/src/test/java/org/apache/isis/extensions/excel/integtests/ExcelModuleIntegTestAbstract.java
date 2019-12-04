@@ -15,14 +15,16 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(classes = ExcelModuleIntegTestAbstract.AppManifest.class)
+@SpringBootTest(
+        classes = ExcelModuleIntegTestAbstract.AppManifest.class,
+        properties = {"logging.config=log4j2-test.xml" }
+)
 @ContextConfiguration
 @Transactional
 public abstract class ExcelModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
 
     @Configuration
     @PropertySources({
-            @PropertySource(IsisPresets.Log4j2Test),
             @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
             @PropertySource(IsisPresets.NoTranslations),
             @PropertySource(IsisPresets.DataNucleusAutoCreate),

@@ -4,7 +4,6 @@ public class ExcelDemoToDoItem_recreate5_forSven extends ExcelDemoToDoItem_recre
 
     public ExcelDemoToDoItem_recreate5_forSven() {
         super("sven");
-        withDiscoverability(Discoverability.DISCOVERABLE);
     }
 
 }

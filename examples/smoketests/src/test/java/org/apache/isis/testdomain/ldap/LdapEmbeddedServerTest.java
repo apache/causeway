@@ -39,9 +39,8 @@ import lombok.val;
 @Smoketest
 @SpringBootTest(
         classes = {LdapServerService.class},
-        properties = {
-                "logging.config=log4j2-test.xml",
-        })
+        properties = {"logging.config=log4j2-test.xml" }
+)
 class LdapEmbeddedServerTest {
 
     @Inject LdapServerService ldapServerService;

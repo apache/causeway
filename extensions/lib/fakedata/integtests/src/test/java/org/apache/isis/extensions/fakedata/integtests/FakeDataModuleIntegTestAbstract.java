@@ -16,14 +16,16 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(classes = FakeDataModuleIntegTestAbstract.AppManifest.class)
+@SpringBootTest(
+        classes = FakeDataModuleIntegTestAbstract.AppManifest.class,
+        properties = {"logging.config=log4j2-test.xml"}
+)
 @ContextConfiguration
 @Transactional
 public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
 
         @Configuration
         @PropertySources({
-                @PropertySource(IsisPresets.Log4j2Test),
                 @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
                 @PropertySource(IsisPresets.NoTranslations),
                 @PropertySource(IsisPresets.DataNucleusAutoCreate),
@@ -33,7 +35,6 @@ public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTes
                 IsisBootSecurityBypass.class,
                 IsisBootDataNucleus.class,
                 IsisExtFixturesModule.class,
-
                 FakeDataFixturesModule.class
         })
         public static class AppManifest {

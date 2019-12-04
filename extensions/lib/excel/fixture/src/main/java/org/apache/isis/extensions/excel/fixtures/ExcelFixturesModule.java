@@ -1,5 +1,6 @@
 package org.apache.isis.extensions.excel.fixtures;
 
+import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.modules.Module;
 import org.apache.isis.extensions.excel.ExcelModule;
@@ -10,7 +11,8 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-        ExcelModule.class
+        ExcelModule.class,
+        IsisExtFixturesModule.class
 })
 @ComponentScan
 public class ExcelFixturesModule implements Module {

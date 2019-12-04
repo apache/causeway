@@ -236,9 +236,7 @@ public class FixtureScripts extends AbstractService {
     )
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(
-            @ParameterLayout(
-                    named = "Fixture script"
-            )
+            @ParameterLayout(named = "Fixture script")
             final String fixtureScriptName,
             @ParameterLayout(
                     named = "Parameters",
@@ -247,15 +245,22 @@ public class FixtureScripts extends AbstractService {
                     multiLine = 10)
             @Parameter(optionality = Optionality.OPTIONAL)
             final String parameters) {
+        final FixtureScript fixtureScript = fixtureScriptByFriendlyName.get(fixtureScriptName);
+        return runFixtureScript(fixtureScript, parameters);
+    }
+
+    @Programmatic
+    public List<FixtureResult> runFixtureScript(
+            final FixtureScript fixtureScript,
+            final String parameters) {
         try {
             eventBusService.post(new FixturesInstallingEvent(this));
 
-            // if this method is called programmatically, the caller may have simply new'd up the fixture script
-            // (rather than use container.newTransientInstance(...).  To allow this use case, we need to ensure that
+            // the caller may have simply new'd up the fixture script.  To allow this use case, we need to ensure that
             // domain services are injected into the fixture script.
-            serviceInjector.injectServicesInto(fixtureScriptName);
+            serviceInjector.injectServicesInto(fixtureScript);
 
-            return fixtureScriptByFriendlyName.get(fixtureScriptName).run(parameters);
+            return fixtureScript.run(parameters);
         } finally {
             eventBusService.post(new FixturesInstalledEvent(this));
         }

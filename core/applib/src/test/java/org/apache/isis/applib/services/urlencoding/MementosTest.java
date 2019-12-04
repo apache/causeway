@@ -17,13 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.commons.internal.memento;
+package org.apache.isis.applib.services.urlencoding;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
+import org.apache.isis.commons.internal.memento._Mementos;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;

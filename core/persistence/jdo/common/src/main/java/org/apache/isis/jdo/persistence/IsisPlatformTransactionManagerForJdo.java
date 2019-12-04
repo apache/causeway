@@ -20,6 +20,7 @@ package org.apache.isis.jdo.persistence;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
@@ -38,13 +39,19 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service @Log4j2 @Qualifier("jdo")
 public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransactionManager {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject private IsisSessionFactory isisSessionFactory;
-    @Inject private ServiceRegistry serviceRegistry;
+    private final IsisSessionFactory isisSessionFactory;
+    private final ServiceRegistry serviceRegistry;
+
+    @Inject
+    public IsisPlatformTransactionManagerForJdo(IsisSessionFactory isisSessionFactory, ServiceRegistry serviceRegistry) {
+        this.isisSessionFactory = isisSessionFactory;
+        this.serviceRegistry = serviceRegistry;
+    }
 
     @Override
     protected Object doGetTransaction() throws TransactionException {

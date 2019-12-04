@@ -22,6 +22,13 @@ import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandl
 )
 public class ExcelUploadServiceForDemoToDoItem {
 
+    private final FixtureScripts fixtureScripts;
+
+    @Inject
+    public ExcelUploadServiceForDemoToDoItem(FixtureScripts fixtureScripts) {
+        this.fixtureScripts = fixtureScripts;
+    }
+
     public List<FixtureResult> uploadSpreadsheet(
             @ParameterLayout(named = "spreadsheet")
             final Blob file,
@@ -35,6 +42,4 @@ public class ExcelUploadServiceForDemoToDoItem {
         return fixtureScripts.runFixtureScript(script, parameters);
     }
 
-    @Inject
-    private FixtureScripts fixtureScripts;
 }
