@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.keycloak;
+package org.apache.isis.security.keycloak.webmodule;
 
 import lombok.val;
 
@@ -42,15 +42,9 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Order(Ordered.HIGHEST_PRECEDENCE + 100)
 public final class WebModuleKeycloak implements WebModule  {
 
-    private final static String KEYCLOAK_FILTER_CLASS_NAME =
-            KeycloakFilter.class.getName();
+    private final static String KEYCLOAK_FILTER_CLASS_NAME = KeycloakFilter.class.getName();
 
     private final static String KEYCLOAK_FILTER_NAME = "KeycloakFilter";
-
-    // -- CONFIGURATION
-
-
-    // -- 
 
     @Override
     public String getName() {

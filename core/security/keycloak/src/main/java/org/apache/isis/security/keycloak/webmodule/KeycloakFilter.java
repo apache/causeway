@@ -1,4 +1,4 @@
-package org.apache.isis.security.keycloak;
+package org.apache.isis.security.keycloak.webmodule;
 
 import lombok.val;
 

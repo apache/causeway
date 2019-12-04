@@ -23,6 +23,7 @@ import javax.inject.Singleton;
 import org.apache.isis.runtime.services.auth.AuthorizationManagerStandard;
 import org.apache.isis.security.keycloak.authentication.KeycloakAuthenticator;
 import org.apache.isis.security.keycloak.authorization.KeycloakAuthorizor;
+import org.apache.isis.security.keycloak.webmodule.WebModuleKeycloak;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
