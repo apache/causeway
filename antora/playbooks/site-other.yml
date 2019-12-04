@@ -24,6 +24,9 @@ content:
     - url: .
       start_path: incubator/core/model/src/main/doc # other
       branches: HEAD
+    - url: .
+      start_path: incubator/core/microprofile/src/main/doc # other
+      branches: HEAD
 
 # legacy
     - url: .
@@ -41,10 +44,10 @@ content:
       start_path: extensions/core/spring/src/main/doc # other
       branches: HEAD
     - url: .
-      start_path: extensions/core/h2console/src/main/doc # other
+      start_path: extensions/persistence/h2console/src/main/doc # other
       branches: HEAD
     - url: .
-      start_path: extensions/core/hsqldbmgr/src/main/doc # other
+      start_path: extensions/persistence/hsqldbmgr/src/main/doc # other
       branches: HEAD
 
 
