@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.applib;
+package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4;
 
-public class RepresentationTypeTest_lookup extends RepresentationTypeTest_lookup_ContractTest {
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationTypeTest_getMediaType_ContractTest;
 
-
+public class RepresentationTypeTest_getMediaType extends RepresentationTypeTest_getMediaType_ContractTest {
 
 }
