@@ -42,8 +42,8 @@ import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
-import org.apache.isis.schema.utils.CommandDtoUtils;
-import org.apache.isis.schema.utils.InteractionDtoUtils;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 
 @DomainService(
         nature = NatureOfService.DOMAIN

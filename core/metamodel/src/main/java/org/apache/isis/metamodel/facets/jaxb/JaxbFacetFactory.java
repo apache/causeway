@@ -274,7 +274,7 @@ implements MetaModelRefiner {
             validator.onFailure(
                     property,
                     property.getIdentifier(),
-                    "JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter.class) or equivalent.",
+                    "JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter.class) or equivalent.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),
                     propertyType.getName());

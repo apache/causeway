@@ -6,6 +6,10 @@ Search also for: "TODO: v2: " in the .adoc documentation.
 
 == 2.0.0-M2 to 2.0.0-M3
 
+* `o.a.isis.schema.utils.Xxx` in the applib have moved to `o.a.isis.applib.util.schema`
+* `o.a.isis.schema.utils.jaxbadapters.Xxx` in the applib have moved to `o.a.isis.applib.jaxbadapters`
+
+
 === Server-Sent-Event (SSE) Support (ISIS-2102)
 
 Experimental feature to allow for submission of background-tasks, that themselfes may fire UI-events to update eg. a progress-bar.

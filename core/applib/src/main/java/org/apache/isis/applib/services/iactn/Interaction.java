@@ -51,7 +51,7 @@ import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v1.MetricsDto;
 import org.apache.isis.schema.ixn.v1.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
-import org.apache.isis.schema.utils.MemberExecutionDtoUtils;
+import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 /**

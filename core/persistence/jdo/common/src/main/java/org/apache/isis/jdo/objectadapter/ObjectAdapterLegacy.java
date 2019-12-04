@@ -31,7 +31,7 @@ import org.apache.isis.schema.common.v1.CollectionDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.common.v1.ValueType;
-import org.apache.isis.schema.utils.CommonDtoUtils;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 
 /**
  * TODO Interim class, expected to be removed, need to smoketest the CommandExecutorServiceDefault first

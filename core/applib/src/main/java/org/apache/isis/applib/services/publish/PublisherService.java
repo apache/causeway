@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.publish;
 
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 
 /**
  * Replaces {@link PublishingService}.
@@ -31,7 +32,7 @@ public interface PublisherService {
 
     /**
      * Most implementations are expected to use {@link Interaction.Execution#getDto()} to create a serializable
-     * XML representation of the execution.  The easiest way to do this is using {@link org.apache.isis.schema.utils.InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.  There is
+     * XML representation of the execution.  The easiest way to do this is using {@link InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.  There is
      * some flexibility here, though.
      */
     void publish(final Interaction.Execution<?, ?> execution);

@@ -55,7 +55,7 @@ import org.apache.isis.schema.metamodel.v1.Param;
 import org.apache.isis.schema.metamodel.v1.Property;
 import org.apache.isis.schema.metamodel.v1.ScalarParam;
 import org.apache.isis.schema.metamodel.v1.VectorParam;
-import org.apache.isis.schema.utils.CommonDtoUtils;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 
 import lombok.val;
 

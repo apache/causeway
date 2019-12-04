@@ -34,8 +34,8 @@ import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
-import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
+import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
+import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 
 @Service
 public class JaxbServiceDefault extends JaxbService.Simple {

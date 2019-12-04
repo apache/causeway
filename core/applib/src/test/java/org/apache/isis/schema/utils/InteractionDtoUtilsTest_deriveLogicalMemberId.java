@@ -16,6 +16,7 @@
  */
 package org.apache.isis.schema.utils;
 
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;

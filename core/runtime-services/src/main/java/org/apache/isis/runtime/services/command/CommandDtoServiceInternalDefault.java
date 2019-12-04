@@ -45,8 +45,8 @@ import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidsDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
-import org.apache.isis.schema.utils.CommandDtoUtils;
-import org.apache.isis.schema.utils.CommonDtoUtils;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 
 import lombok.val;
 

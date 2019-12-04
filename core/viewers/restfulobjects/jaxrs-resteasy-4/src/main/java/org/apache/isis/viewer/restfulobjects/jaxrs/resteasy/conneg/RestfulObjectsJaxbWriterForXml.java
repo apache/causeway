@@ -30,7 +30,7 @@ import javax.xml.bind.Marshaller;
 import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
+import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 
 import lombok.val;
 

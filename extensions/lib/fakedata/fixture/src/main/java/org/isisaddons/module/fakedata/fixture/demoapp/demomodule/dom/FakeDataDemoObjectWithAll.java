@@ -24,7 +24,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
+import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 import org.joda.time.LocalDateTime;
 
 import lombok.Getter;

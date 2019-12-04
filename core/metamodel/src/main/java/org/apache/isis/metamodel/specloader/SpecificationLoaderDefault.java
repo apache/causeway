@@ -56,7 +56,7 @@ import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDef
 import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.schema.utils.CommonDtoUtils;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.springframework.stereotype.Service;
 
 import lombok.Getter;

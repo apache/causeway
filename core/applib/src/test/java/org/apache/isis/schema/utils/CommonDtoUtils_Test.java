@@ -18,6 +18,7 @@
  */
 package org.apache.isis.schema.utils;
 
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.jmock.auto.Mock;
 import org.junit.Assert;
 import org.junit.Rule;

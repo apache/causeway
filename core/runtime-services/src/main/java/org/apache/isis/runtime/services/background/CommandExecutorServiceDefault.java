@@ -63,8 +63,8 @@ import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.OidsDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
-import org.apache.isis.schema.utils.CommandDtoUtils;
-import org.apache.isis.schema.utils.CommonDtoUtils;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
