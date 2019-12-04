@@ -19,7 +19,7 @@ etc. See [setup instructions](./docs/DevelopmentGuide.md#setup-the-back-end).
 
 A [Naked Objects for .NET](http://nakedobjects.net/home/index.shtml) application should work as well, but is not tested yet.
 
-![Preview](./images/arc-overview.png)
+![Preview](./doc/arc-overview.png)
 
 ## User Interface
 
