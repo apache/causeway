@@ -43,6 +43,9 @@ content:
     - url: .
       start_path: extensions/core/h2console/src/main/doc # other
       branches: HEAD
+    - url: .
+      start_path: extensions/core/hsqldbmgr/src/main/doc # other
+      branches: HEAD
 
 
 ui:

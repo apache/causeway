@@ -17,7 +17,7 @@ org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi
 org.apache.isis.runtime.services.command.CommandDtoServiceInternalDefault
 org.apache.isis.runtime.services.confmenu.ConfigurationViewServiceDefault
 org.apache.isis.runtime.services.email.EmailServiceDefault
-org.apache.isis.runtime.services.hsqldb.HsqlDbManagerMenu
+org.apache.isis.extensions.hsqldbmgr.services.HsqlDbManagerMenu
 org.apache.isis.runtime.services.i18n.po.TranslationServicePoMenu
 org.apache.isis.runtime.services.ixn.InteractionDtoServiceInternalDefault
 org.apache.isis.runtime.services.publish.PublishingServiceInternalDefault

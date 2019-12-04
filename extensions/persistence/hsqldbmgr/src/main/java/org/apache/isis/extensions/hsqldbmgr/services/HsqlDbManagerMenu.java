@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.services.hsqldb;
+package org.apache.isis.extensions.hsqldbmgr.services;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.isis.config.IsisConfiguration;
@@ -38,7 +37,7 @@ import org.apache.isis.commons.internal.context._Context;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isisApplib.HsqlDbManagerMenu"
+        objectType = "isisExtHsqldbMgr.HsqlDbManagerMenu"
         )
 @DomainServiceLayout(
         named = "Prototyping",
@@ -46,15 +45,15 @@ import org.apache.isis.commons.internal.context._Context;
         )
 public class HsqlDbManagerMenu {
 
+    private final IsisConfiguration isisConfiguration;
+    private final String url;
 
-    @Inject IsisConfiguration isisConfiguration;
-
-    private String url;
-
-    @PostConstruct
-    public void init() {
+    @Inject
+    public HsqlDbManagerMenu(IsisConfiguration isisConfiguration) {
+        this.isisConfiguration = isisConfiguration;
         this.url = isisConfiguration.getPersistor().getDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
     }
+
 
 
     public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<HsqlDbManagerMenu> { }
@@ -82,6 +81,5 @@ public class HsqlDbManagerMenu {
         }
         return _Strings.isNullOrEmpty(url) || !url.contains("hsqldb:mem");
     }
-
 
 }
