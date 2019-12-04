@@ -35,10 +35,7 @@ import org.apache.isis.webapp.IsisBootWebApp;
     IsisBootWebApp.class,
     IsisWicketThemeSupportDefault.class
 })
-@ComponentScan(
-        basePackageClasses= {
-                IsisBootViewerWicket.class,
-        })
+@ComponentScan
 public class IsisBootViewerWicket {
 
 }

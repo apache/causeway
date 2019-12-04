@@ -33,11 +33,7 @@ import org.apache.isis.webapp.IsisBootWebApp;
 @Import({
     IsisBootWebApp.class
 })
-@ComponentScan(
-        basePackageClasses= {
-                IsisBootViewerRestfulObjects.class,
-        })
+@ComponentScan
 public class IsisBootViewerRestfulObjects {
-
 
 }
