@@ -82,8 +82,8 @@
 			<artifactId>isis-extensions-asciidoc</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-incubator</artifactId>
+			<groupId>org.apache.isis.incubator</groupId>
+			<artifactId>isis-incubator-model</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
