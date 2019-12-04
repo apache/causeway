@@ -18,6 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
+
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.messages.MessageRegistry;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -25,15 +33,6 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
-
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.SystemConstants;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 public final class PanelUtil {
 
@@ -98,10 +97,10 @@ public final class PanelUtil {
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
-        final String context = SystemConstants.class.getName();
-        final String areYouSure = translationService.translate(context, SystemConstants.MSG_ARE_YOU_SURE);
-        final String confirm = translationService.translate(context, SystemConstants.MSG_CONFIRM);
-        final String cancel = translationService.translate(context, SystemConstants.MSG_CANCEL);
+        final String context = MessageRegistry.class.getName();
+        final String areYouSure = translationService.translate(context, MessageRegistry.MSG_ARE_YOU_SURE);
+        final String confirm = translationService.translate(context, MessageRegistry.MSG_CONFIRM);
+        final String cancel = translationService.translate(context, MessageRegistry.MSG_CANCEL);
 
         confirmationConfig
         .withTitle(areYouSure)

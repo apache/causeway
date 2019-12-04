@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.config.SystemConstants;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
@@ -145,6 +144,10 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
      * The value is expected as a comma separated list.
      */
     public static final String IGNORE_EXTENSIONS_KEY = "ignoreExtensions";
+    /**
+     * Somewhat hacky, add this to the query
+     */
+    public static final String ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT = "__isis_force_logout";
 
     private static final Function<String, Pattern> STRING_TO_PATTERN = (final String input) -> {
         return Pattern.compile(".*\\." + input);
@@ -351,7 +354,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         try {
             val queryString = httpServletRequest.getQueryString();
             if (queryString != null && queryString
-                    .contains(SystemConstants.ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT)) {
+                    .contains(ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT)) {
 
                 authSessionStrategy.invalidate(httpServletRequest, httpServletResponse);
                 return;

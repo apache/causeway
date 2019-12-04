@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.registry.types;
+package org.apache.isis.config.beans;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -43,7 +43,6 @@ import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.config.beans.IsisComponentScanInterceptor;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;

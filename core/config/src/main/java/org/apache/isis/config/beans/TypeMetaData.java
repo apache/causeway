@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.registry.types;
+package org.apache.isis.config.beans;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
@@ -28,7 +28,7 @@ import lombok.Setter;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of")
-public final class TypeMetaData {
+final class TypeMetaData {
 
     /**
      * Fully qualified name of the underlying class.

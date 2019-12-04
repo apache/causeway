@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.config.registry.types.IsisBeanTypeRegistry;
+import org.apache.isis.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;

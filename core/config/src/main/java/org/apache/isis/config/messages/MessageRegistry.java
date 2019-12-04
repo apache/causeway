@@ -17,22 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.config;
+package org.apache.isis.config.messages;
 
-public final class WebAppConstants {
+import java.util.List;
 
-    public final static String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = WebAppConstants.class.getPackage().getName() + ".authenticationSession";
+import org.apache.isis.commons.internal.collections._Lists;
 
-    /**
-     * Servlet context parameter name used to specify the location for property file
-     * overloads. Property files in this location take precedence over property files
-     * in other locations. Since the ResourceStreamSourceComposite is being used
-     * property files from various locations are merged together. So only overloaded
-     * properties (entries in the file) need to present.
-     */
-    public static final String CONFIG_DIR_PARAM = "isis.config.dir";
+public class MessageRegistry {
 
-    private WebAppConstants() {
+    public static final String MSG_ARE_YOU_SURE = "Are you sure?";
+    public static final String MSG_CONFIRM = "Confirm";
+    public static final String MSG_CANCEL = "Cancel";
+
+    public MessageRegistry(){}
+
+    public List<String> listMessages() {
+        return _Lists.of(
+                MSG_ARE_YOU_SURE,
+                MSG_CONFIRM,
+                MSG_CANCEL);
     }
+
 
 }

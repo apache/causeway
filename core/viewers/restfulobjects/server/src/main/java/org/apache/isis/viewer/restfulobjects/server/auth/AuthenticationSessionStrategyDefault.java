@@ -37,7 +37,7 @@ import lombok.val;
  * The session is looked-up as follows:
  * <ul>
  * <li>it looks up from the {@link HttpSession} using the value
- * {@link WebAppConstants#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
+ * {@link AuthenticationSessionStrategyDefault#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
  * </ul>
  * 
  * @implNote prior to version 2.0 ... failing that, if a {@link LogonFixture} has been provided and not already
@@ -49,6 +49,8 @@ import lombok.val;
  */
 public class AuthenticationSessionStrategyDefault extends AuthenticationSessionStrategyAbstract {
 
+    public final static String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = AuthenticationSessionStrategyDefault.class.getPackage().getName() + ".authenticationSession";
+
     @Override
     public AuthenticationSession lookupValid(
             final HttpServletRequest httpServletRequest, 
@@ -59,7 +61,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
 
         // use previously authenticated session if available
         val authSession = (AuthenticationSession) 
-                httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
+                httpSession.getAttribute(HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         if (authSession != null) {
             val sessionValid = authenticationManager.isSessionValid(authSession);
             if (sessionValid) {
@@ -79,9 +81,9 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
         val httpSession = getHttpSession(httpServletRequest);
         if(authSession != null) {
             httpSession.setAttribute(
-                    WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
+                    HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
         } else {
-            httpSession.removeAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
+            httpSession.removeAttribute(HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         }
     }
 

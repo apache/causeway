@@ -35,7 +35,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.WebAppConstants;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 import lombok.val;
@@ -48,11 +47,16 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public class TranslationsResolverWicket implements TranslationsResolver {
 
+    /**
+     * Servlet context parameter name used to specify the location for translations.
+     */
+    public static final String CONFIG_DIR_PARAM = "isis.config.dir";
+
     @Override
     public List<String> readLines(final String fileName) {
         final ServletContext servletContext = getServletContext();
 
-        final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
+        final String configLocation = servletContext.getInitParameter(CONFIG_DIR_PARAM);
         try {
             if(configLocation != null) {
                 log.info( "Reading translations relative to config override location: {}", configLocation );

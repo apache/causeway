@@ -39,4 +39,6 @@ public final class ConfigurationConstants {
     public static final List<String> PROTECTED_KEYS =
             _Lists.of("password", "apiKey", "authToken");
 
+    // -- SERVICE SUPPORT
+    public static final String SERVICE_IDENTIFIER = "1";
 }

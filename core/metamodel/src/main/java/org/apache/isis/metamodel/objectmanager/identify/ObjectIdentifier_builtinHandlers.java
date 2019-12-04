@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.objectmanager.identify;
 import java.util.UUID;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.SystemConstants;
+import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
@@ -60,7 +60,7 @@ class ObjectIdentifier_builtinHandlers {
 
         @Override
         public RootOid handle(ManagedObject managedObject) {
-            final String identifier = SystemConstants.SERVICE_IDENTIFIER;
+            final String identifier = ConfigurationConstants.SERVICE_IDENTIFIER;
             return Oid.Factory.persistentOf(managedObject.getSpecification().getSpecId(), identifier);
         }
 

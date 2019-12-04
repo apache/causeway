@@ -19,15 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.List;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Fragment;
+import java.util.List;
 
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.MenuBars;
@@ -37,7 +35,7 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.SystemConstants;
+import org.apache.isis.config.messages.MessageRegistry;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
@@ -45,12 +43,13 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
 
 @Log4j2
 public final class ServiceActionUtil {
@@ -259,10 +258,10 @@ public final class ServiceActionUtil {
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
-        final String context = SystemConstants.class.getName();
-        final String areYouSure = translationService.translate(context, SystemConstants.MSG_ARE_YOU_SURE);
-        final String confirm = translationService.translate(context, SystemConstants.MSG_CONFIRM);
-        final String cancel = translationService.translate(context, SystemConstants.MSG_CANCEL);
+        final String context = MessageRegistry.class.getName();
+        final String areYouSure = translationService.translate(context, MessageRegistry.MSG_ARE_YOU_SURE);
+        final String confirm = translationService.translate(context, MessageRegistry.MSG_CONFIRM);
+        final String cancel = translationService.translate(context, MessageRegistry.MSG_CANCEL);
 
         confirmationConfig
         .withTitle(areYouSure)
