@@ -11,7 +11,7 @@ org.apache.isis.applib.services.swagger.SwaggerServiceMenu
 org.apache.isis.applib.services.tablecol.TableColumnOrderService$Default
 org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression
 org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts
-org.apache.isis.persistence.jdo.metrics.MetricsServiceDefault
+org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault
 org.apache.isis.metamodel.services.registry.ServiceRegistryDefault
 org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi
 org.apache.isis.runtime.services.command.CommandDtoServiceInternalDefault

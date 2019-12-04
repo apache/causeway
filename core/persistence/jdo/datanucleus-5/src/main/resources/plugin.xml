@@ -18,8 +18,8 @@
     under the License. 
 -->
 <plugin
-   id="org.apache.isis.objectstore.jdo.datanucleus"
-   name="Apache Isis JDO ObjectStore DataNucleus Implementation"
+   id="org.apache.isis.persistence.jdo.datanucleus5"
+   name="Apache Isis Persistence JDO DataNucleus 5 Implementation"
    provider-name="Apache Isis">
 
     <!--
@@ -28,13 +28,13 @@
     <extension point="org.datanucleus.store.rdbms.java_mapping">
         <mapping
             java-type="org.apache.isis.applib.value.Blob"
-            mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuetypes.IsisBlobMapping"/>
+            mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.IsisBlobMapping"/>
         <mapping
             java-type="org.apache.isis.applib.value.Clob"
-            mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuetypes.IsisClobMapping"/>
+            mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.IsisClobMapping"/>
         <mapping
             java-type="org.apache.isis.applib.value.Money"
-            mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuetypes.IsisMoneyMapping"/>
+            mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.IsisMoneyMapping"/>
     </extension>
 
 
@@ -47,14 +47,14 @@
                 jdbc-type="BLOB"
                 sql-type="BLOB"
                 default="true"
-                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
+                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
         </mapping>
         <mapping
                 java-type="[Ljava.lang.Byte;"
                 jdbc-type="BLOB"
                 sql-type="BLOB"
                 default="true"
-                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
+                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
         </mapping>
     </extension>
 
@@ -83,7 +83,7 @@
                 name="isis.password-string"
                 member-type="org.apache.isis.applib.value.Password"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.IsisPasswordConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.IsisPasswordConverter"/>
     </extension>
 
     <!--
@@ -94,7 +94,7 @@
                 name="isis.markup-string"
                 member-type="org.apache.isis.applib.value.Markup"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.IsisMarkupConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.typeconverters.IsisMarkupConverter"/>
     </extension>
 
 </plugin>

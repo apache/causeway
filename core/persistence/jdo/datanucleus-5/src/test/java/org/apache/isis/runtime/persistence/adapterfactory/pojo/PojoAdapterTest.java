@@ -25,7 +25,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.persistence.jdo.persistence.PersistenceSession5;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.spec.ObjectSpecId;

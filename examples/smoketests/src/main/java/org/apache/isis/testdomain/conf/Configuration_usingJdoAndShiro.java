@@ -32,7 +32,7 @@ import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.persistence.jdo.IsisBootDataNucleus;
+import org.apache.isis.persistence.jdo.datanucleus5.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;

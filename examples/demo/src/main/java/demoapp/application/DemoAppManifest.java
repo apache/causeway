@@ -37,7 +37,7 @@ import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.extensions.sse.IsisBootSse;
-import org.apache.isis.persistence.jdo.IsisBootDataNucleus;
+import org.apache.isis.persistence.jdo.datanucleus5.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.viewer.restfulobjects.server.IsisBootViewerRestfulObjects;
