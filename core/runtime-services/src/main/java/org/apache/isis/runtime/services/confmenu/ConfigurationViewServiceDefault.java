@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.util.ConfigUtil;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -112,11 +113,12 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
     private static void add(String key, String value, Map<String, ConfigurationProperty> map) {
 
-        value = ConfigurationConstants.maskIfProtected(key, value);
+        value = ConfigUtil.maskIfProtected(key, value);
 
         map.put(key, new ConfigurationProperty(key, value));
     }
 
-    
-    
+
+
+
 }

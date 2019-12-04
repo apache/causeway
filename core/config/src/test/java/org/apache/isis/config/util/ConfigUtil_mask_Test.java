@@ -16,34 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config;
+package org.apache.isis.config.util;
 
+import org.apache.isis.config.ConfigurationConstants;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class ConfigurationConstants_mask_Test {
+public class ConfigUtil_mask_Test {
 
     @Test
     public void not_a_password() {
-        assertThat(ConfigurationConstants.maskIfProtected("foo", "bar"), is(equalTo("bar")));
+        assertThat(ConfigUtil.maskIfProtected("foo", "bar"), is(equalTo("bar")));
     }
 
     @Test
     public void a_password() {
-        assertThat(ConfigurationConstants.maskIfProtected("xyz.password.abc", "bar"), is(equalTo("********")));
+        assertThat(ConfigUtil.maskIfProtected("xyz.password.abc", "bar"), is(equalTo("********")));
     }
 
     @Test
     public void a_PassWord() {
-        assertThat(ConfigurationConstants.maskIfProtected("xyz.PassWord.abc", "bar"), is(equalTo("********")));
+        assertThat(ConfigUtil.maskIfProtected("xyz.PassWord.abc", "bar"), is(equalTo("********")));
     }
 
     @Test
     public void is_null() {
-        assertThat(ConfigurationConstants.maskIfProtected(null, "bar"), is(equalTo("bar")));
+        assertThat(ConfigUtil.maskIfProtected(null, "bar"), is(equalTo("bar")));
     }
 
 }

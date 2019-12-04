@@ -19,6 +19,8 @@
 
 package org.apache.isis.config;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -26,6 +28,7 @@ import java.util.function.Supplier;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
+@UtilityClass
 public final class ConfigurationConstants {
 
     public static final String LIST_SEPARATOR = ",";
@@ -33,49 +36,7 @@ public final class ConfigurationConstants {
     public static final String ROOT_PREFIX = "isis";
     public static final String ROOT = ROOT_PREFIX + DELIMITER;
 
-//    public static final String DEFAULT_CONFIG_DIRECTORY = "config";
-    public static final String WEBINF_DIRECTORY = "WEB-INF";
-//    public static final String WEBINF_FULL_DIRECTORY = "src/main/webapp/" + WEBINF_DIRECTORY;
-
-//    public static final String DEFAULT_CONFIG_FILE = "isis.properties";
-//    public static final String WEB_CONFIG_FILE = "web.properties";
-
     public static final List<String> PROTECTED_KEYS =
             _Lists.of("password", "apiKey", "authToken");
-
-    public static String maskIfProtected(final String key, final String value) {
-        return isProtected(key) ? "********" : value;
-    }
-
-    public static Map<String, String> maskIfProtected(
-            final Map<String, String> inMap, 
-            final Supplier<Map<String, String>> mapFactory) {
-        final Map<String, String> result = mapFactory.get();
-
-        inMap.forEach((k, v)->{
-            result.put(k, maskIfProtected(k, v));
-        });
-
-        return result;
-    }
-
-    // -- HELPER
-
-    private ConfigurationConstants() {}
-
-    static boolean isProtected(final String key) {
-        if(_Strings.isNullOrEmpty(key)) {
-            return false;
-        }
-        final String toLowerCase = key.toLowerCase();
-        for (String protectedKey : ConfigurationConstants.PROTECTED_KEYS) {
-            if(toLowerCase.contains(protectedKey.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
 
 }

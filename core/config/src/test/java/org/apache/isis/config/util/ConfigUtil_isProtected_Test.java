@@ -16,51 +16,52 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config;
+package org.apache.isis.config.util;
 
+import org.apache.isis.config.ConfigurationConstants;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class ConfigurationConstants_isProtected_Test {
+public class ConfigUtil_isProtected_Test {
 
     @Test
     public void null_is_not() {
-        assertFalse(ConfigurationConstants.isProtected(null));
+        assertFalse(ConfigUtil.isProtected(null));
 
-        assertEquals("xxx", ConfigurationConstants.maskIfProtected(null, "xxx"));
+        assertEquals("xxx", ConfigUtil.maskIfProtected(null, "xxx"));
     }
 
     @Test
     public void empty_is_not() {
-        assertFalse(ConfigurationConstants.isProtected(""));
+        assertFalse(ConfigUtil.isProtected(""));
     }
 
     @Test
     public void password_is() {
-        assertTrue(ConfigurationConstants.isProtected("foo.PassWord.bar"));
-        assertTrue(ConfigurationConstants.isProtected("password.bar"));
-        assertTrue(ConfigurationConstants.isProtected("foo.PASSWORD"));
+        assertTrue(ConfigUtil.isProtected("foo.PassWord.bar"));
+        assertTrue(ConfigUtil.isProtected("password.bar"));
+        assertTrue(ConfigUtil.isProtected("foo.PASSWORD"));
 
-        assertEquals("********", ConfigurationConstants.maskIfProtected("password", "xxx"));
+        assertEquals("********", ConfigUtil.maskIfProtected("password", "xxx"));
     }
 
     @Test
     public void apiKey_is() {
-        assertTrue(ConfigurationConstants.isProtected("foo.apiKey.bar"));
-        assertTrue(ConfigurationConstants.isProtected("APIKEY.bar"));
-        assertTrue(ConfigurationConstants.isProtected("foo.apikey"));
+        assertTrue(ConfigUtil.isProtected("foo.apiKey.bar"));
+        assertTrue(ConfigUtil.isProtected("APIKEY.bar"));
+        assertTrue(ConfigUtil.isProtected("foo.apikey"));
     }
     @Test
     public void authToken_is() {
-        assertTrue(ConfigurationConstants.isProtected("foo.authToken.bar"));
-        assertTrue(ConfigurationConstants.isProtected("AUTHTOKEN.bar"));
-        assertTrue(ConfigurationConstants.isProtected("foo.authtoken"));
+        assertTrue(ConfigUtil.isProtected("foo.authToken.bar"));
+        assertTrue(ConfigUtil.isProtected("AUTHTOKEN.bar"));
+        assertTrue(ConfigUtil.isProtected("foo.authtoken"));
     }
     @Test
     public void otherwise_is_not() {
-        assertFalse(ConfigurationConstants.isProtected("foo"));
+        assertFalse(ConfigUtil.isProtected("foo"));
     }
 }
