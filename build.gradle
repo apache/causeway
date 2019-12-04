@@ -3,7 +3,6 @@ buildscript {
     ext.production = (findProperty('prod') ?: 'false') == 'true'
 
     repositories {
-        maven { url = "http://bintray.com/" }
         maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
         maven { url = 'https://plugins.gradle.org/m2/' }
         maven { url = 'https://kotlin.bintray.com/kotlinx' }
@@ -29,7 +28,6 @@ apply plugin: 'org.jetbrains.kotlin.frontend'
 apply plugin: 'kotlinx-serialization'
 
 repositories {
-    maven { url = "http://bintray.com/" }
     maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
     maven { url = 'https://kotlin.bintray.com/kotlinx' }
     maven { url = 'https://dl.bintray.com/kotlin/kotlin-js-wrappers' }
@@ -44,18 +42,24 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:${kotlinVersion}"
     compile "pl.treksoft:kvision:${kvisionVersion}"
     compile "pl.treksoft:kvision-bootstrap:${kvisionVersion}"
-    compile "pl.treksoft:kvision-select:${kvisionVersion}"
-    compile "pl.treksoft:kvision-datetime:${kvisionVersion}"
-    compile "pl.treksoft:kvision-spinner:${kvisionVersion}"
+    compile "pl.treksoft:kvision-bootstrap-css:${kvisionVersion}"
+    compile "pl.treksoft:kvision-fontawesome:${kvisionVersion}"
+    compile "pl.treksoft:kvision-bootstrap-select:${kvisionVersion}"
+    compile "pl.treksoft:kvision-bootstrap-datetime:${kvisionVersion}"
+    compile "pl.treksoft:kvision-bootstrap-spinner:${kvisionVersion}"
+    compile "pl.treksoft:kvision-bootstrap-upload:${kvisionVersion}"
+    compile "pl.treksoft:kvision-bootstrap-dialog:${kvisionVersion}"
     compile "pl.treksoft:kvision-richtext:${kvisionVersion}"
-    compile "pl.treksoft:kvision-upload:${kvisionVersion}"
     compile "pl.treksoft:kvision-handlebars:${kvisionVersion}"
     compile "pl.treksoft:kvision-i18n:${kvisionVersion}"
-    compile "pl.treksoft:kvision-chart:${kvisionVersion}"
     compile "pl.treksoft:kvision-datacontainer:${kvisionVersion}"
-    compile "pl.treksoft:kvision-moment:${kvisionVersion}"
+    compile "pl.treksoft:kvision-chart:${kvisionVersion}"
     compile "pl.treksoft:kvision-tabulator:${kvisionVersion}"
+    compile "pl.treksoft:kvision-moment:${kvisionVersion}"
+    compile "pl.treksoft:kvision-pace:${kvisionVersion}"
+    testCompile "com.github.snabbdom:snabbdom-kotlin:0.1.1"
     testCompile "org.jetbrains.kotlin:kotlin-test-js:${kotlinVersion}"
+    testCompile "pl.treksoft:kvision-testutils:${kvisionVersion}:tests"
 }
 
 kotlinFrontend {

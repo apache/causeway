@@ -1,10 +1,12 @@
 package org.ro.ui.kv
 
 import org.ro.core.Utils
+import org.ro.ui.kv.RoDialog
 import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Parameter
 import org.ro.ui.Command
+import org.ro.ui.Point
 import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.select.Select
@@ -14,13 +16,13 @@ class ActionPrompt(val action: Action) : Command {
 
     lateinit var form: RoDialog
 
-    fun open() {
+    fun open(at:Point) {
         val formItems = buildFormItems()
         form = RoDialog(
-                label = buildLabel(),
+                caption = buildLabel(),
                 items = formItems,
                 command = this)
-        form.show()
+        form.show(at)
     }
 
     override fun execute() {

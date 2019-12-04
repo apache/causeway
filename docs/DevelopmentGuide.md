@@ -2,6 +2,7 @@
 
 #Quickstart
 ## Frontend
+
 ### Requirements
 Kotlin/JS uses `Gradle` for the build, for the JS runtime `NodeJS`, and for the JS dependency management part `npm`.
 You should have installed:
@@ -239,4 +240,4 @@ nyc npm test
 https://github.com/istanbuljs/nyc
 
 ## Gradle Build Overview
-![Preview](./build-overview.png)
+![Preview](./dev-overview.png)

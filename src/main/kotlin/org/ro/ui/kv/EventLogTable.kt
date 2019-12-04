@@ -1,6 +1,5 @@
 package org.ro.ui.kv
 
-import com.github.snabbdom._get
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.ui.table.el.EventLogDetail
@@ -8,10 +7,9 @@ import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
-import pl.treksoft.kvision.panel.HPanel.Companion.hPanel
 import pl.treksoft.kvision.panel.VPanel
+import pl.treksoft.kvision.panel.hPanel
 import pl.treksoft.kvision.tabulator.*
-import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
 import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 
@@ -92,8 +90,8 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
     private fun showDetails(cell: pl.treksoft.kvision.tabulator.js.Tabulator.CellComponent) {
         val row = cell.getRow()
-        val data = row.getData()
-        val url: String = data._get("url")
+        val data = row.getData() as Map<String, String>
+        val url: String = data.get("url")!!
         val logEntry = EventStore.find(url)!!
         EventLogDetail(logEntry).open()
     }

@@ -1,11 +1,11 @@
 package org.ro.core.event
 
-import org.ro.core.Session
 import org.ro.core.Utils
 import org.ro.core.aggregator.IAggregator
 import org.ro.handler.ResponseHandler
 import org.ro.to.Link
 import org.ro.to.Method
+import org.ro.ui.kv.UiManager
 import org.w3c.xhr.XMLHttpRequest
 
 /**
@@ -40,7 +40,7 @@ class RoXmlHttpRequest {
         if (method != Method.POST.operation) {
             url += Utils.argumentsAsUrlParameter(link)
         }
-        val credentials: String = Session.getCredentials()
+        val credentials: String = UiManager.getCredentials()
 
         val xhr = XMLHttpRequest()
         xhr.open(method, url, true)

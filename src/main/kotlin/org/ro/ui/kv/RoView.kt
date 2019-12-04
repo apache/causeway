@@ -2,7 +2,7 @@ package org.ro.ui.kv
 
 import org.ro.ui.IconManager
 import pl.treksoft.kvision.core.*
-import pl.treksoft.kvision.panel.VPanel
+import pl.treksoft.kvision.panel.SimplePanel
 
 /**
  * Area between menu bar at the top and the status bar at the bottom.
@@ -25,7 +25,7 @@ object RoView {
         console.log("[RV.addTab] $title")
         console.log(index)
         if (index != null) {
-            val tab = tabPanel.getChildComponent(index) as VPanel
+            val tab = tabPanel.getChildComponent(index) as SimplePanel
             removeTab(tab)
             tabPanel.removeTab(index)
         }
@@ -42,7 +42,7 @@ object RoView {
         tabCount += 1
     }
 
-    fun removeTab(tab: VPanel) {
+    fun removeTab(tab: SimplePanel) {
         tabCount--
         UiManager.closeView(tab)
     }
@@ -54,6 +54,15 @@ object RoView {
                 color = color
         )
         tabPanel.background = bg
+    }
+
+    fun display(dialog: RoDialog) {
+        tabPanel.add(dialog)
+        dialog.verticalAlign = VerticalAlign.MIDDLE
+        dialog.focus()
+    }
+    fun remove(dialog: RoDialog) {
+        tabPanel.remove(dialog)
     }
 
 }

@@ -39,6 +39,9 @@
 +++ Karma
 +++ Broswerify
 +++ ~~Mocha~~
++++ ChromeHeadless
++++ jasmine
++++ qunit
 +++ PhtantomJS
 +++ coverage
 ++++ istanbul

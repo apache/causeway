@@ -1,5 +1,6 @@
 package org.ro.ui.kv
 
+import org.ro.core.Session
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.core.aggregator.IAggregator
 import org.ro.core.aggregator.UndefinedAggregator
@@ -7,23 +8,44 @@ import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
+import org.ro.ui.Point
 import org.ro.ui.RoStatusBar
-import pl.treksoft.kvision.panel.VPanel
+import org.w3c.dom.events.KeyboardEvent
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
+import pl.treksoft.kvision.core.Widget
+import pl.treksoft.kvision.dropdown.ContextMenu
+import pl.treksoft.kvision.panel.SimplePanel
+import pl.treksoft.kvision.utils.ESC_KEY
+import kotlin.browser.window
 
 /**
  * Single point of contact for view components consisting of:
  * @item RoMenubar,
  * @item RoView (tabs, etc.),
  * @item RoStatusbar,
+ * @item Session
  */
 object UiManager {
 
-    fun add(title: String, panel: VPanel, aggregator: IAggregator = UndefinedAggregator()) {
+    private var session: Session? = null
+    private val popups = mutableListOf<Widget>()
+
+    init {
+        window.addEventListener("keydown", fun(event) {
+            val e = event as KeyboardEvent
+            if (e.keyCode == ESC_KEY) {
+                pop()
+            }
+        })
+    }
+
+    fun add(title: String, panel: SimplePanel, aggregator: IAggregator = UndefinedAggregator()) {
         RoView.addTab(title, panel)
         EventStore.addView(title, aggregator, panel)
     }
 
-    fun closeView(tab: VPanel) {
+    fun closeView(tab: SimplePanel) {
         val tt = tab.title
         if (tt != null) {
             EventStore.closeView(tt)
@@ -52,7 +74,7 @@ object UiManager {
     }
 
     fun updatePower(by: String) {
-        RoView.updatePowered(by)
+//        RoView.updatePowered(by)
         RoStatusBar.brand("#FF00FF")
         // https://www.w3schools.com/css/css3_gradients.asp
         //  #grad {
@@ -74,6 +96,50 @@ object UiManager {
         val panel = RoDisplay(displayable as DisplayObject)
         add(title, panel, aggregator)
         displayable.isRendered = true
+    }
+
+    fun openDialog(panel: RoDialog, at: Point = Point(100, 100)) {
+        RoApp.add(panel)
+        panel.left = CssSize(at.x, UNIT.px)
+        panel.top = CssSize(at.x, UNIT.px)
+        push(panel)
+    }
+
+    fun closeDialog(panel: RoDialog) {
+        RoApp.remove(panel)
+        pop()
+    }
+
+    fun getUrl(): String {
+        return session!!.url
+    }
+
+    fun login(url: String, username: String, password: String) {
+        session = Session()
+        session!!.login(url, username, password)
+    }
+
+    fun getCredentials(): String {
+        return session!!.getCredentials()
+    }
+
+    fun push(widget: Widget) {
+        popups.add(widget)
+    }
+
+    fun pop() {
+        val len = popups.size
+        if (len > 0) {
+            val widget = popups[len - 1]
+            when (widget) {
+                is RoDialog -> widget.close()
+                is ContextMenu -> {
+                    widget.hide()
+                    widget.dispose()
+                }
+            }
+            popups.removeAt(len - 1)
+        }
     }
 
 }

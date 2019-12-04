@@ -1,8 +1,8 @@
 package org.ro.view
 
 import org.ro.core.event.LogEntry
-import org.ro.ui.Command
 import org.ro.ui.kv.RoDialog
+import org.ro.ui.Command
 import org.ro.ui.uicomp.FormItem
 
 class UndefinedAlert(val logEntry: LogEntry) : Command {
@@ -21,7 +21,7 @@ class UndefinedAlert(val logEntry: LogEntry) : Command {
         formItems.add(FormItem("URL", "Text", logEntry.url))
         formItems.add(FormItem("JSON", "TextArea", logEntry.response, 10))
         val label = "TransferObject has no Handler"
-        RoDialog(label = label, items = formItems, command = this).show()
+        RoDialog(caption = label, items = formItems, command = this).show()
     }
 
     override fun execute() {

@@ -1,6 +1,5 @@
 package org.ro.to
 
-import com.github.snabbdom._set
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.ro.IntegrationTest
@@ -54,9 +53,9 @@ class LinkTest : IntegrationTest() {
             val link = action.getInvokeLink()
             assertNotNull(link)
             //now pass on body in order to prepare everything to invoke
-            val arguments = link.arguments
+            val arguments = link.arguments as MutableMap
             val arg = Argument(href)
-            arguments._set("script", arg)
+            arguments.put("script", arg)
             ActionAggregator().invoke(link)
             val le = EventStore.find(url)!!
             assertTrue(!le.isError())

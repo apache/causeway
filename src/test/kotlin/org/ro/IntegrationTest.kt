@@ -4,12 +4,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.UnstableDefault
-import org.ro.core.Session
 import org.ro.core.aggregator.IAggregator
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.handler.ResponseHandler
 import org.ro.to.Method
+import org.ro.ui.kv.UiManager
 import org.ro.urls.Response
 import org.w3c.xhr.XMLHttpRequest
 
@@ -22,8 +22,8 @@ open class IntegrationTest {
         val url = "http://sven:pass@localhost:8080/restful/"
         val user = "sven"
         val pw = "pass"
-        Session.login(url, user, pw)
-        val credentials: String = Session.getCredentials()
+        UiManager.login(url, user, pw)
+        val credentials: String = UiManager.getCredentials()
         val xhr = XMLHttpRequest();
         xhr.open("GET", url, false, user, pw);
         xhr.setRequestHeader("Authorization", "Basic $credentials")

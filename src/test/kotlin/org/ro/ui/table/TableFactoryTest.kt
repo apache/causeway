@@ -5,8 +5,9 @@ import org.ro.to.Extensions
 import org.ro.to.Member
 import org.ro.to.MemberType
 import org.ro.to.TObject
-import pl.treksoft.kvision.utils.ObservableList
-import pl.treksoft.kvision.utils.observableListOf
+import pl.treksoft.kvision.state.ObservableList
+import pl.treksoft.kvision.state.observableListOf
+
 
 class TableFactoryTest {
 

@@ -2,33 +2,38 @@
 // Doc: see http://karma-runner.github.io/4.0/config/configuration-file.html
 module.exports = function (config) {
   config.set({
+      basePath: '',
+      frameworks: ['jasmine'],
       files: ['./build/**/*.js'],
       excludes: ['./**/*.css'],
       preprocessors: {
-//        'build/**/*_test.js': ['webpack']
+          './build/js-tests/*-tests.js': ['coverage']
       },
-      frameworks: ['jasmine'],
       plugins: [
-        require('karma-chrome-launcher'),
-        require('karma-coverage-istanbul-reporter'),
-        require('istanbul-instrumenter-loader'),
         require('karma-jasmine'),
-        require('karma-jasmine-html-reporter'),
+        require('karma-coverage'),
+//        require('karma-phantomjs-launcher'),
+        require('karma-chrome-launcher'),
         require('karma-webpack')
       ],
-      reporters: ['coverage-istanbul'],
-      coverageIstanbulReporter: {
-        reports: ['html', 'lcovonly', 'text-summary'],
-        // if using webpack and pre-loaders, work around webpack breaking the source path
-        fixWebpackSourcePaths: true
-      },
+      reporters: ['progress', 'coverage'],
+      port: 9876,
+      colors: true,
+      logLevel: config.LOG_INFO,
+      autowatch: true,
       browsers: ['ChromeHeadless'],
-
-//      logLevel: config.LOG_DEBUG,
-      autoWatch: true,
       singleRun: true,
       concurrency: Infinity,
-      color: false
+      coverageReporter: {
+        includeAllSources: true,
+        dir: 'coverage/',
+        reporters: [
+          {type: "html", subdir: "html"},
+ //         {type: "lcov"},
+          {type: 'text-summary'}
+        ]
+
+      }
     }
   )
 };

@@ -1,8 +1,8 @@
 package org.ro.ui
 
 import org.ro.core.event.LogEntry
-import org.ro.to.HttpError
 import org.ro.ui.kv.RoDialog
+import org.ro.to.HttpError
 import org.ro.ui.uicomp.FormItem
 
 class ErrorAlert(val logEntry: LogEntry) : Command {
@@ -18,7 +18,7 @@ class ErrorAlert(val logEntry: LogEntry) : Command {
             formItems.add(FormItem("Caused by", "Text", detail.causedBy))
         }
         val label = "HttpError " + error.httpStatusCode.toString()
-        RoDialog(label = label, items = formItems, command = this).show()
+        RoDialog(caption = label, items = formItems, command = this).show()
     }
 
     override fun execute() {
