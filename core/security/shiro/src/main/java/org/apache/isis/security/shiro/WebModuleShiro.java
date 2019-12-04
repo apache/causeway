@@ -42,7 +42,7 @@ import org.springframework.util.ReflectionUtils;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.webapp.IsisWebAppUtils;
+import org.apache.isis.webapp.util.IsisWebAppUtils;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 

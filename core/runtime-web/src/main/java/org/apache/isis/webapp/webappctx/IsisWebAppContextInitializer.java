@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp;
+package org.apache.isis.webapp.webappctx;
 
 import javax.inject.Singleton;
 import javax.servlet.ServletContext;

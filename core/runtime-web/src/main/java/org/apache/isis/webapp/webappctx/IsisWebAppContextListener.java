@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp;
+package org.apache.isis.webapp.webappctx;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.webapp.IsisWebAppContextInitializer.ServletContextResource;
+import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer.ServletContextResource;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 

@@ -50,7 +50,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
-import org.apache.isis.webapp.IsisWebAppUtils;
+import org.apache.isis.webapp.util.IsisWebAppUtils;
 
 import lombok.Getter;
 import lombok.Setter;

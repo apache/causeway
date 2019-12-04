@@ -18,6 +18,8 @@
  */
 package org.apache.isis.webapp;
 
+import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer;
+import org.apache.isis.webapp.webappctx.IsisWebAppContextListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 

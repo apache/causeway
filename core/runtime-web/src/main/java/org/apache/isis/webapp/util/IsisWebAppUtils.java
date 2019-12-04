@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp;
+package org.apache.isis.webapp.util;
 
 import javax.servlet.ServletContext;
 

@@ -31,7 +31,7 @@ import javax.servlet.ServletException;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.webapp.IsisWebAppContextInitializer.ServletContextResource;
+import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer.ServletContextResource;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 

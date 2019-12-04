@@ -29,7 +29,7 @@ import javax.servlet.ServletResponse;
 import javax.transaction.TransactionalException;
 
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.webapp.IsisWebAppUtils;
+import org.apache.isis.webapp.util.IsisWebAppUtils;
 
 import lombok.val;
 

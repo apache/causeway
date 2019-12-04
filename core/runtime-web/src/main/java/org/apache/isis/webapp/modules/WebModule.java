@@ -31,7 +31,7 @@ import javax.servlet.annotation.WebListener;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.webapp.IsisWebAppContextListener;
+import org.apache.isis.webapp.webappctx.IsisWebAppContextListener;
 
 import lombok.val;
 
