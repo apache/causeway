@@ -18,17 +18,6 @@
  */
 package org.apache.isis.extensions.fixtures.legacy.teardown;
 
-import javax.inject.Inject;
-import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.annotations.DiscriminatorStrategy;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.metadata.DiscriminatorMetadata;
-import javax.jdo.metadata.InheritanceMetadata;
-import javax.jdo.metadata.TypeMetadata;
-
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
-import org.apache.isis.commons.internal.base._Strings;
-
 public abstract class TeardownFixtureAbstract2 extends TeardownFixtureAbstract {
 
 }

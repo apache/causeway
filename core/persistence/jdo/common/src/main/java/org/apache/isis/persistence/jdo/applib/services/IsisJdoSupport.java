@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.services.jdosupport;
+package org.apache.isis.persistence.jdo.applib.services;
 
 import java.util.Collection;
 import java.util.List;

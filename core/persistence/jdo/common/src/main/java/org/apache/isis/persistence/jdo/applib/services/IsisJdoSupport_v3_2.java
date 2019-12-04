@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.jdo.jdosupport;
+package org.apache.isis.persistence.jdo.applib.services;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 /**
  * Service that provide a number of workarounds when using JDO/DataNucleus.
  */
-public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdosupport.IsisJdoSupport
+public interface IsisJdoSupport_v3_2 extends IsisJdoSupport
 {
 
     /**

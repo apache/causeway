@@ -72,7 +72,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-persistence-jdo-common</artifactId>
+			<artifactId>isis-persistence-jdo-applib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

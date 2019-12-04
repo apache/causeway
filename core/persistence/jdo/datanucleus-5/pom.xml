@@ -69,13 +69,16 @@
 
 	<dependencies>
 
-		<!-- JDO API (providing compile dependency) -->
+
 		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>javax.jdo</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-persistence-jdo-applib</artifactId>
 		</dependency>
 
-		<!-- DataNucleus -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime-services</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.datanucleus</groupId>
@@ -98,25 +101,13 @@
 			<artifactId>datanucleus-jodatime</artifactId>
 		</dependency>
 
-		<!-- Core Runtime -->
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-runtime</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		
+<!--
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-runtime-spring</artifactId>
-			<scope>compile</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-persistence-jdo-common</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		
+-->
+
 		<!-- TESTING -->
 		
         <dependency>

@@ -327,7 +327,7 @@ org.apache.isis.objectstore.jdo.applib
 
 
 org.apache.isis.objectstore.jdo.applib.service.support
-    IsisJdoSupport.java - replaced by org.apache.isis.applib.services.jdosupport.IsisJdoSupport
+    IsisJdoSupport.java - replaced by org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport
 
 
 

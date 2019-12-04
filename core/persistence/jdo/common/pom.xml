@@ -20,16 +20,16 @@
 		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-persistence-jdo-common</artifactId>
+	<artifactId>isis-persistence-jdo-applib</artifactId>
 
-	<name>Apache Isis Persistence - JDO (Common)</name>
+	<name>Apache Isis Persistence - JDO Applib</name>
 	<description>
-        Common base for JDO persistence.
+		Supplementary applib for JDO persistence
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.common</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo.common</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -68,44 +68,26 @@
 	</build>
 
 	<dependencies>
-	
-		<!-- JDO API (non transient, provided by concrete JDO plugins) -->
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-            <version>${jdo-api.version}</version>
-            <!-- provided by plugins -->
-            <scope>provided</scope>
-        </dependency>
 
-		<!-- Core Runtime -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-runtime</artifactId>
-			<scope>compile</scope>
+			<artifactId>isis-applib</artifactId>
 		</dependency>
-		
-		<!-- TESTING -->
-		
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-metamodel</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-		
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
+
+		<!-- JDO API (providing compile dependency) -->
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>javax.jdo</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-rdbms</artifactId>
+			<!-- to avoid polluting the classpath -->
+			<optional>true</optional>
+		</dependency>
+
+
 
 	</dependencies>
 

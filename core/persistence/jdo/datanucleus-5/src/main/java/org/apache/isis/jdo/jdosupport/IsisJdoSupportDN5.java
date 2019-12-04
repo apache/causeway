@@ -35,6 +35,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
 import javax.jdo.query.BooleanExpression;
 
+import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.FatalException;
@@ -44,7 +45,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.jdo.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectPersistenceException;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 

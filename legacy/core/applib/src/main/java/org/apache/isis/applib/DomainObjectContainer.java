@@ -32,7 +32,7 @@ import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -93,7 +93,7 @@ public class DomainObjectContainer {
      *     that original functionality is performed automatically by the framework.
      * </p>
      *
-     * @deprecated - equivalent to {@link org.apache.isis.applib.services.jdosupport.IsisJdoSupport#refresh(Object)}.
+     * @deprecated - equivalent to {@link IsisJdoSupport#refresh(Object)}.
      */
     @Programmatic
     @Deprecated
@@ -110,7 +110,7 @@ public class DomainObjectContainer {
      *     that original functionality is performed automatically by the framework.
      * </p>
      *
-     * @deprecated - equivalent to {@link org.apache.isis.applib.services.jdosupport.IsisJdoSupport#refresh(Object)}.
+     * @deprecated - equivalent to {@link IsisJdoSupport#refresh(Object)}.
      */
     @Programmatic
     @Deprecated
