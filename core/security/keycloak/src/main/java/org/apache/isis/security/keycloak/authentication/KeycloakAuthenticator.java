@@ -28,6 +28,7 @@ import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.standard.Authenticator;
 import org.apache.isis.security.keycloak.WebModuleKeycloak;
+import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
 
 @Log4j2 @NoArgsConstructor
 public class KeycloakAuthenticator implements Authenticator {
@@ -53,7 +54,7 @@ public class KeycloakAuthenticator implements Authenticator {
 
     @Override
     public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
-        return WebModuleKeycloak.sessionByThread.get();
+        return AuthenticationSessionWormhole.sessionByThread.get();
     }
 
     @Override

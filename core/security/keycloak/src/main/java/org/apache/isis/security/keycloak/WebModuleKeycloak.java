@@ -43,8 +43,6 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Order(Ordered.HIGHEST_PRECEDENCE + 100)
 public final class WebModuleKeycloak implements WebModule  {
 
-    public final static ThreadLocal<AuthenticationSession> sessionByThread = new ThreadLocal<>();
-
     private final static String KEYCLOAK_FILTER_CLASS_NAME =
             KeycloakFilter.class.getName();
 
