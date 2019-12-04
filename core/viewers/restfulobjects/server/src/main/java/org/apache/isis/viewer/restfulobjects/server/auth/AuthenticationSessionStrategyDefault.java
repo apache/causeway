@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.isis.config.WebAppConstants;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.val;
@@ -39,12 +38,6 @@ import lombok.val;
  * <li>it looks up from the {@link HttpSession} using the value
  * {@link AuthenticationSessionStrategyDefault#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
  * </ul>
- * 
- * @implNote prior to version 2.0 ... failing that, if a {@link LogonFixture} has been provided and not already
- * used, will provide a session for that fixture. The {@link HttpSession} also
- * stores the value
- * {@link WebAppConstants#HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY}
- * in the session to track whether this has been done</li>
  * 
  */
 public class AuthenticationSessionStrategyDefault extends AuthenticationSessionStrategyAbstract {
