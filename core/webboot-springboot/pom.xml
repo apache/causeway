@@ -34,8 +34,8 @@
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.runtime.spring</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/runtime/spring</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.webboot.springboot</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/webboot/springboot</git-plugin.propertiesDir>
     </properties>
 
     <build>
