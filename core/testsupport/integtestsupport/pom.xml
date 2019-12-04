@@ -158,7 +158,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-runtime-spring</artifactId>
+			<artifactId>isis-webboot-springboot</artifactId>
 		</dependency>
 	</dependencies>
 

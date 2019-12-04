@@ -772,12 +772,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-runtime-spring</artifactId>
+				<artifactId>isis-webboot-springboot</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-runtime-spring</artifactId>
+				<artifactId>isis-webboot-springboot</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>

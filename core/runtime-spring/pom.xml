@@ -26,9 +26,12 @@
         <version>2.0.0-M3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-runtime-spring</artifactId>
-    <name>Apache Isis Core - Runtime Spring Boot</name>
-    <description>Defines the main Spring @Configuration, which transitively depends on the rest of core. Viewers don't have dependencies on this module.</description>
+    <artifactId>isis-webboot-springboot</artifactId>
+    <name>Apache Isis Core - Web Boot using Spring Boot</name>
+    <description>
+        Defines the main Spring @Configuration, which transitively depends on the rest of core.
+        Viewers don't have dependencies on this module.
+    </description>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.runtime.spring</jar-plugin.automaticModuleName>
