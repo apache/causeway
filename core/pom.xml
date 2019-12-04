@@ -1839,7 +1839,7 @@
 		<module>runtime</module>
 		<module>runtime-services</module>
 		<module>runtime-spring</module>
-		<module>runtime-web</module>
+		<module>webapp</module>
 
 		<module>testsupport/unittestsupport</module>
 		<module>testsupport/integtestsupport</module>
