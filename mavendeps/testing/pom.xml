@@ -30,77 +30,66 @@
         Defines a module that can be used as a single dependency for a set of common testing libraries.
     </description>
 
-	<profiles>
-		<profile>
-			<id>isis-mavendeps-testing</id>
-			<activation>
-				<property>
-					<name>!skip.isis-mavendeps-testing</name>
-				</property>
-			</activation>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-unittestsupport</artifactId>
+			<!--
+            excluded to make consistent with JDK11 where these have been removed.
+            -->
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.ws</groupId>
+					<artifactId>jaxws-ri</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-integtestsupport</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+		</dependency>
 
-			<dependencies>
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-unittestsupport</artifactId>
-					<!--
-					these are transitively included only if built on jdk11; can't think of another way to remove them
-					-->
-					<exclusions>
-						<exclusion>
-							<groupId>com.sun.xml.ws</groupId>
-							<artifactId>jaxws-ri</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>javax.xml.bind</groupId>
-							<artifactId>jaxb-api</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>com.sun.xml.bind</groupId>
-							<artifactId>jaxb-core</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>com.sun.xml.bind</groupId>
-							<artifactId>jaxb-impl</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-integtestsupport</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>org.hamcrest</groupId>
-					<artifactId>hamcrest-library</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>org.assertj</groupId>
-					<artifactId>assertj-core</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>com.approvaltests</groupId>
+			<artifactId>approvaltests</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>com.approvaltests</groupId>
-					<artifactId>approvaltests</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>org.picocontainer</groupId>
+			<artifactId>picocontainer</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>org.picocontainer</groupId>
-					<artifactId>picocontainer</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>org.hsqldb</groupId>
-					<artifactId>hsqldb</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>com.h2database</groupId>
-					<artifactId>h2</artifactId>
-				</dependency>
-
-			</dependencies>
-		</profile>
-	</profiles>
+	</dependencies>
 
 </project>

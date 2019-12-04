@@ -30,123 +30,112 @@
         Defines a module that can be used as a single dependency for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security)
     </description>
 
-	<profiles>
-		<profile>
-			<id>isis-mavendeps-webapp</id>
-			<activation>
-				<property>
-					<name>!skip.isis-mavendeps-webapp</name>
-				</property>
-			</activation>
+	<dependencies>
+		<!-- SPRING -->
 
-			<dependencies>
-				<!-- SPRING -->
-
-				<dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.validation</groupId>
+					<artifactId>validation-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-jcl</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-web</artifactId>
-					<exclusions>
-						<exclusion>
-							<groupId>javax.validation</groupId>
-							<artifactId>validation-api</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>org.springframework</groupId>
-							<artifactId>spring-jcl</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>org.springframework.boot</groupId>
-							<artifactId>spring-boot-starter-logging</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-				<dependency>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-					<scope>provided</scope>
-				</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-				<!-- ISIS API -->
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-applib</artifactId>
-				</dependency>
+		<!-- ISIS API -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-schema</artifactId>
-					<!--
-					these are transitively included only if built on jdk11; can't think of another way to remove them
-					-->
-					<exclusions>
-						<exclusion>
-							<groupId>com.sun.xml.ws</groupId>
-							<artifactId>jaxws-ri</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>javax.xml.bind</groupId>
-							<artifactId>jaxb-api</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>com.sun.xml.bind</groupId>
-							<artifactId>jaxb-core</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>com.sun.xml.bind</groupId>
-							<artifactId>jaxb-impl</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-schema</artifactId>
+			<!--
+            excluded to make consistent with JDK11 where these have been removed from the JDK and must be explicitly included.
+            -->
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.ws</groupId>
+					<artifactId>jaxws-ri</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-codegen-bytebuddy</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-codegen-bytebuddy</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-viewer-wicket-impl</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-viewer-wicket-impl</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-viewer-restfulobjects-server</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-viewer-restfulobjects-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-security</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-security-bypass</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-security-shiro</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-security-keycloak</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-security-bypass</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-security-shiro</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-security-keycloak</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
+		</dependency>
 
-				<dependency>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime-spring</artifactId>
+		</dependency>
 
-			</dependencies>
-		</profile>
-	</profiles>
+	</dependencies>
 
 </project>
