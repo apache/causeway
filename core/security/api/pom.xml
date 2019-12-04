@@ -31,8 +31,8 @@
     <name>Apache Isis Security - API</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.security</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/security</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.security.api</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/security/api</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

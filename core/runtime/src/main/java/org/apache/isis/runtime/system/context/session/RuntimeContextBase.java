@@ -29,8 +29,8 @@ import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;
 import lombok.val;

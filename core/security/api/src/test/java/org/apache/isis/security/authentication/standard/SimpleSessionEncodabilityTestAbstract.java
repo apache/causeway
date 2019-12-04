@@ -20,6 +20,7 @@
 package org.apache.isis.security.authentication.standard;
 
 import org.apache.isis.security.EncodabilityContractTest;
+import org.apache.isis.security.api.authentication.standard.SimpleSession;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

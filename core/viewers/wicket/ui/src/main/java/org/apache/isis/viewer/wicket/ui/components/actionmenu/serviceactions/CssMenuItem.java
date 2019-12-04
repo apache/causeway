@@ -40,7 +40,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

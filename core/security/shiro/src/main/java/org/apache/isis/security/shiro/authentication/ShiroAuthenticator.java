@@ -45,12 +45,12 @@ import org.apache.shiro.subject.Subject;
 
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.security.authentication.AuthenticationRequest;
-import org.apache.isis.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.standard.Authenticator;
-import org.apache.isis.security.authentication.standard.SimpleSession;
-import org.apache.isis.security.authorization.standard.Authorizor;
+import org.apache.isis.security.api.authentication.AuthenticationRequest;
+import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.standard.Authenticator;
+import org.apache.isis.security.api.authentication.standard.SimpleSession;
+import org.apache.isis.security.api.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.ShiroSecurityContext;
 
 import lombok.NoArgsConstructor;

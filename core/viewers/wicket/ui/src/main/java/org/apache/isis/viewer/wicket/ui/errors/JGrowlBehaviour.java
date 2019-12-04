@@ -28,7 +28,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.security.authentication.MessageBroker;
+import org.apache.isis.security.api.authentication.MessageBroker;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 /**

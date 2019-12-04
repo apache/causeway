@@ -29,8 +29,8 @@ import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.MessageBroker;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.MessageBroker;
 
 import lombok.Getter;
 

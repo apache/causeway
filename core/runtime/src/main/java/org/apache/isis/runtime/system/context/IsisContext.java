@@ -27,7 +27,7 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 /**
  * Provides static access to current context's singletons

@@ -22,7 +22,7 @@ package org.apache.isis.runtime.system.internal;
 import java.io.IOException;
 
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.security.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.security.api.authentication.AuthenticationSessionAbstract;
 
 public final class InitialisationSession extends AuthenticationSessionAbstract {
 

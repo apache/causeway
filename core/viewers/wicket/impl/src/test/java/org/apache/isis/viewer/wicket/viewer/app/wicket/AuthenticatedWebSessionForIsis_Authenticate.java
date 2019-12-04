@@ -23,7 +23,7 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.security.authentication.AuthenticationRequest;
+import org.apache.isis.security.api.authentication.AuthenticationRequest;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;

@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.runtime.services.wrapper.WrapperFactoryDefault;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -61,8 +60,8 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.runtime.services.wrapper.dom.employees.Employee;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
-import org.apache.isis.security.authentication.standard.SimpleSession;
+import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.api.authentication.standard.SimpleSession;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 

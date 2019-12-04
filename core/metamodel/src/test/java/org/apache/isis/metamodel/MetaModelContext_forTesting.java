@@ -45,10 +45,10 @@ import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
-import org.apache.isis.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
 import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 import org.apache.isis.unittestsupport.config.internal._Config;
 

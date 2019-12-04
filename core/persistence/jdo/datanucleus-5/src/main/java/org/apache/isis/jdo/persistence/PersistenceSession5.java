@@ -92,7 +92,7 @@ import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplib
 import org.apache.isis.runtime.services.RequestScopedService;
 import org.apache.isis.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;

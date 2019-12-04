@@ -45,7 +45,7 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;

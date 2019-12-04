@@ -43,9 +43,9 @@ import org.apache.isis.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

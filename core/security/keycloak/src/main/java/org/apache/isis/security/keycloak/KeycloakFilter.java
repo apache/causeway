@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.standard.SimpleSession;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.standard.SimpleSession;
 
 public class KeycloakFilter implements Filter {
 

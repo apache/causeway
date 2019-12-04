@@ -19,6 +19,7 @@
 
 package org.apache.isis.security.authentication.standard;
 
+import org.apache.isis.security.api.authentication.standard.SimpleSession;
 import org.jmock.integration.junit4.JMock;
 import org.junit.runner.RunWith;
 

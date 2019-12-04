@@ -19,7 +19,7 @@
 package org.apache.isis.runtime.system.persistence;
 
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 public interface PersistenceSessionFactory {
 

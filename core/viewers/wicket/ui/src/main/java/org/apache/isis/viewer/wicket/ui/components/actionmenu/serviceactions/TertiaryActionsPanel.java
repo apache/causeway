@@ -23,7 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.wicket.MarkupContainer;

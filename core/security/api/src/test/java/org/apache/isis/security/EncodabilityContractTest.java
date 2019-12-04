@@ -32,7 +32,7 @@ import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataInputStreamExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputStreamExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;

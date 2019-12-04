@@ -26,10 +26,10 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.runtime.services.auth.AuthorizationManagerStandard;
 import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.security.authentication.standard.Authenticator;
+import org.apache.isis.security.api.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
-import org.apache.isis.security.authorization.standard.Authorizor;
+import org.apache.isis.security.api.authorization.standard.Authorizor;
 
 /**
  * Auth/bypass for eg. Integration Testing

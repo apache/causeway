@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.health.Health;
 import org.apache.isis.applib.services.health.HealthCheckService;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.runtime.sessiontemplate.AbstractIsisSessionTemplate;
-import org.apache.isis.security.authentication.health.HealthAuthSession;
+import org.apache.isis.security.api.authentication.health.HealthAuthSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;

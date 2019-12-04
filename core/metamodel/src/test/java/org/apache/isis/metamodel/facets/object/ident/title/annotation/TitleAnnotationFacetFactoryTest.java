@@ -41,8 +41,8 @@ import org.apache.isis.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

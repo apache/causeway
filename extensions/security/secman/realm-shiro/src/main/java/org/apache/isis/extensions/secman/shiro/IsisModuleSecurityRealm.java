@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
+import org.apache.isis.security.api.authorization.standard.Authorizor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -63,7 +64,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     /**
      * Configures a {@link org.apache.shiro.authz.permission.PermissionResolver} that knows how to process the
      * permission strings that are provided by Isis'
-     * {@link org.apache.isis.security.authorization.standard.Authorizor} for Shiro.
+     * {@link Authorizor} for Shiro.
      */
     public IsisModuleSecurityRealm() {
         setPermissionResolver(new PermissionResolverForIsisShiroAuthorizor());

@@ -31,9 +31,9 @@ import org.apache.isis.metamodel.authorization.standard.AuthorizationFacetFactor
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel.FacetProcessingOrder;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authorization.manager.AuthorizationManager;
-import org.apache.isis.security.authorization.standard.Authorizor;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
+import org.apache.isis.security.api.authorization.standard.Authorizor;
 
 import lombok.val;
 

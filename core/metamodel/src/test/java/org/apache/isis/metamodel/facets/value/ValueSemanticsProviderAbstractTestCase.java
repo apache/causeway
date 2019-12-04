@@ -38,7 +38,7 @@ import org.apache.isis.metamodel.facets.object.encodeable.encoder.EncodableFacet
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 import org.apache.isis.unittestsupport.config.internal._Config;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;

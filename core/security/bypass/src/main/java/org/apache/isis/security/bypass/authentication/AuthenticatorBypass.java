@@ -19,8 +19,8 @@
 
 package org.apache.isis.security.bypass.authentication;
 
-import org.apache.isis.security.authentication.AuthenticationRequest;
-import org.apache.isis.security.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.security.api.authentication.AuthenticationRequest;
+import org.apache.isis.security.api.authentication.standard.AuthenticatorAbstract;
 
 /**
  * Implementation that bypasses authentication.

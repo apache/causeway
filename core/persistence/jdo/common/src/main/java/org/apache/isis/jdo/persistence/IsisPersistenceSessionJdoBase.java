@@ -44,7 +44,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.system.persistence.PersistenceQueryFactory;
 import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.val;

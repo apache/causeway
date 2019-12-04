@@ -28,8 +28,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.val;
 

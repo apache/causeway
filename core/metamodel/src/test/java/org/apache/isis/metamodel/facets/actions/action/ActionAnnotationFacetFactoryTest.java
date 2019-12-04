@@ -33,7 +33,7 @@ import org.apache.isis.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.config.metamodel.facets.PublishActionsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 
 import lombok.val;
 

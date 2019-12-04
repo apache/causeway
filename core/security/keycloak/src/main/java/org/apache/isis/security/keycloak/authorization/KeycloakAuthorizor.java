@@ -20,7 +20,7 @@ package org.apache.isis.security.keycloak.authorization;
 
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.security.authorization.standard.Authorizor;
+import org.apache.isis.security.api.authorization.standard.Authorizor;
 
 public class KeycloakAuthorizor implements Authorizor {
 

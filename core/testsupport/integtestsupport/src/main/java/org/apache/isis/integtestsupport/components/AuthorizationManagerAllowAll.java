@@ -19,8 +19,8 @@
 package org.apache.isis.integtestsupport.components;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
 
 public class AuthorizationManagerAllowAll implements AuthorizationManager {
 

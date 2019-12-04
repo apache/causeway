@@ -32,8 +32,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.security.authentication.AuthenticationRequest;
-import org.apache.isis.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.security.api.authentication.AuthenticationRequest;
+import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.shiro.authentication.ShiroAuthenticator;
 import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;

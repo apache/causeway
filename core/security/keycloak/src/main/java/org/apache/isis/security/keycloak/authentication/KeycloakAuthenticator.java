@@ -24,10 +24,9 @@ import lombok.extern.log4j.Log4j2;
 import javax.inject.Inject;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.security.authentication.AuthenticationRequest;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.standard.Authenticator;
-import org.apache.isis.security.keycloak.WebModuleKeycloak;
+import org.apache.isis.security.api.authentication.AuthenticationRequest;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
 
 @Log4j2 @NoArgsConstructor

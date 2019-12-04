@@ -19,6 +19,7 @@
 
 package org.apache.isis.security.authentication.standard;
 
+import org.apache.isis.security.api.authentication.standard.AuthenticatorAbstract;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -26,7 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.security.authentication.AuthenticationRequest;
+import org.apache.isis.security.api.authentication.AuthenticationRequest;
 
 @RunWith(JMock.class)
 public class AuthenticatorDefaultTest {

@@ -27,9 +27,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
-import org.apache.isis.security.authentication.standard.SimpleSession;
+import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.api.authentication.standard.SimpleSession;
 
 @Service
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
