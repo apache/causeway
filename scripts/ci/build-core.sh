@@ -40,6 +40,7 @@ fi
 cd $PROJECT_ROOT_PATH/core-parent
 mvn -s $SETTINGS_XML \
     $BATCH_MODE \
+    -T1C \
     $MVN_STAGES \
     $MVN_ADDITIONAL_OPTS \
     $*
