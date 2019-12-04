@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp.auth;
+package org.apache.isis.viewer.restfulobjects.server.auth;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;

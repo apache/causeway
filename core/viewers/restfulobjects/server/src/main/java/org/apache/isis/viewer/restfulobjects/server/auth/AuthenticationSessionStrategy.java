@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.webapp.auth;
+package org.apache.isis.viewer.restfulobjects.server.auth;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
