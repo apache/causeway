@@ -1,0 +1,65 @@
+.Development Overview Diagram
+[plantuml,file="dev-overview.png"]
+--
+@startuml
+skinparam nodesep 20
+skinparam ranksep 5
+
+top to bottom direction
+
+component gradle <<build.tool>> {
+    component kotlinFrontend <<gradle.plugin>> as KF
+    component kotlin2js <<transpiler>> as K2JS
+    component DCE
+}
+
+
+package root #gold {
+    rectangle "build.gradle\nsettings.gradle\ngradle.properties" as GCFG
+    rectangle karma.conf.js as KC
+    rectangle package.json as PJ
+    GCFG -[hidden]--> PJ
+}
+package root.build  #gold {
+}
+package root.node_modules as NM #gold {
+    component karma
+    component webpack
+}
+component NodeJS
+component Browser
+
+gradle .> GCFG : configured\nthrough
+gradle --> webpack
+
+K2JS --> root.build : generates\n*.js\n*-tests.js
+KF --> KC : initially generates
+KC -> PJ : requires
+PJ -> NM : adds to
+
+:Developer,\nalmost\ngone\ncrazy;-): as DEV
+($ gradlew -t run) as RUN
+($ npm install <> --save-dev) as NI
+($ npm test) as TEST
+
+DEV --> RUN
+DEV --> NI
+RUN --> gradle
+
+
+component npm
+NI .> npm : uses
+NI -> PJ : updates
+
+
+DEV --> TEST
+TEST .> npm : uses
+TEST --> karma : runs
+karma --> Browser : displays\ntest results\nvia port 9876
+
+note left of PJ
+package.json.lock
+end note
+
+@enduml
+--
