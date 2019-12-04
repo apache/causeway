@@ -40,13 +40,18 @@ import lombok.val;
 @Service @Order(0)
 public class WebModuleH2Console implements WebModule  {
 
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
-    @Inject IsisConfiguration isisConfiguration;
-
-
     private final static String SERVLET_NAME = "H2Console";
     private final static String SERVLET_CLASS_NAME = "org.h2.server.web.WebServlet";
     private final static String CONSOLE_PATH = "/db"; //XXX could be made a config value 
+
+    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final IsisConfiguration isisConfiguration;
+
+    @Inject
+    public WebModuleH2Console(IsisSystemEnvironment isisSystemEnvironment, IsisConfiguration isisConfiguration) {
+        this.isisSystemEnvironment = isisSystemEnvironment;
+        this.isisConfiguration = isisConfiguration;
+    }
 
     @Getter private LocalResourcePath localResourcePathIfEnabled;
 
