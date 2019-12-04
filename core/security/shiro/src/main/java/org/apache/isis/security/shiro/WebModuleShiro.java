@@ -33,6 +33,7 @@ import org.apache.shiro.web.env.EnvironmentLoaderListener;
 import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.env.WebEnvironment;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
+import org.apache.shiro.web.servlet.ShiroFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -61,12 +62,8 @@ import lombok.val;
 @Service @Order(Ordered.HIGHEST_PRECEDENCE + 100)
 public final class WebModuleShiro implements WebModule  {
     
-    private final static String SHIRO_LISTENER_CLASS_NAME = 
-            //"org.apache.shiro.web.env.EnvironmentLoaderListener";
-            EnvironmentLoaderListenerForIsis.class.getName();
-
-    private final static String SHIRO_FILTER_CLASS_NAME = 
-            "org.apache.shiro.web.servlet.ShiroFilter";
+    private final static String SHIRO_LISTENER_CLASS_NAME = EnvironmentLoaderListenerForIsis.class.getName();
+    private final static String SHIRO_FILTER_CLASS_NAME = ShiroFilter.class.getName();
 
     private final static String SHIRO_FILTER_NAME = "ShiroFilter";
 
