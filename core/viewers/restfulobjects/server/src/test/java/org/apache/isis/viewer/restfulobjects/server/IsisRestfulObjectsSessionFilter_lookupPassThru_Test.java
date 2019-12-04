@@ -16,12 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects;
+package org.apache.isis.viewer.restfulobjects.server;
 
 import java.util.List;
 
 import javax.servlet.FilterConfig;
 
+import org.apache.isis.viewer.restfulobjects.server.IsisRestfulObjectsSessionFilter;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Assert;

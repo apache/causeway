@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects;
+package org.apache.isis.viewer.restfulobjects.server;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.restfulobjects;
+package org.apache.isis.viewer.restfulobjects.server;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

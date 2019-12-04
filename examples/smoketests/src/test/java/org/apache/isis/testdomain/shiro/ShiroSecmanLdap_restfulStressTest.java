@@ -44,7 +44,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
 import org.apache.isis.testdomain.rest.RestEndpointService;
-import org.apache.isis.viewer.restfulobjects.IsisBootViewerRestfulObjects;
+import org.apache.isis.viewer.restfulobjects.server.IsisBootViewerRestfulObjects;
 
 import static java.time.Duration.ofMillis;
 import static org.junit.jupiter.api.Assertions.assertEquals;

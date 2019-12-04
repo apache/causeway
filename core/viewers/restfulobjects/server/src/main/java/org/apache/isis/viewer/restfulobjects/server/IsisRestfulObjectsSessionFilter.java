@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.restfulobjects;
+package org.apache.isis.viewer.restfulobjects.server;
 
 import java.io.IOException;
 import java.util.Arrays;
