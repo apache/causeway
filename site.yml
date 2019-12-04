@@ -67,7 +67,7 @@ content:
       start_path: core/runtime-services/src/main/doc # core
       branches: HEAD
     - url: .
-      start_path: core/runtime-web/src/main/doc # core
+      start_path: core/webapp/src/main/doc # core
       branches: HEAD
     - url: .
       start_path: core/schema/src/main/doc # refguide
