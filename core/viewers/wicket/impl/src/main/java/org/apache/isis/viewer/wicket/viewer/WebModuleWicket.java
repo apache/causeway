@@ -25,10 +25,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
@@ -39,8 +39,6 @@ import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._Strings.suffix;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-
-import lombok.val;
 
 /**
  * WebModule that provides the Wicket Viewer.
@@ -54,11 +52,29 @@ public final class WebModuleWicket implements WebModule  {
 
     private final static String WICKET_FILTER_NAME = "WicketFilter";
 
-    private String pathConfigValue;
-    private String deploymentMode;
-    private String appConfigValue;
+    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final IsisConfiguration isisConfiguration;
 
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    private final String wicketBasePath;
+    private final String deploymentMode;
+    private final String wicketApp;
+
+    @Inject
+    public WebModuleWicket(final IsisSystemEnvironment isisSystemEnvironment, final IsisConfiguration isisConfiguration) {
+        this.isisSystemEnvironment = isisSystemEnvironment;
+        this.isisConfiguration = isisConfiguration;
+
+        wicketBasePath = isisConfiguration.getViewer().getWicket().getBasePath();
+
+        deploymentMode = isisSystemEnvironment.isPrototyping()
+                ? "development"
+                : "deployment";
+
+        wicketApp = isisConfiguration.getViewer().getWicket().getApp();
+
+        requireNonNull(wicketBasePath, "Config property 'isis.viewer.wicket.base-path' is required.");
+        requireNonNull(wicketApp, "Config property 'isis.viewer.wicket.app' is required.");
+    }
 
     @Override
     public String getName() {
@@ -67,24 +83,13 @@ public final class WebModuleWicket implements WebModule  {
 
     @Override
     public void prepare(WebModuleContext ctx) {
-
         if(!isAvailable()) {
             return;
         }
 
-        val wicketConf = ctx.getConfiguration().getViewer().getWicket();
-        
-        pathConfigValue = wicketConf.getBasePath();
-
-        deploymentMode = isisSystemEnvironment.isPrototyping()
-                ? "development" 
-                        : "deployment";
-
-        appConfigValue = wicketConf.getApp();
-
         ctx.setHasBootstrapper();
         ctx.addViewer("wicket");
-        ctx.addProtectedPath(suffix(prefix(pathConfigValue, "/"), "/") + "*");
+        ctx.addProtectedPath(suffix(prefix(wicketBasePath, "/"), "/") + "*");
     }
 
     @Override
@@ -106,9 +111,9 @@ public final class WebModuleWicket implements WebModule  {
 
         final String urlPattern = getUrlPattern();
 
-        reg.setInitParameter("applicationClassName", getApplicationClassName());
+        reg.setInitParameter("applicationClassName", wicketApp);
         reg.setInitParameter("filterMappingUrlPattern", urlPattern);
-        reg.setInitParameter("configuration", getWicketMode()); 
+        reg.setInitParameter("configuration", deploymentMode);
         reg.addMappingForUrlPatterns(null, true, urlPattern);
 
         return null; // does not provide a listener
@@ -131,23 +136,10 @@ public final class WebModuleWicket implements WebModule  {
     }
 
     private String getUrlPattern() {
-        final String wicketPath = getWicketPath();
-        final String wicketPathEnclosedWithSlashes = suffix(prefix(wicketPath, "/"), "/");
+        final String wicketPathEnclosedWithSlashes = suffix(prefix(wicketBasePath, "/"), "/");
         final String urlPattern = wicketPathEnclosedWithSlashes + "*";
         return urlPattern;
     }
 
-    private String getWicketPath() {
-        return requireNonNull(pathConfigValue, "This web-module needs to be prepared first.");
-    }
-
-    private String getWicketMode() {
-        return requireNonNull(deploymentMode, "This web-module needs to be prepared first.");
-    }
-
-    private String getApplicationClassName() {
-        return requireNonNull(appConfigValue, "This web-module needs to be prepared first.");
-
-    }
 
 }
