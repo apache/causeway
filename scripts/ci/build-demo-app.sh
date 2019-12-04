@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+if [ -z "$BATCH_MODE_FLAG" ] || [ "$BATCH_MODE_FLAG" != "off" ]; then
+  BATCH_MODE=--batch-mode
+fi
+
 SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
   PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
@@ -41,8 +45,8 @@ for app in demo
 do
   cd $PROJECT_ROOT_PATH/examples/$app
 
-  mvn --batch-mode \
-      clean install \
+  mvn clean install \
+      $BATCH_MODE \
       -Dflavor=$FLAVOR \
       -Dskip.git \
       -Dskip.arch \

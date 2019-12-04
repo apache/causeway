@@ -27,4 +27,3 @@ build all:
     - echo "REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)" > $SHARED_VARS_FILE
     - sh $CI_SCRIPTS_PATH/build-core.sh
     - sh $CI_SCRIPTS_PATH/build-demo-app.sh springboot
-    - sh $CI_SCRIPTS_PATH/build-starter-apps.sh

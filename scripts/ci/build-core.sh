@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+if [ -z "$BATCH_MODE_FLAG" ] || [ "$BATCH_MODE_FLAG" != "off" ]; then
+  BATCH_MODE=--batch-mode
+fi
+
 SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
   PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
@@ -35,7 +39,7 @@ fi
 
 cd $PROJECT_ROOT_PATH/core-parent
 mvn -s $SETTINGS_XML \
-    --batch-mode \
+    $BATCH_MODE \
     $MVN_STAGES \
     $MVN_ADDITIONAL_OPTS \
     $*

@@ -35,4 +35,3 @@ fi
 
 bash $CI_SCRIPTS_PATH/build-core.sh
 bash $CI_SCRIPTS_PATH/build-demo-app.sh dryrun
-bash $CI_SCRIPTS_PATH/build-starter-apps.sh
