@@ -22,6 +22,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.viewer.restfulobjects.server.auth.AuthenticationSessionStrategyBasicAuth;
+import org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -50,9 +52,7 @@ import lombok.val;
 @Order(-80)
 public final class WebModuleRestfulObjects implements WebModule  {
 
-    private final static String RESTEASY_BOOTSTRAPPER = 
-            "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
-
+    private final static String RESTEASY_BOOTSTRAPPER = "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
     private final static String RESTEASY_DISPATCHER = "RestfulObjectsRestEasyDispatcher";
 
     String restfulPathConfigValue;
@@ -97,7 +97,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
 
             filter.setInitParameter(
                     "authenticationSessionStrategy", 
-                    "org.apache.isis.viewer.restfulobjects.server.auth.AuthenticationSessionStrategyBasicAuth");
+                    AuthenticationSessionStrategyBasicAuth.class.getName());
             filter.setInitParameter(
                     "whenNoSession", // what to do if no session was found ...
                     "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
@@ -108,8 +108,8 @@ public final class WebModuleRestfulObjects implements WebModule  {
         }
 
         {
-            val filter = ctx.addFilter("RestfulObjectsRestEasyDispatcher", 
-                    "org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects");
+            val filter = ctx.addFilter("RestfulObjectsRestEasyDispatcher",
+                    IsisTransactionFilterForRestfulObjects.class.getName());
             filter.addMappingForServletNames(null, true, RESTEASY_DISPATCHER); 
         }
 
@@ -160,8 +160,6 @@ public final class WebModuleRestfulObjects implements WebModule  {
         final String restfulPathEnclosedWithSlashes = suffix(prefix(restfulPathConfigValue, "/"), "/");
         return restfulPathEnclosedWithSlashes;
     }
-
-
 
 
 }
