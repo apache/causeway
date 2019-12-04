@@ -18,6 +18,18 @@
  */
 package org.apache.isis.runtime.services;
 
-public final class IsisRuntimeServicesModule {
+import org.apache.isis.config.IsisConfigModule;
+import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.isis.runtime.IsisRuntimeModule;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+@Configuration
+@Import({
+        IsisRuntimeModule.class,
+})
+@ComponentScan
+public class IsisRuntimeServicesModule {
 
 }

@@ -18,9 +18,11 @@
  */
 package org.apache.isis.applib;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-@XmlRootElement(name = "module")
+@Configuration
+@ComponentScan
 public class IsisApplibModule {
 
     // -- UI EVENT CLASSES
@@ -46,7 +48,6 @@ public class IsisApplibModule {
 
     public abstract static class PropertyDomainEvent<S,T>
     extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}
-
 
 
 }

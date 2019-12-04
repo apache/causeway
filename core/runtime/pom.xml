@@ -75,7 +75,6 @@
             <scope>test</scope>
         </dependency>
 
-        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-metamodel</artifactId>

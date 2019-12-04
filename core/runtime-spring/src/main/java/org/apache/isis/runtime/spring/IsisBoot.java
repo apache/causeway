@@ -39,15 +39,8 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 @Configuration
 @Import({
     IsisBeanFactoryPostProcessorForSpring.class,
-    IsisConfigModule.class,
+    IsisRuntimeServicesModule.class,
 })
-@ComponentScan(
-        basePackageClasses= {
-                IsisApplibModule.class,
-                IsisMetamodelModule.class,
-                IsisRuntimeModule.class,
-                IsisRuntimeServicesModule.class
-                })
 public class IsisBoot implements ApplicationContextAware {
 
     @Override
