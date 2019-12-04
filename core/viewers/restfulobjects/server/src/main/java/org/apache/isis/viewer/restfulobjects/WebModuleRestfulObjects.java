@@ -18,10 +18,12 @@
  */
 package org.apache.isis.viewer.restfulobjects;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.viewer.restfulobjects.server.auth.AuthenticationSessionStrategyBasicAuth;
 import org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects;
 import org.springframework.core.annotation.Order;
@@ -55,7 +57,14 @@ public final class WebModuleRestfulObjects implements WebModule  {
     private final static String RESTEASY_BOOTSTRAPPER = "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
     private final static String RESTEASY_DISPATCHER = "RestfulObjectsRestEasyDispatcher";
 
-    String restfulPathConfigValue;
+    private final IsisConfiguration isisConfiguration;
+    private final String restfulPathConfigValue;
+
+    @Inject
+    public WebModuleRestfulObjects(final IsisConfiguration isisConfiguration) {
+        this.isisConfiguration = isisConfiguration;
+        this.restfulPathConfigValue = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
+    }
 
     @Override
     public String getName() {
@@ -69,15 +78,11 @@ public final class WebModuleRestfulObjects implements WebModule  {
             return;
         }
 
-        val restfulPath = ctx.getConfiguration().getViewer().getRestfulobjects().getBasePath();
-
-        putRestfulPath(restfulPath);
-
-        this.restfulPathConfigValue = restfulPath; // store locally for reuse
+        putRestfulPath(this.restfulPathConfigValue);
 
         // register this module as a viewer
         ctx.addViewer("restfulobjects");
-        ctx.addProtectedPath(suffix(prefix(restfulPath, "/"), "/") + "*" );
+        ctx.addProtectedPath(suffix(prefix(this.restfulPathConfigValue, "/"), "/") + "*" );
     }
 
     @Override
@@ -160,6 +165,5 @@ public final class WebModuleRestfulObjects implements WebModule  {
         final String restfulPathEnclosedWithSlashes = suffix(prefix(restfulPathConfigValue, "/"), "/");
         return restfulPathEnclosedWithSlashes;
     }
-
 
 }
