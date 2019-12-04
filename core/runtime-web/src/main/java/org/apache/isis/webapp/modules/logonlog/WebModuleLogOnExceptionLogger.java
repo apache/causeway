@@ -24,6 +24,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.webapp.diagnostics.IsisLogOnExceptionFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -44,10 +45,9 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Service @Order(Ordered.LOWEST_PRECEDENCE)
 public final class WebModuleLogOnExceptionLogger implements WebModule  {
 
-    private final static String LOGONLOGGER_FILTER_CLASS_NAME = 
-            "org.apache.isis.webapp.diagnostics.IsisLogOnExceptionFilter";
-    private final static String LOGONLOGGER_FILTER_NAME = 
-            "IsisLogOnExceptionFilter";
+    private final static String LOGONLOGGER_FILTER_CLASS_NAME = IsisLogOnExceptionFilter.class.getName();
+    private final static String LOGONLOGGER_FILTER_NAME = "IsisLogOnExceptionFilter";
+
     private WebModuleContext webModuleContext;
 
 
