@@ -16,48 +16,46 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.schema.utils.jaxbadapters;
+package org.apache.isis.schema.jaxbadapters;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.joda.time.LocalDate;
-
-import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Note: not actually registered as a JAXB adapter.
  */
-public final class JodaLocalDateStringAdapter {
-    private JodaLocalDateStringAdapter() {
-    }
-
-    public static LocalDate parse(final String date) {
-        if (_Strings.isNullOrEmpty(date)) {
-            return null;
-        }
-        return LocalDate.parse(date);
-    }
-
-    public static String print(LocalDate date) {
-        if (date == null) {
-            return null;
-        }
-        return date.toString();
+public final class JodaLocalDateXMLGregorianCalendarAdapter {
+    private JodaLocalDateXMLGregorianCalendarAdapter() {
     }
 
 
-    public static class ForJaxb extends XmlAdapter<String, LocalDate> {
+    public static LocalDate parse(final XMLGregorianCalendar xgc) {
+        if(xgc == null) return null;
+
+        final int year = xgc.getYear();
+        final int month = xgc.getMonth();
+        final int day = xgc.getDay();
+
+        return new LocalDate(year, month, day);
+    }
+
+    public static XMLGregorianCalendar print(final LocalDate localDate) {
+    	return XmlCalendarFactory.create(localDate);
+    }
+
+    public static class ForJaxb extends XmlAdapter<XMLGregorianCalendar, LocalDate> {
 
         @Override
-        public LocalDate unmarshal(final String localDateStr) throws Exception {
-            return JodaLocalDateStringAdapter.parse(localDateStr);
+        public LocalDate unmarshal(final XMLGregorianCalendar localDateStr) throws Exception {
+            return JodaLocalDateXMLGregorianCalendarAdapter.parse(localDateStr);
         }
 
         @Override
-        public String marshal(final LocalDate localDate) throws Exception {
-            return JodaLocalDateStringAdapter.print(localDate);
+        public XMLGregorianCalendar marshal(final LocalDate LocalDate) throws Exception {
+            return JodaLocalDateXMLGregorianCalendarAdapter.print(LocalDate);
         }
     }
-
 
 }

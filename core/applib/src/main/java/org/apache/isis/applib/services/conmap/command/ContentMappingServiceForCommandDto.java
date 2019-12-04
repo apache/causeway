@@ -38,7 +38,7 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
+import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class ContentMappingServiceForCommandDto implements ContentMappingService {

@@ -18,10 +18,15 @@
  */
 package org.apache.isis.applib;
 
+import org.apache.isis.schema.IsisSchemaModule;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
+@Import({
+        IsisSchemaModule.class
+})
 @ComponentScan
 public class IsisApplibModule {
 

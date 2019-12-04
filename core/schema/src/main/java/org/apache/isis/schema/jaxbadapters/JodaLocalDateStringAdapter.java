@@ -16,46 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.schema.utils.jaxbadapters;
+package org.apache.isis.schema.jaxbadapters;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
 
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Note: not actually registered as a JAXB adapter.
  */
-public final class JodaLocalDateTimeStringAdapter {
-    private JodaLocalDateTimeStringAdapter() {
+public final class JodaLocalDateStringAdapter {
+    private JodaLocalDateStringAdapter() {
     }
 
-    public static LocalDateTime parse(final String localDateTimeStr) {
-        if (_Strings.isNullOrEmpty(localDateTimeStr)) {
+    public static LocalDate parse(final String date) {
+        if (_Strings.isNullOrEmpty(date)) {
             return null;
         }
-        return LocalDateTime.parse(localDateTimeStr);
+        return LocalDate.parse(date);
     }
 
-    public static String print(final LocalDateTime localDateTime) {
-        if (localDateTime == null) {
+    public static String print(LocalDate date) {
+        if (date == null) {
             return null;
         }
-        return localDateTime.toString();
+        return date.toString();
     }
 
-    public static class ForJaxb extends XmlAdapter<String, LocalDateTime> {
+
+    public static class ForJaxb extends XmlAdapter<String, LocalDate> {
 
         @Override
-        public LocalDateTime unmarshal(final String localDateTimeStr) throws Exception {
-            return JodaLocalDateTimeStringAdapter.parse(localDateTimeStr);
+        public LocalDate unmarshal(final String localDateStr) throws Exception {
+            return JodaLocalDateStringAdapter.parse(localDateStr);
         }
 
         @Override
-        public String marshal(final LocalDateTime localDateTime) throws Exception {
-            return JodaLocalDateTimeStringAdapter.print(localDateTime);
+        public String marshal(final LocalDate localDate) throws Exception {
+            return JodaLocalDateStringAdapter.print(localDate);
         }
     }
+
 
 }

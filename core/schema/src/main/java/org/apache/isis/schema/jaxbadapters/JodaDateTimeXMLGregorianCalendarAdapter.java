@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.schema.utils.jaxbadapters;
+package org.apache.isis.schema.jaxbadapters;
 
 import java.util.Date;
 import java.util.GregorianCalendar;

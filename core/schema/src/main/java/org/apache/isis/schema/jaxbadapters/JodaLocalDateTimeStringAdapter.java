@@ -16,45 +16,45 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.schema.utils.jaxbadapters;
+package org.apache.isis.schema.jaxbadapters;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.joda.time.LocalTime;
+import org.joda.time.LocalDateTime;
 
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Note: not actually registered as a JAXB adapter.
  */
-public final class JodaLocalTimeStringAdapter {
-    private JodaLocalTimeStringAdapter() {
+public final class JodaLocalDateTimeStringAdapter {
+    private JodaLocalDateTimeStringAdapter() {
     }
 
-    public static LocalTime parse(final String localTimeStr) {
-        if (_Strings.isNullOrEmpty(localTimeStr)) {
+    public static LocalDateTime parse(final String localDateTimeStr) {
+        if (_Strings.isNullOrEmpty(localDateTimeStr)) {
             return null;
         }
-        return LocalTime.parse(localTimeStr);
+        return LocalDateTime.parse(localDateTimeStr);
     }
 
-    public static String print(LocalTime localTime) {
-        if (localTime == null) {
+    public static String print(final LocalDateTime localDateTime) {
+        if (localDateTime == null) {
             return null;
         }
-        return localTime.toString();
+        return localDateTime.toString();
     }
 
-    public static class ForJaxb extends XmlAdapter<String, LocalTime> {
+    public static class ForJaxb extends XmlAdapter<String, LocalDateTime> {
 
         @Override
-        public LocalTime unmarshal(final String localTimeStr) throws Exception {
-            return JodaLocalTimeStringAdapter.parse(localTimeStr);
+        public LocalDateTime unmarshal(final String localDateTimeStr) throws Exception {
+            return JodaLocalDateTimeStringAdapter.parse(localDateTimeStr);
         }
 
         @Override
-        public String marshal(final LocalTime localTime) throws Exception {
-            return JodaLocalTimeStringAdapter.print(localTime);
+        public String marshal(final LocalDateTime localDateTime) throws Exception {
+            return JodaLocalDateTimeStringAdapter.print(localDateTime);
         }
     }
 

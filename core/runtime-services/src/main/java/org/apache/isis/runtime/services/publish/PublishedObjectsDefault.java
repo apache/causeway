@@ -39,7 +39,7 @@ import org.apache.isis.schema.chg.v1.ChangesDto;
 import org.apache.isis.schema.chg.v1.ObjectsDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.OidsDto;
-import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
+import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 import lombok.ToString;
 

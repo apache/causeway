@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.schema.utils.jaxbadapters;
+package org.apache.isis.schema.jaxbadapters;
 
 class Strings {
 
