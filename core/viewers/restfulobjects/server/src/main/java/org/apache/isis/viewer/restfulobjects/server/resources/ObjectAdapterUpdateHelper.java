@@ -28,7 +28,7 @@ import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.server.context.ResourceContext;
 
 /**
  * Utility class that encapsulates the logic for updating an

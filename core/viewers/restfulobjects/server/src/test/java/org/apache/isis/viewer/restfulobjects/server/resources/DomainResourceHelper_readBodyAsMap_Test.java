@@ -27,7 +27,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class DomainResourceHelperTest_readBodyAsMap {
+public class DomainResourceHelper_readBodyAsMap_Test {
 
     private JsonRepresentation representation;
 

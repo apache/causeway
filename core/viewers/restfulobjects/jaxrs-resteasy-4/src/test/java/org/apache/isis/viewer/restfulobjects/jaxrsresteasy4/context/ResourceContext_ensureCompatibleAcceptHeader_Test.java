@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.context;
 
-import org.apache.isis.viewer.restfulobjects.server.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
+import org.apache.isis.viewer.restfulobjects.server.context.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
 
 public class ResourceContext_ensureCompatibleAcceptHeader_Test extends
         ResourceContext_ensureCompatibleAcceptHeader_ContractTest {

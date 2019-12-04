@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.server.webmodule;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -46,8 +46,8 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.webapp.util.IsisWebAppUtils;
-import org.apache.isis.viewer.restfulobjects.server.auth.AuthenticationSessionStrategy;
-import org.apache.isis.viewer.restfulobjects.server.auth.AuthenticationSessionStrategyDefault;
+import org.apache.isis.viewer.restfulobjects.server.webmodule.auth.AuthenticationSessionStrategy;
+import org.apache.isis.viewer.restfulobjects.server.webmodule.auth.AuthenticationSessionStrategyDefault;
 import org.apache.isis.webapp.modules.templresources.TemplateResourceCachingFilter;
 
 import static org.apache.isis.commons.internal.base._With.requires;

@@ -29,7 +29,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication;
+import org.apache.isis.viewer.restfulobjects.server.jaxrsapp.RestfulObjectsApplication;
 
 public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRenderer, Void> {
 

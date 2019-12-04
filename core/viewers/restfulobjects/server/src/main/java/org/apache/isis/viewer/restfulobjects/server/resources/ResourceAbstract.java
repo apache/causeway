@@ -44,7 +44,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
-import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.server.context.ResourceContext;
 
 import lombok.val;
 

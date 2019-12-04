@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.server.jaxrsapp;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
+import org.apache.isis.viewer.restfulobjects.server.IsisJaxrsServerPlugin;
 import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForObjectNotFound;
 import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForRestfulObjectsApplication;
 import org.apache.isis.viewer.restfulobjects.server.mappers.ExceptionMapperForRuntimeException;

@@ -16,15 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.server.context;
 
+import org.apache.isis.viewer.restfulobjects.server.context.ResourceContext;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class ResourceContextTest_stripQuotes {
+public class ResourceContext_stripQuotes_Test {
 
     @Test
     public void whenQuotes() throws Exception {

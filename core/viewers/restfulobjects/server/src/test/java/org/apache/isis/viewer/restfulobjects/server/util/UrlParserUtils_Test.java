@@ -24,7 +24,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.junit.Assert.assertEquals;
 
-public class UrlParserUtilsTest {
+public class UrlParserUtils_Test {
 
     @Test
     public void domainTypeFromLink() throws Exception {

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.server.webmodule;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -24,8 +24,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.viewer.restfulobjects.server.auth.AuthenticationSessionStrategyBasicAuth;
-import org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects;
+import org.apache.isis.viewer.restfulobjects.server.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -125,7 +124,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
         // used by RestEasy to determine the JAX-RS resources and other related configuration
         ctx.setInitParameter(
                 "javax.ws.rs.Application", 
-                "org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication");
+                "org.apache.isis.viewer.restfulobjects.server.jaxrsapp.RestfulObjectsApplication");
 
         ctx.setInitParameter("resteasy.servlet.mapping.prefix", getRestfulPath());
 

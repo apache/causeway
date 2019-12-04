@@ -43,7 +43,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection2;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty2;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.server.context.ResourceContext;
 
 class DomainResourceHelper {
 

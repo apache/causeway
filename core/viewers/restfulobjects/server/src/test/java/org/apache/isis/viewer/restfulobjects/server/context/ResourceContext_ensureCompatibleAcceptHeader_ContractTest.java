@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.server.context;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.viewer.restfulobjects.server.context.ResourceContext;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;

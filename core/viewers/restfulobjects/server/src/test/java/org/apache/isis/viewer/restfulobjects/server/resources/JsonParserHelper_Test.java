@@ -24,7 +24,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.junit.Assert.assertEquals;
 
-public class JsonParserHelpTest {
+public class JsonParserHelper_Test {
 
     @Test
     public void oidFromLink() throws Exception {
