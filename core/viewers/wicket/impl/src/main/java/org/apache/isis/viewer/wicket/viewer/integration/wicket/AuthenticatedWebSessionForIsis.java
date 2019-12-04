@@ -30,7 +30,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.core.runtime.web.AuthenticationSessionWormhole;
+import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;

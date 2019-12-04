@@ -22,15 +22,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.core.runtime.web.AuthenticationSessionWormhole;
-import org.apache.isis.metamodel.commons.Wormhole;
+import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;

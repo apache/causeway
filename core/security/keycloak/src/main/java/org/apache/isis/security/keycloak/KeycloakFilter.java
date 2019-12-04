@@ -9,7 +9,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.core.runtime.web.AuthenticationSessionWormhole;
+import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.standard.SimpleSession;
 
