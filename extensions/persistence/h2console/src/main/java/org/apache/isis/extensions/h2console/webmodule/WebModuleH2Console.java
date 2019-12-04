@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp.modules.h2console;
+package org.apache.isis.extensions.h2console.webmodule;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;

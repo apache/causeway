@@ -16,26 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp;
+package org.apache.isis.extensions.h2console;
 
+import org.apache.isis.extensions.h2console.services.H2ManagerMenu;
+import org.apache.isis.extensions.h2console.webmodule.WebModuleH2Console;
+import org.apache.isis.webapp.IsisBootWebApp;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
-import org.apache.isis.webapp.modules.templresources.WebModuleTemplateResources;
-
 @Configuration
 @Import({
-    IsisWebAppContextListener.class,
-    IsisWebAppContextInitializer.class,
-
-    // default modules
-    WebModuleLogOnExceptionLogger.class,
-    
-    // static html template preprocessing
-    WebModuleTemplateResources.class,
-
+        IsisBootWebApp.class
 })
-public class IsisBootWebApp {
+@ComponentScan
+public class IsisExtH2ConsoleModule {
 
 }

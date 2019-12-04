@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp.modules.h2console;
+package org.apache.isis.extensions.h2console.services;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisApplibModule;
@@ -32,10 +31,11 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.extensions.h2console.webmodule.WebModuleH2Console;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isisApplib.H2ManagerMenu"
+        objectType = "isisExtH2Console.H2ManagerMenu"
         )
 @DomainServiceLayout(
         named = "Prototyping",
@@ -43,15 +43,13 @@ import org.apache.isis.applib.value.LocalResourcePath;
         )
 public class H2ManagerMenu {
 
-    @Inject private ServiceRegistry serviceRegistry;
+    private final ServiceRegistry serviceRegistry;
+    private final WebModuleH2Console webModule;
 
-    private WebModuleH2Console webModule;
-
-    @PostConstruct
-    public void init() {
-        webModule = serviceRegistry.select(WebModuleH2Console.class)
-                .getFirst()
-                .orElse(null);
+    @Inject
+    public H2ManagerMenu(final ServiceRegistry serviceRegistry, final WebModuleH2Console webModule) {
+        this.serviceRegistry = serviceRegistry;
+        this.webModule = webModule;
     }
 
 

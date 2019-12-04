@@ -133,6 +133,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-h2console</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-sse</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
@@ -186,6 +191,7 @@
 
 	<modules>
 		<module>core/spring</module>
+		<module>persistence/h2console</module>
 		<module>security/secman</module>
 		<module>testing/fixtures</module>
 		<module>testing/specsupport</module>
