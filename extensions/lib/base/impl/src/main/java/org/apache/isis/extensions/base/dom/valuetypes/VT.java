@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.base.integtests;
+package org.apache.isis.extensions.base.dom.valuetypes;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

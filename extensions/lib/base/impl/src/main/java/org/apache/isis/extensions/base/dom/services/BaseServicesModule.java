@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.base.services;
+package org.apache.isis.extensions.base.dom.services;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

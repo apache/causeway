@@ -21,13 +21,13 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-h2console</artifactId>
+	<artifactId>isis-extensions-h2console-dom</artifactId>
 	<name>Apache Isis Ext - H2 Console</name>
 	<description>Menu and configuration to open up H2 Console</description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.h2console</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/h2console</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.h2console.dom</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/h2console/dom</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>

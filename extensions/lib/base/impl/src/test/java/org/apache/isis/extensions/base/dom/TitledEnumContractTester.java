@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.base.unittestsupport.dom.titled;
+package org.apache.isis.extensions.base.dom;
 
 import org.apache.isis.extensions.base.dom.TitledEnum;
 

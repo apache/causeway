@@ -33,7 +33,7 @@
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.api</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/secman-api</git-plugin.propertiesDir>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/secman/api</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

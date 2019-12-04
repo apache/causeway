@@ -29,7 +29,7 @@
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.common</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo-common</git-plugin.propertiesDir>
+		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo.common</git-plugin.propertiesDir>
 	</properties>
 
 	<build>

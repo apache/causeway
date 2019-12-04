@@ -133,12 +133,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-h2console</artifactId>
+				<artifactId>isis-extensions-h2console-dom</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-hsqldbmgr</artifactId>
+				<artifactId>isis-extensions-hsqldbmgr-dom</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>

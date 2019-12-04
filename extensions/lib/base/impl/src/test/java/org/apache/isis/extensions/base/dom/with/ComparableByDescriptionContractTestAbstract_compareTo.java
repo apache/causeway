@@ -8,7 +8,6 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.reflections.Reflections;
 
-import org.apache.isis.extensions.base.unittestsupport.dom.with.ComparableByDescriptionContractTester;
 
 public abstract class ComparableByDescriptionContractTestAbstract_compareTo {
     protected final String packagePrefix;

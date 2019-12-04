@@ -19,8 +19,8 @@
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.lib.base</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/lib/base</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.base</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/base</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

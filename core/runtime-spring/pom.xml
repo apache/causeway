@@ -31,8 +31,8 @@
     <description>Defines the main Spring @Configuration, which transitively depends on the rest of core. Viewers don't have dependencies on this module.</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.runtime.extensions</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/runtime-extensions</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.runtime.spring</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/runtime/spring</git-plugin.propertiesDir>
     </properties>
 
     <build>

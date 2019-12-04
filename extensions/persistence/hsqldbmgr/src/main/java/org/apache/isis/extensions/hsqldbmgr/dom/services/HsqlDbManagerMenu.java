@@ -16,9 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.h2console.services;
+package org.apache.isis.extensions.hsqldbmgr.dom.services;
 
 import javax.inject.Inject;
+
+import org.apache.isis.config.IsisConfiguration;
+import org.hsqldb.util.DatabaseManagerSwing;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
@@ -29,32 +32,31 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.extensions.h2console.webmodule.WebModuleH2Console;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.context._Context;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isisExtH2Console.H2ManagerMenu"
+        objectType = "isisExtHsqldbMgr.HsqlDbManagerMenu"
         )
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
-public class H2ManagerMenu {
+public class HsqlDbManagerMenu {
 
-    private final ServiceRegistry serviceRegistry;
-    private final WebModuleH2Console webModule;
+    private final IsisConfiguration isisConfiguration;
+    private final String url;
 
     @Inject
-    public H2ManagerMenu(final ServiceRegistry serviceRegistry, final WebModuleH2Console webModule) {
-        this.serviceRegistry = serviceRegistry;
-        this.webModule = webModule;
+    public HsqlDbManagerMenu(IsisConfiguration isisConfiguration) {
+        this.isisConfiguration = isisConfiguration;
+        this.url = isisConfiguration.getPersistor().getDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
     }
 
 
-    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<H2ManagerMenu>{ 
-        private static final long serialVersionUID = 1L; }
+
+    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<HsqlDbManagerMenu> { }
 
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -62,19 +64,22 @@ public class H2ManagerMenu {
             domainEvent = ActionDomainEvent.class
             )
     @ActionLayout(
-            named = "H2 Console",
+            named = "HSQL DB Manager",
             cssClassFa = "database"
             )
     @MemberOrder(sequence = "500.800")
-    public LocalResourcePath openH2Console() {
-        if(webModule==null) {
-            return null;
-        }
-        return webModule.getLocalResourcePathIfEnabled();
+    public void hsqlDbManager() {
+        String[] args = {"--url", url, "--noexit" };
+        DatabaseManagerSwing.main(args);
     }
-
-    public boolean hideOpenH2Console() {
-        return webModule==null || webModule.getLocalResourcePathIfEnabled()==null;
+    public boolean hideHsqlDbManager() {
+        try {
+            // hsqldb is configured as optional in the applib's pom.xml
+            _Context.loadClass("org.hsqldb.util.DatabaseManagerSwing");
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            return true;
+        }
+        return _Strings.isNullOrEmpty(url) || !url.contains("hsqldb:mem");
     }
 
 }

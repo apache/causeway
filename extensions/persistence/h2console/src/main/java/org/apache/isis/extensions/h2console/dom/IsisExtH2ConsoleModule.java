@@ -16,10 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.h2console;
+package org.apache.isis.extensions.h2console.dom;
 
-import org.apache.isis.extensions.h2console.services.H2ManagerMenu;
-import org.apache.isis.extensions.h2console.webmodule.WebModuleH2Console;
 import org.apache.isis.webapp.IsisBootWebApp;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

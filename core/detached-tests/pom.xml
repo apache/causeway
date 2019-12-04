@@ -25,7 +25,7 @@
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.detachedtests</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/detached-tests</git-plugin.propertiesDir>
+		<git-plugin.propertiesDir>org/apache/isis/detachedtests</git-plugin.propertiesDir>
 		
         <!-- to support the ParameterNameFacet Test -->
 		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>

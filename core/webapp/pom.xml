@@ -34,8 +34,8 @@
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.runtime.web</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/runtime-web</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.webapp</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/webapp</git-plugin.propertiesDir>
     </properties>
 
     <build>

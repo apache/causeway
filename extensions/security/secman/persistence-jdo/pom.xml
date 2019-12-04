@@ -33,7 +33,7 @@
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.persistence.jdo</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/secman-persistence-jdo</git-plugin.propertiesDir>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/secman/persistence/jdo</git-plugin.propertiesDir>
         
     </properties>
 

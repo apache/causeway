@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.base.services.calendar;
+package org.apache.isis.extensions.base.dom.services.calendar;
 
 import java.time.LocalDate;
 

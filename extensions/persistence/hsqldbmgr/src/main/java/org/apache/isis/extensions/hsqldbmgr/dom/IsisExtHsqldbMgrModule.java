@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.hsqldbmgr;
+package org.apache.isis.extensions.hsqldbmgr.dom;
 
 import org.apache.isis.webapp.IsisBootWebApp;
 import org.springframework.context.annotation.ComponentScan;

@@ -32,7 +32,7 @@
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.runtime.services</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/runtime-services</git-plugin.propertiesDir>
+        <git-plugin.propertiesDir>org/apache/isis/runtime/services</git-plugin.propertiesDir>
     </properties>
 
     <build>

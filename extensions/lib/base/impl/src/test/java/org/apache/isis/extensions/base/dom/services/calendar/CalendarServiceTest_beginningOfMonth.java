@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.base.services.calendar;
+package org.apache.isis.extensions.base.dom.services.calendar;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import org.apache.isis.applib.services.clock.ClockService;
 
-import org.apache.isis.extensions.base.services.calendar.CalendarService;
+import org.apache.isis.extensions.base.dom.services.calendar.CalendarService;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

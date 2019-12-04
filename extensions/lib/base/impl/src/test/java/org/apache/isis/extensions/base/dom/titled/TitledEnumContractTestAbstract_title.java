@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.reflections.Reflections;
 
 import org.apache.isis.extensions.base.dom.TitledEnum;
-import org.apache.isis.extensions.base.unittestsupport.dom.titled.TitledEnumContractTester;
+import org.apache.isis.extensions.base.dom.TitledEnumContractTester;
 
 public abstract class TitledEnumContractTestAbstract_title {
     protected final String prefix;

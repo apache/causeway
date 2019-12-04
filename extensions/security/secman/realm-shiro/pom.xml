@@ -33,7 +33,7 @@
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.realm.shiro</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/secman-realm-shiro</git-plugin.propertiesDir>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/secman/realm/shiro</git-plugin.propertiesDir>
         
     </properties>
 

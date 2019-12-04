@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.base;
+package org.apache.isis.extensions.base.dom.matchers;
 
 import java.io.File;
 import java.io.IOException;

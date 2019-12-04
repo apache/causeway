@@ -21,13 +21,13 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-hsqldbmgr</artifactId>
+	<artifactId>isis-extensions-hsqldbmgr-dom</artifactId>
 	<name>Apache Isis Ext - HSQLDB Manager</name>
 	<description>Menu and configuration to open up HSQLDB Manager</description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.hsqldbmgr</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/hsqldbmgr</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.hsqldbmgr.dom</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/hsqldbmgr/dom</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
