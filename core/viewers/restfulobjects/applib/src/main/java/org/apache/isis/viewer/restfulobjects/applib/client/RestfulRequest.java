@@ -27,8 +27,6 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.legacy.ClientRequest;
-import org.apache.isis.viewer.legacy.RestEasyLegacy;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
@@ -175,8 +173,6 @@ public final class RestfulRequest {
             }
             final ClientRequest clientRequest = clientRequestConfigurer.getClientRequest();
             final Response response = clientRequest.execute();
-
-            RestEasyLegacy.setReturnTypeToString(response);
 
             return RestfulResponse.ofT(response);
         } catch (final Exception ex) {

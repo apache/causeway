@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
-import org.apache.isis.viewer.legacy.ClientRequest;
+import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
 
 public enum RestfulHttpMethod {

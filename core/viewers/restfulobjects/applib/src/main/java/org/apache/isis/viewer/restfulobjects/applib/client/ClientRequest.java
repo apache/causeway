@@ -18,23 +18,26 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.client;
 
-public class RestfulClientException extends RuntimeException {
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-    private static final long serialVersionUID = 1L;
+/**
+ * Compatibility layer, legacy of deprecated resteasy client API.
+ *
+ */
+public interface ClientRequest {
 
-    public RestfulClientException() {
-    }
+    void accept(MediaType mediaType);
 
-    public RestfulClientException(final String message) {
-        super(message);
-    }
+    void header(String headerName, String value);
 
-    public RestfulClientException(final Throwable cause) {
-        super(cause);
-    }
+    void setHttpMethod(String httpMethod);
+    String getHttpMethod();
 
-    public RestfulClientException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
+    void addQueryParameter(String param, String arg);
+
+    void jsonPayload(String jsonString);
+
+    Response execute();
 
 }

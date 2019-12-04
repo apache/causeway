@@ -2,4 +2,5 @@ include::legacy:ROOT:partial$module-nav.adoc[]
 include::legacy:applib:partial$module-nav.adoc[]
 include::legacy:commons:partial$module-nav.adoc[]
 include::legacy:runtime:partial$module-nav.adoc[]
+include::legacy:restclient:partial$module-nav.adoc[]
 

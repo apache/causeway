@@ -41,10 +41,28 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-import org.apache.isis.viewer.legacy.RestEasyLegacy;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public final class JsonMapper {
+
+    public static String getEntityAsStringFrom(Response response) {
+
+        final Object result = response.getEntity();
+
+        if(result == null)
+            return null;
+
+        if(result instanceof String) {
+            return (String) result;
+        }
+
+        // TODO [andi-huber] just a wild guess
+        return response.readEntity(String.class);
+
+        // legacy code ...
+        // final ClientResponse<?> clientResponse = (ClientResponse<?>) response;
+        // return clientResponse.getEntity(String.class);
+    }
 
     public enum PrettyPrinting {
         ENABLE,
@@ -118,7 +136,7 @@ public final class JsonMapper {
     }
 
     public <T> T read(final Response response, final Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-        final String entity = RestEasyLegacy.getEntityAsStringFrom(response);
+        final String entity = getEntityAsStringFrom(response);
         if (entity == null) {
             return null;
         }

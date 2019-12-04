@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.legacy;
+package org.apache.isis.legacy.restclient;
 
 import java.lang.reflect.Method;
 
@@ -29,37 +29,6 @@ import javax.ws.rs.core.Response;
  *
  */
 public class RestEasyLegacy {
-
-    public static String getEntityAsStringFrom(Response response) {
-
-        final Object result = response.getEntity();
-
-        if(result == null)
-            return null;
-
-        if(result instanceof String) {
-            return (String) result;
-        }
-
-        // TODO [andi-huber] just a wild guess
-        return response.readEntity(String.class);
-
-        // legacy code ...
-        // final ClientResponse<?> clientResponse = (ClientResponse<?>) response;
-        // return clientResponse.getEntity(String.class);
-    }
-
-    public static void setReturnTypeToString(Response response) {
-
-        // TODO [andi-huber] why is this needed at all?
-
-        // legacy code ...
-        // final BaseClientResponse<String> restEasyResponse = (BaseClientResponse<String>) response;
-        // restEasyResponse.setReturnType(String.class);
-
-        System.err.println("WARN RestEasyLegacy - setReturnTypeToString(Response) not implemented!");
-
-    }
 
     @SuppressWarnings("unchecked")
     public static <T> T proxy(WebTarget webTarget, Class<T> clazz) {

@@ -131,6 +131,9 @@ content:
     - url: .
       start_path: legacy/core/runtime/src/main/doc # other
       branches: HEAD
+    - url: .
+      start_path: legacy/vro/restclient/src/main/doc # other
+      branches: HEAD
 
 # extensions
     - url: .

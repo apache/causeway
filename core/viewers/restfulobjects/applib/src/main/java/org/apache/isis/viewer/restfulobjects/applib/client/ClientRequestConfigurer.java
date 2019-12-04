@@ -23,10 +23,7 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
-import org.apache.isis.viewer.legacy.ClientExecutor;
-import org.apache.isis.viewer.legacy.ClientRequest;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
@@ -85,7 +82,7 @@ public class ClientRequestConfigurer {
      * <p>
      * Typical flow is:
      * <ul>
-     * <li> {@link RestfulClient#createRequest(RestfulHttpMethod, String)}
+     * <li> RestfulClient#createRequest(RestfulHttpMethod, String)
      * <li> {@link RestfulRequest#withArg(RequestParameter, Object)} for each arg
      * <li> {@link RestfulRequest#execute()} - which calls this method.
      * </ul>
@@ -111,8 +108,7 @@ public class ClientRequestConfigurer {
     }
 
     /**
-     * Used when following links (
-     * {@link RestfulClient#follow(LinkRepresentation)}).
+     * Used when following links - RestfulClient#follow(LinkRepresentation)
      */
     public ClientRequestConfigurer configureArgs(final JsonRepresentation requestArgs) {
         if (clientRequest.getHttpMethod() == null) {

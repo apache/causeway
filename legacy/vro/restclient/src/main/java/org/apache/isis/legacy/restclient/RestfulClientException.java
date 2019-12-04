@@ -16,28 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.legacy;
+package org.apache.isis.legacy.restclient;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+public class RestfulClientException extends RuntimeException {
 
-/**
- * Compatibility layer, legacy of deprecated resteasy client API.
- *
- */
-public interface ClientRequest {
+    private static final long serialVersionUID = 1L;
 
-    void accept(MediaType mediaType);
+    public RestfulClientException() {
+    }
 
-    void header(String headerName, String value);
+    public RestfulClientException(final String message) {
+        super(message);
+    }
 
-    void setHttpMethod(String httpMethod);
-    String getHttpMethod();
+    public RestfulClientException(final Throwable cause) {
+        super(cause);
+    }
 
-    void addQueryParameter(String param, String arg);
-
-    void jsonPayload(String jsonString);
-
-    Response execute();
+    public RestfulClientException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
 }

@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.legacy;
+package org.apache.isis.legacy.restclient;
 
 import java.net.URI;
+
+import org.apache.isis.viewer.restfulobjects.applib.client.ClientExecutor;
 
 /**
  * Compatibility layer, legacy of deprecated resteasy client API.

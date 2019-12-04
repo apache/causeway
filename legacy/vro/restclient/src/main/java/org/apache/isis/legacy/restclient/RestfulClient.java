@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.applib.client;
+package org.apache.isis.legacy.restclient;
 
 import java.net.URI;
 
@@ -25,11 +25,13 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.legacy.ClientExecutor;
-import org.apache.isis.viewer.legacy.ClientRequestFactory;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.client.ClientExecutor;
+import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.DomainTypeResource;

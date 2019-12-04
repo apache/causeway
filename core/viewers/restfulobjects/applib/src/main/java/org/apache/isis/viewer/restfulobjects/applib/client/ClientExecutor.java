@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.legacy;
+package org.apache.isis.viewer.restfulobjects.applib.client;
 
 import java.net.URI;
 import java.util.AbstractMap;
@@ -33,10 +33,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-/**
- * Compatibility layer, legacy of deprecated resteasy client API.
- *
- */
 public interface ClientExecutor {
 
     ClientRequest createRequest(UriBuilder uriBuilder);

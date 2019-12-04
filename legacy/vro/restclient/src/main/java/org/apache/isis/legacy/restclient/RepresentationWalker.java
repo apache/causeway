@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.applib.client;
+package org.apache.isis.legacy.restclient;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 
 import lombok.AllArgsConstructor;
 
