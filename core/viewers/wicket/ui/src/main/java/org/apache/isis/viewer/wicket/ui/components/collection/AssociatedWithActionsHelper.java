@@ -68,7 +68,7 @@ public class AssociatedWithActionsHelper implements Serializable {
 
     private ObjectSpecification getObjectSpecification() {
         val parentMemento = collectionModel.getParentObjectAdapterMemento();
-        val parentAdapter = parentMemento.getObjectAdapter(collectionModel.getSpecificationLoader());
+        val parentAdapter = collectionModel.getCommonContext().reconstructObject(parentMemento);
         return parentAdapter.getSpecification();
     }
 

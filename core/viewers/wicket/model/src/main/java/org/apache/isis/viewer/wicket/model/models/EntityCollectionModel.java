@@ -190,7 +190,7 @@ implements LinksProvider, UiHintContainer {
             private Stream<ManagedObject> loadElementsOneByOne(final EntityCollectionModel model) {
 
                 return stream(model.mementoList)
-                        .map(memento->memento.getObjectAdapter(model.getSpecificationLoader()))
+                        .map(model.getCommonContext()::reconstructObject)
                         .filter(_NullSafe::isPresent);
             }
 
@@ -236,8 +236,8 @@ implements LinksProvider, UiHintContainer {
             @Override
             List<ManagedObject> load(EntityCollectionModel colModel) {
 
-                final ManagedObject adapter = colModel.getParentObjectAdapterMemento()
-                        .getObjectAdapter(colModel.getSpecificationLoader());
+                val adapter = colModel.getCommonContext()
+                        .reconstructObject(colModel.getParentObjectAdapterMemento()); 
 
                 final OneToManyAssociation collection = colModel.collectionMemento
                         .getCollection(colModel.getSpecificationLoader());

@@ -100,6 +100,10 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
         return ObjectAdapterMemento.ofRootOid(rootOid, getMementoSupport());
     }
     
+    public ManagedObject reconstructObject(ObjectAdapterMemento memento) {
+        return getMementoSupport().reconstructObject(memento);
+    }
+    
     // -- COMMON CONTEXT PROVIDER INTERFACE
     
     public static interface Provider {

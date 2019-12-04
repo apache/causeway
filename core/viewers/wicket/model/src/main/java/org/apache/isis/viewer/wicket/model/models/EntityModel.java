@@ -334,7 +334,7 @@ implements ObjectAdapterModel, UiHintContainer {
         if (adapterMemento == null) {
             return null;
         }
-        val adapter = adapterMemento.getObjectAdapter(super.getSpecificationLoader());
+        val adapter = super.getCommonContext().reconstructObject(adapterMemento);
         return adapter;
     }
 
@@ -344,12 +344,10 @@ implements ObjectAdapterModel, UiHintContainer {
         adapterMemento = ObjectAdapterMemento.ofAdapter(adapter, super.getMementoSupport());
     }
 
-    public void setObjectMemento(final ObjectAdapterMemento memento) {
-        super.setObject(
-                memento != null
-                ? memento.getObjectAdapter(super.getSpecificationLoader())
-                        : null);
-        adapterMemento = memento;
+    public void setObjectMemento(final ObjectAdapterMemento adapterMemento) {
+        val adapter = super.getCommonContext().reconstructObject(adapterMemento);
+        super.setObject(adapter);
+        this.adapterMemento = adapterMemento;
     }
 
 
@@ -508,10 +506,8 @@ implements ObjectAdapterModel, UiHintContainer {
         }
 
         private ManagedObject getPendingAdapter() {
-            final ObjectAdapterMemento memento = getObject();
-            return memento != null
-                    ? memento.getObjectAdapter(entityModel.getSpecificationLoader())
-                            : null;
+            val memento = getObject();
+            return entityModel.getCommonContext().reconstructObject(memento);
         }
 
         public ManagedObject getPendingElseCurrentAdapter() {

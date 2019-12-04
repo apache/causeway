@@ -108,7 +108,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                     final List<Object> selectedPojos = selectedMementos.stream()
                     .filter(_NullSafe::isPresent)
-                    .map(memento -> memento.getObjectAdapter(commonContext.getSpecificationLoader()))
+                    .map(commonContext::reconstructObject)
                     .filter(_NullSafe::isPresent)
                     .map(ManagedObject::getPojo)
                     .filter(_NullSafe::isPresent)

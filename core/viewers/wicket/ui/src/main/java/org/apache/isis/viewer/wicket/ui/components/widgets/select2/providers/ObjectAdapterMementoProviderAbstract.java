@@ -64,7 +64,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             return NULL_DISPLAY_TEXT;
         }
 
-        val objectAdapter = choice.getObjectAdapter(commonContext.getSpecificationLoader());
+        val objectAdapter = commonContext.reconstructObject(choice); 
         final IConverter<Object> converter = findConverter(objectAdapter);
         return converter != null
                 ? converter.convertToString(objectAdapter.getPojo(), getLocale())
@@ -123,7 +123,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             matches.addAll(choicesMementos);
         } else {
             for (ObjectAdapterMemento candidate : choicesMementos) {
-                val objectAdapter = candidate.getObjectAdapter(commonContext.getSpecificationLoader());
+                val objectAdapter = commonContext.reconstructObject(candidate); 
                 String title = objectAdapter.titleString(objectAdapter);
                 if (title.toLowerCase().contains(term.toLowerCase())) {
                     matches.add(candidate);

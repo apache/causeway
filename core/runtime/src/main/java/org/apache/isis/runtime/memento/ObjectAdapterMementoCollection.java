@@ -19,14 +19,11 @@
 package org.apache.isis.runtime.memento;
 
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -50,15 +47,16 @@ final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
     @Getter(onMethod = @__({@Override})) private final ObjectSpecId objectSpecId;
 
     @Override
-    public ManagedObject getObjectAdapter(SpecificationLoader specificationLoader) {
-
+    public ManagedObject reconstructObject(MementoStore mementoStore, SpecificationLoader specificationLoader) {
+        
         //TODO[2112] we don't need the persistence layer to do that!
         val listOfPojos = getContainer().stream()
-                .map(memento->memento.getObjectAdapter(specificationLoader))
-                .filter(_NullSafe::isPresent)
-                .map(ManagedObject::getPojo)
-                .filter(_NullSafe::isPresent)
-                .collect(Collectors.toCollection(ArrayList::new));
+              .map(memento->((ObjectAdapterMementoDefault)memento).getObjectAdapter(mementoStore, specificationLoader))
+              .filter(_NullSafe::isPresent)
+              .map(ManagedObject::getPojo)
+              .filter(_NullSafe::isPresent)
+              .collect(Collectors.toCollection(ArrayList::new));
+        
         return IsisContext.getPersistenceSession().get().adapterFor(listOfPojos);
     }
 
@@ -81,21 +79,6 @@ final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
         return getContainer();
     }
 
-    @Override
-    public BeanSort getBeanSort() {
-        return BeanSort.COLLECTION;
-    }
 
-    @Override
-    public UUID getStoreKey() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public RootOid getRootOid() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
 }

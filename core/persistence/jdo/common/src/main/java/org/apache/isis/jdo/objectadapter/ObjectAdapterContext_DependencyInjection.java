@@ -26,6 +26,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -34,29 +35,28 @@ import lombok.RequiredArgsConstructor;
  * </p> 
  * @since 2.0
  */
-//@Log4j2
+@Deprecated // use ObjectManager.createObject instead
 @RequiredArgsConstructor
 class ObjectAdapterContext_DependencyInjection {
 
     private final RuntimeContext runtimeContext;
 
-    Object instantiateAndInjectServices(final ObjectSpecification objectSpec) {
+    Object instantiateAndInjectServices(ObjectSpecification spec) {
 
-        final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-        if (correspondingClass.isArray()) {
-            return Array.newInstance(correspondingClass.getComponentType(), 0);
+        val type = spec.getCorrespondingClass();
+        if (type.isArray()) {
+            return Array.newInstance(type.getComponentType(), 0);
         }
 
-        final Class<?> cls = correspondingClass;
-        if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new IsisException("Cannot create an instance of an abstract class: " + cls);
+        if (Modifier.isAbstract(type.getModifiers())) {
+            throw new IsisException("Cannot create an instance of an abstract class: " + type);
         }
 
         final Object newInstance;
         try {
-            newInstance = cls.newInstance();
+            newInstance = type.newInstance();
         } catch (final IllegalAccessException | InstantiationException e) {
-            throw new IsisException("Failed to create instance of type " + objectSpec.getFullIdentifier(), e);
+            throw new IsisException("Failed to create instance of type " + spec.getFullIdentifier(), e);
         }
 
         runtimeContext.getServiceInjector().injectServicesInto(newInstance);

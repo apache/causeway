@@ -247,8 +247,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
                 proposedValue = (ObjectAdapterMemento) proposedValueObj;
             }
 
-            val proposedAdapter = proposedValue.getObjectAdapter(scalarModel.getSpecificationLoader());
-
+            val proposedAdapter = scalarModel.getCommonContext().reconstructObject(proposedValue); 
             final String reasonIfAny = scalarModel.validate(proposedAdapter);
             if (reasonIfAny != null) {
                 final ValidationError error = new ValidationError();

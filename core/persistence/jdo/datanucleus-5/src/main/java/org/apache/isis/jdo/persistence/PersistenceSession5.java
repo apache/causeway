@@ -81,7 +81,6 @@ import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.memento.Data;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtime.persistence.UnsupportedFindException;
@@ -871,13 +870,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             }
         }
         return false;
-    }
-
-    // -- MEMENTO SUPPORT
-
-    @Override
-    public ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data) {
-        return objectAdapterContext.mementoSupport().recreateObject(spec, oid, data);
     }
 
     @Override

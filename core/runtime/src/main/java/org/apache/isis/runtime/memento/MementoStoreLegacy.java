@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.jdo.objectadapter;
+package org.apache.isis.runtime.memento;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -27,29 +27,31 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.jdo.objectadapter.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.runtime.memento.CollectionData;
-import org.apache.isis.runtime.memento.Data;
-import org.apache.isis.runtime.memento.ObjectData;
-import org.apache.isis.runtime.memento.StandaloneData;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -60,36 +62,39 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  * @since 2.0
  */
-@Log4j2
-class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSupport {
+@Log4j2 @RequiredArgsConstructor
+class MementoStoreLegacy implements MementoStore {
 
-
-    private final ObjectAdapterContext objectAdapterContext;
+    private final ObjectManager objectManager;
     private final PersistenceSession persistenceSession;
-
-    ObjectAdapterContext_MementoSupport(ObjectAdapterContext objectAdapterContext,
-            PersistenceSession persistenceSession) {
-        this.objectAdapterContext = objectAdapterContext;
-        this.persistenceSession = persistenceSession;
-    }
+    private final SpecificationLoader specificationLoader;
 
     @Override
-    public ObjectAdapter recreateObject(ObjectSpecification spec, Oid oid, Data data) {
+    public ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data) {
+        
         ObjectAdapter adapter;
 
         if (spec.isParentedOrFreeCollection()) {
 
             final Supplier<Object> emptyCollectionPojoFactory = 
-                    ()->objectAdapterContext.instantiateAndInjectServices(spec);
+                    ()->instantiateAndInjectServices(spec);
 
-                    final Object collectionPojo = populateCollection(emptyCollectionPojoFactory, spec, (CollectionData) data);
-                    adapter = objectAdapterContext.recreatePojo(oid, collectionPojo);
-
+            final Object collectionPojo = populateCollection(
+                    emptyCollectionPojoFactory, 
+                    spec, 
+                    (CollectionData) data);
+            
+            
+            final ParentedOid collectionOid = (ParentedOid) oid;
+            adapter = PojoAdapter.of(
+                    collectionPojo, collectionOid,
+                    IsisSession.currentOrElseNull(),
+                    persistenceSession);
 
         } else {
             _Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
-            // recreate an adapter for the original OID (with correct version)
+            // recreate an adapter for the original OID
             adapter = persistenceSession.adapterFor(typedOid);
 
             updateObject(adapter, data);
@@ -100,12 +105,23 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         }
         return adapter;
     }
+    
+    // -- HELPER
+    
+    private Object instantiateAndInjectServices(ObjectSpecification spec) {
+        
+        val objectCreateRequest = ObjectCreator.Request.of(spec);
+        return objectManager.createObject(objectCreateRequest);
+        
+        // legacy of
+        //return dependencyInjectionMixin.instantiateAndInjectServices(objectSpec);
+    }
 
     private ManagedObject recreateReference(Data data) {
         // handle values
         if (data instanceof StandaloneData) {
             val standaloneData = (StandaloneData) data;
-            return standaloneData.getAdapter(persistenceSession, objectAdapterContext.getSpecificationLoader());
+            return standaloneData.getAdapter(persistenceSession, specificationLoader);
         }
 
         // reference to entity

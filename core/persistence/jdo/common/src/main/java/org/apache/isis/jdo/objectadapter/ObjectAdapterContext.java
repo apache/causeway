@@ -31,12 +31,13 @@ import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.object.callbacks.LifecycleEventFacet;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.Data;
 import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -67,12 +68,12 @@ final public class ObjectAdapterContext {
     private final IsisPersistenceSessionJdo persistenceSession; 
     @Getter private final SpecificationLoader specificationLoader;
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
-    private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
     private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
     private final ServiceInjector serviceInjector;
     final ObjectAdapterContext_ObjectCreation objectCreationMixin;
     private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
+    private final ObjectManager objectManager;
 
     private ObjectAdapterContext(
             MetaModelContext mmc,
@@ -82,12 +83,13 @@ final public class ObjectAdapterContext {
         val runtimeContext = new RuntimeContextBase(mmc) {};
 
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, runtimeContext);
-        this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(persistenceSession, runtimeContext.getSpecificationLoader());
         this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(runtimeContext);
         this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, runtimeContext);
         this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(runtimeContext);
 
+        this.objectManager = mmc.getObjectManager();
+        
         this.persistenceSession = persistenceSession;
         this.specificationLoader = mmc.getSpecificationLoader();
         this.serviceInjector = mmc.getServiceInjector();
@@ -125,7 +127,12 @@ final public class ObjectAdapterContext {
 
     // package private
     Object instantiateAndInjectServices(ObjectSpecification objectSpec) {
-        return dependencyInjectionMixin.instantiateAndInjectServices(objectSpec);
+        
+        val objectCreateRequest = ObjectCreator.Request.of(objectSpec);
+        return objectManager.createObject(objectCreateRequest);
+        
+        // legacy of
+        //return dependencyInjectionMixin.instantiateAndInjectServices(objectSpec);
     }
 
     // -- FACTORIES
@@ -160,7 +167,6 @@ final public class ObjectAdapterContext {
     }
 
     private final ObjectAdapterFactories objectAdapterFactories;
-
 
     // package private
     ObjectAdapterFactories getFactories() {
@@ -212,16 +218,6 @@ final public class ObjectAdapterContext {
 
     public ObjectAdapterProvider getObjectAdapterProvider() {
         return objectAdapterProviderMixin;
-    }
-
-    // -- MEMENTO SUPPORT
-
-    public static interface MementoRecreateObjectSupport {
-        ObjectAdapter recreateObject(ObjectSpecification spec, Oid oid, Data data);
-    }
-
-    public MementoRecreateObjectSupport mementoSupport() {
-        return mementoSupportMixin;
     }
 
     // -- LIFECYCLE EVENT SUPPORT

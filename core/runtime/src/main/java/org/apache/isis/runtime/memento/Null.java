@@ -25,7 +25,7 @@ import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
 
-public class Null implements Encodable, Serializable {
+class Null implements Encodable, Serializable {
     private static final long serialVersionUID = 1L;
 
     public Null() {

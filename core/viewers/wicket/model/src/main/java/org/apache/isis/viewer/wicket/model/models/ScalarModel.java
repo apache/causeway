@@ -735,8 +735,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     private void getAndStore(final EntityModel parentEntityModel) {
         final ObjectAdapterMemento parentAdapterMemento = parentEntityModel.getObjectAdapterMemento();
         final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        final ManagedObject parentAdapter = parentAdapterMemento.getObjectAdapter(getSpecificationLoader());
-
+        final ManagedObject parentAdapter = super.getCommonContext().reconstructObject(parentAdapterMemento); 
         setObjectFromPropertyIfVisible(ScalarModel.this, property, parentAdapter);
     }
 

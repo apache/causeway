@@ -189,54 +189,55 @@ implements CollectionCountProvider {
 
         final ObjectSpecification parentSpecIfAny =
                 getModel().isParented()
-                ? getModel().getParentObjectAdapterMemento().getObjectAdapter(getCommonContext().getSpecificationLoader()).getSpecification()
+                    ? getCommonContext().reconstructObject(getModel().getParentObjectAdapterMemento())
+                            .getSpecification()
                         : null;
 
-                final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
-                        .and((final ObjectAssociation association)->{
-                            final Stream<Facet> facets = association.streamFacets()
-                                    .filter((final Facet facet)->
-                                    facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
-                            return !facets
-                                    .map(facet->(WhereValueFacet) facet)
-                                    .anyMatch(wawF->wawF.where().includes(whereContext));
+        final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
+                .and((final ObjectAssociation association)->{
+                    final Stream<Facet> facets = association.streamFacets()
+                            .filter((final Facet facet)->
+                            facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
+                    return !facets
+                            .map(facet->(WhereValueFacet) facet)
+                            .anyMatch(wawF->wawF.where().includes(whereContext));
 
-                        })
-                        .and(associationDoesNotReferenceParent(parentSpecIfAny));
+                })
+                .and(associationDoesNotReferenceParent(parentSpecIfAny));
 
-                final Stream<? extends ObjectAssociation> propertyList = 
-                        typeOfSpec.streamAssociations(Contributed.INCLUDED)
-                        .filter(predicate);
+        final Stream<? extends ObjectAssociation> propertyList = 
+                typeOfSpec.streamAssociations(Contributed.INCLUDED)
+                .filter(predicate);
 
-                final Map<String, ObjectAssociation> propertyById = _Maps.newLinkedHashMap();
-                propertyList.forEach(property->
-                propertyById.put(property.getId(), property));
+        final Map<String, ObjectAssociation> propertyById = _Maps.newLinkedHashMap();
+        propertyList.forEach(property->
+        propertyById.put(property.getId(), property));
 
-                List<String> propertyIds = _Lists.newArrayList(propertyById.keySet());
+        List<String> propertyIds = _Lists.newArrayList(propertyById.keySet());
 
-                if(propertyIdComparator!=null) {
-                    propertyIds.sort(propertyIdComparator);   
-                }
+        if(propertyIdComparator!=null) {
+            propertyIds.sort(propertyIdComparator);   
+        }
 
-                // optional SPI to reorder
-                final Can<TableColumnOrderService> tableColumnOrderServices =
-                        getServiceRegistry().select(TableColumnOrderService.class);
+        // optional SPI to reorder
+        final Can<TableColumnOrderService> tableColumnOrderServices =
+                getServiceRegistry().select(TableColumnOrderService.class);
 
-                for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
-                    final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);
-                    if(propertyReorderedIds != null) {
-                        propertyIds = propertyReorderedIds;
-                        break;
-                    }
-                }
+        for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
+            final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);
+            if(propertyReorderedIds != null) {
+                propertyIds = propertyReorderedIds;
+                break;
+            }
+        }
 
-                for (final String propertyId : propertyIds) {
-                    final ObjectAssociation property = propertyById.get(propertyId);
-                    if(property != null) {
-                        final ColumnAbstract<ManagedObject> nopc = createObjectAdapterPropertyColumn(property);
-                        columns.add(nopc);
-                    }
-                }
+        for (final String propertyId : propertyIds) {
+            final ObjectAssociation property = propertyById.get(propertyId);
+            if(property != null) {
+                final ColumnAbstract<ManagedObject> nopc = createObjectAdapterPropertyColumn(property);
+                columns.add(nopc);
+            }
+        }
     }
 
     private List<String> reordered(
@@ -247,7 +248,7 @@ implements CollectionCountProvider {
 
         final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
         if(parentObjectAdapterMemento != null) {
-            val parentObjectAdapter = parentObjectAdapterMemento.getObjectAdapter(getCommonContext().getSpecificationLoader());
+            val parentObjectAdapter = getCommonContext().reconstructObject(parentObjectAdapterMemento);
             final Object parent = parentObjectAdapter.getPojo();
             final String collectionId = getModel().getCollectionMemento().getId();
 

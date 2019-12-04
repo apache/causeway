@@ -40,7 +40,7 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
 
     @Override
     protected ManagedObject load() {
-        return adapterMemento.getObjectAdapter(super.getSpecificationLoader());
+        return super.getCommonContext().reconstructObject(adapterMemento);
     }
 
     // //////////////////////////////////////

@@ -67,7 +67,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (memento == null) {
             return null;
         }
-        val adapter = memento.getObjectAdapter(commonContext.getSpecificationLoader());
+        val adapter = commonContext.reconstructObject(memento);
         val spec = adapter.getSpecification();
         if(spec!=null && spec.isValue()) {
             return memento.toString();

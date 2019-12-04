@@ -222,9 +222,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     public ManagedObject getContextAdapterIfAny() {
         ObjectAdapterModel model = getModel();
         ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
-        return contextAdapterMementoIfAny != null
-                ? contextAdapterMementoIfAny.getObjectAdapter(getCommonContext().getSpecificationLoader())
-                        : null;
+        return getCommonContext().reconstructObject(contextAdapterMementoIfAny);
     }
 
     static String abbreviated(final String str, final int maxLength) {

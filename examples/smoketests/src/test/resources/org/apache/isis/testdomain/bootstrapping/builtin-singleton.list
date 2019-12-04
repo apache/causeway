@@ -59,7 +59,7 @@ org.apache.isis.runtime.services.email.EmailServiceDefault
 org.apache.isis.runtime.services.eventbus.EventBusServiceSpring
 org.apache.isis.runtime.services.factory.FactoryServiceInternalDefault
 org.apache.isis.runtime.services.homepage.HomePageResolverServiceDefault
-org.apache.isis.extensions.hsqldbmgr.services.HsqlDbManagerMenu
+#org.apache.isis.extensions.hsqldbmgr.services.HsqlDbManagerMenu
 org.apache.isis.runtime.services.i18n.po.TranslationServicePo
 org.apache.isis.runtime.services.i18n.po.TranslationServicePoMenu
 org.apache.isis.runtime.services.ixn.InteractionDtoServiceInternalDefault

@@ -26,13 +26,15 @@ import javax.inject.Singleton;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +50,8 @@ public class ObjectAdapterMementoSupport_usingDefault
 implements ObjectAdapterMementoSupport {
     
     @Inject @Getter private SpecificationLoader specificationLoader;
+    @Inject private ObjectManager objectManager;
+    private MementoStore mementoStore;
 
     @Override
     public ObjectAdapterMemento mementoForRootOid(RootOid rootOid) {
@@ -72,8 +76,27 @@ implements ObjectAdapterMementoSupport {
     }
 
     @Override
-    public ManagedObject reconstructObjectAdapter(ObjectAdapterMemento memento) {
-        return memento.getObjectAdapter(specificationLoader);
+    public ManagedObject reconstructObject(ObjectAdapterMemento memento) {
+        if(memento==null) {
+            return null;
+        }
+        if(mementoStore==null) {
+            val ps = IsisContext.getPersistenceSession().get();
+            mementoStore = new MementoStoreLegacy(objectManager, ps, specificationLoader);
+        }
+        
+        
+        return memento.reconstructObject(mementoStore, specificationLoader);
+        
+//        val specId = memento.getObjectSpecId();
+//        val spec = specificationLoader.loadSpecification(specId);
+//        
+//        if(memento.getIdentifier()==null) {
+//            System.out.println("#### has no id: " + memento);
+//        }
+//        
+//        val objectLoadRequest = ObjectLoader.Request.of(spec, memento.getIdentifier());
+//        return objectManager.loadObject(objectLoadRequest);         
     }
 
     @RequiredArgsConstructor(staticName = "of")
@@ -82,21 +105,6 @@ implements ObjectAdapterMementoSupport {
         private static final long serialVersionUID = 1L;
 
         private final ObjectAdapterMementoDefault delegate;
-
-        @Override
-        public UUID getStoreKey() {
-            return null;
-        }
-
-        @Override
-        public BeanSort getBeanSort() {
-            return null;
-        }
-
-        @Override
-        public RootOid getRootOid() {
-            return null;
-        }
 
         @Override
         public String asString() {
@@ -119,12 +127,15 @@ implements ObjectAdapterMementoSupport {
         }
 
         @Override
-        public ManagedObject getObjectAdapter(SpecificationLoader specificationLoader) {
-            return delegate.getObjectAdapter(persistenceSession(), specificationLoader);
+        public ManagedObject reconstructObject(
+                MementoStore mementoStore, SpecificationLoader specificationLoader) {
+            
+            return delegate.getObjectAdapter(mementoStore, specificationLoader);
         }
         
-        private PersistenceSession persistenceSession() {
-            return IsisContext.getPersistenceSession().orElse(null);
+        @Override
+        public String toString() {
+            return delegate.toString();
         }
 
     }

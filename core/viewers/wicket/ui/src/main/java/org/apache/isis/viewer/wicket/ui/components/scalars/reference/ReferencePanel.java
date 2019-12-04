@@ -171,7 +171,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
                 if(memento == null) {
                     return null;
                 }
-                val adapter = memento.getObjectAdapter(getSpecificationLoader());
+                val adapter = ReferencePanel.super.getCommonContext().reconstructObject(memento);
                 return adapter != null ? adapter.titleString(null) : null;
             }
 
@@ -410,10 +410,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
                 select2.getModel().setObject(convertedInput);
             }
 
-            val adapter = convertedInput!=null
-                    ? convertedInput.getObjectAdapter(super.getSpecificationLoader())
-                            :null;
-                    
+            val adapter = super.getCommonContext().reconstructObject(convertedInput); 
             getModel().setObject(adapter);
         }
 

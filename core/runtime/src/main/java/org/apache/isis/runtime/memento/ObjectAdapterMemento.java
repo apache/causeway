@@ -23,14 +23,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
@@ -43,10 +41,6 @@ import lombok.val;
  * @since 2.0
  */
 public interface ObjectAdapterMemento extends Serializable {
-
-    UUID getStoreKey();
-    BeanSort getBeanSort();
-    RootOid getRootOid();
 
     String asString();
 
@@ -67,8 +61,8 @@ public interface ObjectAdapterMemento extends Serializable {
     Bookmark asHintingBookmarkIfSupported();
 
     ObjectSpecId getObjectSpecId();
-
-    ManagedObject getObjectAdapter(SpecificationLoader specificationLoader); 
+    
+    ManagedObject reconstructObject(MementoStore mementoStore, SpecificationLoader specificationLoader);
 
     // -- FACTORIES
 
@@ -128,6 +122,8 @@ public interface ObjectAdapterMemento extends Serializable {
                 ObjectAdapterMemento.wrapMementoList(listOfMementos, specId);
         return memento;
     }
+
+    
 
 
 }

@@ -34,6 +34,6 @@ public interface ObjectAdapterMementoSupport {
 
     ObjectAdapterMemento mementoForPojo(Object pojo);
 
-    ManagedObject reconstructObjectAdapter(ObjectAdapterMemento memento);
+    ManagedObject reconstructObject(ObjectAdapterMemento memento);
 
 }

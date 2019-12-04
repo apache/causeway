@@ -41,6 +41,7 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -48,6 +49,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.val;
+
 
 public class ObjectAdapterMementoDefault implements Serializable {
 
@@ -119,10 +121,10 @@ public class ObjectAdapterMementoDefault implements Serializable {
             @Override
             public ManagedObject asAdapter(
                     ObjectAdapterMementoDefault memento,
-                    PersistenceSession persistenceSession,
+                    MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
                 
-                return memento.recreateStrategy.getAdapter(memento, persistenceSession, specificationLoader);
+                return memento.recreateStrategy.getAdapter(memento, mementoStore, specificationLoader);
             }
 
             @Override
@@ -155,12 +157,14 @@ public class ObjectAdapterMementoDefault implements Serializable {
             @Override
             public ManagedObject asAdapter(
                     ObjectAdapterMementoDefault memento,
-                    PersistenceSession persistenceSession,
+                    MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
                 
                 final List<Object> listOfPojos =
-                        _Lists.map(memento.list, Functions.toPojo(persistenceSession, specificationLoader));
+                        _Lists.map(memento.list, Functions.toPojo(mementoStore, specificationLoader));
 
+                PersistenceSession persistenceSession = IsisContext.getPersistenceSession().get();
+                
                 return persistenceSession.adapterFor(listOfPojos);
             }
 
@@ -196,7 +200,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
 
         public abstract ManagedObject asAdapter(
                 ObjectAdapterMementoDefault memento,
-                PersistenceSession persistenceSession,
+                MementoStore mementoStore,
                 SpecificationLoader specificationLoader);
 
         public abstract int hashCode(ObjectAdapterMementoDefault memento);
@@ -216,7 +220,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
             @Override
             ManagedObject recreateAdapter(
                     ObjectAdapterMementoDefault memento,
-                    PersistenceSession persistenceSession,
+                    MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
                 
                 ObjectSpecId specId = memento.objectSpecId;
@@ -247,7 +251,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
             @Override
             public void resetVersion(
                     ObjectAdapterMementoDefault memento,
-                    PersistenceSession persistenceSession, 
+                    MementoStore mementoStore, 
                     SpecificationLoader specificationLoader) {
             }
         },
@@ -259,7 +263,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
             @Override
             ManagedObject recreateAdapter(
                     ObjectAdapterMementoDefault memento,
-                    PersistenceSession persistenceSession, 
+                    MementoStore mementoStore, 
                     SpecificationLoader specificationLoader) {
                 
                 RootOid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);
@@ -281,12 +285,13 @@ public class ObjectAdapterMementoDefault implements Serializable {
             @Override
             public void resetVersion(
                     ObjectAdapterMementoDefault memento,
-                    PersistenceSession persistenceSession,
+                    MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
                 
                 //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
                 final ManagedObject adapter = recreateAdapter(
-                        memento, persistenceSession, specificationLoader);
+                        memento, mementoStore, specificationLoader);
+                
                 Oid oid = ManagedObject._identify(adapter);
                 memento.persistentOidStr = oid.enString();
             }
@@ -318,10 +323,10 @@ public class ObjectAdapterMementoDefault implements Serializable {
             @Override
             ManagedObject recreateAdapter(
                     ObjectAdapterMementoDefault memento,
-                    PersistenceSession persistenceSession, 
+                    MementoStore mementoStore, 
                     SpecificationLoader specificationLoader) {
                 
-                return memento.transientMemento.recreateObject(specificationLoader, persistenceSession);
+                return memento.transientMemento.recreateObject(specificationLoader, mementoStore);
             }
 
             @Override
@@ -342,22 +347,22 @@ public class ObjectAdapterMementoDefault implements Serializable {
             @Override
             public void resetVersion(
                     ObjectAdapterMementoDefault memento,
-                    PersistenceSession persistenceSession,
+                    MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
             }
         };
 
         public ManagedObject getAdapter(
                 ObjectAdapterMementoDefault memento,
-                PersistenceSession persistenceSession,
+                MementoStore mementoStore,
                 SpecificationLoader specificationLoader) {
             
-            return recreateAdapter(memento, persistenceSession, specificationLoader);
+            return recreateAdapter(memento, mementoStore, specificationLoader);
         }
 
         abstract ManagedObject recreateAdapter(
                 ObjectAdapterMementoDefault memento,
-                PersistenceSession persistenceSession, 
+                MementoStore mementoStore, 
                 SpecificationLoader specificationLoader);
 
         public abstract boolean equals(
@@ -370,7 +375,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
 
         public abstract void resetVersion(
                 ObjectAdapterMementoDefault memento,
-                PersistenceSession persistenceSession, 
+                MementoStore mementoStore, 
                 SpecificationLoader specificationLoader);
     }
 
@@ -525,11 +530,11 @@ public class ObjectAdapterMementoDefault implements Serializable {
 
 
     public void resetVersion(
-            PersistenceSession persistenceSession,
+            MementoStore mementoStore,
             SpecificationLoader specificationLoader) {
         
         ensureScalar();
-        recreateStrategy.resetVersion(this, persistenceSession, specificationLoader);
+        recreateStrategy.resetVersion(this, mementoStore, specificationLoader);
     }
 
 
@@ -556,7 +561,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
      * can call {@link #setAdapter(ManagedObject)} to keep this memento in sync.
      */
     public ManagedObject getObjectAdapter(
-            PersistenceSession persistenceSession,
+            MementoStore mementoStore,
             SpecificationLoader specificationLoader) {
         
         val spec = specificationLoader.loadSpecification(objectSpecId);
@@ -570,7 +575,7 @@ public class ObjectAdapterMementoDefault implements Serializable {
             return spec.getMetaModelContext().lookupServiceAdapterById(objectSpecId.asString());
         }
         
-        return cardinality.asAdapter(this, persistenceSession, specificationLoader);
+        return cardinality.asAdapter(this, mementoStore, specificationLoader);
     }
 
     /**
@@ -593,20 +598,20 @@ public class ObjectAdapterMementoDefault implements Serializable {
      */
     public boolean containedIn(
             List<ObjectAdapterMementoDefault> mementos,
-            PersistenceSession persistenceSession,
+            MementoStore mementoStore,
             SpecificationLoader specificationLoader) {
 
         ensureScalar();
 
         //XXX REVIEW: heavy handed, ought to be possible to just compare the OIDs
         // ignoring the concurrency checking
-        val currAdapter = getObjectAdapter(persistenceSession, specificationLoader);
+        val currAdapter = getObjectAdapter(mementoStore, specificationLoader);
         
         for (val memento : mementos) {
             if(memento == null) {
                 continue;
             }
-            val otherAdapter = memento.getObjectAdapter(persistenceSession, specificationLoader);
+            val otherAdapter = memento.getObjectAdapter(mementoStore, specificationLoader);
             if(currAdapter == otherAdapter) {
                 return true;
             }
@@ -645,12 +650,12 @@ public class ObjectAdapterMementoDefault implements Serializable {
         }
 
         public static Function<ObjectAdapterMementoDefault, ManagedObject> fromMemento(
-                final PersistenceSession persistenceSession,
+                final MementoStore mementoStore,
                 final SpecificationLoader specificationLoader) {
 
             return memento->{
                 try {
-                    return memento.getObjectAdapter(persistenceSession, specificationLoader);
+                    return memento.getObjectAdapter(mementoStore, specificationLoader);
                 } catch (ObjectNotFoundException e) {
                     // this can happen if for example the object is not visible (due to the security tenanted facet)
                     return null;
@@ -659,14 +664,14 @@ public class ObjectAdapterMementoDefault implements Serializable {
         }
 
         public static Function<ObjectAdapterMementoDefault, Object> toPojo(
-                final PersistenceSession persistenceSession,
+                final MementoStore mementoStore,
                 final SpecificationLoader specificationLoader) {
             
             return memento->{
                 if(memento == null) {
                     return null;
                 }
-                val objectAdapter = memento.getObjectAdapter(persistenceSession, specificationLoader);
+                val objectAdapter = memento.getObjectAdapter(mementoStore, specificationLoader);
                 if(objectAdapter == null) {
                     return null;
                 }

@@ -37,7 +37,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.Getter;
 import lombok.val;
@@ -67,14 +66,14 @@ public class Memento implements Serializable {
     
     public ObjectAdapter recreateObject(
             SpecificationLoader specLoader, 
-            PersistenceSession persistenceSession) {
+            MementoStore mementoStore) {
         
         if (data == null) {
             return null;
         }
         val spec = specLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(data.getClassName()));
         val oid = data.getOid();
-        return persistenceSession.adapterOfMemento(spec, oid, data);
+        return mementoStore.adapterOfMemento(spec, oid, data);
     }
 
     @Override
