@@ -21,16 +21,7 @@ package org.apache.isis.config;
 
 public final class WebAppConstants {
 
-    /**
-     * Key under which the {@link AuthenticationSession} is bound as a session
-     * attribute ( <tt>HttpSession#getAttribute(String)</tt>).
-     */
     public final static String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = WebAppConstants.class.getPackage().getName() + ".authenticationSession";
-
-    /**
-     * Property name given to the web app directory.
-     */
-    public static final String WEB_APP_DIR = "application.webapp.dir";
 
     /**
      * Servlet context parameter name used to specify the location for property file

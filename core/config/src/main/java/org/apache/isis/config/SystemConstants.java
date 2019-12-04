@@ -21,31 +21,14 @@ package org.apache.isis.config;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class SystemConstants {
 
     public static final String MSG_ARE_YOU_SURE = "Are you sure?";
     public static final String MSG_CONFIRM = "Confirm";
     public static final String MSG_CANCEL = "Cancel";
-
-    /**
-     * Default for {@link #AUTHENTICATION_INSTALLER_KEY}.
-     */
-    public static final String AUTHENTICATION_DEFAULT = "shiro";
-
-    /**
-     * Default for {@link #AUTHORIZATION_DEFAULT}.
-     */
-    public static final String AUTHORIZATION_DEFAULT = "shiro";
-
-
-    /**
-     * Key by which requested fixture (eg via command line) is made available in
-     * {@link IsisConfigurationLegacy}.
-     */
-    public final static String FIXTURE_KEY = ConfigurationConstants.ROOT + "fixtures";
-
 
     /**
      * Somewhat hacky, add this to the query
