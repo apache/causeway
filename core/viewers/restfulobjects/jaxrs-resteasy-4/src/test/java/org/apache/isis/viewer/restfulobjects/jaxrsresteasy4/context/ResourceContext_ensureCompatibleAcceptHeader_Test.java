@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server.mappers;
+package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.context;
 
-public class RestfulObjectsApplicationExceptionMapper_Test extends
-RestfulObjectsApplicationExceptionMapper_Test_Contract {
+import org.apache.isis.viewer.restfulobjects.server.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
+
+public class ResourceContext_ensureCompatibleAcceptHeader_Test extends
+        ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
 }
