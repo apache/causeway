@@ -65,7 +65,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime-web</artifactId>
+            <artifactId>isis-webapp</artifactId>
         </dependency>
 	
 	<!-- TEST DEPENDENCIES -->

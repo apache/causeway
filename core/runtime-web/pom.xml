@@ -26,7 +26,7 @@
         <version>2.0.0-M3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-runtime-web</artifactId>
+    <artifactId>isis-webapp</artifactId>
     <name>Apache Isis Core - Runtime Web</name>
     <description>Introduced to keep the 'runtime' package concise. 
     Bundles all the web specific classes a srequired by viewers.</description>
