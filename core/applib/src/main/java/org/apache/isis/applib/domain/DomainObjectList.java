@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.domain;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -35,8 +34,8 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
+import org.apache.isis.commons.internal.collections._Lists;
 
 @XmlRootElement(name = "list")
 @XmlType(
@@ -61,7 +60,7 @@ import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
         cssClassUiEvent = DomainObjectList.CssClassUiEvent.class,
         layoutUiEvent = DomainObjectList.LayoutUiEvent.class
         )
-public class DomainObjectList implements Iterable<Object> {
+public class DomainObjectList {
 
     // -- ui event classes
     public static class TitleUiEvent extends IsisApplibModule.TitleUiEvent<DomainObjectList>{  }
@@ -174,11 +173,6 @@ public class DomainObjectList implements Iterable<Object> {
 
     public void setObjects(final List<Object> objects) {
         this.objects = objects;
-    }
-    
-    @Override
-    public Iterator<Object> iterator() {
-        return objects.iterator();
     }
 
 

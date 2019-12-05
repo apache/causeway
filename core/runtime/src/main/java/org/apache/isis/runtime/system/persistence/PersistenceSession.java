@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.context._Context;
@@ -38,7 +37,6 @@ public interface PersistenceSession {
     // -- STABLE API (DRAFT)
     // -------------------------------------------------------------------------------------------------
 
-    ServiceInjector getServiceInjector();
     TransactionService getTransactionService();
 
     void open();

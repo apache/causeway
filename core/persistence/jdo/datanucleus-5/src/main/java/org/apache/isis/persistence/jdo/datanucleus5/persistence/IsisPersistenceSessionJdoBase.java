@@ -35,12 +35,12 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.system.persistence.PersistenceQueryFactory;
 import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
@@ -62,8 +62,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     protected final AuthenticationSession authenticationSession;
 
     @Getter protected final MetaModelContext metaModelContext;
-    @Getter protected final ServiceInjector serviceInjector;
-    
+    protected final ServiceInjector serviceInjector;
     protected final ServiceRegistry serviceRegistry;
 
     protected final CommandContext commandContext;

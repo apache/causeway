@@ -69,7 +69,9 @@ public class JaxbServiceDefault extends JaxbService.Simple {
             try {
                 final String elementObjectType = list.getElementObjectType();
                 final Class<?> elementType = metaModelService.fromObjectType(elementObjectType);
-                if (elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
+                if (elementType!=null 
+                        && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
+                    
                     return JAXBContext.newInstance(domainClass, elementType);
                 } else {
                     return JAXBContext.newInstance(domainClass);

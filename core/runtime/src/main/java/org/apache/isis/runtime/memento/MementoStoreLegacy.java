@@ -25,7 +25,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -49,7 +48,6 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
@@ -110,10 +108,7 @@ final class MementoStoreLegacy implements MementoStore {
     
     @Override
     public ManagedObject adapterForListOfPojos(List<Object> listOfPojos) {
-        
-        val domainObjectList = new DomainObjectList();
-        domainObjectList.setObjects(listOfPojos);
-        return ManagedObject._adapterOfList(specificationLoader, domainObjectList);
+        return ManagedObject.of(specificationLoader::loadSpecification, listOfPojos);
     }
     
     // -- HELPER
