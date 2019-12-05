@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.enterprise.context.RequestScoped;
 
+import org.apache.isis.runtime.scoping.RequestScopedService;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;

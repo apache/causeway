@@ -49,7 +49,7 @@ import lombok.val;
  */
 @DomainService(
         nature = NatureOfService.DOMAIN, 
-        objectType = "webModules.RestfulObjects") // add to meta-model, for swagger-menu to check whether available or not 
+        objectType = "restfulObjectsViewer.WebModule") // add to meta-model, for swagger-menu to check whether available or not
 @Order(-80)
 public final class WebModuleRestfulObjects implements WebModule  {
 

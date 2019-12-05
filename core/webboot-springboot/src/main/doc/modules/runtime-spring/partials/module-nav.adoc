@@ -1,1 +1,0 @@
-* xref:core:runtime-extensions:about.adoc[Runtime Extensions]

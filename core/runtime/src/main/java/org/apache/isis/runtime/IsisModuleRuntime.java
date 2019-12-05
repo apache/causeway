@@ -19,15 +19,38 @@
 package org.apache.isis.runtime;
 
 import org.apache.isis.metamodel.IsisModuleMetamodel;
+import org.apache.isis.runtime.memento.ObjectAdapterMementoServiceDefault;
+import org.apache.isis.runtime.system.context.session.RuntimeEventService;
+import org.apache.isis.runtime.system.context.session.RuntimeEventSupport_Spring;
+import org.apache.isis.runtime.system.persistence.events.PersistenceEventService;
+import org.apache.isis.runtime.system.persistence.events.PersistenceEventService_Spring;
+import org.apache.isis.runtime.system.persistence.events.TimestampService;
+import org.apache.isis.runtime.system.session.IsisSessionFactoryDefault;
+import org.apache.isis.runtime.system.transaction.AuditingServiceInternal;
+import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
+        // modules
         IsisModuleMetamodel.class,
+
+        // @Service's
+        ObjectAdapterMementoServiceDefault.class,
+        RuntimeEventService.class,
+        PersistenceEventService.class,
+        TimestampService.class,
+        IsisSessionFactoryDefault.class,
+        AuditingServiceInternal.class,
+        ChangedObjectsServiceInternal.class,
+
+        // @Configuration's
+        RuntimeEventSupport_Spring.class,
+        PersistenceEventService_Spring.class,
+
 })
-@ComponentScan
 public class IsisModuleRuntime {
 
 }

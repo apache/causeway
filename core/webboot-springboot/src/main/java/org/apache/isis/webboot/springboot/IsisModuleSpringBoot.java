@@ -33,8 +33,8 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 @Configuration
 @Import({
-    IsisBeanFactoryPostProcessorForSpring.class,
-    IsisModuleRuntimeServices.class,
+        // modules
+        IsisModuleRuntimeServices.class,
 })
 public class IsisModuleSpringBoot implements ApplicationContextAware {
 

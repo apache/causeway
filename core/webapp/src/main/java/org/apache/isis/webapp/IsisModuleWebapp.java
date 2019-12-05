@@ -18,6 +18,7 @@
  */
 package org.apache.isis.webapp;
 
+import org.apache.isis.runtime.IsisModuleRuntime;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextListener;
 import org.springframework.context.annotation.Configuration;
@@ -28,14 +29,18 @@ import org.apache.isis.webapp.modules.templresources.WebModuleTemplateResources;
 
 @Configuration
 @Import({
-    IsisWebAppContextListener.class,
-    IsisWebAppContextInitializer.class,
+        // modules
+        IsisModuleRuntime.class,
 
-    // default modules
-    WebModuleLogOnExceptionLogger.class,
-    
-    // static html template preprocessing
-    WebModuleTemplateResources.class,
+        // @Configuration's
+        IsisWebAppContextInitializer.class,
+
+        // @Service's
+        WebModuleLogOnExceptionLogger.class,
+        WebModuleTemplateResources.class,
+
+        // (not annotated)
+        IsisWebAppContextListener.class,
 
 })
 public class IsisModuleWebapp {

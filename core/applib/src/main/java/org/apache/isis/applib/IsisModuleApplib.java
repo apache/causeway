@@ -89,7 +89,6 @@ import org.springframework.context.annotation.Import;
         JaxbServiceDefault.class,
         PublisherServiceLogging.class
 
-
 })
 public class IsisModuleApplib {
 

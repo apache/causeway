@@ -22,7 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.metamodel.IsisModuleMetamodel;
-import org.apache.isis.persistence.jdo.applib.services.IsisModuleJdoApplib;
+import org.apache.isis.persistence.jdo.applib.IsisModuleJdoApplib;
+import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerCompositeForJdoObjectStore;
+import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionLong;
+import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionTimestamp;
+import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_downloadJdoMetadata;
+import org.apache.isis.runtime.IsisModuleRuntime;
 import org.apache.isis.schema.IsisModuleSchema;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -42,23 +47,29 @@ import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessi
 @Configuration
 @Import({
         // modules
+        IsisModuleRuntime.class,
         IsisModuleJdoApplib.class,
-        IsisModuleMetamodel.class,
-        IsisModuleSchema.class,
 
-    DataNucleusSettings.class, // config bean
-    JdoProgrammingModelPlugin.class, // metamodel extensions
-    JdoPersistenceLifecycleService.class,
-    MetricsServiceDefault.class,
-    IsisJdoSupportDN5.class,
-    IsisPlatformTransactionManagerForJdo.class,
-    PersistenceSessionFactory5.class
+        // @Component's
+        JdoProgrammingModelPlugin.class,
+
+        // @Service's
+        DataNucleusSettings.class,
+        JdoPersistenceLifecycleService.class,
+        IsisJdoSupportDN5.class,
+        IsisPlatformTransactionManagerForJdo.class,
+        PersistenceSessionFactory5.class,
+
+        // @DomainService's
+        MetricsServiceDefault.class,
+        ExceptionRecognizerCompositeForJdoObjectStore.class,
+
+        // @Mixin's
+        Persistable_datanucleusIdLong.class,
+        Persistable_datanucleusVersionLong.class,
+        Persistable_datanucleusVersionTimestamp.class,
+        Persistable_downloadJdoMetadata.class,
 })
-@ComponentScan(
-        basePackageClasses= {
-                // bring in the mixins
-                Persistable_datanucleusIdLong.class,
-        })
 public class IsisModuleJdoDataNucleus5 {
     
     // reserved for datanucleus' own config props

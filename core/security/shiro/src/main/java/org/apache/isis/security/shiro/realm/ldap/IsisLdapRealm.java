@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.shiro;
+package org.apache.isis.security.shiro.realm.ldap;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -57,14 +57,14 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
  * Sample config for <tt>shiro.ini</tt>:
  * <p/>
  * <pre>
- * contextFactory = org.apache.isis.security.shiro.IsisLdapContextFactory
+ * contextFactory = org.apache.isis.security.shiro.realm.ldap.IsisLdapContextFactory
  * contextFactory.url = ldap://localhost:10389
  * contextFactory.authenticationMechanism = CRAM-MD5
  * contextFactory.systemAuthenticationMechanism = simple
  * contextFactory.systemUsername = uid=admin,ou=system
  * contextFactory.systemPassword = secret
  *
- * ldapRealm = org.apache.isis.security.shiro.IsisLdapRealm
+ * ldapRealm = org.apache.isis.security.shiro.realm.ldap.IsisLdapRealm
  * ldapRealm.contextFactory = $contextFactory
  *
  * ldapRealm.searchBase = ou=groups,o=mojo

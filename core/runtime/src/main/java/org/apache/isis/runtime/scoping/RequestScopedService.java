@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.services;
+package org.apache.isis.runtime.scoping;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.inject.ServiceInjector;

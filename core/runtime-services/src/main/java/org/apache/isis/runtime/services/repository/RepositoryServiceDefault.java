@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.NonRecoverableException;
@@ -48,7 +49,7 @@ import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.val;
 
-@Service
+@Repository
 public class RepositoryServiceDefault implements RepositoryService {
 
     @Inject private FactoryService factoryService;

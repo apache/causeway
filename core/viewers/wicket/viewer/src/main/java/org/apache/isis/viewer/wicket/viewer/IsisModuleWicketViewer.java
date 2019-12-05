@@ -19,6 +19,15 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import org.apache.isis.viewer.wicket.ui.IsisModuleWicketUi;
+import org.apache.isis.viewer.wicket.viewer.mixins.Object_clearHints;
+import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
+import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
+import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
+import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
+import org.apache.isis.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault;
+import org.apache.isis.viewer.wicket.viewer.services.*;
+import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -32,10 +41,30 @@ import org.apache.isis.webapp.IsisModuleWebapp;
  */
 @Configuration
 @Import({
-    IsisModuleWebapp.class,
-    IsisWicketThemeSupportDefault.class
+        // modules
+        IsisModuleWicketUi.class,
+
+        // @Service's
+        ComponentFactoryRegistrarDefault.class,
+        ComponentFactoryRegistryDefault.class,
+        PageClassListDefault.class,
+        PageClassRegistryDefault.class,
+        PageNavigationServiceDefault.class,
+        DeepLinkServiceWicket.class,
+        ImageResourceCacheClassPath.class,
+        LocaleProviderWicket.class,
+        TranslationsResolverWicket.class,
+        WicketViewerSettingsDefault.class,
+        WebModuleWicket.class,
+
+        // @DomainService's
+        BookmarkUiServiceWicket.class,
+        HintStoreUsingWicketSession.class,
+
+        // @Mixin's
+        Object_clearHints.class,
+
 })
-@ComponentScan
 public class IsisModuleWicketViewer {
 
 }

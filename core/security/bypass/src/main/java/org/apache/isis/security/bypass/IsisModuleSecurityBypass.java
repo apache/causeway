@@ -20,6 +20,8 @@ package org.apache.isis.security.bypass;
 
 import javax.inject.Singleton;
 
+import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
+import org.apache.isis.security.api.IsisModuleSecurityApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -38,8 +40,10 @@ import org.apache.isis.security.api.authorization.standard.Authorizor;
  */
 @Configuration
 @Import({
-    AuthorizationManagerStandard.class,
-    AuthenticationManagerStandard.class
+        // modules
+        IsisModuleSecurityApi.class,
+        IsisModuleRuntimeServices.class
+
 })
 public class IsisModuleSecurityBypass {
 

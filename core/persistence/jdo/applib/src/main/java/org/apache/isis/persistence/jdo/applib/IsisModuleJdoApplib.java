@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.applib.services;
+package org.apache.isis.persistence.jdo.applib;
 
 import org.springframework.context.annotation.Configuration;
 

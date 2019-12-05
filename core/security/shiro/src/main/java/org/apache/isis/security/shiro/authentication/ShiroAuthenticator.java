@@ -51,7 +51,7 @@ import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
-import org.apache.isis.security.shiro.ShiroSecurityContext;
+import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;

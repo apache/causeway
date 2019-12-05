@@ -81,13 +81,6 @@ import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi.JdoObjectIdSerializer;
-import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtime.persistence.UnsupportedFindException;
@@ -96,7 +89,7 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObject
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.runtime.services.RequestScopedService;
+import org.apache.isis.runtime.scoping.RequestScopedService;
 import org.apache.isis.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 

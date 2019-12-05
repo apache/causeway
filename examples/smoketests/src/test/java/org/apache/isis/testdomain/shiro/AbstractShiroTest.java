@@ -31,7 +31,7 @@ import org.apache.shiro.util.ThreadState;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.security.shiro.WebModuleShiro.EnvironmentLoaderListenerForIsis;
+import org.apache.isis.security.shiro.webmodule.WebModuleShiro.EnvironmentLoaderListenerForIsis;
 
 import lombok.SneakyThrows;
 import lombok.val;

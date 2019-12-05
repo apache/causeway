@@ -47,6 +47,7 @@ import org.apache.isis.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.metamodel.specloader.ProgrammingModelServiceDefault;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
+import org.apache.isis.security.api.IsisModuleSecurityApi;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -56,6 +57,7 @@ import org.springframework.context.annotation.Import;
         // modules
         IsisModuleApplib.class,
         IsisModuleConfig.class,
+        IsisModuleSecurityApi.class,
 
         // @Configuration's
         MetaModelContexts.class,

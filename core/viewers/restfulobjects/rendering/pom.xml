@@ -40,10 +40,6 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-metamodel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-runtime</artifactId>
         </dependency>
         <dependency>

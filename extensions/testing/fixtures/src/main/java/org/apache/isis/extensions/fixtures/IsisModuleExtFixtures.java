@@ -29,13 +29,18 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    IsisModuleExtSpring.class,
-    FixturesLifecycleService.class,
-    FixtureScripts.class,
-    ExecutionParametersService.class,
-    QueryResultsCacheControlInternal.class,
-    ModuleService.class,
-    ModuleFixtureService.class
+        // modules
+        IsisModuleExtSpring.class,
+
+        // @Service's
+        FixturesLifecycleService.class,
+        ExecutionParametersService.class,
+        ModuleService.class,
+        QueryResultsCacheControlInternal.class,
+
+        // @DomainService's
+        FixtureScripts.class,
+        ModuleFixtureService.class
 })
 public class IsisModuleExtFixtures {
 

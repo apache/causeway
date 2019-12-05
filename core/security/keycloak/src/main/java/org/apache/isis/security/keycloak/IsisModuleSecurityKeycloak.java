@@ -20,10 +20,13 @@ package org.apache.isis.security.keycloak;
 
 import javax.inject.Singleton;
 
+import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
 import org.apache.isis.runtime.services.auth.AuthorizationManagerStandard;
+import org.apache.isis.security.api.IsisModuleSecurityApi;
 import org.apache.isis.security.keycloak.authentication.KeycloakAuthenticator;
 import org.apache.isis.security.keycloak.authorization.KeycloakAuthorizor;
 import org.apache.isis.security.keycloak.webmodule.WebModuleKeycloak;
+import org.apache.isis.webapp.IsisModuleWebapp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -39,9 +42,14 @@ import org.apache.isis.security.api.authorization.standard.Authorizor;
  */
 @Configuration
 @Import({
-    AuthorizationManagerStandard.class,
-    AuthenticationManagerStandard.class,
-    WebModuleKeycloak.class
+        // modules
+        IsisModuleSecurityApi.class,
+        IsisModuleRuntimeServices.class,
+        IsisModuleWebapp.class,
+
+        // @Service's
+        WebModuleKeycloak.class,
+
 })
 public class IsisModuleSecurityKeycloak {
 

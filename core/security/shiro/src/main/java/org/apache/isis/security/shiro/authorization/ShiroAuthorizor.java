@@ -26,7 +26,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
-import org.apache.isis.security.shiro.ShiroSecurityContext;
+import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
 /**
  * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and

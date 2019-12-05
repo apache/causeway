@@ -38,7 +38,7 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleSecmanEncr
 import org.apache.isis.extensions.secman.jdo.IsisModuleSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleSecmanRealmShiro;
-import org.apache.isis.security.shiro.WebModuleShiro;
+import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;

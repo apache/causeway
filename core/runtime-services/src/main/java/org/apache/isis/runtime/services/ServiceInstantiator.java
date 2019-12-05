@@ -38,6 +38,7 @@ import org.apache.isis.commons.internal.factory.InstanceCreationException;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.metamodel.commons.MethodExtensions;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
+import org.apache.isis.runtime.scoping.RequestScopedService;
 
 import lombok.extern.log4j.Log4j2;
 

@@ -30,6 +30,7 @@ import java.util.stream.IntStream;
 
 import javax.enterprise.context.RequestScoped;
 
+import org.apache.isis.runtime.scoping.RequestScopedService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

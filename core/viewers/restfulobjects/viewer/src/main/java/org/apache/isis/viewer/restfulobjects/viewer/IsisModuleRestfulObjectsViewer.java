@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.restfulobjects.viewer;
 
+import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
+import org.apache.isis.viewer.restfulobjects.viewer.webmodule.WebModuleRestfulObjects;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -31,9 +33,13 @@ import org.apache.isis.webapp.IsisModuleWebapp;
  */
 @Configuration
 @Import({
-    IsisModuleWebapp.class
+        // modules
+        IsisModuleWebapp.class,
+        IsisModuleRestfulObjectsRendering.class,
+
+        // @DomainService's
+        WebModuleRestfulObjects.class,
 })
-@ComponentScan
 public class IsisModuleRestfulObjectsViewer {
 
 }
