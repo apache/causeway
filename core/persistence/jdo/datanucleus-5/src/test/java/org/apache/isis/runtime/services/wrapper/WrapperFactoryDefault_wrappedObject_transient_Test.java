@@ -72,7 +72,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Contract test.
  */
-public class WrapperFactoryDefaultTest_wrappedObject_transient {
+public class WrapperFactoryDefault_wrappedObject_transient_Test {
 
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
