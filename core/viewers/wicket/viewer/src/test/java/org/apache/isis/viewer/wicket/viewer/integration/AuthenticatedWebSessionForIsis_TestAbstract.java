@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.app.wicket;
+package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -33,7 +33,7 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
+import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 public abstract class AuthenticatedWebSessionForIsis_TestAbstract {

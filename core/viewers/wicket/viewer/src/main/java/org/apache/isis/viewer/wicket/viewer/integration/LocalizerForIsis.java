@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.viewer.integration.wicket;
+package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
 /**
  * Implementation integrates Isis' own i18n support ({@link TranslationService}) with Wicket's equivalent i18n

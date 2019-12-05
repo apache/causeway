@@ -17,26 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.app.wicket;
+package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.apache.wicket.Session;
 
-public class AuthenticatedWebSessionForIsis_DownCastsInheritedFunctionality {
+import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 
-    @Before
-    public void setUp() throws Exception {
-    }
+import lombok.RequiredArgsConstructor;
 
-    @Ignore("thread-safe downcast of inherited functionality")
-    @Test
-    public void testGet() {
-    }
+/**
+ * 
+ * Initializes new sessions with the common-context. 
+ * 
+ * @since 2.0
+ *
+ */
+@RequiredArgsConstructor
+class IsisWicketApplication_newSession {
 
-    @Ignore("thread-safe downcast of inherited functionality")
-    @Test
-    public void testGetClientInfo() {
+    private final IsisWicketApplication holder;
+
+    /**
+     * overrides the default, to 'inject' the commonContext into new sessions
+     */
+    public Session interceptNewSession(Session session) {
+        
+        ((AuthenticatedWebSessionForIsis) session).init(holder.getCommonContext());
+        return session;
     }
 
 }

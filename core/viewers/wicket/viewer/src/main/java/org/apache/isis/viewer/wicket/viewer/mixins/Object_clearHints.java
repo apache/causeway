@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.viewer.services;
+package org.apache.isis.viewer.wicket.viewer.mixins;
 
 import javax.inject.Inject;
 
@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
 
 @Mixin(method="act")
 public class Object_clearHints {

@@ -17,31 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.integration.wicket;
+package org.apache.isis.viewer.wicket.viewer.integration;
 
-import org.apache.wicket.Session;
-import org.apache.wicket.request.Request;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+public class AuthenticatedWebSessionForIsis_NotYetImplemented {
 
-import lombok.Getter;
-
-@Deprecated // not used
-class AnonymousWebSessionForIsis extends AuthenticatedWebSessionForIsis {
-
-    private static final long serialVersionUID = 1L;
-
-    public static AnonymousWebSessionForIsis get() {
-        return (AnonymousWebSessionForIsis) Session.get();
+    @Before
+    public void setUp() throws Exception {
     }
 
-    @Getter(onMethod = @__(@Override))
-    private final transient AuthenticationManager authenticationManager;
-
-    public AnonymousWebSessionForIsis(Request request, AuthenticationManager authenticationManager) {
-        super(request);
-        this.authenticationManager = authenticationManager;
+    @Ignore("not yet implemented")
+    @Test
+    public void testIsDebugMode() {
     }
-
 
 }

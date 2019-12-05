@@ -17,8 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer;
+package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
+import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.junit.After;
@@ -27,12 +28,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
+import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;

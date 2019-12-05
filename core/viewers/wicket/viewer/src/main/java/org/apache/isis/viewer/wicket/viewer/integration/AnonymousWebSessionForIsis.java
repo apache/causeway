@@ -17,33 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer;
+package org.apache.isis.viewer.wicket.viewer.integration;
 
 import org.apache.wicket.Session;
+import org.apache.wicket.request.Request;
 
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
+import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 
-/**
- * 
- * Initializes new sessions with the common-context. 
- * 
- * @since 2.0
- *
- */
-@RequiredArgsConstructor
-class IsisWicketApplication_newSession {
+@Deprecated // not used
+class AnonymousWebSessionForIsis extends AuthenticatedWebSessionForIsis {
 
-    private final IsisWicketApplication holder;
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * overrides the default, to 'inject' the commonContext into new sessions
-     */
-    public Session interceptNewSession(Session session) {
-        
-        ((AuthenticatedWebSessionForIsis) session).init(holder.getCommonContext());
-        return session;
+    public static AnonymousWebSessionForIsis get() {
+        return (AnonymousWebSessionForIsis) Session.get();
     }
+
+    @Getter(onMethod = @__(@Override))
+    private final transient AuthenticationManager authenticationManager;
+
+    public AnonymousWebSessionForIsis(Request request, AuthenticationManager authenticationManager) {
+        super(request);
+        this.authenticationManager = authenticationManager;
+    }
+
 
 }

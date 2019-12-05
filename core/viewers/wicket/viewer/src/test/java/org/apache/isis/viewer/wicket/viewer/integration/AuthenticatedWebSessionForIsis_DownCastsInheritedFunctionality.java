@@ -17,36 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.app.wicket;
+package org.apache.isis.viewer.wicket.viewer.integration;
 
-import org.jmock.Expectations;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import org.apache.isis.security.api.authentication.AuthenticationRequest;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
-public class AuthenticatedWebSessionForIsis_SignIn 
-extends AuthenticatedWebSessionForIsis_TestAbstract {
+public class AuthenticatedWebSessionForIsis_DownCastsInheritedFunctionality {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
     }
 
+    @Ignore("thread-safe downcast of inherited functionality")
     @Test
-    public void signInJustDelegatesToAuthenticateAndSavesState() {
-        context.checking(new Expectations() {
-            {
-                oneOf(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
-            }
-        });
-
-        super.setupWebSession();
-        
-        webSession.signIn("john", "secret");
-        assertThat(webSession.isSignedIn(), is(true));
+    public void testGet() {
     }
+
+    @Ignore("thread-safe downcast of inherited functionality")
+    @Test
+    public void testGetClientInfo() {
+    }
+
 }

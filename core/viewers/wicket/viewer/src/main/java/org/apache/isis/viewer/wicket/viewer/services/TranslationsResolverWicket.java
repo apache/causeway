@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

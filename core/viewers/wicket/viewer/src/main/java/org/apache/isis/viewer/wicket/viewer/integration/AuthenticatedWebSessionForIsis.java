@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.integration.wicket;
+package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Date;
 import java.util.Objects;

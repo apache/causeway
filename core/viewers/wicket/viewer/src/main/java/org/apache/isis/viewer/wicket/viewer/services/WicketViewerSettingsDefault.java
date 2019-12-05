@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.settings;
+package org.apache.isis.viewer.wicket.viewer.services;
 
 import javax.inject.Inject;
 

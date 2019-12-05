@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.pages;
+package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
 import org.apache.wicket.Page;
 import org.junit.Before;

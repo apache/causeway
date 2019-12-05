@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer;
+package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import java.util.Collections;
 import java.util.ServiceLoader;
@@ -27,6 +27,7 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import org.apache.isis.viewer.wicket.viewer.TargetRespondListenerToResetQueryResultCache;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -86,10 +87,10 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
+import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
+import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
+import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
 import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 

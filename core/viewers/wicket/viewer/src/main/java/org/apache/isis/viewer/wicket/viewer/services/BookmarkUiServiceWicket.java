@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.services;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.bookmarkui.BookmarkUiService;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
+import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 
 @DomainService(
         nature = NatureOfService.DOMAIN

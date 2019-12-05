@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.viewer;
+package org.apache.isis.viewer.wicket.viewer.webmodule;
 
 import javax.inject.Inject;
 import javax.servlet.Filter;

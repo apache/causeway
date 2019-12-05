@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer.app.wicket;
+package org.apache.isis.viewer.wicket.viewer.integration;
 
 import org.jmock.Expectations;
 import org.junit.Before;

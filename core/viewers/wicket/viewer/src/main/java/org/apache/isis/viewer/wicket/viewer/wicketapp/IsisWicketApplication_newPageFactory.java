@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.viewer;
+package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import org.apache.wicket.IPageFactory;
