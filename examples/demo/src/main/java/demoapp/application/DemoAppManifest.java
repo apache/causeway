@@ -40,7 +40,7 @@ import org.apache.isis.extensions.sse.IsisBootSse;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-import org.apache.isis.viewer.restfulobjects.server.IsisBootViewerRestfulObjects;
+import org.apache.isis.viewer.restfulobjects.viewer.IsisBootViewerRestfulObjects;
 import org.apache.isis.viewer.wicket.viewer.IsisBootViewerWicket;
 
 import demoapp.dom.DemoModule;

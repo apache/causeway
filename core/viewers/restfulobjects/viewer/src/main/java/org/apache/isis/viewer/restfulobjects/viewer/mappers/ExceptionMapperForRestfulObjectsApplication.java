@@ -16,11 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.context;
+package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
-import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 
-public class ResourceContext_ensureCompatibleAcceptHeader_Test extends
-        ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+
+@Provider
+public class ExceptionMapperForRestfulObjectsApplication extends ExceptionMapperAbstract<RestfulObjectsApplicationException> {
+
+    @Override
+    public Response toResponse(final RestfulObjectsApplicationException ex) {
+        final JsonRepresentation body = ex.getBody();
+        final String bodyStr = body != null ? body.toString() : null;
+        return buildResponse(ex);
+    }
+
 
 }

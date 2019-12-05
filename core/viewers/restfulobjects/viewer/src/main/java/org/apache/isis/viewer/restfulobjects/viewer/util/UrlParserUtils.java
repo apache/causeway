@@ -16,11 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.context;
+package org.apache.isis.viewer.restfulobjects.viewer.util;
 
-import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class ResourceContext_ensureCompatibleAcceptHeader_Test extends
-        ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+
+public final class UrlParserUtils {
+
+    private UrlParserUtils(){}
+
+    private final static Pattern DOMAIN_TYPE = Pattern.compile(".*domain-types\\/([^/]+).*");
+
+    public final static String domainTypeFrom(final JsonRepresentation link) {
+        return domainTypeFrom(link.getString("href"));
+    }
+
+    public static String domainTypeFrom(final String href) {
+        final Matcher matcher = DOMAIN_TYPE.matcher(href);
+        if (!matcher.matches()) {
+            return null;
+        }
+        return matcher.group(1);
+    }
+
 
 }

@@ -16,11 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.context;
+package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.JsonParserHelper;
+import org.junit.Test;
 
-public class ResourceContext_ensureCompatibleAcceptHeader_Test extends
-        ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+
+import static org.junit.Assert.assertEquals;
+
+public class JsonParserHelper_Test {
+
+    @Test
+    public void oidFromLink() throws Exception {
+        final JsonRepresentation link = JsonRepresentation.newMap();
+        link.mapPut("href", "http://localhost/objects/OID/1");
+        final String oidFromHref = JsonParserHelper.encodedOidFromLink(link);
+        Assert.assertEquals("OID:1", oidFromHref);
+    }
 
 }

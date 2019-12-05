@@ -16,11 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.context;
+package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
-import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 
-public class ResourceContext_ensureCompatibleAcceptHeader_Test extends
-        ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
+import org.apache.isis.metamodel.exceptions.persistence.ObjectNotFoundException;
+
+@Provider
+public class ExceptionMapperForObjectNotFound extends ExceptionMapperAbstract<ObjectNotFoundException> {
+
+    @Override
+    public Response toResponse(final ObjectNotFoundException ex) {
+
+        return buildResponse(ex);
+    }
 
 }

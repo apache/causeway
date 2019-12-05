@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.mappers;
 
-import org.apache.isis.viewer.restfulobjects.server.mappers.RestfulObjectsApplicationExceptionMapper_Test_Contract;
+import org.apache.isis.viewer.restfulobjects.viewer.mappers.RestfulObjectsApplicationExceptionMapper_Test_Contract;
 
 public class RestfulObjectsApplicationExceptionMapper_Test extends
         RestfulObjectsApplicationExceptionMapper_Test_Contract {
