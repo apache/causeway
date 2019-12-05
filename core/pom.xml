@@ -1851,8 +1851,8 @@
 
 		<module>viewers/restfulobjects/applib</module>
 		<module>viewers/restfulobjects/rendering</module>
-		<module>viewers/restfulobjects/server</module>
 		<module>viewers/restfulobjects/jaxrs-resteasy-4</module>
+		<module>viewers/restfulobjects/viewer</module>
 
 		<module>viewers/wicket/model</module>
 		<module>viewers/wicket/ui</module>
