@@ -122,14 +122,14 @@ implements LinksProvider, UiHintContainer {
 
     private static EntityCollectionModel parentedOf(EntityModel entityModel) {
 
-        val type = Type.PARENTED;
+        final Type type = Type.PARENTED;
 
-        val collection = collectionFor(entityModel);
-        val typeOf = forName(collection.getSpecification());
-        val pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
-        val sortedByFacet = collection.getFacet(SortedByFacet.class);
+        final OneToManyAssociation collection = collectionFor(entityModel);
+        final Class<?> typeOf = forName(collection.getSpecification());
+        final int pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
+        final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
 
-        val colModel = new EntityCollectionModel(
+        final EntityCollectionModel colModel = new EntityCollectionModel(
                 entityModel.getCommonContext(), type, entityModel, typeOf, pageSize);
 
         colModel.collectionMemento = new CollectionMemento(collection);
@@ -144,10 +144,10 @@ implements LinksProvider, UiHintContainer {
             List<ObjectAdapterMemento> mementoList, 
             int pageSize) {
 
-        val type = Type.STANDALONE;
-        val entityModel = (EntityModel)null;
+        final Type type = Type.STANDALONE;
+        final EntityModel entityModel = null;
 
-        val colModel = new EntityCollectionModel(commonContext, type, entityModel, typeOf, pageSize);
+        final EntityCollectionModel colModel = new EntityCollectionModel(commonContext, type, entityModel, typeOf, pageSize);
         colModel.mementoList = mementoList;
         return colModel;
 
@@ -236,8 +236,8 @@ implements LinksProvider, UiHintContainer {
             @Override
             List<ManagedObject> load(EntityCollectionModel colModel) {
 
-                val adapter = colModel.getCommonContext()
-                        .reconstructObject(colModel.getParentObjectAdapterMemento()); 
+                final ManagedObject adapter = colModel.getCommonContext()
+                        .reconstructObject(colModel.getParentObjectAdapterMemento());
 
                 final OneToManyAssociation collection = colModel.collectionMemento
                         .getCollection(colModel.getSpecificationLoader());
@@ -395,9 +395,9 @@ implements LinksProvider, UiHintContainer {
 
     private static OneToManyAssociation collectionFor(EntityModel entityModel) {
 
-        val parentObjectAdapterMemento = entityModel.getObjectAdapterMemento();
-        val collectionLayoutData = entityModel.getCollectionLayoutData();
-        val specificationLoader = entityModel.getSpecificationLoader();
+        final ObjectAdapterMemento parentObjectAdapterMemento = entityModel.getObjectAdapterMemento();
+        final CollectionLayoutData collectionLayoutData = entityModel.getCollectionLayoutData();
+        final SpecificationLoader specificationLoader = entityModel.getSpecificationLoader();
 
         if(collectionLayoutData == null) {
             throw new IllegalArgumentException("EntityModel must have a CollectionLayoutMetadata");
@@ -515,7 +515,7 @@ implements LinksProvider, UiHintContainer {
 
     public void toggleSelectionOn(ManagedObject selectedAdapter) {
         //XXX lombok issue, cannot use val here
-        ObjectAdapterMemento selectedAsMemento = super.getMementoService().mementoForAdapter(selectedAdapter); 
+        final ObjectAdapterMemento selectedAsMemento = super.getMementoService().mementoForAdapter(selectedAdapter);
 
         // try to remove; if couldn't, then mustn't have been in there, in which case add.
         boolean removed = toggledMementosList.remove(selectedAsMemento);
