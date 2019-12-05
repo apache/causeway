@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import org.apache.isis.viewer.restfulobjects.viewer.resources.JsonParserHelper;
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
