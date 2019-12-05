@@ -30,7 +30,7 @@
 
     <name>Apache Isis Viewer - Wicket (Implementation)</name>
 
-    <artifactId>isis-viewer-wicket-impl</artifactId>
+    <artifactId>isis-viewer-wicket-viewer</artifactId>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.impl</jar-plugin.automaticModuleName>

@@ -913,12 +913,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-viewer-wicket-impl</artifactId>
+				<artifactId>isis-viewer-wicket-viewer</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-viewer-wicket-impl</artifactId>
+				<artifactId>isis-viewer-wicket-viewer</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>

@@ -97,7 +97,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-viewer-wicket-impl</artifactId>
+			<artifactId>isis-viewer-wicket-viewer</artifactId>
 		</dependency>
 
 		<dependency>
