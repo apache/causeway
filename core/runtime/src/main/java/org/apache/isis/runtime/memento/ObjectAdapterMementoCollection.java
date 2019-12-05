@@ -57,7 +57,7 @@ final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
               .filter(_NullSafe::isPresent)
               .collect(Collectors.toCollection(ArrayList::new));
         
-        return IsisContext.getPersistenceSession().get().adapterFor(listOfPojos);
+        return mementoStore.adapterForListOfPojos(listOfPojos);
     }
 
     @Override

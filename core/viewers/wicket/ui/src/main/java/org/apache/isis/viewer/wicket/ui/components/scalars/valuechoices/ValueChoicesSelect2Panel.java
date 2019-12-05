@@ -98,9 +98,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
 
     @Override
     protected IModel<String> obtainInlinePromptModel() {
-        ObjectAdapterMemento modelObject = select2.getModelObject();
-        String str = modelObject != null ? modelObject.asString(): null;
-        return Model.of(str);
+        ObjectAdapterMemento inlinePromptMemento = select2.getModelObject();
+        String inlinePrompt = inlinePromptMemento != null ? inlinePromptMemento.asString(): null;
+        return Model.of(inlinePrompt);
     }
 
 

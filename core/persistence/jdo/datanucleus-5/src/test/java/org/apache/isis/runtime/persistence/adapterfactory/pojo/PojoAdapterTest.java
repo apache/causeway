@@ -25,7 +25,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
@@ -47,7 +46,6 @@ public class PojoAdapterTest {
 
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private AuthenticationSession mockAuthenticationSession;
-    @Mock private PersistenceSession5 mockPersistenceSession;
 
     @Before
     public void setUp() throws Exception {
@@ -56,8 +54,7 @@ public class PojoAdapterTest {
         adapter = PojoAdapter.of(
                 domainObject, 
                 Factory.persistentOf(ObjectSpecId.of("CUS"), "1"),
-                mockSpecificationLoader, 
-                mockPersistenceSession);
+                mockSpecificationLoader);
 
         allowUnimportantMethodCallsOn();
     }

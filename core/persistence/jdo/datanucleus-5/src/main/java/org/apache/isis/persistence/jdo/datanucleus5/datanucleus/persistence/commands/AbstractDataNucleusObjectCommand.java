@@ -22,7 +22,6 @@ import javax.jdo.PersistenceManager;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 import lombok.Getter;
 
@@ -38,8 +37,5 @@ public abstract class AbstractDataNucleusObjectCommand extends PersistenceComman
         this.persistenceManager = persistenceManager;
 
     }
-
-    @Override
-    public abstract void execute(final PersistenceCommandContext context);
 
 }

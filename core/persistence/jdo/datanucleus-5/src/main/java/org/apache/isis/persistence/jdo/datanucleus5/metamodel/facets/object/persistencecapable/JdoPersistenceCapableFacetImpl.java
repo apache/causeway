@@ -30,6 +30,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.metamodel.IsisJdoMetamodelPl
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.spec.EntityState;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
@@ -88,8 +89,13 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
         }
         
         val persistenceSession = super.getPersistenceSessionJdo();
-        //TODO don't bypass domain logic !? 
-        persistenceSession.getJdoPersistenceManager().makePersistent(pojo);
+        persistenceSession.makePersistentInTransaction(ManagedObject.of(spec, pojo));
+    }
+    
+    @Override
+    public void delete(ObjectSpecification spec, Object pojo) {
+        val persistenceSession = super.getPersistenceSessionJdo();
+        persistenceSession.destroyObjectInTransaction(ManagedObject.of(spec, pojo));
     }
     
     @Override
@@ -124,6 +130,8 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     public boolean isProxyEnhancement(Method method) {
         return IsisJdoMetamodelPlugin.get().isMethodProvidedByEnhancement(method);
     }
+
+
 
 
 }

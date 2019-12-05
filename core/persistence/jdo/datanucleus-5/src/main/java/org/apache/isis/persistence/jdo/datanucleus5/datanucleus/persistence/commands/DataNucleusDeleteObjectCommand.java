@@ -22,19 +22,20 @@ import javax.jdo.PersistenceManager;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class DataNucleusDeleteObjectCommand extends AbstractDataNucleusObjectCommand implements DestroyObjectCommand {
+public class DataNucleusDeleteObjectCommand 
+extends AbstractDataNucleusObjectCommand 
+implements DestroyObjectCommand {
 
     public DataNucleusDeleteObjectCommand(ManagedObject adapter, PersistenceManager persistenceManager) {
         super(adapter, persistenceManager);
     }
 
     @Override
-    public void execute(final PersistenceCommandContext context) {
+    public void execute() {
         if (log.isDebugEnabled()) {
             log.debug("destroy object - executing command for {}", onManagedObject());
         }

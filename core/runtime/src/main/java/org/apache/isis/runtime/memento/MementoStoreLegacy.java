@@ -19,15 +19,18 @@
 package org.apache.isis.runtime.memento;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -63,10 +66,10 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Log4j2 @RequiredArgsConstructor
-class MementoStoreLegacy implements MementoStore {
+final class MementoStoreLegacy implements MementoStore {
 
     private final ObjectManager objectManager;
-    private final PersistenceSession persistenceSession;
+    private final ObjectAdapterProvider objectAdapterProvider;
     private final SpecificationLoader specificationLoader;
 
     @Override
@@ -88,14 +91,13 @@ class MementoStoreLegacy implements MementoStore {
             final ParentedOid collectionOid = (ParentedOid) oid;
             adapter = PojoAdapter.of(
                     collectionPojo, collectionOid,
-                    IsisSession.currentOrElseNull(),
-                    persistenceSession);
+                    IsisSession.currentOrElseNull());
 
         } else {
             _Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
             // recreate an adapter for the original OID
-            adapter = persistenceSession.adapterFor(typedOid);
+            adapter = objectAdapterProvider.adapterFor(typedOid);
 
             updateObject(adapter, data);
         }
@@ -106,22 +108,27 @@ class MementoStoreLegacy implements MementoStore {
         return adapter;
     }
     
+    @Override
+    public ManagedObject adapterForListOfPojos(List<Object> listOfPojos) {
+        
+        val domainObjectList = new DomainObjectList();
+        domainObjectList.setObjects(listOfPojos);
+        return ManagedObject._adapterOfList(specificationLoader, domainObjectList);
+    }
+    
     // -- HELPER
     
     private Object instantiateAndInjectServices(ObjectSpecification spec) {
         
         val objectCreateRequest = ObjectCreator.Request.of(spec);
         return objectManager.createObject(objectCreateRequest);
-        
-        // legacy of
-        //return dependencyInjectionMixin.instantiateAndInjectServices(objectSpec);
     }
 
     private ManagedObject recreateReference(Data data) {
         // handle values
         if (data instanceof StandaloneData) {
             val standaloneData = (StandaloneData) data;
-            return standaloneData.getAdapter(persistenceSession, specificationLoader);
+            return standaloneData.getAdapter(objectAdapterProvider, specificationLoader);
         }
 
         // reference to entity
@@ -130,7 +137,7 @@ class MementoStoreLegacy implements MementoStore {
         _Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
 
         val rootOid = (RootOid) oid;
-        val referencedAdapter = persistenceSession.adapterFor(rootOid);
+        val referencedAdapter = objectAdapterProvider.adapterFor(rootOid);
 
         if (data instanceof ObjectData) {
             if (rootOid.isTransient()) {
@@ -178,7 +185,7 @@ class MementoStoreLegacy implements MementoStore {
             updateFields(objectAdapter, data);
             
         } else if (dataIsTransient 
-                && persistenceSession.getEntityState(objectAdapter.getPojo()).isDetached()) {
+                && ManagedObject._entityState(objectAdapter).isDetached()) {
             updateFields(objectAdapter, data);
 
         } else if (objectAdapter.isParentedCollection()) {

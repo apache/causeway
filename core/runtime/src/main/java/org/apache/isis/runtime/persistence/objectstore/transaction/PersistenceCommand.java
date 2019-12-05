@@ -22,7 +22,7 @@ package org.apache.isis.runtime.persistence.objectstore.transaction;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface PersistenceCommand {
-    void execute(PersistenceCommandContext context);
+    void execute();
 
     ManagedObject onManagedObject();
 }

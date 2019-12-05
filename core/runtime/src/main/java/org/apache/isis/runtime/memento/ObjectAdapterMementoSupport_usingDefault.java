@@ -18,19 +18,15 @@
  */
 package org.apache.isis.runtime.memento;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -70,8 +66,7 @@ implements ObjectAdapterMementoSupport {
 
     @Override
     public ObjectAdapterMemento mementoForPojo(Object pojo) {
-        val ps = IsisContext.getPersistenceSession().get();
-        val adapter = ps.adapterFor(pojo);
+        val adapter = objectManager.adapt(pojo);
         return mementoForAdapter(adapter);
     }
 
@@ -81,8 +76,8 @@ implements ObjectAdapterMementoSupport {
             return null;
         }
         if(mementoStore==null) {
-            val ps = IsisContext.getPersistenceSession().get();
-            mementoStore = new MementoStoreLegacy(objectManager, ps, specificationLoader);
+            val objectAdapterProvider = (ObjectAdapterProvider) IsisContext.getPersistenceSession().get();
+            mementoStore = new MementoStoreLegacy(objectManager, objectAdapterProvider, specificationLoader);
         }
         
         

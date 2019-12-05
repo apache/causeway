@@ -18,13 +18,17 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
+import org.apache.isis.commons.internal.components.SessionScopedComponent;
+import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 /**
  * 
  * @since 2.0
  */
-public interface IsisPersistenceSessionJdo extends PersistenceSession {
+public interface IsisPersistenceSessionJdo 
+extends PersistenceSession, TransactionalResource, SessionScopedComponent, ObjectAdapterProvider {
 
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
@@ -32,7 +36,7 @@ public interface IsisPersistenceSessionJdo extends PersistenceSession {
      * @param queryName
      * @return
      */
-    default <T> javax.jdo.Query newJdoNamedQuery(Class<T> cls, String queryName){
+    default <T> javax.jdo.Query<T> newJdoNamedQuery(Class<T> cls, String queryName){
         return getJdoPersistenceManager().newNamedQuery(cls, queryName);
     }
 
@@ -41,7 +45,7 @@ public interface IsisPersistenceSessionJdo extends PersistenceSession {
      * @param cls
      * @return
      */
-    default <T> javax.jdo.Query newJdoQuery(Class<T> cls){
+    default <T> javax.jdo.Query<T> newJdoQuery(Class<T> cls){
         return getJdoPersistenceManager().newQuery(cls);
     }
 
@@ -51,7 +55,7 @@ public interface IsisPersistenceSessionJdo extends PersistenceSession {
      * @param filter
      * @return
      */
-    default <T> javax.jdo.Query newJdoQuery(Class<T> cls, String filter){
+    default <T> javax.jdo.Query<T> newJdoQuery(Class<T> cls, String filter){
         return getJdoPersistenceManager().newQuery(cls, filter);
     }
     

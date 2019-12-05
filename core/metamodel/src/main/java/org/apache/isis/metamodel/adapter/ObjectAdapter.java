@@ -44,11 +44,11 @@ public interface ObjectAdapter extends ManagedObject {
      */
     Oid getOid(); //XXX[2033] referenced by 'metamodel' only to create a bookmark (CommandUtil)
 
-    /**
-     * Returns either itself (if this is a root) or for parented collections, the
-     * adapter corresponding to their {@link ParentedOid#getParentOid() root oid}.
-     */
-    ObjectAdapter getAggregateRoot(); //XXX[2033] not referenced by 'metamodel'
+//    /**
+//     * Returns either itself (if this is a root) or for parented collections, the
+//     * adapter corresponding to their {@link ParentedOid#getParentOid() root oid}.
+//     */
+//    ObjectAdapter getAggregateRoot(); //XXX[2033] not referenced by 'metamodel'
 
     /**
      * Whether this instance belongs to another object (meaning its

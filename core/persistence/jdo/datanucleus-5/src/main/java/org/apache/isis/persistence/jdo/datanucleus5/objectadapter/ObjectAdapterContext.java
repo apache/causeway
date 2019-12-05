@@ -69,7 +69,6 @@ final public class ObjectAdapterContext {
     @Getter private final SpecificationLoader specificationLoader;
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
-    private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
     private final ServiceInjector serviceInjector;
     final ObjectAdapterContext_ObjectCreation objectCreationMixin;
     private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
@@ -84,7 +83,6 @@ final public class ObjectAdapterContext {
 
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, runtimeContext);
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(persistenceSession, runtimeContext.getSpecificationLoader());
-        this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(runtimeContext);
         this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, runtimeContext);
         this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(runtimeContext);
 
@@ -94,7 +92,7 @@ final public class ObjectAdapterContext {
         this.specificationLoader = mmc.getSpecificationLoader();
         this.serviceInjector = mmc.getServiceInjector();
 
-        this.objectAdapterFactories = new ObjectAdapterContext_Factories(persistenceSession);
+        this.objectAdapterFactories = new ObjectAdapterContext_Factories();
     }
 
     // -- DEBUG

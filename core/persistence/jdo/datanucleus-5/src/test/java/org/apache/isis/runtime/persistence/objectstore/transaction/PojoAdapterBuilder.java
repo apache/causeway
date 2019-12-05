@@ -22,7 +22,6 @@ package org.apache.isis.runtime.persistence.objectstore.transaction;
 import java.util.Iterator;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -33,8 +32,6 @@ import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import lombok.val;
 
 public class PojoAdapterBuilder {
-
-    private PersistenceSession5 persistenceSession;
 
     private PojoAdapterBuilder(){
     }
@@ -146,11 +143,6 @@ public class PojoAdapterBuilder {
         return this;
     }
 
-    public PojoAdapterBuilder with(PersistenceSession5 persistenceSession) {
-        this.persistenceSession = persistenceSession;
-        return this;
-    }
-
     public PojoAdapterBuilder with(SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
         return this;
@@ -159,8 +151,7 @@ public class PojoAdapterBuilder {
     public PojoAdapter build() {
         val rootOid = persistence.createOid(objectSpecId, identifier);
         val oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
-        val pojoAdapter = PojoAdapter.of(pojo, oid,
-                specificationLoader, persistenceSession);
+        val pojoAdapter = PojoAdapter.of(pojo, oid, specificationLoader);
         return pojoAdapter;
     }
 

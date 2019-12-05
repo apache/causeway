@@ -44,13 +44,13 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.metamodel.facets.CommandActionsConfiguration;
-import org.apache.isis.config.metamodel.facets.PublishActionsConfiguration;
 import org.apache.isis.config.metamodel.facets.AuditObjectsConfiguration;
+import org.apache.isis.config.metamodel.facets.CommandActionsConfiguration;
+import org.apache.isis.config.metamodel.facets.CommandPropertiesConfiguration;
 import org.apache.isis.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.config.metamodel.facets.EditingObjectsConfiguration;
+import org.apache.isis.config.metamodel.facets.PublishActionsConfiguration;
 import org.apache.isis.config.metamodel.facets.PublishObjectsConfiguration;
-import org.apache.isis.config.metamodel.facets.CommandPropertiesConfiguration;
 import org.apache.isis.config.metamodel.facets.PublishPropertiesConfiguration;
 import org.apache.isis.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
@@ -66,7 +66,6 @@ import lombok.Data;
  * 
  * @since 2.0
  */
-@SuppressWarnings("ConfigurationProperties") // think this is not really an issue...
 @ConfigurationProperties(ConfigurationConstants.ROOT_PREFIX)
 @Data
 public class IsisConfiguration {
@@ -674,7 +673,7 @@ public class IsisConfiguration {
         @Data
         public static class Wicket {
 
-            private String app = "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication";
+            private String app = "org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication";
 
             /**
              * Whether the Ajax debug should be shown.

@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.runtime.system.transaction.IsisTransactionManagerException;
 import org.apache.isis.runtime.system.transaction.IsisTransactionObject;
@@ -44,13 +43,13 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
     // -- constructor, fields
 
     @Getter
-    private final PersistenceSession persistenceSession;
+    private final IsisPersistenceSessionJdo persistenceSession;
 
     private final ServiceRegistry serviceRegistry;
     private final CommandContext commandContext;
     private final InteractionContext interactionContext;
 
-    IsisTransactionManagerJdo(ServiceRegistry serviceRegistry, PersistenceSession persistenceSession) {
+    IsisTransactionManagerJdo(ServiceRegistry serviceRegistry, IsisPersistenceSessionJdo persistenceSession) {
 
         this.serviceRegistry = serviceRegistry;
         this.persistenceSession = persistenceSession;
@@ -59,7 +58,7 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
     }
 
     public IsisTransactionJdo beginTransaction() {
-        return beginTransaction(/*command*/null);
+        return beginTransaction(/*existingCommandIfAny*/null);
     }
 
     /**

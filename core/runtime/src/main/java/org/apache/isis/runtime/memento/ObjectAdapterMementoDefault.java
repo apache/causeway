@@ -72,47 +72,47 @@ final class ObjectAdapterMementoDefault implements Serializable {
     /**
      * Factory method
      */
-    public static ObjectAdapterMementoDefault createPersistent(
+    static ObjectAdapterMementoDefault createPersistent(
             RootOid rootOid, 
             SpecificationLoader specificationLoader) {
         
         return new ObjectAdapterMementoDefault(rootOid, specificationLoader);
     }
 
-    public static ObjectAdapterMementoDefault createForList(
+    static ObjectAdapterMementoDefault createForList(
             ArrayList<ObjectAdapterMementoDefault> list,
             ObjectSpecId objectSpecId) {
         
         return new ObjectAdapterMementoDefault(list, objectSpecId);
     }
 
-    public static ObjectAdapterMementoDefault createForList(
+    static ObjectAdapterMementoDefault createForList(
             Collection<ObjectAdapterMementoDefault> list,
             ObjectSpecId objectSpecId) {
         
         return list != null ? createForList(_Lists.newArrayList(list), objectSpecId) :  null;
     }
 
-    public static ObjectAdapterMementoDefault createForIterable(
-            Iterable<?> iterable,
-            ObjectSpecId specId,
-            PersistenceSession persistenceSession) {
-        
-        final List<ObjectAdapterMementoDefault> listOfMementos =
-                _NullSafe.stream(iterable)
-                .map(Functions.fromPojo(persistenceSession))
-                .collect(Collectors.toList());
-        return createForList(listOfMementos, specId);
-    }
+//    static ObjectAdapterMementoDefault createForIterable(
+//            Iterable<?> iterable,
+//            ObjectSpecId specId,
+//            ObjectAdapterProvider objectAdapterProvider) {
+//        
+//        final List<ObjectAdapterMementoDefault> listOfMementos =
+//                _NullSafe.stream(iterable)
+//                .map(Functions.fromPojo(objectAdapterProvider))
+//                .collect(Collectors.toList());
+//        return createForList(listOfMementos, specId);
+//    }
 
-    public static ObjectAdapterMementoDefault createForEncodeable(
+    static ObjectAdapterMementoDefault createForEncodeable(
             ObjectSpecId specId,
             String encodableValue) {
         
         return new ObjectAdapterMementoDefault(specId, encodableValue);
     }
 
-    public enum Cardinality {
+    enum Cardinality {
         /**
          * represents a single object
          */
@@ -163,9 +163,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
                 final List<Object> listOfPojos =
                         _Lists.map(memento.list, Functions.toPojo(mementoStore, specificationLoader));
 
-                PersistenceSession persistenceSession = IsisContext.getPersistenceSession().get();
-                
-                return persistenceSession.adapterFor(listOfPojos);
+                return mementoStore.adapterForListOfPojos(listOfPojos);
             }
 
             @Override
@@ -519,17 +517,17 @@ final class ObjectAdapterMementoDefault implements Serializable {
         recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
-    public Cardinality getCardinality() {
+    Cardinality getCardinality() {
         return cardinality;
     }
 
-    public ArrayList<ObjectAdapterMementoDefault> getList() {
+    ArrayList<ObjectAdapterMementoDefault> getList() {
         ensureVector();
         return list;
     }
 
 
-    public void resetVersion(
+    void resetVersion(
             MementoStore mementoStore,
             SpecificationLoader specificationLoader) {
         
@@ -538,12 +536,12 @@ final class ObjectAdapterMementoDefault implements Serializable {
     }
 
 
-    public Bookmark asBookmark() {
+    Bookmark asBookmark() {
         ensureScalar();
         return bookmark;
     }
 
-    public Bookmark asHintingBookmark() {
+    Bookmark asHintingBookmark() {
         val bookmark = asBookmark();
         return hintId != null && bookmark != null
                 ? new HintStore.BookmarkWithHintId(bookmark, hintId)
@@ -560,7 +558,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
      * best to call once and then hold onto the value thereafter. Alternatively,
      * can call {@link #setAdapter(ManagedObject)} to keep this memento in sync.
      */
-    public ManagedObject getObjectAdapter(
+    ManagedObject getObjectAdapter(
             MementoStore mementoStore,
             SpecificationLoader specificationLoader) {
         
@@ -583,12 +581,12 @@ final class ObjectAdapterMementoDefault implements Serializable {
      *
      * @param adapter
      */
-    public void setAdapter(ManagedObject adapter) {
+    void setAdapter(ManagedObject adapter) {
         ensureScalar();
         init(adapter);
     }
 
-    public ObjectSpecId getObjectSpecId() {
+    ObjectSpecId getObjectSpecId() {
         return objectSpecId;
     }
 
@@ -596,7 +594,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
      * Analogous to {@link List#contains(Object)}, but does not perform
      * {@link ConcurrencyChecking concurrency checking} of the OID.
      */
-    public boolean containedIn(
+    boolean containedIn(
             List<ObjectAdapterMementoDefault> mementos,
             MementoStore mementoStore,
             SpecificationLoader specificationLoader) {
@@ -643,9 +641,11 @@ final class ObjectAdapterMementoDefault implements Serializable {
     // -- FUNCTIONS
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public final static class Functions {
+    final static class Functions {
 
-        public static Function<Object, ObjectAdapterMementoDefault> fromPojo(final ObjectAdapterProvider adapterProvider) {
+        public static Function<Object, ObjectAdapterMementoDefault> fromPojo(
+                final ObjectAdapterProvider adapterProvider) {
+            
             return pojo->ObjectAdapterMementoDefault.createOrNull( adapterProvider.adapterFor(pojo) );
         }
 
@@ -688,7 +688,6 @@ final class ObjectAdapterMementoDefault implements Serializable {
     private void ensureVector() {
         getCardinality().ensure(Cardinality.VECTOR);
     }
-
 
 
 }

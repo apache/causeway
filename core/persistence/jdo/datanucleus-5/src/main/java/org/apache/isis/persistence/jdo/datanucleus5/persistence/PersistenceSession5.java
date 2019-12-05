@@ -49,13 +49,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi.JdoObjectIdSerializer;
-import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
@@ -81,6 +74,13 @@ import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtime.persistence.UnsupportedFindException;
@@ -91,7 +91,6 @@ import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstance
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtime.services.RequestScopedService;
 import org.apache.isis.runtime.system.persistence.PersistenceQuery;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import static java.util.Objects.requireNonNull;
@@ -570,31 +569,16 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     // -- makePersistent
 
-    /**
-     * Makes an {@link ObjectAdapter} persistent. The specified object should be
-     * stored away via this object store's persistence mechanism, and have a
-     * new and unique OID assigned to it. The object, should also be added to
-     * the {@link PersistenceSession} as the object is implicitly 'in use'.
-     *
-     * <p>
-     * If the object has any associations then each of these, where they aren't
-     * already persistent, should also be made persistent by recursively calling
-     * this method.
-     *
-     * <p>
-     * If the object to be persisted is a collection, then each element of that
-     * collection, that is not already persistent, should be made persistent by
-     * recursively calling this method.
-     */
+
     @Override
-    public void makePersistentInTransaction(final ObjectAdapter adapter) {
+    public void makePersistentInTransaction(final ManagedObject adapter) {
         
         val pojo = adapter.getPojo();
         
         if (getEntityState(pojo).isAttached()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
-        if (adapter.isParentedCollection()) {
+        if (ManagedObject._isParentedCollection(adapter)) {
             //or should we just ignore this?
             throw new NotPersistableException("Cannot persist parented collection: " + adapter);
         }
@@ -609,15 +593,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         });
     }
 
-
     // -- destroyObjectInTransaction
 
-    /**
-     * Removes the specified object from the system. The specified object's data
-     * should be removed from the persistence mechanism.
-     */
+
     @Override
-    public void destroyObjectInTransaction(final ObjectAdapter adapter) {
+    public void destroyObjectInTransaction(final ManagedObject adapter) {
         val spec = adapter.getSpecification();
         if (spec.isParented()) {
             return;
@@ -650,7 +630,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * </p>
      *
      */
-    private CreateObjectCommand newCreateObjectCommand(final ObjectAdapter adapter) {
+    private CreateObjectCommand newCreateObjectCommand(final ManagedObject adapter) {
 
         ensureOpened();
         
@@ -663,7 +643,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return new DataNucleusCreateObjectCommand(adapter, persistenceManager);
     }
 
-    private DestroyObjectCommand newDestroyObjectCommand(final ObjectAdapter adapter) {
+    private DestroyObjectCommand newDestroyObjectCommand(final ManagedObject adapter) {
         
         ensureOpened();
         
@@ -691,7 +671,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     private void executeCommands(final List<PersistenceCommand> commands) {
 
         for (final PersistenceCommand command : commands) {
-            command.execute(null);
+            command.execute();
         }
         persistenceManager.flush();
     }
@@ -876,7 +856,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public ObjectAdapter adapterFor(Object pojo) {
         return objectAdapterContext.getObjectAdapterProvider().adapterFor(pojo);
     }
-
+    
     // -- HELPER
     
     private void debugLogNotPersistentIgnoring(Object domainObject) {

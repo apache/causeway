@@ -39,6 +39,8 @@ public interface EntityFacet extends Facet {
     
     void refresh(Object pojo);
     
+    void delete(ObjectSpecification spec, Object pojo);
+    
     EntityState getEntityState(Object pojo);
 
     /**
@@ -47,5 +49,6 @@ public interface EntityFacet extends Facet {
      * @return
      */
     boolean isProxyEnhancement(Method method);
+    
 
 }

@@ -19,14 +19,13 @@
 package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext.ObjectAdapterFactories;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext.ObjectAdapterFactories;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -43,8 +42,6 @@ import lombok.RequiredArgsConstructor;
 //@Log4j2
 @RequiredArgsConstructor
 class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
-
-    private final PersistenceSession persistenceSession;
 
     @Override
     public ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
@@ -79,7 +76,6 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
             final Oid oid) {
         return PojoAdapter.of(
                 pojo, oid,
-                IsisSession.currentOrElseNull(),
-                persistenceSession);
+                IsisSession.currentOrElseNull());
     }
 }

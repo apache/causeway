@@ -27,12 +27,10 @@ import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -43,7 +41,6 @@ import lombok.val;
 public final class PojoAdapter implements ObjectAdapter {
 
     private final SpecificationLoader specificationLoader;
-    private final PersistenceSession persistenceSession;
 
     @Getter(onMethod = @__(@Override)) private final Object pojo;
     @Getter(onMethod = @__(@Override)) private final Oid oid;
@@ -54,7 +51,7 @@ public final class PojoAdapter implements ObjectAdapter {
             final Object pojo,
             final Oid oid) {
 
-        return of(pojo, oid, IsisSession.currentOrElseNull(), null);
+        return of(pojo, oid, IsisSession.currentOrElseNull());
     }
 
     public static PojoAdapter ofValue(Serializable value) {
@@ -70,32 +67,28 @@ public final class PojoAdapter implements ObjectAdapter {
     public static PojoAdapter of(
             final Object pojo,
             final Oid oid,
-            final IsisSession isisSession,
-            final PersistenceSession persistenceSession) {
+            final IsisSession isisSession) {
 
         val specificationLoader = isisSession.getSpecificationLoader();
 
-        return new PojoAdapter(pojo, oid, specificationLoader, persistenceSession);
+        return new PojoAdapter(pojo, oid, specificationLoader);
     }
 
     public static PojoAdapter of(
             final Object pojo,
             final Oid oid,
-            final SpecificationLoader specificationLoader,
-            final PersistenceSession persistenceSession) {
-        return new PojoAdapter(pojo, oid, specificationLoader, persistenceSession);
+            final SpecificationLoader specificationLoader) {
+        return new PojoAdapter(pojo, oid, specificationLoader);
     }
 
     private PojoAdapter(
             final Object pojo,
             final Oid oid,
-            final SpecificationLoader specificationLoader,
-            final PersistenceSession persistenceSession) {
+            final SpecificationLoader specificationLoader) {
 
         Objects.requireNonNull(pojo);
 
         this.specificationLoader = specificationLoader;
-        this.persistenceSession = persistenceSession;
 
         if (pojo instanceof ObjectAdapter) {
             throw new IsisException("ObjectAdapter can't be used to wrap an ObjectAdapter: " + pojo);
@@ -125,16 +118,16 @@ public final class PojoAdapter implements ObjectAdapter {
 
     // -- getAggregateRoot
     
-    @Override
-    public ObjectAdapter getAggregateRoot() {
-        if(!isParentedCollection()) {
-            return this;
-        }
-        val collectionOid = (ParentedOid) oid;
-        val rootOid = collectionOid.getParentOid();
-        val rootAdapter = persistenceSession.adapterFor(rootOid);
-        return rootAdapter;
-    }
+//    @Override
+//    public ObjectAdapter getAggregateRoot() {
+//        if(!isParentedCollection()) {
+//            return this;
+//        }
+//        val collectionOid = (ParentedOid) oid;
+//        val rootOid = collectionOid.getParentOid();
+//        val rootAdapter = persistenceSession.adapterFor(rootOid);
+//        return rootAdapter;
+//    }
 
     @Override
     public String toString() {

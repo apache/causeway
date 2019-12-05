@@ -56,10 +56,10 @@ public class ObjectAdapterForBean implements ObjectAdapter {
         return Oid.Factory.persistentOf(spec.getSpecId(), bean.getId());
     }
 
-    @Override
-    public ObjectAdapter getAggregateRoot() {
-        return this;
-    }
+//    @Override
+//    public ObjectAdapter getAggregateRoot() {
+//        return this;
+//    }
 
     @Override
     public String toString() {

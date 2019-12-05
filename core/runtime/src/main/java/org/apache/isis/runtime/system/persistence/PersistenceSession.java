@@ -25,20 +25,14 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.EntityState;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.TransactionalResource;
 
-public interface PersistenceSession 
-extends 
-ObjectAdapterProvider,
-TransactionalResource, 
-SessionScopedComponent {
+public interface PersistenceSession {
 
     // -------------------------------------------------------------------------------------------------
     // -- STABLE API (DRAFT)
@@ -106,8 +100,29 @@ SessionScopedComponent {
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
     <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
 
-    void destroyObjectInTransaction(ObjectAdapter adapter);
-    void makePersistentInTransaction(ObjectAdapter adapter);
+    /**
+     * Removes the specified object from the system. The specified object's data
+     * should be removed from the persistence mechanism.
+     */
+    void destroyObjectInTransaction(ManagedObject adapter);
+    
+    /**
+     * Makes an {@link ManagedObject} persistent. The specified object should be
+     * stored away via this object store's persistence mechanism, and have a
+     * new and unique OID assigned to it. The object, should also be added to
+     * the {@link PersistenceSession} as the object is implicitly 'in use'.
+     *
+     * <p>
+     * If the object has any associations then each of these, where they aren't
+     * already persistent, should also be made persistent by recursively calling
+     * this method.
+     *
+     * <p>
+     * If the object to be persisted is a collection, then each element of that
+     * collection, that is not already persistent, should be made persistent by
+     * recursively calling this method.
+     */
+    void makePersistentInTransaction(ManagedObject adapter);
 
     // -- OTHERS
 

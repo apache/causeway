@@ -22,7 +22,6 @@ import javax.jdo.PersistenceManager;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.val;
@@ -39,7 +38,7 @@ implements CreateObjectCommand {
 
 
     @Override
-    public void execute(final PersistenceCommandContext context) {
+    public void execute() {
         if (log.isDebugEnabled()) {
             log.debug("create object - executing command for: {}", onManagedObject());
         }

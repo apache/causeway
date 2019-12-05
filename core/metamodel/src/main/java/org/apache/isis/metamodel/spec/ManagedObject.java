@@ -34,6 +34,7 @@ import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ListExtensions;
@@ -607,6 +608,20 @@ public interface ManagedObject {
 
         throw _Exceptions.unexpectedCodeReach();
     }
+    
+    static void _destroyObjectInTransaction(ManagedObject adapter) {
+        // legacy of
+        //getPersistenceSession().destroyObjectInTransaction(adapter);
+        
+        val spec = adapter.getSpecification();
+        if(spec.isEntity()) {
+            val entityFacet = spec.getFacet(EntityFacet.class);
+            entityFacet.delete(spec, adapter.getPojo());
+            return;
+        }
+
+        throw _Exceptions.unexpectedCodeReach();
+    }
 
     @Deprecated
     static Stream<ManagedObject> _bulkLoadStream(Stream<RootOid> rootOids) {
@@ -623,7 +638,13 @@ public interface ManagedObject {
         //                .map(ManagedObject.class::cast);
     }
 
-
+    static boolean _isParentedCollection(ManagedObject adapter) {
+        
+        //legacy of (FIXME not a perfect match)
+        //getOid() instanceof ParentedOid;
+        
+        return adapter.getSpecification().getBeanSort().isCollection();
+    }
 
 
 
