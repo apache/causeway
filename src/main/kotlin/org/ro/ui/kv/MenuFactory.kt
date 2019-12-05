@@ -19,7 +19,11 @@ object MenuFactory {
                 val title = it.id
                 val iconName = IconManager.find(title)
                 val link = it.getInvokeLink()!!
-                cmLink(tr(title), icon = iconName) {
+                var styles = setOf("text-normal")
+                if (IconManager.isDangerous(title)) {
+                    styles = setOf("text-danger")
+                }
+                cmLink(tr(title), icon = iconName, classes = styles) {
                     setEventListener {
                         click = { e ->
                             e.stopPropagation()

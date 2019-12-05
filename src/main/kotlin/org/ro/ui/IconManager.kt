@@ -40,4 +40,8 @@ object IconManager {
         }
         return DEFAULT_ICON
     }
+
+    fun isDangerous(actionName: String): Boolean {
+        return (actionName.equals("delete"))
+    }
 }

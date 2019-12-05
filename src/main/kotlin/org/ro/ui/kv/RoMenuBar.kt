@@ -46,7 +46,8 @@ object RoMenuBar : SimplePanel() {
                     icon = IconManager.find("Connect")
             ).onClick { e ->
                 val at = Point(e.pageX.toInt(), e.pageY.toInt())
-                LoginPrompt().open(at) }
+                LoginPrompt().open(at)
+            }
 
             val logTitle = "Log Entries"
             ddLink(
@@ -77,9 +78,14 @@ object RoMenuBar : SimplePanel() {
                     style = ButtonStyle.LIGHT)
             for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
                 val label = me.action.id
+                var styles = setOf("text-normal")
+                if (IconManager.isDangerous(label)) {
+                    styles = setOf("text-danger")
+                }
                 dd.ddLink(
                         label = label,
-                        icon = IconManager.find(label)
+                        icon = IconManager.find(label),
+                        classes = styles
                 ).onClick { e ->
                     val at = Point(e.pageX.toInt(), e.pageY.toInt())
                     val l = me.action.getInvokeLink()!!
