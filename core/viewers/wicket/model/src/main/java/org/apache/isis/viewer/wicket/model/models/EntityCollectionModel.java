@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.wicket.Component;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -89,7 +90,7 @@ implements LinksProvider, UiHintContainer {
         // dynamically determine the spec of the elements
         // (ie so a List<Object> can be rendered according to the runtime type of its elements,
         // rather than the compile-time type
-        val lowestCommonSuperclassFinder = new LowestCommonSuperclassFinder();
+        final LowestCommonSuperclassFinder lowestCommonSuperclassFinder = new LowestCommonSuperclassFinder();
 
         //XXX lombok issue, cannot use val here
         final ObjectAdapterMementoService mementoService = model.getMementoService();
@@ -99,9 +100,9 @@ implements LinksProvider, UiHintContainer {
                 .map(mementoService::mementoForPojo)
                 .collect(Collectors.toList());
 
-        val specificationLoader = model.getSpecificationLoader();
+        final SpecificationLoader specificationLoader = model.getSpecificationLoader();
 
-        val elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
+        final ObjectSpecification elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
                 .map(specificationLoader::loadSpecification)
                 .orElse(collectionAsAdapter.getSpecification().getElementSpecification());
 
