@@ -33,8 +33,8 @@
     <artifactId>isis-viewer-wicket-viewer</artifactId>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.impl</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/impl</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.viewer</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/viewer</git-plugin.propertiesDir>
     </properties>
 
     <build>
