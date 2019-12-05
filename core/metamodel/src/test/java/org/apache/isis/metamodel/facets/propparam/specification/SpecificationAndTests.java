@@ -40,7 +40,7 @@ public class SpecificationAndTests {
             public MySpecAnd() {
             }
         }
-        ;
+
         final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(nullValue()));
     }
@@ -52,7 +52,7 @@ public class SpecificationAndTests {
                 super(alwaysSatisfied);
             }
         }
-        ;
+
         final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(nullValue()));
     }
@@ -64,7 +64,7 @@ public class SpecificationAndTests {
                 super(neverSatisfied);
             }
         }
-        ;
+
         final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(not(nullValue())));
         assertThat(mySpecAnd.satisfies(null), is("not satisfied"));
@@ -77,7 +77,7 @@ public class SpecificationAndTests {
                 super(alwaysSatisfied, neverSatisfied);
             }
         }
-        ;
+
         final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(not(nullValue())));
         assertThat(mySpecAnd.satisfies(null), is("not satisfied"));
@@ -90,7 +90,7 @@ public class SpecificationAndTests {
                 super(alwaysSatisfied, alwaysSatisfied);
             }
         }
-        ;
+
         final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(nullValue()));
     }
@@ -102,7 +102,7 @@ public class SpecificationAndTests {
                 super(neverSatisfied, neverSatisfied);
             }
         }
-        ;
+
         final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(not(nullValue())));
         assertThat(mySpecAnd.satisfies(null), is("not satisfied; not satisfied"));

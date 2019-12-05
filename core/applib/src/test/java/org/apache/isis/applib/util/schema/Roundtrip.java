@@ -303,7 +303,7 @@ public class Roundtrip {
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaDateTime"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_DATE_TIME));
-        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));;
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalDate"));

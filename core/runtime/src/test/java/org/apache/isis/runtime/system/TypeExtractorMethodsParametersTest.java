@@ -43,7 +43,7 @@ public class TypeExtractorMethodsParametersTest {
         class CustomerRepository {
             @SuppressWarnings("unused")
             public void filterCustomers(final List<Customer> customerList) {
-                ;
+
             }
         }
 
