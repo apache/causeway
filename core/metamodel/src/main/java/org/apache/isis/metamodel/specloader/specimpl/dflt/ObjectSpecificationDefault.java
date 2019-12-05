@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.facetapi.Facet;

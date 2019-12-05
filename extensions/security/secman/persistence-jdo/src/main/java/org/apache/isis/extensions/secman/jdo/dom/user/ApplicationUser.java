@@ -56,7 +56,7 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -140,13 +140,13 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     public static abstract class PropertyDomainEvent<T>
-    extends SecurityModule.PropertyDomainEvent<ApplicationUser, T> {}
+    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
 
     public static abstract class CollectionDomainEvent<T> 
-    extends SecurityModule.CollectionDomainEvent<ApplicationUser, T> {}
+    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
 
     public static abstract class ActionDomainEvent 
-    extends SecurityModule.ActionDomainEvent<ApplicationUser> {}
+    extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser> {}
 
 
     // -- identification

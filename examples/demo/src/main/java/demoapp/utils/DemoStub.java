@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.extensions.asciidoc.AsciiDoc;
+import org.apache.isis.extensions.asciidoc.applib.value.AsciiDoc;
 
 import lombok.val;
 

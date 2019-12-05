@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.objectmanager.create;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.MetaModelContextAware;
+import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 

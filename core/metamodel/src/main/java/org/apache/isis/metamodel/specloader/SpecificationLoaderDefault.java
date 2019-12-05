@@ -39,7 +39,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;

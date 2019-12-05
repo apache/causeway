@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 
@@ -44,11 +44,11 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRep
 public class ApplicationPermissionMenu {
 
     // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermissionMenu, T> {}
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermissionMenu, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermissionMenu, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermissionMenu, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermissionMenu> {}
+    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermissionMenu> {}
 
 
     // -- iconName

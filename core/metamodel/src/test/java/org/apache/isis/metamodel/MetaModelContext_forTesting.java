@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.i18n.TranslationService;

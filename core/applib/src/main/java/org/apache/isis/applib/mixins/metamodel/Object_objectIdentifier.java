@@ -41,7 +41,7 @@ public class Object_objectIdentifier {
     private final Object holder;
 
     public static class ActionDomainEvent 
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectIdentifier> {}
+    extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectIdentifier> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

@@ -23,7 +23,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -42,7 +42,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 public class ConfigurationMenu {
 
     public static abstract class ActionDomainEvent
-    extends IsisApplibModule.ActionDomainEvent<ConfigurationMenu> {}
+    extends IsisModuleApplib.ActionDomainEvent<ConfigurationMenu> {}
 
     public static class AllConfigurationPropertiesDomainEvent
     extends ActionDomainEvent {}

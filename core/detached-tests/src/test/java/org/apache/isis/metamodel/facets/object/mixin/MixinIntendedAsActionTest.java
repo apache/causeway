@@ -27,23 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.ReflectionUtils;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.metamodel.facets.object.mixin.MixinFacet.Policy;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

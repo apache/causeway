@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.bookmark;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
@@ -36,7 +36,7 @@ public class BookmarkHolder_object {
         this.bookmarkHolder = bookmarkHolder;
     }
 
-    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolder_object> { }
+    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<BookmarkHolder_object> { }
 
     @Action(
             semantics = SemanticsOf.SAFE,

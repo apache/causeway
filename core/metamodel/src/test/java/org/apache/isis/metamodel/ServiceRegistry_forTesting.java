@@ -33,6 +33,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.metamodel.context.MetaModelContext;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -45,7 +46,7 @@ import lombok.val;
 @RequiredArgsConstructor
 class ServiceRegistry_forTesting implements ServiceRegistry {
 
-    @NonNull private final MetaModelContext metaModelContext; 
+    @NonNull private final MetaModelContext metaModelContext;
     
     @Getter @Setter private IocContainer iocContainer;
     private final Set<ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();

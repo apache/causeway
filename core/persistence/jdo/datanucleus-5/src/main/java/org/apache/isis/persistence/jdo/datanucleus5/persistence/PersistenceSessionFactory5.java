@@ -39,7 +39,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSetti
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.persistence.jdo.datanucleus5.entities.JdoEntityTypeRegistry;
 import org.apache.isis.persistence.jdo.datanucleus5.lifecycles.JdoStoreLifecycleListenerForIsis;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;

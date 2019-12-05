@@ -42,7 +42,7 @@ public class Persistable_datanucleusIdLong {
         this.persistable = persistable;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusIdLong> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_datanucleusIdLong> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

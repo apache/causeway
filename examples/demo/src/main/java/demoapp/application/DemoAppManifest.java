@@ -20,6 +20,7 @@ package demoapp.application;
 
 import javax.inject.Singleton;
 
+import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -28,20 +29,19 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.presets.IsisPresets;
-import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
+import org.apache.isis.extensions.fixtures.IsisModuleExtFixtures;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
-import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
+import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleSecmanEncryptionJbcrypt;
+import org.apache.isis.extensions.secman.jdo.IsisModuleSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.model.IsisModuleSecmanModel;
+import org.apache.isis.extensions.secman.shiro.IsisModuleSecmanRealmShiro;
 import org.apache.isis.extensions.sse.IsisBootSse;
-import org.apache.isis.persistence.jdo.datanucleus5.IsisBootDataNucleus;
-import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-import org.apache.isis.viewer.restfulobjects.viewer.IsisBootViewerRestfulObjects;
-import org.apache.isis.viewer.wicket.viewer.IsisBootViewerWicket;
+import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
+import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
+import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
+import org.apache.isis.viewer.wicket.viewer.IsisModuleWicketViewer;
 
 import demoapp.dom.DemoModule;
 import demoapp.utils.LibraryPreloadingService;
@@ -56,20 +56,20 @@ import demoapp.utils.LibraryPreloadingService;
     @PropertySource(IsisPresets.SilenceWicket),
 })
 @Import({
-    IsisBoot.class,
-    IsisBootSecurityShiro.class,
-    IsisBootDataNucleus.class,
-    IsisBootViewerWicket.class,
+    IsisModuleSpringBoot.class,
+    IsisModuleSecurityShiro.class,
+    IsisModuleJdoDataNucleus5.class,
+    IsisModuleWicketViewer.class,
     IsisBootSse.class, // server sent events
-    IsisBootViewerRestfulObjects.class,
+    IsisModuleRestfulObjectsViewer.class,
 
     // Security Manager Extension (secman)
-    IsisBootSecmanModel.class,
-    IsisBootSecmanRealmShiro.class,
-    IsisBootSecmanPersistenceJdo.class,
-    IsisBootSecmanEncryptionJbcrypt.class,
+    IsisModuleSecmanModel.class,
+    IsisModuleSecmanRealmShiro.class,
+    IsisModuleSecmanPersistenceJdo.class,
+    IsisModuleSecmanEncryptionJbcrypt.class,
 
-    IsisExtFixturesModule.class,
+    IsisModuleExtFixtures.class,
     
     LibraryPreloadingService.class // just a performance enhancement
 

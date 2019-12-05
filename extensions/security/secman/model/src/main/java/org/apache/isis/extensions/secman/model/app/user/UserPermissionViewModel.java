@@ -43,7 +43,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
@@ -74,11 +74,11 @@ import lombok.val;
 
 public class UserPermissionViewModel implements ViewModel {
 
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<UserPermissionViewModel, T> {}
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<UserPermissionViewModel, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<UserPermissionViewModel, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<UserPermissionViewModel, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<UserPermissionViewModel> {}
+    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<UserPermissionViewModel> {}
 
 
 

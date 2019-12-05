@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.metamodel.MetaModelContexts;
+import org.apache.isis.metamodel.context.MetaModelContexts;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingStereotypes;

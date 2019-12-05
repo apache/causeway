@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.config.IsisConfigModule;
+import org.apache.isis.config.IsisModuleConfig;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.testdomain.Smoketest;
 
@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Smoketest
 @SpringBootTest(
         classes = { 
-                IsisConfigModule.class
+                IsisModuleConfig.class
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",

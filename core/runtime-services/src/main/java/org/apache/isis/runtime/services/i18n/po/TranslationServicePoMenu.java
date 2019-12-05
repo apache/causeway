@@ -20,7 +20,7 @@ package org.apache.isis.runtime.services.i18n.po;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -42,7 +42,7 @@ import org.apache.isis.applib.value.Clob;
         )
 public class TranslationServicePoMenu {
 
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<TranslationServicePoMenu> {}
+    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<TranslationServicePoMenu> {}
 
     // //////////////////////////////////////
 

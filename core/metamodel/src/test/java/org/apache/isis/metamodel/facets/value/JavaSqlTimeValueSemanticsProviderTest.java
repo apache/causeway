@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.MetaModelContextAware;
+import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;

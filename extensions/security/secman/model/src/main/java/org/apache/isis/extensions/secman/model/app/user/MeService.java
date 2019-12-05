@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
@@ -44,11 +44,11 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
         )
 public class MeService {
 
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<MeService, T> {}
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<MeService, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<MeService, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<MeService, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<MeService> {}
+    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<MeService> {}
 
     // -- iconName
     public String iconName() {

@@ -849,7 +849,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-security</artifactId>
+				<artifactId>isis-security-api</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>

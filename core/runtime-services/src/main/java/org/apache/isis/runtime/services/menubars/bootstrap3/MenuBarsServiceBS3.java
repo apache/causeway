@@ -46,7 +46,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.members.order.MemberOrderFacet;

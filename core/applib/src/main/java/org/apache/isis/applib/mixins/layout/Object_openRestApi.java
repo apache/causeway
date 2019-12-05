@@ -43,7 +43,7 @@ public class Object_openRestApi {
     private final Object holder;
 
     public static class ActionDomainEvent
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_openRestApi> {}
+    extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_openRestApi> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

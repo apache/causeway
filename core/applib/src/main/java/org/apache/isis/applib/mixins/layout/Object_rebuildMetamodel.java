@@ -40,7 +40,7 @@ public class Object_rebuildMetamodel {
     private final Object holder;
 
     public static class ActionDomainEvent
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_rebuildMetamodel> {}
+    extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_rebuildMetamodel> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

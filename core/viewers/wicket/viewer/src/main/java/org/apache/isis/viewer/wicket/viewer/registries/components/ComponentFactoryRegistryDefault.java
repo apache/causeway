@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;

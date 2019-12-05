@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;

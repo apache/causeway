@@ -39,7 +39,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;

@@ -20,7 +20,7 @@ package org.apache.isis.extensions.h2console.dom.services;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -53,7 +53,7 @@ public class H2ManagerMenu {
     }
 
 
-    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<H2ManagerMenu>{ 
+    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<H2ManagerMenu>{
         private static final long serialVersionUID = 1L; }
 
     @Action(

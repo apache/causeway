@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.shiro;
 
 import java.util.Collection;
 
+import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;

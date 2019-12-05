@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.config.IsisConfiguration;
 import org.hsqldb.util.DatabaseManagerSwing;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -56,7 +56,7 @@ public class HsqlDbManagerMenu {
 
 
 
-    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<HsqlDbManagerMenu> { }
+    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<HsqlDbManagerMenu> { }
 
     @Action(
             semantics = SemanticsOf.SAFE,

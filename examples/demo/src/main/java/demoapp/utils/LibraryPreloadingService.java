@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.extensions.asciidoc.AsciiDoc;
+import org.apache.isis.extensions.asciidoc.applib.value.AsciiDoc;
 
 import lombok.val;
 

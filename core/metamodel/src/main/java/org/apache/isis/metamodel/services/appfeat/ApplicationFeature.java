@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 
 import javax.enterprise.inject.Vetoed;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
@@ -48,17 +48,17 @@ import org.apache.isis.commons.internal.collections._Sets;
 public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     public static abstract class PropertyDomainEvent<T> 
-    extends IsisApplibModule.PropertyDomainEvent<ApplicationFeature, T> {
+    extends IsisModuleApplib.PropertyDomainEvent<ApplicationFeature, T> {
         private static final long serialVersionUID = 1L;
     }
 
     public static abstract class CollectionDomainEvent<T> 
-    extends IsisApplibModule.CollectionDomainEvent<ApplicationFeature, T> {
+    extends IsisModuleApplib.CollectionDomainEvent<ApplicationFeature, T> {
         private static final long serialVersionUID = 1L;
     }
 
     public static abstract class ActionDomainEvent 
-    extends IsisApplibModule.ActionDomainEvent<ApplicationFeature> {
+    extends IsisModuleApplib.ActionDomainEvent<ApplicationFeature> {
         private static final long serialVersionUID = 1L;
     }
 

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilter;

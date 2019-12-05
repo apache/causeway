@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;

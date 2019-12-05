@@ -71,12 +71,11 @@ public interface ChainOfResponsibility<X, R> {
     
         return request -> {
 
-            val response = chainOfHandlers.stream()
-                    .filter(h->h.isHandling(request))
+            final Optional<R> responseIfAny = chainOfHandlers.stream()
+                    .filter(h -> h.isHandling(request))
                     .findFirst()
-                    .map(h->h.handle(request));
-
-            return response;
+                    .map(h -> h.handle(request));
+            return responseIfAny;
         };
         
     }

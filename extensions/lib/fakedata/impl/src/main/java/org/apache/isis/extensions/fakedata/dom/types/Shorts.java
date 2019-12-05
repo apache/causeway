@@ -1,0 +1,27 @@
+package org.apache.isis.extensions.fakedata.dom.types;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.extensions.fakedata.dom.AbstractRandomValueGenerator;
+import org.apache.isis.extensions.fakedata.dom.FakeDataService;
+
+public class Shorts extends AbstractRandomValueGenerator {
+
+    public Shorts(final FakeDataService fakeDataService) {
+        super(fakeDataService);
+    }
+
+    @Programmatic
+    public short upTo(final short upTo) {
+        return (short) fake.ints().upTo(upTo);
+    }
+
+    @Programmatic
+    public short between(final short min, final short max) {
+        return (short) fake.ints().between(min, max);
+    }
+
+    @Programmatic
+    public short any() {
+        return (short) fake.ints().any();
+    }
+}

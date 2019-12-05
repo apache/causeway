@@ -22,7 +22,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -48,7 +48,7 @@ import org.apache.isis.commons.internal.base._Strings;
 public class LayoutServiceMenu {
 
     public static abstract class ActionDomainEvent
-    extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {}
+    extends IsisModuleApplib.ActionDomainEvent<LayoutServiceMenu> {}
 
     private final MimeType mimeTypeApplicationZip;
 

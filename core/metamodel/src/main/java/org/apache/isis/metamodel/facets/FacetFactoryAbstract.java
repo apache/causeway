@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.facets;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.MetaModelContextAware;
+import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;

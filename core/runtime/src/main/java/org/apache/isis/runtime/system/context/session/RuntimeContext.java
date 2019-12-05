@@ -21,7 +21,7 @@ package org.apache.isis.runtime.system.context.session;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.api.authentication.AuthenticationSession;

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -63,16 +63,16 @@ import org.apache.isis.commons.internal.collections._Lists;
 public class DomainObjectList {
 
     // -- ui event classes
-    public static class TitleUiEvent extends IsisApplibModule.TitleUiEvent<DomainObjectList>{  }
-    public static class IconUiEvent extends IsisApplibModule.IconUiEvent<DomainObjectList>{  }
-    public static class CssClassUiEvent extends IsisApplibModule.CssClassUiEvent<DomainObjectList>{  }
-    public static class LayoutUiEvent extends IsisApplibModule.LayoutUiEvent<DomainObjectList>{  }
+    public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<DomainObjectList>{  }
+    public static class IconUiEvent extends IsisModuleApplib.IconUiEvent<DomainObjectList>{  }
+    public static class CssClassUiEvent extends IsisModuleApplib.CssClassUiEvent<DomainObjectList>{  }
+    public static class LayoutUiEvent extends IsisModuleApplib.LayoutUiEvent<DomainObjectList>{  }
 
 
     // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends IsisApplibModule.PropertyDomainEvent<DomainObjectList, T> {  }
-    public static abstract class CollectionDomainEvent<T> extends IsisApplibModule.CollectionDomainEvent<DomainObjectList, T> {  }
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<DomainObjectList> {  }
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleApplib.PropertyDomainEvent<DomainObjectList, T> {  }
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleApplib.CollectionDomainEvent<DomainObjectList, T> {  }
+    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<DomainObjectList> {  }
 
 
     // -- constructors

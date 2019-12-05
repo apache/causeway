@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.swagger;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -46,7 +46,7 @@ import org.apache.isis.commons.internal.resources._Resources;
         )
 public class SwaggerServiceMenu {
 
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<SwaggerServiceMenu> { }
+    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<SwaggerServiceMenu> { }
     public static class OpenSwaggerUiDomainEvent extends ActionDomainEvent { }
 
     @Action(

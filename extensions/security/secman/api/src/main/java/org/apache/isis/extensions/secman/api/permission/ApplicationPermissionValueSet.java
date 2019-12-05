@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 /**
@@ -42,11 +42,11 @@ public class ApplicationPermissionValueSet implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermissionValueSet, T> {}
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermissionValueSet, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermissionValueSet, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermissionValueSet, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermissionValueSet> {}
+    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermissionValueSet> {}
 
 
 

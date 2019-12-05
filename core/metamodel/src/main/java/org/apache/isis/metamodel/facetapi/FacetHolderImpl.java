@@ -27,8 +27,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Maps.AliasMap;
-import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.MetaModelContextAware;
+import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContextAware;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 

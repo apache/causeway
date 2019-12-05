@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain.model.good;
 
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.Model;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 

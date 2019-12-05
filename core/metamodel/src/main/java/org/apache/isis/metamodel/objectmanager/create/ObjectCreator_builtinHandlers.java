@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;

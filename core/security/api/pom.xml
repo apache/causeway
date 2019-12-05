@@ -27,7 +27,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-security</artifactId>
+    <artifactId>isis-security-api</artifactId>
     <name>Apache Isis Security - API</name>
 
     <properties>

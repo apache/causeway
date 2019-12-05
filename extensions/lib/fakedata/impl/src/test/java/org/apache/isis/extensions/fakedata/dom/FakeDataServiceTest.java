@@ -14,6 +14,8 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.extensions.fakedata.dom.types.IsisBlobs;
+import org.apache.isis.extensions.fakedata.dom.types.IsisClobs;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

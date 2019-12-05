@@ -46,7 +46,7 @@ public class Object_downloadMetaModelXml {
     private final Object holder;
 
     public static class ActionDomainEvent 
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadMetaModelXml> {}
+    extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetaModelXml> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

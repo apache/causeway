@@ -24,7 +24,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -35,7 +34,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;

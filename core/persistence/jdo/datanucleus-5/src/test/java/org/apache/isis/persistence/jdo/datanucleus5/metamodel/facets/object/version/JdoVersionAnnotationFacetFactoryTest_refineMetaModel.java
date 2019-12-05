@@ -20,7 +20,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.ver
 
 import javax.jdo.annotations.Version;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.junit.Before;
@@ -28,7 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;

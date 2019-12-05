@@ -35,7 +35,7 @@ import javax.ws.rs.ext.Providers;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;

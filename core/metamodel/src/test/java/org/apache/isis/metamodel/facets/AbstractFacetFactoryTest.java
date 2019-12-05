@@ -27,7 +27,7 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.metamodel.MetaModelContextAware;
+import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

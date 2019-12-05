@@ -24,7 +24,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;

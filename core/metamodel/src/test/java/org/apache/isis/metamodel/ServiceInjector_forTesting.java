@@ -20,6 +20,7 @@ package org.apache.isis.metamodel;
 
 import java.util.function.Consumer;
 
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.springframework.beans.factory.InjectionPoint;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;

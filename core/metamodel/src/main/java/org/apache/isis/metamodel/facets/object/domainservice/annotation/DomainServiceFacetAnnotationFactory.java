@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;

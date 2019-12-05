@@ -25,18 +25,18 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.presets.IsisPresets;
-import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
-import org.apache.isis.persistence.jdo.datanucleus5.IsisBootDataNucleus;
-import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.bypass.IsisBootSecurityBypass;
+import org.apache.isis.extensions.fixtures.IsisModuleExtFixtures;
+import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
+import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
+import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 
 @Configuration
 @Import({
-    IsisBoot.class,
-    IsisBootSecurityBypass.class,
-    IsisBootDataNucleus.class,
-    IsisExtFixturesModule.class
+    IsisModuleSpringBoot.class,
+    IsisModuleSecurityBypass.class,
+    IsisModuleJdoDataNucleus5.class,
+    IsisModuleExtFixtures.class
 })
 @ComponentScan(
         basePackageClasses= {               

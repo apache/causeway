@@ -24,7 +24,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtime.services.wrapper.proxy.ProxyCreator;
 

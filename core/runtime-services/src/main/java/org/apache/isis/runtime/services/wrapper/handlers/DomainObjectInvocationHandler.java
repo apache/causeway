@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facets.ImperativeFacet;

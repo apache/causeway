@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
@@ -48,7 +48,7 @@ import lombok.val;
 public class ApplicationUser_filterPermissions {
 
 
-    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationUser_filterPermissions> {
+    public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_filterPermissions> {
     }
 
     private final ApplicationUser holder;

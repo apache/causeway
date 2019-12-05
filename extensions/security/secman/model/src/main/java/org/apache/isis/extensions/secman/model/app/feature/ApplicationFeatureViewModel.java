@@ -40,7 +40,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
@@ -60,11 +60,11 @@ import lombok.val;
 //)
 public abstract class ApplicationFeatureViewModel implements ViewModel {
 
-    public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends SecurityModule.PropertyDomainEvent<S, T> {}
+    public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<S, T> {}
 
-    public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends SecurityModule.CollectionDomainEvent<S, T> {}
+    public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<S, T> {}
 
-    public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends SecurityModule.ActionDomainEvent<S> {}
+    public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends IsisModuleExtSecmanApi.ActionDomainEvent<S> {}
 
 
 

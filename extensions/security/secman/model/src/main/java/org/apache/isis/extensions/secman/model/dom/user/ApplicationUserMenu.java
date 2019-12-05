@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.SecurityRealmService;
@@ -55,15 +55,15 @@ public class ApplicationUserMenu {
 
 
     public static abstract class PropertyDomainEvent<T> 
-    extends SecurityModule.PropertyDomainEvent<ApplicationUserMenu, T> {
+    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUserMenu, T> {
     }
 
     public static abstract class CollectionDomainEvent<T>
-    extends SecurityModule.CollectionDomainEvent<ApplicationUserMenu, T> {
+    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUserMenu, T> {
     }
 
     public static abstract class ActionDomainEvent 
-    extends SecurityModule.ActionDomainEvent<ApplicationUserMenu> {
+    extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUserMenu> {
     }
 
     public static class FindUsersByNameDomainEvent

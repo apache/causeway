@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.facetapi;
 
 import java.util.stream.Stream;
 
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 
 import lombok.val;
 

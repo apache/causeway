@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
@@ -39,7 +39,7 @@ public class HasUsername_open {
 
     private final HasUsername holder;
 
-    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<HasUsername_open> {}
+    public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<HasUsername_open> {}
 
     @Action(
             semantics = SemanticsOf.SAFE,

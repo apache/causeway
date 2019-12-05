@@ -18,6 +18,7 @@
  */
 package org.apache.isis.metamodel;
 
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

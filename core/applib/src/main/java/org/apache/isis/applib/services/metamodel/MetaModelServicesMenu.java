@@ -28,7 +28,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -57,7 +57,7 @@ import org.apache.isis.schema.metamodel.v1.MetamodelDto;
         )
 public class MetaModelServicesMenu {
 
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<MetaModelServicesMenu> { }
+    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServicesMenu> { }
 
     final MimeType mimeTypeTextCsv;
     final MimeType mimeTypeTextXml;

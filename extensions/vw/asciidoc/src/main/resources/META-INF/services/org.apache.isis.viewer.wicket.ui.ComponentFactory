@@ -1,2 +1,2 @@
-org.apache.isis.extensions.asciidoc.AsciiDocPanelFactoriesForWicket$Parented
-org.apache.isis.extensions.asciidoc.AsciiDocPanelFactoriesForWicket$Standalone
+org.apache.isis.extensions.asciidoc.ui.components.AsciiDocPanelFactoriesForWicket$Parented
+org.apache.isis.extensions.asciidoc.ui.components.AsciiDocPanelFactoriesForWicket$Standalone

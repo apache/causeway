@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
+import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;

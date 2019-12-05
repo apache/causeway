@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;

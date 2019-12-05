@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

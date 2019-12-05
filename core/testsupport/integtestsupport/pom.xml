@@ -138,7 +138,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-security</artifactId>
+			<artifactId>isis-security-api</artifactId>
 		</dependency>
 		
 		<dependency>

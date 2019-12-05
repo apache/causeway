@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.runtime.system.context.session.AppLifecycleEvent;
 import org.apache.isis.runtime.system.context.session.SessionLifecycleEvent;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;

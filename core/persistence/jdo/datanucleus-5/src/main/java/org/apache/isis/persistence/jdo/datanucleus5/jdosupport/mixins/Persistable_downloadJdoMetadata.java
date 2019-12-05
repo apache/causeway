@@ -49,7 +49,7 @@ public class Persistable_downloadJdoMetadata {
         this.persistable = persistable;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

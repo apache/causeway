@@ -1,0 +1,27 @@
+package org.apache.isis.extensions.fakedata.dom.types;
+
+import java.sql.Date;
+import java.time.OffsetDateTime;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.extensions.fakedata.dom.AbstractRandomValueGenerator;
+import org.apache.isis.extensions.fakedata.dom.FakeDataService;
+
+public class JavaSqlDates extends AbstractRandomValueGenerator {
+
+    public JavaSqlDates(final FakeDataService fakeDataService) {
+        super(fakeDataService);
+    }
+
+    @Programmatic
+    public java.sql.Date any() {
+        final OffsetDateTime dateTime = fake.jodaDateTimes().any();
+        final Date sqldt = asSqlDate(dateTime);
+        return sqldt;
+    }
+
+    private static Date asSqlDate(final OffsetDateTime dateTime) {
+        long epochMillis = dateTime.toInstant().toEpochMilli();
+        return new Date(epochMillis);
+    }
+}

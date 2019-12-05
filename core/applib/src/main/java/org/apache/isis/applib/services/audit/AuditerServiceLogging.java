@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -30,7 +31,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Log4j2
+@Log4j2 @Qualifier("logging")
 public class AuditerServiceLogging implements AuditerService {
 
     @PostConstruct

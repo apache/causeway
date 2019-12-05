@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;

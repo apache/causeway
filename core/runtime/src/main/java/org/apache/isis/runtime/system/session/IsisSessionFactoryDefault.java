@@ -35,7 +35,7 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.runtime.system.internal.IsisLocaleInitializer;
