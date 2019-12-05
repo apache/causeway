@@ -304,6 +304,12 @@
             </exclusions>
         </dependency>
 
+        <!-- required by de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
         <!-- JDO API (non transient, provided by plugin) -->
         <dependency>
             <groupId>javax.jdo</groupId>
