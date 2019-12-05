@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.MementoHelper.RecreateStrategy;
 
 /**
  * @since 2.0
@@ -41,7 +40,8 @@ public interface ObjectAdapterMemento extends Serializable {
 
     /**
      * TODO[2112] outdated
-     * Returns a bookmark only if {@link RecreateStrategy#LOOKUP} and 
+     * Returns a bookmark only if 
+     * {@link org.apache.isis.runtime.memento.MementoHelper.RecreateStrategy#LOOKUP} and 
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */
@@ -49,7 +49,8 @@ public interface ObjectAdapterMemento extends Serializable {
 
     /**
      * TODO[2112] outdated 
-     * Returns a bookmark only if {@link RecreateStrategy#LOOKUP} and 
+     * Returns a bookmark only if 
+     * {@link org.apache.isis.runtime.memento.MementoHelper.RecreateStrategy#LOOKUP} and 
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */

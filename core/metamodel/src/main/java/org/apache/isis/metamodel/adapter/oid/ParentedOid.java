@@ -19,14 +19,12 @@
 
 package org.apache.isis.metamodel.adapter.oid;
 
-import java.io.Serializable;
-
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 
 /**
  * Used as the {@link Oid} for collections.
  */
-public interface ParentedOid extends Serializable, Oid {
+public interface ParentedOid extends Oid {
 
     RootOid getParentOid();
 

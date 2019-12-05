@@ -19,12 +19,9 @@
 
 package org.apache.isis.metamodel.adapter.oid;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
@@ -62,26 +59,6 @@ final class Oid_Root implements RootOid {
         this.state = state;
         this.hashCode = calculateHash();
 
-    }
-
-    // -- Encodeable
-    public Oid_Root(final DataInputExtended input) throws IOException {
-        final String oidStr = input.readUTF();
-        final Oid_Root oid = Oid.unmarshaller().unmarshal(oidStr, Oid_Root.class);
-        this.objectSpecId = oid.objectSpecId;
-        this.identifier = oid.identifier;
-        this.state = oid.state;
-
-        requires(objectSpecId, "objectSpecId");
-        requires(identifier, "identifier");
-        requires(state, "state");
-
-        this.hashCode = calculateHash();
-    }
-
-    @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        output.writeUTF(enString());
     }
 
     // -- deString'able, enString

@@ -59,8 +59,6 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
-//import lombok.val;
-
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
  * standalone} (eg result of invoking an action) or {@link Type#PARENTED
@@ -514,7 +512,8 @@ implements LinksProvider, UiHintContainer {
 
 
     public void toggleSelectionOn(ManagedObject selectedAdapter) {
-        val selectedAsMemento = super.getMementoService().mementoForAdapter(selectedAdapter); 
+        //XXX lombok issue, cannot use val here
+        ObjectAdapterMemento selectedAsMemento = super.getMementoService().mementoForAdapter(selectedAdapter); 
 
         // try to remove; if couldn't, then mustn't have been in there, in which case add.
         boolean removed = toggledMementosList.remove(selectedAsMemento);

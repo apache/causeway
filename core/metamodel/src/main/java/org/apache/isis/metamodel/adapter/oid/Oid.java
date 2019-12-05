@@ -19,9 +19,10 @@
 
 package org.apache.isis.metamodel.adapter.oid;
 
+import java.io.Serializable;
+
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
@@ -33,7 +34,7 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
  * <p>
  * Note that value objects (strings, ints, {@link Value}s etc) do not have an {@link Oid}.
  */
-public interface Oid extends Encodable {
+public interface Oid extends Serializable {
 
     /**
      * A string representation of this {@link Oid}.

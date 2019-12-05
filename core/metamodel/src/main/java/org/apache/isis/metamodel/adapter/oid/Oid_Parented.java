@@ -22,9 +22,6 @@ package org.apache.isis.metamodel.adapter.oid;
 import java.io.IOException;
 import java.util.Objects;
 
-import org.apache.isis.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-
 import static org.apache.isis.commons.internal.base._With.requires;
 
 final class Oid_Parented implements ParentedOid {
@@ -83,26 +80,10 @@ final class Oid_Parented implements ParentedOid {
         return Oid.marshaller().marshal(this);
     }
 
-
-    // /////////////////////////////////////////////////////////
-    // encodeable
-    // /////////////////////////////////////////////////////////
-
-
-    public Oid_Parented(DataInputExtended inputStream) throws IOException {
-        this(Oid_Parented.deString(inputStream.readUTF()));
-    }
-
     private Oid_Parented(Oid_Parented oid) throws IOException {
         this.parentRootOid = oid.getParentOid();
         this.name = oid.name;
         this.hashCode = calculateHash();
-    }
-
-
-    @Override
-    public void encode(DataOutputExtended outputStream) throws IOException {
-        outputStream.writeUTF(enString());
     }
 
     // /////////////////////////////////////////////////////////

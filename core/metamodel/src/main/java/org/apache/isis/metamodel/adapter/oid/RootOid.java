@@ -19,14 +19,12 @@
 
 package org.apache.isis.metamodel.adapter.oid;
 
-import java.io.Serializable;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.OidDto;
 
-public interface RootOid extends Oid, Serializable {
+public interface RootOid extends Oid {
 
     ObjectSpecId getObjectSpecId();
 
