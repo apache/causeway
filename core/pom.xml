@@ -1858,7 +1858,7 @@
 		<module>viewers/wicket/ui</module>
 		<module>viewers/wicket/impl</module>
 
-		<module>persistence/jdo/common</module>
+		<module>persistence/jdo/applib</module>
 		<module>persistence/jdo/datanucleus-5</module>
 		
 
