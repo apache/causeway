@@ -91,9 +91,10 @@ implements LinksProvider, UiHintContainer {
         // rather than the compile-time type
         val lowestCommonSuperclassFinder = new LowestCommonSuperclassFinder();
 
-        val mementoService = model.getMementoService();
+        //XXX lombok issue, cannot use val here
+        final ObjectAdapterMementoService mementoService = model.getMementoService();
 
-        val mementoList = streamElementsOf(collectionAsAdapter) // pojos
+        final List<ObjectAdapterMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
                 .peek(lowestCommonSuperclassFinder::collect)
                 .map(mementoService::mementoForPojo)
                 .collect(Collectors.toList());
