@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.shiro;
 
 import javax.inject.Inject;
 
+import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,7 +70,7 @@ import lombok.val;
 @Import({
 
     // Restful server
-    IsisBootViewerRestfulObjects.class,
+    IsisModuleRestfulObjectsViewer.class,
     RestEndpointService.class,
 
     // Embedded LDAP server for testing

@@ -46,7 +46,7 @@ import lombok.val;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
     Configuration_usingJdo.class,
-    IsisBootViewerRestfulObjects.class
+    IsisModuleRestfulObjectsViewer.class
 })
 class RestServiceTest {
 
