@@ -104,7 +104,7 @@ public class IsisConfiguration {
         private final Datanucleus datanucleus = new Datanucleus();
         @Data
         public static class Datanucleus {
-            private String classMetadataLoadedListener = "org.apache.isis.jdo.datanucleus.CreateSchemaObjectFromClassMetadata";
+            private String classMetadataLoadedListener = "org.apache.isis.persistence.jdo.datanucleus5.datanucleus.CreateSchemaObjectFromClassMetadata";
 
             private boolean installFixtures = false;
 
@@ -222,7 +222,7 @@ public class IsisConfiguration {
                          *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                          * </p>
                          */
-                        private String className = "org.apache.isis.jdo.datanucleus.JDOStateManagerForIsis";
+                        private String className = "org.apache.isis.persistence.jdo.datanucleus5.datanucleus.JDOStateManagerForIsis";
                     }
                     private final Schema schema = new Schema();
                     @Data
