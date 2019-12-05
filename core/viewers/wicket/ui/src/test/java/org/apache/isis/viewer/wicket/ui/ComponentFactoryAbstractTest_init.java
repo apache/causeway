@@ -71,7 +71,7 @@ public class ComponentFactoryAbstractTest_init {
 
     @Test
     public void canInstantiateComponentFactoryWithComponentClass() {
-        class ComponentClass {};
+        class ComponentClass {}
         class ComponentFactoryWithComponentClass extends ComponentFactoryAbstract {
 
             private static final long serialVersionUID = 1L;

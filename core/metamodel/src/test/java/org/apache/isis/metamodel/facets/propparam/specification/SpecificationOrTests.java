@@ -40,7 +40,7 @@ public class SpecificationOrTests {
             public MySpecOr() {
             }
         }
-        ;
+
         final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }
@@ -52,7 +52,7 @@ public class SpecificationOrTests {
                 super(alwaysSatisfied);
             }
         }
-        ;
+
         final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }
@@ -64,7 +64,7 @@ public class SpecificationOrTests {
                 super(neverSatisfied);
             }
         }
-        ;
+
         final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(not(nullValue())));
         assertThat(mySpecOr.satisfies(null), is("not satisfied"));
@@ -77,7 +77,7 @@ public class SpecificationOrTests {
                 super(alwaysSatisfied, neverSatisfied);
             }
         }
-        ;
+
         final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }
@@ -89,7 +89,7 @@ public class SpecificationOrTests {
                 super(alwaysSatisfied, alwaysSatisfied);
             }
         }
-        ;
+
         final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }
@@ -101,7 +101,7 @@ public class SpecificationOrTests {
                 super(neverSatisfied, neverSatisfied);
             }
         }
-        ;
+
         final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(not(nullValue())));
         assertThat(mySpecOr.satisfies(null), is("not satisfied; not satisfied"));

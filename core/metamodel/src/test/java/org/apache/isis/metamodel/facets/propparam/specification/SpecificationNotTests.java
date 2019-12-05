@@ -41,7 +41,7 @@ public class SpecificationNotTests {
                 super(alwaysSatisfied);
             }
         }
-        ;
+
         final Specification mySpecOr = new MySpecNot();
         assertThat(mySpecOr.satisfies(null), is(not(nullValue())));
         assertThat(mySpecOr.satisfies(null), is("not satisfied"));
@@ -54,7 +54,7 @@ public class SpecificationNotTests {
                 super(neverSatisfied);
             }
         }
-        ;
+
         final Specification mySpecOr = new MySpecNot();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }

@@ -6,7 +6,7 @@ public class Addresses extends AbstractRandomValueGenerator {
 
     Addresses(final FakeDataService fakeDataService) {
         super(fakeDataService);
-        ;
+
         javaFakerAddress = fakeDataService.javaFaker().address();
     }
 

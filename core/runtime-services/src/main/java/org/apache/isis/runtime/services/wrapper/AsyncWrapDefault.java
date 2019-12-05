@@ -208,7 +208,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
                                 domainObject.getClass());
                 
                 
-                ;
+
                 
                 exceptionHandler.accept(_Exceptions.unrecoverable(msg, e));
 
