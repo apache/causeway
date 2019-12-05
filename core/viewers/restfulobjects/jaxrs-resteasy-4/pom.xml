@@ -69,7 +69,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-viewer-restfulobjects-server</artifactId>
+			<artifactId>isis-viewer-restfulobjects-viewer</artifactId>
 		</dependency>
 
 		<dependency>
@@ -185,7 +185,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-viewer-restfulobjects-server</artifactId>
+			<artifactId>isis-viewer-restfulobjects-viewer</artifactId>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>

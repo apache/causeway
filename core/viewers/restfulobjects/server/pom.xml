@@ -27,7 +27,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-viewer-restfulobjects-server</artifactId>
+    <artifactId>isis-viewer-restfulobjects-viewer</artifactId>
 
 	<name>Apache Isis Viewer - RO (Server)</name>
 
