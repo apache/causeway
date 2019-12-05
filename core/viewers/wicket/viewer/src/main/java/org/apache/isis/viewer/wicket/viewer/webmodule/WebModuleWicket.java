@@ -26,6 +26,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.wicket.protocol.http.WicketFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -47,9 +48,7 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Service @Order(-80)
 public final class WebModuleWicket implements WebModule  {
 
-    private final static String WICKET_FILTER_CLASS_NAME = 
-            "org.apache.wicket.protocol.http.WicketFilter";
-
+    private final static String WICKET_FILTER_CLASS_NAME = WicketFilter.class.getName();
     private final static String WICKET_FILTER_NAME = "WicketFilter";
 
     private final IsisSystemEnvironment isisSystemEnvironment;
@@ -64,9 +63,9 @@ public final class WebModuleWicket implements WebModule  {
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.isisConfiguration = isisConfiguration;
 
-        wicketBasePath = isisConfiguration.getViewer().getWicket().getBasePath();
+        wicketBasePath = this.isisConfiguration.getViewer().getWicket().getBasePath();
 
-        deploymentMode = isisSystemEnvironment.isPrototyping()
+        deploymentMode = this.isisSystemEnvironment.isPrototyping()
                 ? "development"
                 : "deployment";
 

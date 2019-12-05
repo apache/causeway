@@ -27,7 +27,6 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
-import org.apache.isis.viewer.wicket.viewer.TargetRespondListenerToResetQueryResultCache;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -91,7 +90,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionF
 import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
 import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
-import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
+import org.apache.isis.viewer.wicket.viewer.integration.IsisResourceSettings;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import static java.util.Objects.requireNonNull;
