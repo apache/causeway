@@ -19,58 +19,27 @@
 
 package org.apache.isis.runtime.memento;
 
-import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.commons.internal.encoding.Encodable;
+import javax.annotation.Nullable;
+
 import org.apache.isis.metamodel.adapter.oid.Oid;
 
-class Data implements Encodable, Serializable {
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
+class Data implements Serializable {
 
     private final static long serialVersionUID = 1L;
 
-    private final String className;
-    private final Oid oid;
-
-    public Data(final Oid oid, final String className) {
-        this.className = className;
-        this.oid = oid;
-        initialized();
-    }
-
-    public Data(final DataInputExtended input) throws IOException {
-        this.className = input.readUTF();
-        this.oid = input.readEncodable(Oid.class);
-        initialized();
-    }
-
-    @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        output.writeUTF(className);
-        output.writeEncodable(oid);
-    }
-
-    private void initialized() {
-        // nothing to do
-    }
-
-
     /**
-     * Note: could be <tt>null</tt> if represents a value (standalone adapter).
+     * @apiNote could be <tt>null</tt> if represents a value (standalone adapter).
      */
-    public Oid getOid() {
-        return oid;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    @Override
-    public String toString() {
-        return className + "/" + oid;
-    }
+    @Getter @Nullable private final Oid oid;
+    @Getter private final String className;
 
 }

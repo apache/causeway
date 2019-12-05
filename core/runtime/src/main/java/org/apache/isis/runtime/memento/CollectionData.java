@@ -19,12 +19,10 @@
 
 package org.apache.isis.runtime.memento;
 
-import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 
 final class CollectionData extends Data {
@@ -38,16 +36,12 @@ final class CollectionData extends Data {
     }
 
     @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        super.encode(output);
-        output.writeEncodables(elements);
-    }
-
-    @Override
     public String toString() {
-        return "(" + streamElements()
-        .map(data->""+data)
-        .collect(Collectors.joining(",")) + ")";
+        return "(" 
+                + streamElements()
+                    .map(data->""+data)
+                    .collect(Collectors.joining(",")) 
+                + ")";
     }
 
     public Stream<Data> streamElements() {

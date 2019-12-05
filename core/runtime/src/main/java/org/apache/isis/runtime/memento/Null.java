@@ -21,32 +21,11 @@ package org.apache.isis.runtime.memento;
 
 import java.io.Serializable;
 
-import org.apache.isis.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.commons.internal.encoding.Encodable;
-
-final class Null implements Encodable, Serializable {
+final class Null implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Null() {
-        initialized();
     }
-
-    public Null(final DataInputExtended input) {
-        initialized();
-    }
-
-    @Override
-    public void encode(final DataOutputExtended output) {
-    }
-
-    private void initialized() {
-        // nothing to do
-    }
-
-    // ///////////////////////////////////////////////////////
-    //
-    // ///////////////////////////////////////////////////////
 
     @Override
     public String toString() {
