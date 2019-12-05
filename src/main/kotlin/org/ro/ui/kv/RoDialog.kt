@@ -9,7 +9,7 @@ import pl.treksoft.kvision.core.VerticalAlign
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.formPanel
-import pl.treksoft.kvision.form.select.Select
+import pl.treksoft.kvision.form.select.SimpleSelect
 import pl.treksoft.kvision.form.text.Password
 import pl.treksoft.kvision.form.text.Text
 import pl.treksoft.kvision.form.text.TextArea
@@ -58,12 +58,15 @@ class RoDialog(
                     }
                     "Select" -> {
                         @Suppress("UNCHECKED_CAST")
+                        console.log("[RoDialog.init]")
+                        console.log(fi.content)
                         val list = fi.content as List<StringPair>
                         var preSelectedValue: String? = null
                         if (list.isNotEmpty()) {
                             preSelectedValue = list.first().first
                         }
-                        add(Select(label = fi.label, options = list, value = preSelectedValue))
+                        val select = SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
+                        add(select)
                     }
                 }
             }
