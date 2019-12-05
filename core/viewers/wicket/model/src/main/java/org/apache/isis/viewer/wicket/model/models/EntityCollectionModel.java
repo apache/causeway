@@ -47,7 +47,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.memento.ObjectAdapterMementoSupport;
+import org.apache.isis.runtime.memento.ObjectAdapterMementoService;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -93,11 +93,11 @@ implements LinksProvider, UiHintContainer {
         // rather than the compile-time type
         val lowestCommonSuperclassFinder = new LowestCommonSuperclassFinder();
 
-        val mementoSupport = model.getMementoSupport();
+        val mementoService = model.getMementoService();
 
         val mementoList = streamElementsOf(collectionAsAdapter) // pojos
                 .peek(lowestCommonSuperclassFinder::collect)
-                .map(pojo->ObjectAdapterMemento.ofPojo(pojo, mementoSupport))
+                .map(mementoService::mementoForPojo)
                 .collect(Collectors.toList());
 
         val specificationLoader = model.getSpecificationLoader();
@@ -198,10 +198,10 @@ implements LinksProvider, UiHintContainer {
             void setObject(EntityCollectionModel colModel, List<ManagedObject> adapterList) {
 
                 //XXX lombok issue, cannot use val here 
-                ObjectAdapterMementoSupport mementoSupport = colModel.getMementoSupport();
+                final ObjectAdapterMementoService mementoService = colModel.getMementoService();
 
                 colModel.mementoList = _NullSafe.stream(adapterList)
-                        .map(adapter->ObjectAdapterMemento.ofAdapter(adapter, mementoSupport))
+                        .map(mementoService::mementoForAdapter)
                         .filter(_NullSafe::isPresent)
                         .collect(Collectors.toList());
             }
@@ -479,7 +479,7 @@ implements LinksProvider, UiHintContainer {
      */
     public void setObjectList(ManagedObject resultAdapter) {
         this.mementoList = streamElementsOf(resultAdapter)
-                .map(pojo->ObjectAdapterMemento.ofPojo(pojo, super.getMementoSupport()))
+                .map(super.getMementoService()::mementoForPojo)
                 .collect(Collectors.toList());
     }
 
@@ -514,8 +514,7 @@ implements LinksProvider, UiHintContainer {
 
 
     public void toggleSelectionOn(ManagedObject selectedAdapter) {
-        ObjectAdapterMemento selectedAsMemento = ObjectAdapterMemento
-                .ofAdapter(selectedAdapter, super.getMementoSupport());
+        val selectedAsMemento = super.getMementoService().mementoForAdapter(selectedAdapter); 
 
         // try to remove; if couldn't, then mustn't have been in there, in which case add.
         boolean removed = toggledMementosList.remove(selectedAsMemento);

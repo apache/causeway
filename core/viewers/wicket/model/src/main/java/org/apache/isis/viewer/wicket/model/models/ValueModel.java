@@ -35,7 +35,7 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
 
     public ValueModel(IsisWebAppCommonContext commonContext, ManagedObject adapter) {
         super(commonContext);
-        adapterMemento = ObjectAdapterMemento.ofAdapter(adapter, super.getMementoSupport());
+        adapterMemento = super.getMementoService().mementoForAdapter(adapter);
     }
 
     @Override

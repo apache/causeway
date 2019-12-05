@@ -95,11 +95,11 @@ public class EntityModelForReference implements ObjectAdapterModel {
 
     @Override
     public PageParameters getPageParameters() {
-        val mementoSupport = scalarModel.getMementoSupport();
+        val mementoService = scalarModel.getMementoService();
         val hintStore = scalarModel.getCommonContext().lookupServiceElseFail(HintStore.class); 
         
         val pageParameters = createPageParameters(getObject());
-        val objectAdapterMemento = ObjectAdapterMemento.ofAdapter(getObject(), mementoSupport);
+        val objectAdapterMemento = mementoService.mementoForAdapter(getObject()); 
         
         HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, objectAdapterMemento, hintStore);
         return pageParameters;

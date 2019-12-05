@@ -23,19 +23,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Cardinality;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.ObjectAdapterMementoDefault.RecreateStrategy;
-
-import lombok.val;
+import org.apache.isis.runtime.memento.MementoHelper.RecreateStrategy;
 
 /**
  * @since 2.0
@@ -66,27 +61,6 @@ public interface ObjectAdapterMemento extends Serializable {
 
     // -- FACTORIES
 
-    static ObjectAdapterMemento ofRootOid(RootOid rootOid, ObjectAdapterMementoSupport support) {
-        if(rootOid==null) {
-            return null;
-        }
-        return support.mementoForRootOid(rootOid);
-    }
-
-    static ObjectAdapterMemento ofAdapter(ManagedObject adapter, ObjectAdapterMementoSupport support) {
-        if(adapter==null) {
-            return null;
-        }
-        return support.mementoForAdapter(adapter);
-    }
-
-    static ObjectAdapterMemento ofPojo(Object pojo, ObjectAdapterMementoSupport support) {
-        if(pojo==null) {
-            return null;
-        }
-        return support.mementoForPojo(pojo);
-    }
-
     static ObjectAdapterMemento wrapMementoList(
             Collection<ObjectAdapterMemento> container, 
             ObjectSpecId specId) {
@@ -108,22 +82,6 @@ public interface ObjectAdapterMemento extends Serializable {
         }
         return Optional.ofNullable(((ObjectAdapterMementoCollection)memento).unwrapList());
     }
-
-
-    static ObjectAdapterMemento ofIterablePojos(
-            Object iterablePojos,
-            ObjectSpecId specId,
-            ObjectAdapterMementoSupport support) {
-
-        val listOfMementos = _NullSafe.stream((Iterable<?>) iterablePojos)
-                .map(pojo->ofPojo(pojo, support))
-                .collect(Collectors.toList());
-        val memento =
-                ObjectAdapterMemento.wrapMementoList(listOfMementos, specId);
-        return memento;
-    }
-
-    
 
 
 }

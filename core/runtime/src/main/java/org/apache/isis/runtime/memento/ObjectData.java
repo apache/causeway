@@ -25,11 +25,12 @@ import java.util.Map;
 
 import org.apache.isis.metamodel.adapter.oid.Oid;
 
+import lombok.NoArgsConstructor;
+
 final class ObjectData extends Data {
 
     private static final long serialVersionUID = 3772154051989942219L;
     
-    private final static Serializable NO_ENTRY = new Null();
     private final Map<String, Object> fields = new HashMap<String, Object>();
 
     public ObjectData(final Oid oid, final String className) {
@@ -55,6 +56,21 @@ final class ObjectData extends Data {
     @Override
     public String toString() {
         return fields.toString();
+    }
+    
+    // -- HELPER
+    
+    private final static Serializable NO_ENTRY = new EmptyEntry();
+    
+    @NoArgsConstructor
+    private final static class EmptyEntry implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public String toString() {
+            return "NULL";
+        }
+
     }
 
 

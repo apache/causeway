@@ -42,8 +42,8 @@ import lombok.val;
  *
  */
 @Service @Singleton
-public class ObjectAdapterMementoSupport_usingDefault 
-implements ObjectAdapterMementoSupport {
+public class ObjectAdapterMementoServiceDefault 
+implements ObjectAdapterMementoService {
     
     @Inject @Getter private SpecificationLoader specificationLoader;
     @Inject private ObjectManager objectManager;
@@ -51,13 +51,13 @@ implements ObjectAdapterMementoSupport {
 
     @Override
     public ObjectAdapterMemento mementoForRootOid(RootOid rootOid) {
-        val delegate = ObjectAdapterMementoDefault.createPersistent(rootOid, specificationLoader);
+        val delegate = MementoHelper.createPersistent(rootOid, specificationLoader);
         return ObjectAdapterMementoDelegator.of(delegate);
     }
 
     @Override
     public ObjectAdapterMemento mementoForAdapter(ManagedObject adapter) {
-        val delegate = ObjectAdapterMementoDefault.createOrNull(adapter);
+        val delegate = MementoHelper.createOrNull(adapter);
         if(delegate==null) {
             return null;
         }
@@ -76,22 +76,10 @@ implements ObjectAdapterMementoSupport {
             return null;
         }
         if(mementoStore==null) {
-            val objectAdapterProvider = (ObjectAdapterProvider) IsisContext.getPersistenceSession().get();
-            mementoStore = new MementoStoreLegacy(objectManager, objectAdapterProvider, specificationLoader);
+            mementoStore = new MementoStoreLegacy(objectManager, specificationLoader);
         }
         
-        
         return memento.reconstructObject(mementoStore, specificationLoader);
-        
-//        val specId = memento.getObjectSpecId();
-//        val spec = specificationLoader.loadSpecification(specId);
-//        
-//        if(memento.getIdentifier()==null) {
-//            System.out.println("#### has no id: " + memento);
-//        }
-//        
-//        val objectLoadRequest = ObjectLoader.Request.of(spec, memento.getIdentifier());
-//        return objectManager.loadObject(objectLoadRequest);         
     }
 
     @RequiredArgsConstructor(staticName = "of")
@@ -99,7 +87,7 @@ implements ObjectAdapterMementoSupport {
 
         private static final long serialVersionUID = 1L;
 
-        private final ObjectAdapterMementoDefault delegate;
+        private final MementoHelper delegate;
 
         @Override
         public String asString() {

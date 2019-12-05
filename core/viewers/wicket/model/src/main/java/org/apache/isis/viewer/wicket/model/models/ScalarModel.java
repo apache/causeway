@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.Consent;
@@ -55,6 +56,8 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+
+import lombok.val;
 
 
 
@@ -837,8 +840,9 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
         }
 
         if(isCollection()) {
-            ObjectAdapterMemento memento = ObjectAdapterMemento
-                    .ofIterablePojos(pojo, getTypeOfSpecification().getSpecId(), super.getMementoSupport());
+            val memento = super.getMementoService()
+                    .mementoForPojos(_Casts.uncheckedCast(pojo), getTypeOfSpecification().getSpecId());
+                    
             super.setObjectMemento(memento); // associated value
         } else {
             super.setObject(adapter); // associated value
@@ -859,12 +863,14 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
     public void setPendingAdapter(final ManagedObject objectAdapter) {
         if(isCollection()) {
-            Object pojo = objectAdapter.getPojo();
-            ObjectAdapterMemento memento = ObjectAdapterMemento
-                    .ofIterablePojos(pojo, getTypeOfSpecification().getSpecId(), super.getMementoSupport());
+            val pojos = objectAdapter.getPojo();
+            val memento = super.getMementoService()
+                    .mementoForPojos(_Casts.uncheckedCast(pojos), getTypeOfSpecification().getSpecId());
             setPending(memento);
         } else {
-            setPending(ObjectAdapterMemento.ofAdapter(objectAdapter, super.getMementoSupport()));
+            val memento = super.getMementoService()
+                    .mementoForAdapter(objectAdapter);
+            setPending(memento);
         }
     }
 

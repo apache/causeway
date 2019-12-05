@@ -48,6 +48,7 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
@@ -67,7 +68,7 @@ import lombok.extern.log4j.Log4j2;
 final class MementoStoreLegacy implements MementoStore {
 
     private final ObjectManager objectManager;
-    private final ObjectAdapterProvider objectAdapterProvider;
+    //private final ObjectAdapterProvider objectAdapterProvider;
     private final SpecificationLoader specificationLoader;
 
     @Override
@@ -95,7 +96,7 @@ final class MementoStoreLegacy implements MementoStore {
             _Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
             // recreate an adapter for the original OID
-            adapter = objectAdapterProvider.adapterFor(typedOid);
+            adapter = objectAdapterProvider().adapterFor(typedOid);
 
             updateObject(adapter, data);
         }
@@ -105,7 +106,7 @@ final class MementoStoreLegacy implements MementoStore {
         }
         return adapter;
     }
-    
+
     @Override
     public ManagedObject adapterForListOfPojos(List<Object> listOfPojos) {
         return ManagedObject.of(specificationLoader::loadSpecification, listOfPojos);
@@ -123,7 +124,7 @@ final class MementoStoreLegacy implements MementoStore {
         // handle values
         if (data instanceof StandaloneData) {
             val standaloneData = (StandaloneData) data;
-            return standaloneData.getAdapter(objectAdapterProvider, specificationLoader);
+            return standaloneData.getAdapter(objectAdapterProvider(), specificationLoader);
         }
 
         // reference to entity
@@ -132,7 +133,7 @@ final class MementoStoreLegacy implements MementoStore {
         _Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
 
         val rootOid = (RootOid) oid;
-        val referencedAdapter = objectAdapterProvider.adapterFor(rootOid);
+        val referencedAdapter = objectAdapterProvider().adapterFor(rootOid);
 
         if (data instanceof ObjectData) {
             if (rootOid.isTransient()) {
@@ -288,6 +289,11 @@ final class MementoStoreLegacy implements MementoStore {
                 otoa.initAssociation(objectAdapter, ref);
             }
         }
+    }
+    
+    private ObjectAdapterProvider objectAdapterProvider() {
+        val objectAdapterProvider = (ObjectAdapterProvider) IsisContext.getPersistenceSession().get();
+        return objectAdapterProvider;
     }
 
 }

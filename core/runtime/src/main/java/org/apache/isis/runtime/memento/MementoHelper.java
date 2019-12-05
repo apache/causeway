@@ -24,12 +24,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -41,8 +39,6 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -51,14 +47,14 @@ import lombok.NoArgsConstructor;
 import lombok.val;
 
 
-final class ObjectAdapterMementoDefault implements Serializable {
+final class MementoHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Factory method
      */
-    public static ObjectAdapterMementoDefault createOrNull(ManagedObject adapter) {
+    public static MementoHelper createOrNull(ManagedObject adapter) {
         if (adapter == null) {
             return null;
         }
@@ -66,28 +62,28 @@ final class ObjectAdapterMementoDefault implements Serializable {
         if(pojo == null) {
             return null;
         }
-        return new ObjectAdapterMementoDefault(adapter);
+        return new MementoHelper(adapter);
     }
 
     /**
      * Factory method
      */
-    static ObjectAdapterMementoDefault createPersistent(
+    static MementoHelper createPersistent(
             RootOid rootOid, 
             SpecificationLoader specificationLoader) {
         
-        return new ObjectAdapterMementoDefault(rootOid, specificationLoader);
+        return new MementoHelper(rootOid, specificationLoader);
     }
 
-    static ObjectAdapterMementoDefault createForList(
-            ArrayList<ObjectAdapterMementoDefault> list,
+    static MementoHelper createForList(
+            ArrayList<MementoHelper> list,
             ObjectSpecId objectSpecId) {
         
-        return new ObjectAdapterMementoDefault(list, objectSpecId);
+        return new MementoHelper(list, objectSpecId);
     }
 
-    static ObjectAdapterMementoDefault createForList(
-            Collection<ObjectAdapterMementoDefault> list,
+    static MementoHelper createForList(
+            Collection<MementoHelper> list,
             ObjectSpecId objectSpecId) {
         
         return list != null ? createForList(_Lists.newArrayList(list), objectSpecId) :  null;
@@ -105,11 +101,11 @@ final class ObjectAdapterMementoDefault implements Serializable {
 //        return createForList(listOfMementos, specId);
 //    }
 
-    static ObjectAdapterMementoDefault createForEncodeable(
+    static MementoHelper createForEncodeable(
             ObjectSpecId specId,
             String encodableValue) {
         
-        return new ObjectAdapterMementoDefault(specId, encodableValue);
+        return new MementoHelper(specId, encodableValue);
     }
 
     enum Cardinality {
@@ -120,7 +116,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
 
             @Override
             public ManagedObject asAdapter(
-                    ObjectAdapterMementoDefault memento,
+                    MementoHelper memento,
                     MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
                 
@@ -128,16 +124,16 @@ final class ObjectAdapterMementoDefault implements Serializable {
             }
 
             @Override
-            public int hashCode(ObjectAdapterMementoDefault memento) {
+            public int hashCode(MementoHelper memento) {
                 return memento.recreateStrategy.hashCode(memento);
             }
 
             @Override
-            public boolean equals(ObjectAdapterMementoDefault memento, Object other) {
-                if (!(other instanceof ObjectAdapterMementoDefault)) {
+            public boolean equals(MementoHelper memento, Object other) {
+                if (!(other instanceof MementoHelper)) {
                     return false;
                 }
-                final ObjectAdapterMementoDefault otherMemento = (ObjectAdapterMementoDefault) other;
+                final MementoHelper otherMemento = (MementoHelper) other;
                 if(otherMemento.cardinality != SCALAR) {
                     return false;
                 }
@@ -145,7 +141,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
             }
 
             @Override
-            public String asString(final ObjectAdapterMementoDefault memento) {
+            public String asString(final MementoHelper memento) {
                 return memento.recreateStrategy.toString(memento);
             }
         },
@@ -156,7 +152,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
 
             @Override
             public ManagedObject asAdapter(
-                    ObjectAdapterMementoDefault memento,
+                    MementoHelper memento,
                     MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
                 
@@ -167,16 +163,16 @@ final class ObjectAdapterMementoDefault implements Serializable {
             }
 
             @Override
-            public int hashCode(ObjectAdapterMementoDefault memento) {
+            public int hashCode(MementoHelper memento) {
                 return memento.list.hashCode();
             }
 
             @Override
-            public boolean equals(ObjectAdapterMementoDefault memento, Object other) {
-                if (!(other instanceof ObjectAdapterMementoDefault)) {
+            public boolean equals(MementoHelper memento, Object other) {
+                if (!(other instanceof MementoHelper)) {
                     return false;
                 }
-                final ObjectAdapterMementoDefault otherMemento = (ObjectAdapterMementoDefault) other;
+                final MementoHelper otherMemento = (MementoHelper) other;
                 if(otherMemento.cardinality != VECTOR) {
                     return false;
                 }
@@ -184,7 +180,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
             }
 
             @Override
-            public String asString(ObjectAdapterMementoDefault memento) {
+            public String asString(MementoHelper memento) {
                 return memento.list.toString();
             }
         };
@@ -197,15 +193,15 @@ final class ObjectAdapterMementoDefault implements Serializable {
         }
 
         public abstract ManagedObject asAdapter(
-                ObjectAdapterMementoDefault memento,
+                MementoHelper memento,
                 MementoStore mementoStore,
                 SpecificationLoader specificationLoader);
 
-        public abstract int hashCode(ObjectAdapterMementoDefault memento);
+        public abstract int hashCode(MementoHelper memento);
 
-        public abstract boolean equals(ObjectAdapterMementoDefault memento, Object other);
+        public abstract boolean equals(MementoHelper memento, Object other);
 
-        public abstract String asString(ObjectAdapterMementoDefault memento);
+        public abstract String asString(MementoHelper memento);
     }
 
     enum RecreateStrategy {
@@ -217,7 +213,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
         ENCODEABLE {
             @Override
             ManagedObject recreateAdapter(
-                    ObjectAdapterMementoDefault memento,
+                    MementoHelper memento,
                     MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
                 
@@ -229,26 +225,26 @@ final class ObjectAdapterMementoDefault implements Serializable {
 
             @Override
             public boolean equals(
-                    ObjectAdapterMementoDefault memento, 
-                    ObjectAdapterMementoDefault otherMemento) {
+                    MementoHelper memento, 
+                    MementoHelper otherMemento) {
                 
                 return otherMemento.recreateStrategy == ENCODEABLE && 
                         memento.encodableValue.equals(otherMemento.encodableValue);
             }
 
             @Override
-            public int hashCode(ObjectAdapterMementoDefault memento) {
+            public int hashCode(MementoHelper memento) {
                 return memento.encodableValue.hashCode();
             }
 
             @Override
-            public String toString(ObjectAdapterMementoDefault memento) {
+            public String toString(MementoHelper memento) {
                 return memento.encodableValue;
             }
 
             @Override
             public void resetVersion(
-                    ObjectAdapterMementoDefault memento,
+                    MementoHelper memento,
                     MementoStore mementoStore, 
                     SpecificationLoader specificationLoader) {
             }
@@ -260,7 +256,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
         LOOKUP {
             @Override
             ManagedObject recreateAdapter(
-                    ObjectAdapterMementoDefault memento,
+                    MementoHelper memento,
                     MementoStore mementoStore, 
                     SpecificationLoader specificationLoader) {
                 
@@ -282,7 +278,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
 
             @Override
             public void resetVersion(
-                    ObjectAdapterMementoDefault memento,
+                    MementoHelper memento,
                     MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
                 
@@ -295,17 +291,17 @@ final class ObjectAdapterMementoDefault implements Serializable {
             }
 
             @Override
-            public boolean equals(ObjectAdapterMementoDefault oam, ObjectAdapterMementoDefault other) {
+            public boolean equals(MementoHelper oam, MementoHelper other) {
                 return other.recreateStrategy == LOOKUP && oam.persistentOidStr.equals(other.persistentOidStr);
             }
 
             @Override
-            public int hashCode(ObjectAdapterMementoDefault oam) {
+            public int hashCode(MementoHelper oam) {
                 return oam.persistentOidStr.hashCode();
             }
 
             @Override
-            public String toString(final ObjectAdapterMementoDefault oam) {
+            public String toString(final MementoHelper oam) {
                 return oam.persistentOidStr;
             }
 
@@ -320,7 +316,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
              */
             @Override
             ManagedObject recreateAdapter(
-                    ObjectAdapterMementoDefault memento,
+                    MementoHelper memento,
                     MementoStore mementoStore, 
                     SpecificationLoader specificationLoader) {
                 
@@ -328,30 +324,30 @@ final class ObjectAdapterMementoDefault implements Serializable {
             }
 
             @Override
-            public boolean equals(ObjectAdapterMementoDefault oam, ObjectAdapterMementoDefault other) {
+            public boolean equals(MementoHelper oam, MementoHelper other) {
                 return other.recreateStrategy == TRANSIENT && oam.transientMemento.equals(other.transientMemento);
             }
 
             @Override
-            public int hashCode(ObjectAdapterMementoDefault oam) {
+            public int hashCode(MementoHelper oam) {
                 return oam.transientMemento.hashCode();
             }
 
             @Override
-            public String toString(final ObjectAdapterMementoDefault oam) {
+            public String toString(final MementoHelper oam) {
                 return oam.transientMemento.toString();
             }
 
             @Override
             public void resetVersion(
-                    ObjectAdapterMementoDefault memento,
+                    MementoHelper memento,
                     MementoStore mementoStore,
                     SpecificationLoader specificationLoader) {
             }
         };
 
         public ManagedObject getAdapter(
-                ObjectAdapterMementoDefault memento,
+                MementoHelper memento,
                 MementoStore mementoStore,
                 SpecificationLoader specificationLoader) {
             
@@ -359,20 +355,20 @@ final class ObjectAdapterMementoDefault implements Serializable {
         }
 
         abstract ManagedObject recreateAdapter(
-                ObjectAdapterMementoDefault memento,
+                MementoHelper memento,
                 MementoStore mementoStore, 
                 SpecificationLoader specificationLoader);
 
         public abstract boolean equals(
-                ObjectAdapterMementoDefault memento, 
-                ObjectAdapterMementoDefault otherMemento);
+                MementoHelper memento, 
+                MementoHelper otherMemento);
         
-        public abstract int hashCode(ObjectAdapterMementoDefault memento);
+        public abstract int hashCode(MementoHelper memento);
 
-        public abstract String toString(ObjectAdapterMementoDefault memento);
+        public abstract String toString(MementoHelper memento);
 
         public abstract void resetVersion(
-                ObjectAdapterMementoDefault memento,
+                MementoHelper memento,
                 MementoStore mementoStore, 
                 SpecificationLoader specificationLoader);
     }
@@ -433,10 +429,10 @@ final class ObjectAdapterMementoDefault implements Serializable {
     /**
      * populated only if {@link #getCardinality() sort} is {@link Cardinality#VECTOR vector}
      */
-    private ArrayList<ObjectAdapterMementoDefault> list;
+    private ArrayList<MementoHelper> list;
 
-    public ObjectAdapterMementoDefault(
-            ArrayList<ObjectAdapterMementoDefault> list, 
+    public MementoHelper(
+            ArrayList<MementoHelper> list, 
             ObjectSpecId objectSpecId) {
         
         this.cardinality = Cardinality.VECTOR;
@@ -444,7 +440,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
         this.objectSpecId = objectSpecId;
     }
 
-    private ObjectAdapterMementoDefault(RootOid rootOid, SpecificationLoader specificationLoader) {
+    private MementoHelper(RootOid rootOid, SpecificationLoader specificationLoader) {
 
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
         val specId = rootOid.getObjectSpecId(); 
@@ -471,7 +467,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
         this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
-    private ObjectAdapterMementoDefault(ManagedObject adapter) {
+    private MementoHelper(ManagedObject adapter) {
         
         requires(adapter, "adapter");
         
@@ -481,7 +477,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
         init(adapter);
     }
 
-    private ObjectAdapterMementoDefault(ObjectSpecId specId, String encodableValue) {
+    private MementoHelper(ObjectSpecId specId, String encodableValue) {
         this.cardinality = Cardinality.SCALAR;
         this.objectSpecId = specId;
         this.encodableValue = encodableValue;
@@ -521,7 +517,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
         return cardinality;
     }
 
-    ArrayList<ObjectAdapterMementoDefault> getList() {
+    ArrayList<MementoHelper> getList() {
         ensureVector();
         return list;
     }
@@ -595,7 +591,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
      * {@link ConcurrencyChecking concurrency checking} of the OID.
      */
     boolean containedIn(
-            List<ObjectAdapterMementoDefault> mementos,
+            List<MementoHelper> mementos,
             MementoStore mementoStore,
             SpecificationLoader specificationLoader) {
 
@@ -643,13 +639,13 @@ final class ObjectAdapterMementoDefault implements Serializable {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     final static class Functions {
 
-        public static Function<Object, ObjectAdapterMementoDefault> fromPojo(
+        public static Function<Object, MementoHelper> fromPojo(
                 final ObjectAdapterProvider adapterProvider) {
             
-            return pojo->ObjectAdapterMementoDefault.createOrNull( adapterProvider.adapterFor(pojo) );
+            return pojo->MementoHelper.createOrNull( adapterProvider.adapterFor(pojo) );
         }
 
-        public static Function<ObjectAdapterMementoDefault, ManagedObject> fromMemento(
+        public static Function<MementoHelper, ManagedObject> fromMemento(
                 final MementoStore mementoStore,
                 final SpecificationLoader specificationLoader) {
 
@@ -663,7 +659,7 @@ final class ObjectAdapterMementoDefault implements Serializable {
             };
         }
 
-        public static Function<ObjectAdapterMementoDefault, Object> toPojo(
+        public static Function<MementoHelper, Object> toPojo(
                 final MementoStore mementoStore,
                 final SpecificationLoader specificationLoader) {
             

@@ -33,7 +33,7 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.memento.ObjectAdapterMementoSupport;
+import org.apache.isis.runtime.memento.ObjectAdapterMementoService;
 import org.apache.isis.runtime.system.session.IsisSession;
 
 import lombok.AccessLevel;
@@ -63,7 +63,7 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
     
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    private final ObjectAdapterMementoSupport mementoSupport = lookupServiceElseFail(ObjectAdapterMementoSupport.class);
+    private final ObjectAdapterMementoService mementoService = lookupServiceElseFail(ObjectAdapterMementoService.class);
     
     @Getter(lazy = true)
     private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
@@ -93,15 +93,15 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     }
     
     public ObjectAdapterMemento mementoFor(ManagedObject adapter) {
-        return ObjectAdapterMemento.ofAdapter(adapter, getMementoSupport());
+        return getMementoService().mementoForAdapter(adapter);
     }
     
     public ObjectAdapterMemento mementoFor(RootOid rootOid) {
-        return ObjectAdapterMemento.ofRootOid(rootOid, getMementoSupport());
+        return getMementoService().mementoForRootOid(rootOid);
     }
     
     public ManagedObject reconstructObject(ObjectAdapterMemento memento) {
-        return getMementoSupport().reconstructObject(memento);
+        return getMementoService().reconstructObject(memento);
     }
     
     // -- COMMON CONTEXT PROVIDER INTERFACE
@@ -128,8 +128,8 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
             return getCommonContext().getSpecificationLoader();
         }
         
-        default ObjectAdapterMementoSupport getMementoSupport() {
-            return getCommonContext().getMementoSupport();
+        default ObjectAdapterMementoService getMementoService() {
+            return getCommonContext().getMementoService();
         }
         
         default Function<Object, ManagedObject> getPojoToAdapter() {

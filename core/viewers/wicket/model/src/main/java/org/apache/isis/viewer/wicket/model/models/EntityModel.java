@@ -341,7 +341,7 @@ implements ObjectAdapterModel, UiHintContainer {
     @Override
     public void setObject(ManagedObject adapter) {
         super.setObject(adapter);
-        adapterMemento = ObjectAdapterMemento.ofAdapter(adapter, super.getMementoSupport());
+        adapterMemento = super.getMementoService().mementoForAdapter(adapter); 
     }
 
     public void setObjectMemento(final ObjectAdapterMemento adapterMemento) {
@@ -491,7 +491,7 @@ implements ObjectAdapterModel, UiHintContainer {
                 return pending;
             }
             val adapter = entityModel.getObject();
-            return ObjectAdapterMemento.ofAdapter(adapter, entityModel.getMementoSupport());
+            return entityModel.getMementoService().mementoForAdapter(adapter);
         }
 
         @Override

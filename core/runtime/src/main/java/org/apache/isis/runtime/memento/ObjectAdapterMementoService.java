@@ -18,22 +18,38 @@
  */
 package org.apache.isis.runtime.memento;
 
+import java.util.stream.Collectors;
+
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
+
+import lombok.val;
 
 /**
  * @since 2.0
  * 
  *
  */
-public interface ObjectAdapterMementoSupport {
+public interface ObjectAdapterMementoService {
 
     ObjectAdapterMemento mementoForRootOid(RootOid rootOid);
 
     ObjectAdapterMemento mementoForAdapter(ManagedObject adapter);
 
     ObjectAdapterMemento mementoForPojo(Object pojo);
+    
+    default ObjectAdapterMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId) {
+        val listOfMementos = _NullSafe.stream(iterablePojos)
+                .map(pojo->mementoForPojo(pojo))
+                .collect(Collectors.toList());
+        val memento =
+                ObjectAdapterMemento.wrapMementoList(listOfMementos, specId);
+        return memento;
+    }
 
     ManagedObject reconstructObject(ObjectAdapterMemento memento);
+    
 
 }
