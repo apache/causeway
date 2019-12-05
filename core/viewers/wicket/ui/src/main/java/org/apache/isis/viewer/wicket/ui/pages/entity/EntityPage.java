@@ -67,7 +67,7 @@ public class EntityPage extends PageAbstract {
 
     /**
      * Called reflectively, in support of {@link BookmarkablePageLink} links. 
-     * Specifically handled by {@link org.apache.isis.viewer.wicket.viewer.IsisWicketApplication_newPageFactory}
+     * Specifically handled by {@link org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication_newPageFactory}
      */
     public static EntityPage bookmarked(
             IsisWebAppCommonContext commonContext, 

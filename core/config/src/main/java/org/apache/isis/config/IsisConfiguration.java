@@ -674,7 +674,7 @@ public class IsisConfiguration {
         @Data
         public static class Wicket {
 
-            private String app = "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication";
+            private String app = "org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication";
 
             /**
              * Whether the Ajax debug should be shown.
