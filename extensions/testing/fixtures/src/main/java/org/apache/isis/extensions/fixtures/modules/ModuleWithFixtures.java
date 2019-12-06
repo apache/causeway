@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 
 /**
- * A module is a class that implements this {@link Module} interface, but in addition is expected to be annotated with
+ * A module is a class that implements this {@link ModuleWithFixtures} interface, but in addition is expected to be annotated with
  * {@link Configuration @Configuration} and which defines a dependency other modules by {@link Import @Import}ing them,
  * and conversely may be a dependency of other modules if they import it.
  *
@@ -19,7 +19,7 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
  * </p>
  *
  * <p>
- *     Optionally, the <code>@Configuration</code> class can implements this {@link Module} interface.
+ *     Optionally, the <code>@Configuration</code> class can implements this {@link ModuleWithFixtures} interface.
  *     Doing so allows it to declare setup and teardown fixtures, eg to set up permanent ref data or to teardown
  *     test entities within the module.
  * </p>
@@ -28,7 +28,7 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
  *     inferred from the <code>@Configuration</code> imports.
  * </p>
  */
-public interface Module {
+public interface ModuleWithFixtures {
 
     /**
      * Optionally each module can define a {@link FixtureScript} which holds immutable "reference data".

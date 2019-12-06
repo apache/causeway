@@ -40,6 +40,7 @@ import org.apache.isis.metamodel.facets.Annotations;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Log4j2
@@ -51,29 +52,29 @@ public class ModuleService {
         this.springBeansService = springBeansService;
     }
 
-    public List<ModuleDescriptor> modules() {
+    public List<ModuleWithFixturesDescriptor> modules() {
 
-        final List<ModuleDescriptor> moduleDescriptors = new ArrayList<>();
+        final List<ModuleWithFixturesDescriptor> descriptors = new ArrayList<>();
         final Map<String, ContextBeans> contexts = springBeansService.beans();
         for (Map.Entry<String, ContextBeans> contextEntry : contexts.entrySet()) {
             final String contextId = contextEntry.getKey();
             final ContextBeans contextBeans = contextEntry.getValue();
             final ConfigurableApplicationContext context = contextBeans.getContext();
 
-            final Map<String, Module> modulesByBeanName = context.getBeansOfType(Module.class);
+            final Map<String, ModuleWithFixtures> modulesByBeanName = context.getBeansOfType(ModuleWithFixtures.class);
             final Map<String, Object> configurationBeansByBeanName = context.getBeansWithAnnotation(Configuration.class);
             final Map<String, Object> beansAnnotatedWithImportByBeanName = context.getBeansWithAnnotation(Import.class);
 
             for (Map.Entry<String, BeanDescriptor> beanEntry : contextBeans.getBeans().entrySet()) {
                 final String beanName = beanEntry.getKey();
 
-                final Module module = modulesByBeanName.get(beanName);
+                final ModuleWithFixtures module = modulesByBeanName.get(beanName);
                 if(module != null) {
 
                     final Object annotatedWithConfiguration = configurationBeansByBeanName.get(beanName);
                     final Object annotatedWithImport = beansAnnotatedWithImportByBeanName.get(beanName);
 
-                    final Map<String, Module> importedModulesByBeanName = new LinkedHashMap<>();
+                    final Map<String, ModuleWithFixtures> importedModulesByBeanName = new LinkedHashMap<>();
                     if(annotatedWithConfiguration != null && annotatedWithImport != null) {
 
                         final Import importAnnot = Annotations.getAnnotation(annotatedWithImport.getClass(), Import.class);
@@ -90,40 +91,39 @@ public class ModuleService {
                                             beanCollection = Collections.singletonList(entryValue);
                                         }
                                         beanCollection.stream()
-                                                .filter(Module.class::isInstance)
-                                                .map(Module.class::cast)
+                                                .filter(ModuleWithFixtures.class::isInstance)
+                                                .map(ModuleWithFixtures.class::cast)
                                                 .forEach(mod -> importedModulesByBeanName.put(name, mod));
                                     });
                                 });
                     }
 
-                    final ModuleDescriptor moduleDescriptor = new ModuleDescriptor(contextId, beanName, module, importedModulesByBeanName);
-                    moduleDescriptors.add(moduleDescriptor);
+                    val descriptor = new ModuleWithFixturesDescriptor(contextId, beanName, module, importedModulesByBeanName);
+                    descriptors.add(descriptor);
                 }
             }
         }
-        return moduleDescriptors;
+        return descriptors;
     }
 
     @EventListener(ContextRefreshedEvent.class)
     public void onContextRefreshed(ContextRefreshedEvent event) {
         log.info("onContextRefreshed");
-        final List<ModuleDescriptor> modules = modules();
-        for (final ModuleDescriptor module : modules) {
-            log.info(module);
+        for (final ModuleWithFixturesDescriptor descriptor : modules()) {
+            log.info(descriptor);
         }
     }
 
     @Data
-    public static class ModuleDescriptor {
+    public static class ModuleWithFixturesDescriptor {
         private final String contextId;
         private final String beanName;
-        private final Module module;
-        private final Map<String,Module> dependenciesByName;
+        private final ModuleWithFixtures module;
+        private final Map<String, ModuleWithFixtures> dependenciesByName;
 
         @Override
         public String toString() {
-            return "ModuleDescriptor{" +
+            return "ModuleWithFixturesDescriptor{" +
                     "contextId='" + contextId + '\'' +
                     ", beanName='" + beanName + '\'' +
                     ", dependenciesByName=" + dependenciesByName.keySet() +

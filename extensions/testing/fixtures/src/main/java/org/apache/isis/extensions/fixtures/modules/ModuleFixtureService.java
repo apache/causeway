@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +25,11 @@ public class ModuleFixtureService {
         return new FixtureScript() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
-                final List<ModuleService.ModuleDescriptor> modules = moduleService.modules();
+                final List<ModuleService.ModuleWithFixturesDescriptor> descriptors = moduleService.modules();
                 executionContext.executeChildren(this,
-                        modules.stream()
-                        .map(ModuleService.ModuleDescriptor::getModule)
-                        .map(Module::getRefDataSetupFixture));
+                        descriptors.stream()
+                        .map(ModuleService.ModuleWithFixturesDescriptor::getModule)
+                        .map(ModuleWithFixtures::getRefDataSetupFixture));
             }
         };
     }
@@ -40,12 +38,12 @@ public class ModuleFixtureService {
         return new FixtureScript() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
-                final List<ModuleService.ModuleDescriptor> modules = moduleService.modules();
-                Collections.reverse(modules);
+                final List<ModuleService.ModuleWithFixturesDescriptor> descriptors = moduleService.modules();
+                Collections.reverse(descriptors);
                 executionContext.executeChildren(this,
-                        modules.stream()
-                            .map(ModuleService.ModuleDescriptor::getModule)
-                            .map(Module::getTeardownFixture));
+                        descriptors.stream()
+                            .map(ModuleService.ModuleWithFixturesDescriptor::getModule)
+                            .map(ModuleWithFixtures::getTeardownFixture));
             }
 
         };
