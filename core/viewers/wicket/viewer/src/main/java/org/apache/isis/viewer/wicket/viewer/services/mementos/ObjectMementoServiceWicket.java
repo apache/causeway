@@ -49,9 +49,9 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisRuntimeServices.ObjectMementoServiceDefault")
+@Named("isisWicketViewer.ObjectMementoServiceWicket")
 @Singleton
-public class ObjectMementoServiceDefault
+public class ObjectMementoServiceWicket
 implements ObjectMementoService {
 
     @Inject @Getter private SpecificationLoader specificationLoader;
