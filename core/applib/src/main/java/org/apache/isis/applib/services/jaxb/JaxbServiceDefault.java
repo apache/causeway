@@ -30,6 +30,9 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.NonRecoverableException;
@@ -42,6 +45,8 @@ import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 
 @Service
 @Named("isisApplib.JaxbServiceDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class JaxbServiceDefault extends JaxbService.Simple {
 

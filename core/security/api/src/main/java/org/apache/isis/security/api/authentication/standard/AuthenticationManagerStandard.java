@@ -27,6 +27,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
@@ -38,6 +39,8 @@ import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.api.authentication.manager.RegistrationDetails;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -48,6 +51,8 @@ import lombok.val;
 
 @Service
 @Named("isisSecurityApi.AuthenticationManagerStandard")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class AuthenticationManagerStandard implements AuthenticationManager {
 

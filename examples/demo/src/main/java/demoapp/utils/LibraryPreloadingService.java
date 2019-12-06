@@ -19,6 +19,7 @@
 package demoapp.utils;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -26,9 +27,12 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.extensions.asciidoc.applib.value.AsciiDoc;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
+@Named("demoapp.LibraryPreloadingService")
+@Log4j2
 public class LibraryPreloadingService {
 
     @PostConstruct

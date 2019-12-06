@@ -23,6 +23,9 @@ import lombok.extern.log4j.Log4j2;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.RecoverableException;
@@ -34,6 +37,8 @@ import org.apache.isis.security.api.authentication.MessageBroker;
 
 @Service
 @Named("isisRuntimeServices.MessageServiceDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class MessageServiceDefault implements MessageService {
 

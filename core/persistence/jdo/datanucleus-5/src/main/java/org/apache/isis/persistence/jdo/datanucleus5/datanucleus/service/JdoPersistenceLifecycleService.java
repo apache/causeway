@@ -20,8 +20,12 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.context._Context;
@@ -37,7 +41,11 @@ import org.apache.isis.runtime.system.session.IsisSession;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service
+@Named("isisJdoDn5.JdoPersistenceLifecycleService")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Log4j2
 public class JdoPersistenceLifecycleService {
 
     @Inject private MetaModelContext metaModelContext;

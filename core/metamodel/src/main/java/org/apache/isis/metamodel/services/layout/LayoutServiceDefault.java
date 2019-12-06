@@ -26,6 +26,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.Marshaller;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.layout.grid.Grid;
@@ -46,6 +49,8 @@ import lombok.val;
 
 @Service
 @Named("isisMetaModel.LayoutServiceDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class LayoutServiceDefault implements LayoutService {
 

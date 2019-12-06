@@ -26,9 +26,12 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.config.IsisConfiguration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 /**
@@ -44,6 +47,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Named("isisJdoDn5.ExceptionRecognizerCompositeForJdoObjectStore")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 

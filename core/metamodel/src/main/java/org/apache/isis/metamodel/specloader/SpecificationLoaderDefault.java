@@ -29,6 +29,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Blackhole;
@@ -59,6 +60,8 @@ import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecif
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import lombok.Getter;
@@ -83,6 +86,8 @@ import static org.apache.isis.commons.internal.base._With.requires;
  */
 @Service
 @Named("isisMetaModel.SpecificationLoaderDefault")
+@Order(OrderPrecedence.HIGH)
+@Primary
 @Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
 

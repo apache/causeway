@@ -34,9 +34,12 @@ import org.apache.commons.mail.resolver.DataSourceClassPathResolver;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
@@ -46,6 +49,8 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isisRuntimeServices.EmailServiceDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class EmailServiceDefault implements EmailService {
 

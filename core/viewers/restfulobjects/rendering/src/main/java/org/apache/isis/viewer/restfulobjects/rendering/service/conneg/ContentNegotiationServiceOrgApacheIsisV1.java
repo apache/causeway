@@ -26,6 +26,8 @@ import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -56,7 +58,7 @@ import lombok.val;
 
 @Service
 @Named("isisRoRendering.ContentNegotiationServiceOrgApacheIsisV1")
-@Order(200) //in effect, is the relative priority (lower numbers have higher priority)
+@Order(OrderPrecedence.DEFAULT + 200)
 @Log4j2
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 

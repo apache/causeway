@@ -18,14 +18,20 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -40,6 +46,10 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNeg
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
 @Service
+@Named("isisRoRendering.RepresentationServiceContentNegotiator")
+@Order(OrderPrecedence.HIGH)
+@Primary
+@Log4j2
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
     @Inject List<ContentNegotiationService> contentNegotiationServices;

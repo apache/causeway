@@ -29,8 +29,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
@@ -44,7 +48,11 @@ import lombok.extern.log4j.Log4j2;
 /**
  * An implementation that reads from /WEB-INF/...
  */
-@Service @Log4j2
+@Service
+@Named("isisWicketViewer.TranslationsResolverWicket")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Log4j2
 public class TranslationsResolverWicket implements TranslationsResolver {
 
     /**

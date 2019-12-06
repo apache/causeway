@@ -18,12 +18,16 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +55,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
  * </p>
  */
 @Service
-@Order(100) //in effect, is the relative priority (lower numbers have higher priority)
+@Named("isisRoRendering.ContentNegotiationServiceXRoDomainType")
+@Order(OrderPrecedence.DEFAULT + 100)
+@Log4j2
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
 
     public static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";

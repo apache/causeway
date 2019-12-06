@@ -24,11 +24,15 @@ import java.util.Objects;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.jdo.listener.StoreLifecycleListener;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Blackhole;
@@ -56,7 +60,12 @@ import lombok.extern.log4j.Log4j2;
  * Factory for {@link PersistenceSession}.
  *
  */
-@Service @Singleton @Log4j2
+@Service
+@Named("isisJdoDn5.PersistenceSessionFactory5")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Singleton
+@Log4j2
 public class PersistenceSessionFactory5
 implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     

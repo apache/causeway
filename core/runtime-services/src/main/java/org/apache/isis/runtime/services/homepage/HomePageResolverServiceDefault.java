@@ -22,13 +22,12 @@ import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.ViewModel;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -51,6 +50,8 @@ import lombok.val;
 
 @Service
 @Named("isisRuntimeServices.HomePageResolverServiceDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 

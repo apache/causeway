@@ -25,6 +25,9 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
@@ -38,6 +41,8 @@ import org.apache.isis.config.IsisConfiguration;
 
 @Service
 @Named("isisRuntimeServices.TranslationServicePo")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class TranslationServicePo implements TranslationService {
 

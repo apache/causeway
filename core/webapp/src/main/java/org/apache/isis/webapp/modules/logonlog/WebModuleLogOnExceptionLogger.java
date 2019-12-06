@@ -18,6 +18,9 @@
  */
 package org.apache.isis.webapp.modules.logonlog;
 
+import lombok.extern.log4j.Log4j2;
+
+import javax.inject.Named;
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
@@ -42,7 +45,10 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
  * 
  * @since 2.0
  */
-@Service @Order(Ordered.LOWEST_PRECEDENCE)
+@Service
+@Named("isisWebapp.WebModuleLogOnExceptionLogger")
+@Order(Ordered.LOWEST_PRECEDENCE) // TODO: should this not be the highest precedence, ie first in stack?
+@Log4j2
 public final class WebModuleLogOnExceptionLogger implements WebModule  {
 
     private final static String LOGONLOGGER_FILTER_CLASS_NAME = IsisLogOnExceptionFilter.class.getName();

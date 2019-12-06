@@ -26,6 +26,9 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 public interface TableColumnOrderService {
@@ -45,6 +48,8 @@ public interface TableColumnOrderService {
      */
     @Service
     @Named("isisApplib.TableColumnOrderService.Default")
+    @Order(OrderPrecedence.LOW)
+    @Primary
     @Log4j2
     public static class Default implements TableColumnOrderService {
 

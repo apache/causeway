@@ -22,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +40,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("demoapp.eventSubscriber")
+@Qualifier("demo")
 @Log4j2
 public class EventSubscriber {
 

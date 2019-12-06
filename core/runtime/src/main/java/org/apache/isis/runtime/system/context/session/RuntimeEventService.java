@@ -18,9 +18,14 @@
  */
 package org.apache.isis.runtime.system.context.session;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -34,6 +39,9 @@ import org.apache.isis.runtime.system.session.IsisSession;
  */
 @Service
 @Named("isisRuntime.RuntimeEventService")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Log4j2
 public class RuntimeEventService {
     
     @Inject private EventBusService eventBusService;  

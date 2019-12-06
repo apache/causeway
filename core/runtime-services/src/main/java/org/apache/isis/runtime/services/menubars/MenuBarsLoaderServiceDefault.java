@@ -24,7 +24,10 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.AbstractResource;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +43,8 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntimeServices.MenuBarsLoaderServiceDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 

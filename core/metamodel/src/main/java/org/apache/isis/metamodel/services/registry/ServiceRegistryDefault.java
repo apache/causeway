@@ -29,6 +29,7 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -38,6 +39,8 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
@@ -48,6 +51,8 @@ import lombok.val;
  */
 @Service
 @Named("isisMetaModel.ServiceRegistryDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public final class ServiceRegistryDefault implements ServiceRegistry {
     

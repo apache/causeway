@@ -19,8 +19,12 @@
 package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
@@ -39,7 +43,12 @@ import org.apache.isis.security.api.authentication.AuthenticationSession;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2 @Qualifier("jdo")
+@Service
+@Named("isisJdoDn5.IsisPlatformTransactionManagerForJdo")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Qualifier("jdo")
+@Log4j2
 public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransactionManager {
 
     private static final long serialVersionUID = 1L;

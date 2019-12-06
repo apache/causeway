@@ -26,6 +26,9 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.audit.AuditerService;
@@ -37,6 +40,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.metamodel.facets.object.audit.AuditableFacet;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -44,6 +48,9 @@ import lombok.val;
  */
 @Service
 @Named("isisRuntime.AuditingServiceInternal")
+@Order(OrderPrecedence.HIGH)
+@Primary
+@Log4j2
 public class AuditingServiceInternal {
     
     @Inject private List<AuditerService> auditerServices;

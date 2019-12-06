@@ -23,6 +23,9 @@ import lombok.extern.log4j.Log4j2;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
@@ -37,6 +40,8 @@ import static org.apache.isis.commons.internal.resources._Resources.prependConte
 
 @Service
 @Named("isisMetaModel.swaggerServiceDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class SwaggerServiceDefault implements SwaggerService {
 

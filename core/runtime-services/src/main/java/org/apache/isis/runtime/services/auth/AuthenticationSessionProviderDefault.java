@@ -25,6 +25,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.metamodel.services.user.UserServiceDefault;
@@ -36,6 +39,8 @@ import org.apache.isis.security.api.authentication.standard.SimpleSession;
 
 @Service
 @Named("isisRuntimeServices.AuthenticationSessionProviderDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 

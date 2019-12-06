@@ -21,7 +21,10 @@ package org.apache.isis.runtime.system.persistence.events;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.mixins.timestamp.HoldsUpdatedAt;
@@ -35,6 +38,8 @@ import lombok.val;
 
 @Service
 @Named("isisRuntime.TimestampService")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class TimestampService {
 

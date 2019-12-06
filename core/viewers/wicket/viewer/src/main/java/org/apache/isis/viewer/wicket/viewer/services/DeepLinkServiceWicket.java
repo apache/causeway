@@ -18,15 +18,21 @@
  */
 package org.apache.isis.viewer.wicket.viewer.services;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.linking.DeepLinkService;
@@ -41,6 +47,10 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
  * for Wicket Viewer
  */
 @Service
+@Named("isisWicketViewer.DeepLinkServiceWicket")
+@Order(OrderPrecedence.HIGH)
+@Primary
+@Log4j2
 public class DeepLinkServiceWicket implements DeepLinkService {
 
     @Inject private PageClassRegistry pageClassRegistry;

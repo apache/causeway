@@ -18,11 +18,15 @@
  */
 package org.apache.isis.webapp.modules.templresources;
 
+import lombok.extern.log4j.Log4j2;
+
+import javax.inject.Named;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +38,10 @@ import org.apache.isis.webapp.modules.WebModuleContext;
  * 
  * @since 2.0
  */
-@Service @Order(-100)
+@Service
+@Named("isisWebapp.WebModuleTemplateResources")
+@Order(OrderPrecedence.DEFAULT - 100)
+@Log4j2
 public final class WebModuleTemplateResources implements WebModule  {
 
     private final static String[] urlPatterns = { "*.thtml" };

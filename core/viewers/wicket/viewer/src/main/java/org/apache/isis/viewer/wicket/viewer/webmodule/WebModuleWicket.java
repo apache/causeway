@@ -18,14 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.viewer.webmodule;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.protocol.http.WicketFilter;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +50,11 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
  * WebModule that provides the Wicket Viewer.
  * @since 2.0
  */
-@Service @Order(-80)
+@Service
+@Named("isisWicketViewer.WebModuleWicket")
+@Order(OrderPrecedence.DEFAULT - 80)
+@Primary
+@Log4j2
 public final class WebModuleWicket implements WebModule  {
 
     private final static String WICKET_FILTER_CLASS_NAME = WicketFilter.class.getName();

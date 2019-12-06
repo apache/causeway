@@ -24,6 +24,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
 import org.springframework.core.annotation.Order;
@@ -52,7 +53,7 @@ import lombok.val;
  */
 @Service
 @Named("isisRoViewer.WebModuleRestfulObjects")
-@Order(-80)
+@Order(OrderPrecedence.DEFAULT - 80)
 @Log4j2
 public final class WebModuleRestfulObjects implements WebModule  {
 

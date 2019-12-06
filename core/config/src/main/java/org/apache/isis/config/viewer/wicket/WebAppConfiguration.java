@@ -25,6 +25,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.AbstractResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,8 @@ import lombok.val;
 @Service
 @Singleton
 @Named("isisConfig.WebAppConfiguration")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class WebAppConfiguration {
     

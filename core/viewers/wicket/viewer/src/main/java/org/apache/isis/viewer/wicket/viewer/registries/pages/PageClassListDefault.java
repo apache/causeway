@@ -19,7 +19,14 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
+import lombok.extern.log4j.Log4j2;
+
+import javax.inject.Named;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.Page;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -42,6 +49,10 @@ import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
  * for each of the {@link PageType}s.
  */
 @Service
+@Named("isisWicketViewer.PageClassListDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Log4j2
 public class PageClassListDefault implements PageClassList {
 
     private static final long serialVersionUID = 1L;

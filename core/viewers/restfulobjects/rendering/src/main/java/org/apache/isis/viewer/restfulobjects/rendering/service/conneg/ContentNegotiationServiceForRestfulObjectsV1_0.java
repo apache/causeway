@@ -32,6 +32,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -59,6 +60,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
@@ -66,6 +69,8 @@ import lombok.val;
 
 @Service
 @Named("isisRoRendering.ContentNegotiationServiceForRestfulObjectsV1_0")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
 

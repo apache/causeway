@@ -28,6 +28,9 @@ import javax.inject.Named;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.layout.grid.Grid;
@@ -43,6 +46,8 @@ import org.apache.isis.commons.internal.collections._Arrays;
  */
 @Service
 @Named("isisMetaModel.GridReaderUsingJaxb")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class GridReaderUsingJaxb {
 

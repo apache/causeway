@@ -25,9 +25,11 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.context._Context;
@@ -46,8 +48,10 @@ import lombok.extern.log4j.Log4j2;
  * @implNote acts as the framework's bootstrapping entry-point for Spring  
  */
 @Service
-@Singleton
 @Named("isisCommons.IsisSystemEnvironment")
+@Order(-1_073_741_824) // same as OrderedPrecedence#HIGH
+@Primary
+@Singleton
 @Log4j2
 public class IsisSystemEnvironment {
     

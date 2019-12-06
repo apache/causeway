@@ -35,14 +35,19 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 @Service
 @Named("isisRoRendering.AcceptHeaderServiceForRest")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @RequestScoped
 @Log4j2
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {

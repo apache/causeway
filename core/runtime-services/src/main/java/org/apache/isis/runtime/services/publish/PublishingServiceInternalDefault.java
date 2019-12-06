@@ -34,6 +34,7 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
@@ -49,14 +50,18 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
  */
 @Service
-@RequestScoped
 @Named("isisRuntimeServices.PublishingServiceInternalDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@RequestScoped
 @Log4j2
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 

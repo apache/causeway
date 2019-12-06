@@ -20,7 +20,11 @@
 package org.apache.isis.viewer.wicket.viewer.services;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -28,8 +32,13 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 @Service
+@Named("isisWicketViewer.WicketViewerSettingsDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Log4j2
 public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     private static final long serialVersionUID = 1L;

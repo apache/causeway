@@ -19,8 +19,15 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.ServiceLoader;
 
+import javax.inject.Named;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.context._Plugin;
@@ -95,6 +102,10 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.Enti
  * <tt>META-INF/services</tt>).
  */
 @Service
+@Named("isisWicketViewer.ComponentFactoryRegistrarDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Log4j2
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
     
     @Override

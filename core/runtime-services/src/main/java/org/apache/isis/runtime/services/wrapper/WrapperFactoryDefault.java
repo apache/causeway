@@ -32,6 +32,9 @@ import java.util.function.BiConsumer;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -77,6 +80,8 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isisRuntimeServices.WrapperFactoryDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
 

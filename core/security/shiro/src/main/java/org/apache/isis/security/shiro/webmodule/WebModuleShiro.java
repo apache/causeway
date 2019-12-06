@@ -22,11 +22,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Named;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
@@ -51,6 +53,7 @@ import static org.apache.isis.commons.internal.context._Context.getDefaultClassL
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -59,8 +62,11 @@ import lombok.val;
  * Can be customized via static {@link WebModuleShiro#setShiroEnvironmentClass(Class)}
  * @since 2.0
  */
-@Service @Order(Ordered.HIGHEST_PRECEDENCE + 100)
-public final class WebModuleShiro implements WebModule  {
+@Service
+@Named("isisSecKeycloak.WebModuleKeycloak")
+@Order(OrderPrecedence.HIGHEST + 200)
+@Log4j2
+public class WebModuleShiro implements WebModule  {
     
     private final static String SHIRO_LISTENER_CLASS_NAME = EnvironmentLoaderListenerForIsis.class.getName();
     private final static String SHIRO_FILTER_CLASS_NAME = ShiroFilter.class.getName();

@@ -25,8 +25,11 @@ import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -38,6 +41,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
  */
 @Service
 @Named("isisMetaModel.ServiceInjectorDefault")
+@Order(OrderPrecedence.HIGH)
+@Primary
 @Log4j2
 public class ServiceInjectorDefault implements ServiceInjector {
 

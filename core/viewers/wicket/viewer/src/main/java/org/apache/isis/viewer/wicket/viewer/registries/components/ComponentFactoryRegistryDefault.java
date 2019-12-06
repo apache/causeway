@@ -26,10 +26,14 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Lists;
@@ -45,6 +49,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.C
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -52,6 +57,10 @@ import lombok.val;
  * provided {@link ComponentFactoryRegistrar}.
  */
 @Service
+@Named("isisWicketViewer.ComponentFactoryRegistryDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Log4j2
 public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry {
 
     @Inject private ComponentFactoryRegistrar componentFactoryRegistrar;

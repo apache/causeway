@@ -22,6 +22,9 @@ package org.apache.isis.metamodel.services.title;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.title.TitleService;
@@ -34,6 +37,8 @@ import lombok.val;
 
 @Service
 @Named("isisMetaModel.TitleServiceDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class TitleServiceDefault implements TitleService {
 

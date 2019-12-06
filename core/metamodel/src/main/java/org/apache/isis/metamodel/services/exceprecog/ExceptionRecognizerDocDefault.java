@@ -26,6 +26,9 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.RecoverableException;
@@ -36,6 +39,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 
 @Service
 @Named("isisMetaModel.ExceptionRecognizerDocDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class ExceptionRecognizerDocDefault
 implements ExceptionRecognizer {
@@ -69,8 +74,7 @@ implements ExceptionRecognizer {
 
     /**
      * Framework-provided implementation of {@link ExceptionRecognizer},
-     * which will automatically recognize any {@link org.apache.isis.applib.RecoverableException}s or
-     * any {@link ConcurrencyException}s.
+     * which will automatically recognize any {@link org.apache.isis.applib.RecoverableException}s.
      */
     @Override
     public String recognize(Throwable ex) {

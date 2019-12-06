@@ -25,13 +25,18 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.userprof.UserProfileService;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 @Service
 @Named("isisRuntimeServices.UserProfileServiceDefault")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
 @Log4j2
 public class UserProfileServiceDefault implements UserProfileService {
 

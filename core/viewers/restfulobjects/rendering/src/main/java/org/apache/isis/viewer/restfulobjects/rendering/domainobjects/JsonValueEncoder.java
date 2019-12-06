@@ -25,10 +25,14 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -43,6 +47,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 
@@ -50,7 +55,12 @@ import lombok.val;
  * Similar to Isis' value encoding, but with additional support for JSON
  * primitives.
  */
-@Service @Singleton
+@Service
+@Named("isisRoRendering.JsonValueEncoder")
+@Order(OrderPrecedence.HIGH)
+@Primary
+@Singleton
+@Log4j2
 public class JsonValueEncoder {
 
     @Inject private SpecificationLoader specificationLoader;

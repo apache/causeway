@@ -28,13 +28,18 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.CommandsDto;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 @Service
 @Named("isisApplib.ContentMappingServiceForCommandsDto")
+@Order(OrderPrecedence.HIGH)
+@Primary
 @Log4j2
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 

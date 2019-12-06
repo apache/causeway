@@ -24,6 +24,7 @@ import java.util.concurrent.Callable;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -32,6 +33,8 @@ import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
@@ -48,6 +51,8 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isisApplib.QueryResultsCacheInternal")
+@Order(OrderPrecedence.HIGH)
+@Primary
 @RequestScoped
 @Log4j2
 public class QueryResultsCacheInternal implements QueryResultsCache, WithTransactionScope {

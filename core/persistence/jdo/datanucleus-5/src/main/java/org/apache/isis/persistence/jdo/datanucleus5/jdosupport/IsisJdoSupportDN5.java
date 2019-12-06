@@ -19,6 +19,8 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.jdosupport;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -29,13 +31,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jdo.Extent;
 import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
 import javax.jdo.query.BooleanExpression;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.FatalException;
@@ -56,6 +62,10 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
  *
  */
 @Service
+@Named("isisJdoDn5.IsisJdoSupportDN5")
+@Order(OrderPrecedence.DEFAULT)
+@Primary
+@Log4j2
 public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
 
