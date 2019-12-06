@@ -37,7 +37,7 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleSecmanEncr
 import org.apache.isis.extensions.secman.jdo.IsisModuleSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleSecmanRealmShiro;
-import org.apache.isis.extensions.sse.IsisBootSse;
+import org.apache.isis.extensions.sse.IsisModuleExtSse;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
@@ -60,7 +60,7 @@ import demoapp.utils.LibraryPreloadingService;
     IsisModuleSecurityShiro.class,
     IsisModuleJdoDataNucleus5.class,
     IsisModuleWicketViewer.class,
-    IsisBootSse.class, // server sent events
+    IsisModuleExtSse.class, // server sent events
     IsisModuleRestfulObjectsViewer.class,
 
     // Security Manager Extension (secman)

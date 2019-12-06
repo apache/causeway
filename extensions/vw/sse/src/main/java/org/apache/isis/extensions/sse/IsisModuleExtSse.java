@@ -30,6 +30,6 @@ import org.apache.isis.extensions.sse.services.SseServiceDefault;
     SseServiceDefault.class,
     WebModuleServerSentEvents.class
 })
-public class IsisBootSse {
+public class IsisModuleExtSse {
 
 }
