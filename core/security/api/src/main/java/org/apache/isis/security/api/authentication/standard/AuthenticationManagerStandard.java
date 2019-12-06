@@ -37,12 +37,14 @@ import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.api.authentication.manager.RegistrationDetails;
+import org.springframework.stereotype.Service;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.val;
 
+@Service
 public class AuthenticationManagerStandard implements AuthenticationManager {
 
     @Inject private ServiceRegistry serviceRegistry;
