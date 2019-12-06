@@ -19,11 +19,13 @@
 package org.apache.isis.testdomain.bootstrapping;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -62,10 +64,25 @@ import lombok.val;
 class SpringServiceProvisioningTest {
     
     @Inject private ServiceRegistry serviceRegistry; 
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
 
     @BeforeEach
     void beforeEach() {
 
+    }
+
+    @Test
+    void dump_all() throws IOException {
+
+        final List<String> beans = isisSystemEnvironment.getIocContainer().streamAllBeans()
+                .map(ManagedBeanAdapter::getId)
+                .sorted()
+                .collect(Collectors.toList());
+
+        val beansFound = toStringJoiningNewLine(beans);
+        System.out.println("--- Beans discovered by Isis ---");
+        System.out.println(beansFound);
+        System.out.println("--------------------------------");
     }
 
     @Test
@@ -84,7 +101,7 @@ class SpringServiceProvisioningTest {
         assertFalse(expectedSingletons.isEmpty());
         
         val servicesFound = toStringJoiningNewLine(managedServices);
-        System.out.println("--- Beans discovered by Isis ---");
+        System.out.println("--- Services discovered by Isis ---");
         System.out.println(servicesFound);
         System.out.println("--------------------------------");
         

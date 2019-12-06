@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.jaxb;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -37,7 +38,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 
-@Service
+@Service @Named("jaxbServiceDefault")
 public class JaxbServiceDefault extends JaxbService.Simple {
 
     @Override

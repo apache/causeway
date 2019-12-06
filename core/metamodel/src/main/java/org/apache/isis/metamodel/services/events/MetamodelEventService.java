@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.services.events;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ import lombok.Builder;
  */
 @Service 
 @Builder //for JUnit Test support
+@Named("metamodelEventService")
 public class MetamodelEventService {
 
     @Inject Event<CssClassUiEvent<Object>> cssClassUiEvents;

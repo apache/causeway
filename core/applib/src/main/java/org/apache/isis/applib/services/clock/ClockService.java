@@ -23,6 +23,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
+import javax.inject.Named;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.clock.Clock;
@@ -33,7 +35,7 @@ import org.apache.isis.applib.clock.Clock;
  * co-ordinated time management through a centralized time service.
  *
  */
-@Service
+@Service @Named("clockService")
 public class ClockService {
 
     public LocalDate now() {

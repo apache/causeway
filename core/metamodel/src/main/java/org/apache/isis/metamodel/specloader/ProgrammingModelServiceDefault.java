@@ -19,6 +19,7 @@
 package org.apache.isis.metamodel.specloader;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service @Log4j2 @Named("programmingModelServiceDefault")
 public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     @Override

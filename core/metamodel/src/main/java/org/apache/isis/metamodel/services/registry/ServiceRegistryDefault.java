@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -43,7 +44,7 @@ import lombok.val;
 /**
  * @since 2.0
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(nature = NatureOfService.DOMAIN) @Named("serviceRegistryDefault")
 public final class ServiceRegistryDefault implements ServiceRegistry {
     
     // enforces provisioning order (this is a depends-on relationship) 

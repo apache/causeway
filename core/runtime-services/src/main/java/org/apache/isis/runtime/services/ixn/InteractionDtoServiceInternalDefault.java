@@ -22,6 +22,7 @@ package org.apache.isis.runtime.services.ixn;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -48,6 +49,7 @@ import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 @DomainService(
         nature = NatureOfService.DOMAIN
         )
+@Named("interactionDtoServiceInternalDefault")
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 
     @Inject CommandDtoServiceInternal commandDtoServiceInternal;

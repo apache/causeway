@@ -19,6 +19,7 @@
 package org.apache.isis.runtime.memento;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ import lombok.val;
  * @since 2.0 
  *
  */
-@Service @Singleton
+@Service @Singleton @Named("objectAdapterMementoServiceDefault")
 public class ObjectAdapterMementoServiceDefault 
 implements ObjectAdapterMementoService {
     

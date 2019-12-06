@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -53,7 +54,7 @@ import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
 @DomainService(
         nature = NatureOfService.DOMAIN
         )
-@RequestScoped
+@RequestScoped @Named("publishingServiceInternalDefault")
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 
 

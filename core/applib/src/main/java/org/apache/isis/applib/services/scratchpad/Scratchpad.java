@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.scratchpad;
 import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -39,7 +40,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 @DomainService(
         nature = NatureOfService.DOMAIN
         )
-@RequestScoped
+@RequestScoped @Named("scratchpad")
 public class Scratchpad {
 
     /**

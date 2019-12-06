@@ -21,12 +21,14 @@ package org.apache.isis.metamodel.services.swagger.internal;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Named;
+
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component @Named("classExcluderDefault")
 public class ClassExcluderDefault extends ClassExcluderAbstract {
 
     public ClassExcluderDefault() {

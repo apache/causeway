@@ -30,6 +30,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -74,7 +75,7 @@ import lombok.extern.log4j.Log4j2;
  * be interacted with, while enforcing the hide/disable/validate rules as implied by
  * the Isis programming model.
  */
-@Service @Log4j2
+@Service @Log4j2 @Named("wrapperFactoryDefault")
 public class WrapperFactoryDefault implements WrapperFactory {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();

@@ -20,6 +20,7 @@
 package org.apache.isis.metamodel.services.title;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 
-@Service
+@Service @Named("titleServiceDefault")
 public class TitleServiceDefault implements TitleService {
 
     @Inject private WrapperFactory wrapperFactory;

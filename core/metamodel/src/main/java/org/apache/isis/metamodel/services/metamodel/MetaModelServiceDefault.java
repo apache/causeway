@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -52,7 +53,7 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
-@Service
+@Service @Named("metaModelServiceDefault")
 public class MetaModelServiceDefault implements MetaModelService {
 
     private MetaModelExporter metaModelExporter;

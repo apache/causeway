@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.iactn;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ import org.apache.isis.applib.annotation.DomainService;
  * {@link DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@RequestScoped @Service
+@RequestScoped @Service @Named("interactionContext")
 public class InteractionContext {
 
     private Interaction interaction;

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.Marshaller;
 
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 
-@Service
+@Service @Named("layoutServiceDefault")
 public class LayoutServiceDefault implements LayoutService {
 
     @Override

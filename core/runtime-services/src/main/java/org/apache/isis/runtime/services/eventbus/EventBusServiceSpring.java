@@ -19,13 +19,14 @@
 package org.apache.isis.runtime.services.eventbus;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 
-@Service
+@Service @Named("eventBusServiceSpring")
 public class EventBusServiceSpring implements EventBusService {
 
     @Inject private ApplicationEventPublisher applicationEventPublisher;

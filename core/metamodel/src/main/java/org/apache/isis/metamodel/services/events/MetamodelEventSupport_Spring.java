@@ -19,6 +19,7 @@
 package org.apache.isis.metamodel.services.events;
 
 import javax.enterprise.event.Event;
+import javax.inject.Named;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +34,7 @@ import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 
-@Configuration
+@Configuration @Named("metamodelEventSupport_Spring")
 public class MetamodelEventSupport_Spring {
 
     @Bean

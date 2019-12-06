@@ -22,6 +22,7 @@ package org.apache.isis.runtime.services.xactn;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -41,7 +42,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Log4j2
+@Log4j2 @Named("transactionServiceSpring")
 public class TransactionServiceSpring implements TransactionService {
 
     // single TransactionTemplate shared amongst all methods in this instance

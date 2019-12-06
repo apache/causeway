@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.services;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -33,7 +34,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
  * @since 2.0
  *
  */
-@Service
+@Service @Named("serviceInjectorDefault")
 public class ServiceInjectorDefault implements ServiceInjector {
 
     @Inject private AutowireCapableBeanFactory autowireCapableBeanFactory;

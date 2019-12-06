@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.val;
 
-@RequestScoped @Service 
+@RequestScoped @Service @Named("changedObjectsServiceInternal")
 public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
     /**

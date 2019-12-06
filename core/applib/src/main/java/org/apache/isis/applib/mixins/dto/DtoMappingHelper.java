@@ -19,6 +19,7 @@
 package org.apache.isis.applib.mixins.dto;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -28,7 +29,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(nature = NatureOfService.DOMAIN) @Named("dtoMappingHelper")
 public class DtoMappingHelper {
 
     public OidDto oidDtoFor(final Object object) {

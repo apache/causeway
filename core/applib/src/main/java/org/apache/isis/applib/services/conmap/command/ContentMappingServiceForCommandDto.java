@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.core.annotation.Order;
@@ -40,7 +41,7 @@ import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(nature = NatureOfService.DOMAIN) @Named("contentMappingServiceForCommandDto")
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
     @Override
@@ -100,6 +101,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
     // specify quite a high priority since custom processors will probably want to run after this one
     // (but can choose to run before if they wish)
     @Order(-1000)
+    @Named("contentMappingServiceForCommandDto.CopyOverFromCommand")
     public static class CopyOverFromCommand implements CommandDtoProcessorService {
 
         @Override

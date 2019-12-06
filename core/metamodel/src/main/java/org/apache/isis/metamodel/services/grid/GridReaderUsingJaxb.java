@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
@@ -38,7 +39,7 @@ import org.apache.isis.commons.internal.collections._Arrays;
  * @since 2.0
  *
  */
-@Service
+@Service @Named("gridReaderUsingJaxb")
 public class GridReaderUsingJaxb {
 
     private JAXBContext jaxbContext;

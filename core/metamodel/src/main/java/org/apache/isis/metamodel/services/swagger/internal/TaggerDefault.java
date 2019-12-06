@@ -21,10 +21,12 @@ package org.apache.isis.metamodel.services.swagger.internal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component @Named("taggerDefault")
 public class TaggerDefault implements Tagger {
 
     static Pattern tagSpringFramework = Pattern.compile("^org\\.springframework\\.([^\\.]+)\\.(.+)$");

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.metamodel.context;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
  * @since 2.0
  *
  */
-@Configuration
+@Configuration @Named("metaModelContexts")
 public class MetaModelContexts {
 
     @Bean @Singleton

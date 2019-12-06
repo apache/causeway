@@ -14,7 +14,7 @@ org.apache.isis.applib.services.publish.PublisherServiceLogging
 org.apache.isis.applib.services.queryresultscache.QueryResultsCacheInternal
 org.apache.isis.applib.services.scratchpad.Scratchpad
 org.apache.isis.applib.services.swagger.SwaggerServiceMenu
-org.apache.isis.applib.spi.tablecol.TableColumnOrderService$Default
+org.apache.isis.applib.services.tablecol.TableColumnOrderService$Default
 org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression
 org.apache.isis.config.beans.WebAppConfigBean
 org.apache.isis.extensions.fixtures.FixturesEventService

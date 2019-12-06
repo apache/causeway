@@ -19,6 +19,7 @@
 package org.apache.isis.runtime.services.userprof;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -26,7 +27,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.userprof.UserProfileService;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(nature = NatureOfService.DOMAIN) @Named("userProfileServiceDefault")
 public class UserProfileServiceDefault implements UserProfileService {
 
     @Programmatic

@@ -33,7 +33,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.spi.tablecol.TableColumnOrderService;
+import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;

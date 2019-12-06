@@ -28,7 +28,9 @@ import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+import javax.inject.Named;
+
+@Service @Log4j2 @Named("publisherServiceLogging")
 public class PublisherServiceLogging implements PublisherService {
 
     @Override

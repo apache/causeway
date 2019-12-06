@@ -19,6 +19,7 @@
 package org.apache.isis.metamodel.services.swagger;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ import static org.apache.isis.commons.internal.base._With.ifPresentElse;
 import static org.apache.isis.commons.internal.resources._Resources.getRestfulPathIfAny;
 import static org.apache.isis.commons.internal.resources._Resources.prependContextPathIfPresent;
 
-@Service 
+@Service @Named("swaggerServiceDefault")
 public class SwaggerServiceDefault implements SwaggerService {
 
     @Inject SpecificationLoader specificationLoader;

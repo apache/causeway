@@ -24,6 +24,7 @@ import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -44,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @DomainService(nature = NatureOfService.DOMAIN)
-@Log4j2
+@Log4j2 @Named("configurationViewServiceDefault")
 public class ConfigurationViewServiceDefault implements ConfigurationViewService {
 
     @Inject private IsisSystemEnvironment systemEnvironment;

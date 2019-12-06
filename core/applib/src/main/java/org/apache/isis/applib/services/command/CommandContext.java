@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.command;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Component;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@Component @RequestScoped  
+@Component @RequestScoped @Named("commandContext")
 public class CommandContext {
 
     private Command command;

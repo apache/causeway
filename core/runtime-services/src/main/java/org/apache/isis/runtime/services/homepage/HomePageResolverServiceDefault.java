@@ -20,6 +20,7 @@ package org.apache.isis.runtime.services.homepage;
 
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 
-@Service
+@Service @Named("homePageResolverServiceDefault")
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     @Inject private FactoryService factoryService;

@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.springframework.stereotype.Repository;
@@ -63,7 +64,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
-@Repository
+@Repository @Named("applicationFeatureRepositoryDefault")
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
     // -- caches

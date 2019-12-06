@@ -43,6 +43,7 @@ import org.apache.isis.applib.services.publish.PublisherServiceLogging;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCacheInternal;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.swagger.SwaggerServiceMenu;
+import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.schema.IsisModuleSchema;
 import org.springframework.context.annotation.Configuration;
@@ -75,6 +76,7 @@ import org.springframework.context.annotation.Import;
         QueryResultsCacheInternal.class,
         Scratchpad.class,
         SwaggerServiceMenu.class,
+        TableColumnOrderService.Default.class,
         UrlEncodingServiceWithCompression.class,
 
         // @Component's

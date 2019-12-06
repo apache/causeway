@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
 import lombok.val;
 
-@Repository
+@Repository @Named("repositoryServiceDefault")
 public class RepositoryServiceDefault implements RepositoryService {
 
     @Inject private FactoryService factoryService;

@@ -20,12 +20,14 @@ package org.apache.isis.applib.services.urlencoding;
 
 import java.nio.charset.StandardCharsets;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(nature = NatureOfService.DOMAIN) @Named("urlEncodingServiceWithCompression")
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {
 
     @Override

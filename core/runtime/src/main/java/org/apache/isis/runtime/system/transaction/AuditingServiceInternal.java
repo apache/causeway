@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,7 @@ import lombok.val;
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
  */
-@Service
+@Service @Named("auditingServiceInternal")
 public class AuditingServiceInternal {
     
     @Inject private List<AuditerService> auditerServices;

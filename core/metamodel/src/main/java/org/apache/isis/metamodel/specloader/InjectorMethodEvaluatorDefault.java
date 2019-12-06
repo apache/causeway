@@ -21,11 +21,13 @@ package org.apache.isis.metamodel.specloader;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Named;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 
-@Service
+@Service @Named("injectorMethodEvaluatorDefault")
 public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvaluator {
 
     //TODO[2112] cleanup comment

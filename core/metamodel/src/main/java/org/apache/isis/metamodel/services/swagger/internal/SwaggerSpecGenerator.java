@@ -29,8 +29,9 @@ import io.swagger.util.Json;
 import io.swagger.util.Yaml;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-@Component
+@Component @Named("swaggerSpecGenerator")
 public class SwaggerSpecGenerator {
 
     private final SpecificationLoader specificationLoader;

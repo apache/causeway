@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.spi.tablecol;
+package org.apache.isis.applib.services.tablecol;
 
 import java.util.List;
+
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -41,6 +43,7 @@ public interface TableColumnOrderService {
     @DomainService(
             nature = NatureOfService.DOMAIN
             )
+    @Named("tableColumnOrderService.Default")
     public static class Default implements TableColumnOrderService {
 
         @Override

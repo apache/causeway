@@ -19,6 +19,7 @@
 package org.apache.isis.runtime.system.persistence.events;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ import org.apache.isis.applib.services.user.UserService;
 
 import lombok.val;
 
-@Service
+@Service @Named("timestampService")
 public class TimestampService {
 
     @EventListener(PreStoreEvent.class)

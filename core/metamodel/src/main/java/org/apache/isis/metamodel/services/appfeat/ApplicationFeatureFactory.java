@@ -19,12 +19,13 @@
 package org.apache.isis.metamodel.services.appfeat;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 
-@Service
+@Service @Named("applicationFeatureFactory")
 public class ApplicationFeatureFactory {
 
     public ApplicationFeature newApplicationFeature() {

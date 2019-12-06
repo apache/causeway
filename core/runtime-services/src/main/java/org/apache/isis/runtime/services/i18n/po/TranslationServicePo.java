@@ -21,6 +21,7 @@ package org.apache.isis.runtime.services.i18n.po;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 
-@Service
+@Service @Named("translationServicePo")
 public class TranslationServicePo implements TranslationService {
 
     private PoAbstract po;

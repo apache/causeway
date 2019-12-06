@@ -310,15 +310,15 @@ public final class _Collections {
 
     // -- TO STRING
 
-    public static String toStringJoining(@Nullable Collection<?> collecion, String delimiter) {
+    public static String toStringJoining(@Nullable Collection<?> collection, String delimiter) {
         requires(delimiter, "delimiter");
-        return _NullSafe.stream(collecion)
+        return _NullSafe.stream(collection)
                 .map(x->""+x)
                 .collect(Collectors.joining(delimiter));
     }
 
-    public static String toStringJoiningNewLine(@Nullable Collection<?> collecion) {
-        return toStringJoining(collecion, "\n");
+    public static String toStringJoiningNewLine(@Nullable Collection<?> collection) {
+        return toStringJoining(collection, "\n");
     }
 
 }

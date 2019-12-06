@@ -50,7 +50,9 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 
-@Component
+import javax.inject.Named;
+
+@Component @Named("valuePropertyFactoryDefault")
 public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 
     private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();

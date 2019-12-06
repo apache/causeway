@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -45,6 +46,7 @@ import static java.util.regex.Pattern.quote;
 @DomainService(
         nature = NatureOfService.DOMAIN
         )
+@Named("emailNotificationServiceDefault")
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 
     private static final long serialVersionUID = 1L;

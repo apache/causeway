@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -45,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
  * available for use; no further configuration is required.
  */
 @DomainService(nature = NatureOfService.DOMAIN)
-@RequestScoped @Log4j2
+@RequestScoped @Log4j2 @Named("queryResultsCacheInternal")
 public class QueryResultsCacheInternal implements QueryResultsCache, WithTransactionScope {
 
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();

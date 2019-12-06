@@ -21,6 +21,7 @@ package org.apache.isis.runtime.services.auth;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 
-@Service
+@Service @Named("authenticationSessionProviderDefault")
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 
     @Inject protected UserServiceDefault userServiceDefault;

@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.objectmanager;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ import lombok.val;
  * @since 2.0
  *
  */
-@Service
+@Service @Named("objectManagerDefault")
 public class ObjectManagerDefault implements ObjectManager {
     
     @Inject @Getter(onMethod = @__(@Override)) private MetaModelContext metaModelContext;

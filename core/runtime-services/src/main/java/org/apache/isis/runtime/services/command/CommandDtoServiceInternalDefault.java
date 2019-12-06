@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -53,6 +54,7 @@ import lombok.val;
 @DomainService(
         nature = NatureOfService.DOMAIN
         )
+@Named("commandDtoServiceInternalDefault")
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
     @Inject private CommandContext commandContext;

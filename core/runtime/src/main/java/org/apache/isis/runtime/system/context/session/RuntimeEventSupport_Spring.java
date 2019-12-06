@@ -19,6 +19,7 @@
 package org.apache.isis.runtime.system.context.session;
 
 import javax.enterprise.event.Event;
+import javax.inject.Named;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 
-@Configuration
+@Configuration @Named("runtimeEventSupport_Spring")
 public class RuntimeEventSupport_Spring {
 
     @Bean

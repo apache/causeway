@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.AbstractResource;
@@ -37,7 +38,7 @@ import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service @Log4j2 @Named("menuBarsLoaderServiceDefault")
 public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
     @Inject private IsisSystemEnvironment isisSystemEnvironment;

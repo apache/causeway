@@ -23,6 +23,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
-@Service 
+@Service @Named("factoryServiceDefault")
 public class FactoryServiceDefault implements FactoryService {
     
     @Inject IsisSessionFactory isisSessionFactory; // dependsOn

@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service @Log4j2 @Named("gridLoaderServiceDefault")
 public class GridLoaderServiceDefault implements GridLoaderService {
 
 

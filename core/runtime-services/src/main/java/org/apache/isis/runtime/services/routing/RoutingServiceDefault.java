@@ -19,6 +19,7 @@
 package org.apache.isis.runtime.services.routing;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
 
 import lombok.val;
 
-@Controller
+@Controller @Named("routingServiceDefault")
 public class RoutingServiceDefault implements RoutingService {
 
     @Override

@@ -19,9 +19,11 @@
 
 package org.apache.isis.metamodel.services.classsubstitutor;
 
+import javax.inject.Named;
+
 import org.springframework.stereotype.Component;
 
-@Component
+@Component @Named("classSubstitutorDefault")
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
     public ClassSubstitutorDefault() {

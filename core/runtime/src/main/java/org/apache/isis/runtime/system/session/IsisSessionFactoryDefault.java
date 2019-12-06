@@ -25,6 +25,7 @@ import java.util.concurrent.Callable;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -62,7 +63,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  */
-@Service @Log4j2 
+@Service @Log4j2 @Named("isisSessionFactoryDefault")
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     @Inject private AuthenticationManager authenticationManager;

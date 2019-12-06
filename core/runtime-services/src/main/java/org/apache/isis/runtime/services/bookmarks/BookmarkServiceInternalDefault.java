@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
@@ -49,7 +50,7 @@ import lombok.val;
  * This service enables a serializable 'bookmark' to be created for an entity.
  *
  */
-@Service
+@Service @Named("bookmarkServiceInternalDefault")
 public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 
     @Inject private SpecificationLoader specificationLoader;

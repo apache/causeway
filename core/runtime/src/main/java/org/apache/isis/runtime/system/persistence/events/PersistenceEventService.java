@@ -20,6 +20,7 @@ package org.apache.isis.runtime.system.persistence.events;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ import org.springframework.stereotype.Service;
  * @since 2.0
  *
  */
-@Service 
+@Service @Named("persistenceEventService")
 public class PersistenceEventService {
     
     // -- MANAGED EVENTS

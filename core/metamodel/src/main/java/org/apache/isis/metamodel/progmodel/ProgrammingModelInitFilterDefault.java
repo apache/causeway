@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -38,7 +39,7 @@ import lombok.val;
  * @since 2.0
  *
  */
-@Component
+@Component @Named("programmingModelInitFilterDefault")
 public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFilter {
 
     @Inject private IsisConfiguration configuration;

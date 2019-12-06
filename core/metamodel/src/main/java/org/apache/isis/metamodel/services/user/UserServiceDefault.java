@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Stack;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 
-@Service
+@Service @Named("userServiceDefault")
 public class UserServiceDefault implements UserService {
 
     @Override
@@ -146,6 +147,7 @@ public class UserServiceDefault implements UserService {
     @DomainService(
             nature = NatureOfService.DOMAIN
             )
+    @Named("userServiceDefault.SudoServiceSpi")
     public static class SudoServiceSpi implements SudoService.Spi {
 
         @Override

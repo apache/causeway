@@ -8,7 +8,7 @@ org.apache.isis.applib.services.metamodel.MetaModelServicesMenu
 org.apache.isis.applib.services.queryresultscache.QueryResultsCacheInternal
 org.apache.isis.applib.services.scratchpad.Scratchpad
 org.apache.isis.applib.services.swagger.SwaggerServiceMenu
-org.apache.isis.applib.spi.tablecol.TableColumnOrderService$Default
+org.apache.isis.applib.services.tablecol.TableColumnOrderService$Default
 org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression
 org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts
 org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault

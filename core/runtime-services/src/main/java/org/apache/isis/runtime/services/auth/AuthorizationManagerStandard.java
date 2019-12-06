@@ -22,6 +22,7 @@ package org.apache.isis.runtime.services.auth;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ import org.apache.isis.security.api.authorization.standard.Authorizor;
 
 import lombok.val;
 
-@Service
+@Service @Named("authorizationManagerStandard")
 public class AuthorizationManagerStandard implements AuthorizationManager, MetaModelRefiner {
 
     @Inject protected Authorizor authorizor;

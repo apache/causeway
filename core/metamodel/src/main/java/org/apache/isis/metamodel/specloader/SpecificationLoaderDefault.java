@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -81,7 +82,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
  * </p>
  */
 @Service
-@Log4j2
+@Log4j2 @Named("specificationLoaderDefault")
 public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Inject private ProgrammingModelService programmingModelService;

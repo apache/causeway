@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.conmap.command;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -29,7 +30,7 @@ import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.CommandsDto;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(nature = NatureOfService.DOMAIN) @Named("contentMappingServiceForCommandsDto")
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 
     @Override

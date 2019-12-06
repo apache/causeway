@@ -18,13 +18,15 @@
  */
 package org.apache.isis.runtime.services.command;
 
+import javax.inject.Named;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDefault;
 import org.apache.isis.applib.services.command.spi.CommandService;
 
-@Service
+@Service @Named("commandServiceDefault")
 public class CommandServiceDefault implements CommandService {
 
     @Override

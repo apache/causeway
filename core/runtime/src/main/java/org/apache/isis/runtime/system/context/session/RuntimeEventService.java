@@ -19,6 +19,7 @@
 package org.apache.isis.runtime.system.context.session;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ import org.apache.isis.runtime.system.session.IsisSession;
  */
 @Service
 //@Log4j2
+@Named("runtimeEventService")
 public class RuntimeEventService {
     
     @Inject private EventBusService eventBusService;  

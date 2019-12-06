@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.services.exceprecog;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 
-@Service
+@Service @Named("exceptionRecognizerDocDefault")
 public class ExceptionRecognizerDocDefault
 implements ExceptionRecognizer {
     

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -31,6 +32,7 @@ import org.apache.isis.applib.services.sudo.SudoService;
 @DomainService(
         nature = NatureOfService.DOMAIN
         )
+@Named("sudoServiceDefault")
 public class SudoServiceDefault implements SudoService {
 
     @Override

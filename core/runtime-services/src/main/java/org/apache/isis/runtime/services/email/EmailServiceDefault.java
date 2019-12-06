@@ -25,6 +25,7 @@ import java.util.Properties;
 import javax.activation.DataSource;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
@@ -45,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 @DomainService(
         nature = NatureOfService.DOMAIN
         )
-@Log4j2
+@Log4j2 @Named("emailServiceDefault")
 public class EmailServiceDefault implements EmailService {
 
     private static final long serialVersionUID = 1L;
