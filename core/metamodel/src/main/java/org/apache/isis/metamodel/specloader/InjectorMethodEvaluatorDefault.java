@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.specloader;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.lang.reflect.Method;
 
 import javax.inject.Named;
@@ -27,7 +29,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 
-@Service @Named("injectorMethodEvaluatorDefault")
+@Service
+@Named("isisMetaModel.injectorMethodEvaluatorDefault")
+@Log4j2
 public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvaluator {
 
     //TODO[2112] cleanup comment

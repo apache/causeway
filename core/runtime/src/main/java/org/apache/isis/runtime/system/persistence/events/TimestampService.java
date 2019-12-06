@@ -29,9 +29,13 @@ import org.apache.isis.applib.mixins.timestamp.HoldsUpdatedBy;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@Service @Named("timestampService")
+@Service
+@Named("isisRuntime.timestampService")
+@Log4j2
 public class TimestampService {
 
     @EventListener(PreStoreEvent.class)

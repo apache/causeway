@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.services.swagger.internal;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +28,9 @@ import javax.inject.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.springframework.stereotype.Component;
 
-@Component @Named("taggerDefault")
+@Component
+@Named("isisMetaModel.taggerDefault")
+@Log4j2
 public class TaggerDefault implements Tagger {
 
     static Pattern tagSpringFramework = Pattern.compile("^org\\.springframework\\.([^\\.]+)\\.(.+)$");

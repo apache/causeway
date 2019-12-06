@@ -22,6 +22,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -48,11 +49,15 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCo
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.springframework.stereotype.Service;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@Service
+@Named("isisRoRendering.contentNegotiationServiceOrgApacheIsisV1")
 @Order(200) //in effect, is the relative priority (lower numbers have higher priority)
+@Log4j2
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
     /**

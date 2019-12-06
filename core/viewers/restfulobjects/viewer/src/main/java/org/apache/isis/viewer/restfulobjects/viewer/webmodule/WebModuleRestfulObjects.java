@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.viewer.webmodule;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -31,6 +32,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
+import org.springframework.stereotype.Service;
 
 import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
@@ -40,6 +42,7 @@ import static org.apache.isis.commons.internal.context._Context.getDefaultClassL
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -47,10 +50,10 @@ import lombok.val;
  * 
  * @since 2.0
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN, 
-        objectType = "isisRestfulObjectsViewer.WebModule") // add to meta-model, for swagger-menu to check whether available or not
+@Service
+@Named("isisRoViewer.webModuleRestfulObjects")
 @Order(-80)
+@Log4j2
 public final class WebModuleRestfulObjects implements WebModule  {
 
     private final static String RESTEASY_BOOTSTRAPPER = "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";

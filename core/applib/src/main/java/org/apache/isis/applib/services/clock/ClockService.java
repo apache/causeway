@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.clock;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,7 +37,9 @@ import org.apache.isis.applib.clock.Clock;
  * co-ordinated time management through a centralized time service.
  *
  */
-@Service @Named("clockService")
+@Service
+@Named("isisApplib.clockService")
+@Log4j2
 public class ClockService {
 
     public LocalDate now() {

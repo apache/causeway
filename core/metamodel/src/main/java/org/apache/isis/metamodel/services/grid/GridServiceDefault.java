@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.services.grid;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,9 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 
-@Service @Named("gridServiceDefault")
+@Service
+@Named("isisMetaModel.gridServiceDefault")
+@Log4j2
 public class GridServiceDefault implements GridService {
 
     public static final String COMPONENT_TNS = "http://isis.apache.org/applib/layout/component";

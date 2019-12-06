@@ -63,7 +63,9 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  */
-@Service @Log4j2 @Named("isisSessionFactoryDefault")
+@Service
+@Named("isisRuntime.isisSessionFactoryDefault")
+@Log4j2
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     @Inject private AuthenticationManager authenticationManager;

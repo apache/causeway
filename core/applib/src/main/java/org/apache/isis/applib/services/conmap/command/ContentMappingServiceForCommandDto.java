@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.conmap.command;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -40,8 +42,11 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN) @Named("contentMappingServiceForCommandDto")
+@Service
+@Named("isisApplib.contentMappingServiceForCommandDto")
+@Log4j2
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
     @Override
@@ -97,11 +102,12 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
     /**
      * Uses the SPI infrastructure to copy over standard properties from {@link Command} to {@link CommandDto}.
      */
-    @DomainService(nature = NatureOfService.DOMAIN) 
+    @Service
+    @Named("isisApplib.contentMappingServiceForCommandDto.CopyOverFromCommand")
     // specify quite a high priority since custom processors will probably want to run after this one
     // (but can choose to run before if they wish)
     @Order(-1000)
-    @Named("contentMappingServiceForCommandDto.CopyOverFromCommand")
+    @Log4j2
     public static class CopyOverFromCommand implements CommandDtoProcessorService {
 
         @Override

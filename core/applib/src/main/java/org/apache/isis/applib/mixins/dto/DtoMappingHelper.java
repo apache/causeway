@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.mixins.dto;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -28,8 +30,11 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN) @Named("dtoMappingHelper")
+@Service
+@Named("isisApplib.dtoMappingHelper")
+@Log4j2
 public class DtoMappingHelper {
 
     public OidDto oidDtoFor(final Object object) {

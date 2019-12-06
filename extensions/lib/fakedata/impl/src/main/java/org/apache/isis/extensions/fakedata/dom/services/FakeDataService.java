@@ -1,9 +1,13 @@
 package org.apache.isis.extensions.fakedata.dom.services;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.Locale;
 import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
+
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
@@ -12,8 +16,11 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@Service
+@Named("isisExtFakeData.fakeDataService")
+@Log4j2
 public class FakeDataService {
 
     private final Faker javaFaker;

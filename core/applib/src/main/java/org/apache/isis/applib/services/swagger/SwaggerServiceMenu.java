@@ -119,7 +119,7 @@ public class SwaggerServiceMenu {
     // -- HELPER
     
     private String disableReasonWhenRequiresROViewer() {
-        return serviceRegistry.lookupRegisteredBeanById("isisRestfulObjectsViewer.WebModule").isPresent()
+        return serviceRegistry.lookupRegisteredBeanById("isisRoViewer.webModuleRestfulObjects").isPresent()
                 ? null
                         : "RestfulObjects viewer is not configured";
     }

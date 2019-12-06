@@ -18,10 +18,13 @@
  */
 package org.apache.isis.applib.services.command;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Command}.
@@ -30,7 +33,10 @@ import org.springframework.stereotype.Component;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@Component @RequestScoped @Named("commandContext")
+@Service
+@Named("isisApplib.commandContext")
+@RequestScoped
+@Log4j2
 public class CommandContext {
 
     private Command command;

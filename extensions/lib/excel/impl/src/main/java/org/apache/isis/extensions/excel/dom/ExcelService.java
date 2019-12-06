@@ -1,5 +1,7 @@
 package org.apache.isis.extensions.excel.dom;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -20,10 +23,11 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.excel.dom.util.ExcelServiceImpl;
 import org.apache.isis.extensions.excel.dom.util.Mode;
+import org.springframework.stereotype.Service;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-)
+@Service
+@Named("isisExtExcel.excelService")
+@Log4j2
 public class ExcelService {
 
     public static class Exception extends RecoverableException {

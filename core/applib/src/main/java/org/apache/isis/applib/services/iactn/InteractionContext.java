@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.iactn;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -32,7 +34,10 @@ import org.apache.isis.applib.annotation.DomainService;
  * {@link DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@RequestScoped @Service @Named("interactionContext")
+@Service
+@Named("isisApplib.interactionContext")
+@RequestScoped
+@Log4j2
 public class InteractionContext {
 
     private Interaction interaction;

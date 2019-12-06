@@ -37,6 +37,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.util.ConfigUtil;
+import org.springframework.stereotype.Service;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -44,8 +45,9 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @since 2.0
  */
-@DomainService(nature = NatureOfService.DOMAIN)
-@Log4j2 @Named("configurationViewServiceDefault")
+@Service
+@Named("isisRuntimeServices.configurationViewServiceDefault")
+@Log4j2
 public class ConfigurationViewServiceDefault implements ConfigurationViewService {
 
     @Inject private IsisSystemEnvironment systemEnvironment;

@@ -35,6 +35,8 @@ import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -42,8 +44,11 @@ import lombok.val;
  * @since 2.0 
  *
  */
-@Service @Singleton @Named("objectAdapterMementoServiceDefault")
-public class ObjectAdapterMementoServiceDefault 
+@Service
+@Named("isisRuntime.objectAdapterMementoServiceDefault")
+@Singleton
+@Log4j2
+public class ObjectAdapterMementoServiceDefault
 implements ObjectAdapterMementoService {
     
     @Inject @Getter private SpecificationLoader specificationLoader;

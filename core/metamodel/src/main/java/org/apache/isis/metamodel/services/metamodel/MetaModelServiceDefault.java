@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.services.metamodel;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +55,9 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
-@Service @Named("metaModelServiceDefault")
+@Service
+@Named("isisMetaModel.metaModelServiceDefault")
+@Log4j2
 public class MetaModelServiceDefault implements MetaModelService {
 
     private MetaModelExporter metaModelExporter;

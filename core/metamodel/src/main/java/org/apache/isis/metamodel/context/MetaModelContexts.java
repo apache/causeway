@@ -31,7 +31,8 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
  * @since 2.0
  *
  */
-@Configuration @Named("metaModelContexts")
+@Configuration
+@Named("isisMetaModel.metaModelContexts")
 public class MetaModelContexts {
 
     @Bean @Singleton

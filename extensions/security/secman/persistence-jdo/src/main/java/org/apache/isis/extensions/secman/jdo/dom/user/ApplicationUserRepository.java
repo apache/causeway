@@ -18,10 +18,13 @@
  */
 package org.apache.isis.extensions.secman.jdo.dom.user;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
@@ -38,11 +41,11 @@ import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
+import org.springframework.stereotype.Repository;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        repositoryFor = ApplicationUser.class
-        )
+@Repository
+@Named("isisExtSecman.applicationUserRepository")
+@Log4j2
 public class ApplicationUserRepository
 implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository {
 

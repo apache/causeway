@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.services.grid;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -39,7 +41,9 @@ import org.apache.isis.commons.internal.collections._Arrays;
  * @since 2.0
  *
  */
-@Service @Named("gridReaderUsingJaxb")
+@Service
+@Named("isisMetaModel.gridReaderUsingJaxb")
+@Log4j2
 public class GridReaderUsingJaxb {
 
     private JAXBContext jaxbContext;

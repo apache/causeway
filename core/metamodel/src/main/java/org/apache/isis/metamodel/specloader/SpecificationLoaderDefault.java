@@ -82,7 +82,8 @@ import static org.apache.isis.commons.internal.base._With.requires;
  * </p>
  */
 @Service
-@Log4j2 @Named("specificationLoaderDefault")
+@Named("isisMetaModel.specificationLoaderDefault")
+@Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Inject private ProgrammingModelService programmingModelService;

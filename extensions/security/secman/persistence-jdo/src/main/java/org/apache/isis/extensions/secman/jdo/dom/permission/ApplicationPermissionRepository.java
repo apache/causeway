@@ -26,6 +26,7 @@ import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -49,13 +50,14 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
+import org.springframework.stereotype.Repository;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        repositoryFor = ApplicationPermission.class
-        )
+@Repository
+@Named("isisExtSecman.applicationPermissionRepository")
+@Log4j2
 public class ApplicationPermissionRepository 
 implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository {
 

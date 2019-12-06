@@ -20,6 +20,7 @@ package demoapp.dom.events;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -29,14 +30,16 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.springframework.stereotype.Service;
 
 import static demoapp.utils.DemoUtils.emphasize;
 
 import demoapp.dom.events.EventLogMenu.EventTestProgrammaticEvent;
 import lombok.extern.log4j.Log4j2;
 
-@DomainService(nature=NatureOfService.DOMAIN)
-@Log4j2 @Component
+@Service
+@Named("demoapp.eventSubscriber")
+@Log4j2
 public class EventSubscriber {
 
     @Inject private WrapperFactory wrapper;

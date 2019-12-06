@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.services.appfeat;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -25,7 +27,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 
-@Service @Named("applicationFeatureFactory")
+@Service
+@Log4j2
+@Named("isisMetaModel.applicationFeatureFactory")
 public class ApplicationFeatureFactory {
 
     public ApplicationFeature newApplicationFeature() {

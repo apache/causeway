@@ -46,9 +46,12 @@ import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@Service @Named("homePageResolverServiceDefault")
+@Service
+@Named("isisRuntimeServices.homePageResolverServiceDefault")
+@Log4j2
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     @Inject private FactoryService factoryService;

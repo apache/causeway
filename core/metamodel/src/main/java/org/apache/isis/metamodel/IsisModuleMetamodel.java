@@ -81,21 +81,19 @@ import org.springframework.context.annotation.Import;
         GridReaderUsingJaxb.class,
         GridServiceDefault.class,
         GridSystemServiceBS3.class,
+        InjectorMethodEvaluatorDefault.class,
         LayoutServiceDefault.class,
         MetaModelServiceDefault.class,
+        ProgrammingModelServiceDefault.class,
+        ServiceRegistryDefault.class,
         SwaggerServiceDefault.class,
         TitleServiceDefault.class,
-        UserServiceDefault.class,
-        InjectorMethodEvaluatorDefault.class,
-        ProgrammingModelServiceDefault.class,
         SpecificationLoaderDefault.class,
+        UserServiceDefault.class,
+        UserServiceDefault.SudoServiceSpi.class,
 
         // @Repository's
         ApplicationFeatureRepositoryDefault.class,
-
-        // @DomainService's
-        ServiceRegistryDefault.class,
-        UserServiceDefault.SudoServiceSpi.class,
 
 })
 public class IsisModuleMetamodel {

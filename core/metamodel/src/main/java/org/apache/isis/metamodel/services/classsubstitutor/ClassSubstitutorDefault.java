@@ -19,11 +19,15 @@
 
 package org.apache.isis.metamodel.services.classsubstitutor;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-@Component @Named("classSubstitutorDefault")
+@Component
+@Named("isisMetaModel.classSubstitutorDefault")
+@Log4j2
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
     public ClassSubstitutorDefault() {

@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtime.services.ixn;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,11 +47,11 @@ import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.springframework.stereotype.Service;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
-@Named("interactionDtoServiceInternalDefault")
+@Service
+@Named("isisRuntimeServices.interactionDtoServiceInternalDefault")
+@Log4j2
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 
     @Inject CommandDtoServiceInternal commandDtoServiceInternal;

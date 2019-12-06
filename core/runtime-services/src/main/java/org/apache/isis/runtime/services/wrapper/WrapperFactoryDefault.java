@@ -75,7 +75,9 @@ import lombok.extern.log4j.Log4j2;
  * be interacted with, while enforcing the hide/disable/validate rules as implied by
  * the Isis programming model.
  */
-@Service @Log4j2 @Named("wrapperFactoryDefault")
+@Service
+@Named("isisRuntimeServices.wrapperFactoryDefault")
+@Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();

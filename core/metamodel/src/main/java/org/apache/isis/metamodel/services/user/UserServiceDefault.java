@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.services.user;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -37,7 +39,9 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 
-@Service @Named("userServiceDefault")
+@Service
+@Named("isisMetaModel.userServiceDefault")
+@Log4j2
 public class UserServiceDefault implements UserService {
 
     @Override
@@ -144,10 +148,9 @@ public class UserServiceDefault implements UserService {
     }
 
 
-    @DomainService(
-            nature = NatureOfService.DOMAIN
-            )
-    @Named("userServiceDefault.SudoServiceSpi")
+    @Service
+    @Named("isisMetaModel.userServiceDefault.SudoServiceSpi")
+    @Log4j2
     public static class SudoServiceSpi implements SudoService.Spi {
 
         @Override

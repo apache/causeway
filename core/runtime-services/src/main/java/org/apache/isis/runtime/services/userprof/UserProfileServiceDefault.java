@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.services.userprof;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -26,8 +28,11 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.userprof.UserProfileService;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN) @Named("userProfileServiceDefault")
+@Service
+@Named("isisRuntimeServices.userProfileServiceDefault")
+@Log4j2
 public class UserProfileServiceDefault implements UserProfileService {
 
     @Programmatic

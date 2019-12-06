@@ -18,14 +18,12 @@ import org.springframework.context.annotation.Import;
         IsisModuleRuntime.class,
 
         // @Service's
-        JsonValueEncoder.class,
-        RepresentationServiceContentNegotiator.class,
-        ContentNegotiationServiceXRoDomainType.class,
-
-        // @DomainService's
         AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,
         ContentNegotiationServiceOrgApacheIsisV1.class,
+        ContentNegotiationServiceXRoDomainType.class,
+        JsonValueEncoder.class,
+        RepresentationServiceContentNegotiator.class,
 
 })
 public class IsisModuleRestfulObjectsRendering {

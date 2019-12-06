@@ -34,6 +34,7 @@ import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
 
 import lombok.Builder;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 
@@ -41,8 +42,9 @@ import lombok.Builder;
  *
  */
 @Service 
+@Named("isisMetaModel.metamodelEventService")
+@Log4j2
 @Builder //for JUnit Test support
-@Named("metamodelEventService")
 public class MetamodelEventService {
 
     @Inject Event<CssClassUiEvent<Object>> cssClassUiEvents;

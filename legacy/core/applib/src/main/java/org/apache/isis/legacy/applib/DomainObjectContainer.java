@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.DomainService;
@@ -43,10 +44,12 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
+import org.springframework.stereotype.Service;
 
 import com.google.common.base.Predicate;
 
-@DomainService(nature=NatureOfService.DOMAIN)
+@Service
+@Named("isisLegacyApplib.domainObjectContainer")
 @Deprecated
 public class DomainObjectContainer {
 	

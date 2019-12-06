@@ -1,13 +1,20 @@
 package org.apache.isis.extensions.fixtures.modules;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@Service
+@Named("isisExtFixtures.moduleFixtureService")
+@Log4j2
 public class ModuleFixtureService {
 
     private final ModuleService moduleService;

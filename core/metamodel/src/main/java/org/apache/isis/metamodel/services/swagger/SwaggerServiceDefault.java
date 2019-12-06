@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.services.swagger;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -33,7 +35,9 @@ import static org.apache.isis.commons.internal.base._With.ifPresentElse;
 import static org.apache.isis.commons.internal.resources._Resources.getRestfulPathIfAny;
 import static org.apache.isis.commons.internal.resources._Resources.prependContextPathIfPresent;
 
-@Service @Named("swaggerServiceDefault")
+@Service
+@Named("isisMetaModel.swaggerServiceDefault")
+@Log4j2
 public class SwaggerServiceDefault implements SwaggerService {
 
     @Inject SpecificationLoader specificationLoader;

@@ -41,9 +41,12 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@Service @Named("factoryServiceDefault")
+@Service
+@Named("isisRuntimeServices.factoryServiceDefault")
+@Log4j2
 public class FactoryServiceDefault implements FactoryService {
     
     @Inject IsisSessionFactory isisSessionFactory; // dependsOn

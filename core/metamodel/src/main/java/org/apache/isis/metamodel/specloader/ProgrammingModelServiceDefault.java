@@ -36,7 +36,9 @@ import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2 @Named("programmingModelServiceDefault")
+@Service
+@Named("isisMetaModel.programmingModelServiceDefault")
+@Log4j2
 public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     @Override

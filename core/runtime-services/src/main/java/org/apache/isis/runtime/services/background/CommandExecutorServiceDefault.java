@@ -70,7 +70,9 @@ import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2 @Named("commandExecutorServiceDefault")
+@Service
+@Named("isisRuntimeServices.commandExecutorServiceDefault")
+@Log4j2
 public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     @Override

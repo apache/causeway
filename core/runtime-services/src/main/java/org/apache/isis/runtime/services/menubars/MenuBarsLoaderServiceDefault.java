@@ -38,7 +38,9 @@ import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2 @Named("menuBarsLoaderServiceDefault")
+@Service
+@Named("isisRuntimeServices.menuBarsLoaderServiceDefault")
+@Log4j2
 public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
     @Inject private IsisSystemEnvironment isisSystemEnvironment;

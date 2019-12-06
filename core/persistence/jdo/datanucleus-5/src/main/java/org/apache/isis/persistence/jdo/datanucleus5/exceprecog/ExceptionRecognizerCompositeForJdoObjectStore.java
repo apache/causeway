@@ -18,14 +18,18 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.exceprecog;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.config.IsisConfiguration;
+import org.springframework.stereotype.Service;
 
 /**
  * Convenience implementation of the {@link ExceptionRecognizer} domain service that
@@ -38,7 +42,9 @@ import org.apache.isis.config.IsisConfiguration;
  *     the first one found).
  * </p>
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@Service
+@Named("isisJdoDn5.exceptionRecognizerCompositeForJdoObjectStore")
+@Log4j2
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 
     @Override

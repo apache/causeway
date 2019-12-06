@@ -48,9 +48,12 @@ import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@Repository @Named("repositoryServiceDefault")
+@Repository
+@Named("isisRuntimeServices.repositoryServiceDefault")
+@Log4j2
 public class RepositoryServiceDefault implements RepositoryService {
 
     @Inject private FactoryService factoryService;

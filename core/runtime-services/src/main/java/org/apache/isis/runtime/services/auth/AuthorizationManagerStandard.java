@@ -38,7 +38,8 @@ import org.apache.isis.security.api.authorization.standard.Authorizor;
 
 import lombok.val;
 
-@Service @Named("authorizationManagerStandard")
+@Service
+@Named("isisRuntimeServices.authorizationManagerStandard")
 public class AuthorizationManagerStandard implements AuthorizationManager, MetaModelRefiner {
 
     @Inject protected Authorizor authorizor;

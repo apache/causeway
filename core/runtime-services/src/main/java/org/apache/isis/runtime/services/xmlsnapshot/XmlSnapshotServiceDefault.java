@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.services.xmlsnapshot;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -38,7 +40,9 @@ import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
  * that it is automatically registered and available for use; no further configuration is required.
  */
-@Service @Named("xmlSnapshotServiceDefault")
+@Service
+@Named("isisRuntimeServices.xmlSnapshotServiceDefault")
+@Log4j2
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     
     @Inject private SpecificationLoader specificationLoader;

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.conmap.command;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,8 +31,11 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.CommandsDto;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN) @Named("contentMappingServiceForCommandsDto")
+@Service
+@Named("isisApplib.contentMappingServiceForCommandsDto")
+@Log4j2
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 
     @Override

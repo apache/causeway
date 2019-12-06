@@ -42,7 +42,8 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Log4j2 @Named("transactionServiceSpring")
+@Named("isisRuntimeServices.transactionServiceSpring")
+@Log4j2
 public class TransactionServiceSpring implements TransactionService {
 
     // single TransactionTemplate shared amongst all methods in this instance

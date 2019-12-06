@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.jaxb;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -38,7 +40,9 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 
-@Service @Named("jaxbServiceDefault")
+@Service
+@Named("isisApplib.jaxbServiceDefault")
+@Log4j2
 public class JaxbServiceDefault extends JaxbService.Simple {
 
     @Override

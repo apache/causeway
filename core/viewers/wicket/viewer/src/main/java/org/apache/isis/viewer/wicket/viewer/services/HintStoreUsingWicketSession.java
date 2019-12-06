@@ -29,12 +29,14 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        ) 
+import javax.inject.Named;
+
+@Service
+@Named("isisWicketViewer.hintStoreUsingWicketSession")
 @Log4j2
 public class HintStoreUsingWicketSession implements HintStore {
 

@@ -48,13 +48,14 @@ import org.apache.isis.schema.common.v1.OidsDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.springframework.stereotype.Service;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
-@Named("commandDtoServiceInternalDefault")
+@Service
+@Named("isisRuntimeServices.commandDtoServiceInternalDefault")
+@Log4j2
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
     @Inject private CommandContext commandContext;

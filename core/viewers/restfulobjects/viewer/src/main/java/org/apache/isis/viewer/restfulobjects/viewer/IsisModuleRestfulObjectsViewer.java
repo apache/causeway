@@ -37,7 +37,7 @@ import org.apache.isis.webapp.IsisModuleWebapp;
         IsisModuleWebapp.class,
         IsisModuleRestfulObjectsRendering.class,
 
-        // @DomainService's
+        // @Service's
         WebModuleRestfulObjects.class,
 })
 public class IsisModuleRestfulObjectsViewer {

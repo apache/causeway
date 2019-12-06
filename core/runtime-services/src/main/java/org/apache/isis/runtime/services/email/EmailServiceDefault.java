@@ -37,16 +37,16 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
+import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
 
 /**
  * A service that sends email notifications when specific events occur
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
-@Log4j2 @Named("emailServiceDefault")
+@Service
+@Named("isisRuntimeServices.emailServiceDefault")
+@Log4j2
 public class EmailServiceDefault implements EmailService {
 
     private static final long serialVersionUID = 1L;

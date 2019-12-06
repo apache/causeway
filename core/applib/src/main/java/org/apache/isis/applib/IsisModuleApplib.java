@@ -68,26 +68,24 @@ import org.springframework.context.annotation.Import;
 
         // @DomainService's
         ConfigurationMenu.class,
-        ContentMappingServiceForCommandDto.class,
-        ContentMappingServiceForCommandsDto.class,
-        DtoMappingHelper.class,
         LayoutServiceMenu.class,
         MetaModelServicesMenu.class,
-        QueryResultsCacheInternal.class,
-        Scratchpad.class,
         SwaggerServiceMenu.class,
-        TableColumnOrderService.Default.class,
-        UrlEncodingServiceWithCompression.class,
-
-        // @Component's
-        CommandContext.class,
 
         // @Service's
         AuditerServiceLogging.class,
         ClockService.class,
+        CommandContext.class,
+        ContentMappingServiceForCommandDto.class,
+        ContentMappingServiceForCommandsDto.class,
+        DtoMappingHelper.class,
         InteractionContext.class,
         JaxbServiceDefault.class,
-        PublisherServiceLogging.class
+        PublisherServiceLogging.class,
+        QueryResultsCacheInternal.class,
+        Scratchpad.class,
+        TableColumnOrderService.Default.class,
+        UrlEncodingServiceWithCompression.class,
 
 })
 public class IsisModuleApplib {

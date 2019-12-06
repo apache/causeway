@@ -18,11 +18,14 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -34,13 +37,14 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.springframework.stereotype.Service;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
+@Service
+@Named("isisRoRendering.acceptHeaderServiceForRest")
 @RequestScoped
+@Log4j2
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 
     private static ThreadLocal<List<MediaType>> mediaTypesByThread = new ThreadLocal<>();

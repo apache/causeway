@@ -45,21 +45,19 @@ import org.apache.isis.webapp.IsisModuleWebapp;
         IsisModuleWicketUi.class,
 
         // @Service's
+        BookmarkUiServiceWicket.class,
         ComponentFactoryRegistrarDefault.class,
         ComponentFactoryRegistryDefault.class,
-        PageClassListDefault.class,
-        PageClassRegistryDefault.class,
-        PageNavigationServiceDefault.class,
         DeepLinkServiceWicket.class,
         ImageResourceCacheClassPath.class,
         LocaleProviderWicket.class,
-        TranslationsResolverWicket.class,
-        WicketViewerSettingsDefault.class,
-        WebModuleWicket.class,
-
-        // @DomainService's
-        BookmarkUiServiceWicket.class,
         HintStoreUsingWicketSession.class,
+        PageClassListDefault.class,
+        PageClassRegistryDefault.class,
+        PageNavigationServiceDefault.class,
+        TranslationsResolverWicket.class,
+        WebModuleWicket.class,
+        WicketViewerSettingsDefault.class,
 
         // @Mixin's
         Object_clearHints.class,

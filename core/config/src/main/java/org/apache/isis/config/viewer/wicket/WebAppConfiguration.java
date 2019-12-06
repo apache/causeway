@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.core.io.AbstractResource;
@@ -32,12 +33,16 @@ import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
  * @since 2.0 
  */
-@Service @Singleton
+@Service
+@Singleton
+@Named("isisConfig.webAppConfiguration")
+@Log4j2
 public class WebAppConfiguration {
     
     @Inject private IsisConfiguration isisConfiguration; 

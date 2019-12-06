@@ -38,13 +38,17 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
+import org.springframework.stereotype.Service;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
  * @since 2.0
  */
-@DomainService(nature = NatureOfService.DOMAIN) @Named("serviceRegistryDefault")
+@Service
+@Named("isisMetaModel.serviceRegistryDefault")
+@Log4j2
 public final class ServiceRegistryDefault implements ServiceRegistry {
     
     // enforces provisioning order (this is a depends-on relationship) 

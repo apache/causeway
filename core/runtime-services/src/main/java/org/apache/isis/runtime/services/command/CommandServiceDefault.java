@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.services.command;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
@@ -26,7 +28,9 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDefault;
 import org.apache.isis.applib.services.command.spi.CommandService;
 
-@Service @Named("commandServiceDefault")
+@Service
+@Named("isisRuntimeServices.commandServiceDefault")
+@Log4j2
 public class CommandServiceDefault implements CommandService {
 
     @Override

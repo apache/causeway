@@ -68,9 +68,12 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@Service @Named("gridSystemServiceBS3")
+@Service
+@Named("isisMetaModel.gridSystemServiceBS3")
+@Log4j2
 public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";

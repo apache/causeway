@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtime.services.sudo;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -28,11 +30,11 @@ import javax.inject.Named;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.sudo.SudoService;
+import org.springframework.stereotype.Service;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
-@Named("sudoServiceDefault")
+@Service
+@Named("isisRuntimeServices.sudoServiceDefault")
+@Log4j2
 public class SudoServiceDefault implements SudoService {
 
     @Override

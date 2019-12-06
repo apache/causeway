@@ -44,13 +44,16 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
  * This service enables a serializable 'bookmark' to be created for an entity.
  *
  */
-@Service @Named("bookmarkServiceInternalDefault")
+@Service
+@Named("isisRuntimeServices.bookmarkServiceInternalDefault")
+@Log4j2
 public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 
     @Inject private SpecificationLoader specificationLoader;

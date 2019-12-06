@@ -55,14 +55,12 @@ import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessi
 
         // @Service's
         DataNucleusSettings.class,
-        JdoPersistenceLifecycleService.class,
+        ExceptionRecognizerCompositeForJdoObjectStore.class,
         IsisJdoSupportDN5.class,
         IsisPlatformTransactionManagerForJdo.class,
-        PersistenceSessionFactory5.class,
-
-        // @DomainService's
+        JdoPersistenceLifecycleService.class,
         MetricsServiceDefault.class,
-        ExceptionRecognizerCompositeForJdoObjectStore.class,
+        PersistenceSessionFactory5.class,
 
         // @Mixin's
         Persistable_datanucleusIdLong.class,

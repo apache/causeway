@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.scratchpad;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
@@ -26,6 +28,7 @@ import javax.inject.Named;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.springframework.stereotype.Service;
 
 /**
  * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same
@@ -37,10 +40,10 @@ import org.apache.isis.commons.internal.collections._Maps;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
-@RequestScoped @Named("scratchpad")
+@Service
+@RequestScoped
+@Named("isisApplib.scratchpad")
+@Log4j2
 public class Scratchpad {
 
     /**

@@ -49,10 +49,13 @@ import io.swagger.models.properties.LongProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
+import lombok.extern.log4j.Log4j2;
 
 import javax.inject.Named;
 
-@Component @Named("valuePropertyFactoryDefault")
+@Component
+@Named("isisMetaModel.valuePropertyFactoryDefault")
+@Log4j2
 public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 
     private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();

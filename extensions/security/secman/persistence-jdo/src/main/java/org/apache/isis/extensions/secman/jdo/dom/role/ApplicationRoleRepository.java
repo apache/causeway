@@ -18,9 +18,12 @@
  */
 package org.apache.isis.extensions.secman.jdo.dom.role;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
@@ -31,11 +34,11 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.springframework.stereotype.Repository;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        repositoryFor = ApplicationRole.class
-        )
+@Repository
+@Named("isisExtSecman.applicationRoleRepository")
+@Log4j2
 public class ApplicationRoleRepository 
 implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository {
 

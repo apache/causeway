@@ -31,6 +31,7 @@ import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.objectmanager.refresh.ObjectRefresher;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -38,7 +39,9 @@ import lombok.val;
  * @since 2.0
  *
  */
-@Service @Named("objectManagerDefault")
+@Service
+@Named("isisMetaModel.objectManagerDefault")
+@Log4j2
 public class ObjectManagerDefault implements ObjectManager {
     
     @Inject @Getter(onMethod = @__(@Override)) private MetaModelContext metaModelContext;

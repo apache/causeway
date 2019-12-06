@@ -30,7 +30,9 @@ import lombok.extern.log4j.Log4j2;
 
 import javax.inject.Named;
 
-@Service @Log4j2 @Named("publisherServiceLogging")
+@Service
+@Named("isisApplib.publisherServiceLogging")
+@Log4j2
 public class PublisherServiceLogging implements PublisherService {
 
     @Override

@@ -1060,6 +1060,7 @@ public class IsisConfiguration {
     }
 
     @Component
+    @Named("isisConfig.patternsConverter")
     @ConfigurationPropertiesBinding
     public static class PatternsConverter implements Converter<String, Map<Pattern, String>> {
         @Override

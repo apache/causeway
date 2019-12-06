@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.services.i18n.po;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -34,7 +36,9 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 
-@Service @Named("translationServicePo")
+@Service
+@Named("isisRuntimeServices.translationServicePo")
+@Log4j2
 public class TranslationServicePo implements TranslationService {
 
     private PoAbstract po;

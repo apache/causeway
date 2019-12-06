@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.services;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
@@ -34,7 +36,9 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
  * @since 2.0
  *
  */
-@Service @Named("serviceInjectorDefault")
+@Service
+@Named("isisMetaModel.serviceInjectorDefault")
+@Log4j2
 public class ServiceInjectorDefault implements ServiceInjector {
 
     @Inject private AutowireCapableBeanFactory autowireCapableBeanFactory;

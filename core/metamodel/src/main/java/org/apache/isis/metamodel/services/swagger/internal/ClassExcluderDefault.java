@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.services.swagger.internal;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +30,9 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.springframework.stereotype.Component;
 
-@Component @Named("classExcluderDefault")
+@Component
+@Named("isisMetaModel.classExcluderDefault")
+@Log4j2
 public class ClassExcluderDefault extends ClassExcluderAbstract {
 
     public ClassExcluderDefault() {

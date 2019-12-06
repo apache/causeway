@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -45,8 +46,10 @@ import lombok.extern.log4j.Log4j2;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
-@RequestScoped @Log4j2 @Named("queryResultsCacheInternal")
+@Service
+@Named("isisApplib.queryResultsCacheInternal")
+@RequestScoped
+@Log4j2
 public class QueryResultsCacheInternal implements QueryResultsCache, WithTransactionScope {
 
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.services.auth;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,7 +34,9 @@ import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 
-@Service @Named("authenticationSessionProviderDefault")
+@Service
+@Named("isisRuntimeServices.authenticationSessionProviderDefault")
+@Log4j2
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 
     @Inject protected UserServiceDefault userServiceDefault;

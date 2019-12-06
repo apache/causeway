@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.services.message;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -30,7 +32,9 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.MessageBroker;
 
-@Service @Named("messageServiceDefault")
+@Service
+@Named("isisRuntimeServices.messageServiceDefault")
+@Log4j2
 public class MessageServiceDefault implements MessageService {
 
     @Override

@@ -18,10 +18,13 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metrics;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.InstanceLifecycleListener;
 import javax.jdo.listener.LoadLifecycleListener;
@@ -31,12 +34,13 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
+import org.springframework.stereotype.Service;
 
+@Service
+@Named("isisJdoDn5.metricsServiceDefault")
 @RequestScoped
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
-public class MetricsServiceDefault implements MetricsService, InstanceLifecycleListener, 
+@Log4j2
+public class MetricsServiceDefault implements MetricsService, InstanceLifecycleListener,
 LoadLifecycleListener, WithTransactionScope {
 
     private AtomicInteger numberLoaded = new AtomicInteger(0);

@@ -63,7 +63,9 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2 @Named("menuBarsServiceBS3")
+@Service
+@Named("isisRuntimeServices.menuBarsServiceBS3")
+@Log4j2
 public class MenuBarsServiceBS3 implements MenuBarsService {
 
     public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";

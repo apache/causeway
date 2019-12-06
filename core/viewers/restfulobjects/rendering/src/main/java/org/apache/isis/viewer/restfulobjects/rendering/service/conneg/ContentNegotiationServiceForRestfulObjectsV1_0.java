@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -58,12 +59,14 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.springframework.stereotype.Service;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
+@Service
+@Named("isisRoRendering.contentNegotiationServiceForRestfulObjectsV1_0")
+@Log4j2
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
 
     private boolean strictAcceptChecking;

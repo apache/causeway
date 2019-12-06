@@ -18,12 +18,15 @@
  */
 package org.apache.isis.applib.services.tablecol;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
 
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.springframework.stereotype.Service;
 
 public interface TableColumnOrderService {
 
@@ -40,10 +43,9 @@ public interface TableColumnOrderService {
     /**
      * Used as a fallback.
      */
-    @DomainService(
-            nature = NatureOfService.DOMAIN
-            )
-    @Named("tableColumnOrderService.Default")
+    @Service
+    @Named("isisApplib.tableColumnOrderService.Default")
+    @Log4j2
     public static class Default implements TableColumnOrderService {
 
         @Override

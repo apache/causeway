@@ -39,7 +39,6 @@ import org.apache.isis.security.api.authorization.standard.Authorizor;
 @Configuration
 @Import({
         // modules
-        IsisModuleSecurityApi.class,
         IsisModuleRuntimeServices.class
 
 })

@@ -26,10 +26,14 @@ import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.applib.services.error.Ticket.StackTracePolicy;
 import org.apache.isis.runtime.services.error.EmailTicket;
 import org.apache.isis.runtime.services.error.EmailTicket.MailTo;
+import org.springframework.stereotype.Service;
 
 import lombok.val;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+import javax.inject.Named;
+
+@Service
+@Named("demoapp.demoErrorReportingService")
 public class DemoErrorReportingService implements ErrorReportingService {
 
     @Override

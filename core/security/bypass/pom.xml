@@ -36,11 +36,7 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-security-api</artifactId>
-        </dependency>
-        
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-runtime-services</artifactId>

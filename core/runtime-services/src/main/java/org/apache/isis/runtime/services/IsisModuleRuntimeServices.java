@@ -60,19 +60,27 @@ import org.springframework.context.annotation.Import;
         // @Service's
         AuthenticationSessionProviderDefault.class,
         AuthorizationManagerStandard.class,
-        CommandExecutorServiceDefault.class,
         BookmarkServiceInternalDefault.class,
+        CommandDtoServiceInternalDefault.class,
+        CommandExecutorServiceDefault.class,
         CommandServiceDefault.class,
+        ConfigurationViewServiceDefault.class,
+        EmailNotificationServiceDefault.class,
+        EmailServiceDefault.class,
         EventBusServiceSpring.class,
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
+        InteractionDtoServiceInternalDefault.class,
         TranslationServicePo.class,
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS3.class,
         MessageServiceDefault.class,
+        PublishingServiceInternalDefault.class,
         SessionManagementServiceDefault.class,
-        WrapperFactoryDefault.class,
+        SudoServiceDefault.class,
         TransactionServiceSpring.class,
+        UserProfileServiceDefault.class,
+        WrapperFactoryDefault.class,
         XmlSnapshotServiceDefault.class,
 
         // @Controller
@@ -82,15 +90,7 @@ import org.springframework.context.annotation.Import;
         RepositoryServiceDefault.class,
 
         // @DomainService's
-        CommandDtoServiceInternalDefault.class,
-        ConfigurationViewServiceDefault.class,
-        EmailServiceDefault.class,
         TranslationServicePoMenu.class,
-        InteractionDtoServiceInternalDefault.class,
-        PublishingServiceInternalDefault.class,
-        SudoServiceDefault.class,
-        UserProfileServiceDefault.class,
-        EmailNotificationServiceDefault.class,
 })
 public class IsisModuleRuntimeServices {
 

@@ -1,23 +1,24 @@
 package org.apache.isis.extensions.base.dom.services.calendar;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.time.LocalDate;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@Service
+@Named("isisExtBase.calendarService")
+@Log4j2
 public class CalendarService {
 
     private static final int MONTHS_IN_QUARTER = 3;
 
-    // cannot have the same id as the superclass
-    // (that is also registered as a service by virtue of @DomainService)
-    public String getId() {
-        return "incodeClockService";
-    }
 
     /**
      * @deprecated - use {@link org.apache.isis.applib.services.clock.ClockService#nowAsMillis()}.

@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.environment;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.context.ApplicationContext;
@@ -44,7 +45,10 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  * @implNote acts as the framework's bootstrapping entry-point for Spring  
  */
-@Service @Singleton @Log4j2
+@Service
+@Singleton
+@Named("isisCommons.isisSystemEnvironment")
+@Log4j2
 public class IsisSystemEnvironment {
     
     public static final String VERSION = "2.0.0-M3"; // landed here, but could be anywhere else if reasonable

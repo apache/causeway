@@ -41,7 +41,9 @@ import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2 @Named("gridLoaderServiceDefault")
+@Service
+@Named("isisMetaModel.gridLoaderServiceDefault")
+@Log4j2
 public class GridLoaderServiceDefault implements GridLoaderService {
 
 

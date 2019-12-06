@@ -27,7 +27,8 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 
-@Configuration @Named("runtimeEventSupport_Spring")
+@Configuration
+@Named("isisRuntime.runtimeEventSupport_Spring")
 public class RuntimeEventSupport_Spring {
 
     @Bean

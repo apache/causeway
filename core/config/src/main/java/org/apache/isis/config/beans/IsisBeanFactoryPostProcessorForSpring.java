@@ -32,6 +32,8 @@ import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import javax.inject.Named;
+
 /**
  * The framework's stereotypes {@link DomainService}, {@link DomainObject}, {@link ViewModel}, etc. 
  * are meta annotated with eg. {@link Component}, which allows for the Spring framework to pick up the 
@@ -43,8 +45,10 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  *
  */
-@Log4j2 @Component
-public class IsisBeanFactoryPostProcessorForSpring 
+@Component
+@Named("isisConfig.isisBeanFactoryPostProcessorForSpring")
+@Log4j2
+public class IsisBeanFactoryPostProcessorForSpring
 implements BeanFactoryPostProcessor, IsisBeanTypeRegistryHolder {
 
     @Getter(onMethod = @__(@Override))

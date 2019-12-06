@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtime.services.publish;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -47,14 +49,15 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
+import org.springframework.stereotype.Service;
 
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
-@RequestScoped @Named("publishingServiceInternalDefault")
+@Service
+@RequestScoped
+@Named("isisRuntimeServices.publishingServiceInternalDefault")
+@Log4j2
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 
 

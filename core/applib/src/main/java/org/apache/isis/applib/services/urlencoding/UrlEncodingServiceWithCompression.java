@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.urlencoding;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.nio.charset.StandardCharsets;
 
 import javax.inject.Named;
@@ -26,8 +28,11 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN) @Named("urlEncodingServiceWithCompression")
+@Service
+@Named("isisApplib.urlEncodingServiceWithCompression")
+@Log4j2
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {
 
     @Override
