@@ -32,7 +32,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -187,7 +187,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
         }
 
         @Override
-        public Can<ObjectAdapterMemento> getToggles() {
+        public Can<ObjectMemento> getToggles() {
             return collectionModel.getToggleMementosList();
         }
 

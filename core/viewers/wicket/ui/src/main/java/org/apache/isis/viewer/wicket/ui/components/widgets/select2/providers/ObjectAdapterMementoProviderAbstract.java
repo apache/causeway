@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
@@ -40,7 +40,7 @@ import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import lombok.Getter;
 import lombok.val;
 
-public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvider<ObjectAdapterMemento> {
+public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvider<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,7 +59,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     }
 
     @Override
-    public String getDisplayValue(final ObjectAdapterMemento choice) {
+    public String getDisplayValue(final ObjectMemento choice) {
         if (choice == null) {
             return NULL_DISPLAY_TEXT;
         }
@@ -80,7 +80,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     }
 
     @Override
-    public String getIdValue(final ObjectAdapterMemento choice) {
+    public String getIdValue(final ObjectMemento choice) {
         if (choice == null) {
             return NULL_PLACEHOLDER;
         }
@@ -97,9 +97,9 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     }
 
     @Override
-    public void query(final String term, final int page, final org.wicketstuff.select2.Response<ObjectAdapterMemento> response) {
+    public void query(final String term, final int page, final org.wicketstuff.select2.Response<ObjectMemento> response) {
 
-        final List<ObjectAdapterMemento> mementos = _Lists.newArrayList(obtainMementos(term));
+        final List<ObjectMemento> mementos = _Lists.newArrayList(obtainMementos(term));
         // if not mandatory, and the list doesn't contain null already, then add it in.
         if(!scalarModel.isRequired() && !mementos.contains(null)) {
             mementos.add(0, null);
@@ -107,7 +107,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         response.addAll(mementos);
     }
 
-    protected abstract List<ObjectAdapterMemento> obtainMementos(String term);
+    protected abstract List<ObjectMemento> obtainMementos(String term);
 
     /**
      * Filters all choices against a term by using their
@@ -117,12 +117,12 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
      * @param choicesMementos The collections of choices to filter
      * @return A list of all matching choices
      */
-    protected final List<ObjectAdapterMemento> obtainMementos(String term, Collection<ObjectAdapterMemento> choicesMementos) {
-        List<ObjectAdapterMemento> matches = _Lists.newArrayList();
+    protected final List<ObjectMemento> obtainMementos(String term, Collection<ObjectMemento> choicesMementos) {
+        List<ObjectMemento> matches = _Lists.newArrayList();
         if (Strings.isEmpty(term)) {
             matches.addAll(choicesMementos);
         } else {
-            for (ObjectAdapterMemento candidate : choicesMementos) {
+            for (ObjectMemento candidate : choicesMementos) {
                 val objectAdapter = commonContext.reconstructObject(candidate); 
                 String title = objectAdapter.titleString(objectAdapter);
                 if (title.toLowerCase().contains(term.toLowerCase())) {

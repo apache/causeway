@@ -48,7 +48,7 @@ import org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.runtime.system.session.IsisRequestCycle;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
@@ -284,15 +284,15 @@ implements FormExecutor {
             final ManagedObject targetAdapter,
             final ManagedObject resultAdapter) {
 
-        final ObjectAdapterMemento targetOam = getCommonContext().mementoFor(targetAdapter);
-        final ObjectAdapterMemento resultOam = getCommonContext().mementoFor(resultAdapter);
+        final ObjectMemento targetOam = getCommonContext().mementoFor(targetAdapter);
+        final ObjectMemento resultOam = getCommonContext().mementoFor(resultAdapter);
 
         return differs(targetOam, resultOam);
     }
 
     private static boolean differs(
-            final ObjectAdapterMemento targetOam,
-            final ObjectAdapterMemento resultOam) {
+            final ObjectMemento targetOam,
+            final ObjectMemento resultOam) {
 
         final Bookmark resultBookmark = resultOam != null ? resultOam.asHintingBookmarkIfSupported() : null;
         final Bookmark targetBookmark = targetOam != null ? targetOam.asHintingBookmarkIfSupported() : null;

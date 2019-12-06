@@ -25,23 +25,23 @@ import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
 
 public class Select2MultiChoiceExt
-extends Select2MultiChoice<ObjectAdapterMemento>
+extends Select2MultiChoice<ObjectMemento>
 implements ChoiceExt {
 
     private static final long serialVersionUID = 1L;
 
     public static Select2MultiChoiceExt create(
             final String id,
-            final IModel<ArrayList<ObjectAdapterMemento>> modelObject,
+            final IModel<ArrayList<ObjectMemento>> modelObject,
             final ScalarModel scalarModel) {
 
         // TODO: naughty..
-        final IModel<Collection<ObjectAdapterMemento>> modelObjectColl = (IModel) modelObject;
+        final IModel<Collection<ObjectMemento>> modelObjectColl = (IModel) modelObject;
 
         return new Select2MultiChoiceExt(id, modelObjectColl, scalarModel);
     }
@@ -50,7 +50,7 @@ implements ChoiceExt {
 
     Select2MultiChoiceExt(
             final String id,
-            final IModel<Collection<ObjectAdapterMemento>> model,
+            final IModel<Collection<ObjectMemento>> model,
             final ScalarModel scalarModel) {
         super(id, model, EmptyChoiceProvider.INSTANCE);
         specId = scalarModel.getTypeOfSpecification().getSpecId();

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 /**
@@ -31,7 +31,7 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
-    private final ObjectAdapterMemento adapterMemento;
+    private final ObjectMemento adapterMemento;
 
     public ValueModel(IsisWebAppCommonContext commonContext, ManagedObject adapter) {
         super(commonContext);

@@ -32,24 +32,24 @@ import lombok.val;
  * 
  *
  */
-public interface ObjectAdapterMementoService {
+public interface ObjectMementoService {
 
-    ObjectAdapterMemento mementoForRootOid(RootOid rootOid);
+    ObjectMemento mementoForRootOid(RootOid rootOid);
 
-    ObjectAdapterMemento mementoForAdapter(ManagedObject adapter);
+    ObjectMemento mementoForAdapter(ManagedObject adapter);
 
-    ObjectAdapterMemento mementoForPojo(Object pojo);
+    ObjectMemento mementoForPojo(Object pojo);
     
-    default ObjectAdapterMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId) {
+    default ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId) {
         val listOfMementos = _NullSafe.stream(iterablePojos)
                 .map(pojo->mementoForPojo(pojo))
                 .collect(Collectors.toList());
         val memento =
-                ObjectAdapterMemento.wrapMementoList(listOfMementos, specId);
+                ObjectMemento.wrapMementoList(listOfMementos, specId);
         return memento;
     }
 
-    ManagedObject reconstructObject(ObjectAdapterMemento memento);
+    ManagedObject reconstructObject(ObjectMemento memento);
     
 
 }

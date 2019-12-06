@@ -23,12 +23,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 
 public interface ObjectAdapterModel extends IModel<ManagedObject> {
 
-    ObjectAdapterMemento getContextAdapterIfAny();
-    void setContextAdapterIfAny(ObjectAdapterMemento contextAdapterIfAny);
+    ObjectMemento getContextAdapterIfAny();
+    void setContextAdapterIfAny(ObjectMemento contextAdapterIfAny);
 
     EntityModel.RenderingHint getRenderingHint();
     void setRenderingHint(EntityModel.RenderingHint renderingHint);

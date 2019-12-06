@@ -25,7 +25,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 import lombok.val;
@@ -48,7 +48,7 @@ class HintPageParameterSerializer implements Serializable {
 
     static void hintStoreToPageParameters(
             final PageParameters pageParameters,
-            final ObjectAdapterMemento objectAdapterMemento,
+            final ObjectMemento objectAdapterMemento,
             final HintStore hintStore) {
         
         if(objectAdapterMemento == null) {

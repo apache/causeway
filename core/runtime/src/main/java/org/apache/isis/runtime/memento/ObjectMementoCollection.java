@@ -26,8 +26,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.Getter;
 import lombok.Value;
@@ -39,25 +37,24 @@ import lombok.val;
  *
  */
 @Value(staticConstructor = "of")
-final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
+final class ObjectMementoCollection implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
-    private final ArrayList<ObjectAdapterMemento> container; 
+    private final ArrayList<ObjectMemento> container; 
     @Getter(onMethod = @__({@Override})) private final ObjectSpecId objectSpecId;
 
     @Override
-    public ManagedObject reconstructObject(MementoStore mementoStore, SpecificationLoader specificationLoader) {
+    public ManagedObject reconstructObject(ObjectUnmarshaller objectUnmarshaller) {
         
-        //TODO[2112] we don't need the persistence layer to do that!
         val listOfPojos = getContainer().stream()
-              .map(memento->memento.reconstructObject(mementoStore, specificationLoader))
+              .map(memento->memento.reconstructObject(objectUnmarshaller))
               .filter(_NullSafe::isPresent)
               .map(ManagedObject::getPojo)
               .filter(_NullSafe::isPresent)
               .collect(Collectors.toCollection(ArrayList::new));
         
-        return mementoStore.adapterForListOfPojos(listOfPojos);
+        return objectUnmarshaller.adapterForListOfPojos(listOfPojos);
     }
 
     @Override
@@ -75,10 +72,9 @@ final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }    
 
-    public ArrayList<ObjectAdapterMemento> unwrapList() {
+    public ArrayList<ObjectMemento> unwrapList() {
         return getContainer();
     }
-
 
 
 }

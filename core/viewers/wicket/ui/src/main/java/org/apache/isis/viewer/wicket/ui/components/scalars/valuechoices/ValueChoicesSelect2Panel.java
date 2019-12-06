@@ -34,7 +34,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
@@ -76,7 +76,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
 
-    private List<ObjectAdapterMemento> getChoiceMementos(final ManagedObject[] argumentsIfAvailable) {
+    private List<ObjectMemento> getChoiceMementos(final ManagedObject[] argumentsIfAvailable) {
         
         val commonContext = super.getCommonContext();
         
@@ -98,7 +98,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
 
     @Override
     protected IModel<String> obtainInlinePromptModel() {
-        ObjectAdapterMemento inlinePromptMemento = select2.getModelObject();
+        ObjectMemento inlinePromptMemento = select2.getModelObject();
         String inlinePrompt = inlinePromptMemento != null ? inlinePromptMemento.asString(): null;
         return Model.of(inlinePrompt);
     }
@@ -167,14 +167,14 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
     // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
     @Override
-    protected ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable) {
-        final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(argsIfAvailable);
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable) {
+        final List<ObjectMemento> choicesMementos = getChoiceMementos(argsIfAvailable);
         return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos);
     }
 
     @Override
-    protected void syncIfNull(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos) {
-        final ObjectAdapterMemento curr = getModel().getObjectAdapterMemento();
+    protected void syncIfNull(final Select2 select2, final List<ObjectMemento> choicesMementos) {
+        final ObjectMemento curr = getModel().getObjectAdapterMemento();
 
         if(curr == null) {
             select2.getModel().setObject(null);

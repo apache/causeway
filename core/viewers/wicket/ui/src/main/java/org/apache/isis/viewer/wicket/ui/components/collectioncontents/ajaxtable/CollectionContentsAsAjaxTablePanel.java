@@ -47,7 +47,7 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
@@ -135,7 +135,7 @@ implements CollectionCountProvider {
 
     private void addTitleColumn(
             final List<IColumn<ManagedObject, String>> columns,
-            final ObjectAdapterMemento parentAdapterMementoIfAny,
+            final ObjectMemento parentAdapterMementoIfAny,
             final int maxTitleParented,
             final int maxTitleStandalone) {
         
@@ -246,7 +246,7 @@ implements CollectionCountProvider {
 
         final Class<?> collectionType = getModel().getTypeOfSpecification().getCorrespondingClass();
 
-        final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
+        final ObjectMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
         if(parentObjectAdapterMemento != null) {
             val parentObjectAdapter = getCommonContext().reconstructObject(parentObjectAdapterMemento);
             final Object parent = parentObjectAdapter.getPojo();

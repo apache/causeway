@@ -29,19 +29,18 @@ import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 /**
  * @since 2.0
  */
-public interface ObjectAdapterMemento extends Serializable {
+public interface ObjectMemento extends Serializable {
 
     String asString();
 
     /**
      * TODO[2112] outdated
      * Returns a bookmark only if 
-     * {@link org.apache.isis.runtime.memento.MementoHelper.RecreateStrategy#LOOKUP} and 
+     * {@link org.apache.isis.runtime.memento.ObjectMementoLegacy.RecreateStrategy#LOOKUP} and 
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */
@@ -50,7 +49,7 @@ public interface ObjectAdapterMemento extends Serializable {
     /**
      * TODO[2112] outdated 
      * Returns a bookmark only if 
-     * {@link org.apache.isis.runtime.memento.MementoHelper.RecreateStrategy#LOOKUP} and 
+     * {@link org.apache.isis.runtime.memento.ObjectMementoLegacy.RecreateStrategy#LOOKUP} and 
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */
@@ -58,30 +57,30 @@ public interface ObjectAdapterMemento extends Serializable {
 
     ObjectSpecId getObjectSpecId();
     
-    ManagedObject reconstructObject(MementoStore mementoStore, SpecificationLoader specificationLoader);
+    ManagedObject reconstructObject(ObjectUnmarshaller objectUnmarshaller);
 
     // -- FACTORIES
 
-    static ObjectAdapterMemento wrapMementoList(
-            Collection<ObjectAdapterMemento> container, 
+    static ObjectMemento wrapMementoList(
+            Collection<ObjectMemento> container, 
             ObjectSpecId specId) {
 
         // ArrayList is serializable
         if(container instanceof ArrayList) {
-            return ObjectAdapterMementoCollection.of((ArrayList<ObjectAdapterMemento>)container, specId);
+            return ObjectMementoCollection.of((ArrayList<ObjectMemento>)container, specId);
         }
-        return ObjectAdapterMementoCollection.of(_Lists.newArrayList(container), specId);
+        return ObjectMementoCollection.of(_Lists.newArrayList(container), specId);
     }
 
     // ArrayList is serializable
-    static Optional<ArrayList<ObjectAdapterMemento>> unwrapList(ObjectAdapterMemento memento) {
+    static Optional<ArrayList<ObjectMemento>> unwrapList(ObjectMemento memento) {
         if(memento==null) {
             return Optional.empty();
         }
-        if(!(memento instanceof ObjectAdapterMementoCollection)) {
+        if(!(memento instanceof ObjectMementoCollection)) {
             return Optional.empty();
         }
-        return Optional.ofNullable(((ObjectAdapterMementoCollection)memento).unwrapList());
+        return Optional.ofNullable(((ObjectMementoCollection)memento).unwrapList());
     }
 
 

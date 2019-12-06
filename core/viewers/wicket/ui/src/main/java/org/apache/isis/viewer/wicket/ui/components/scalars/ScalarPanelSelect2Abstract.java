@@ -33,7 +33,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -114,7 +114,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      */
     private void setProviderAndCurrAndPending(Select2 select2, ManagedObject[] argsIfAvailable) {
 
-        final ChoiceProvider<ObjectAdapterMemento> choiceProvider = buildChoiceProvider(argsIfAvailable);
+        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(argsIfAvailable);
 
         select2.setProvider(choiceProvider);
         getModel().clearPending();
@@ -128,12 +128,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ManagedObject[])})
      */
-    protected abstract ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable);
+    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable);
 
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ManagedObject[])})
      */
-    protected abstract void syncIfNull(Select2 select2, List<ObjectAdapterMemento> choicesMementos);
+    protected abstract void syncIfNull(Select2 select2, List<ObjectMemento> choicesMementos);
 
 
     // //////////////////////////////////////
@@ -231,20 +231,20 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         public void validate(final IValidatable<Object> validatable) {
             final Object proposedValueObj = validatable.getValue();
 
-            final ObjectAdapterMemento proposedValue;
+            final ObjectMemento proposedValue;
 
             if (proposedValueObj instanceof List) {
                 @SuppressWarnings("unchecked")
-                val proposedValueObjAsList = (List<ObjectAdapterMemento>) proposedValueObj;
+                val proposedValueObjAsList = (List<ObjectMemento>) proposedValueObj;
                 if (proposedValueObjAsList.isEmpty()) {
                     return;
                 }
                 val memento = proposedValueObjAsList.get(0);
                 val objectSpecId = memento.getObjectSpecId();
-                proposedValue = ObjectAdapterMemento
+                proposedValue = ObjectMemento
                         .wrapMementoList(proposedValueObjAsList, objectSpecId);
             } else {
-                proposedValue = (ObjectAdapterMemento) proposedValueObj;
+                proposedValue = (ObjectMemento) proposedValueObj;
             }
 
             val proposedAdapter = scalarModel.getCommonContext().reconstructObject(proposedValue); 

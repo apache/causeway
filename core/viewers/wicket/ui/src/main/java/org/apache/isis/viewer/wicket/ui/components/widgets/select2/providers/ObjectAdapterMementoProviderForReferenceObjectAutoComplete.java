@@ -47,7 +47,7 @@ import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
@@ -62,7 +62,7 @@ extends ObjectAdapterMementoProviderAbstract {
     }
 
     @Override
-    protected List<ObjectAdapterMemento> obtainMementos(String term) {
+    protected List<ObjectMemento> obtainMementos(String term) {
         final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
         final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
         final List<ManagedObject> autoCompleteAdapters =
@@ -74,7 +74,7 @@ extends ObjectAdapterMementoProviderAbstract {
     }
 
     @Override
-    public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
+    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
         
         val commonContext = super.getCommonContext();
 

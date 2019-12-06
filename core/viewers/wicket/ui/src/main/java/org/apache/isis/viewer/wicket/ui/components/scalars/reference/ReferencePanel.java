@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModelForReference;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -160,7 +160,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
     @Override
     protected IModel<String> obtainInlinePromptModel() {
-        final IModel<ObjectAdapterMemento> model = select2.getModel();
+        final IModel<ObjectMemento> model = select2.getModel();
         
         return new IModel<String>() {
             private static final long serialVersionUID = 1L;
@@ -338,10 +338,10 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable) {
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable) {
 
         if (getModel().hasChoices()) {
-            List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
+            List<ObjectMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
             return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
         }
 
@@ -353,7 +353,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     }
 
     // called by setProviderAndCurrAndPending
-    private List<ObjectAdapterMemento> obtainChoiceMementos(ManagedObject[] argsIfAvailable) {
+    private List<ObjectMemento> obtainChoiceMementos(ManagedObject[] argsIfAvailable) {
         
         val commonContext = super.getCommonContext();
         
@@ -366,8 +366,8 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
     // called by setProviderAndCurrAndPending
     @Override
-    protected void syncIfNull(final Select2 select2, final List<ObjectAdapterMemento> choiceMementos) {
-        final ObjectAdapterMemento curr = select2.getModelObject();
+    protected void syncIfNull(final Select2 select2, final List<ObjectMemento> choiceMementos) {
+        final ObjectMemento curr = select2.getModelObject();
 
         if(!getModel().isCollection()) {
 
@@ -403,7 +403,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         if(isEditableWithEitherAutoCompleteOrChoices()) {
 
             // flush changes to pending
-            ObjectAdapterMemento convertedInput = select2.getConvertedInput();
+            ObjectMemento convertedInput = select2.getConvertedInput();
 
             getModel().setPending(convertedInput);
             if(select2 != null) {

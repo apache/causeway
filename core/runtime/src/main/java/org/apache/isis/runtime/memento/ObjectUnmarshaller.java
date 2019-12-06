@@ -1,21 +1,3 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
- */
 package org.apache.isis.runtime.memento;
 
 import java.util.LinkedHashSet;
@@ -53,26 +35,39 @@ import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * package private mixin for ObjectAdapterContext
- * <p>
- * Responsibility: provides object recreation to mementos
- * </p>
+ * Converts serializable {@link Data} back to a {@link ManagedObject}. 
+ * 
  * @since 2.0
  */
-@Log4j2 @RequiredArgsConstructor
-final class MementoStoreLegacy implements MementoStore {
+@RequiredArgsConstructor
+@Log4j2
+class ObjectUnmarshaller {
 
     private final ObjectManager objectManager;
-    //private final ObjectAdapterProvider objectAdapterProvider;
-    private final SpecificationLoader specificationLoader;
-
-    @Override
-    public ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data) {
+    @Getter private final SpecificationLoader specificationLoader; 
+    
+    ObjectAdapter recreateObject(Data data) {
+        if (data == null) {
+            return null;
+        }
+        val spec = specificationLoader.lookupBySpecIdElseLoad(data.getObjectSpecId());
+        val oid = data.getOid();
+        return recreateObject(spec, oid, data);
+    }
+    
+    ManagedObject adapterForListOfPojos(List<Object> listOfPojos) {
+        return ManagedObject.of(specificationLoader::loadSpecification, listOfPojos);
+    }
+    
+    // -- HELPER
+    
+    private ObjectAdapter recreateObject(ObjectSpecification spec, Oid oid, Data data) {
         
         ObjectAdapter adapter;
 
@@ -106,13 +101,6 @@ final class MementoStoreLegacy implements MementoStore {
         }
         return adapter;
     }
-
-    @Override
-    public ManagedObject adapterForListOfPojos(List<Object> listOfPojos) {
-        return ManagedObject.of(specificationLoader::loadSpecification, listOfPojos);
-    }
-    
-    // -- HELPER
     
     private Object instantiateAndInjectServices(ObjectSpecification spec) {
         
@@ -190,7 +178,7 @@ final class MementoStoreLegacy implements MementoStore {
 
         } else {
             final ObjectData od = (ObjectData) data;
-            if (od.containsField()) {
+            if (od.hasAnyField()) {
                 throw _Exceptions.unrecoverableFormatted(
                         "Resolve state (for %s) inconsistent with fact that data exists for fields", 
                         objectAdapter); 
@@ -296,4 +284,5 @@ final class MementoStoreLegacy implements MementoStore {
         return objectAdapterProvider;
     }
 
+    
 }

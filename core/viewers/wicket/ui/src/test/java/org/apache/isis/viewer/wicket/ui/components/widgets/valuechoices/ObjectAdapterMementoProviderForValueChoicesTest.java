@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -47,10 +47,10 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
     @Rule public JUnitRuleMockery2 context = 
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private List<ObjectAdapterMemento> mementos;
+    private List<ObjectMemento> mementos;
 
-    private ObjectAdapterMemento mockMemento1;
-    private ObjectAdapterMemento mockMemento2;
+    private ObjectMemento mockMemento1;
+    private ObjectMemento mockMemento2;
     private ObjectAdapterMementoProviderForValueChoices provider;
 
     @Mock private SpecificationLoader mockSpecificationLoader;
@@ -94,15 +94,15 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
 
     @Test
     public void whenInList() throws Exception {
-        final Collection<ObjectAdapterMemento> mementos = provider.toChoices(Collections.singletonList("FAKE:mockMemento1"));
+        final Collection<ObjectMemento> mementos = provider.toChoices(Collections.singletonList("FAKE:mockMemento1"));
         Assert.assertThat(mementos.size(), is(1));
         Assert.assertThat(mementos.iterator().next(), is(mockMemento1));
     }
 
-    private ObjectAdapterMemento mock(
+    private ObjectMemento mock(
             final ObjectSpecId specId,
             final String id) {
-        final ObjectAdapterMemento mock = context.mock(ObjectAdapterMemento.class, id);
+        final ObjectMemento mock = context.mock(ObjectMemento.class, id);
         context.checking(new Expectations() {{
             allowing(mock).getObjectSpecId();
             will(returnValue(specId));

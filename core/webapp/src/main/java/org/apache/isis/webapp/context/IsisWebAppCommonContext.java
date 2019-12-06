@@ -32,8 +32,8 @@ import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.memento.ObjectAdapterMementoService;
+import org.apache.isis.runtime.memento.ObjectMemento;
+import org.apache.isis.runtime.memento.ObjectMementoService;
 import org.apache.isis.runtime.system.session.IsisSession;
 
 import lombok.AccessLevel;
@@ -63,7 +63,7 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
     
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    private final ObjectAdapterMementoService mementoService = lookupServiceElseFail(ObjectAdapterMementoService.class);
+    private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);
     
     @Getter(lazy = true)
     private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
@@ -92,15 +92,15 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
         return new TransactionTemplate(txMan);
     }
     
-    public ObjectAdapterMemento mementoFor(ManagedObject adapter) {
+    public ObjectMemento mementoFor(ManagedObject adapter) {
         return getMementoService().mementoForAdapter(adapter);
     }
     
-    public ObjectAdapterMemento mementoFor(RootOid rootOid) {
+    public ObjectMemento mementoFor(RootOid rootOid) {
         return getMementoService().mementoForRootOid(rootOid);
     }
     
-    public ManagedObject reconstructObject(ObjectAdapterMemento memento) {
+    public ManagedObject reconstructObject(ObjectMemento memento) {
         return getMementoService().reconstructObject(memento);
     }
     
@@ -128,7 +128,7 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
             return getCommonContext().getSpecificationLoader();
         }
         
-        default ObjectAdapterMementoService getMementoService() {
+        default ObjectMementoService getMementoService() {
             return getCommonContext().getMementoService();
         }
         

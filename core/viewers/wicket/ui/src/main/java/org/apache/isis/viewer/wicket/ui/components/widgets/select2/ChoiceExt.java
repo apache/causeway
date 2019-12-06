@@ -24,7 +24,7 @@ import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 
 /**
  * Represents functionality that is common to both {@link Select2Choice} and {@link Select2MultiChoice}, but for
@@ -33,7 +33,7 @@ import org.apache.isis.runtime.memento.ObjectAdapterMemento;
  * Also holds extensions, notable {@link #getSpecId()}.
  */
 public interface ChoiceExt {
-    void setProvider(final ChoiceProvider<ObjectAdapterMemento> providerForChoices);
+    void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices);
     Settings getSettings();
 
     ObjectSpecId getSpecId();

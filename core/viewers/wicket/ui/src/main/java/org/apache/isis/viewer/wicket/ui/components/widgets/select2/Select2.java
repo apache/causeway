@@ -32,7 +32,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
@@ -99,39 +99,39 @@ public class Select2 implements Serializable {
         return choiceExt().getSettings();
     }
 
-    public void setProvider(final ChoiceProvider<ObjectAdapterMemento> providerForChoices) {
+    public void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices) {
         choiceExt().setProvider(providerForChoices);
     }
 
-    public ObjectAdapterMemento getModelObject() {
+    public ObjectMemento getModelObject() {
         if (select2Choice != null) {
             return select2Choice.getModelObject();
         } else {
-            final Collection<ObjectAdapterMemento> modelObject = select2MultiChoice.getModelObject();
+            final Collection<ObjectMemento> modelObject = select2MultiChoice.getModelObject();
 
-            return ObjectAdapterMemento.wrapMementoList(modelObject, select2MultiChoice.getSpecId());
+            return ObjectMemento.wrapMementoList(modelObject, select2MultiChoice.getSpecId());
         }
     }
 
-    public IModel<ObjectAdapterMemento> getModel() {
+    public IModel<ObjectMemento> getModel() {
         if (select2Choice != null) {
             return select2Choice.getModel();
         } else {
-            final IModel<Collection<ObjectAdapterMemento>> model = select2MultiChoice.getModel();
-            final Collection<ObjectAdapterMemento> modelObject = model.getObject();
+            final IModel<Collection<ObjectMemento>> model = select2MultiChoice.getModel();
+            final Collection<ObjectMemento> modelObject = model.getObject();
 
-            final ObjectAdapterMemento memento = ObjectAdapterMemento.wrapMementoList(modelObject, select2MultiChoice.getSpecId());
-            return new IModel<ObjectAdapterMemento>() {
+            final ObjectMemento memento = ObjectMemento.wrapMementoList(modelObject, select2MultiChoice.getSpecId());
+            return new IModel<ObjectMemento>() {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                public ObjectAdapterMemento getObject() {
+                public ObjectMemento getObject() {
                     return memento;
                 }
 
                 @Override
-                public void setObject(final ObjectAdapterMemento memento) {
-                    model.setObject(ObjectAdapterMemento.unwrapList(memento)
+                public void setObject(final ObjectMemento memento) {
+                    model.setObject(ObjectMemento.unwrapList(memento)
                             .orElse(null));
                 }
 
@@ -142,12 +142,12 @@ public class Select2 implements Serializable {
         }
     }
 
-    public ObjectAdapterMemento getConvertedInput() {
+    public ObjectMemento getConvertedInput() {
         if (select2Choice != null) {
             return select2Choice.getConvertedInput();
         } else {
-            final Collection<ObjectAdapterMemento> convertedInput = select2MultiChoice.getConvertedInput();
-            return ObjectAdapterMemento.wrapMementoList(convertedInput, select2MultiChoice.getSpecId());
+            final Collection<ObjectMemento> convertedInput = select2MultiChoice.getConvertedInput();
+            return ObjectMemento.wrapMementoList(convertedInput, select2MultiChoice.getSpecId());
         }
     }
 

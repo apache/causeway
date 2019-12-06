@@ -25,18 +25,14 @@ import javax.inject.Singleton;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -45,55 +41,54 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisRuntime.ObjectAdapterMementoServiceDefault")
+@Named("isisRuntime.ObjectMementoServiceDefault")
 @Singleton
-@Log4j2
-public class ObjectAdapterMementoServiceDefault
-implements ObjectAdapterMementoService {
+public class ObjectMementoServiceDefault
+implements ObjectMementoService {
     
     @Inject @Getter private SpecificationLoader specificationLoader;
     @Inject private ObjectManager objectManager;
-    private MementoStore mementoStore;
+    private ObjectUnmarshaller objectUnmarshaller;
 
     @Override
-    public ObjectAdapterMemento mementoForRootOid(RootOid rootOid) {
-        val delegate = MementoHelper.createPersistent(rootOid, specificationLoader);
-        return ObjectAdapterMementoDelegator.of(delegate);
+    public ObjectMemento mementoForRootOid(RootOid rootOid) {
+        val mementoAdapter = ObjectMementoLegacy.createPersistent(rootOid, specificationLoader);
+        return ObjectMementoAdapter.of(mementoAdapter);
     }
 
     @Override
-    public ObjectAdapterMemento mementoForAdapter(ManagedObject adapter) {
-        val delegate = MementoHelper.createOrNull(adapter);
-        if(delegate==null) {
+    public ObjectMemento mementoForAdapter(ManagedObject adapter) {
+        val mementoAdapter = ObjectMementoLegacy.createOrNull(adapter);
+        if(mementoAdapter==null) {
             return null;
         }
-        return ObjectAdapterMementoDelegator.of(delegate);
+        return ObjectMementoAdapter.of(mementoAdapter);
     }
 
     @Override
-    public ObjectAdapterMemento mementoForPojo(Object pojo) {
-        val adapter = objectManager.adapt(pojo);
-        return mementoForAdapter(adapter);
+    public ObjectMemento mementoForPojo(Object pojo) {
+        val managedObject = objectManager.adapt(pojo);
+        return mementoForAdapter(managedObject);
     }
 
     @Override
-    public ManagedObject reconstructObject(ObjectAdapterMemento memento) {
+    public ManagedObject reconstructObject(ObjectMemento memento) {
         if(memento==null) {
             return null;
         }
-        if(mementoStore==null) {
-            mementoStore = new MementoStoreLegacy(objectManager, specificationLoader);
+        if(objectUnmarshaller==null) {
+            objectUnmarshaller = new ObjectUnmarshaller(objectManager, specificationLoader);
         }
         
-        return memento.reconstructObject(mementoStore, specificationLoader);
+        return memento.reconstructObject(objectUnmarshaller);
     }
 
     @RequiredArgsConstructor(staticName = "of")
-    static class ObjectAdapterMementoDelegator implements ObjectAdapterMemento {
+    static class ObjectMementoAdapter implements ObjectMemento {
 
         private static final long serialVersionUID = 1L;
 
-        private final MementoHelper delegate;
+        private final ObjectMementoLegacy delegate;
 
         @Override
         public String asString() {
@@ -116,10 +111,8 @@ implements ObjectAdapterMementoService {
         }
 
         @Override
-        public ManagedObject reconstructObject(
-                MementoStore mementoStore, SpecificationLoader specificationLoader) {
-            
-            return delegate.getObjectAdapter(mementoStore, specificationLoader);
+        public ManagedObject reconstructObject(ObjectUnmarshaller objectUnmarshaller) {
+            return delegate.reconstructObject(objectUnmarshaller, objectUnmarshaller.getSpecificationLoader());
         }
         
         @Override

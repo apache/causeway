@@ -21,8 +21,6 @@ package org.apache.isis.runtime.memento;
 
 import java.io.Serializable;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 
@@ -37,11 +35,11 @@ class Data implements Serializable {
 
     private final static long serialVersionUID = 1L;
 
-    /**
-     * @apiNote could be <tt>null</tt> if represents a value (standalone adapter).
-     */
-    @Getter @Nullable private final Oid oid;
+    @Getter private final Oid oid;
 
+    /**
+     * @apiNote: <tt>null</tt> if represents a value
+     */
     public ObjectSpecId getObjectSpecId() {
         return oid.getObjectSpecId();
     }

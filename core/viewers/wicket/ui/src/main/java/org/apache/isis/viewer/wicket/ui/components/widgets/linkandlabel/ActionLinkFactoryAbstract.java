@@ -42,7 +42,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -103,7 +103,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 if(toggledMementosProviderIfAny != null) {
 
-                    final Can<ObjectAdapterMemento> selectedMementos =
+                    final Can<ObjectMemento> selectedMementos =
                             toggledMementosProviderIfAny.getToggles();
 
                     final List<Object> selectedPojos = selectedMementos.stream()

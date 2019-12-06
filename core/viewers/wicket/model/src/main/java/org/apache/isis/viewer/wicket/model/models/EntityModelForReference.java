@@ -23,7 +23,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 
 import static org.apache.isis.viewer.wicket.model.models.EntityModel.createPageParameters;
 
@@ -35,7 +35,7 @@ public class EntityModelForReference implements ObjectAdapterModel {
 
     private final ScalarModel scalarModel;
 
-    private ObjectAdapterMemento contextAdapterIfAny;
+    private ObjectMemento contextAdapterIfAny;
     private EntityModel.RenderingHint renderingHint;
 
 
@@ -59,12 +59,12 @@ public class EntityModelForReference implements ObjectAdapterModel {
     }
 
     @Override
-    public ObjectAdapterMemento getContextAdapterIfAny() {
+    public ObjectMemento getContextAdapterIfAny() {
         return contextAdapterIfAny;
     }
 
     @Override
-    public void setContextAdapterIfAny(ObjectAdapterMemento contextAdapterIfAny) {
+    public void setContextAdapterIfAny(ObjectMemento contextAdapterIfAny) {
         this.contextAdapterIfAny = contextAdapterIfAny;
     }
 

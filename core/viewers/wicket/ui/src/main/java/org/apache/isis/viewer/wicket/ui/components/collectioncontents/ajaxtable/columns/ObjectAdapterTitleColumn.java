@@ -25,7 +25,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
@@ -38,9 +38,9 @@ import lombok.val;
 public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
-    private final ObjectAdapterMemento parentAdapterMementoIfAny;
+    private final ObjectMemento parentAdapterMementoIfAny;
 
-    private static String columnName(final ObjectAdapterMemento parentAdapterMementoIfAny, final int maxTitleLength) {
+    private static String columnName(final ObjectMemento parentAdapterMementoIfAny, final int maxTitleLength) {
         if(maxTitleLength == 0) {
             return "";
         }
@@ -49,7 +49,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
 
     public ObjectAdapterTitleColumn(
             IsisWebAppCommonContext commonContext, 
-            ObjectAdapterMemento parentAdapterMementoIfAny, 
+            ObjectMemento parentAdapterMementoIfAny, 
             int maxTitleLength) {
         
         super(commonContext, columnName(parentAdapterMementoIfAny, maxTitleLength)); // i18n

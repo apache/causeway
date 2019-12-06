@@ -50,7 +50,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -343,7 +343,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
             @Override
             public String getCssClass(final ScalarModel scalarModel) {
-                final ObjectAdapterMemento adapterMemento = scalarModel.getObjectAdapterMemento();
+                final ObjectMemento adapterMemento = scalarModel.getObjectAdapterMemento();
                 if (adapterMemento == null) {
                     // shouldn't happen
                     return null;
@@ -736,7 +736,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     }
 
     private void getAndStore(final EntityModel parentEntityModel) {
-        final ObjectAdapterMemento parentAdapterMemento = parentEntityModel.getObjectAdapterMemento();
+        final ObjectMemento parentAdapterMemento = parentEntityModel.getObjectAdapterMemento();
         final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
         final ManagedObject parentAdapter = super.getCommonContext().reconstructObject(parentAdapterMemento); 
         setObjectFromPropertyIfVisible(ScalarModel.this, property, parentAdapter);
@@ -972,12 +972,12 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public ObjectAdapterMemento getPending() {
+            public ObjectMemento getPending() {
                 return ScalarModel.this.getPending();
             }
 
             @Override
-            public void setPending(ObjectAdapterMemento pending) {
+            public void setPending(ObjectMemento pending) {
                 ScalarModel.this.setPending(pending);
             }
 
@@ -997,16 +997,16 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public ArrayList<ObjectAdapterMemento> getMultiPending() {
-                ObjectAdapterMemento pendingMemento = ScalarModel.this.getPending();
-                return ObjectAdapterMemento.unwrapList(pendingMemento)
+            public ArrayList<ObjectMemento> getMultiPending() {
+                ObjectMemento pendingMemento = ScalarModel.this.getPending();
+                return ObjectMemento.unwrapList(pendingMemento)
                         .orElse(null);
             }
 
             @Override
-            public void setMultiPending(final ArrayList<ObjectAdapterMemento> pending) {
+            public void setMultiPending(final ArrayList<ObjectMemento> pending) {
                 ObjectSpecId specId = getScalarModel().getTypeOfSpecification().getSpecId();
-                ObjectAdapterMemento adapterMemento = ObjectAdapterMemento.wrapMementoList(pending, specId);
+                ObjectMemento adapterMemento = ObjectMemento.wrapMementoList(pending, specId);
                 ScalarModel.this.setPending(adapterMemento);
             }
 

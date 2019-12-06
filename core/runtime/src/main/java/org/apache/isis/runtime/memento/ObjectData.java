@@ -44,7 +44,7 @@ final class ObjectData extends Data {
         fields.put(fieldName, entry == null ? NO_ENTRY : entry);
     }
 
-    public boolean containsField() {
+    public boolean hasAnyField() {
         return !fields.isEmpty();
     }
 

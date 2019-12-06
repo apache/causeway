@@ -23,10 +23,10 @@ import java.io.Serializable;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 
 public interface ToggledMementosProvider extends Serializable {
     
-    Can<ObjectAdapterMemento> getToggles();
+    Can<ObjectMemento> getToggles();
     void clearToggles(final AjaxRequestTarget target);
 }

@@ -47,8 +47,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.memento.ObjectAdapterMementoService;
+import org.apache.isis.runtime.memento.ObjectMemento;
+import org.apache.isis.runtime.memento.ObjectMementoService;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -67,7 +67,7 @@ import lombok.val;
  *
  * <p>
  * So that the model is {@link Serializable}, the {@link ManagedObject}s within
- * the collection are stored as {@link ObjectAdapterMemento}s.
+ * the collection are stored as {@link ObjectMemento}s.
  */
 public class EntityCollectionModel extends ModelAbstract<List<ManagedObject>> 
 implements LinksProvider, UiHintContainer {
@@ -93,9 +93,9 @@ implements LinksProvider, UiHintContainer {
         final LowestCommonSuperclassFinder lowestCommonSuperclassFinder = new LowestCommonSuperclassFinder();
 
         //XXX lombok issue, cannot use val here
-        final ObjectAdapterMementoService mementoService = model.getMementoService();
+        final ObjectMementoService mementoService = model.getMementoService();
 
-        final List<ObjectAdapterMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
+        final List<ObjectMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
                 .peek(lowestCommonSuperclassFinder::collect)
                 .map(mementoService::mementoForPojo)
                 .collect(Collectors.toList());
@@ -141,7 +141,7 @@ implements LinksProvider, UiHintContainer {
     private static EntityCollectionModel standaloneOf(
             IsisWebAppCommonContext commonContext, 
             Class<?> typeOf, 
-            List<ObjectAdapterMemento> mementoList, 
+            List<ObjectMemento> mementoList, 
             int pageSize) {
 
         final Type type = Type.STANDALONE;
@@ -180,7 +180,7 @@ implements LinksProvider, UiHintContainer {
                 //XXX lombok issue, cannot use val here 
 
                 final Stream<RootOid> rootOids = stream(colModel.mementoList)
-                        .map(ObjectAdapterMemento::asBookmarkIfSupported)
+                        .map(ObjectMemento::asBookmarkIfSupported)
                         .filter(_NullSafe::isPresent)
                         .map(Oid.Factory::ofBookmark);
                 
@@ -198,7 +198,7 @@ implements LinksProvider, UiHintContainer {
             void setObject(EntityCollectionModel colModel, List<ManagedObject> adapterList) {
 
                 //XXX lombok issue, cannot use val here 
-                final ObjectAdapterMementoService mementoService = colModel.getMementoService();
+                final ObjectMementoService mementoService = colModel.getMementoService();
 
                 colModel.mementoList = _NullSafe.stream(adapterList)
                         .map(mementoService::mementoForAdapter)
@@ -342,12 +342,12 @@ implements LinksProvider, UiHintContainer {
     /**
      * Populated only if {@link Type#STANDALONE}.
      */
-    private List<ObjectAdapterMemento> mementoList;
+    private List<ObjectMemento> mementoList;
 
     /**
      * Populated only if {@link Type#STANDALONE}.
      */
-    private List<ObjectAdapterMemento> toggledMementosList;
+    private List<ObjectMemento> toggledMementosList;
 
     /**
      * Populated only if {@link Type#PARENTED}.
@@ -389,13 +389,13 @@ implements LinksProvider, UiHintContainer {
         this.entityModel = entityModel;
         this.typeOf = typeOf;
         this.pageSize = pageSize;
-        this.toggledMementosList = _Lists.<ObjectAdapterMemento>newArrayList();
+        this.toggledMementosList = _Lists.<ObjectMemento>newArrayList();
     }
 
 
     private static OneToManyAssociation collectionFor(EntityModel entityModel) {
 
-        final ObjectAdapterMemento parentObjectAdapterMemento = entityModel.getObjectAdapterMemento();
+        final ObjectMemento parentObjectAdapterMemento = entityModel.getObjectAdapterMemento();
         final CollectionLayoutData collectionLayoutData = entityModel.getCollectionLayoutData();
         final SpecificationLoader specificationLoader = entityModel.getSpecificationLoader();
 
@@ -493,7 +493,7 @@ implements LinksProvider, UiHintContainer {
     /**
      * Populated only if {@link Type#PARENTED}.
      */
-    public ObjectAdapterMemento getParentObjectAdapterMemento() {
+    public ObjectMemento getParentObjectAdapterMemento() {
         return entityModel != null? entityModel.getObjectAdapterMemento(): null;
     }
 
@@ -515,7 +515,7 @@ implements LinksProvider, UiHintContainer {
 
     public void toggleSelectionOn(ManagedObject selectedAdapter) {
         //XXX lombok issue, cannot use val here
-        final ObjectAdapterMemento selectedAsMemento = super.getMementoService().mementoForAdapter(selectedAdapter);
+        final ObjectMemento selectedAsMemento = super.getMementoService().mementoForAdapter(selectedAdapter);
 
         // try to remove; if couldn't, then mustn't have been in there, in which case add.
         boolean removed = toggledMementosList.remove(selectedAsMemento);
@@ -524,7 +524,7 @@ implements LinksProvider, UiHintContainer {
         }
     }
 
-    public Can<ObjectAdapterMemento> getToggleMementosList() {
+    public Can<ObjectMemento> getToggleMementosList() {
         return Can.ofCollection(this.toggledMementosList);
     }
 
@@ -544,7 +544,7 @@ implements LinksProvider, UiHintContainer {
 
     public EntityCollectionModel asDummy() {
         return standaloneOf(
-                super.getCommonContext(), typeOf, Collections.<ObjectAdapterMemento>emptyList(), pageSize);
+                super.getCommonContext(), typeOf, Collections.<ObjectMemento>emptyList(), pageSize);
     }
 
     // //////////////////////////////////////

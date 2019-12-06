@@ -19,16 +19,13 @@
 
 package org.apache.isis.runtime.memento;
 
-import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
@@ -37,48 +34,27 @@ import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterF
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-import lombok.Getter;
-import lombok.ToString;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Holds the state for the specified object in serializable form.
- *
- * <p>
- * This object is {@link Serializable} and can be passed over the network
- * easily. Also for a persistent objects only the reference's {@link Oid}s are
- * held, avoiding the need for serializing the whole object graph.
+ * converts a {@link ManagedObject} to serializable {@link Data} 
+ * 
+ * @since 2.0
  */
-@Log4j2 @ToString
-class Memento implements Serializable {
+@Log4j2
+class ObjectMarshaller {
 
-    private final static long serialVersionUID = 1L;
-
-    private final List<Oid> oids = _Lists.newArrayList();
-
-    @Getter private Data data;
-
-    public Memento(ManagedObject adapter) {
-        data = (adapter == null) ? null : createData(adapter);
+    Data toData(ManagedObject adapter) {
+        val data = (adapter == null) ? null : createData(adapter);
         log.debug("created memento for {}", this);
-    }
-    
-    public ObjectAdapter recreateObject(
-            SpecificationLoader specLoader, 
-            MementoStore mementoStore) {
-        
-        if (data == null) {
-            return null;
-        }
-        val spec = specLoader.lookupBySpecIdElseLoad(data.getObjectSpecId());
-        val oid = data.getOid();
-        return mementoStore.adapterOfMemento(spec, oid, data);
+        return data;
     }
     
     // -- HELPER
+    
+    private final transient Set<Oid> oids = _Sets.newHashSet();
 
     private Data createData(ManagedObject adapter) {
         if (adapter.getSpecification().isParentedOrFreeCollection() && 
@@ -157,7 +133,7 @@ class Memento implements Serializable {
         }
         
         if (refOid.isValue()) {
-            return createStandaloneData(refOid, referencedAdapter);
+            return new StandaloneData(refOid, referencedAdapter);
         }
 
         val refSpec = referencedAdapter.getSpecification();
@@ -172,11 +148,6 @@ class Memento implements Serializable {
 
         return new Data(refOid);
     }
-
-    private Data createStandaloneData(RootOid rootOid, ManagedObject adapter) {
-        return new StandaloneData(rootOid, adapter);
-    }
-
 
 
 }

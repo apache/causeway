@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
@@ -53,29 +53,29 @@ extends ObjectAdapterMementoProviderAbstract
 implements ObjectAdapterMementoProviderForChoices {
 
     private static final long serialVersionUID = 1L;
-    private final List<ObjectAdapterMemento> choiceMementos;
+    private final List<ObjectMemento> choiceMementos;
 
     public ObjectAdapterMementoProviderForReferenceChoices(
             ScalarModel model,
-            List<ObjectAdapterMemento> choiceMementos) {
+            List<ObjectMemento> choiceMementos) {
         
         super(model);
         this.choiceMementos = choiceMementos;
     }
 
     @Override
-    protected List<ObjectAdapterMemento> obtainMementos(String term) {
+    protected List<ObjectMemento> obtainMementos(String term) {
         return obtainMementos(term, choiceMementos);
     }
 
     @Override
-    public List<ObjectAdapterMemento> getChoiceMementos() {
+    public List<ObjectMemento> getChoiceMementos() {
         return choiceMementos;
     }
 
     @Override
-    public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
-        final Function<String, ObjectAdapterMemento> function = (final String input) -> {
+    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
+        final Function<String, ObjectMemento> function = (final String input) -> {
             if(NULL_PLACEHOLDER.equals(input)) {
                 return null;
             }

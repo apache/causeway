@@ -69,7 +69,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -573,7 +573,7 @@ IsisWebAppCommonContext.Provider {
     protected IConverterLocator newConverterLocator() {
         final ConverterLocator converterLocator = new ConverterLocator();
         converterLocator.set(ManagedObject.class, new ConverterForObjectAdapter());
-        converterLocator.set(ObjectAdapterMemento.class, new ConverterForObjectAdapterMemento(commonContext));
+        converterLocator.set(ObjectMemento.class, new ConverterForObjectAdapterMemento(commonContext));
         return converterLocator;
     }
 

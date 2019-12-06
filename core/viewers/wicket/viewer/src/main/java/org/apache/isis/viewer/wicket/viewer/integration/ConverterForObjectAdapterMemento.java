@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.RequiredArgsConstructor;
@@ -35,11 +35,11 @@ import lombok.val;
 
 /**
  * Implementation of a Wicket {@link IConverter} for
- * {@link ObjectAdapterMemento}s, converting to-and-from their {@link Oid}'s
+ * {@link ObjectMemento}s, converting to-and-from their {@link Oid}'s
  * string representation.
  */
 @RequiredArgsConstructor
-public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapterMemento> {
+public class ConverterForObjectAdapterMemento implements IConverter<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
     
@@ -47,10 +47,10 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
 
     /**
      * Converts string representation of {@link Oid} to
-     * {@link ObjectAdapterMemento}.
+     * {@link ObjectMemento}.
      */
     @Override
-    public ObjectAdapterMemento convertToObject(final String value, final Locale locale) {
+    public ObjectMemento convertToObject(final String value, final Locale locale) {
         if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
@@ -59,11 +59,11 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
     }
 
     /**
-     * Converts {@link ObjectAdapterMemento} to string representation of
+     * Converts {@link ObjectMemento} to string representation of
      * {@link RootOid}.
      */
     @Override
-    public String convertToString(final ObjectAdapterMemento memento, final Locale locale) {
+    public String convertToString(final ObjectMemento memento, final Locale locale) {
         if (memento == null) {
             return null;
         }

@@ -19,7 +19,7 @@
 package org.apache.isis.runtime;
 
 import org.apache.isis.metamodel.IsisModuleMetamodel;
-import org.apache.isis.runtime.memento.ObjectAdapterMementoServiceDefault;
+import org.apache.isis.runtime.memento.ObjectMementoServiceDefault;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.runtime.system.context.session.RuntimeEventSupport_Spring;
 import org.apache.isis.runtime.system.persistence.events.PersistenceEventService;
@@ -38,7 +38,7 @@ import org.springframework.context.annotation.Import;
         IsisModuleMetamodel.class,
 
         // @Service's
-        ObjectAdapterMementoServiceDefault.class,
+        ObjectMementoServiceDefault.class,
         RuntimeEventService.class,
         PersistenceEventService.class,
         TimestampService.class,

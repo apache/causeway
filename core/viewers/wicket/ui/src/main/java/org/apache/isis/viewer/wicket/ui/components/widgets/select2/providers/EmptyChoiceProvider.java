@@ -23,29 +23,29 @@ import java.util.Collection;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 
-public class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
+public class EmptyChoiceProvider extends ChoiceProvider<ObjectMemento> {
     private static final long serialVersionUID = 1L;
 
     public static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
 
     @Override
-    public String getDisplayValue(ObjectAdapterMemento object) {
+    public String getDisplayValue(ObjectMemento object) {
         return null;
     }
 
     @Override
-    public String getIdValue(ObjectAdapterMemento object) {
+    public String getIdValue(ObjectMemento object) {
         return null;
     }
 
     @Override
-    public void query(String term, int page, Response<ObjectAdapterMemento> response) {
+    public void query(String term, int page, Response<ObjectMemento> response) {
     }
 
     @Override
-    public Collection<ObjectAdapterMemento> toChoices(Collection<String> ids) {
+    public Collection<ObjectMemento> toChoices(Collection<String> ids) {
         return null;
     }
 }

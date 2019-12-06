@@ -41,40 +41,40 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 public class ObjectAdapterMementoProviderForValueChoices
 extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProviderForChoices {
 
     private static final long serialVersionUID = 1L;
-    private final List<ObjectAdapterMemento> choicesMementos;
+    private final List<ObjectMemento> choicesMementos;
 
     public ObjectAdapterMementoProviderForValueChoices(
             ScalarModel scalarModel,
-            List<ObjectAdapterMemento> choicesMementos) {
+            List<ObjectMemento> choicesMementos) {
         
         super(scalarModel);
         this.choicesMementos = choicesMementos;
     }
 
     @Override
-    protected List<ObjectAdapterMemento> obtainMementos(String term) {
+    protected List<ObjectMemento> obtainMementos(String term) {
         return obtainMementos(term, choicesMementos);
     }
 
     @Override
-    public List<ObjectAdapterMemento> getChoiceMementos() {
+    public List<ObjectMemento> getChoiceMementos() {
         return choicesMementos;
     }
 
     @Override
-    public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
-        final List<ObjectAdapterMemento> mementos = obtainMementos(null);
+    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
+        final List<ObjectMemento> mementos = obtainMementos(null);
 
-        final Predicate<ObjectAdapterMemento> lookupOam = new Predicate<ObjectAdapterMemento>() {
+        final Predicate<ObjectMemento> lookupOam = new Predicate<ObjectMemento>() {
             @Override
-            public boolean test(ObjectAdapterMemento input) {
+            public boolean test(ObjectMemento input) {
                 final String id = getIdValue(input);
                 return ids.contains(id);
             }

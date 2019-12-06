@@ -31,7 +31,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -221,7 +221,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
     public ManagedObject getContextAdapterIfAny() {
         ObjectAdapterModel model = getModel();
-        ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
+        ObjectMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
         return getCommonContext().reconstructObject(contextAdapterMementoIfAny);
     }
 
