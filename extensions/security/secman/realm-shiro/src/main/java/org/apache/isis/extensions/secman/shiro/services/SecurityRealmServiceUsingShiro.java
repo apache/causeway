@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.shiro.services;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,12 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmService;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
+@Named("isisExtSecman.SecurityRealmServiceUsingShiro")
+@Log4j2
 public class SecurityRealmServiceUsingShiro implements SecurityRealmService {
     
     @Inject private ServiceInjector serviceInjector;

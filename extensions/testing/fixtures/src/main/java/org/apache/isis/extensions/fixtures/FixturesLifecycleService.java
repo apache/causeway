@@ -18,9 +18,12 @@
  */
 package org.apache.isis.extensions.fixtures;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,8 @@ import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 @Service
+@Named("isisExtFixtures.FixturesLifecycleService")
+@Log4j2
 public class FixturesLifecycleService {
 
     @Inject IsisSessionFactory isisSessionFactory; // depends on  

@@ -32,6 +32,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.function.Predicate;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -58,7 +59,9 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  *
  */
-@Service @Log4j2
+@Service
+@Named("isisExtSse.SseServiceDefault")
+@Log4j2
 public class SseServiceDefault implements SseService {
 
     @Inject TransactionService transactionService;

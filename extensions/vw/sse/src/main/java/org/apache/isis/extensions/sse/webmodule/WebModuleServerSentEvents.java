@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.sse.webmodule;
 
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -35,7 +37,10 @@ import lombok.val;
  * 
  * @since 2.0
  */
-@Service @Order(-99)
+@Service
+@Named("isisExtSse.WebModuleServerSentEvents")
+@Order(-99)
+@Log4j2
 public final class WebModuleServerSentEvents implements WebModule  {
 
     private final static String SERVLET_NAME = "ServerSentEventsServlet";

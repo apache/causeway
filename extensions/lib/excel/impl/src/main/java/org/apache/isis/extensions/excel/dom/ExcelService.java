@@ -26,7 +26,7 @@ import org.apache.isis.extensions.excel.dom.util.Mode;
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisExtExcel.excelService")
+@Named("isisExtExcel.ExcelService")
 @Log4j2
 public class ExcelService {
 

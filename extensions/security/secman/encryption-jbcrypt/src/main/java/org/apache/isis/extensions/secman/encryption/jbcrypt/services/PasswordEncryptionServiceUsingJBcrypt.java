@@ -18,12 +18,18 @@
  */
 package org.apache.isis.extensions.secman.encryption.jbcrypt.services;
 
+import lombok.extern.log4j.Log4j2;
+
+import javax.inject.Named;
+
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 
 @Service
+@Named("isisExtSecman.PasswordEncryptionServiceUsingJBcrypt")
+@Log4j2
 public class PasswordEncryptionServiceUsingJBcrypt implements PasswordEncryptionService {
 
     private String salt;

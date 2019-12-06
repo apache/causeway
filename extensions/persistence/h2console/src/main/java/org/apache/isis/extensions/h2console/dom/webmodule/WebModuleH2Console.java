@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.h2console.dom.webmodule;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -35,9 +36,13 @@ import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
-@Service @Order(0)
+@Service
+@Named("isisExtH2Console.WebModuleH2Console")
+@Order(0)
+@Log4j2
 public class WebModuleH2Console implements WebModule  {
 
     private final static String SERVLET_NAME = "H2Console";

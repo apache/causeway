@@ -18,7 +18,10 @@
  */
 package org.apache.isis.extensions.secman.jdo.dom.tenancy;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -55,7 +58,10 @@ public interface ApplicationTenancyFactory {
 
     public ApplicationTenancy newApplicationTenancy();
 
-    @Service @Order(Ordered.LOWEST_PRECEDENCE)
+    @Service
+    @Named("isisExtSecman.ApplicationTenancyFactory.Default")
+    @Order(Ordered.LOWEST_PRECEDENCE)
+    @Log4j2
     public static class Default implements ApplicationTenancyFactory {
 
         @Override

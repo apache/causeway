@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -42,14 +43,45 @@ import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
+import javax.inject.Named;
+
 @Service
+@Named("isisExtFixtures.ModuleService")
 @Log4j2
-public class ModuleService {
+public class ModuleWithFixturesService {
 
     private final SpringBeansService springBeansService;
 
-    public ModuleService(final SpringBeansService springBeansService) {
+    public ModuleWithFixturesService(final SpringBeansService springBeansService) {
         this.springBeansService = springBeansService;
+    }
+
+    public FixtureScript getRefDataSetupFixture() {
+        return new FixtureScript() {
+            @Override
+            protected void execute(final ExecutionContext executionContext) {
+                final List<ModuleWithFixturesService.ModuleWithFixturesDescriptor> descriptors = modules();
+                executionContext.executeChildren(this,
+                        descriptors.stream()
+                                .map(ModuleWithFixturesService.ModuleWithFixturesDescriptor::getModule)
+                                .map(ModuleWithFixtures::getRefDataSetupFixture));
+            }
+        };
+    }
+
+    public FixtureScript getTeardownFixture() {
+        return new FixtureScript() {
+            @Override
+            protected void execute(final ExecutionContext executionContext) {
+                final List<ModuleWithFixturesService.ModuleWithFixturesDescriptor> descriptors = modules();
+                Collections.reverse(descriptors);
+                executionContext.executeChildren(this,
+                        descriptors.stream()
+                                .map(ModuleWithFixturesService.ModuleWithFixturesDescriptor::getModule)
+                                .map(ModuleWithFixtures::getTeardownFixture));
+            }
+
+        };
     }
 
     public List<ModuleWithFixturesDescriptor> modules() {

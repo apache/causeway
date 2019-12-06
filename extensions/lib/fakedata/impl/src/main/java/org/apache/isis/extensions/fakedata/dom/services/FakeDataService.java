@@ -19,7 +19,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisExtFakeData.fakeDataService")
+@Named("isisExtFakeData.FakeDataService")
 @Log4j2
 public class FakeDataService {
 

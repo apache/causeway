@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.fixtures.legacy.queryresultscache;
 
+import lombok.extern.log4j.Log4j2;
+
+import javax.inject.Named;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +35,8 @@ import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
  * In separate class because {@link QueryResultsCache} itself is request-scoped
  */
 @Service
+@Named("isisExtFixtures.QueryResultsCacheControlInternal")
+@Log4j2
 public class QueryResultsCacheControlInternal implements QueryResultCacheControl {
 
     @EventListener(FixturesInstallingEvent.class)

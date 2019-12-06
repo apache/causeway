@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.jdo.seed;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,9 @@ import org.apache.isis.runtime.system.context.session.AppLifecycleEvent;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service
+@Named("isisExtSecman.SeedSecurityModuleService")
+@Log4j2
 public class SeedSecurityModuleService {
 
     @Inject private FixtureScripts fixtureScripts;

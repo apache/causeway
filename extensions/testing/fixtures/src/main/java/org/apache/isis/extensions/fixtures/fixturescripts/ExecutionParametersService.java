@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.fixtures.fixturescripts;
 
+import lombok.extern.log4j.Log4j2;
+
+import javax.inject.Named;
+
 import org.springframework.stereotype.Service;
 
 
@@ -32,6 +36,8 @@ import org.springframework.stereotype.Service;
  * </p>
  */
 @Service
+@Named("isisExtFixtures.ExecutionParametersService")
+@Log4j2
 public class ExecutionParametersService {
 
     public ExecutionParameters newExecutionParameters(final String parameters) {

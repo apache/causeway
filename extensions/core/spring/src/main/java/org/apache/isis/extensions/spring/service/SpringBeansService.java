@@ -23,6 +23,8 @@ import lombok.extern.log4j.Log4j2;
 
 import java.util.*;
 
+import javax.inject.Named;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ import org.springframework.stereotype.Service;
  * Borrowed from BeansEndpoint.
  */
 @Service
+@Named("isisExtSpring.SpringBeansService")
 @Log4j2
 public class SpringBeansService {
 
