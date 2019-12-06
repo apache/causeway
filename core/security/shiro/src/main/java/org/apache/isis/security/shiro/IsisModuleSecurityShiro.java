@@ -41,7 +41,6 @@ import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 @Configuration
 @Import({
         // modules
-        IsisModuleSecurityApi.class,
         IsisModuleRuntimeServices.class,
         IsisModuleWebapp.class,
 
