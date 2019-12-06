@@ -41,7 +41,7 @@ public class OidMarshallerTest_roundtripping {
     @Test
     public void collectionOid() {
         RootOid parentOid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123");
-        ParentedOid oid = Factory.parentedOfName(parentOid, "items");
+        ParentedOid oid = Factory.parentedOfOneToManyId(parentOid, "items");
 
         final String enString = oid.enString();
         final ParentedOid deString = ParentedOid.deString(enString);

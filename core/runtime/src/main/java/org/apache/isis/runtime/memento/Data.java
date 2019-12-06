@@ -40,6 +40,6 @@ class Data implements Serializable {
      * @apiNote could be <tt>null</tt> if represents a value (standalone adapter).
      */
     @Getter @Nullable private final Oid oid;
-    @Getter private final String className;
+    @Getter private final String specId;
 
 }

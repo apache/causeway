@@ -84,9 +84,4 @@ final class Oid_Value implements RootOid {
         return null;
     }
 
-    @Override
-    public Oid copy() {
-        return this; // immutable singleton, just reuse
-    }
-
 }

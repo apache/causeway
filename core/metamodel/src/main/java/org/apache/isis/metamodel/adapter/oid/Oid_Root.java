@@ -157,12 +157,6 @@ final class Oid_Root implements RootOid {
         return enString();
     }
 
-    @Override
-    public Oid copy() {
-        // these are all immutable ... of(objectSpecId, identifier, state);
-        return this; 
-    }
-
     // -- HELPER
 
     private int calculateHash() {

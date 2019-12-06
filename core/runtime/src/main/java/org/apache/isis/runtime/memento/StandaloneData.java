@@ -62,7 +62,7 @@ final class StandaloneData extends Data {
             return objectAdapterProvider.adapterFor(objectAsSerializable);
         } else {
             val spec = 
-                    specificationLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(getClassName()));
+                    specificationLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(getSpecId()));
             val encodeableFacet = spec.getFacet(EncodableFacet.class);
             return encodeableFacet.fromEncodedString(objectAsEncodedString);
         }

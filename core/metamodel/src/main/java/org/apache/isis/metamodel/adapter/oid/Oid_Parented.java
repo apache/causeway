@@ -22,6 +22,8 @@ package org.apache.isis.metamodel.adapter.oid;
 import java.io.IOException;
 import java.util.Objects;
 
+import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+
 import static org.apache.isis.commons.internal.base._With.requires;
 
 final class Oid_Parented implements ParentedOid {
@@ -33,15 +35,14 @@ final class Oid_Parented implements ParentedOid {
 
     private final RootOid parentRootOid;
 
-    // package private to support testing
-    static Oid_Parented ofName(RootOid parentRootOid, String name) {
-        return new Oid_Parented(parentRootOid, name);
+    static Oid_Parented ofOneToManyId(RootOid parentRootOid, String oneToManyId) {
+        return new Oid_Parented(parentRootOid, oneToManyId);
     }
 
-    private Oid_Parented(RootOid parentRootOid, String name) {
+    private Oid_Parented(RootOid parentRootOid, String oneToManyId) {
         requires(parentRootOid, "parentRootOid");
         this.parentRootOid = parentRootOid;
-        this.name = name;
+        this.name = oneToManyId;
         this.hashCode = calculateHash();
     }
 
@@ -65,15 +66,9 @@ final class Oid_Parented implements ParentedOid {
         return getParentOid().isPersistent();
     }
 
-
-    // /////////////////////////////////////////////////////////
-    // enstring
-    // /////////////////////////////////////////////////////////
-
     public static Oid_Parented deString(String oidStr) {
         return Oid.unmarshaller().unmarshal(oidStr, Oid_Parented.class);
     }
-
 
     @Override
     public String enString() {
@@ -85,10 +80,6 @@ final class Oid_Parented implements ParentedOid {
         this.name = oid.name;
         this.hashCode = calculateHash();
     }
-
-    // /////////////////////////////////////////////////////////
-    // Properties
-    // /////////////////////////////////////////////////////////
 
     @Override
     public String getName() {
@@ -104,8 +95,6 @@ final class Oid_Parented implements ParentedOid {
     public String toString() {
         return enString();
     }
-
-
 
     // /////////////////////////////////////////////////////////
     // Value semantics
@@ -139,11 +128,6 @@ final class Oid_Parented implements ParentedOid {
         return Objects.hash(getParentOid(), name);
     }
 
-
-    // /////////////////////////////////////////////////////////
-    // asPersistent
-    // /////////////////////////////////////////////////////////
-
     /**
      * When the RootOid is persisted, all its &quot;children&quot;
      * need updating similarly.
@@ -151,12 +135,6 @@ final class Oid_Parented implements ParentedOid {
     public Oid_Parented asPersistent(RootOid newParentRootOid) {
         return new Oid_Parented(newParentRootOid, name);
     }
-
-    @Override
-    public Oid copy() {
-        return ofName((RootOid) parentRootOid.copy(), name);
-    }
-
 
 
 }

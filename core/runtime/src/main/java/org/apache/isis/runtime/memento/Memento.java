@@ -71,14 +71,14 @@ class Memento implements Serializable {
         if (data == null) {
             return null;
         }
-        val spec = specLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(data.getClassName()));
+        val spec = specLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(data.getSpecId()));
         val oid = data.getOid();
         return mementoStore.adapterOfMemento(spec, oid, data);
     }
 
     @Override
     public String toString() {
-        return "[" + (data == null ? null : data.getClassName() + "/" + data.getOid() + data) + "]";
+        return "[" + (data == null ? null : data.getSpecId() + "/" + data.getOid() + data) + "]";
     }
     
     // -- HELPER

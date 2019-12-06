@@ -19,15 +19,25 @@
 
 package org.apache.isis.metamodel.adapter.oid;
 
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 /**
- * Used as the {@link Oid} for collections.
+ * Used as the {@link Oid} for {@link OneToManyAssociation} (collections).
  */
 public interface ParentedOid extends Oid {
 
+    /**
+     * object identifier of the domain object that is holding the {@link OneToManyAssociation}
+     * this instance is representing
+     */
     RootOid getParentOid();
 
+    /**
+     * id of the {@link OneToManyAssociation} this instance is representing, that is 
+     * the member name, that is annotated with {@link Collection}
+     */
     String getName();
 
     // -- DECODE FROM STRING

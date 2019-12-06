@@ -32,16 +32,16 @@ public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstr
     @Override
     protected List<ParentedOid> getObjectsWithSameValue() {
         return Arrays.asList(
-                Oid.Factory.parentedOfName(parent, "456"),
-                Oid.Factory.parentedOfName(parent, "456"),
-                Oid.Factory.parentedOfName(parent, "456"));
+                Oid.Factory.parentedOfOneToManyId(parent, "456"),
+                Oid.Factory.parentedOfOneToManyId(parent, "456"),
+                Oid.Factory.parentedOfOneToManyId(parent, "456"));
     }
 
     @Override
     protected List<ParentedOid> getObjectsWithDifferentValue() {
         return Arrays.asList(
-                Oid.Factory.parentedOfName(otherParent, "456"),
-                Oid.Factory.parentedOfName(parent, "457"));
+                Oid.Factory.parentedOfOneToManyId(otherParent, "456"),
+                Oid.Factory.parentedOfOneToManyId(parent, "457"));
     }
 
 }

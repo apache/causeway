@@ -121,18 +121,14 @@ public interface Oid extends Serializable {
 
         // -- PARENTED COLLECTIONS
 
-        public static ParentedOid parentedOfOneToMany(RootOid parentRootOid, OneToManyAssociation otma) {
-            return Oid_Parented.ofName(parentRootOid, otma.getId());
+        public static ParentedOid parentedOfOneToMany(RootOid parentRootOid, OneToManyAssociation oneToMany) {
+            return Oid_Parented.ofOneToManyId(parentRootOid, oneToMany.getId());
         }
 
-        public static ParentedOid parentedOfName(RootOid parentRootOid, String name) {
-            return Oid_Parented.ofName(parentRootOid, name);
+        public static ParentedOid parentedOfOneToManyId(RootOid parentRootOid, String oneToManyId) {
+            return Oid_Parented.ofOneToManyId(parentRootOid, oneToManyId);
         }
-
-
+        
     }
-
-    Oid copy();
-
 
 }

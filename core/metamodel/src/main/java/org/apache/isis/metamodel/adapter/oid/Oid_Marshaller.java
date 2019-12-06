@@ -178,9 +178,9 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
         }
         final String collectionPart = getGroup(matcher, 8);
-        final String collectionName = collectionPart != null ? collectionPart.substring(1) : null;
+        final String oneToManyId = collectionPart != null ? collectionPart.substring(1) : null;
 
-        if(collectionName == null) {
+        if(oneToManyId == null) {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, RootOid.class);
                 return _Casts.uncheckedCast(
@@ -195,7 +195,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
             RootOid parentOid = this.unmarshal(parentOidStr, RootOid.class);
             ensureCorrectType(oidStr, requestedType, ParentedOid.class);
-            return _Casts.uncheckedCast( Oid_Parented.ofName(parentOid, collectionName) );
+            return _Casts.uncheckedCast( Oid_Parented.ofOneToManyId(parentOid, oneToManyId) );
         }
     }
 
