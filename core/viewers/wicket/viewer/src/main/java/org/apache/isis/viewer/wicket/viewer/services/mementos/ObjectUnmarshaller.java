@@ -2,6 +2,7 @@ package org.apache.isis.viewer.wicket.viewer.services.mementos;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -10,8 +11,6 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -22,6 +21,7 @@ import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAc
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
+import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
@@ -30,7 +30,6 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
@@ -52,7 +51,7 @@ final class ObjectUnmarshaller {
     private final ObjectManager objectManager;
     @Getter private final SpecificationLoader specificationLoader; 
     
-    ObjectAdapter recreateObject(Data data) {
+    ManagedObject recreateObject(Data data) {
         if (data == null) {
             return null;
         }
@@ -67,9 +66,9 @@ final class ObjectUnmarshaller {
     
     // -- HELPER
     
-    private ObjectAdapter recreateObject(ObjectSpecification spec, Oid oid, Data data) {
+    private ManagedObject recreateObject(ObjectSpecification spec, Oid oid, Data data) {
         
-        ObjectAdapter adapter;
+        ManagedObject adapter;
 
         if (spec.isParentedOrFreeCollection()) {
 
@@ -91,13 +90,13 @@ final class ObjectUnmarshaller {
             _Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
             // recreate an adapter for the original OID
-            adapter = objectAdapterProvider().adapterFor(typedOid);
+            adapter = adapterForOid(typedOid);
 
             updateObject(adapter, data);
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("recreated object {}", adapter.getOid());
+            log.debug("recreated object {}", oid);
         }
         return adapter;
     }
@@ -112,7 +111,7 @@ final class ObjectUnmarshaller {
         // handle values
         if (data instanceof StandaloneData) {
             val standaloneData = (StandaloneData) data;
-            return standaloneData.getAdapter(objectAdapterProvider(), specificationLoader);
+            return standaloneData.getAdapter(this::adapterForPojo, specificationLoader);
         }
 
         // reference to entity
@@ -121,7 +120,7 @@ final class ObjectUnmarshaller {
         _Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
 
         val rootOid = (RootOid) oid;
-        val referencedAdapter = objectAdapterProvider().adapterFor(rootOid);
+        val referencedAdapter = adapterForOid(rootOid);
 
         if (data instanceof ObjectData) {
             if (rootOid.isTransient()) {
@@ -131,9 +130,13 @@ final class ObjectUnmarshaller {
         return referencedAdapter;
     }
 
-    private void updateObject(final ObjectAdapter adapter, final Data data) {
-        val oid = adapter.getOid();
-        if (oid != null && !oid.equals(data.getOid())) {
+
+
+    private void updateObject(final ManagedObject adapter, final Data data) {
+        
+        val oid = objectManager.identifyObject(adapter);
+        
+        if (!Objects.equals(oid, data.getOid())) {
             throw new IllegalArgumentException(
                     "This memento can only be used to update the ObjectAdapter with the Oid " + data.getOid() + " but is " + oid);
         }
@@ -144,7 +147,7 @@ final class ObjectUnmarshaller {
         updateFieldsAndResolveState(adapter, data);
 
         if (log.isDebugEnabled()) {
-            log.debug("object updated {}", adapter.getOid());
+            log.debug("object updated {}", oid);
         }
     }
 
@@ -161,27 +164,29 @@ final class ObjectUnmarshaller {
                 emptyCollectionPojoFactory, collectionSpec, initData, state.getElementCount());
     }
 
-    private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {
+    private void updateFieldsAndResolveState(final ManagedObject adapter, final Data data) {
 
+        val spec = adapter.getSpecification();
+        
         boolean dataIsTransient = data.getOid().isTransient();
 
         if (!dataIsTransient) {
-            updateFields(objectAdapter, data);
+            updateFields(adapter, data);
             
         } else if (dataIsTransient 
-                && ManagedObject._entityState(objectAdapter).isDetached()) {
-            updateFields(objectAdapter, data);
+                && ManagedObject._entityState(adapter).isDetached()) {
+            updateFields(adapter, data);
 
-        } else if (objectAdapter.isParentedCollection()) {
+        } else if (spec.isParented()) {
             // this branch is kind-a wierd, I think it's to handle aggregated adapters.
-            updateFields(objectAdapter, data);
+            updateFields(adapter, data);
 
         } else {
             final ObjectData od = (ObjectData) data;
             if (od.hasAnyField()) {
                 throw _Exceptions.unrecoverableFormatted(
                         "Resolve state (for %s) inconsistent with fact that data exists for fields", 
-                        objectAdapter); 
+                        adapter); 
             }
         }
     }
@@ -279,10 +284,15 @@ final class ObjectUnmarshaller {
         }
     }
     
-    private ObjectAdapterProvider objectAdapterProvider() {
-        val objectAdapterProvider = (ObjectAdapterProvider) IsisContext.getPersistenceSession().get();
-        return objectAdapterProvider;
+    private ManagedObject adapterForOid(RootOid oid) {
+        val spec = specificationLoader.loadSpecification(oid.getObjectSpecId()); 
+        val objectLoadRequest = ObjectLoader.Request.of(spec, oid.getIdentifier());
+        return objectManager.loadObject(objectLoadRequest);
     }
-
+    
+    private ManagedObject adapterForPojo(Object pojo) {
+        return objectManager.adapt(pojo);
+    }
+    
     
 }

@@ -20,8 +20,8 @@
 package org.apache.isis.viewer.wicket.viewer.services.mementos;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -55,11 +55,11 @@ final class StandaloneData extends Data {
     }
 
     public ManagedObject getAdapter(
-            ObjectAdapterProvider objectAdapterProvider,
+            Function<Object, ManagedObject> objectAdapterProvider,
             SpecificationLoader specificationLoader) {
         
         if (objectAsSerializable != null) {
-            return objectAdapterProvider.adapterFor(objectAsSerializable);
+            return objectAdapterProvider.apply(objectAsSerializable);
         } else {
             val spec = specificationLoader.lookupBySpecIdElseLoad(getObjectSpecId());
             val encodeableFacet = spec.getFacet(EncodableFacet.class);

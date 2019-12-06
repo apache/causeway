@@ -31,8 +31,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
@@ -146,7 +144,7 @@ final class ObjectMementoLegacy implements Serializable {
                     SpecificationLoader specificationLoader) {
                 
                 final List<Object> listOfPojos =
-                        _Lists.map(memento.list, Functions.toPojo(objectUnmarshaller, specificationLoader));
+                        _Lists.map(memento.list, Functions.toPojo(objectUnmarshaller));
 
                 return objectUnmarshaller.adapterForListOfPojos(listOfPojos);
             }
@@ -620,35 +618,15 @@ final class ObjectMementoLegacy implements Serializable {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     final static class Functions {
 
-        public static Function<Object, ObjectMementoLegacy> fromPojo(
-                final ObjectAdapterProvider adapterProvider) {
-            
-            return pojo->ObjectMementoLegacy.createOrNull( adapterProvider.adapterFor(pojo) );
-        }
-
-        public static Function<ObjectMementoLegacy, ManagedObject> fromMemento(
-                final ObjectUnmarshaller objectUnmarshaller,
-                final SpecificationLoader specificationLoader) {
-
-            return memento->{
-                try {
-                    return memento.reconstructObject(objectUnmarshaller, specificationLoader);
-                } catch (ObjectNotFoundException e) {
-                    // this can happen if for example the object is not visible (due to the security tenanted facet)
-                    return null;
-                }
-            };
-        }
-
         public static Function<ObjectMementoLegacy, Object> toPojo(
-                final ObjectUnmarshaller objectUnmarshaller,
-                final SpecificationLoader specificationLoader) {
+                final ObjectUnmarshaller objectUnmarshaller) {
             
             return memento->{
                 if(memento == null) {
                     return null;
                 }
-                val objectAdapter = memento.reconstructObject(objectUnmarshaller, specificationLoader);
+                val objectAdapter = memento
+                        .reconstructObject(objectUnmarshaller, objectUnmarshaller.getSpecificationLoader());
                 if(objectAdapter == null) {
                     return null;
                 }
