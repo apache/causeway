@@ -44,7 +44,7 @@ public interface TableColumnOrderService {
      * Used as a fallback.
      */
     @Service
-    @Named("isisApplib.tableColumnOrderService.Default")
+    @Named("isisApplib.TableColumnOrderService.Default")
     @Log4j2
     public static class Default implements TableColumnOrderService {
 

@@ -41,7 +41,7 @@ import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
  * that it is automatically registered and available for use; no further configuration is required.
  */
 @Service
-@Named("isisRuntimeServices.xmlSnapshotServiceDefault")
+@Named("isisRuntimeServices.XmlSnapshotServiceDefault")
 @Log4j2
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     

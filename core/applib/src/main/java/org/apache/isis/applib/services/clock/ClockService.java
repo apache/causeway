@@ -38,7 +38,7 @@ import org.apache.isis.applib.clock.Clock;
  *
  */
 @Service
-@Named("isisApplib.clockService")
+@Named("isisApplib.ClockService")
 @Log4j2
 public class ClockService {
 

@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 
 @Service
-@Named("isisRuntimeServices.eventBusServiceSpring")
+@Named("isisRuntimeServices.EventBusServiceSpring")
 @Log4j2
 public class EventBusServiceSpring implements EventBusService {
 

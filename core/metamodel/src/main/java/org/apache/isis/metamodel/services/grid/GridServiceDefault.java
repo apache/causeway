@@ -38,7 +38,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @Service
-@Named("isisMetaModel.gridServiceDefault")
+@Named("isisMetaModel.GridServiceDefault")
 @Log4j2
 public class GridServiceDefault implements GridService {
 

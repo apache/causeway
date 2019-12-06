@@ -65,7 +65,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisRoRendering.contentNegotiationServiceForRestfulObjectsV1_0")
+@Named("isisRoRendering.ContentNegotiationServiceForRestfulObjectsV1_0")
 @Log4j2
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
 

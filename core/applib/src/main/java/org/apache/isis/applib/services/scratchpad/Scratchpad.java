@@ -42,7 +42,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequestScoped
-@Named("isisApplib.scratchpad")
+@Named("isisApplib.Scratchpad")
 @Log4j2
 public class Scratchpad {
 

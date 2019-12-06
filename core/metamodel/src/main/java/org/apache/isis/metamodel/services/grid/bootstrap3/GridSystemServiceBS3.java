@@ -72,7 +72,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.gridSystemServiceBS3")
+@Named("isisMetaModel.GridSystemServiceBS3")
 @Log4j2
 public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 

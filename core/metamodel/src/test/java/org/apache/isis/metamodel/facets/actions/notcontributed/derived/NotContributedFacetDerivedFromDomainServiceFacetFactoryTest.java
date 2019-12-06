@@ -125,7 +125,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
     public void whenView() throws Exception {
 
         // given
-        @DomainService(nature = NatureOfService.VIEW)
+        @DomainService()
         class CustomerService {
 
             public String name() {

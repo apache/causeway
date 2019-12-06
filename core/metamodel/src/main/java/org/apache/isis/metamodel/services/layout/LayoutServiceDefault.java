@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.layoutServiceDefault")
+@Named("isisMetaModel.LayoutServiceDefault")
 @Log4j2
 public class LayoutServiceDefault implements LayoutService {
 

@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 
 @Service
-@Named("isisMetaModel.injectorMethodEvaluatorDefault")
+@Named("isisMetaModel.InjectorMethodEvaluatorDefault")
 @Log4j2
 public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvaluator {
 

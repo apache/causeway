@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.command.CommandDefault;
 import org.apache.isis.applib.services.command.spi.CommandService;
 
 @Service
-@Named("isisRuntimeServices.commandServiceDefault")
+@Named("isisRuntimeServices.CommandServiceDefault")
 @Log4j2
 public class CommandServiceDefault implements CommandService {
 

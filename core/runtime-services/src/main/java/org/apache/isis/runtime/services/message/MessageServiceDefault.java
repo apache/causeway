@@ -33,7 +33,7 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.MessageBroker;
 
 @Service
-@Named("isisRuntimeServices.messageServiceDefault")
+@Named("isisRuntimeServices.MessageServiceDefault")
 @Log4j2
 public class MessageServiceDefault implements MessageService {
 

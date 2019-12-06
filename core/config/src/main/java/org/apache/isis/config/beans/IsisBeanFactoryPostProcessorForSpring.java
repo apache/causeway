@@ -46,7 +46,7 @@ import javax.inject.Named;
  *
  */
 @Component
-@Named("isisConfig.isisBeanFactoryPostProcessorForSpring")
+@Named("isisConfig.IsisBeanFactoryPostProcessorForSpring")
 @Log4j2
 public class IsisBeanFactoryPostProcessorForSpring
 implements BeanFactoryPostProcessor, IsisBeanTypeRegistryHolder {

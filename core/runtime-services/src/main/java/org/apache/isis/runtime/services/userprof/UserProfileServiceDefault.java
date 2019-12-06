@@ -31,7 +31,7 @@ import org.apache.isis.security.api.authentication.AuthenticationSessionProvider
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisRuntimeServices.userProfileServiceDefault")
+@Named("isisRuntimeServices.UserProfileServiceDefault")
 @Log4j2
 public class UserProfileServiceDefault implements UserProfileService {
 

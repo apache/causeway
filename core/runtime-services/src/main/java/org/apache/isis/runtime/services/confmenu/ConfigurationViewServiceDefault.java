@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Service
-@Named("isisRuntimeServices.configurationViewServiceDefault")
+@Named("isisRuntimeServices.ConfigurationViewServiceDefault")
 @Log4j2
 public class ConfigurationViewServiceDefault implements ConfigurationViewService {
 

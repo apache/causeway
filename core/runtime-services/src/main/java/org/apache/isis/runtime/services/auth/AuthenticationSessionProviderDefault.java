@@ -35,7 +35,7 @@ import org.apache.isis.security.api.authentication.AuthenticationSessionProvider
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 
 @Service
-@Named("isisRuntimeServices.authenticationSessionProviderDefault")
+@Named("isisRuntimeServices.AuthenticationSessionProviderDefault")
 @Log4j2
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 

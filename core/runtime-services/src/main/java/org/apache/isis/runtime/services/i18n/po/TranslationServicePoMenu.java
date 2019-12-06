@@ -19,6 +19,7 @@
 package org.apache.isis.runtime.services.i18n.po;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -32,14 +33,12 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
-@DomainService(
-        nature = NatureOfService.VIEW,
-        objectType = "isisApplib.TranslationServicePoMenu"
-        )
+@Named("isisApplib.TranslationServicePoMenu")
+@DomainService(objectType = "isisApplib.TranslationServicePoMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+)
 public class TranslationServicePoMenu {
 
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<TranslationServicePoMenu> {}

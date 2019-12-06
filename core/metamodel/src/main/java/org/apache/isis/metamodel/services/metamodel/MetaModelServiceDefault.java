@@ -56,7 +56,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 @Service
-@Named("isisMetaModel.metaModelServiceDefault")
+@Named("isisMetaModel.MetaModelServiceDefault")
 @Log4j2
 public class MetaModelServiceDefault implements MetaModelService {
 

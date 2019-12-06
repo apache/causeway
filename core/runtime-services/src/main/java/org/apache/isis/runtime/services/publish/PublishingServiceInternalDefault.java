@@ -56,7 +56,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequestScoped
-@Named("isisRuntimeServices.publishingServiceInternalDefault")
+@Named("isisRuntimeServices.PublishingServiceInternalDefault")
 @Log4j2
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 

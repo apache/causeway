@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisApplib.urlEncodingServiceWithCompression")
+@Named("isisApplib.UrlEncodingServiceWithCompression")
 @Log4j2
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {
 

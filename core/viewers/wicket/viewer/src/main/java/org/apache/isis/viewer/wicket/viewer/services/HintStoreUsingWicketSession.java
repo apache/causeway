@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
 import javax.inject.Named;
 
 @Service
-@Named("isisWicketViewer.hintStoreUsingWicketSession")
+@Named("isisWicketViewer.HintStoreUsingWicketSession")
 @Log4j2
 public class HintStoreUsingWicketSession implements HintStore {
 

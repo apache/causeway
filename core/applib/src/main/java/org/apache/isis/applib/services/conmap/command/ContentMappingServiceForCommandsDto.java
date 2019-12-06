@@ -34,7 +34,7 @@ import org.apache.isis.schema.cmd.v1.CommandsDto;
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisApplib.contentMappingServiceForCommandsDto")
+@Named("isisApplib.ContentMappingServiceForCommandsDto")
 @Log4j2
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 

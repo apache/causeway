@@ -35,7 +35,7 @@ import org.apache.isis.applib.events.ui.TitleUiEvent;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 
 @Configuration
-@Named("isisMetaModel.metamodelEventSupport_Spring")
+@Named("isisMetaModel.MetamodelEventSupport_Spring")
 public class MetamodelEventSupport_Spring {
 
     @Bean

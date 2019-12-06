@@ -71,7 +71,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisRuntimeServices.commandExecutorServiceDefault")
+@Named("isisRuntimeServices.CommandExecutorServiceDefault")
 @Log4j2
 public class CommandExecutorServiceDefault implements CommandExecutorService {
 

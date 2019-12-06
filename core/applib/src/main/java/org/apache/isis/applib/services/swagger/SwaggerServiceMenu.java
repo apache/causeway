@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.swagger;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -36,14 +37,12 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.resources._Resources;
 
 
-@DomainService(
-        nature = NatureOfService.VIEW,
-        objectType = "isisApplib.SwaggerServiceMenu"
-        )
+@Named("isisApplib.SwaggerServiceMenu")
+@DomainService(objectType = "isisApplib.SwaggerServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+)
 public class SwaggerServiceMenu {
 
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<SwaggerServiceMenu> { }

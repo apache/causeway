@@ -42,7 +42,7 @@ import org.springframework.stereotype.Service;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 @Service
-@Named("isisRoRendering.acceptHeaderServiceForRest")
+@Named("isisRoRendering.AcceptHeaderServiceForRest")
 @RequestScoped
 @Log4j2
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {

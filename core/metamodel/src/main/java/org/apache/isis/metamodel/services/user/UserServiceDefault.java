@@ -40,7 +40,7 @@ import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 
 @Service
-@Named("isisMetaModel.userServiceDefault")
+@Named("isisMetaModel.UserServiceDefault")
 @Log4j2
 public class UserServiceDefault implements UserService {
 
@@ -149,7 +149,7 @@ public class UserServiceDefault implements UserService {
 
 
     @Service
-    @Named("isisMetaModel.userServiceDefault.SudoServiceSpi")
+    @Named("isisMetaModel.UserServiceDefault.SudoServiceSpi")
     @Log4j2
     public static class SudoServiceSpi implements SudoService.Spi {
 

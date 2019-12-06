@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-@Named("isisRuntime.persistenceEventService")
+@Named("isisRuntime.PersistenceEventService")
 public class PersistenceEventService {
     
     // -- MANAGED EVENTS

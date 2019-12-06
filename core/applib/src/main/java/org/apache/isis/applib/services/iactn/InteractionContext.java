@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.DomainService;
  * available for use; no further configuration is required.
  */
 @Service
-@Named("isisApplib.interactionContext")
+@Named("isisApplib.InteractionContext")
 @RequestScoped
 @Log4j2
 public class InteractionContext {

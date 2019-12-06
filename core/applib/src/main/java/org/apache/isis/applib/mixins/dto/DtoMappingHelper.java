@@ -33,7 +33,7 @@ import org.apache.isis.schema.common.v1.OidDto;
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisApplib.dtoMappingHelper")
+@Named("isisApplib.DtoMappingHelper")
 @Log4j2
 public class DtoMappingHelper {
 

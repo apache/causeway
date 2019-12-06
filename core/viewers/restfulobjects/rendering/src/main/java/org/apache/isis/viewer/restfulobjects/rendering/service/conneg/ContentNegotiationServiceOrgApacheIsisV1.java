@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisRoRendering.contentNegotiationServiceOrgApacheIsisV1")
+@Named("isisRoRendering.ContentNegotiationServiceOrgApacheIsisV1")
 @Order(200) //in effect, is the relative priority (lower numbers have higher priority)
 @Log4j2
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {

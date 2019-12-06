@@ -59,7 +59,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
         public void onDomainServiceForViewWithDefault() {
 
             // given
-            @DomainService(nature = NatureOfService.VIEW)
+            @DomainService()
             class CustomerService {
 
                 @ActionLayout()
@@ -95,7 +95,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
         @Test
         public void onDomainServiceForViewWithBoth() {
             // given
-            @DomainService(nature = NatureOfService.VIEW)
+            @DomainService()
             class CustomerService {
 
                 @ActionLayout(contributed = Contributed.AS_BOTH)
@@ -131,7 +131,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
         public void testOnDomainServiceForViewWithAssociation() {
 
             // given
-            @DomainService(nature = NatureOfService.VIEW)
+            @DomainService()
             class CustomerService {
 
                 @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
@@ -171,7 +171,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
         public void onDomainServiceForViewWithAction() {
 
             // given
-            @DomainService(nature = NatureOfService.VIEW)
+            @DomainService()
             class CustomerService {
 
                 @ActionLayout(contributed = Contributed.AS_ACTION)
@@ -209,7 +209,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
         @Test
         public void onDomainServiceForViewWithNeither() {
             // given
-            @DomainService(nature = NatureOfService.VIEW)
+            @DomainService()
             class CustomerService {
 
                 @ActionLayout(contributed = Contributed.AS_NEITHER)

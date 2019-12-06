@@ -41,7 +41,7 @@ import lombok.val;
  */
 @Service
 @Singleton
-@Named("isisConfig.webAppConfiguration")
+@Named("isisConfig.WebAppConfiguration")
 @Log4j2
 public class WebAppConfiguration {
     

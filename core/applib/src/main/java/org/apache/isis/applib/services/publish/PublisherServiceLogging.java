@@ -31,7 +31,7 @@ import lombok.extern.log4j.Log4j2;
 import javax.inject.Named;
 
 @Service
-@Named("isisApplib.publisherServiceLogging")
+@Named("isisApplib.PublisherServiceLogging")
 @Log4j2
 public class PublisherServiceLogging implements PublisherService {
 

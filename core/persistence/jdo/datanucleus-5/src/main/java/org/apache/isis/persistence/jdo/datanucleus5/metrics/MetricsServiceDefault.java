@@ -37,7 +37,7 @@ import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisJdoDn5.metricsServiceDefault")
+@Named("isisJdoDn5.MetricsServiceDefault")
 @RequestScoped
 @Log4j2
 public class MetricsServiceDefault implements MetricsService, InstanceLifecycleListener,

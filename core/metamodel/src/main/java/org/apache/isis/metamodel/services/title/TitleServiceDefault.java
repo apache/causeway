@@ -33,7 +33,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.titleServiceDefault")
+@Named("isisMetaModel.TitleServiceDefault")
 @Log4j2
 public class TitleServiceDefault implements TitleService {
 

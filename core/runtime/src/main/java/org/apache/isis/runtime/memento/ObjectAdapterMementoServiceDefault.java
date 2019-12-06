@@ -45,7 +45,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisRuntime.objectAdapterMementoServiceDefault")
+@Named("isisRuntime.ObjectAdapterMementoServiceDefault")
 @Singleton
 @Log4j2
 public class ObjectAdapterMementoServiceDefault

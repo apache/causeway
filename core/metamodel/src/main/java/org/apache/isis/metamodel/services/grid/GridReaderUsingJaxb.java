@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.collections._Arrays;
  *
  */
 @Service
-@Named("isisMetaModel.gridReaderUsingJaxb")
+@Named("isisMetaModel.GridReaderUsingJaxb")
 @Log4j2
 public class GridReaderUsingJaxb {
 

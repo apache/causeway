@@ -32,7 +32,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.sessionManagementServiceDefault")
+@Named("isisRuntimeServices.SessionManagementServiceDefault")
 @Log4j2
 public class SessionManagementServiceDefault implements SessionManagementService {
 

@@ -22,6 +22,7 @@ package org.apache.isis.applib.services.confview;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -32,13 +33,9 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-@DomainService(
-        nature = NatureOfService.VIEW,
-        objectType = "isisApplib.ConfigurationMenu"
-        )
-@DomainServiceLayout(
-        menuBar = DomainServiceLayout.MenuBar.TERTIARY
-        )
+@Named("isisApplib.ConfigurationMenu")
+@DomainService(objectType = "isisApplib.ConfigurationMenu")
+@DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 public class ConfigurationMenu {
 
     public static abstract class ActionDomainEvent

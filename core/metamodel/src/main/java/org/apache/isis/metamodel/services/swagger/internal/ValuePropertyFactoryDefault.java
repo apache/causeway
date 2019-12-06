@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
 import javax.inject.Named;
 
 @Component
-@Named("isisMetaModel.valuePropertyFactoryDefault")
+@Named("isisMetaModel.ValuePropertyFactoryDefault")
 @Log4j2
 public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 

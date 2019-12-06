@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
  * available for use; no further configuration is required.
  */
 @Service
-@Named("isisApplib.commandContext")
+@Named("isisApplib.CommandContext")
 @RequestScoped
 @Log4j2
 public class CommandContext {

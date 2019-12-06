@@ -52,7 +52,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisRuntimeServices.bookmarkServiceInternalDefault")
+@Named("isisRuntimeServices.BookmarkServiceInternalDefault")
 @Log4j2
 public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 

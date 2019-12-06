@@ -43,7 +43,7 @@ import lombok.val;
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
  */
 @Service
-@Named("isisRuntime.auditingServiceInternal")
+@Named("isisRuntime.AuditingServiceInternal")
 public class AuditingServiceInternal {
     
     @Inject private List<AuditerService> auditerServices;

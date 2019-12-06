@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 @Service
 @Log4j2
-@Named("isisMetaModel.applicationFeatureFactory")
+@Named("isisMetaModel.ApplicationFeatureFactory")
 public class ApplicationFeatureFactory {
 
     public ApplicationFeature newApplicationFeature() {

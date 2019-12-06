@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.springframework.stereotype.Component;
 
 @Component
-@Named("isisMetaModel.taggerDefault")
+@Named("isisMetaModel.TaggerDefault")
 @Log4j2
 public class TaggerDefault implements Tagger {
 

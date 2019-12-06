@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Service 
-@Named("isisMetaModel.metamodelEventService")
+@Named("isisMetaModel.MetamodelEventService")
 @Log4j2
 @Builder //for JUnit Test support
 public class MetamodelEventService {

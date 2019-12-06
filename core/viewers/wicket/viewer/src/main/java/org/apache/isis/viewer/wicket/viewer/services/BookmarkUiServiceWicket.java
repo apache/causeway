@@ -29,7 +29,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionF
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisWicketViewer.bookmarkUiServiceWicket")
+@Named("isisWicketViewer.BookmarkUiServiceWicket")
 @Log4j2
 public class BookmarkUiServiceWicket implements BookmarkUiService {
 

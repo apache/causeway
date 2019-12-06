@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 
 @Service
-@Named("isisMetaModel.exceptionRecognizerDocDefault")
+@Named("isisMetaModel.ExceptionRecognizerDocDefault")
 @Log4j2
 public class ExceptionRecognizerDocDefault
 implements ExceptionRecognizer {

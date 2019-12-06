@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
  * @since 2.0
  */
 @Service
-@Named("isisJdoDn5.dataNucleusSettings")
+@Named("isisJdoDn5.DataNucleusSettings")
 public class DataNucleusSettings {
 
     @Inject @Named("dn-settings") 

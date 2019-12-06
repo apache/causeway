@@ -31,7 +31,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Controller
-@Named("isisRuntimeServices.routingServiceDefault")
+@Named("isisRuntimeServices.RoutingServiceDefault")
 @Log4j2
 public class RoutingServiceDefault implements RoutingService {
 

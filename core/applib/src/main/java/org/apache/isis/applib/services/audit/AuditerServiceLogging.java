@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisApplib.auditerServiceLogging")
+@Named("isisApplib.AuditerServiceLogging")
 @Log4j2
 public class AuditerServiceLogging implements AuditerService {
 

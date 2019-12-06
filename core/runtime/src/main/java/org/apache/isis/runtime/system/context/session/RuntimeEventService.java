@@ -33,7 +33,7 @@ import org.apache.isis.runtime.system.session.IsisSession;
  * post-construct phase has finished and before the pre-destroy phase has begun.
  */
 @Service
-@Named("isisRuntime.runtimeEventService")
+@Named("isisRuntime.RuntimeEventService")
 public class RuntimeEventService {
     
     @Inject private EventBusService eventBusService;  

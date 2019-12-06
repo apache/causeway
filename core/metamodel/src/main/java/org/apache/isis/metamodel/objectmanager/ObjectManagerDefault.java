@@ -40,7 +40,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisMetaModel.objectManagerDefault")
+@Named("isisMetaModel.ObjectManagerDefault")
 @Log4j2
 public class ObjectManagerDefault implements ObjectManager {
     

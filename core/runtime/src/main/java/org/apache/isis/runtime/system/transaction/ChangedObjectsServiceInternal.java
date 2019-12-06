@@ -44,7 +44,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import lombok.val;
 
 @Service
-@Named("isisRuntime.changedObjectsServiceInternal")
+@Named("isisRuntime.ChangedObjectsServiceInternal")
 @RequestScoped
 public class ChangedObjectsServiceInternal implements WithTransactionScope {
 

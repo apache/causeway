@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.commandDtoServiceInternalDefault")
+@Named("isisRuntimeServices.CommandDtoServiceInternalDefault")
 @Log4j2
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 

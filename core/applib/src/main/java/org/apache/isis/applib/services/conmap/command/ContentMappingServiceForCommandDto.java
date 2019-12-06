@@ -45,7 +45,7 @@ import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarA
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisApplib.contentMappingServiceForCommandDto")
+@Named("isisApplib.ContentMappingServiceForCommandDto")
 @Log4j2
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
@@ -103,7 +103,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
      * Uses the SPI infrastructure to copy over standard properties from {@link Command} to {@link CommandDto}.
      */
     @Service
-    @Named("isisApplib.contentMappingServiceForCommandDto.CopyOverFromCommand")
+    @Named("isisApplib.ContentMappingServiceForCommandDto.CopyOverFromCommand")
     // specify quite a high priority since custom processors will probably want to run after this one
     // (but can choose to run before if they wish)
     @Order(-1000)

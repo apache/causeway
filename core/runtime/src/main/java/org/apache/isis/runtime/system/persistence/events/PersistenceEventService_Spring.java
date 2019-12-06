@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.ioc.spring._Spring;
  *
  */
 @Configuration
-@Named("isisRuntime.persistenceEventService_Spring")
+@Named("isisRuntime.PersistenceEventService_Spring")
 public class PersistenceEventService_Spring {
     
     @Bean

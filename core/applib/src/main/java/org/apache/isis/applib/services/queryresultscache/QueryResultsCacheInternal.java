@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  * available for use; no further configuration is required.
  */
 @Service
-@Named("isisApplib.queryResultsCacheInternal")
+@Named("isisApplib.QueryResultsCacheInternal")
 @RequestScoped
 @Log4j2
 public class QueryResultsCacheInternal implements QueryResultsCache, WithTransactionScope {

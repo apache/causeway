@@ -127,7 +127,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
     public void whenView() throws Exception {
 
         // given
-        @DomainService(nature = NatureOfService.VIEW)
+        @DomainService()
         class CustomerService {
 
             public String name() {
@@ -160,7 +160,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
     public void whenMenu() throws Exception {
 
         // given
-        @DomainService(nature = NatureOfService.VIEW)
+        @DomainService()
         class CustomerService {
 
             public String name() {

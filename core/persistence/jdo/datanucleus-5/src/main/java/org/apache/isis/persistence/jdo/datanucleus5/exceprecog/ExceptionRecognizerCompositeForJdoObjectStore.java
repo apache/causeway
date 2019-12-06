@@ -43,7 +43,7 @@ import org.springframework.stereotype.Service;
  * </p>
  */
 @Service
-@Named("isisJdoDn5.exceptionRecognizerCompositeForJdoObjectStore")
+@Named("isisJdoDn5.ExceptionRecognizerCompositeForJdoObjectStore")
 @Log4j2
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 

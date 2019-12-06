@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisRuntimeServices.sudoServiceDefault")
+@Named("isisRuntimeServices.SudoServiceDefault")
 @Log4j2
 public class SudoServiceDefault implements SudoService {
 

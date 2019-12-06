@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
  *
  */
 @Service
-@Named("isisMetaModel.serviceInjectorDefault")
+@Named("isisMetaModel.ServiceInjectorDefault")
 @Log4j2
 public class ServiceInjectorDefault implements ServiceInjector {
 

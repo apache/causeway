@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Repository
-@Named("isisRuntimeServices.repositoryServiceDefault")
+@Named("isisRuntimeServices.RepositoryServiceDefault")
 @Log4j2
 public class RepositoryServiceDefault implements RepositoryService {
 

@@ -47,7 +47,7 @@ import static java.util.regex.Pattern.quote;
  * A service that sends email notifications when specific events occur
  */
 @Service
-@Named("isisRuntimeServices.emailNotificationServiceDefault")
+@Named("isisRuntimeServices.EmailNotificationServiceDefault")
 @Log4j2
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 

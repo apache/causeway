@@ -41,7 +41,7 @@ import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 
 @Service
-@Named("isisApplib.jaxbServiceDefault")
+@Named("isisApplib.JaxbServiceDefault")
 @Log4j2
 public class JaxbServiceDefault extends JaxbService.Simple {
 

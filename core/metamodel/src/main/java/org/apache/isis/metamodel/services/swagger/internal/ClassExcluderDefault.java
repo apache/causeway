@@ -31,7 +31,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.springframework.stereotype.Component;
 
 @Component
-@Named("isisMetaModel.classExcluderDefault")
+@Named("isisMetaModel.ClassExcluderDefault")
 @Log4j2
 public class ClassExcluderDefault extends ClassExcluderAbstract {
 

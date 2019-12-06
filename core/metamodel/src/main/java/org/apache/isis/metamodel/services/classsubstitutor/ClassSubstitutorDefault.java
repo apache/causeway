@@ -26,7 +26,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 @Component
-@Named("isisMetaModel.classSubstitutorDefault")
+@Named("isisMetaModel.ClassSubstitutorDefault")
 @Log4j2
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 

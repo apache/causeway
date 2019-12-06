@@ -33,7 +33,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 @Component
-@Named("isisMetaModel.swaggerSpecGenerator")
+@Named("isisMetaModel.SwaggerSpecGenerator")
 @Log4j2
 public class SwaggerSpecGenerator {
 

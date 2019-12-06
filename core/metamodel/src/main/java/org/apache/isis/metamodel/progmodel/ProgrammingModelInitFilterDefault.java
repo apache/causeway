@@ -41,7 +41,7 @@ import lombok.val;
  *
  */
 @Component
-@Named("isisMetaModel.programmingModelInitFilterDefault")
+@Named("isisMetaModel.ProgrammingModelInitFilterDefault")
 @Log4j2
 public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFilter {
 

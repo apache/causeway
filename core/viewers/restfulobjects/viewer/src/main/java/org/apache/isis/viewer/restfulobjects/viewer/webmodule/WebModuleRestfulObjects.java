@@ -51,7 +51,7 @@ import lombok.val;
  * @since 2.0
  */
 @Service
-@Named("isisRoViewer.webModuleRestfulObjects")
+@Named("isisRoViewer.WebModuleRestfulObjects")
 @Order(-80)
 @Log4j2
 public final class WebModuleRestfulObjects implements WebModule  {

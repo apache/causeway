@@ -76,7 +76,7 @@ import lombok.extern.log4j.Log4j2;
  * the Isis programming model.
  */
 @Service
-@Named("isisRuntimeServices.wrapperFactoryDefault")
+@Named("isisRuntimeServices.WrapperFactoryDefault")
 @Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
 

@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -47,14 +48,12 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
-@DomainService(
-        nature = NatureOfService.VIEW,
-        objectType = "isisApplib.MetaModelServicesMenu"
-        )
+@Named("isisApplib.MetaModelServicesMenu")
+@DomainService(objectType = "isisApplib.MetaModelServicesMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+)
 public class MetaModelServicesMenu {
 
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServicesMenu> { }

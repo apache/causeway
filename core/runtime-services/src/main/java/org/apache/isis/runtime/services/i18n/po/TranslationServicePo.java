@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 
 @Service
-@Named("isisRuntimeServices.translationServicePo")
+@Named("isisRuntimeServices.TranslationServicePo")
 @Log4j2
 public class TranslationServicePo implements TranslationService {
 

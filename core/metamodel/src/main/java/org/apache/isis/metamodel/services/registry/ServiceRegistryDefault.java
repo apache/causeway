@@ -47,7 +47,7 @@ import lombok.val;
  * @since 2.0
  */
 @Service
-@Named("isisMetaModel.serviceRegistryDefault")
+@Named("isisMetaModel.ServiceRegistryDefault")
 @Log4j2
 public final class ServiceRegistryDefault implements ServiceRegistry {
     

@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.layout;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -37,10 +38,8 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
-@DomainService(
-        nature = NatureOfService.VIEW,
-        objectType = "isisApplib.LayoutServiceMenu"
-        )
+@Named("isisApplib.LayoutServiceMenu")
+@DomainService(objectType = "isisApplib.LayoutServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

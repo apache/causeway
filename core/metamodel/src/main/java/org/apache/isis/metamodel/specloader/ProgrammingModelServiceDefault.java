@@ -37,7 +37,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisMetaModel.programmingModelServiceDefault")
+@Named("isisMetaModel.ProgrammingModelServiceDefault")
 @Log4j2
 public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 

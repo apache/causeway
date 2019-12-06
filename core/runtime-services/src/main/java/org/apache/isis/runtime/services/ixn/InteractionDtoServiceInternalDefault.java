@@ -50,7 +50,7 @@ import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-@Named("isisRuntimeServices.interactionDtoServiceInternalDefault")
+@Named("isisRuntimeServices.InteractionDtoServiceInternalDefault")
 @Log4j2
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 

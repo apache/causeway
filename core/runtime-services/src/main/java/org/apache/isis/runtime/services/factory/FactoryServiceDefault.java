@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.factoryServiceDefault")
+@Named("isisRuntimeServices.FactoryServiceDefault")
 @Log4j2
 public class FactoryServiceDefault implements FactoryService {
     
