@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.util.ToString;
@@ -42,9 +43,12 @@ import org.springframework.stereotype.Service;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
+@Named("isisSecurityApi.AuthenticationManagerStandard")
+@Log4j2
 public class AuthenticationManagerStandard implements AuthenticationManager {
 
     @Inject private ServiceRegistry serviceRegistry;
