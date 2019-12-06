@@ -36,33 +36,11 @@ public class SimpleSession extends AuthenticationSessionAbstract {
     private static final long serialVersionUID = 1L;
     private static final String DEFAULT_VALIDATION_CODE = "";
 
-    // ///////////////////////////////////////////////////////////////
-    // Constructor, encode
-    // ///////////////////////////////////////////////////////////////
-
-    /**
-     * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
-     */
-    public SimpleSession(final String name, final String[] roles) {
-        this(name, stream(roles), DEFAULT_VALIDATION_CODE);
-    }
-
     /**
      * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
      */
     public SimpleSession(final String name, final Iterable<String> roles) {
         this(name, stream(roles), DEFAULT_VALIDATION_CODE);
-    }
-
-    /**
-     * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
-     */
-    public SimpleSession(final String name, final Stream<String> roles) {
-        this(name, roles, DEFAULT_VALIDATION_CODE);
-    }
-
-    public SimpleSession(final String name, final String[] roles, final String code) {
-        this(name, stream(roles), code);
     }
 
     public SimpleSession(final String name, final List<String> roles, final String code) {
@@ -73,16 +51,10 @@ public class SimpleSession extends AuthenticationSessionAbstract {
         super(name, roles, code);
     }
 
-    public SimpleSession(final DataInputExtended input) throws IOException {
-        super(input);
-    }
 
     @Getter @Setter
     private Type type = Type.DEFAULT;
 
-    // ///////////////////////////////////////////////////////////////
-    // equals, hashCode
-    // ///////////////////////////////////////////////////////////////
 
     @Override
     public boolean equals(final Object obj) {

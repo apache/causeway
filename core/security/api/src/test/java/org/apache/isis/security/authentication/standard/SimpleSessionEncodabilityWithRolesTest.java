@@ -19,6 +19,8 @@
 
 package org.apache.isis.security.authentication.standard;
 
+import java.util.Arrays;
+
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 import org.jmock.integration.junit4.JMock;
 import org.junit.runner.RunWith;
@@ -30,7 +32,7 @@ public class SimpleSessionEncodabilityWithRolesTest extends SimpleSessionEncodab
 
     @Override
     protected Encodable createEncodable() {
-        return new SimpleSession("joe", new String[] { "role1", "role2" });
+        return new SimpleSession("joe", Arrays.asList(new String[] { "role1", "role2" }));
     }
 
 }

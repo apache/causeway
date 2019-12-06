@@ -19,6 +19,8 @@
 
 package org.apache.isis.security.authentication.standard;
 
+import java.util.Collections;
+
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 import org.jmock.integration.junit4.JMock;
 import org.junit.runner.RunWith;
@@ -30,7 +32,7 @@ public class SimpleSessionEncodabilityNoRolesTest extends SimpleSessionEncodabil
 
     @Override
     protected Encodable createEncodable() {
-        return new SimpleSession("joe", new String[] {});
+        return new SimpleSession("joe", Collections.emptyList());
     }
 
 }
