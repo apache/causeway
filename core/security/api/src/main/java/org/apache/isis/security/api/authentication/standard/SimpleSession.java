@@ -51,6 +51,9 @@ public class SimpleSession extends AuthenticationSessionAbstract {
         super(name, roles, code);
     }
 
+    public SimpleSession(final DataInputExtended input) throws IOException {
+        super(input);
+    }
 
     @Getter @Setter
     private Type type = Type.DEFAULT;
