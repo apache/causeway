@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.tablecol;
+package org.apache.isis.applib.spi.tablecol;
 
 import java.util.List;
 
