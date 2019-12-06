@@ -49,7 +49,7 @@ import lombok.val;
  */
 @DomainService(
         nature = NatureOfService.DOMAIN, 
-        objectType = "restfulObjectsViewer.WebModule") // add to meta-model, for swagger-menu to check whether available or not
+        objectType = "isisRestfulObjectsViewer.WebModule") // add to meta-model, for swagger-menu to check whether available or not
 @Order(-80)
 public final class WebModuleRestfulObjects implements WebModule  {
 
@@ -62,7 +62,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
     @Inject
     public WebModuleRestfulObjects(final IsisConfiguration isisConfiguration) {
         this.isisConfiguration = isisConfiguration;
-        this.restfulPathConfigValue = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
+        this.restfulPathConfigValue = this.isisConfiguration.getViewer().getRestfulobjects().getBasePath();
     }
 
     @Override

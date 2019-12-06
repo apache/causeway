@@ -70,6 +70,5 @@ public class Object_openRestApi {
     }
 
     @Inject BookmarkService bookmarkService;
-    @Inject SwaggerService swaggerService;
 
 }
