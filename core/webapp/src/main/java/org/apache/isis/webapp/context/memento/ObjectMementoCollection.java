@@ -16,20 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.memento;
+package org.apache.isis.webapp.context.memento;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 import lombok.Getter;
 import lombok.Value;
-import lombok.val;
 
 /**
  * 
@@ -37,25 +33,12 @@ import lombok.val;
  *
  */
 @Value(staticConstructor = "of")
-final class ObjectMementoCollection implements ObjectMemento {
+public final class ObjectMementoCollection implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
     private final ArrayList<ObjectMemento> container; 
     @Getter(onMethod = @__({@Override})) private final ObjectSpecId objectSpecId;
-
-    @Override
-    public ManagedObject reconstructObject(ObjectUnmarshaller objectUnmarshaller) {
-        
-        val listOfPojos = getContainer().stream()
-              .map(memento->memento.reconstructObject(objectUnmarshaller))
-              .filter(_NullSafe::isPresent)
-              .map(ManagedObject::getPojo)
-              .filter(_NullSafe::isPresent)
-              .collect(Collectors.toCollection(ArrayList::new));
-        
-        return objectUnmarshaller.adapterForListOfPojos(listOfPojos);
-    }
 
     @Override
     public String asString() {

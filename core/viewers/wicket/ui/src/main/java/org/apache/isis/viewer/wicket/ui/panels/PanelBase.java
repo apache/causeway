@@ -27,6 +27,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.MessageBroker;
@@ -34,7 +35,6 @@ import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
-import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;

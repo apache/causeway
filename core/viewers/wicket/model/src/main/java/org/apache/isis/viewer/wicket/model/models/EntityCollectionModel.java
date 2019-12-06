@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.wicket.Component;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -47,18 +46,17 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.runtime.memento.ObjectMemento;
-import org.apache.isis.runtime.memento.ObjectMementoService;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFinder;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.webapp.context.memento.ObjectMementoService;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
-import lombok.val;
 
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
@@ -201,7 +199,7 @@ implements LinksProvider, UiHintContainer {
                 final ObjectMementoService mementoService = colModel.getMementoService();
 
                 colModel.mementoList = _NullSafe.stream(adapterList)
-                        .map(mementoService::mementoForAdapter)
+                        .map(mementoService::mementoForObject)
                         .filter(_NullSafe::isPresent)
                         .collect(Collectors.toList());
             }
@@ -515,7 +513,7 @@ implements LinksProvider, UiHintContainer {
 
     public void toggleSelectionOn(ManagedObject selectedAdapter) {
         //XXX lombok issue, cannot use val here
-        final ObjectMemento selectedAsMemento = super.getMementoService().mementoForAdapter(selectedAdapter);
+        final ObjectMemento selectedAsMemento = super.getMementoService().mementoForObject(selectedAdapter);
 
         // try to remove; if couldn't, then mustn't have been in there, in which case add.
         boolean removed = toggledMementosList.remove(selectedAsMemento);

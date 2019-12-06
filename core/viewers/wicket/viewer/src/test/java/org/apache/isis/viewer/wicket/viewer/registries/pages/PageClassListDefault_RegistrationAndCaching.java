@@ -26,9 +26,6 @@ import org.junit.Test;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
-import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
-import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault_Instantiation;
-import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;

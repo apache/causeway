@@ -1,4 +1,4 @@
-package org.apache.isis.runtime.memento;
+package org.apache.isis.viewer.wicket.viewer.services.mementos;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @RequiredArgsConstructor
 @Log4j2
-class ObjectUnmarshaller {
+final class ObjectUnmarshaller {
 
     private final ObjectManager objectManager;
     @Getter private final SpecificationLoader specificationLoader; 

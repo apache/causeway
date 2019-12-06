@@ -28,13 +28,13 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.ObjectMemento;
-import org.apache.isis.runtime.memento.ObjectMementoService;
 import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.webapp.context.memento.ObjectMementoService;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -93,7 +93,7 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     }
     
     public ObjectMemento mementoFor(ManagedObject adapter) {
-        return getMementoService().mementoForAdapter(adapter);
+        return getMementoService().mementoForObject(adapter);
     }
     
     public ObjectMemento mementoFor(RootOid rootOid) {
@@ -141,14 +141,7 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
             return getCommonContext().getServiceInjector();
         }
         
-        
     }
-
-
-
-    
-
-    
     
     
 }

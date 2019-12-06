@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 
 public class AuthenticatedWebSessionForIsis_Instantiation {
 

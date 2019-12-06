@@ -25,8 +25,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 

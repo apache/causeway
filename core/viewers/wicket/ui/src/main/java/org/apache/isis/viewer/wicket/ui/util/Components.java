@@ -19,23 +19,15 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import java.util.Set;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.page.PartialPageUpdate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-
-import lombok.val;
 
 public final class Components {
 

@@ -18,6 +18,9 @@
  */
 package org.apache.isis.runtime.services;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.codegen.bytebuddy.IsisModuleCodegenByteBuddy;
 import org.apache.isis.runtime.IsisModuleRuntime;
 import org.apache.isis.runtime.services.auth.AuthenticationSessionProviderDefault;
@@ -47,9 +50,6 @@ import org.apache.isis.runtime.services.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.runtime.services.wrapper.WrapperFactoryDefault;
 import org.apache.isis.runtime.services.xactn.TransactionServiceSpring;
 import org.apache.isis.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

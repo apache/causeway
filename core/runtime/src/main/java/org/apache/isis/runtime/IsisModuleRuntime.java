@@ -18,8 +18,10 @@
  */
 package org.apache.isis.runtime;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.metamodel.IsisModuleMetamodel;
-import org.apache.isis.runtime.memento.ObjectMementoServiceDefault;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.runtime.system.context.session.RuntimeEventSupport_Spring;
 import org.apache.isis.runtime.system.persistence.events.PersistenceEventService;
@@ -28,9 +30,6 @@ import org.apache.isis.runtime.system.persistence.events.TimestampService;
 import org.apache.isis.runtime.system.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtime.system.transaction.AuditingServiceInternal;
 import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
@@ -38,7 +37,6 @@ import org.springframework.context.annotation.Import;
         IsisModuleMetamodel.class,
 
         // @Service's
-        ObjectMementoServiceDefault.class,
         RuntimeEventService.class,
         PersistenceEventService.class,
         TimestampService.class,

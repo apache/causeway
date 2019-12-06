@@ -43,8 +43,8 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 

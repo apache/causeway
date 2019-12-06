@@ -41,8 +41,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 public class ObjectAdapterMementoProviderForValueChoices
 extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProviderForChoices {

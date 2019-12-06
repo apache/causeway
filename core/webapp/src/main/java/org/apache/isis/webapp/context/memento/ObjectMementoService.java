@@ -16,16 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.memento;
+package org.apache.isis.webapp.context.memento;
 
-import java.util.stream.Collectors;
-
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
-
-import lombok.val;
 
 /**
  * @since 2.0
@@ -36,18 +31,11 @@ public interface ObjectMementoService {
 
     ObjectMemento mementoForRootOid(RootOid rootOid);
 
-    ObjectMemento mementoForAdapter(ManagedObject adapter);
+    ObjectMemento mementoForObject(ManagedObject adapter);
 
     ObjectMemento mementoForPojo(Object pojo);
     
-    default ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId) {
-        val listOfMementos = _NullSafe.stream(iterablePojos)
-                .map(pojo->mementoForPojo(pojo))
-                .collect(Collectors.toList());
-        val memento =
-                ObjectMemento.wrapMementoList(listOfMementos, specId);
-        return memento;
-    }
+    ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId);
 
     ManagedObject reconstructObject(ObjectMemento memento);
     

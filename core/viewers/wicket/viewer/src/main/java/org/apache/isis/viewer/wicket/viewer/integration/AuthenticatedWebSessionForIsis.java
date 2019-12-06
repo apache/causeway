@@ -30,7 +30,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
@@ -41,6 +40,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
 
 import lombok.Getter;
 import lombok.val;

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.memento;
+package org.apache.isis.viewer.wicket.viewer.services.mementos;
 
 import java.util.Set;
 
@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Log4j2
-class ObjectMarshaller {
+final class ObjectMarshaller {
 
     Data toData(ManagedObject adapter) {
         val data = (adapter == null) ? null : createData(adapter);

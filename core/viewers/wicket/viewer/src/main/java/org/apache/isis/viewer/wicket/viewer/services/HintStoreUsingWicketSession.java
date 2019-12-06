@@ -22,18 +22,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.wicket.Session;
+import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.wicket.Session;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Named;
 
 @Service
 @Named("isisWicketViewer.HintStoreUsingWicketSession")

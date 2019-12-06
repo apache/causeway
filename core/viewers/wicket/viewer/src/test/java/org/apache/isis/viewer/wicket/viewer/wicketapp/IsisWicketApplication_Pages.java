@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
-import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.jmock.Expectations;

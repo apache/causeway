@@ -18,15 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.viewer.services;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.services.bookmarkui.BookmarkUiService;
 import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
-import org.springframework.stereotype.Service;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisWicketViewer.BookmarkUiServiceWicket")

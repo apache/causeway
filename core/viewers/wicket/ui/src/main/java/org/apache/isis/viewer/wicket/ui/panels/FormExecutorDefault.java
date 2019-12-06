@@ -48,7 +48,6 @@ import org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.runtime.system.session.IsisRequestCycle;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
@@ -64,6 +63,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOr
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

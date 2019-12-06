@@ -40,13 +40,13 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -341,7 +341,7 @@ implements ObjectAdapterModel, UiHintContainer {
     @Override
     public void setObject(ManagedObject adapter) {
         super.setObject(adapter);
-        adapterMemento = super.getMementoService().mementoForAdapter(adapter); 
+        adapterMemento = super.getMementoService().mementoForObject(adapter); 
     }
 
     public void setObjectMemento(final ObjectMemento adapterMemento) {
@@ -491,7 +491,7 @@ implements ObjectAdapterModel, UiHintContainer {
                 return pending;
             }
             val adapter = entityModel.getObject();
-            return entityModel.getMementoService().mementoForAdapter(adapter);
+            return entityModel.getMementoService().mementoForObject(adapter);
         }
 
         @Override

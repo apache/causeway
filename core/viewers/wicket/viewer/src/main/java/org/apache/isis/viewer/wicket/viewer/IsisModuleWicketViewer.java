@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.viewer.wicket.ui.IsisModuleWicketUi;
 import org.apache.isis.viewer.wicket.viewer.mixins.Object_clearHints;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
@@ -26,14 +29,15 @@ import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFacto
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault;
-import org.apache.isis.viewer.wicket.viewer.services.*;
+import org.apache.isis.viewer.wicket.viewer.services.BookmarkUiServiceWicket;
+import org.apache.isis.viewer.wicket.viewer.services.DeepLinkServiceWicket;
+import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
+import org.apache.isis.viewer.wicket.viewer.services.ImageResourceCacheClassPath;
+import org.apache.isis.viewer.wicket.viewer.services.LocaleProviderWicket;
+import org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket;
+import org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault;
+import org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoServiceDefault;
 import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault;
-import org.apache.isis.webapp.IsisModuleWebapp;
 
 /**
  * 
@@ -52,6 +56,7 @@ import org.apache.isis.webapp.IsisModuleWebapp;
         ImageResourceCacheClassPath.class,
         LocaleProviderWicket.class,
         HintStoreUsingWicketSession.class,
+        ObjectMementoServiceDefault.class,
         PageClassListDefault.class,
         PageClassRegistryDefault.class,
         PageNavigationServiceDefault.class,

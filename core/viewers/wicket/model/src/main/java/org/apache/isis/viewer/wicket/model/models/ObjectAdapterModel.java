@@ -23,7 +23,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.memento.ObjectMemento;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 public interface ObjectAdapterModel extends IModel<ManagedObject> {
 

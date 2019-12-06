@@ -16,7 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.memento;
+package org.apache.isis.viewer.wicket.viewer.services.mementos;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -25,11 +28,16 @@ import javax.inject.Singleton;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.webapp.context.memento.ObjectMementoCollection;
+import org.apache.isis.webapp.context.memento.ObjectMementoService;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -41,11 +49,11 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisRuntime.ObjectMementoServiceDefault")
+@Named("isisRuntimeServices.ObjectMementoServiceDefault")
 @Singleton
 public class ObjectMementoServiceDefault
 implements ObjectMementoService {
-    
+
     @Inject @Getter private SpecificationLoader specificationLoader;
     @Inject private ObjectManager objectManager;
     private ObjectUnmarshaller objectUnmarshaller;
@@ -57,7 +65,7 @@ implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForAdapter(ManagedObject adapter) {
+    public ObjectMemento mementoForObject(ManagedObject adapter) {
         val mementoAdapter = ObjectMementoLegacy.createOrNull(adapter);
         if(mementoAdapter==null) {
             return null;
@@ -68,7 +76,16 @@ implements ObjectMementoService {
     @Override
     public ObjectMemento mementoForPojo(Object pojo) {
         val managedObject = objectManager.adapt(pojo);
-        return mementoForAdapter(managedObject);
+        return mementoForObject(managedObject);
+    }
+    
+    @Override
+    public ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId) {
+        val listOfMementos = _NullSafe.stream(iterablePojos)
+                .map(pojo->mementoForPojo(pojo))
+                .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
+
+        return ObjectMementoCollection.of(listOfMementos, specId);
     }
 
     @Override
@@ -79,8 +96,26 @@ implements ObjectMementoService {
         if(objectUnmarshaller==null) {
             objectUnmarshaller = new ObjectUnmarshaller(objectManager, specificationLoader);
         }
-        
-        return memento.reconstructObject(objectUnmarshaller);
+
+        if(memento instanceof ObjectMementoCollection) {
+            val objectMementoCollection = (ObjectMementoCollection) memento;
+
+            val listOfPojos = objectMementoCollection.unwrapList().stream()
+                    .map(this::reconstructObject)
+                    .filter(_NullSafe::isPresent)
+                    .map(ManagedObject::getPojo)
+                    .filter(_NullSafe::isPresent)
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            return objectUnmarshaller.adapterForListOfPojos(listOfPojos);
+        }
+
+        if(memento instanceof ObjectMementoAdapter) {
+            val objectMementoAdapter = (ObjectMementoAdapter) memento;
+            return objectMementoAdapter.reconstructObject(objectUnmarshaller);
+        }
+
+        throw _Exceptions.unrecoverableFormatted("unsupported ObjectMemento type %s", memento.getClass());
     }
 
     @RequiredArgsConstructor(staticName = "of")
@@ -110,16 +145,17 @@ implements ObjectMementoService {
             return delegate.getObjectSpecId();
         }
 
-        @Override
-        public ManagedObject reconstructObject(ObjectUnmarshaller objectUnmarshaller) {
+        ManagedObject reconstructObject(ObjectUnmarshaller objectUnmarshaller) {
             return delegate.reconstructObject(objectUnmarshaller, objectUnmarshaller.getSpecificationLoader());
         }
-        
+
         @Override
         public String toString() {
             return delegate.toString();
         }
 
     }
+
+
 
 }

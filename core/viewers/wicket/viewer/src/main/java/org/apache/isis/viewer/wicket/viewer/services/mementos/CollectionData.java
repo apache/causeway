@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.memento;
+package org.apache.isis.viewer.wicket.viewer.services.mementos;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

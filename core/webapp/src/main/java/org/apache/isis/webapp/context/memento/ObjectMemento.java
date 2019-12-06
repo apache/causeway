@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.memento;
+package org.apache.isis.webapp.context.memento;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ import java.util.Optional;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
+
 
 /**
  * @since 2.0
@@ -38,26 +38,22 @@ public interface ObjectMemento extends Serializable {
     String asString();
 
     /**
-     * TODO[2112] outdated
      * Returns a bookmark only if 
-     * {@link org.apache.isis.runtime.memento.ObjectMementoLegacy.RecreateStrategy#LOOKUP} and 
+     * {@link org.apache.isis.runtime.services.memento.ObjectMementoLegacy.RecreateStrategy#LOOKUP} and 
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */
     Bookmark asBookmarkIfSupported();
 
     /**
-     * TODO[2112] outdated 
      * Returns a bookmark only if 
-     * {@link org.apache.isis.runtime.memento.ObjectMementoLegacy.RecreateStrategy#LOOKUP} and 
+     * {@link org.apache.isis.runtime.services.memento.ObjectMementoLegacy.RecreateStrategy#LOOKUP} and 
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */
     Bookmark asHintingBookmarkIfSupported();
 
     ObjectSpecId getObjectSpecId();
-    
-    ManagedObject reconstructObject(ObjectUnmarshaller objectUnmarshaller);
 
     // -- FACTORIES
 
@@ -82,6 +78,6 @@ public interface ObjectMemento extends Serializable {
         }
         return Optional.ofNullable(((ObjectMementoCollection)memento).unwrapList());
     }
-
-
+    
+    
 }

@@ -23,7 +23,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.memento.ObjectMemento;
+import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 import static org.apache.isis.viewer.wicket.model.models.EntityModel.createPageParameters;
 
@@ -99,7 +99,7 @@ public class EntityModelForReference implements ObjectAdapterModel {
         val hintStore = scalarModel.getCommonContext().lookupServiceElseFail(HintStore.class); 
         
         val pageParameters = createPageParameters(getObject());
-        val objectAdapterMemento = mementoService.mementoForAdapter(getObject()); 
+        val objectAdapterMemento = mementoService.mementoForObject(getObject()); 
         
         HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, objectAdapterMemento, hintStore);
         return pageParameters;
