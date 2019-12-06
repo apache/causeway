@@ -38,20 +38,24 @@ public enum NatureOfService {
      */
     REST,
     
+    // -- DEPRECATIONS
+
     /**
      * A <em>programmatic</em> service.
      * <p>
-     * The service's actions do not appear on any viewer and are not visible in the REST API. In other words 
-     * these are not contributed to the domain-model. However, the service is injectable into domain objects.  
+     * The service's actions do not appear on any viewer and are not visible in the REST API. In other words
+     * these are not contributed to the domain-model. However, the service is injectable into domain objects.
      * </p>
+     *
+     * @deprecated will be removed with 2.0.0 release! use Spring's {@link org.springframework.stereotype.Service @Service} instead;
+     * @apiNote For now, used as synonym for {@link #REST}
      */
+    @Deprecated
     DOMAIN,
-    
-    // -- DEPRECATIONS
-    
+
     /**
-     * @deprecated will be removed with 2.0.0 release! use {@link #REST} instead; 
-     * @apiNote For now, used as synonym for {@link #REST} 
+     * @deprecated will be removed with 2.0.0 release! use {@link #REST} instead;
+     * @apiNote For now, used as synonym for {@link #REST}
      */
     @Deprecated
     VIEW_REST_ONLY,
