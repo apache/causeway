@@ -56,7 +56,7 @@ class RoDialog(
                         val rowCnt = maxOf(3, fi.size)
                         add(TextArea(label = fi.label, value = fi.content as String, rows = rowCnt))
                     }
-                    "Select" -> {
+                    "SimpleSelect" -> {
                         @Suppress("UNCHECKED_CAST")
                         console.log("[RoDialog.init]")
                         console.log(fi.content)

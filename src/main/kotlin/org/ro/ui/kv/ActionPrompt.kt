@@ -1,7 +1,6 @@
 package org.ro.ui.kv
 
 import org.ro.core.Utils
-import org.ro.ui.kv.RoDialog
 import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Parameter
@@ -9,7 +8,7 @@ import org.ro.ui.Command
 import org.ro.ui.Point
 import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.core.StringPair
-import pl.treksoft.kvision.form.select.Select
+import pl.treksoft.kvision.form.select.SimpleSelect
 import pl.treksoft.kvision.form.text.TextArea
 
 class ActionPrompt(val action: Action) : Command {
@@ -43,7 +42,7 @@ class ActionPrompt(val action: Action) : Command {
             var type = "TextArea"
             var content: Any = ""
             if (p.choices.isNotEmpty()) {
-                type = "Select"
+                type = "SimpleSelect"
                 content = buildSelectionList(p)
             }
             val fi = FormItem(v, type, content)
@@ -76,7 +75,7 @@ class ActionPrompt(val action: Action) : Command {
                     key = i.label!!
                     value = i.getValue()
                 }
-                is Select -> {
+                is SimpleSelect -> {
                     key = i.label!!
                     value = i.getValue()!!
                     val p: Parameter = action.findParameterByName(key.toLowerCase())!!

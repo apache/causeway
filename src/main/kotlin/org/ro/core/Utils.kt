@@ -58,7 +58,7 @@ object Utils {
         var body = "{"
         args.forEach {
             val arg = it.value!!
-            body = body + arg.asBody() + ","
+            body = body + asBody(arg) + ","
         }
         val len = body.length
         body = body.replaceRange(len - 1, len, "}")
@@ -70,7 +70,7 @@ object Utils {
         return argumentsAsString(args, "?", "&", "")
     }
 
-    private fun argumentsAsString(
+    internal fun argumentsAsString(
             args: Map<String, Argument?>?,
             start: String,
             sep: String,
@@ -88,6 +88,27 @@ object Utils {
             return answer
         }
     }
+
+    internal fun asBody(arg: Argument): String {
+        console.log("[Utils.asBody]")
+        console.log(arg)
+        var v = arg.value!!
+        val isHttp = v.startsWith("http")
+        v = quote(v)
+        if (isHttp) {
+            v = enbrace("href", v)
+        }
+        return quote(arg.key) + ": " + enbrace("value", v)
+    }
+
+    private fun enbrace(k: String, v: String): String {
+        return "{" + quote(k) + ": " + v + "}"
+    }
+
+    private fun quote(s: String): String {
+        return "\"" + s + "\""
+    }
+
 
 
 }
