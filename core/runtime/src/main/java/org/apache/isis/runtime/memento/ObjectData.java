@@ -29,14 +29,14 @@ import lombok.NoArgsConstructor;
 
 final class ObjectData extends Data {
 
-    private static final long serialVersionUID = 3772154051989942219L;
+    private static final long serialVersionUID = 2L;
     
     private final Map<String, Object> fields = new HashMap<String, Object>();
 
-    public ObjectData(final Oid oid, final String className) {
-        super(oid, className);
+    public ObjectData(final Oid oid) {
+        super(oid);
     }
-
+    
     public void addField(final String fieldName, final Object entry) {
         if (fields.containsKey(fieldName)) {
             throw new IllegalArgumentException("Field already entered " + fieldName);

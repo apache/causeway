@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.adapter.oid;
 import java.io.IOException;
 import java.util.Objects;
 
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -30,7 +30,7 @@ final class Oid_Parented implements ParentedOid {
 
     private static final long serialVersionUID = 1L;
 
-    private final String name;
+    private final String oneToManyId;
     private final int hashCode;
 
     private final RootOid parentRootOid;
@@ -42,13 +42,18 @@ final class Oid_Parented implements ParentedOid {
     private Oid_Parented(RootOid parentRootOid, String oneToManyId) {
         requires(parentRootOid, "parentRootOid");
         this.parentRootOid = parentRootOid;
-        this.name = oneToManyId;
+        this.oneToManyId = oneToManyId;
         this.hashCode = calculateHash();
     }
 
     @Override
     public RootOid getParentOid() {
         return parentRootOid;
+    }
+    
+    @Override
+    public ObjectSpecId getObjectSpecId() {
+        return getParentOid().getObjectSpecId();
     }
 
     @Override
@@ -77,13 +82,13 @@ final class Oid_Parented implements ParentedOid {
 
     private Oid_Parented(Oid_Parented oid) throws IOException {
         this.parentRootOid = oid.getParentOid();
-        this.name = oid.name;
+        this.oneToManyId = oid.oneToManyId;
         this.hashCode = calculateHash();
     }
 
     @Override
     public String getName() {
-        return name;
+        return oneToManyId;
     }
 
 
@@ -115,7 +120,8 @@ final class Oid_Parented implements ParentedOid {
     }
 
     public boolean equals(final Oid_Parented other) {
-        return Objects.equals(other.getParentOid(), getParentOid()) && Objects.equals(other.name, name);
+        return Objects.equals(other.getParentOid(), getParentOid()) 
+                && Objects.equals(other.oneToManyId, oneToManyId);
     }
 
 
@@ -125,7 +131,7 @@ final class Oid_Parented implements ParentedOid {
     }
 
     private int calculateHash() {
-        return Objects.hash(getParentOid(), name);
+        return Objects.hash(getParentOid(), oneToManyId);
     }
 
     /**
@@ -133,7 +139,7 @@ final class Oid_Parented implements ParentedOid {
      * need updating similarly.
      */
     public Oid_Parented asPersistent(RootOid newParentRootOid) {
-        return new Oid_Parented(newParentRootOid, name);
+        return new Oid_Parented(newParentRootOid, oneToManyId);
     }
 
 

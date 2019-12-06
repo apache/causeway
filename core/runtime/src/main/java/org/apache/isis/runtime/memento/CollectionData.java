@@ -30,8 +30,8 @@ final class CollectionData extends Data {
     private final static long serialVersionUID = 1L;
     private final Data[] elements;
 
-    public CollectionData(final Oid oid, final String className, final Data[] elements) {
-        super(oid, className);
+    public CollectionData(final Oid oid, final Data[] elements) {
+        super(oid);
         this.elements = elements;
     }
 

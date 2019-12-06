@@ -25,20 +25,22 @@ import java.util.List;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
+import lombok.ToString;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -50,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
  * easily. Also for a persistent objects only the reference's {@link Oid}s are
  * held, avoiding the need for serializing the whole object graph.
  */
-@Log4j2
+@Log4j2 @ToString
 class Memento implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -71,14 +73,9 @@ class Memento implements Serializable {
         if (data == null) {
             return null;
         }
-        val spec = specLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(data.getSpecId()));
+        val spec = specLoader.lookupBySpecIdElseLoad(data.getObjectSpecId());
         val oid = data.getOid();
         return mementoStore.adapterOfMemento(spec, oid, data);
-    }
-
-    @Override
-    public String toString() {
-        return "[" + (data == null ? null : data.getSpecId() + "/" + data.getOid() + data) + "]";
     }
     
     // -- HELPER
@@ -99,16 +96,15 @@ class Memento implements Serializable {
                 .collect(_Arrays.toArray(Data.class, CollectionFacet.Utils.size(adapter)));
 
         val elementOid = ManagedObject._identify(adapter);
-        val elementSpec = adapter.getSpecification();
         
-        return new CollectionData(elementOid, elementSpec.getFullIdentifier(), collData);
+        return new CollectionData(elementOid, collData);
     }
 
     private ObjectData createObjectData(ManagedObject adapter) {
         val oid = ManagedObject._identify(adapter);
         oids.add(oid);
         val spec = adapter.getSpecification();
-        val data = new ObjectData(oid, spec.getFullIdentifier());
+        val data = new ObjectData(oid);
 
         spec.streamAssociations(Contributed.EXCLUDED)
         .filter(association->{
@@ -156,8 +152,12 @@ class Memento implements Serializable {
 
         val refOid = ManagedObject._identify(referencedAdapter);
 
-        if (refOid == null || refOid.isValue()) {
-            return createStandaloneData(referencedAdapter);
+        if (refOid == null) {
+            throw _Exceptions.unexpectedCodeReach();
+        }
+        
+        if (refOid.isValue()) {
+            return createStandaloneData(refOid, referencedAdapter);
         }
 
         val refSpec = referencedAdapter.getSpecification();
@@ -170,11 +170,11 @@ class Memento implements Serializable {
             }
         }
 
-        return new Data(refOid, refSpec.getFullIdentifier());
+        return new Data(refOid);
     }
 
-    private Data createStandaloneData(ManagedObject adapter) {
-        return new StandaloneData(adapter);
+    private Data createStandaloneData(RootOid rootOid, ManagedObject adapter) {
+        return new StandaloneData(rootOid, adapter);
     }
 
 

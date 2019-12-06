@@ -24,6 +24,7 @@ import java.io.Serializable;
 import javax.annotation.Nullable;
 
 import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -40,6 +41,9 @@ class Data implements Serializable {
      * @apiNote could be <tt>null</tt> if represents a value (standalone adapter).
      */
     @Getter @Nullable private final Oid oid;
-    @Getter private final String specId;
 
+    public ObjectSpecId getObjectSpecId() {
+        return oid.getObjectSpecId();
+    }
+    
 }

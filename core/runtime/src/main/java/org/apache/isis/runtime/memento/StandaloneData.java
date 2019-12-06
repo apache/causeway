@@ -22,9 +22,9 @@ package org.apache.isis.runtime.memento;
 import java.io.Serializable;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
@@ -36,8 +36,8 @@ final class StandaloneData extends Data {
     private String objectAsEncodedString;
     private Serializable objectAsSerializable;
 
-    public StandaloneData(ManagedObject adapter) {
-        super(null, adapter.getSpecification().getFullIdentifier());
+    public StandaloneData(RootOid rootOid, ManagedObject adapter) {
+        super(rootOid);
 
         final Object object = adapter.getPojo();
         if (object instanceof Serializable) {
@@ -61,8 +61,7 @@ final class StandaloneData extends Data {
         if (objectAsSerializable != null) {
             return objectAdapterProvider.adapterFor(objectAsSerializable);
         } else {
-            val spec = 
-                    specificationLoader.lookupBySpecIdElseLoad(ObjectSpecId.of(getSpecId()));
+            val spec = specificationLoader.lookupBySpecIdElseLoad(getObjectSpecId());
             val encodeableFacet = spec.getFacet(EncodableFacet.class);
             return encodeableFacet.fromEncodedString(objectAsEncodedString);
         }

@@ -26,8 +26,6 @@ import org.apache.isis.schema.common.v1.OidDto;
 
 public interface RootOid extends Oid {
 
-    ObjectSpecId getObjectSpecId();
-
     String getIdentifier();
 
     Bookmark asBookmark();
