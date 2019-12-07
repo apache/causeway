@@ -69,8 +69,13 @@
         	<artifactId>spring-web</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+        </dependency>
+
         <!-- TESTING -->
-        
+
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>

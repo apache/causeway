@@ -19,6 +19,7 @@
 package org.apache.isis.webapp;
 
 import org.apache.isis.runtime.IsisModuleRuntime;
+import org.apache.isis.webapp.health.HealthIndicatorUsingHealthCheckService;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextListener;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,9 @@ import org.apache.isis.webapp.modules.templresources.WebModuleTemplateResources;
         // @Service's
         WebModuleLogOnExceptionLogger.class,
         WebModuleTemplateResources.class,
+
+        // @Component's
+        HealthIndicatorUsingHealthCheckService.class,
 
         // (not annotated)
         IsisWebAppContextListener.class,
