@@ -26,9 +26,12 @@ import org.apache.isis.extensions.sse.services.SseServiceDefault;
 
 @Configuration
 @Import({
-    SseMetaModelPlugin.class,
-    SseServiceDefault.class,
-    WebModuleServerSentEvents.class
+        // @Component's
+        SseMetaModelPlugin.class,
+
+        // @Service's
+        SseServiceDefault.class,
+        WebModuleServerSentEvents.class
 })
 public class IsisModuleExtSse {
 
