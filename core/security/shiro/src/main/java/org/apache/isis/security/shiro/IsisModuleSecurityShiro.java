@@ -27,10 +27,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
-import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
+import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
 
 /**
  * Configuration Bean to support Isis Security using Shiro.
@@ -45,15 +44,10 @@ import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 
         // @Service's
         AuthenticatorShiro.class,
+        AuthorizorShiro.class,
         WebModuleShiro.class,
 
 })
 public class IsisModuleSecurityShiro {
-
-    @Bean @Singleton
-    public Authorizor autorizor() {
-        return new ShiroAuthorizor();
-    }
-
 
 }

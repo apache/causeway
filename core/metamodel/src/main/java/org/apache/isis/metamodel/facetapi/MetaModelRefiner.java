@@ -33,10 +33,4 @@ public interface MetaModelRefiner {
     
     void refineProgrammingModel(ProgrammingModel programmingModel);
 
-    // -- LOOKUP ALL REFINERS
-
-    static Can<MetaModelRefiner> getAll(ServiceRegistry serviceRegistry) {
-        return serviceRegistry.select(MetaModelRefiner.class);
-    }
-
 }

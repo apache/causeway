@@ -42,9 +42,6 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class AuthenticatorKeycloak implements Authenticator {
 
-    public AuthenticatorKeycloak() {
-    }
-
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
         return true;

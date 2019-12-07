@@ -19,20 +19,23 @@
 
 package org.apache.isis.security.bypass.authorization;
 
+import lombok.extern.log4j.Log4j2;
+
+import javax.inject.Named;
+
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
+@Service
+@Named("isisSecurityBypass.AuthorizorBypass")
+@Order(OrderPrecedence.LOW)
+@Qualifier("Bypass")
+@Log4j2
 public class AuthorizorBypass implements Authorizor {
-
-    @Override
-    public void init() {
-        // does nothing
-    }
-
-    @Override
-    public void shutdown() {
-        // does nothing
-    }
 
     @Override
     public boolean isUsableInRole(final String role, final Identifier identifier) {

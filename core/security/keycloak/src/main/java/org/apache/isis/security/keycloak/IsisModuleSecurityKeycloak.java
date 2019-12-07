@@ -22,7 +22,7 @@ import javax.inject.Singleton;
 
 import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
 import org.apache.isis.security.keycloak.authentication.AuthenticatorKeycloak;
-import org.apache.isis.security.keycloak.authorization.KeycloakAuthorizor;
+import org.apache.isis.security.keycloak.authorization.AuthorizorKeycloak;
 import org.apache.isis.security.keycloak.webmodule.WebModuleKeycloak;
 import org.apache.isis.webapp.IsisModuleWebapp;
 import org.springframework.context.annotation.Bean;
@@ -44,15 +44,10 @@ import org.apache.isis.security.api.authorization.standard.Authorizor;
 
         // @Service's
         AuthenticatorKeycloak.class,
+        AuthorizorKeycloak.class,
         WebModuleKeycloak.class,
 
 })
 public class IsisModuleSecurityKeycloak {
-
-    @Bean @Singleton
-    public Authorizor autorizor() {
-        return new KeycloakAuthorizor();
-    }
-
 
 }

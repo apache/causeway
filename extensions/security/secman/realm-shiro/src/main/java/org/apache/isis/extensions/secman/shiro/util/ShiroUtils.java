@@ -22,7 +22,7 @@ import lombok.experimental.UtilityClass;
 
 import java.util.Collection;
 
-import org.apache.isis.extensions.secman.shiro.IsisModuleSecurityRealm;
+import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
@@ -45,12 +45,12 @@ public class ShiroUtils {
         return (RealmSecurityManager) securityManager;
     }
 
-    public static IsisModuleSecurityRealm getIsisModuleSecurityRealm() {
+    public static IsisModuleExtSecmanShiroRealm getIsisModuleSecurityRealm() {
         final RealmSecurityManager securityManager = getSecurityManager();
         final Collection<Realm> realms = securityManager.getRealms();
         for (Realm realm : realms) {
-            if(realm instanceof IsisModuleSecurityRealm) {
-                IsisModuleSecurityRealm imsr = (IsisModuleSecurityRealm) realm;
+            if(realm instanceof IsisModuleExtSecmanShiroRealm) {
+                IsisModuleExtSecmanShiroRealm imsr = (IsisModuleExtSecmanShiroRealm) realm;
                 return imsr;
             }
         }

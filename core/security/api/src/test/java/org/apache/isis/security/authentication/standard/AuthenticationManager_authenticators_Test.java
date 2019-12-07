@@ -41,7 +41,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(JMock.class)
 public class AuthenticationManager_authenticators_Test {
 
-    @Rule
     private final Mockery mockery = new JUnit4Mockery();
 
     private AuthenticationManager authenticationManager;

@@ -71,7 +71,7 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
         // from all plugins out there, add their contributed FacetFactories, Validators 
         // and PostProcessors to the programming model
-        val metaModelRefiners = MetaModelRefiner.getAll(serviceRegistry);
+        val metaModelRefiners = serviceRegistry.select(MetaModelRefiner.class);
         for (val metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel);
         }

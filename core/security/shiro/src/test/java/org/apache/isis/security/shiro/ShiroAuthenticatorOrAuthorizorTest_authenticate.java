@@ -35,7 +35,7 @@ import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
-import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
+import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -52,7 +52,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     private AuthenticatorShiro authenticator;
-    private ShiroAuthorizor authorizor;
+    private AuthorizorShiro authorizor;
 
     @Before
     public void setUp() throws Exception {
@@ -63,9 +63,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         configuration.getAuthentication().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
         
         authenticator = new AuthenticatorShiro(configuration);
-        authorizor = new ShiroAuthorizor();
-
-        authorizor.init();
+        authorizor = new AuthorizorShiro();
     }
 
     @After

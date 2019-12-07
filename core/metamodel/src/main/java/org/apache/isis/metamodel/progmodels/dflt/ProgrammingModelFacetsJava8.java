@@ -17,7 +17,10 @@
 
 package org.apache.isis.metamodel.progmodels.dflt;
 
+import lombok.val;
+
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.metamodel.authorization.standard.AuthorizationFacetFactory;
 import org.apache.isis.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
@@ -329,6 +332,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, Jdk8OffsetDateTimeValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory.class);
 
+        addFactory(FacetProcessingOrder.Z0_BEFORE_FINALLY, AuthorizationFacetFactory.class);
+
         // written to not trample over TypeOf if already installed
         addFactory(FacetProcessingOrder.Z1_FINALLY, CollectionFacetFactory.class);
         // must come after CollectionFacetFactory
@@ -352,7 +357,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
         addValidator(new TitlesAndTranslationsValidator());
-        
+
+
     }
 
 

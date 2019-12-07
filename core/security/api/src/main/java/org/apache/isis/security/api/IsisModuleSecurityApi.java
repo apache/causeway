@@ -20,6 +20,7 @@ package org.apache.isis.security.api;
 
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.api.authentication.standard.RandomCodeGeneratorDefault;
+import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -27,6 +28,9 @@ import org.springframework.context.annotation.Import;
 @Import({
         // @Service's
         AuthenticationManager.class,
+        AuthorizationManager.class,
+
+        // @Component's
         RandomCodeGeneratorDefault.class,
 })
 public class IsisModuleSecurityApi {

@@ -53,7 +53,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-public class IsisModuleSecurityRealm extends AuthorizingRealm implements SecurityRealm {
+public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements SecurityRealm {
 
     @Inject protected ServiceInjector serviceInjector;
     @Inject protected IsisSessionFactory isisSessionFactory;
@@ -67,7 +67,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
      * permission strings that are provided by Isis'
      * {@link Authorizor} for Shiro.
      */
-    public IsisModuleSecurityRealm() {
+    public IsisModuleExtSecmanShiroRealm() {
         setPermissionResolver(new PermissionResolverForIsisShiroAuthorizor());
     }
 

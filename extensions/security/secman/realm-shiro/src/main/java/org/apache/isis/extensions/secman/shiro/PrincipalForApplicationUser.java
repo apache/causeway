@@ -42,15 +42,15 @@ import lombok.val;
 
 
 /**
- * Acts as the Principal for the {@link IsisModuleSecurityRealm}, meaning that it is returned from
- * {@link IsisModuleSecurityRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken) authentication}, and passed into
- * {@link IsisModuleSecurityRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection) authorization}.
+ * Acts as the Principal for the {@link IsisModuleExtSecmanShiroRealm}, meaning that it is returned from
+ * {@link IsisModuleExtSecmanShiroRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken) authentication}, and passed into
+ * {@link IsisModuleExtSecmanShiroRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection) authorization}.
  *
  * <p>
  *     To minimize database lookups, holds the user, corresponding roles and the full set of permissions
  *     (all as value objects).  The permissions are eagerly looked up during
- *     {@link IsisModuleSecurityRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken) authentication} and so the
- *     {@link IsisModuleSecurityRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection) authorization} merely involves
+ *     {@link IsisModuleExtSecmanShiroRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken) authentication} and so the
+ *     {@link IsisModuleExtSecmanShiroRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection) authorization} merely involves
  *     creating an adapter object for the appropriate Shiro API.
  * </p>
  *

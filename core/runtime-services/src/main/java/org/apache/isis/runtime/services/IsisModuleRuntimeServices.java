@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.codegen.bytebuddy.IsisModuleCodegenByteBuddy;
 import org.apache.isis.runtime.IsisModuleRuntime;
 import org.apache.isis.runtime.services.auth.AuthenticationSessionProviderDefault;
-import org.apache.isis.runtime.services.auth.AuthorizationManagerDefault;
+import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
 import org.apache.isis.runtime.services.background.CommandExecutorServiceDefault;
 import org.apache.isis.runtime.services.bookmarks.BookmarkServiceInternalDefault;
 import org.apache.isis.runtime.services.command.CommandDtoServiceInternalDefault;
@@ -59,7 +59,6 @@ import org.apache.isis.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault;
 
         // @Service's
         AuthenticationSessionProviderDefault.class,
-        AuthorizationManagerDefault.class,
         BookmarkServiceInternalDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,

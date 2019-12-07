@@ -24,9 +24,6 @@ import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 
 public interface Authorizor extends ApplicationScopedComponent {
 
-    void init();
-    void shutdown();
-
     boolean isVisibleInAnyRole(final Identifier identifier);
     boolean isUsableInAnyRole(final Identifier identifier);
 
@@ -43,14 +40,6 @@ public interface Authorizor extends ApplicationScopedComponent {
     // -- NOP IMPLEMENTATIOn 
 
     final static Authorizor NOP = new Authorizor() {
-
-        @Override
-        public void init() {
-        }
-
-        @Override
-        public void shutdown() {
-        }
 
         @Override
         public boolean isVisibleInRole(final String user, final Identifier identifier) {

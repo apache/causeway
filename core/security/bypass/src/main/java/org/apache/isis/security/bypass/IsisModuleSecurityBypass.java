@@ -43,13 +43,9 @@ import org.apache.isis.security.api.authorization.standard.Authorizor;
 
         // @Service's
         AuthenticatorBypass.class,
+        AuthorizorBypass.class,
 
 })
 public class IsisModuleSecurityBypass {
-
-    @Bean @Singleton
-    public Authorizor authorizor() {
-        return new AuthorizorBypass();
-    }
 
 }

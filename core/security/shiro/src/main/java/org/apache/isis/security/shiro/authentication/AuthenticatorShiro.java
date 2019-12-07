@@ -66,15 +66,14 @@ import lombok.extern.log4j.Log4j2;
  * in the role of {@link Authenticator}.
  *
  * <p>
- * However, although there are two objects, they are set up to share the same 
- * {@link SecurityManager Shiro SecurityManager}
+ * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  * </p>
  */
 @Service
 @Named("isisSecurityShiro.AuthenticatorShiro")
 @Order(OrderPrecedence.HIGH)
-@Qualifier("Keycloak")
+@Qualifier("Shiro")
 @Log4j2
 public class AuthenticatorShiro implements Authenticator {
 

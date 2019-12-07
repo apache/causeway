@@ -19,19 +19,23 @@
 package org.apache.isis.security.keycloak.authorization;
 
 
+import lombok.extern.log4j.Log4j2;
+
+import javax.inject.Named;
+
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
-public class KeycloakAuthorizor implements Authorizor {
-
-    @Override
-    public void init() {
-    }
-
-
-    @Override
-    public void shutdown() {
-    }
+@Service
+@Named("isisSecurityKeycloak.AuthorizorKeycloak")
+@Order(OrderPrecedence.HIGH)
+@Qualifier("Keycloak")
+@Log4j2
+public class AuthorizorKeycloak implements Authorizor {
 
     @Override
     public boolean isVisibleInRole(String role, Identifier identifier) {
