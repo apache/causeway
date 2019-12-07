@@ -35,11 +35,11 @@ public class Health {
     @Getter
     private final String message;
     @Getter
-    private final Throwable throwable;
+    private final Throwable cause;
 
-    private Health(final String message, Throwable throwable) {
+    private Health(final String message, Throwable cause) {
         this.message = message;
-        this.throwable = throwable;
+        this.cause = cause;
     }
 
     public boolean getResult() { return message == null; }

@@ -34,7 +34,12 @@ public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndica
             if(result) {
                 builder.up();
             } else {
-                builder.down(health.getThrowable());
+                final Throwable cause = health.getCause();
+                if(cause != null) {
+                    builder.down(cause);
+                } else {
+                    builder.down();
+                }
             }
         } else {
             builder.unknown();
