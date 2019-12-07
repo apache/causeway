@@ -19,6 +19,7 @@
 
 package org.apache.isis.security.api.authentication.manager;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
@@ -53,6 +54,7 @@ public class AuthenticationManager {
     private final Map<String, String> userByValidationCode = _Maps.newHashMap();
 
     private final RandomCodeGenerator randomCodeGenerator;
+    @Getter
     private final List<Authenticator> authenticators;
     private final List<Registrar> registrars;
 

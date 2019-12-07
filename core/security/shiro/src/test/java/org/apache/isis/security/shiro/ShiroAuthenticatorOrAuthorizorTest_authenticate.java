@@ -65,7 +65,6 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         authenticator = new AuthenticatorShiro(configuration);
         authorizor = new ShiroAuthorizor();
 
-        authenticator.init();
         authorizor.init();
     }
 

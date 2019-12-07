@@ -19,13 +19,17 @@
 
 package org.apache.isis.security.authentication.standard;
 
+import java.util.Collections;
+
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.api.authentication.standard.NoAuthenticatorException;
+import org.apache.isis.security.api.authentication.standard.RandomCodeGeneratorDefault;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -35,8 +39,9 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
-public class StandardAuthenticationManager_AuthenticatorsTest {
+public class AuthenticationManager_authenticators_Test {
 
+    @Rule
     private final Mockery mockery = new JUnit4Mockery();
 
     private AuthenticationManager authenticationManager;
@@ -47,33 +52,19 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
         mockAuthenticator = mockery.mock(Authenticator.class);
     }
 
-    //    @Test
-    //    public void shouldInitiallyHaveNoAuthenticators() throws Exception {
-    //        authenticationManager = new AuthenticationManagerStandard();
-    //        assertThat(authenticationManager.getAuthenticators().size(), is(0));
-    //    }
-
     @Test(expected = NoAuthenticatorException.class)
     public void shouldNotBeAbleToAuthenticateWithNoAuthenticators() throws Exception {
-        
-        authenticationManager = new AuthenticationManager(authenticators, randomCodeGenerator);
-        
+
+        authenticationManager = new AuthenticationManager(Collections.emptyList(), new RandomCodeGeneratorDefault());
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
 
     @Test
     public void shouldBeAbleToUseAuthenticators() throws Exception {
-        
-        authenticationManager = AuthenticationManager.instanceForTesting(mockAuthenticator);
-        
-        assertThat(authenticationManager.getAuthenticators().size(), is(1));
-        assertThat(authenticationManager.getAuthenticators().getFirst().get(), is(sameInstance(mockAuthenticator)));
-    }
 
-    //    @Test(expected = UnsupportedOperationException.class)
-    //    public void shouldNotBeAbleToModifyReturnedAuthenticators() throws Exception {
-    //        val authenticators = authenticationManager.getAuthenticators();
-    //        authenticators.add(mockAuthenticator);
-    //    }
+        authenticationManager = new AuthenticationManager(Collections.singletonList(mockAuthenticator), new RandomCodeGeneratorDefault());
+        assertThat(authenticationManager.getAuthenticators().size(), is(1));
+        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(mockAuthenticator)));
+    }
 
 }
