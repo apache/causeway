@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.api.authentication.standard.AuthenticationManagerDefault;
 
 /**
  * The representation within the system of an authenticated user.
@@ -102,7 +101,7 @@ public interface AuthenticationSession extends Encodable, Serializable {
     public enum Type {
         DEFAULT,
         /**
-         * Instructs the {@link AuthenticationManagerDefault} to not cache this session in its internal map of
+         * Instructs the {@link AuthenticationManager} to not cache this session in its internal map of
          * sessions by validation code, and therefore to ignore this aspect when considering if an
          * {@link AuthenticationSession} is
          * {@link AuthenticationManager#isSessionValid(AuthenticationSession) valid} or not.

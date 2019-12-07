@@ -42,7 +42,7 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
  * WebModule to enable support for Keycloak.
  */
 @Service
-@Named("isisSecKeycloak.WebModuleKeycloak")
+@Named("isisSecurityKeycloak.WebModuleKeycloak")
 @Order(OrderPrecedence.HIGHEST + 100)
 @Qualifier("Keycloak")
 @Log4j2

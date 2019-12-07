@@ -24,13 +24,13 @@ import java.util.Collections;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.security.api.authentication.AuthenticationRequestAbstract;
-import org.apache.isis.security.api.authentication.standard.AuthenticationManagerDefault;
+import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 
 /**
  * For testing purposes, request corresponding to a {@link LogonFixture}.
  *
  * <p>
- * Understood directly by {@link AuthenticationManagerDefault}.
+ * Understood directly by {@link AuthenticationManager}.
  */
 public class AuthenticationRequestLogonFixture extends AuthenticationRequestAbstract {
 

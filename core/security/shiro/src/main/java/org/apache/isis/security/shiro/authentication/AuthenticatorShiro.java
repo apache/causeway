@@ -25,7 +25,9 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -52,40 +54,41 @@ import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and
- * {@link AuthorizationManagerInstaller authorization} (as recommended), then this class is
+ * If Shiro is configured for both authentication and authorization (as recommended), then this class is
  * in the role of {@link Authenticator}.
  *
  * <p>
  * However, although there are two objects, they are set up to share the same 
  * {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
+ * </p>
  */
-@Log4j2 @NoArgsConstructor
-public class ShiroAuthenticator implements Authenticator {
+@Service
+@Named("isisSecurityShiro.AuthenticatorShiro")
+@Order(OrderPrecedence.HIGH)
+@Qualifier("Keycloak")
+@Log4j2
+public class AuthenticatorShiro implements Authenticator {
 
-    @Inject private IsisConfiguration configuration;
+    private final IsisConfiguration configuration;
+    private final boolean autoLogout;
 
-    private boolean autoLogout;
-
-    // -- LIFECYCLE
-
-    @PostConstruct
-    public void init() {
-        autoLogout = configuration.getAuthentication().getShiro().isAutoLogoutIfAlreadyAuthenticated();
+    @Inject
+    public AuthenticatorShiro(IsisConfiguration configuration) {
+        super();
+        this.configuration = configuration;
+        this.autoLogout = this.configuration.getAuthentication().getShiro().isAutoLogoutIfAlreadyAuthenticated();
     }
 
 
-//    @Override
-//    public void shutdown() {
-//    }
-
-    // -- Authenticator API
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -223,12 +226,5 @@ public class ShiroAuthenticator implements Authenticator {
     protected RealmSecurityManager getSecurityManager() {
         return ShiroSecurityContext.getSecurityManager();
     }
-
-    /** Junit support */
-    public ShiroAuthenticator(IsisConfiguration configuration) {
-        super();
-        this.configuration = configuration;
-    }
-
 
 }

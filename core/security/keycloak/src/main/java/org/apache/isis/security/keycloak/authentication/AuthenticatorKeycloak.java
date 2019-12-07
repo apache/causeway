@@ -18,33 +18,32 @@
  */
 package org.apache.isis.security.keycloak.authentication;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
-@Log4j2 @NoArgsConstructor
-public class KeycloakAuthenticator implements Authenticator {
+@Service
+@Named("isisSecurityKeycloak.AuthenticatorKeycloak")
+@Order(OrderPrecedence.HIGH)
+@Qualifier("Keycloak")
+@Singleton
+@Log4j2
+public class AuthenticatorKeycloak implements Authenticator {
 
-    @Inject private IsisConfiguration configuration;
-
-
-    // -- init, shutdown
-
-    public void init() {
+    public AuthenticatorKeycloak() {
     }
-
-
-    public void shutdown() {
-    }
-
-    // -- Authenticator API
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -59,6 +58,5 @@ public class KeycloakAuthenticator implements Authenticator {
     @Override
     public void logout(final AuthenticationSession session) {
     }
-
 
 }

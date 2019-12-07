@@ -29,7 +29,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
      * if required.
      */
     @Override
-    public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
+    public final AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
         if (!isValid(request)) {
             return null;
         }
@@ -44,7 +44,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
     protected abstract boolean isValid(AuthenticationRequest request);
 
     @Override
-    public void logout(final AuthenticationSession session) {
+    public final void logout(final AuthenticationSession session) {
         // no-op
     }
 

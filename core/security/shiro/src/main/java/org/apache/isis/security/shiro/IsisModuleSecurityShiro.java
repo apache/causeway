@@ -21,7 +21,6 @@ package org.apache.isis.security.shiro;
 import javax.inject.Singleton;
 
 import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
-import org.apache.isis.security.api.IsisModuleSecurityApi;
 import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
 import org.apache.isis.webapp.IsisModuleWebapp;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +29,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
-import org.apache.isis.security.shiro.authentication.ShiroAuthenticator;
+import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 
 /**
@@ -45,15 +44,11 @@ import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
         IsisModuleWebapp.class,
 
         // @Service's
+        AuthenticatorShiro.class,
         WebModuleShiro.class,
 
 })
 public class IsisModuleSecurityShiro {
-
-    @Bean @Singleton
-    public Authenticator authenticator() {
-        return new ShiroAuthenticator();
-    }
 
     @Bean @Singleton
     public Authorizor autorizor() {

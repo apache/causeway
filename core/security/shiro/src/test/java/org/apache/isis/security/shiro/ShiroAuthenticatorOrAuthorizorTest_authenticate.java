@@ -34,7 +34,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
-import org.apache.isis.security.shiro.authentication.ShiroAuthenticator;
+import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -51,7 +51,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private ShiroAuthenticator authenticator;
+    private AuthenticatorShiro authenticator;
     private ShiroAuthorizor authorizor;
 
     @Before
@@ -62,7 +62,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         val configuration = new IsisConfiguration();
         configuration.getAuthentication().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
         
-        authenticator = new ShiroAuthenticator(configuration);
+        authenticator = new AuthenticatorShiro(configuration);
         authorizor = new ShiroAuthorizor();
 
         authenticator.init();

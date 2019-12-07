@@ -19,27 +19,150 @@
 
 package org.apache.isis.security.api.authentication.manager;
 
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.standard.*;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
-public interface AuthenticationManager {
+@Service
+@Named("isisSecurityApi.AuthenticationManager")
+@Order(OrderPrecedence.MIDPOINT)
+@Primary
+@Qualifier("Default")
+@Log4j2
+public class AuthenticationManager {
 
-    /**
-     * Caches and returns an authentication {@link AuthenticationSession} if the
-     * {@link AuthenticationRequest request} is valid; otherwise returns
-     * <tt>null</tt>.
-     */
-    AuthenticationSession authenticate(AuthenticationRequest request);
+    private final Map<String, String> userByValidationCode = _Maps.newHashMap();
 
-    boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass);
+    private final RandomCodeGenerator randomCodeGenerator;
+    private final List<Authenticator> authenticators;
+    private final List<Registrar> registrars;
 
-    boolean register(RegistrationDetails registrationDetails);
+    @Inject
+    public AuthenticationManager(
+            final List<Authenticator> authenticators,
+            final RandomCodeGenerator randomCodeGenerator) {
+        this.randomCodeGenerator = randomCodeGenerator;
+        this.authenticators = authenticators;
+        if (authenticators.isEmpty()) {
+            throw new NoAuthenticatorException("No authenticators specified");
+        }
 
-    /**
-     * Whether the provided {@link AuthenticationSession} is still valid.
-     */
-    boolean isSessionValid(AuthenticationSession authenticationSession);
+        registrars = authenticators.stream()
+                .filter(Registrar.class::isInstance)
+                .map(Registrar.class::cast)
+                .collect(_Lists.toUnmodifiable());
+    }
 
-    void closeSession(AuthenticationSession authenticationSession);
+    // -- SESSION MANAGEMENT (including authenticate)
+
+    public synchronized final AuthenticationSession authenticate(AuthenticationRequest request) {
+        
+        if (request == null) {
+            return null;
+        }
+
+        val compatibleAuthenticators = _NullSafe.stream(authenticators)
+                .filter(authenticator->authenticator.canAuthenticate(request.getClass()))
+                .collect(Collectors.toList());
+                
+        if (compatibleAuthenticators.size() == 0) {
+            throw new NoAuthenticatorException("No authenticator available for processing " + request.getClass().getName());
+        }
+        
+        for (final Authenticator authenticator : compatibleAuthenticators) {
+            val authSession = authenticator.authenticate(request, getUnusedRandomCode());
+            if (authSession != null) {
+                userByValidationCode.put(authSession.getValidationCode(), authSession.getUserName());
+                return authSession;
+            }
+        }
+        
+        return null;
+    }
+    
+    private String getUnusedRandomCode() {
+        String code;
+        do {
+            code = randomCodeGenerator.generateRandomCode();
+        } while (userByValidationCode.containsKey(code));
+
+        return code;
+    }
+
+
+    public final boolean isSessionValid(final AuthenticationSession session) {
+        if(session instanceof SimpleSession) {
+            final SimpleSession simpleSession = (SimpleSession) session;
+            if(simpleSession.getType() == AuthenticationSession.Type.EXTERNAL) {
+                return true;
+            }
+        }
+        final String userName = userByValidationCode.get(session.getValidationCode());
+        return session.hasUserNameOf(userName);
+    }
+
+
+    public void closeSession(AuthenticationSession session) {
+        for (Authenticator authenticator : authenticators) {
+            authenticator.logout(session);
+        }
+        userByValidationCode.remove(session.getValidationCode());
+    }
+
+    // -- AUTHENTICATORS
+
+    public boolean register(RegistrationDetails registrationDetails) {
+        for (val registrar : this.registrars) {
+            if (registrar.canRegister(registrationDetails.getClass())) {
+                return registrar.register(registrationDetails);
+            }
+        }
+        return false;
+    }
+
+
+    public boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass) {
+        for (val registrar : this.registrars) {
+            if (registrar.canRegister(registrationDetailsClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    // -- DEBUGGING
+ 
+    private final static ToString<AuthenticationManager> toString =
+            ToString.<AuthenticationManager>toString("class", obj->obj.getClass().getSimpleName())
+            .thenToString("authenticators", obj->""+obj.authenticators.size())
+            .thenToString("users", obj->""+obj.userByValidationCode.size());
+
+    @Override
+    public String toString() {
+        return toString.toString(this);
+    }
+
+
 
 }

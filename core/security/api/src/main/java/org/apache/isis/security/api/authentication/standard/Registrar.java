@@ -26,13 +26,6 @@ import org.apache.isis.security.api.authentication.manager.RegistrationDetails;
 
 public interface Registrar extends Authenticator, ApplicationScopedComponent {
 
-    static Function<Authenticator, Registrar> AS_REGISTRAR_ELSE_NULL = (final Authenticator input) -> {
-        if (input instanceof Registrar) {
-            return (Registrar) input;
-        }
-        return null;
-    };
-
     /**
      * Whether the provided {@link RegistrationDetails} is recognized by this
      * {@link Registrar}.
