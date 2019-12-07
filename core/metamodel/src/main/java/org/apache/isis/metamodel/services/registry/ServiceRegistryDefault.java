@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.services.registry;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -60,6 +61,11 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     @Override
     public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
         return Optional.ofNullable(managedBeansById.get().get(id));
+    }
+
+    @Override
+    public Optional<?> lookupBeanById(final String id) {
+        return isisSystemEnvironment.getIocContainer().lookupById(id);
     }
 
     @Override

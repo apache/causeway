@@ -53,7 +53,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Holds the set of domain services, persistent entities and fixture scripts.services etc.
+ * Holds the set of domain services, persistent entities and fixture scripts etc.
  * @since 2.0
  */
 @NoArgsConstructor @Log4j2

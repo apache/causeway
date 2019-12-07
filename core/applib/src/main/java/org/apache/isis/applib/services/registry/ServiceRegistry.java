@@ -45,7 +45,7 @@ public interface ServiceRegistry {
 
 
     /**
-     * Obtains a Bin container containing any matching instances for the given required type 
+     * Obtains a {@link Can} container containing any matching instances for the given required type
      * and additional required qualifiers. 
      * @param type
      * @param qualifiers
@@ -55,7 +55,7 @@ public interface ServiceRegistry {
     public <T> Can<T> select(Class<T> type, Annotation[] qualifiers);
 
     /**
-     * Obtains a Bin container containing any matching instances for the given required type. 
+     * Obtains a {@link Can} container containing any matching instances for the given required type.
      * @param type
      * @return non-null
      * 
@@ -90,11 +90,13 @@ public interface ServiceRegistry {
      *   
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    public default ManagedBeanAdapter lookupRegisteredBeanByNameElseFail(String id) {
+    public default ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
                         "Failed to lookup BeanAdapter by id '" + id + "'")); 
     }
+
+    public Optional<?> lookupBeanById(final String id);
 
     /**
      * Returns a domain service implementing the requested type.

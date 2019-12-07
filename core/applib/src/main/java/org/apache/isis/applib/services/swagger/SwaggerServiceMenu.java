@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.swagger;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -118,9 +120,10 @@ public class SwaggerServiceMenu {
     // -- HELPER
     
     private String disableReasonWhenRequiresROViewer() {
-        return serviceRegistry.lookupRegisteredBeanById("isisRoViewer.WebModuleRestfulObjects").isPresent()
+        final Optional<?> moduleIfAny = serviceRegistry.lookupBeanById("isisRoViewer.WebModuleRestfulObjects");
+        return moduleIfAny.isPresent()
                 ? null
-                        : "RestfulObjects viewer is not configured";
+                : "RestfulObjects viewer is not configured";
     }
     
     

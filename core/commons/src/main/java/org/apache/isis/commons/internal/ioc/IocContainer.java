@@ -38,6 +38,8 @@ public interface IocContainer {
 
     Stream<ManagedBeanAdapter> streamAllBeans();
 
+    Optional<?> lookupById(final String id);
+
     <T> Can<T> select(Class<T> requiredType);
     
     <T> Can<T> select(Class<T> requiredType, Set<Annotation> qualifiersRequired);

@@ -93,6 +93,11 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         throw _Exceptions.notImplemented();
     }
 
+    @Override
+    public Optional<?> lookupBeanById(String id) {
+        throw _Exceptions.notImplemented();
+    }
+
 
     // -- HELPER
 

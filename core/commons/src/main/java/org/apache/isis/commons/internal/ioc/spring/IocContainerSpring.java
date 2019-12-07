@@ -19,6 +19,7 @@
 package org.apache.isis.commons.internal.ioc.spring;
 
 import java.lang.annotation.Annotation;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -72,7 +73,14 @@ public class IocContainerSpring implements IocContainer {
 
 
     }
-    
+
+    @Override
+    public Optional<?> lookupById(String id) {
+        return springContext.containsBean(id)
+                ? Optional.of(springContext.getBean(id))
+                : Optional.empty();
+    }
+
     @Override
     public <T> Can<T> select(final Class<T> requiredType) {
         requires(requiredType, "requiredType");
