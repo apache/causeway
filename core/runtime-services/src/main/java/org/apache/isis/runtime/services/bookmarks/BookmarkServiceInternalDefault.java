@@ -43,6 +43,7 @@ import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -56,8 +57,9 @@ import lombok.val;
  */
 @Service
 @Named("isisRuntimeServices.BookmarkServiceInternalDefault")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @Log4j2
 public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 

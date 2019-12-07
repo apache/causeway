@@ -29,12 +29,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.sudo.SudoService;
@@ -44,8 +43,9 @@ import org.apache.isis.security.api.authentication.AuthenticationSessionProvider
 
 @Service
 @Named("isisMetaModel.UserServiceDefault")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @Log4j2
 public class UserServiceDefault implements UserService {
 
@@ -155,8 +155,8 @@ public class UserServiceDefault implements UserService {
 
     @Service
     @Named("isisMetaModel.UserServiceDefault.SudoServiceSpi")
-    @Order(OrderPrecedence.DEFAULT)
-    @Primary
+    @Order(OrderPrecedence.MIDPOINT)
+    @Qualifier("UserServiceDefault")
     @Log4j2
     public static class SudoServiceSpi implements SudoService.Spi {
 

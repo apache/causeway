@@ -33,6 +33,7 @@ import javax.inject.Named;
 import javax.servlet.ServletContext;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,8 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isisWicketViewer.TranslationsResolverWicket")
-@Order(OrderPrecedence.DEFAULT)
-@Primary
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("Wicket")
 @Log4j2
 public class TranslationsResolverWicket implements TranslationsResolver {
 

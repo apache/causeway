@@ -25,16 +25,22 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 @Service
 @Named("isisExtFixtures.FixturesLifecycleService")
+@Order(OrderPrecedence.MIDPOINT)
+@Primary
+@Qualifier("Default")
 @Log4j2
 public class FixturesLifecycleService {
 

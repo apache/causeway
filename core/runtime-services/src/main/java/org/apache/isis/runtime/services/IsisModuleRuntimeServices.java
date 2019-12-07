@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.codegen.bytebuddy.IsisModuleCodegenByteBuddy;
 import org.apache.isis.runtime.IsisModuleRuntime;
 import org.apache.isis.runtime.services.auth.AuthenticationSessionProviderDefault;
-import org.apache.isis.runtime.services.auth.AuthorizationManagerStandard;
+import org.apache.isis.runtime.services.auth.AuthorizationManagerDefault;
 import org.apache.isis.runtime.services.background.CommandExecutorServiceDefault;
 import org.apache.isis.runtime.services.bookmarks.BookmarkServiceInternalDefault;
 import org.apache.isis.runtime.services.command.CommandDtoServiceInternalDefault;
@@ -40,7 +40,7 @@ import org.apache.isis.runtime.services.ixn.InteractionDtoServiceInternalDefault
 import org.apache.isis.runtime.services.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.isis.runtime.services.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.runtime.services.message.MessageServiceDefault;
-import org.apache.isis.runtime.services.publish.PublishingServiceInternalDefault;
+import org.apache.isis.runtime.services.publish.PublisherDispatchServiceDefault;
 import org.apache.isis.runtime.services.repository.RepositoryServiceDefault;
 import org.apache.isis.runtime.services.routing.RoutingServiceDefault;
 import org.apache.isis.runtime.services.sessmgmt.SessionManagementServiceDefault;
@@ -59,7 +59,7 @@ import org.apache.isis.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault;
 
         // @Service's
         AuthenticationSessionProviderDefault.class,
-        AuthorizationManagerStandard.class,
+        AuthorizationManagerDefault.class,
         BookmarkServiceInternalDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,
@@ -75,7 +75,7 @@ import org.apache.isis.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault;
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS3.class,
         MessageServiceDefault.class,
-        PublishingServiceInternalDefault.class,
+        PublisherDispatchServiceDefault.class,
         SessionManagementServiceDefault.class,
         SudoServiceDefault.class,
         TransactionServiceSpring.class,

@@ -24,6 +24,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -39,8 +40,9 @@ import org.apache.isis.applib.annotation.DomainService;
  */
 @Service
 @Named("isisApplib.InteractionContext")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @RequestScoped
 @Log4j2
 public class InteractionContext {

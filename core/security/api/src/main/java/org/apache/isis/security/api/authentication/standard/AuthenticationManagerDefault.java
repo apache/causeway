@@ -39,6 +39,7 @@ import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.api.authentication.manager.RegistrationDetails;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -50,11 +51,12 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisSecurityApi.AuthenticationManagerStandard")
-@Order(OrderPrecedence.DEFAULT)
+@Named("isisSecurityApi.AuthenticationManagerDefault")
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @Log4j2
-public class AuthenticationManagerStandard implements AuthenticationManager {
+public class AuthenticationManagerDefault implements AuthenticationManager {
 
     @Inject private ServiceRegistry serviceRegistry;
 
@@ -178,8 +180,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
 
     // -- DEBUGGING
  
-    private final static ToString<AuthenticationManagerStandard> toString =
-            ToString.<AuthenticationManagerStandard>toString("class", obj->obj.getClass().getSimpleName())
+    private final static ToString<AuthenticationManagerDefault> toString =
+            ToString.<AuthenticationManagerDefault>toString("class", obj->obj.getClass().getSimpleName())
             .thenToString("authenticators", obj->""+obj.authenticators.size())
             .thenToString("users", obj->""+obj.userByValidationCode.size());
 
@@ -194,8 +196,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      * @param mockAuthenticator
      * @return
      */
-    public static AuthenticationManagerStandard instanceForTesting(Authenticator authenticator) {
-        val manager = new AuthenticationManagerStandard();
+    public static AuthenticationManagerDefault instanceForTesting(Authenticator authenticator) {
+        val manager = new AuthenticationManagerDefault();
         manager.authenticators = Can.ofSingleton(authenticator);
         return manager;
     }

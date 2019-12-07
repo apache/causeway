@@ -32,7 +32,7 @@ import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.param.autocomplete.MinLengthUtil;
-import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
 public abstract class AutoCompleteFacetAbstract 
@@ -73,7 +73,7 @@ implements AutoCompleteFacet {
 
         final ManagedObject resultAdapter =
                 getPublishingServiceInternal().withPublishingSuppressed(
-                        new PublishingServiceInternal.Block<ManagedObject>() {
+                        new PublisherDispatchService.Block<ManagedObject>() {
                     @Override
                     public ManagedObject exec() {
                         final Object list = invoke();
@@ -104,8 +104,8 @@ implements AutoCompleteFacet {
         return getServiceRegistry().lookupService(repositoryClass).orElse(null);
     }
 
-    private PublishingServiceInternal getPublishingServiceInternal() {
-        return getServiceRegistry().lookupServiceElseFail(PublishingServiceInternal.class);
+    private PublisherDispatchService getPublishingServiceInternal() {
+        return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
     }
 
 

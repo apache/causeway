@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -23,10 +24,16 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.excel.dom.util.ExcelServiceImpl;
 import org.apache.isis.extensions.excel.dom.util.Mode;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 @Service
 @Named("isisExtExcel.ExcelService")
+@Order(OrderPrecedence.MIDPOINT)
+@Primary
+@Qualifier("Default")
 @Log4j2
 public class ExcelService {
 

@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.publish;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ import javax.inject.Named;
 @Named("isisApplib.PublisherServiceLogging")
 @Order(OrderPrecedence.LOW)
 @Primary
+@Qualifier("Logging")
 @Log4j2
 public class PublisherServiceLogging implements PublisherService {
 

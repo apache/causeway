@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.services.events;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -46,8 +46,9 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service 
 @Named("isisMetaModel.MetamodelEventService")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @Log4j2
 @Builder //for JUnit Test support
 public class MetamodelEventService {

@@ -27,6 +27,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,8 @@ import org.apache.isis.webapp.modules.WebModuleContext;
  */
 @Service
 @Named("isisWebapp.WebModuleTemplateResources")
-@Order(OrderPrecedence.DEFAULT - 100)
+@Order(OrderPrecedence.MIDPOINT - 100)
+@Qualifier("TemplateResources")
 @Log4j2
 public final class WebModuleTemplateResources implements WebModule  {
 

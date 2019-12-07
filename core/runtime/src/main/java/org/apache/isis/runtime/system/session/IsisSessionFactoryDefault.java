@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -68,8 +69,9 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isisRuntime.IsisSessionFactoryDefault")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @Log4j2
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 

@@ -23,6 +23,9 @@ import lombok.extern.log4j.Log4j2;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -60,7 +63,9 @@ public interface ApplicationTenancyFactory {
 
     @Service
     @Named("isisExtSecman.ApplicationTenancyFactory.Default")
-    @Order(Ordered.LOWEST_PRECEDENCE)
+    @Order(OrderPrecedence.MIDPOINT)
+    @Primary
+    @Qualifier("Default")
     @Log4j2
     public static class Default implements ApplicationTenancyFactory {
 

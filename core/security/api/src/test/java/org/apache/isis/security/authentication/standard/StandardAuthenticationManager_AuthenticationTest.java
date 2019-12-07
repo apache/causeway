@@ -19,7 +19,7 @@
 
 package org.apache.isis.security.authentication.standard;
 
-import org.apache.isis.security.api.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.security.api.authentication.standard.AuthenticationManagerDefault;
 import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.api.authentication.standard.RandomCodeGenerator;
 import org.hamcrest.Description;
@@ -45,7 +45,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
 
     private final Mockery mockery = new JUnit4Mockery();
 
-    private AuthenticationManagerStandard authenticationManager;
+    private AuthenticationManagerDefault authenticationManager;
 
     private RandomCodeGenerator mockRandomCodeGenerator;
     private Authenticator mockAuthenticator;
@@ -57,7 +57,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
         mockAuthenticator = mockery.mock(Authenticator.class);
         mockAuthSession = mockery.mock(AuthenticationSession.class);
 
-        authenticationManager = AuthenticationManagerStandard.instanceForTesting(mockAuthenticator);
+        authenticationManager = AuthenticationManagerDefault.instanceForTesting(mockAuthenticator);
         authenticationManager.setRandomCodeGenerator(mockRandomCodeGenerator);
 
         mockery.checking(new Expectations() {

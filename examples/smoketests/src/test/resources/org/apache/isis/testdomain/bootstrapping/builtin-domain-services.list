@@ -19,7 +19,7 @@ org.apache.isis.runtime.services.confmenu.ConfigurationViewServiceDefault
 org.apache.isis.runtime.services.email.EmailServiceDefault
 org.apache.isis.runtime.services.i18n.po.TranslationServicePoMenu
 org.apache.isis.runtime.services.ixn.InteractionDtoServiceInternalDefault
-org.apache.isis.runtime.services.publish.PublishingServiceInternalDefault
+PublisherDispatchServiceDefault
 org.apache.isis.runtime.services.sudo.SudoServiceDefault
 org.apache.isis.runtime.services.userprof.UserProfileServiceDefault
 org.apache.isis.runtime.services.userreg.EmailNotificationServiceDefault

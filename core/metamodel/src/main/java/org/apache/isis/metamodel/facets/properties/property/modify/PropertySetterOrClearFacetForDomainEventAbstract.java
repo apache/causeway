@@ -43,7 +43,7 @@ import org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFace
 import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
-import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
@@ -322,8 +322,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         return getServiceRegistry().lookupServiceElseFail(ClockService.class);
     }
 
-    private PublishingServiceInternal getPublishingServiceInternal() {
-        return getServiceRegistry().lookupServiceElseFail(PublishingServiceInternal.class);
+    private PublisherDispatchService getPublishingServiceInternal() {
+        return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

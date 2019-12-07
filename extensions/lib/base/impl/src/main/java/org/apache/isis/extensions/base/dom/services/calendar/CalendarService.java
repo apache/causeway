@@ -7,13 +7,18 @@ import java.time.LocalDate;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 @Service
 @Named("isisExtBase.calendarService")
+@Order(OrderPrecedence.MIDPOINT)
+@Primary
+@Qualifier("Default")
 @Log4j2
 public class CalendarService {
 

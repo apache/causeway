@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -47,14 +48,15 @@ import lombok.val;
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
  */
 @Service
-@Named("isisRuntime.AuditingServiceInternal")
+@Named("isisRuntime.AuditerDispatchService")
 @Order(OrderPrecedence.HIGH)
 @Primary
+@Qualifier("Default")
 @Log4j2
-public class AuditingServiceInternal {
+public class AuditerDispatchService {
     
     @Inject private List<AuditerService> auditerServices;
-    @Inject private ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    @Inject private ChangedObjectsService changedObjectsService;
     @Inject private UserService userService;
     @Inject private ClockService clockService;
     @Inject private TransactionService transactionService;
@@ -82,7 +84,7 @@ public class AuditingServiceInternal {
             return;
         }
         final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
-                changedObjectsServiceInternal.getChangedObjectProperties();
+                changedObjectsService.getChangedObjectProperties();
 
         final String currentUser = userService.getUser().getName();
         final java.sql.Timestamp currentTime = clockService.nowAsJavaSqlTimestamp();

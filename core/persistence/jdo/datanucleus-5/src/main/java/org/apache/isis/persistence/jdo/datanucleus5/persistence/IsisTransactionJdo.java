@@ -34,13 +34,13 @@ import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Inbox;
 import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.metamodel.commons.ToString;
-import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.transaction.AuditingServiceInternal;
+import org.apache.isis.runtime.system.transaction.AuditerDispatchService;
 import org.apache.isis.runtime.system.transaction.IsisTransactionFlushException;
 import org.apache.isis.runtime.system.transaction.IsisTransactionManagerException;
 
@@ -154,8 +154,8 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
 
     private final _Inbox<PersistenceCommand> persistenceCommands = new _Inbox<>();
 
-    private final PublishingServiceInternal publishingServiceInternal;
-    private final AuditingServiceInternal auditingServiceInternal;
+    private final PublisherDispatchService publisherDispatchService;
+    private final AuditerDispatchService auditerDispatchService;
 
     private final Iterable<WithTransactionScope> withTransactionScopes;
 
@@ -170,8 +170,8 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
         //        this.authenticationSession = authenticationSession;
 
         //        this.messageBroker = authenticationSession.getMessageBroker();
-        this.publishingServiceInternal = serviceRegistry.lookupServiceElseFail(PublishingServiceInternal.class);
-        this.auditingServiceInternal = serviceRegistry.lookupServiceElseFail(AuditingServiceInternal.class);
+        this.publisherDispatchService = serviceRegistry.lookupServiceElseFail(PublisherDispatchService.class);
+        this.auditerDispatchService = serviceRegistry.lookupServiceElseFail(AuditerDispatchService.class);
 
         this.withTransactionScopes = serviceRegistry.select(WithTransactionScope.class);
 
@@ -371,9 +371,9 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
         }
 
         try {
-            auditingServiceInternal.audit();
+            auditerDispatchService.audit();
 
-            publishingServiceInternal.publishObjects();
+            publisherDispatchService.publishObjects();
             doFlush();
 
         } catch (final RuntimeException ex) {

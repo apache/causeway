@@ -36,7 +36,8 @@ import org.apache.isis.testdomain.ldap.LdapConstants;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service
+@Log4j2
 public class RestEndpointService {
     
     @Inject private Environment environment;

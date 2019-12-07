@@ -25,8 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.legacy.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
@@ -44,12 +43,18 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Predicate;
 
 @Service
 @Named("isisLegacyApplib.domainObjectContainer")
+@Order(OrderPrecedence.MIDPOINT)
+@Primary
+@Qualifier("Default")
 @Deprecated
 public class DomainObjectContainer {
 	

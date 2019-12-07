@@ -41,10 +41,9 @@ import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.system.persistence.PersistenceQueryFactory;
-import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
+import org.apache.isis.runtime.system.transaction.ChangedObjectsService;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.Getter;
@@ -70,7 +69,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     protected final CommandService commandService;
 
     protected final InteractionContext interactionContext;
-    protected final ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    protected final ChangedObjectsService changedObjectsServiceInternal;
     protected final FactoryService factoryService;
     protected final MetricsService metricsService;
     protected final ClockService clockService;
@@ -129,7 +128,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.commandContext = lookupService(CommandContext.class);
         this.commandService = lookupService(CommandService.class);
         this.interactionContext = lookupService(InteractionContext.class);
-        this.changedObjectsServiceInternal = lookupService(ChangedObjectsServiceInternal.class);
+        this.changedObjectsServiceInternal = lookupService(ChangedObjectsService.class);
         this.metricsService = lookupService(MetricsService.class);
         this.factoryService = lookupService(FactoryService.class);
         this.clockService = lookupService(ClockService.class);

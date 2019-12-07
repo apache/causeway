@@ -27,8 +27,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.webapp.diagnostics.IsisLogOnExceptionFilter;
-import org.springframework.core.Ordered;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,8 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
  */
 @Service
 @Named("isisWebapp.WebModuleLogOnExceptionLogger")
-@Order(Ordered.LOWEST_PRECEDENCE) // TODO: should this not be the highest precedence, ie first in stack?
+@Order(OrderPrecedence.LOWEST) // TODO: should this not be the highest precedence, ie first in stack?
+@Qualifier("LogOnExceptionLogger")
 @Log4j2
 public final class WebModuleLogOnExceptionLogger implements WebModule  {
 

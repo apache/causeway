@@ -26,6 +26,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -53,11 +54,10 @@ import lombok.val;
  */
 @Service
 @Named("isisWicketViewer.ObjectMementoServiceWicket")
-@Order(OrderPrecedence.DEFAULT)
-@Primary
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("Wicket")
 @Singleton
-public class ObjectMementoServiceWicket
-implements ObjectMementoService {
+public class ObjectMementoServiceWicket implements ObjectMementoService {
 
     @Inject @Getter private SpecificationLoader specificationLoader;
     @Inject private ObjectManager objectManager;

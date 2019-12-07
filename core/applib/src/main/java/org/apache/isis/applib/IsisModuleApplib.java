@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServicesMenu;
 import org.apache.isis.applib.services.publish.PublisherServiceLogging;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCacheInternal;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.swagger.SwaggerServiceMenu;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
@@ -82,7 +82,7 @@ import org.springframework.context.annotation.Import;
         InteractionContext.class,
         JaxbServiceDefault.class,
         PublisherServiceLogging.class,
-        QueryResultsCacheInternal.class,
+        QueryResultsCacheDefault.class,
         Scratchpad.class,
         TableColumnOrderService.Default.class,
         UrlEncodingServiceWithCompression.class,

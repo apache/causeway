@@ -31,6 +31,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 @Service
 @Named("isisWicketViewer.DeepLinkServiceWicket")
 @Order(OrderPrecedence.HIGH)
-@Primary
+@Qualifier("Wicket")
 @Log4j2
 public class DeepLinkServiceWicket implements DeepLinkService {
 

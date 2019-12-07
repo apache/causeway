@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -40,8 +41,8 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
  */
 @Service
 @Named("isisWicketViewer.LocaleProviderWicket")
-@Order(OrderPrecedence.DEFAULT)
-@Primary
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("Wicket")
 @Log4j2
 public class LocaleProviderWicket implements LocaleProvider {
 

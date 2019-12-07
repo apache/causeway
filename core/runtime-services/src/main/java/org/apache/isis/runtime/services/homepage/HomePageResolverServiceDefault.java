@@ -24,6 +24,7 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.*;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,9 @@ import lombok.val;
 
 @Service
 @Named("isisRuntimeServices.HomePageResolverServiceDefault")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @Log4j2
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 

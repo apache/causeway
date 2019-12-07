@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -54,8 +55,9 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.HIGH)
 @Primary
 @RequestScoped
+@Qualifier("Default")
 @Log4j2
-public class QueryResultsCacheInternal implements QueryResultsCache, WithTransactionScope {
+public class QueryResultsCacheDefault implements QueryResultsCache, WithTransactionScope {
 
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
 

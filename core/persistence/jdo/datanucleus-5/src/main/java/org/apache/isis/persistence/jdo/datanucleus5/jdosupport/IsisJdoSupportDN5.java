@@ -40,6 +40,7 @@ import javax.jdo.query.BooleanExpression;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -63,8 +64,9 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
  */
 @Service
 @Named("isisJdoDn5.IsisJdoSupportDN5")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("DN5")
 @Log4j2
 public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 

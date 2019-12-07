@@ -31,6 +31,7 @@ import javax.jdo.listener.StoreLifecycleListener;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -62,8 +63,9 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isisJdoDn5.PersistenceSessionFactory5")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("JdoDN5")
 @Singleton
 @Log4j2
 public class PersistenceSessionFactory5

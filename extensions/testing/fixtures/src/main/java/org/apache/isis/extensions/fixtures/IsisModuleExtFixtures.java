@@ -20,7 +20,7 @@ package org.apache.isis.extensions.fixtures;
 
 import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
-import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlInternal;
+import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlDefault;
 import org.apache.isis.extensions.fixtures.modules.ModuleWithFixturesService;
 import org.apache.isis.extensions.spring.IsisModuleExtSpring;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Import;
         FixturesLifecycleService.class,
         ExecutionParametersService.class,
         ModuleWithFixturesService.class,
-        QueryResultsCacheControlInternal.class,
+        QueryResultsCacheControlDefault.class,
 
         // @DomainService's
         FixtureScripts.class,

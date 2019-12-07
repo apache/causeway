@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -32,14 +33,14 @@ import org.apache.isis.applib.mixins.timestamp.HoldsUpdatedBy;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
 @Named("isisRuntime.TimestampService")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @Log4j2
 public class TimestampService {
 

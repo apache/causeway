@@ -4,5 +4,5 @@ org.apache.isis.applib.services.queryresultscache.QueryResultsCacheInternal
 org.apache.isis.applib.services.scratchpad.Scratchpad
 org.apache.isis.runtime.services.changes.ChangedObjectsServiceInternal
 org.apache.isis.runtime.services.metrics.MetricsServiceDefault
-org.apache.isis.runtime.services.publish.PublishingServiceInternalDefault
+PublisherDispatchServiceDefault
 org.apache.isis.objectstore.jdo.datanucleus.service.support.TimestampService

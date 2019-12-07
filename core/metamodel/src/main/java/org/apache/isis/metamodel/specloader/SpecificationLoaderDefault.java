@@ -60,6 +60,7 @@ import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecif
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 @Named("isisMetaModel.SpecificationLoaderDefault")
 @Order(OrderPrecedence.HIGH)
 @Primary
+@Qualifier("Default")
 @Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
 

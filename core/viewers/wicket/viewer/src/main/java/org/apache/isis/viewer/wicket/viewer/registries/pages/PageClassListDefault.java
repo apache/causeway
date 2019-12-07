@@ -25,6 +25,7 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.Page;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,9 @@ import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
  */
 @Service
 @Named("isisWicketViewer.PageClassListDefault")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @Log4j2
 public class PageClassListDefault implements PageClassList {
 

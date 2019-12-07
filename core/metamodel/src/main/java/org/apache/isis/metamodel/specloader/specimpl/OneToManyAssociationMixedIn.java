@@ -38,7 +38,7 @@ import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacetA
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
-import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
@@ -150,7 +150,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         
         final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         return getPublishingServiceInternal().withPublishingSuppressed(
-                new PublishingServiceInternal.Block<ManagedObject>() {
+                new PublisherDispatchService.Block<ManagedObject>() {
                     @Override public ManagedObject exec() {
                         return mixinAction.executeInternal(
                                 mixinAdapter, mixedInAdapter, new ManagedObject[0], interactionInitiatedBy);
@@ -210,8 +210,8 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         return getSpecificationLoader().loadSpecification(mixinType);
     }
 
-    private PublishingServiceInternal getPublishingServiceInternal() {
-        return getServiceRegistry().lookupServiceElseFail(PublishingServiceInternal.class);
+    private PublisherDispatchService getPublishingServiceInternal() {
+        return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
     }
 
 

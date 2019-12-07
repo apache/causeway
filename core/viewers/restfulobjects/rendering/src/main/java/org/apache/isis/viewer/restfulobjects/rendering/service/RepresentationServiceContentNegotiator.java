@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNeg
 @Named("isisRoRendering.RepresentationServiceContentNegotiator")
 @Order(OrderPrecedence.HIGH)
 @Primary
+@Qualifier("ContentNegotiator")
 @Log4j2
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
@@ -64,12 +66,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
             final IResourceContext renderContext,
             final ManagedObject objectAdapter) {
 
-        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
-            @Override
-            public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext, objectAdapter);
-            }
-        });
+        final ResponseBuilder responseBuilder = buildResponse(
+                connegService -> connegService.buildResponse(renderContext, objectAdapter));
 
         assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
@@ -81,12 +79,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
             final ObjectAndProperty objectAndProperty,
             final MemberReprMode memberReprMode) {
 
-        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
-            @Override
-            public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext, objectAndProperty);
-            }
-        });
+        final ResponseBuilder responseBuilder = buildResponse(
+                connegService -> connegService.buildResponse(renderContext, objectAndProperty));
 
         assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
@@ -99,12 +93,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
             final ObjectAndCollection objectAndCollection,
             final MemberReprMode memberReprMode) {
 
-        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
-            @Override
-            public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext, objectAndCollection);
-            }
-        });
+        final ResponseBuilder responseBuilder = buildResponse(
+                connegService -> connegService.buildResponse(renderContext, objectAndCollection));
 
         assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
@@ -118,12 +108,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
             final IResourceContext renderContext,
             final ObjectAndAction objectAndAction) {
 
-        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
-            @Override
-            public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext, objectAndAction);
-            }
-        });
+        final ResponseBuilder responseBuilder = buildResponse(
+                connegService -> connegService.buildResponse(renderContext, objectAndAction));
 
         assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
@@ -136,12 +122,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
             final ObjectAndActionInvocation objectAndActionInvocation,
             final SelfLink selfLink) {
 
-        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
-            @Override
-            public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext, objectAndActionInvocation);
-            }
-        });
+        final ResponseBuilder responseBuilder = buildResponse(
+                connegService -> connegService.buildResponse(renderContext, objectAndActionInvocation));
 
         assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);

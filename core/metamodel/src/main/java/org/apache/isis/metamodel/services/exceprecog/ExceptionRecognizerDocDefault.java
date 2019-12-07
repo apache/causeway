@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -39,11 +40,11 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 
 @Service
 @Named("isisMetaModel.ExceptionRecognizerDocDefault")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @Log4j2
-public class ExceptionRecognizerDocDefault
-implements ExceptionRecognizer {
+public class ExceptionRecognizerDocDefault implements ExceptionRecognizer {
     
     @Inject private ServiceInjector serviceInjector;
 

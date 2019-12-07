@@ -19,7 +19,7 @@
 
 package org.apache.isis.security.authentication.standard;
 
-import org.apache.isis.security.api.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.security.api.authentication.standard.AuthenticationManagerDefault;
 import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.api.authentication.standard.NoAuthenticatorException;
 import org.jmock.Mockery;
@@ -39,7 +39,7 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
 
     private final Mockery mockery = new JUnit4Mockery();
 
-    private AuthenticationManagerStandard authenticationManager;
+    private AuthenticationManagerDefault authenticationManager;
     private Authenticator mockAuthenticator;
 
     @Before
@@ -56,7 +56,7 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
     @Test(expected = NoAuthenticatorException.class)
     public void shouldNotBeAbleToAuthenticateWithNoAuthenticators() throws Exception {
         
-        authenticationManager = new AuthenticationManagerStandard();
+        authenticationManager = new AuthenticationManagerDefault();
         
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
@@ -64,7 +64,7 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
     @Test
     public void shouldBeAbleToUseAuthenticators() throws Exception {
         
-        authenticationManager = AuthenticationManagerStandard.instanceForTesting(mockAuthenticator);
+        authenticationManager = AuthenticationManagerDefault.instanceForTesting(mockAuthenticator);
         
         assertThat(authenticationManager.getAuthenticators().size(), is(1));
         assertThat(authenticationManager.getAuthenticators().getFirst().get(), is(sameInstance(mockAuthenticator)));

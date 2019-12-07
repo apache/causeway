@@ -27,6 +27,7 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.InjectionPoint;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -43,6 +44,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 @Named("isisMetaModel.ServiceInjectorDefault")
 @Order(OrderPrecedence.HIGH)
 @Primary
+@Qualifier("Default")
 @Log4j2
 public class ServiceInjectorDefault implements ServiceInjector {
 

@@ -28,6 +28,7 @@ import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 
@@ -50,6 +51,7 @@ import org.springframework.stereotype.Service;
 @Named("isisApplib.ContentMappingServiceForCommandDto")
 @Order(OrderPrecedence.HIGH)
 @Primary
+@Qualifier("CommandDto")
 @Log4j2
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
@@ -111,7 +113,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
     // specify quite a high priority since custom processors will probably want to run after this one
     // (but can choose to run before if they wish)
     @Order(OrderPrecedence.HIGH)
-    @Primary
+    @Qualifier("Command")
     @Log4j2
     public static class CopyOverFromCommand implements CommandDtoProcessorService {
 

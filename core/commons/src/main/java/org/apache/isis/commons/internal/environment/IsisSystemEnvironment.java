@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ContextClosedEvent;
@@ -51,6 +52,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisCommons.IsisSystemEnvironment")
 @Order(-1_073_741_824) // same as OrderedPrecedence#HIGH
 @Primary
+@Qualifier("Default")
 @Singleton
 @Log4j2
 public class IsisSystemEnvironment {

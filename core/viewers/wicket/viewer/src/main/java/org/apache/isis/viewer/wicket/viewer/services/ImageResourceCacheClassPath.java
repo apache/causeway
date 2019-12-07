@@ -29,6 +29,7 @@ import java.util.Map;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -55,8 +56,9 @@ import javax.inject.Named;
  */
 @Service
 @Named("isisWicketViewer.ImageResourceCacheClassPath")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("ClassPath")
 @Log4j2
 public class ImageResourceCacheClassPath implements ImageResourceCache {
 

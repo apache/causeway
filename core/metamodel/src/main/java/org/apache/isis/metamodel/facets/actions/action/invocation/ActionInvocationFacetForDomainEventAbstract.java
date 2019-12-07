@@ -64,7 +64,7 @@ import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
-import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -509,8 +509,8 @@ implements ImperativeFacet {
         return serviceRegistry.lookupServiceElseFail(ClockService.class);
     }
 
-    private PublishingServiceInternal getPublishingServiceInternal() {
-        return serviceRegistry.lookupServiceElseFail(PublishingServiceInternal.class);
+    private PublisherDispatchService getPublishingServiceInternal() {
+        return serviceRegistry.lookupServiceElseFail(PublisherDispatchService.class);
     }
 
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {

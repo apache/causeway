@@ -31,6 +31,7 @@ import javax.inject.Singleton;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,7 @@ import lombok.val;
 @Named("isisRoRendering.JsonValueEncoder")
 @Order(OrderPrecedence.HIGH)
 @Primary
+@Qualifier("Default")
 @Singleton
 @Log4j2
 public class JsonValueEncoder {

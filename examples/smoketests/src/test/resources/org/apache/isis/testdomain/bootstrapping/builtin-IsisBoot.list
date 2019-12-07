@@ -65,7 +65,7 @@ org.apache.isis.runtime.services.menubars.MenuBarsLoaderServiceDefault
 org.apache.isis.runtime.services.menubars.bootstrap3.MenuBarsServiceBS3
 org.apache.isis.runtime.services.message.MessageServiceDefault
 org.apache.isis.runtime.services.persist.ObjectAdapterServiceDefault
-org.apache.isis.runtime.services.publish.PublishingServiceInternalDefault
+PublisherDispatchServiceDefault
 org.apache.isis.runtime.services.routing.RoutingServiceDefault
 org.apache.isis.runtime.services.sessmgmt.SessionManagementServiceDefault
 org.apache.isis.runtime.services.sse.EventStreamServiceDefault

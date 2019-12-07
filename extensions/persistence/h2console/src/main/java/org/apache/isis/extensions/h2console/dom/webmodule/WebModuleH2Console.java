@@ -24,6 +24,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,8 @@ import lombok.val;
 
 @Service
 @Named("isisExtH2Console.WebModuleH2Console")
-@Order(0)
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("H2Console")
 @Log4j2
 public class WebModuleH2Console implements WebModule  {
 

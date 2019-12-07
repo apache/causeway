@@ -18,14 +18,14 @@
  */
 package org.apache.isis.security.api;
 
-import org.apache.isis.security.api.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.security.api.authentication.standard.AuthenticationManagerDefault;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
         // @Service's
-        AuthenticationManagerStandard.class
+        AuthenticationManagerDefault.class
 })
 public class IsisModuleSecurityApi {
 }

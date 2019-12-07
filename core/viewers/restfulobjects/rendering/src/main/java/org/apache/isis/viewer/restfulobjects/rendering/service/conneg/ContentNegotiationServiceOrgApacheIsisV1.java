@@ -27,11 +27,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.metamodel.consent.Consent;
@@ -58,7 +56,8 @@ import lombok.val;
 
 @Service
 @Named("isisRoRendering.ContentNegotiationServiceOrgApacheIsisV1")
-@Order(OrderPrecedence.DEFAULT + 200)
+@Order(OrderPrecedence.MIDPOINT + 200)
+@Qualifier("OrgApacheIsisV1")
 @Log4j2
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 

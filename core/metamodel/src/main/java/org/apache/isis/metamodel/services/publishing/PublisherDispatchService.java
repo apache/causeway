@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.services.publishing;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.iactn.Interaction;
 
-public interface PublishingServiceInternal {
+public interface PublisherDispatchService {
 
     @Programmatic
     void publishObjects();

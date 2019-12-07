@@ -26,12 +26,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.extensions.spring.service.BeanDescriptor;
@@ -47,6 +51,9 @@ import javax.inject.Named;
 
 @Service
 @Named("isisExtFixtures.ModuleService")
+@Order(OrderPrecedence.MIDPOINT)
+@Primary
+@Qualifier("Default")
 @Log4j2
 public class ModuleWithFixturesService {
 

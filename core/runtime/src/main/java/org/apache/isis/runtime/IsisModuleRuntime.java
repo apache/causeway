@@ -28,8 +28,8 @@ import org.apache.isis.runtime.system.persistence.events.PersistenceEventService
 import org.apache.isis.runtime.system.persistence.events.PersistenceEventService_Spring;
 import org.apache.isis.runtime.system.persistence.events.TimestampService;
 import org.apache.isis.runtime.system.session.IsisSessionFactoryDefault;
-import org.apache.isis.runtime.system.transaction.AuditingServiceInternal;
-import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
+import org.apache.isis.runtime.system.transaction.AuditerDispatchService;
+import org.apache.isis.runtime.system.transaction.ChangedObjectsService;
 
 @Configuration
 @Import({
@@ -41,8 +41,8 @@ import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
         PersistenceEventService.class,
         TimestampService.class,
         IsisSessionFactoryDefault.class,
-        AuditingServiceInternal.class,
-        ChangedObjectsServiceInternal.class,
+        AuditerDispatchService.class,
+        ChangedObjectsService.class,
 
         // @Configuration's
         RuntimeEventSupport_Spring.class,

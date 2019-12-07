@@ -29,6 +29,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -48,12 +49,13 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isisRuntime.ChangedObjectsServiceInternal")
+@Named("isisRuntime.ChangedObjectsService")
 @Order(OrderPrecedence.HIGH)
 @Primary
+@Qualifier("Default")
 @RequestScoped
 @Log4j2
-public class ChangedObjectsServiceInternal implements WithTransactionScope {
+public class ChangedObjectsService implements WithTransactionScope {
 
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.

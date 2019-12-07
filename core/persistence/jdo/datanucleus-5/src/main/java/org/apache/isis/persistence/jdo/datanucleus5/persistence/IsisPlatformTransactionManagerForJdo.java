@@ -45,9 +45,9 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisJdoDn5.IsisPlatformTransactionManagerForJdo")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
-@Qualifier("jdo")
+@Qualifier("JdoDN5")
 @Log4j2
 public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransactionManager {
 

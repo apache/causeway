@@ -32,8 +32,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -48,8 +46,9 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
-import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
+import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
+import org.apache.isis.runtime.system.transaction.ChangedObjectsService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -58,12 +57,13 @@ import org.springframework.stereotype.Service;
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
  */
 @Service
-@Named("isisRuntimeServices.PublishingServiceInternalDefault")
-@Order(OrderPrecedence.DEFAULT)
+@Named("isisRuntimeServices.PublisherDispatchServiceDefault")
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
 @RequestScoped
+@Qualifier("Default")
 @Log4j2
-public class PublishingServiceInternalDefault implements PublishingServiceInternal {
+public class PublisherDispatchServiceDefault implements PublisherDispatchService {
 
 
     @Override
@@ -176,7 +176,8 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     // -- injected services
     @Inject List<PublisherService> publisherServices;
-    @Inject ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    @Inject
+    ChangedObjectsService changedObjectsServiceInternal;
     @Inject CommandContext commandContext;
     @Inject InteractionContext interactionContext;
     @Inject ClockService clockService;

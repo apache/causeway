@@ -36,7 +36,7 @@ import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.env.WebEnvironment;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.ShiroFilter;
-import org.springframework.core.Ordered;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -65,6 +65,7 @@ import lombok.val;
 @Service
 @Named("isisSecKeycloak.WebModuleKeycloak")
 @Order(OrderPrecedence.HIGHEST + 200)
+@Qualifier("Shiro")
 @Log4j2
 public class WebModuleShiro implements WebModule  {
     

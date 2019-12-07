@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,7 @@ import org.springframework.stereotype.Service;
 @Order(OrderPrecedence.HIGH)
 @Primary
 @Named("isisApplib.Scratchpad")
+@Qualifier("Default")
 @Log4j2
 public class Scratchpad {
 

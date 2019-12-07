@@ -54,7 +54,7 @@ public class PreAndPostValues {
     private PreAndPostValues(Object pre, Object post) {
         this.pre = pre;
         this.post = post;
-        this.preString = ChangedObjectsServiceInternal.asString(pre);
+        this.preString = ChangedObjectsService.asString(pre);
     }
 
     /**
@@ -82,7 +82,7 @@ public class PreAndPostValues {
 
     public void setPost(Object post) {
         this.post = post;
-        this.postString = ChangedObjectsServiceInternal.asString(post);
+        this.postString = ChangedObjectsService.asString(post);
     }
 
     @Override

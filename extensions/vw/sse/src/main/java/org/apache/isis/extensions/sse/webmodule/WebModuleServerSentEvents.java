@@ -23,6 +23,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +41,8 @@ import lombok.val;
  */
 @Service
 @Named("isisExtSse.WebModuleServerSentEvents")
-@Order(-99)
+@Qualifier("ServerSentEvents")
+@Order(OrderPrecedence.MIDPOINT-99)
 @Log4j2
 public final class WebModuleServerSentEvents implements WebModule  {
 

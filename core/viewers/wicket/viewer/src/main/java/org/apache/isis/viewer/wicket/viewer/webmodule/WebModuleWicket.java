@@ -30,6 +30,7 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.protocol.http.WicketFilter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -52,8 +53,8 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
  */
 @Service
 @Named("isisWicketViewer.WebModuleWicket")
-@Order(OrderPrecedence.DEFAULT - 80)
-@Primary
+@Order(OrderPrecedence.MIDPOINT - 80)
+@Qualifier("Wicket")
 @Log4j2
 public final class WebModuleWicket implements WebModule  {
 

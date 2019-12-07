@@ -29,20 +29,20 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.InstanceLifecycleListener;
 import javax.jdo.listener.LoadLifecycleListener;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
+import org.apache.isis.runtime.system.transaction.ChangedObjectsService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 @Service
 @Named("isisJdoDn5.MetricsServiceDefault")
-@Order(OrderPrecedence.DEFAULT)
+@Order(OrderPrecedence.MIDPOINT)
 @Primary
+@Qualifier("Default")
 @RequestScoped
 @Log4j2
 public class MetricsServiceDefault implements MetricsService, InstanceLifecycleListener,
@@ -74,6 +74,7 @@ LoadLifecycleListener, WithTransactionScope {
         numberLoaded.set(0);
     }
 
-    @Inject ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    @Inject
+    ChangedObjectsService changedObjectsServiceInternal;
 
 }

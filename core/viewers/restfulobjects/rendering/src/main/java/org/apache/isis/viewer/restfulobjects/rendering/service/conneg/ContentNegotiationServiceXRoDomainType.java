@@ -28,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,6 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
-import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 /**
  * Handles content negotiation for accept headers requiring <code>application/json</code> or <code>application/xml</code>and specifying an x-ro-domain-type; will delegate to
@@ -56,7 +56,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
  */
 @Service
 @Named("isisRoRendering.ContentNegotiationServiceXRoDomainType")
-@Order(OrderPrecedence.DEFAULT + 100)
+@Order(OrderPrecedence.MIDPOINT + 100)
+@Qualifier("XRoDomainType")
 @Log4j2
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
 

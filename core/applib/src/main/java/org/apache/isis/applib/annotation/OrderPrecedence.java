@@ -49,7 +49,7 @@ public class OrderPrecedence {
     /**
      * Used by framework services that could be overridden by application code (though not commonly).
      */
-    public static final int DEFAULT = 0;
+    public static final int MIDPOINT = 0;
     /**
      * Used by framework services that are expected to be overridden by application code, or that act as a fallback.
      */
