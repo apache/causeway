@@ -18,22 +18,29 @@
  */
 package org.apache.isis.applib.services.health;
 
+import lombok.Getter;
+
 public class Health {
 
     public static Health ok() {
-        return new Health(null);
+        return new Health(null, null);
+    }
+    public static Health error(final Throwable throwable) {
+        return new Health(throwable.getMessage(), throwable);
     }
     public static Health error(String message) {
-        return new Health(message);
+        return new Health(message, null);
     }
 
+    @Getter
     private final String message;
+    @Getter
+    private final Throwable throwable;
 
-    private Health(final String message) {
+    private Health(final String message, Throwable throwable) {
         this.message = message;
+        this.throwable = throwable;
     }
 
     public boolean getResult() { return message == null; }
-    public String getMessage() { return message; }
-
 }

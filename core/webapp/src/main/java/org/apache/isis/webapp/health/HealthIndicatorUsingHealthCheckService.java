@@ -1,6 +1,7 @@
 package org.apache.isis.webapp.health;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 import java.util.Optional;
 
@@ -13,7 +14,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
 @Component
-@Named("isisWebapp.HealthIndicatorUsingHealthCheckService")
+@Named("isisWebapp.HealthCheckService") // this appears in the endpoint.
 @Log4j2
 public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndicator {
 
@@ -26,14 +27,14 @@ public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndica
 
     @Override
     protected void doHealthCheck(Health.Builder builder) throws Exception {
-        final Boolean result = healthCheckServiceIfAny.map(HealthCheckService::check)
-                .map(org.apache.isis.applib.services.health.Health::getResult)
-                .orElse(null);
-        if(result != null) {
+        val health = healthCheckServiceIfAny.map(HealthCheckService::check)
+                     .orElse(null);
+        if(health != null) {
+            final boolean result = health.getResult();
             if(result) {
                 builder.up();
             } else {
-                builder.down();
+                builder.down(health.getThrowable());
             }
         } else {
             builder.unknown();
