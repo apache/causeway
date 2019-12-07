@@ -19,15 +19,25 @@
 
 package org.apache.isis.security.bypass.authentication;
 
+import lombok.extern.log4j.Log4j2;
+
+import javax.inject.Named;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.standard.AuthenticatorAbstract;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation that bypasses authentication.
- *
- * <p>
- * Intended for testing use only.
  */
+@Service
+@Named("isisSecurityBypass.AuthenticatorBypass")
+@Order(OrderPrecedence.LOW)
+@Qualifier("Bypass")
+@Log4j2
 public class AuthenticatorBypass extends AuthenticatorAbstract {
 
     @Override
