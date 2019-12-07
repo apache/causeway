@@ -86,8 +86,6 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
             protected AuthenticationManager getAuthenticationManager() {
                 return mockAuthMgr;
             }
-
-            
         };
     }
     
