@@ -16,25 +16,53 @@
       "name": "isis.persistor.datanucleus.impl.datanucleus.objectProvider.className"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateAll"
+      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateAll",
+      "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateDatabase"
+      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateDatabase",
+      "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.validateAll"
+      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.validateAll",
+      "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName"
+      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.validateTables",
+      "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL"
+      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.validateConstraints",
+      "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName"
+      "name": "isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit",
+      "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword"
+      "name": "isis.persistor.datanucleus.impl.datanucleus.identifier.case",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.datanucleus.cache.level2.mode",
+      "type": "java.lang.String",
+      "description": "Values of javax.persistence.SharedCacheMode, capitalized"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword",
+      "type": "java.lang.String"
     },
     {
       "name": "isis.persistor.datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass"
