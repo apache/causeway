@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,6 +41,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Interaction.ActionInvocation;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.metamodel.MetaModelService.Mode;
@@ -70,29 +70,28 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
 extends ActionInvocationFacetAbstract
 implements ImperativeFacet {
 
+    @Getter private final Class<? extends ActionDomainEvent<?>> eventType;
     private final Method method;
-    private final ObjectSpecification onType;
-    private final ObjectSpecification returnType;
-
+    @Getter(onMethod = @__(@Override)) private final ObjectSpecification onType;
+    @Getter(onMethod = @__(@Override)) private final ObjectSpecification returnType;
     private final ServiceRegistry serviceRegistry;
-
-    private final Class<? extends ActionDomainEvent<?>> eventType;
     private final DomainEventHelper domainEventHelper;
 
     public ActionInvocationFacetForDomainEventAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
-                    final Method method,
-                    final ObjectSpecification onType,
-                    final ObjectSpecification returnType,
-                    final FacetHolder holder) {
+            final Method method,
+            final ObjectSpecification onType,
+            final ObjectSpecification returnType,
+            final FacetHolder holder) {
+        
         super(holder);
         this.eventType = eventType;
         this.method = method;
@@ -117,17 +116,6 @@ implements ImperativeFacet {
     }
 
     @Override
-    public ObjectSpecification getReturnType() {
-        return returnType;
-    }
-
-    @Override
-    public ObjectSpecification getOnType() {
-        return onType;
-    }
-
-
-    @Override
     public ManagedObject invoke(
             final ObjectAction owningAction,
             final ManagedObject targetAdapter,
@@ -137,14 +125,31 @@ implements ImperativeFacet {
 
         final ManagedObject executionResult = 
                 getTransactionService().executeWithinTransaction(()->
-                doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy));
+                    doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, 
+                            interactionInitiatedBy));
 
         //PersistableTypeGuard.instate(executionResult);
 
         return executionResult;
     }
 
-    ManagedObject doInvoke(
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+        attributeMap.put("onType", onType);
+        attributeMap.put("returnType", returnType);
+        attributeMap.put("eventType", eventType);
+    }
+    
+    @Override
+    protected String toStringValues() {
+        return "method=" + method;
+    }
+    
+    // -- HELPER
+    
+    private ManagedObject doInvoke(
             final ObjectAction owningAction,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
@@ -192,92 +197,9 @@ implements ImperativeFacet {
                     new Interaction.ActionInvocation(interaction, actionId, mixinElseRegularPojo, argumentPojos, targetMember,
                             targetClass);
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
-                    new Interaction.MemberExecutor<Interaction.ActionInvocation>() {
-
-
-                @Override
-                public Object execute(final Interaction.ActionInvocation currentExecution) {
-
-
-                    try {
-
-                        // update the current execution with the DTO (memento)
-                        final ActionInvocationDto invocationDto =
-                                getInteractionDtoServiceInternal().asActionInvocationDto(
-                                        owningAction, mixinElseRegularAdapter, argumentAdapterList);
-                        currentExecution.setDto(invocationDto);
-
-
-                        // set the startedAt (and update command if this is the top-most member execution)
-                        // (this isn't done within Interaction#execute(...) because it requires the DTO
-                        // to have been set on the current execution).
-                        final Timestamp startedAt = getClockService().nowAsJavaSqlTimestamp();
-                        execution.setStartedAt(startedAt);
-                        if(command.getStartedAt() == null) {
-                            command.internal().setStartedAt(startedAt);
-                        }
-
-
-                        // ... post the executing event
-
-                        final ActionDomainEvent<?> event =
-                                domainEventHelper.postEventForAction(
-                                        AbstractDomainEvent.Phase.EXECUTING,
-                                        getEventType(), null,
-                                        owningAction, owningAction,
-                                        targetAdapter, mixedInAdapter, argumentAdapters,
-                                        command,
-                                        null);
-
-                        // set event onto the execution
-                        currentExecution.setEvent(event);
-
-                        // invoke method
-                        val resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
-                        ManagedObject resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
-
-                        // ... post the executed event
-
-                        //[ahuber] javac (jdk-8) won't compile this without the cast '(ActionDomainEvent)event', 
-                        // while the eclipse compiler does ... 
-                        domainEventHelper.postEventForAction(
-                                AbstractDomainEvent.Phase.EXECUTED,
-                                getEventType(), (ActionDomainEvent)event,
-                                owningAction, owningAction, targetAdapter, mixedInAdapter, argumentAdapters,
-                                command,
-                                resultAdapterPossiblyCloned);
-
-                        final Object returnValue = event.getReturnValue();
-                        if(returnValue != resultPojo) {
-                            resultAdapterPossiblyCloned = cloneIfViewModelCloneable(returnValue, mixinElseRegularAdapter);
-                        }
-                        return ManagedObject.unwrapPojo(resultAdapterPossiblyCloned);
-
-                    } catch (Exception e) {
-
-                        final Consumer<RecoverableException> recovery = recoverableException->{
-
-                            if (!getTransactionState().canCommit()) {
-                                // something severe has happened to the underlying transaction;
-                                // so escalate this exception to be non-recoverable
-                                final Throwable recoverableExceptionCause = recoverableException.getCause();
-                                Throwable nonRecoverableCause = recoverableExceptionCause != null
-                                        ? recoverableExceptionCause
-                                                : recoverableException;
-
-                                // trim to first 300 chars
-                                final String message = trim(nonRecoverableCause.getMessage(), 300);
-
-                                throw new NonRecoverableException(message, nonRecoverableCause);
-                            }
-                        };
-
-                        return ThrowableExtensions.handleInvocationException(e, method.getName(), recovery);
-                    }
-
-
-                }
-            };
+                    new DomainEventMemberExecutor(
+                            argumentAdapters, targetAdapter, argumentAdapterList, command, owningAction,
+                            mixinElseRegularAdapter, mixedInAdapter, execution);
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
             interaction.execute(callable, execution);
@@ -296,7 +218,6 @@ implements ImperativeFacet {
                         : new RuntimeException(executionExceptionIfAny);
             }
 
-
             final Object returnedPojo = priorExecution.getReturned();
             returnedAdapter = getObjectManager().adapt(returnedPojo);
 
@@ -304,17 +225,13 @@ implements ImperativeFacet {
             getInteractionDtoServiceInternal()
             .updateResult(priorExecution.getDto(), owningAction, returnedPojo);
 
-
             // update Command (if required)
             setCommandResultIfEntity(command, returnedAdapter);
 
             // publish (if not a contributed association, query-only mixin)
             final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
             if (publishedActionFacet != null) {
-
-                getPublishingServiceInternal().publishAction(
-                        priorExecution
-                        );
+                getPublishingServiceInternal().publishAction(priorExecution);
             }
         }
 
@@ -337,7 +254,7 @@ implements ImperativeFacet {
         return message;
     }
 
-    protected Object invokeMethodElseFromCache(
+    private Object invokeMethodElseFromCache(
             final ManagedObject targetAdapter, final ManagedObject[] arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
@@ -362,7 +279,7 @@ implements ImperativeFacet {
         }
     }
 
-    protected ManagedObject cloneIfViewModelCloneable(
+    private ManagedObject cloneIfViewModelCloneable(
             final Object resultPojo,
             final ManagedObject targetAdapter) {
 
@@ -391,7 +308,7 @@ implements ImperativeFacet {
     }
 
 
-    protected void setCommandResultIfEntity(final Command command, final ManagedObject resultAdapter) {
+    private void setCommandResultIfEntity(final Command command, final ManagedObject resultAdapter) {
         if(command.getResult() != null) {
             // don't trample over any existing result, eg subsequent mixins.
             return;
@@ -429,7 +346,7 @@ implements ImperativeFacet {
         return serviceRegistry.lookupServiceElseFail(BookmarkService.class);
     }
 
-    protected ManagedObject filteredIfRequired(
+    private ManagedObject filteredIfRequired(
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -471,28 +388,14 @@ implements ImperativeFacet {
         }
     }
 
-    public <S> Class<? extends ActionDomainEvent<S>> getEventType() {
-        return uncheckedCast(eventType);
-    }
-
     private static Object unwrap(final ManagedObject adapter) {
         return adapter == null ? null : adapter.getPojo();
     }
-
-    @Override
-    protected String toStringValues() {
-        return "method=" + method;
-    }
-
-
-
-    // /////////////////////////////////////////////////////////
-    // Dependencies (looked up)
-    // /////////////////////////////////////////////////////////
-
+    
     private CommandContext getCommandContext() {
         return serviceRegistry.lookupServiceElseFail(CommandContext.class);
     }
+    
     private InteractionContext getInteractionContext() {
         return serviceRegistry.lookupServiceElseFail(InteractionContext.class);
     }
@@ -516,18 +419,99 @@ implements ImperativeFacet {
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
         return serviceRegistry.lookupServiceElseFail(InteractionDtoServiceInternal.class);
     }
+    
+    @RequiredArgsConstructor
+    private final class DomainEventMemberExecutor 
+    implements Interaction.MemberExecutor<Interaction.ActionInvocation> {
+        
+        private final ManagedObject[] argumentAdapters;
+        private final ManagedObject targetAdapter;
+        private final List<ManagedObject> argumentAdapterList;
+        private final Command command;
+        private final ObjectAction owningAction;
+        private final ManagedObject mixinElseRegularAdapter;
+        private final ManagedObject mixedInAdapter;
+        private final ActionInvocation execution;
 
-    // /////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // /////////////////////////////////////////////////////////
+        @Override
+        public Object execute(final Interaction.ActionInvocation currentExecution) {
+
+            try {
+
+                // update the current execution with the DTO (memento)
+                val invocationDto = getInteractionDtoServiceInternal()
+                .asActionInvocationDto(owningAction, mixinElseRegularAdapter, argumentAdapterList);
+                
+                currentExecution.setDto(invocationDto);
 
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
-        attributeMap.put("onType", onType);
-        attributeMap.put("returnType", returnType);
-        attributeMap.put("eventType", eventType);
+                // set the startedAt (and update command if this is the top-most member execution)
+                // (this isn't done within Interaction#execute(...) because it requires the DTO
+                // to have been set on the current execution).
+                val startedAt = getClockService().nowAsJavaSqlTimestamp();
+                execution.setStartedAt(startedAt);
+                if(command.getStartedAt() == null) {
+                    command.internal().setStartedAt(startedAt);
+                }
+
+                // ... post the executing event
+                //compiler: cannot use val here, because initializer expression does not have a representable type
+                final ActionDomainEvent<?> actionDomainEvent = domainEventHelper.postEventForAction(
+                        AbstractDomainEvent.Phase.EXECUTING,
+                        getEventType(),
+                        owningAction, owningAction,
+                        targetAdapter, mixedInAdapter, argumentAdapters,
+                        command,
+                        null);
+
+                // set event onto the execution
+                currentExecution.setEvent(actionDomainEvent);
+
+                // invoke method
+                val resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
+                ManagedObject resultAdapterPossiblyCloned = 
+                        cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
+
+                // ... post the executed event
+
+                domainEventHelper.postEventForAction(
+                        AbstractDomainEvent.Phase.EXECUTED,
+                        actionDomainEvent,
+                        owningAction, owningAction, targetAdapter, mixedInAdapter, argumentAdapters,
+                        command,
+                        resultAdapterPossiblyCloned);
+
+                final Object returnValue = actionDomainEvent.getReturnValue();
+                if(returnValue != resultPojo) {
+                    resultAdapterPossiblyCloned = 
+                            cloneIfViewModelCloneable(returnValue, mixinElseRegularAdapter);
+                }
+                return ManagedObject.unwrapPojo(resultAdapterPossiblyCloned);
+
+            } catch (Exception e) {
+
+                final Consumer<RecoverableException> recovery = recoverableException->{
+
+                    if (!getTransactionState().canCommit()) {
+                        // something severe has happened to the underlying transaction;
+                        // so escalate this exception to be non-recoverable
+                        final Throwable recoverableExceptionCause = recoverableException.getCause();
+                        Throwable nonRecoverableCause = recoverableExceptionCause != null
+                                ? recoverableExceptionCause
+                                        : recoverableException;
+
+                        // trim to first 300 chars
+                        final String message = trim(nonRecoverableCause.getMessage(), 300);
+
+                        throw new NonRecoverableException(message, nonRecoverableCause);
+                    }
+                };
+
+                return ThrowableExtensions.handleInvocationException(e, method.getName(), recovery);
+            }
+
+
+        }
     }
 
 }

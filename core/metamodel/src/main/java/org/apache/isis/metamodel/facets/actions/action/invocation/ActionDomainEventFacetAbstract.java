@@ -27,10 +27,7 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Tuples.Tuple2;
-import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.DomainEventHelper;
@@ -44,23 +41,23 @@ import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
-public abstract class ActionDomainEventFacetAbstract
-extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
+import lombok.Getter;
+import lombok.Setter;
 
-    private Class<? extends ActionDomainEvent<?>> eventType;
+public abstract class ActionDomainEventFacetAbstract
+extends SingleClassValueFacetAbstract 
+implements ActionDomainEventFacet {
+
+    @Getter @Setter private Class<? extends ActionDomainEvent<?>> eventType;
     private final TranslationService translationService;
     private final String translationContext;
-
-    static Class<? extends Facet> type() {
-        return ActionDomainEventFacet.class;
-    }
-
     private final DomainEventHelper domainEventHelper;
 
     public ActionDomainEventFacetAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
-                    final FacetHolder holder) {
-        super(type(), holder, eventType);
+            final FacetHolder holder) {
+        
+        super(ActionDomainEventFacet.class, holder, eventType);
         setEventType(eventType);
 
         this.translationService = getTranslationService();
@@ -74,28 +71,14 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
     public Class<?> value() {
         return eventType;
     }
-
-    protected Class<?> eventType() {
-        return eventType;
-    }
-
-    public <S> Class<? extends ActionDomainEvent<S>> getEventType() {
-        return _Casts.uncheckedCast(eventType);
-    }
-    public void setEventType(final Class<? extends ActionDomainEvent<?>> eventType) {
-        _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);
-        this.eventType = eventType;
-    }
-
-
-
+    
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.HIDE,
-                        getEventType(), null,
+                        getEventType(),
                         actionFrom(ic), getIdentified(),
                         ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
                         null,
@@ -112,7 +95,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.DISABLE,
-                        getEventType(), null,
+                        getEventType(),
                         actionFrom(ic), getIdentified(),
                         ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
                         null,
@@ -128,6 +111,31 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         return null;
     }
 
+    @Override
+    public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
+
+        final ActionValidityContext aic = (ActionValidityContext) ic;
+        final ActionDomainEvent<?> event =
+                domainEventHelper.postEventForAction(
+                        AbstractDomainEvent.Phase.VALIDATE,
+                        getEventType(),
+                        actionFrom(ic), getIdentified(),
+                        ic.getTarget(), ic.getMixedIn(), aic.getArgs(),
+                        null,
+                        null);
+        if (event != null && event.isInvalid()) {
+            final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
+            if(reasonTranslatable != null) {
+                return reasonTranslatable.translate(translationService, translationContext);
+            }
+            return event.getInvalidityReason();
+        }
+
+        return null;
+    }
+    
+    // -- HELPER
+    
     private static ObjectAction actionFrom(final InteractionContext<?> ic) {
         if(!(ic instanceof ActionInteractionContext)) {
             throw new IllegalStateException(
@@ -143,29 +151,6 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
             int paramIndex = contributee.get_1(); 
             ManagedObject adapter = contributee.get_2();
             return new ManagedObject[]{paramIndex==0 ? adapter : null};
-        }
-
-        return null;
-    }
-
-    @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
-
-        final ActionValidityContext aic = (ActionValidityContext) ic;
-        final ActionDomainEvent<?> event =
-                domainEventHelper.postEventForAction(
-                        AbstractDomainEvent.Phase.VALIDATE,
-                        getEventType(), null,
-                        actionFrom(ic), getIdentified(),
-                        ic.getTarget(), ic.getMixedIn(), aic.getArgs(),
-                        null,
-                        null);
-        if (event != null && event.isInvalid()) {
-            final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
-            }
-            return event.getInvalidityReason();
         }
 
         return null;

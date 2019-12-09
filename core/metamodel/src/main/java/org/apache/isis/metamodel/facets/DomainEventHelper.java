@@ -35,7 +35,7 @@ import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -44,6 +44,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -57,19 +58,52 @@ public class DomainEventHelper {
 
     private final MetamodelEventService metamodelEventService;
 
-    // -- postEventForAction, newActionDomainEvent
+    // -- postEventForAction
+    
+    // variant using eventType and no existing event
+    public ActionDomainEvent<?> postEventForAction(
+            final AbstractDomainEvent.Phase phase,
+            @NonNull final Class<? extends ActionDomainEvent<?>> eventType,
+            final ObjectAction objectAction,
+            final IdentifiedHolder identified,
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentAdapters,
+            final Command command,
+            final ManagedObject resultAdapter) {
+        
+        return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null, objectAction, identified, 
+                targetAdapter, mixedInAdapter, argumentAdapters, command, resultAdapter);
+    }
+    
+    // variant using existing event and not eventType (is derived from event)
+    public ActionDomainEvent<?> postEventForAction(
+            final AbstractDomainEvent.Phase phase,
+            @NonNull final ActionDomainEvent<?> existingEvent,
+            final ObjectAction objectAction,
+            final IdentifiedHolder identified,
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentAdapters,
+            final Command command,
+            final ManagedObject resultAdapter) {
+        
+        return postEventForAction(phase, 
+                uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, identified, 
+                targetAdapter, mixedInAdapter, argumentAdapters, command, resultAdapter);
+    }
 
-    public <S> ActionDomainEvent<S> postEventForAction(
+    private <S> ActionDomainEvent<S> postEventForAction(
             final AbstractDomainEvent.Phase phase,
             final Class<? extends ActionDomainEvent<S>> eventType,
-                    final ActionDomainEvent<S> existingEvent,
-                    final ObjectAction objectAction,
-                    final IdentifiedHolder identified,
-                    final ManagedObject targetAdapter,
-                    final ManagedObject mixedInAdapter,
-                    final ManagedObject[] argumentAdapters,
-                    final Command command,
-                    final ManagedObject resultAdapter) {
+            final ActionDomainEvent<S> existingEvent,
+            final ObjectAction objectAction,
+            final IdentifiedHolder identified,
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentAdapters,
+            final Command command,
+            final ManagedObject resultAdapter) {
         
         _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);
 

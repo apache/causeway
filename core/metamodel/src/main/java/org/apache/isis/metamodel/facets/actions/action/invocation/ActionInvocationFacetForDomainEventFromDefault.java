@@ -30,10 +30,11 @@ extends ActionInvocationFacetForDomainEventAbstract {
 
     public ActionInvocationFacetForDomainEventFromDefault(
             final Class<? extends ActionDomainEvent<?>> eventType,
-                    final Method method,
-                    final ObjectSpecification onType,
-                    final ObjectSpecification returnType,
-                    final FacetHolder holder) {
+            final Method method,
+            final ObjectSpecification onType,
+            final ObjectSpecification returnType,
+            final FacetHolder holder) {
+        
         super(eventType, method, onType, returnType, holder);
     }
 }
