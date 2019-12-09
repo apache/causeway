@@ -4,3 +4,9 @@ include::_attributes.adoc[]
 CAUTION: TODO ... isis-2-demo
 
 
+
+== Credits
+
+This Demo App uses icons made by link:http://www.freepik.com[Freepik] and
+link:https://www.flaticon.com/authors/smashicons[Smashicons].
+These are licensed by link:http://creativecommons.org/licenses/by/3.0/[Creative Commons BY 3.0^]
