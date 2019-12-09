@@ -34,13 +34,22 @@ I will show you how to change a height of a standard Bootstrap navbar.
     margin-top: -8px;
 }
 
+.tabulator-col-content {
+    padding: 2px 2px !important;
+}
+
 div.tabulator-cell {
     height: 35px;
 }
 
-.text-danger {
-    color:red !important;
+div.tabulator-header {
+    font-weight: lighter !important;
 }
+
+.text-danger {
+    color: red !important;
+}
+
 .text-normal {
-    color:black;
+    color: black;
 }
