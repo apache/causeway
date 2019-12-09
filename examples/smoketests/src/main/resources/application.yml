@@ -35,8 +35,6 @@ isis:
         css: css/application.css
         js: scripts/application.js
         about: Smoke Tests
-      welcome:
-        file: welcome.html
 
       credit[0]:
         image: /images/apache-isis/logo-48x48.png
