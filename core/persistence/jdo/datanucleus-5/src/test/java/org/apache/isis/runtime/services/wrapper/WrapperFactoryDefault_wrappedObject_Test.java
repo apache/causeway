@@ -208,8 +208,6 @@ public class WrapperFactoryDefault_wrappedObject_Test {
         });
 
 
-        wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
-
         final Method employeeGetNameMethod = methodOf(Employee.class, "getName");
         final Method employeeSetNameMethod = methodOf(Employee.class, "setName", String.class);
         final Method employeeModifyNameMethod = methodOf(Employee.class, "modifyName", String.class);

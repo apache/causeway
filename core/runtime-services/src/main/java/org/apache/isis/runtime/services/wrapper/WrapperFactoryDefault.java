@@ -16,9 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.runtime.services.wrapper;
-
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,12 +30,12 @@ import java.util.function.BiConsumer;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.AsyncWrap;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -64,12 +62,11 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.context.MetaModelContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 import org.apache.isis.runtime.services.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.runtime.services.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.runtime.services.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.runtime.services.wrapper.proxy.ProxyCreator;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -86,6 +83,11 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
+    
+    @Inject private FactoryService factoryService;
+    @Inject private MetaModelContext metaModelContext;
+    @Inject private IsisSessionFactory isisSessionFactory;
+    @Inject private TransactionService transactionService;
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final ProxyContextHandler proxyContextHandler;
@@ -119,9 +121,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         putDispatcher(CollectionMethodEvent.class, (listener, event)->listener.collectionMethodInvoked(event));
     }
 
-    // /////////////////////////////////////////////////////////////
-    // wrap and unwrap
-    // /////////////////////////////////////////////////////////////
+    // -- WRAPPING
     
     @Override
     public <T> T wrapMixin(Class<T> mixinClass, Object mixedIn) {
@@ -181,9 +181,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return possibleWrappedDomainObject;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // ASYNC WRAPPING
-    // /////////////////////////////////////////////////////////////
+    // -- ASYNC WRAPPING
 
     
     @Override
@@ -199,9 +197,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return async(mixin, mode);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Listeners
-    // /////////////////////////////////////////////////////////////
+    // -- LISTENERS
 
     @Override
     public List<InteractionListener> getListeners() {
@@ -245,14 +241,6 @@ public class WrapperFactoryDefault implements WrapperFactory {
         
         dispatchersByEventClass.put(type, dispatcher);
     }
-    
-    // -- DEPENDENCES
 
-    @Inject AuthenticationSessionProvider authenticationSessionProvider;
-//    @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-    @Inject FactoryService factoryService;
-    @Inject MetaModelContext metaModelContext;
-    @Inject IsisSessionFactory isisSessionFactory;
-    @Inject TransactionService transactionService;
 
 }
