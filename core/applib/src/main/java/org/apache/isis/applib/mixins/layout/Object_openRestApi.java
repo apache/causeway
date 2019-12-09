@@ -29,7 +29,6 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.resources._Resources;
 
@@ -40,6 +39,8 @@ import lombok.val;
 @RequiredArgsConstructor
 public class Object_openRestApi {
 
+    @Inject private BookmarkService bookmarkService;
+    
     private final Object holder;
 
     public static class ActionDomainEvent
@@ -57,7 +58,7 @@ public class Object_openRestApi {
             )
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "750.1")
     public LocalResourcePath act() {
-        val bookmark = bookmarkService.bookmarkFor(holder);
+        val bookmark = bookmarkService.bookmarkForElseThrow(holder);
         val objType = bookmark.getObjectType();
         val objId = bookmark.getIdentifier();
         val restfulPathIfAny = _Resources.getRestfulPathIfAny();
@@ -68,7 +69,6 @@ public class Object_openRestApi {
                         : new LocalResourcePath(String.format(
                                 "/objects/%s/%s", objType, objId));
     }
-
-    @Inject BookmarkService bookmarkService;
+    
 
 }

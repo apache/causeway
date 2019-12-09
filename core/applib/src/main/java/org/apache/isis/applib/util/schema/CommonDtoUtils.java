@@ -250,13 +250,15 @@ public final class CommonDtoUtils {
         case REFERENCE: {
             final Bookmark bookmark = val instanceof Bookmark
                     ? (Bookmark) val
-                            : bookmarkService!=null ? bookmarkService.bookmarkFor(val) : null;
+                            : bookmarkService!=null 
+                                ? bookmarkService.bookmarkFor(val) 
+                                        : null;
 
-                            if (bookmark != null) {
-                                OidDto argValue = bookmark.toOidDto();
-                                valueDto.setReference(argValue);
-                            }
-                            return valueDto;
+            if (bookmark != null) {
+                OidDto argValue = bookmark.toOidDto();
+                valueDto.setReference(argValue);
+            }
+            return valueDto;
         }
         case BLOB: {
 

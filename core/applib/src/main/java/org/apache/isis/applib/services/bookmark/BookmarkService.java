@@ -18,7 +18,14 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.val;
 
 /**
  * This service enables a serializable 'bookmark' to be created for an entity.
@@ -26,7 +33,26 @@ import org.apache.isis.commons.internal.base._Casts;
  */
 public interface BookmarkService {
 
-    Bookmark bookmarkFor(Object domainObject);
+    /**
+     * Given any {@link Bookmark} this service is 
+     * able to reconstruct to originating domain object the {@link Bookmark} was created for.
+     * <p>
+     * Note: Not every domain object is bookmark-able. 
+     * @param domainObject
+     * @return optionally a {@link Bookmark} representing given {@code domainObject} 
+     */
+    Bookmark bookmarkFor(@Nullable Object domainObject);
+    
+    default Bookmark bookmarkForElseThrow(Object domainObject) {
+        requires(domainObject, "domainObject");
+        val bookmark = bookmarkFor(domainObject);
+        if(bookmark!=null) {
+            return bookmark;
+        }
+        throw _Exceptions.illegalArgument(
+                        "cannot create bookmark for type %s", domainObject.getClass().getName());
+    }
+    
 
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 

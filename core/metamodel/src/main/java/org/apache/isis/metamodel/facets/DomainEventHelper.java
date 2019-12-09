@@ -32,10 +32,8 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -69,11 +67,10 @@ public class DomainEventHelper {
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
             final ManagedObject[] argumentAdapters,
-            final Command command,
             final ManagedObject resultAdapter) {
         
         return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null, objectAction, identified, 
-                targetAdapter, mixedInAdapter, argumentAdapters, command, resultAdapter);
+                targetAdapter, mixedInAdapter, argumentAdapters, resultAdapter);
     }
     
     // variant using existing event and not eventType (is derived from event)
@@ -85,12 +82,11 @@ public class DomainEventHelper {
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
             final ManagedObject[] argumentAdapters,
-            final Command command,
             final ManagedObject resultAdapter) {
         
         return postEventForAction(phase, 
                 uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, identified, 
-                targetAdapter, mixedInAdapter, argumentAdapters, command, resultAdapter);
+                targetAdapter, mixedInAdapter, argumentAdapters, resultAdapter);
     }
 
     private <S> ActionDomainEvent<S> postEventForAction(
@@ -102,7 +98,6 @@ public class DomainEventHelper {
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
             final ManagedObject[] argumentAdapters,
-            final Command command,
             final ManagedObject resultAdapter) {
         
         _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);

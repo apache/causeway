@@ -29,15 +29,17 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.MixinConstants;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Mixin(method="prop") 
 @RequiredArgsConstructor
 public class Object_objectIdentifier {
 
+    @Inject private BookmarkService bookmarkService;
+    
     private final Object holder;
 
     public static class ActionDomainEvent 
@@ -53,11 +55,11 @@ public class Object_objectIdentifier {
     @Property()
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public String prop() {
-        final Bookmark bookmark = bookmarkService.bookmarkFor(this.holder);
+        val bookmark = bookmarkService.bookmarkForElseThrow(this.holder);
         return bookmark.getIdentifier();
     }
 
 
-    @Inject BookmarkService bookmarkService;
+    
 
 }

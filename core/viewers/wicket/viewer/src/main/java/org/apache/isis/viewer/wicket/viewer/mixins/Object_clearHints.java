@@ -27,22 +27,24 @@ import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 @Mixin(method="act")
+@RequiredArgsConstructor
 public class Object_clearHints {
 
-    private final Object object;
+    @Inject private HintStore hintStore;
+    @Inject private BookmarkService bookmarkService;
+    
+    private final Object holder;
 
-    public Object_clearHints(Object object) {
-        this.object = object;
-    }
-
-    public static class ActionDomainEvent extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> {
-        private static final long serialVersionUID = 1L; }
+    public static class ActionDomainEvent 
+    extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
@@ -57,10 +59,10 @@ public class Object_clearHints {
     @MemberOrder(name = "datanucleusIdLong", sequence = "400.1")
     public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
-            final Bookmark bookmark = bookmarkService.bookmarkFor(object);
+            val bookmark = bookmarkService.bookmarkForElseThrow(holder);
             getHintStoreUsingWicketSession().removeAll(bookmark);
         }
-        return object;
+        return holder;
     }
 
     public boolean hideAct() {
@@ -72,8 +74,5 @@ public class Object_clearHints {
                 ? (HintStoreUsingWicketSession) hintStore
                         : null;
     }
-
-    @Inject HintStore hintStore;
-    @Inject BookmarkService bookmarkService;
 
 }

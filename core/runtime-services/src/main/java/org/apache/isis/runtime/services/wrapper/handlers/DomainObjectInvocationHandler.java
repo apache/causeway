@@ -42,9 +42,9 @@ import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
@@ -242,6 +242,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             }
 
             return handleActionMethod(actualTargetAdapter, args, actualObjectAction, contributeeMember);
+            
         }
 
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));

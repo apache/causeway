@@ -328,7 +328,7 @@ implements ImperativeFacet {
             }
             if(getRepositoryService().isPersistent(domainObject)) {
                 BookmarkService bookmarkService = getBookmarkService();
-                Bookmark bookmark = bookmarkService.bookmarkFor(domainObject);
+                Bookmark bookmark = bookmarkService.bookmarkForElseThrow(domainObject);
                 command.internal().setResult(bookmark);
             }
             break;
@@ -461,7 +461,6 @@ implements ImperativeFacet {
                         getEventType(),
                         owningAction, owningAction,
                         targetAdapter, mixedInAdapter, argumentAdapters,
-                        command,
                         null);
 
                 // set event onto the execution
@@ -478,7 +477,6 @@ implements ImperativeFacet {
                         AbstractDomainEvent.Phase.EXECUTED,
                         actionDomainEvent,
                         owningAction, owningAction, targetAdapter, mixedInAdapter, argumentAdapters,
-                        command,
                         resultAdapterPossiblyCloned);
 
                 final Object returnValue = actionDomainEvent.getReturnValue();

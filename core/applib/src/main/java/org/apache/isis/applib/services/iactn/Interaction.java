@@ -164,8 +164,8 @@ public class Interaction implements HasUniqueId {
             final MemberExecutor<T> memberExecutor,
             final T execution) {
 
-        // as a convenience, since in all cases we want the command to start when the first interaction executes,
-        // we populate the command here.
+        // as a convenience, since in all cases we want the command to start when the first 
+        // interaction executes, we populate the command here.
 
         try {
             try {
@@ -174,9 +174,16 @@ public class Interaction implements HasUniqueId {
                 return result;
             } catch (Exception ex) {
                 
-                // just because an exception has thrown, does not mean it is that significant; it could be that
-                // it is recognized by an ExceptionRecognizer and is not severe, eg unique index violation in the DB.
-                currentExecution.setThrew(ex);
+                //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
+                // we rather print all of them, no matter whether recognized or not later on
+                // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
+                // WrapperFactory utilizing async calls
+                ex.printStackTrace();
+                
+                // just because an exception has thrown, does not mean it is that significant; 
+                // it could be that it is recognized by an ExceptionRecognizer and is not severe 
+                // eg. unique index violation in the DB
+                getCurrentExecution().setThrew(ex);
 
                 // propagate (as in previous design); caller will need to trap and decide
                 throw ex;
