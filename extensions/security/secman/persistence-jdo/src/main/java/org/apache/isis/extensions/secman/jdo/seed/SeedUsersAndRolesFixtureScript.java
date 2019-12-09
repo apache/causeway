@@ -25,7 +25,7 @@ import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.GlobalTenancy;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisApplibFixtureResultsRoleAndPermissions;
+import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisExtFixturesFixtureResultsRoleAndPermissions;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminUser;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityFixtureRoleAndPermissions;
@@ -59,7 +59,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         executionContext.executeChild(this, new IsisModuleSecurityAdminUser(configBean));
 
         // isis applib
-        executionContext.executeChild(this, new IsisApplibFixtureResultsRoleAndPermissions());
+        executionContext.executeChild(this, new IsisExtFixturesFixtureResultsRoleAndPermissions());
     }
 
 

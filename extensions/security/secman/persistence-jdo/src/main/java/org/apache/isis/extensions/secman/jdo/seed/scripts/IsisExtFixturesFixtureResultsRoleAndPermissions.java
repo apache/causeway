@@ -22,11 +22,11 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
-public class IsisApplibFixtureResultsRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtFixturesFixtureResultsRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = "isis-applib-fixtureresults";
+    public static final String ROLE_NAME = "isis-ext-fixtures-fixtureresults";
 
-    public IsisApplibFixtureResultsRoleAndPermissions() {
+    public IsisExtFixturesFixtureResultsRoleAndPermissions() {
         super(ROLE_NAME, "Access results of running Fixture Scripts");
     }
 
