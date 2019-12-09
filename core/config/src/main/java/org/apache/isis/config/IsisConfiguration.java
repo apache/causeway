@@ -989,15 +989,6 @@ public class IsisConfiguration {
             @Data
             public static class Welcome {
 
-//TODO not sure whether this was ever implemented                
-//                /**
-//                 * Location of the HTML file (relative to the class-path resource root) whose contents 
-//                 * should be displayed on the application’s home page.
-//                 * If a @HomePage action exists, then that will take precedence. 
-//                 * If no welcome file exists, then the value of {@link Welcome.text} is shown as a fallback.
-//                 */
-//                private String file;
-                
                 /**
                  * Text to be displayed on the application’s home page, used as a fallback if 
                  * welcome.file is not specified. If a @HomePage action exists, then that will take 
