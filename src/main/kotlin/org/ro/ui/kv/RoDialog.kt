@@ -58,8 +58,6 @@ class RoDialog(
                     }
                     "SimpleSelect" -> {
                         @Suppress("UNCHECKED_CAST")
-                        console.log("[RoDialog.init]")
-                        console.log(fi.content)
                         val list = fi.content as List<StringPair>
                         var preSelectedValue: String? = null
                         if (list.isNotEmpty()) {
