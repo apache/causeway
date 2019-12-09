@@ -30,6 +30,7 @@ import java.util.Set;
 import javax.enterprise.inject.Vetoed;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
@@ -66,7 +67,7 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
 
     // -- DISTINCT CATEGORIES OF BEAN SORTS
     
-    @Getter private final Map<Class<?>, String> managedBeanNamesByType = new HashMap<>();
+    private final Map<Class<?>, String> managedBeanNamesByType = new HashMap<>();
     @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
@@ -82,46 +83,9 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     @Override
     public void close() {
 
-//        if(!_Spring.isContextAvailable()) {
-//            // this instance needs to survive a _Context.clear() call when Spring's context 
-//            // gets passed over to Isis
-//            return;
-//        }
-
         managedBeanNamesByType.clear();
         introspectableTypes.clear();
         allCategorySets.forEach(Set::clear);
-    }
-
-    // -- INBOX
-
-    public void addIntrospectableType(BeanSort sort, TypeMetaData typeMeta) {
-        val type = typeMeta.getUnderlyingClass();
-        synchronized (introspectableTypes) {
-            introspectableTypes.put(type, sort);
-            
-            switch (sort) {
-            case MANAGED_BEAN:
-                managedBeanNamesByType.put(type, typeMeta.getEffectiveBeanName());
-                return;
-            case MIXIN:
-                mixinTypes.add(type);
-                return;
-            case ENTITY:
-                entityTypes.add(type);
-                return;
-            case VIEW_MODEL:
-                viewModelTypes.add(type);
-                return;
-            
-            //XXX skip introspection for these
-            case COLLECTION:
-            case VALUE:
-            case UNKNOWN:
-                break;
-            }
-            
-        }
     }
 
     public Map<Class<?>, BeanSort> snapshotIntrospectableTypes() {
@@ -165,7 +129,9 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         }
         
         val isManagedBeanToBeInspected = beanSort.isManagedBean() 
-                && findNearestAnnotation(type, DomainService.class).isPresent();
+                && (findNearestAnnotation(type, DomainService.class).isPresent()
+                        || findNearestAnnotation(type, Service.class).isPresent()
+                        );
         
         val isManagedObjectToBeInspected = !beanSort.isManagedBean() 
                 && !beanSort.isUnknown();
@@ -181,14 +147,12 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
                                 beanSort.name());
             }
         }
-
-        
-
         
     }
     
     /**
-     * If given type is available for injection, returns the <em>Managed Bean's</em> name (id) as
+     * If given type is part of the meta-model and is available for injection, 
+     * returns the <em>Managed Bean's</em> name (id) as
      * recognized by the IoC container, {@code null} otherwise;
      * @param type
      * @return
@@ -201,9 +165,9 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     }
     
     /**
-     * Whether given type is available for injection. Is a <em>Managed Bean</em>. 
+     * Whether given type is part of the meta-model and is available for injection 
+     * (is a <em>Managed Bean</em>). 
      * @param type
-     * @return 
      */
     public boolean isManagedBean(Class<?> type) {
         return getManagedBeanNameForType(type)!=null;
@@ -211,7 +175,35 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     
     // -- HELPER
 
-    // the SpecLoader does a better job at this
+    private void addIntrospectableType(BeanSort sort, TypeMetaData typeMeta) {
+        val type = typeMeta.getUnderlyingClass();
+        synchronized (introspectableTypes) {
+            introspectableTypes.put(type, sort);
+            
+            switch (sort) {
+            case MANAGED_BEAN:
+                managedBeanNamesByType.put(type, typeMeta.getEffectiveBeanName());
+                return;
+            case MIXIN:
+                mixinTypes.add(type);
+                return;
+            case ENTITY:
+                entityTypes.add(type);
+                return;
+            case VIEW_MODEL:
+                viewModelTypes.add(type);
+                return;
+            
+            // skip introspection for these
+            case COLLECTION:
+            case VALUE:
+            case UNKNOWN:
+                return;
+            }
+            
+        }
+    }
+    
     private BeanSort quickClassify(Class<?> type) {
 
         requires(type, "type");
@@ -272,12 +264,6 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
                 return BeanSort.VIEW_MODEL; //because object is not associated with a persistence context unless discovered above
             } 
         }
-
-//XXX RequestScoped is just a qualifier, don't decide on that
-//        
-//        if(findNearestAnnotation(type, RequestScoped.class).isPresent()) {
-//            return BeanSort.MANAGED_BEAN;
-//        }
 
         if(findNearestAnnotation(type, Component.class).isPresent()) {
             return BeanSort.MANAGED_BEAN;

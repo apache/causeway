@@ -39,6 +39,7 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
@@ -772,6 +773,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         val serviceClass = serviceBean.getBeanClass();
         val specification = getSpecificationLoader().loadSpecification(serviceClass,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        
+        if(specification==null) {
+            throw _Exceptions.unrecoverableFormatted("failed to load specification for service %s", serviceClass);
+        }
+        
         if (specification == this) {
             return;
         }

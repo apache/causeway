@@ -19,12 +19,15 @@
 
 package org.apache.isis.runtime.services.ixn;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -32,6 +35,8 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -44,22 +49,15 @@ import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
 @Service
 @Named("isisRuntimeServices.InteractionDtoServiceInternalDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 
-    @Inject CommandDtoServiceInternal commandDtoServiceInternal;
+    @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
     @Inject private BookmarkService bookmarkService;
     @Inject private InteractionContext interactionContext;
     @Inject private UserService userService;

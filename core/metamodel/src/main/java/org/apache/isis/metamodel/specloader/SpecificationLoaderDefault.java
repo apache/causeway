@@ -297,7 +297,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override @Nullable
-    public ObjectSpecification loadSpecification(@Nullable final Class<?> type, final IntrospectionState upTo) {
+    public ObjectSpecification loadSpecification(
+            @Nullable final Class<?> type, 
+            final IntrospectionState upTo) {
 
         if(type==null) {
             return null;
@@ -383,7 +385,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                     metaModelContext,
                     facetProcessor, 
                     managedBeanNameIfAny, 
-                    postProcessor, classSubstitutor);
+                    postProcessor, 
+                    classSubstitutor);
         }
 
         return objectSpec;

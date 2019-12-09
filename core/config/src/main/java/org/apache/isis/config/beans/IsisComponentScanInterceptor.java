@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 public interface IsisComponentScanInterceptor {
 
     /**
-     * Allows for the given type-meta to by modified before bean-definition registration 
+     * Allows for the given type-meta to be modified before bean-definition registration 
      * is finalized by the IoC, immediately after the type-scan phase. 
      * Aspects to be modified: 
      * <br>- Whether given {@link Component} annotated or meta-annotated type should be made
@@ -41,22 +41,5 @@ public interface IsisComponentScanInterceptor {
      * discovered types into a type registry
      */
     void intercept(TypeMetaData type);
-
-//    /**
-//     * If given type is available for injection, returns the <em>Managed Bean's</em> name (id) as
-//     * recognized by the IoC container, {@code null} otherwise;
-//     * @param type
-//     * @return
-//     */
-//    String getManagedBeanNameForType(Class<?> type);
-//    
-//    /**
-//     * Whether given type is available for injection. Is a <em>Managed Bean</em>. 
-//     * @param type
-//     * @return 
-//     */
-//    default boolean isManagedBean(Class<?> type) {
-//        return getManagedBeanNameForType(type)!=null;
-//    }
     
 }

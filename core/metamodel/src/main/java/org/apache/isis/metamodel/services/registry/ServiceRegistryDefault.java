@@ -21,12 +21,16 @@ package org.apache.isis.metamodel.services.registry;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -38,12 +42,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
@@ -51,7 +50,6 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public final class ServiceRegistryDefault implements ServiceRegistry {
     
     // enforces provisioning order (this is a depends-on relationship) 
