@@ -107,7 +107,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-realm-shiro</artifactId>
+			<artifactId>isis-extensions-secman-shiro-realm</artifactId>
 		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->

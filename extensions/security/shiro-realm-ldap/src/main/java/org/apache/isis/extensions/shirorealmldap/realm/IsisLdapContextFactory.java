@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.shiro.realm.ldap;
+package org.apache.isis.extensions.shirorealmldap.realm;
 
 import java.util.Hashtable;
 
@@ -38,10 +38,7 @@ public class IsisLdapContextFactory extends JndiLdapContextFactory {
 
     private String systemAuthenticationMechanism;
 
-    /**
-     * HACK
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked"})
     @Override
     protected LdapContext createLdapContext(Hashtable env) throws NamingException {
         if(getSystemUsername() != null && getSystemUsername().equals(env.get(Context.SECURITY_PRINCIPAL))) {

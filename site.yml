@@ -161,7 +161,10 @@ content:
       start_path: extensions/security/secman/persistence-jdo/src/main/doc # security secman
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/realm-shiro/src/main/doc # security secman
+      start_path: extensions/security/secman/shiro-realm/src/main/doc # security secman
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/shiro-realm-ldap/src/main/doc # security
       branches: HEAD
     - url: .
       start_path: extensions/testing/fixtures/src/main/doc # testing

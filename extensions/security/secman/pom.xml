@@ -87,6 +87,6 @@
     	<module>model</module>
     	<module>encryption-jbcrypt</module>
     	<module>persistence-jdo</module>
-    	<module>realm-shiro</module>
+    	<module>shiro-realm</module>
     </modules>
 </project>
