@@ -61,20 +61,6 @@ jobs:
       shell: bash
       run: bash $CI_SCRIPTS_PATH/build-core.sh
 
-## does not work yet, token is also no longer valid       
-#    - name: Code Quality
-#      shell: bash
-#      run: |
-#        mvn verify sonar:sonar \
-#        -Dsonar.projectKey=isis_180410 \
-#        -Dsonar.organization=apache \
-#        -Dsonar.host.url=https://sonarcloud.io \
-#        -Dsonar.login=$SONAR_TOKEN \
-#        -DskipTests \
-#        -Denforcer.skip
-#      env:
-#        SONAR_TOKEN: ${{ '9984f4bfa6c86ebf43b2b55ef10c3b72658a1965' }} 
- 
 # FOR DEBUG USE
 #   - name: Dump GitHub context 
 #     env:
