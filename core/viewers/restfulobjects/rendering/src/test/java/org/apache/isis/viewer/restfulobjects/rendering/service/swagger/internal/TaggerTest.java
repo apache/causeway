@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.services.swagger.internal;
+package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
 import org.junit.Test;
+
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

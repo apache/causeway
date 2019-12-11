@@ -18,6 +18,9 @@
  */
 package org.apache.isis.metamodel;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.config.IsisModuleConfig;
 import org.apache.isis.metamodel.context.MetaModelContexts;
@@ -37,20 +40,12 @@ import org.apache.isis.metamodel.services.grid.bootstrap3.GridSystemServiceBS3;
 import org.apache.isis.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.isis.metamodel.services.metamodel.MetaModelServiceDefault;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
-import org.apache.isis.metamodel.services.swagger.SwaggerServiceDefault;
-import org.apache.isis.metamodel.services.swagger.internal.ClassExcluderDefault;
-import org.apache.isis.metamodel.services.swagger.internal.SwaggerSpecGenerator;
-import org.apache.isis.metamodel.services.swagger.internal.TaggerDefault;
-import org.apache.isis.metamodel.services.swagger.internal.ValuePropertyFactoryDefault;
 import org.apache.isis.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.metamodel.specloader.ProgrammingModelServiceDefault;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.security.api.IsisModuleSecurityApi;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
@@ -66,10 +61,6 @@ import org.springframework.context.annotation.Import;
         // @Component's
         ProgrammingModelInitFilterDefault.class,
         ClassSubstitutorDefault.class,
-        ClassExcluderDefault.class,
-        SwaggerSpecGenerator.class,
-        TaggerDefault.class,
-        ValuePropertyFactoryDefault.class,
 
         // @Service's
         ObjectManagerDefault.class,
@@ -86,7 +77,6 @@ import org.springframework.context.annotation.Import;
         MetaModelServiceDefault.class,
         ProgrammingModelServiceDefault.class,
         ServiceRegistryDefault.class,
-        SwaggerServiceDefault.class,
         TitleServiceDefault.class,
         SpecificationLoaderDefault.class,
         UserServiceDefault.class,

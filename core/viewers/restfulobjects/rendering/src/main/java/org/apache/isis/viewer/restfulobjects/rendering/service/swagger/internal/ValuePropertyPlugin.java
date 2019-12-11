@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.services.swagger.internal;
+package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.services.swagger.internal.ValuePropertyFactoryDefault.Factory;
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault.Factory;
 
 public interface ValuePropertyPlugin {
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.services.swagger.internal;
+package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -34,7 +34,8 @@ import org.joda.time.LocalDateTime;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Plugin;
-import org.apache.isis.metamodel.services.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
+
 import org.springframework.stereotype.Component;
 
 import io.swagger.models.properties.BooleanProperty;

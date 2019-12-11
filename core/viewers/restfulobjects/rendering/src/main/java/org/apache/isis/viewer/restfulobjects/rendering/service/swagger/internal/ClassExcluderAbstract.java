@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.services.swagger.internal;
+package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
 import java.util.List;
 import java.util.Set;
@@ -24,7 +24,6 @@ import java.util.Set;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.springframework.stereotype.Component;
 
 public abstract class ClassExcluderAbstract implements ClassExcluder {
 

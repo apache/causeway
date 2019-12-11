@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.services.swagger;
+package org.apache.isis.viewer.restfulobjects.rendering.service.swagger;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -31,8 +31,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.metamodel.services.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
 
 import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._With.ifPresentElse;

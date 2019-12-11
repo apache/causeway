@@ -1,5 +1,8 @@
 package org.apache.isis.viewer.restfulobjects.rendering;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.runtime.IsisModuleRuntime;
 import org.apache.isis.viewer.restfulobjects.applib.IsisModuleRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
@@ -8,8 +11,11 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.Acce
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault;
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault;
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault;
 
 @Configuration
 @Import({
@@ -17,6 +23,13 @@ import org.springframework.context.annotation.Import;
         IsisModuleRestfulObjectsApplib.class,
         IsisModuleRuntime.class,
 
+        // @Component's
+        ClassExcluderDefault.class,
+        SwaggerSpecGenerator.class,
+        TaggerDefault.class,
+        ValuePropertyFactoryDefault.class,
+
+        
         // @Service's
         AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,
@@ -24,6 +37,7 @@ import org.springframework.context.annotation.Import;
         ContentNegotiationServiceXRoDomainType.class,
         JsonValueEncoder.class,
         RepresentationServiceContentNegotiator.class,
+        SwaggerServiceDefault.class,
 
 })
 public class IsisModuleRestfulObjectsRendering {

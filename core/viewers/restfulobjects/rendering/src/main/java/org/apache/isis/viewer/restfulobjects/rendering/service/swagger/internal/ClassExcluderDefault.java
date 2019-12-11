@@ -16,13 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.services.swagger.internal;
+package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import javax.inject.Named;
 
-public interface Tagger {
+import org.springframework.stereotype.Component;
 
-    @Programmatic
-    String tagForObjectType(String objType, String fallback);
+@Component
+@Named("isisMetaModel.ClassExcluderDefault")
+public class ClassExcluderDefault extends ClassExcluderAbstract {
+
+    public ClassExcluderDefault() {
+        ignorePackage("org.apache.isis.commons.internal");
+    }
 
 }
