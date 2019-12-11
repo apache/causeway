@@ -96,6 +96,7 @@ class SpringServiceProvisioningTest {
         val singletonListing = _Resources.loadAsStringUtf8(this.getClass(), "builtin-domain-services.list");
         val expectedSingletons = _Strings.splitThenStreamTrimmed(singletonListing, "\n")
                 .filter(entry->!entry.startsWith("#"))
+                .filter(entry->!entry.startsWith("org.apache.isis.testdomain."))
                 .collect(Collectors.toCollection(TreeSet::new));
         
         assertFalse(expectedSingletons.isEmpty());

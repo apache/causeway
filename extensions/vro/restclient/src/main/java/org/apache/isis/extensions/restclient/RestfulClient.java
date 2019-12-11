@@ -111,19 +111,19 @@ if(digest.isSuccess()) {
     <version>2.0.0-M2-SNAPSHOT</version>
 </dependency>
 <dependency>
-    <groupId>javax.ws.rs</groupId>
-    <artifactId>javax.ws.rs-api</artifactId>
-    <version>2.1.1</version>
+    <groupId>org.glassfish.jersey.ext</groupId>
+    <artifactId>jersey-spring5</artifactId>
+    <version>2.29.1</version>
 </dependency>
 <dependency>
-    <groupId>org.glassfish.jersey.core</groupId>
-    <artifactId>jersey-client</artifactId>
-    <version>2.25.1</version>
+    <groupId>org.glassfish</groupId>
+    <artifactId>javax.json</artifactId>
+    <version>1.1.4</version>
 </dependency>
 <dependency>
     <groupId>org.eclipse.persistence</groupId>
     <artifactId>org.eclipse.persistence.moxy</artifactId>
-    <version>2.6.0</version>
+    <version>2.7.5</version>
 </dependency>
  * }</pre></blockquote>
  * 

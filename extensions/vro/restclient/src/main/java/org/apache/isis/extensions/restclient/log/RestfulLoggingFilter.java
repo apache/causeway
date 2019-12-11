@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
@@ -56,27 +57,27 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
         }
         final String acceptHeaderParsing = acceptableMediaTypeParsingFailure != null
                 ? "Failed to parse accept header, cause: " + acceptableMediaTypeParsingFailure.getMessage()
-                : "OK";
+                    : "OK";
 
-                final String headers = requestContext.getStringHeaders().entrySet().stream()
-                        .map(entry->entry.toString())
-                        .map(this::obscureAuthHeader)
-                        .collect(Collectors.joining(",\n\t"));
+        final String headers = requestContext.getStringHeaders().entrySet().stream()
+                .map(this::toKeyValueString)
+                .map(this::obscureAuthHeader)
+                .collect(Collectors.joining(",\n\t"));
 
-                final String requestBody = requestContext.getEntity().toString();
+        final String requestBody = requestContext.getEntity().toString();
 
-                final StringBuilder sb = new StringBuilder();
-                sb.append("\n")
-                .append("---------- JAX-RS REQUEST -------------\n")
-                .append("uri: ").append(endpoint).append("\n")
-                .append("method: ").append(method).append("\n")
-                .append("accept-header-parsing: ").append(acceptHeaderParsing).append("\n")
-                .append("headers: \n\t").append(headers).append("\n")
-                .append("request-body: ").append(requestBody).append("\n")
-                .append("----------------------------------------\n")
-                ;
+        final StringBuilder sb = new StringBuilder();
+        sb.append("\n")
+        .append("---------- JAX-RS REQUEST -------------\n")
+        .append("uri: ").append(endpoint).append("\n")
+        .append("method: ").append(method).append("\n")
+        .append("accept-header-parsing: ").append(acceptHeaderParsing).append("\n")
+        .append("headers: \n\t").append(headers).append("\n")
+        .append("request-body: ").append(requestBody).append("\n")
+        .append("----------------------------------------\n")
+        ;
 
-                log.info(sb.toString());
+        log.info(sb.toString());
     }
 
     @Override
@@ -106,7 +107,11 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
 
     private final String basicAuthMagic = "Authorization=[Basic "; 
 
-    String obscureAuthHeader(String keyValueLiteral) {
+    private String toKeyValueString(Map.Entry<?, ?> entry) {
+        return "" + entry.getKey() + ": " + entry.getValue();
+    }
+    
+    private String obscureAuthHeader(String keyValueLiteral) {
         if(_Strings.isEmpty(keyValueLiteral)) {
             return keyValueLiteral;
         }
