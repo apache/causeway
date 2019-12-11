@@ -1,5 +1,5 @@
 # README
 
-This directory is almost exact copy of the [swagger-ui dist](https://github.com/swagger-api/swagger-ui/tree/v2.2.10/dist) directory.
+This directory is almost exact copy of the [swagger-ui dist](https://github.com/swagger-api/swagger-ui/dist) directory.
 
-The only changes are some very simple alterations to the `index.html` for (a) Basic auth and (b) to allow different Swagger specification file to be used.
+Changes are alterations to the `index.html` to allow for predefined schemas to be explored.

@@ -230,11 +230,9 @@ class Generation {
 
         swagger.path("/",
                 new Path()
-                .get(new Operation()
+                .get(newOperation("home-page")
                         .tag(tag)
                         .description(Util.roSpec("5.1"))
-                        .produces("application/json")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/home-page")
                         .response(200,
                                 newResponse(Caching.NON_EXPIRING)
                                 .description("OK")
@@ -244,11 +242,9 @@ class Generation {
 
         swagger.path("/user",
                 new Path()
-                .get(new Operation()
+                .get(newOperation("user")
                         .tag(tag)
                         .description(Util.roSpec("6.1"))
-                        .produces("application/json")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/user")
                         .response(200,
                                 newResponse(Caching.USER_INFO)
                                 .description("OK")
@@ -264,11 +260,9 @@ class Generation {
 
         swagger.path("/services",
                 new Path()
-                .get(new Operation()
+                .get(newOperation("services")
                         .tag(tag)
                         .description(Util.roSpec("7.1"))
-                        .produces("application/json")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/services")
                         .response(200,
                                 newResponse(Caching.USER_INFO)
                                 .description("OK")
@@ -282,11 +276,9 @@ class Generation {
 
         swagger.path("/version",
                 new Path()
-                .get(new Operation()
+                .get(newOperation("RestfulObjectsSupportingServicesRepr")
                         .tag(tag)
                         .description(Util.roSpec("8.1"))
-                        .produces("application/json")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/RestfulObjectsSupportingServicesRepr")
                         .response(200,
                                 newResponse(Caching.NON_EXPIRING)
                                 .description("OK")
@@ -345,11 +337,9 @@ class Generation {
 
         final String tag = tagForObjectType(serviceId, "> services");
         path.get(
-                new Operation()
+                newOperation("object")
                 .tag(tag)
                 .description(Util.roSpec("15.1"))
-                .produces("application/json")
-                .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
                 .response(200,
                         newResponse(Caching.TRANSACTIONAL)
                         .description("OK")
@@ -454,15 +444,9 @@ class Generation {
 
         final String tag = tagForObjectType(serviceId, "> services");
         final Operation invokeOperation =
-                new Operation()
+                newOperation("object", "action-result")
                 .tag(tag)
-                .description(Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId)
-                .produces("application/json;profile=urn:org.apache.isis/v1")
-                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
-                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all")
-                .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
-                .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result")
-                ;
+                .description(Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId);
 
         final SemanticsOf semantics = serviceAction.getSemantics();
         if(semantics.isSafeInNature()) {
@@ -539,17 +523,13 @@ class Generation {
 
         final String tag = tagForObjectType(objectType, null);
         final Operation collectionOperation =
-                new Operation()
+                newOperation("object-collection")
                 .tag(tag)
                 .description(Util.roSpec("17.1") + ": resource of " + objectType + "#" + collectionId)
                 .parameter(
                         new PathParameter()
                         .name("objectId")
-                        .type("string"))
-                .produces("application/json;profile=urn:org.apache.isis/v1")
-                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
-                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all")
-                .produces("application/json;profile=urn:org.restfulobjects:repr-types/object-collection");
+                        .type("string"));
 
         path.get(collectionOperation);
         collectionOperation
@@ -573,17 +553,13 @@ class Generation {
 
         final String tag = tagForObjectType(objectType, null);
         final Operation invokeOperation =
-                new Operation()
+                newOperation("action-result")
                 .tag(tag)
                 .description(Util.roSpec("19.1") + ": (invoke) resource of " + objectType + "#" + actionId)
                 .parameter(
                         new PathParameter()
                         .name("objectId")
-                        .type("string"))
-                .produces("application/json;profile=urn:org.apache.isis/v1")
-                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
-                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all")
-                .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result");
+                        .type("string"));
 
         final SemanticsOf semantics = objectAction.getSemantics();
         if(semantics.isSafeInNature()) {
@@ -853,5 +829,20 @@ class Generation {
         return referencesCopy;
     }
 
+    private static Operation newOperation(String ... reprTypes) {
+        Operation operation = new Operation()
+                .produces("application/json")
+                .produces("application/json;profile=urn:org.apache.isis/v1")
+                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all");
+                
+        if(reprTypes!=null) {
+            for(String reprType: reprTypes) {
+                operation = operation
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/" + reprType);
+            }
+        }
+                
+        return operation;
+    }
 
 }

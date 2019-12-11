@@ -1,155 +1,67 @@
+<!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  "License"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
-
-         http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
-  specific language governing permissions and limitations
-  under the License.
--->
-<html>
-<head>
+<html lang="en">
+  <head>
     <meta charset="UTF-8">
-    <meta http-equiv="x-ua-compatible" content="IE=edge">
     <title>Swagger UI</title>
-    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
-    <link href='css/typography.css' media='screen' rel='stylesheet' type='text/css'/>
-    <link href='css/reset.css' media='screen' rel='stylesheet' type='text/css'/>
-    <link href='css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
-    <link href='css/reset.css' media='print' rel='stylesheet' type='text/css'/>
-    <link href='css/print.css' media='print' rel='stylesheet' type='text/css'/>
-
-    <script src='lib/object-assign-pollyfill.js' type='text/javascript'></script>
-    <script src='lib/jquery-1.8.0.min.js' type='text/javascript'></script>
-    <script src='lib/jquery.slideto.min.js' type='text/javascript'></script>
-    <script src='lib/jquery.wiggle.min.js' type='text/javascript'></script>
-    <script src='lib/jquery.ba-bbq.min.js' type='text/javascript'></script>
-    <script src='lib/handlebars-4.0.5.js' type='text/javascript'></script>
-    <script src='lib/lodash.min.js' type='text/javascript'></script>
-    <script src='lib/backbone-min.js' type='text/javascript'></script>
-    <script src='swagger-ui.js' type='text/javascript'></script>
-    <script src='lib/highlight.9.1.0.pack.js' type='text/javascript'></script>
-    <script src='lib/highlight.9.1.0.pack_extended.js' type='text/javascript'></script>
-    <script src='lib/jsoneditor.min.js' type='text/javascript'></script>
-    <script src='lib/marked.js' type='text/javascript'></script>
-    <script src='lib/swagger-oauth.js' type='text/javascript'></script>
-
-    <script type="text/javascript">
-    $(function () {
-      var url = document.getElementById("input_baseUrl").selectedOptions[0].value;
-
-      hljs.configure({
-        highlightSizeThreshold: 5000
-      });
-
-      // Pre load translate...
-      if(window.SwaggerTranslator) {
-        window.SwaggerTranslator.translate();
-      }
-      window.swaggerUi = new SwaggerUi({
-        url: url,
-        dom_id: "swagger-ui-container",
-        supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-        onComplete: function(swaggerApi, swaggerUi){
-          if(typeof initOAuth == "function") {
-            initOAuth({
-              clientId: "your-client-id",
-              clientSecret: "your-client-secret-if-required",
-              realm: "your-realms",
-              appName: "your-app-name",
-              scopeSeparator: ",",
-              additionalQueryStringParams: {}
-            });
-          }
-
-          if(window.SwaggerTranslator) {
-            window.SwaggerTranslator.translate();
-          }
-
-          addApiKeyAuthorization();
-        },
-        onFailure: function(data) {
-          log("Unable to Load SwaggerUI");
-        },
-        docExpansion: "none",
-        jsonEditor: false,
-        defaultModelRendering: 'schema',
-        showRequestHeaders: false,
-        showOperationIds: false
-      });
-
-      function log() {
-        if ('console' in window) {
-          console.log.apply(console, arguments);
-        }
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" >
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+    <style>
+      html
+      {
+        box-sizing: border-box;
+        overflow: -moz-scrollbars-vertical;
+        overflow-y: scroll;
       }
 
-      function addApiKeyAuthorization(){
-        var username = document.getElementById("input_user").value;
-        var password = document.getElementById("input_pass").value;
-        if(username && username.trim() != "" && password && password.trim() != "") {
-          var auth = "Basic " + btoa(username + ":" + password);
-          var swaggerUi = window.swaggerUi;
-          window.swaggerUi.api.clientAuthorizations.add("key", new SwaggerClient.ApiKeyAuthorization("Authorization", auth, "header"));
-        } else {
-          window.swaggerUi.api.clientAuthorizations.remove("key");
-        }
+      *,
+      *:before,
+      *:after
+      {
+        box-sizing: inherit;
       }
 
-      $('#input_user').val("sven");
-      $('#input_pass').val("pass");
+      body
+      {
+        margin:0;
+        background: #fafafa;
+      }
+    </style>
+  </head>
 
-  });
+  <body>
+  
+    <div id="swagger-ui"></div>
+
+    <script src="./swagger-ui-bundle.js"> </script>
+    <script src="./swagger-ui-standalone-preset.js"> </script>
+    <script>
+    window.onload = function() {
+      // Begin Swagger UI call region
+      const ui = SwaggerUIBundle({
+    	urls: [{
+    		url: "${restful-base}/swagger/public", name: "public"
+    	},{
+    		url: "${restful-base}/swagger/prototyping", name: "prototyping"
+    	},{
+    		url: "${restful-base}/swagger/private", name: "private"
+    	}],
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+      })
+      // End Swagger UI call region
+
+      window.ui = ui
+    }
   </script>
-</head>
-
-<body class="swagger-section">
-<div id='header'>
-    <div class="swagger-ui-wrap">
-    <a id="logo" href="http://swagger.io"><img class="logo__img" alt="swagger" height="30" width="30" src="images/logo_small.png" /><span class="logo__title">swagger</span></a>
-    
-    	
-    
-        <form id='api_selector'>
-        
-        	<a href="${restful-base}/" target="blank" title="You might need to login.">Direct API Link (Login)</a>
-        	<span> &nbsp; &nbsp; &nbsp;</span>	
-        
-            <div class='input'>
-            
-            <!-- does not work anyway 
-                <div class='input'><input placeholder="user" id="input_user" name="user" type="text" size="10"/></div>
-                <div class='input'><input placeholder="pass" id="input_pass" name="pass" type="password" size="10"/></div>
-			-->
-			
-				API Select:
-
-                <select id="input_baseUrl" name="baseUrl" style="height: 26px;">
-                    <option id="private" label="private" value="${restful-base}/swagger/private">private</option>
-                    <option id="public" label="public" value="${restful-base}/swagger/public">public</option>
-                    <option id="prototyping" label="prototyping" value="${restful-base}/swagger/prototyping">prototyping</option>
-                </select>
-            </div>
-            <div class='input' style="display:none;"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
-            <div class='input'><a id="explore" href="#" data-sw-translate>Reload</a></div>
-            
-        </form>
-
-    </div>
-</div>
-
-<div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
-<div id="swagger-ui-container" class="swagger-ui-wrap"></div>
-</body>
+  </body>
 </html>
