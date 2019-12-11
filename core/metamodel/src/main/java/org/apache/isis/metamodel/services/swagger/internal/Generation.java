@@ -18,7 +18,15 @@
  */
 package org.apache.isis.metamodel.services.swagger.internal;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -363,7 +371,7 @@ class Generation {
         swagger.path(String.format("/objects/%s/{objectId}", objectType), path);
 
         final String tag = tagForObjectType(objectType, null);
-        final Operation operation = new Operation();
+        final Operation operation = newOperation("object");
         path.get(operation);
         operation
         .tag(tag)
@@ -371,12 +379,7 @@ class Generation {
         .parameter(
                 new PathParameter()
                 .name("objectId")
-                .type("string"))
-        .produces("application/json;profile=urn:org.apache.isis/v1")
-        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
-        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all")
-        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object");
-
+                .type("string"));
 
         // per https://github.com/swagger-api/swagger-spec/issues/146, swagger 2.0 doesn't support multiple
         // modelled representations per path and response code;
@@ -831,15 +834,26 @@ class Generation {
 
     private static Operation newOperation(String ... reprTypes) {
         Operation operation = new Operation()
-                .produces("application/json")
-                .produces("application/json;profile=urn:org.apache.isis/v1")
-                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all");
+                .produces("application/json");
+        
+        boolean supportsV1 = false;
                 
         if(reprTypes!=null) {
             for(String reprType: reprTypes) {
+                
+                if(reprType.equals("object") || reprType.equals("action-result")) {
+                    supportsV1 = true;
+                }
+                
                 operation = operation
                         .produces("application/json;profile=urn:org.restfulobjects:repr-types/" + reprType);
             }
+        }
+        
+        if(supportsV1) {
+            operation = operation
+                .produces("application/json;profile=urn:org.apache.isis/v1")
+                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all");
         }
                 
         return operation;
