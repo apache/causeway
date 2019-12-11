@@ -18,15 +18,9 @@
  */
 package org.apache.isis.testdomain.rest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -35,6 +29,11 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
@@ -102,7 +101,7 @@ class RestServiceTest {
     
     
     
-    @Test @Disabled("don't know how to disable http-session creation for the test-web-environment")
+    @Test
     void httpSessionInfo() {
 
         val useRequestDebugLogging = false;
