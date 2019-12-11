@@ -73,11 +73,11 @@ public class Identifier implements Comparable<Identifier> {
         public abstract String toIdentityString(Identifier identifier);
     }
 
-    public static Depth CLASS = Depth.CLASS;
-    public static Depth CLASS_MEMBERNAME = Depth.CLASS_MEMBERNAME;
-    public static Depth CLASS_MEMBERNAME_PARAMETERS = Depth.CLASS_MEMBERNAME_PARAMETERS;
-    public static Depth MEMBERNAME_ONLY = Depth.MEMBERNAME_ONLY;
-    public static Depth PARAMETERS_ONLY = Depth.PARAMETERS_ONLY;
+    public static final Depth CLASS = Depth.CLASS;
+    public static final Depth CLASS_MEMBERNAME = Depth.CLASS_MEMBERNAME;
+    public static final Depth CLASS_MEMBERNAME_PARAMETERS = Depth.CLASS_MEMBERNAME_PARAMETERS;
+    public static final Depth MEMBERNAME_ONLY = Depth.MEMBERNAME_ONLY;
+    public static final Depth PARAMETERS_ONLY = Depth.PARAMETERS_ONLY;
 
     // ///////////////////////////////////////////////////////////////////////////
     // Factory methods
