@@ -16,10 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.metamodel.facets;
-
-import lombok.val;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,11 +25,9 @@ import java.util.Objects;
 
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+
+import lombok.val;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
@@ -62,6 +57,11 @@ implements MethodPrefixBasedFacetFactory {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
+        // we can safely skip this validation if the @Action annoation is mandatory
+        if(getConfiguration().getReflector().getExplicitAnnotations().isAction()) {
+            return;
+        }
+        
         if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
             return;
         }
