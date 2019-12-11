@@ -51,8 +51,7 @@ public abstract class AuthenticationSessionStrategyAbstract implements Authentic
     }
 
     protected ServletContext getServletContext(ServletRequest servletRequest) {
-        val httpSession = getHttpSession(servletRequest);
-        return httpSession.getServletContext();
+        return servletRequest.getServletContext();
     }
 
     

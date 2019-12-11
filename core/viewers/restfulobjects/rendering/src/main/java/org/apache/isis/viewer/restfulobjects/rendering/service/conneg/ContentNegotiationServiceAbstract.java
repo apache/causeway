@@ -21,8 +21,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -42,15 +40,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 public abstract class ContentNegotiationServiceAbstract implements ContentNegotiationService {
 
     @Override
-    
-    @PostConstruct
-    public void init() {}
-
-    @Override
-    @PreDestroy
-    public void shutdown() {}
-
-    @Override
     public Response.ResponseBuilder buildResponse(
             final IResourceContext renderContext2,
             final ManagedObject objectAdapter) {
@@ -65,7 +54,6 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     }
 
     @Override
-    
     public Response.ResponseBuilder buildResponse(
             final IResourceContext renderContext2,
             final ObjectAndCollection objectAndCollection) {
@@ -73,7 +61,6 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     }
 
     @Override
-    
     public Response.ResponseBuilder buildResponse(
             final IResourceContext renderContext2,
             final ObjectAndAction objectAndAction)  {
@@ -81,7 +68,6 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     }
 
     @Override
-    
     public Response.ResponseBuilder buildResponse(
             final IResourceContext renderContext2,
             final ObjectAndActionInvocation objectAndActionInvocation) {

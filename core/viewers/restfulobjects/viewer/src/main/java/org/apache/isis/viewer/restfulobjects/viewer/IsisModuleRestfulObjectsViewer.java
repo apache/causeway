@@ -19,12 +19,11 @@
 
 package org.apache.isis.viewer.restfulobjects.viewer;
 
-import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
-import org.apache.isis.viewer.restfulobjects.viewer.webmodule.WebModuleRestfulObjects;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
+import org.apache.isis.viewer.restfulobjects.viewer.webmodule.WebModuleRestfulObjects;
 import org.apache.isis.webapp.IsisModuleWebapp;
 
 /**

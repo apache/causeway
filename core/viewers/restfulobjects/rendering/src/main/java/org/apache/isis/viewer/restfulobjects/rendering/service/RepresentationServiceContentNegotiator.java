@@ -18,23 +18,20 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.List;
 import java.util.function.Function;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
@@ -46,21 +43,17 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
+import lombok.val;
+
 @Service
 @Named("isisRoRendering.RepresentationServiceContentNegotiator")
 @Order(OrderPrecedence.HIGH)
 @Primary
 @Qualifier("ContentNegotiator")
-@Log4j2
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
-    @Inject List<ContentNegotiationService> contentNegotiationServices;
+    @Inject private List<ContentNegotiationService> contentNegotiationServices;
     
-    @PostConstruct
-    public void init() {
-    }
-
-
     @Override
     public Response objectRepresentation(
             final IResourceContext renderContext,
@@ -147,9 +140,10 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
      * @param connegServiceBuildResponse - the function to ask of the {@link ContentNegotiationService}.
      */
     ResponseBuilder buildResponse(
-            final Function<ContentNegotiationService, ResponseBuilder> connegServiceBuildResponse) {
-        for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
-            final ResponseBuilder responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
+            Function<ContentNegotiationService, ResponseBuilder> connegServiceBuildResponse) {
+        
+        for (val contentNegotiationService : contentNegotiationServices) {
+            val responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
             if(responseBuilder != null) {
                 return responseBuilder;
             }
@@ -158,7 +152,7 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     }
 
     /**
-     * Overriddable to allow further customization.
+     * Override to allow further customization.
      */
     protected Response buildResponse(final ResponseBuilder responseBuilder) {
         return responseBuilder.build();

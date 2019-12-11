@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -30,12 +28,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCo
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 
 public interface ContentNegotiationService {
-
-    @PostConstruct
-    public void init();
-
-    @PreDestroy
-    public void shutdown();
 
     public Response.ResponseBuilder buildResponse(
             IResourceContext renderContext,

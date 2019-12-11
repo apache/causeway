@@ -26,12 +26,14 @@ import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.client.SuppressionType;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
@@ -49,16 +51,13 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCo
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.springframework.stereotype.Service;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
 @Named("isisRoRendering.ContentNegotiationServiceOrgApacheIsisV1")
-@Order(OrderPrecedence.MIDPOINT + 200)
+@Order(OrderPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV1")
-@Log4j2
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
     /**

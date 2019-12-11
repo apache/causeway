@@ -23,12 +23,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.domain.DomainObjectList;
@@ -58,12 +62,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
@@ -71,22 +70,14 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("RestfulObjectsV1_0")
-@Log4j2
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
 
     private boolean strictAcceptChecking;
 
-    @Override
     @PostConstruct
     public void init() {
         this.strictAcceptChecking = configuration.getViewer().getRestfulobjects().isStrictAcceptChecking();
     }
-
-    @Override
-    @PreDestroy
-    public void shutdown() {
-    }
-
 
     @Override
     public ResponseBuilder buildResponse(

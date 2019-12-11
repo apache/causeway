@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,11 +25,11 @@ import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -56,14 +54,13 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
  */
 @Service
 @Named("isisRoRendering.ContentNegotiationServiceXRoDomainType")
-@Order(OrderPrecedence.MIDPOINT + 100)
+@Order(OrderPrecedence.MIDPOINT - 100)
 @Qualifier("XRoDomainType")
-@Log4j2
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
 
     public static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";
 
-    @Inject List<ContentMappingService> contentMappingServices;
+    @Inject private List<ContentMappingService> contentMappingServices;
     
     /**
      * search for an accept header in form <code>application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto</code>
