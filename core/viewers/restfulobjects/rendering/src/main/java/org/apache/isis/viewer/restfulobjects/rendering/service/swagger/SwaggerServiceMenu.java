@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.swagger;
+package org.apache.isis.viewer.restfulobjects.rendering.service.swagger;
 
 import java.util.Optional;
 
@@ -29,13 +29,14 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
 
 
@@ -47,6 +48,9 @@ import org.apache.isis.commons.internal.resources._Resources;
 )
 public class SwaggerServiceMenu {
 
+    @Inject private SwaggerService swaggerService;
+    @Inject private ServiceRegistry serviceRegistry;
+    
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<SwaggerServiceMenu> { }
     public static class OpenSwaggerUiDomainEvent extends ActionDomainEvent { }
 
@@ -102,7 +106,8 @@ public class SwaggerServiceMenu {
             final String fileNamePrefix,
             final SwaggerService.Visibility visibility,
             final SwaggerService.Format format) {
-        final String fileName = Util.buildFileName(fileNamePrefix, visibility, format);
+        
+        final String fileName = buildFileName(fileNamePrefix, visibility, format);
         final String spec = swaggerService.generateSwaggerSpec(visibility, format);
         return new Clob(fileName, format.mediaType(), spec);
     }
@@ -126,7 +131,19 @@ public class SwaggerServiceMenu {
                 : "RestfulObjects viewer is not configured";
     }
     
+    private static String buildFileName(
+            String fileNamePrefix,
+            final SwaggerService.Visibility visibility,
+            final SwaggerService.Format format) {
+        final String formatLower = format.name().toLowerCase();
+        int i = fileNamePrefix.lastIndexOf("." + formatLower);
+        if(i > 0) {
+            fileNamePrefix = fileNamePrefix.substring(0, i);
+        }
+        return _Strings.asFileNameWithExtension(
+                fileNamePrefix + "-" + visibility.name().toLowerCase(), 
+                formatLower);
+    }
     
-    @Inject SwaggerService swaggerService;
-    @Inject ServiceRegistry serviceRegistry; 
+     
 }

@@ -18,6 +18,9 @@
  */
 package org.apache.isis.applib;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.applib.mixins.dto.DtoMappingHelper;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXml;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
@@ -42,12 +45,9 @@ import org.apache.isis.applib.services.metamodel.MetaModelServicesMenu;
 import org.apache.isis.applib.services.publish.PublisherServiceLogging;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
-import org.apache.isis.applib.services.swagger.SwaggerServiceMenu;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.schema.IsisModuleSchema;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
@@ -70,7 +70,6 @@ import org.springframework.context.annotation.Import;
         ConfigurationMenu.class,
         LayoutServiceMenu.class,
         MetaModelServicesMenu.class,
-        SwaggerServiceMenu.class,
 
         // @Service's
         AuditerServiceLogging.class,

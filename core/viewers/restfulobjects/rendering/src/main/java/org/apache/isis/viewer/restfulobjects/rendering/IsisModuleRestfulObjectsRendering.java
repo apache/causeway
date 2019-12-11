@@ -12,6 +12,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNeg
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault;
+import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceMenu;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
@@ -38,6 +39,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
         JsonValueEncoder.class,
         RepresentationServiceContentNegotiator.class,
         SwaggerServiceDefault.class,
+        SwaggerServiceMenu.class,
 
 })
 public class IsisModuleRestfulObjectsRendering {
