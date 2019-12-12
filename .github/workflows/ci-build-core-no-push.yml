@@ -26,10 +26,6 @@ jobs:
       # set this to 'deploy' when intent is to push the built packages to a repo
       # requires 'secrets' which we don't have yet 
       MVN_STAGES: install
-      
-      # though equivalent, setting SHARED_VARS_FILE to ~/.env breaks the build, not sure why
-      # the tilde character appears to produce strange side-effects when used here
-      SHARED_VARS_FILE: /home/runner/.env
 
     steps:
     - uses: actions/checkout@v1
@@ -47,14 +43,12 @@ jobs:
       # we write the more tricky varibles to the $SHARED_VARS_FILE using the full power of bash commands
       # then we simply print all the (non-secret) variables as used by the build scripts to the console
       run: |
-        echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > $SHARED_VARS_FILE
         echo ==============  ENV  =================
         echo BASELINE         \: $BASELINE
         echo TIMESTAMP        \: $TIMESTAMP
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
         echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
         echo MVN_STAGES       \: $MVN_STAGES
-        cat $SHARED_VARS_FILE
         echo ======================================
     
     - name: Build Core
