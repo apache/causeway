@@ -37,26 +37,25 @@ import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusLifeCycleHelper;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusPropertiesAware;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.query.JdoQueryFacet;
 import org.apache.isis.runtime.context.IsisContext;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Vetoed
 @Log4j2
-public class DataNucleusApplicationComponents5 implements ApplicationScopedComponent {
+public class DataNucleusApplicationComponents5 {
 
     private final Set<String> persistableClassNameSet;
     private final IsisConfiguration configuration;

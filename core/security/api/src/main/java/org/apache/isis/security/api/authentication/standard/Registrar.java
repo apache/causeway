@@ -19,12 +19,9 @@
 
 package org.apache.isis.security.api.authentication.standard;
 
-import java.util.function.Function;
-
-import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.security.api.authentication.manager.RegistrationDetails;
 
-public interface Registrar extends Authenticator, ApplicationScopedComponent {
+public interface Registrar extends Authenticator {
 
     /**
      * Whether the provided {@link RegistrationDetails} is recognized by this

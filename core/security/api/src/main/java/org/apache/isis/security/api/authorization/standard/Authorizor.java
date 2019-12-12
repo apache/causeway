@@ -20,9 +20,8 @@
 package org.apache.isis.security.api.authorization.standard;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 
-public interface Authorizor extends ApplicationScopedComponent {
+public interface Authorizor {
 
     boolean isVisibleInAnyRole(final Identifier identifier);
     boolean isUsableInAnyRole(final Identifier identifier);

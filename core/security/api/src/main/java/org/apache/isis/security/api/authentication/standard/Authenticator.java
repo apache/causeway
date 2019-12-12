@@ -19,11 +19,10 @@
 
 package org.apache.isis.security.api.authentication.standard;
 
-import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
-public interface Authenticator extends ApplicationScopedComponent {
+public interface Authenticator {
 
     /**
      * Whether the provided {@link AuthenticationRequest} is recognized by this
