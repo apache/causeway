@@ -98,6 +98,10 @@
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-shiro-realm</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-shiro-realm-ldap</artifactId>
+		</dependency>
 
 		<!-- TEST DEPENDENCIES -->
 

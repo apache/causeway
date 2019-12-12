@@ -57,14 +57,14 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
  * Sample config for <tt>shiro.ini</tt>:
  * <p/>
  * <pre>
- * contextFactory = org.apache.isis.security.shiro.realm.ldap.IsisLdapContextFactory
+ * contextFactory = org.apache.isis.extensions.shirorealmldap.realm.IsisLdapContextFactory
  * contextFactory.url = ldap://localhost:10389
  * contextFactory.authenticationMechanism = CRAM-MD5
  * contextFactory.systemAuthenticationMechanism = simple
  * contextFactory.systemUsername = uid=admin,ou=system
  * contextFactory.systemPassword = secret
  *
- * ldapRealm = org.apache.isis.security.shiro.realm.ldap.IsisLdapRealm
+ * ldapRealm = org.apache.isis.extensions.shirorealmldap.realm.IsisLdapRealm
  * ldapRealm.contextFactory = $contextFactory
  *
  * ldapRealm.searchBase = ou=groups,o=mojo

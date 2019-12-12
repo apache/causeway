@@ -6,7 +6,6 @@ org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandsD
 org.apache.isis.applib.services.layout.LayoutServiceMenu
 org.apache.isis.applib.services.metamodel.MetaModelServicesMenu
 org.apache.isis.applib.services.scratchpad.Scratchpad
-org.apache.isis.applib.services.swagger.SwaggerServiceMenu
 org.apache.isis.applib.services.tablecol.TableColumnOrderService$Default
 org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression
 org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts

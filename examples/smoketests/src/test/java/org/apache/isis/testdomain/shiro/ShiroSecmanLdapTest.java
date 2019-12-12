@@ -91,6 +91,8 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
     @BeforeEach
     void beforeEach() {
         
+        org.apache.isis.extensions.shirorealmldap.realm.IsisLdapContextFactory f;
+        
         setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
         
         // given
