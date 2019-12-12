@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.persistence;
+package org.apache.isis.persistence.jdo.applib.exceptions;
 
 import org.apache.isis.commons.exceptions.IsisException;
 

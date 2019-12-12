@@ -17,16 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.persistence;
+package org.apache.isis.persistence.jdo.applib.fixturestate;
 
 /**
- * Implementing classes must cache the FixturesInstalledState, so fixtures are installed (run) 
- * only once per application life-cycle.
+ * For {@link org.apache.isis.runtime.system.persistence.PersistenceSessionFactory} 
+ * implementations that can cache the
+ * {@link PersistenceSession#isFixturesInstalled()} so is only called once per
+ * application scope.
  */
-public interface FixturesInstalledStateHolder {
+public interface FixturesInstalledFlag {
 
-    public FixturesInstalledState getFixturesInstalledState();
+    public Boolean isFixturesInstalled();
 
-    public void setFixturesInstalledState(FixturesInstalledState fixturesInstalledState);
+    public void setFixturesInstalled(Boolean fixturesInstalled);
 
 }

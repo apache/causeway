@@ -17,43 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.persistence;
+package org.apache.isis.persistence.jdo.applib.fixturestate;
 
 /**
- * 
- * @since 2.0
- *
+ * Implementing classes must cache the FixturesInstalledState, so fixtures are installed (run) 
+ * only once per application life-cycle.
  */
-public enum FixturesInstalledState {
+public interface FixturesInstalledStateHolder {
 
-    /**
-     * application scoped state indicating fixture scripts have not been run yet
-     */
-    not_Installed,
+    public FixturesInstalledState getFixturesInstalledState();
 
-    /**
-     * application scoped state indicating fixture scripts are currently in the process 
-     * of being installed (are running)
-     */
-    Installing,
+    public void setFixturesInstalledState(FixturesInstalledState fixturesInstalledState);
 
-    /**
-     * application scoped state indicating fixture scripts have been installed (have run)
-     */
-    Installed
-
-    ;
-
-    public boolean isNotInstalled() {
-        return this == not_Installed;
-    }
-
-    public boolean isInstalling() {
-        return this == Installing;
-    }
-
-    public boolean isInstalled() {
-        return this == Installed;
-    }
 }
-

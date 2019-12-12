@@ -43,5 +43,5 @@
  * responsibility of the {@link PersistenceMechanismInstaller} to ensure that the correct helper objects
  * are passed to the {@link PersistenceSession} implementation.
  */
-package org.apache.isis.runtime.persistence;
+package org.apache.isis.persistence.jdo.applib.fixturestate;
 

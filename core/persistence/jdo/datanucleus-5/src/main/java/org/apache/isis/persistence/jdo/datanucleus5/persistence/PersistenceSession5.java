@@ -49,6 +49,9 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
+import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
+import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
@@ -81,9 +84,6 @@ import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
-import org.apache.isis.runtime.persistence.NotPersistableException;
-import org.apache.isis.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -337,7 +337,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * The {@link QueryCardinality} determines whether all instances or just the
      * first matching instance is returned.
      *
-     * @throws org.apache.isis.runtime.persistence.UnsupportedFindException
+     * @throws org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException
      *             if the criteria is not support by this persistor
      */
     private <T> ObjectAdapter findInstancesInTransaction(final Query<T> query, final QueryCardinality cardinality) {

@@ -17,19 +17,43 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.persistence;
-
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
+package org.apache.isis.persistence.jdo.applib.fixturestate;
 
 /**
- * For {@link org.apache.isis.runtime.system.persistence.PersistenceSessionFactory} implementations that can cache the
- * {@link PersistenceSession#isFixturesInstalled()} so is only called once per
- * application scope.
+ * 
+ * @since 2.0
+ *
  */
-public interface FixturesInstalledFlag {
+public enum FixturesInstalledState {
 
-    public Boolean isFixturesInstalled();
+    /**
+     * application scoped state indicating fixture scripts have not been run yet
+     */
+    not_Installed,
 
-    public void setFixturesInstalled(Boolean fixturesInstalled);
+    /**
+     * application scoped state indicating fixture scripts are currently in the process 
+     * of being installed (are running)
+     */
+    Installing,
 
+    /**
+     * application scoped state indicating fixture scripts have been installed (have run)
+     */
+    Installed
+
+    ;
+
+    public boolean isNotInstalled() {
+        return this == not_Installed;
+    }
+
+    public boolean isInstalling() {
+        return this == Installing;
+    }
+
+    public boolean isInstalled() {
+        return this == Installed;
+    }
 }
+
