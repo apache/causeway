@@ -76,6 +76,7 @@ public class DemoApp extends SpringBootServletInitializer {
         @PropertySource(IsisPresets.HsqlDbInMemory),
         @PropertySource(IsisPresets.NoTranslations),
         @PropertySource(IsisPresets.SilenceWicket),
+        @PropertySource(IsisPresets.DataNucleusAutoCreate),
     })
     @Import({
         IsisModuleSpringBoot.class,

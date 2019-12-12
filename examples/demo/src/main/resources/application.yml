@@ -49,7 +49,7 @@ isis:
   viewer:
     wicket:
       application:
-        menubars-layout-xml: domainapp/webapp/application/menubars.layout.xml
+        menubars-layout-xml: demoapp/webapp/menubars.layout.xml
         favicon-url: /images/favicon.png
         brand-logo-header: /images/gift_48.png
         brand-logo-signin: /images/gift_256.png
@@ -87,7 +87,6 @@ isis:
         # to DataNucleus, and must use camelCase rather than kebab-case
         datanucleus:
           schema:
-            autoCreateTables: true
             validateTables: true
             validateConstraints: true
 
