@@ -502,27 +502,17 @@ body {
     }
 }
 
-#wrapper.toggled {
-    padding-left: 20%;
-}
-
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
-    left: 20%;
     width: 0;
     height: 100%;
-    margin-left: -20%;
     overflow-y: auto;
     border: 1px dotted;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
-}
-
-#wrapper.toggled #sidebar-wrapper {
-    width: 20%;
 }
 
 #page-content-wrapper {
@@ -533,7 +523,6 @@ body {
 
 #wrapper.toggled #page-content-wrapper {
     position: absolute;
-    margin-right: -20%;
 }
 
 /* Sidebar Styles */
@@ -588,16 +577,8 @@ body {
     padding-bottom: 20px;
 }
 
-#wrapper {
-    padding-left: 20%;
-}
-
 #wrapper.toggled {
     padding-left: 0;
-}
-
-#sidebar-wrapper {
-    width: 20%;
 }
 
 #wrapper.toggled #sidebar-wrapper {
