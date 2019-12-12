@@ -227,6 +227,80 @@
 		<module>lib/unittestsupport/impl</module>
 	</modules>
 
+	<profiles>
+		<profile>
+			<id>isis-app-starter-datanucleusenhance</id>
+			<activation>
+				<file>
+					<exists>${basedir}/logging-dn-enhance.properties</exists>
+				</file>
+			</activation>
+			<properties>
+
+				<!-- keep in sync with versions used in Apache Isis -->
+				<datanucleus-api-jdo.version>5.2.2</datanucleus-api-jdo.version>
+				<datanucleus-core.version>5.2.2</datanucleus-core.version>
+				<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
+				<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
+
+				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
+				<datanucleus-maven-plugin.verbose>true</datanucleus-maven-plugin.verbose>
+				<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
+
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.datanucleus</groupId>
+						<artifactId>datanucleus-maven-plugin</artifactId>
+						<version>${datanucleus-maven-plugin.version}</version>
+						<configuration>
+							<fork>${datanucleus-maven-plugin.fork}</fork>
+							<log4jConfiguration>${datanucleus-maven-plugin.log4jConfiguration}</log4jConfiguration>
+							<verbose>${datanucleus-maven-plugin.verbose}</verbose>
+						</configuration>
+						<executions>
+							<execution>
+								<id>process-classes</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>enhance</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>process-test-classes</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>test-enhance</goal>
+								</goals>
+								<configuration>
+									<metadataDirectory>${project.build.testOutputDirectory}</metadataDirectory>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-core</artifactId>
+								<version>${datanucleus-core.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-api-jdo</artifactId>
+								<version>${datanucleus-api-jdo.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-jodatime</artifactId>
+								<version>${datanucleus-jodatime.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 </project>
 
 

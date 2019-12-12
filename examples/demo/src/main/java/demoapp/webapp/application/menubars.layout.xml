@@ -86,13 +86,10 @@
         <mb3:menu>
             <mb3:named>Prototyping</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.FixtureScriptsDefault" id="runFixtureScript">
+                <mb3:serviceAction objectType="isisExtFixtures.FixtureScripts" id="runFixtureScript">
                     <cpt:named>Run Fixture Script</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.FixtureScriptsDefault" id="runFixtureScriptWithAutoComplete">
-                    <cpt:named>Run Fixture Script</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.FixtureScriptsDefault" id="recreateObjectsAndReturnFirst">
+                <mb3:serviceAction objectType="isisExtFixtures.FixtureScripts" id="recreateObjectsAndReturnFirst">
                     <cpt:named>Recreate Objects And Return First</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>

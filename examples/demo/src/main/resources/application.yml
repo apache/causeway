@@ -1,0 +1,108 @@
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+#
+# See also config/application.properties
+#
+isis:
+  reflector:
+    explicit-annotations:
+      action: true
+    validator:
+      allow-deprecated: false
+      no-params-only: true
+      explicit-object-type: true
+      service-actions-only: true
+      mixins-only: true
+
+    facet:
+      css-class-fa:
+        patterns:
+          new.*:fa-plus,
+          add.*:fa-plus-square,
+          create.*:fa-plus,
+          update.*:fa-edit,
+          delete.*:fa-trash,
+          find.*:fa-search,
+          list.*:fa-list
+
+      css-class:
+        patterns:
+          delete.*:btn-danger
+
+  objects:
+    editing: false
+
+  viewer:
+    wicket:
+      application:
+        menubars-layout-xml: domainapp/webapp/application/menubars.layout.xml
+        favicon-url: /images/favicon.png
+        brand-logo-header: /images/gift_48.png
+        brand-logo-signin: /images/gift_256.png
+        name: Apache Isis Demo App
+        css: css/application.css
+        js: scripts/application.js
+        about: Apache Isis Hello World
+
+
+      credit[0]:
+        image: /images/apache-isis/logo-48x48.png
+        name: Apache Isis
+        url: http://isis.apache.org
+
+      themes:
+        initial: bootstrap-theme
+        showChooser: true
+        enabled: bootstrap-theme,Cosmo,Flatly,Darkly,Sandstone,United
+
+      max-title-length-in-standalone-tables: 0
+      max-title-length-in-parented-tables: 0
+
+      development-utilities:
+        enable: false
+      bookmarked-pages:
+        show-chooser: false
+      breadcrumbs:
+        show-chooser: false
+      dialog-mode: sidebar
+      dialog-mode-for-menu: modal
+
+  persistor:
+    datanucleus:
+      impl:
+        # note that properties under 'isis.persistor.datanucleus.impl' are passed through directly
+        # to DataNucleus, and must use camelCase rather than kebab-case
+        datanucleus:
+          schema:
+            validateTables: true
+            validateConstraints: true
+
+          persistenceByReachabilityAtCommit: false
+          identifier:
+            case: MixedCase
+
+          cache:
+            level2:
+              type: none
+              mode: ENABLE_SELECTIVE
+  services:
+    translation:
+      po:
+        mode: disable
+spring:
+  banner:
+    location: banner.txt
