@@ -18,21 +18,21 @@
  */
 package org.apache.isis.applib.services.publish;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import javax.inject.Named;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.schema.chg.v1.ChangesDto;
-import org.apache.isis.schema.ixn.v1.InteractionDto;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.schema.chg.v1.ChangesDto;
+import org.apache.isis.schema.ixn.v1.InteractionDto;
 
 import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Named;
 
 @Service
 @Named("isisApplib.PublisherServiceLogging")

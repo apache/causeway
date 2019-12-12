@@ -19,14 +19,11 @@
 
 package org.apache.isis.config;
 
-import lombok.experimental.UtilityClass;
-
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class ConfigurationConstants {

@@ -18,21 +18,18 @@
  */
 package org.apache.isis.applib.services.scratchpad;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.commons.internal.collections._Maps;
 
 /**
  * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same
@@ -50,7 +47,6 @@ import org.springframework.stereotype.Service;
 @Primary
 @Named("isisApplib.Scratchpad")
 @Qualifier("Default")
-@Log4j2
 public class Scratchpad {
 
     /**

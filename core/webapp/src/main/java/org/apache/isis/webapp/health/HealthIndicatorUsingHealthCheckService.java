@@ -1,21 +1,20 @@
 package org.apache.isis.webapp.health;
 
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
 import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.services.health.HealthCheckService;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.services.health.HealthCheckService;
+
+import lombok.val;
+
 @Component
 @Named("isisWebapp.HealthCheckService") // this appears in the endpoint.
-@Log4j2
 public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndicator {
 
     private final Optional<HealthCheckService> healthCheckServiceIfAny;

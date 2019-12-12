@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.events.ui;
 
+import java.util.EventObject;
 
 /**
  * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>iconName()</tt> supporting method).

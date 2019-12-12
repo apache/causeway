@@ -18,8 +18,6 @@
  */
 package org.apache.isis.webapp.modules.logonlog;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Named;
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
@@ -27,13 +25,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.webapp.diagnostics.IsisLogOnExceptionFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.webapp.diagnostics.IsisLogOnExceptionFilter;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
@@ -50,7 +48,6 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Named("isisWebapp.WebModuleLogOnExceptionLogger")
 @Order(OrderPrecedence.LOWEST) // TODO: should this not be the highest precedence, ie first in stack?
 @Qualifier("LogOnExceptionLogger")
-@Log4j2
 public final class WebModuleLogOnExceptionLogger implements WebModule  {
 
     private final static String LOGONLOGGER_FILTER_CLASS_NAME = IsisLogOnExceptionFilter.class.getName();

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.conmap.command;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -27,32 +25,29 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.conmap.ContentMappingService;
-import org.apache.isis.applib.services.conmap.command.spi.CommandDtoProcessorService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
+import org.apache.isis.applib.services.conmap.ContentMappingService;
+import org.apache.isis.applib.services.conmap.command.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.common.v1.PeriodDto;
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
-import org.springframework.stereotype.Service;
 
 @Service
 @Named("isisApplib.ContentMappingServiceForCommandDto")
 @Order(OrderPrecedence.HIGH)
 @Primary
 @Qualifier("CommandDto")
-@Log4j2
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
     @Override
@@ -114,7 +109,6 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
     // (but can choose to run before if they wish)
     @Order(OrderPrecedence.HIGH)
     @Qualifier("Command")
-    @Log4j2
     public static class CopyOverFromCommand implements CommandDtoProcessorService {
 
         @Override

@@ -21,15 +21,14 @@ package org.apache.isis.config;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.commons.IsisModuleCommons;
-import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.IsisModuleCommons;
+import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 
 @Configuration
@@ -47,7 +46,6 @@ import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 @EnableConfigurationProperties(IsisConfiguration.class)
 public class IsisModuleConfig {
     
-    @SuppressWarnings("ConfigurationProperties") // think this is not really an issue...
     @ConfigurationProperties(prefix = "isis")
     @Bean("isis-settings")
     public Map<String, String> getAsMap() {

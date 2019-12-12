@@ -41,6 +41,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.schema.common.v1.DifferenceDto;
@@ -51,7 +52,6 @@ import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v1.MetricsDto;
 import org.apache.isis.schema.ixn.v1.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
-import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 /**

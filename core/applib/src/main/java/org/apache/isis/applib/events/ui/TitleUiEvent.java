@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.events.ui;
 
+import java.util.EventObject;
+
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
 /**

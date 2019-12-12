@@ -18,13 +18,13 @@
  */
 package org.apache.isis.config.util;
 
-import lombok.experimental.UtilityClass;
-
 import java.util.Map;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.ConfigurationConstants;
+
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ConfigUtil {

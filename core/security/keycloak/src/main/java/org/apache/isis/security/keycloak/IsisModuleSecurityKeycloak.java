@@ -18,18 +18,14 @@
  */
 package org.apache.isis.security.keycloak;
 
-import javax.inject.Singleton;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
 import org.apache.isis.security.keycloak.authentication.AuthenticatorKeycloak;
 import org.apache.isis.security.keycloak.authorization.AuthorizorKeycloak;
 import org.apache.isis.security.keycloak.webmodule.WebModuleKeycloak;
 import org.apache.isis.webapp.IsisModuleWebapp;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.apache.isis.security.api.authorization.standard.Authorizor;
 
 /**
  * Configuration Bean to support Isis Security using Shiro.

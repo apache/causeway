@@ -18,16 +18,15 @@
  */
 package org.apache.isis.applib.services.command;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Command}.
@@ -42,7 +41,6 @@ import org.springframework.stereotype.Service;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class CommandContext {
 
     private Command command;

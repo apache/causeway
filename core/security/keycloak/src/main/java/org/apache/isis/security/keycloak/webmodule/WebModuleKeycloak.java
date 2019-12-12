@@ -18,25 +18,26 @@
  */
 package org.apache.isis.security.keycloak.webmodule;
 
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
 import javax.inject.Named;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.webapp.modules.WebModule;
-import org.apache.isis.webapp.modules.WebModuleContext;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.webapp.modules.WebModule;
+import org.apache.isis.webapp.modules.WebModuleContext;
+
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule to enable support for Keycloak.

@@ -33,14 +33,11 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisApplib.DtoMappingHelper")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class DtoMappingHelper {
     
     @Inject private BookmarkService bookmarkService;

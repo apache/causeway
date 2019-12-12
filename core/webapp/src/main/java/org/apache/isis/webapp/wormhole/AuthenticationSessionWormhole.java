@@ -18,9 +18,9 @@
  */
 package org.apache.isis.webapp.wormhole;
 
-import lombok.experimental.UtilityClass;
-
 import org.apache.isis.security.api.authentication.AuthenticationSession;
+
+import lombok.experimental.UtilityClass;
 
 /**
  * Just a mechanism to pass an {@link AuthenticationSession} from a filter (eg keycloak) to a viewer (eg Wicket).

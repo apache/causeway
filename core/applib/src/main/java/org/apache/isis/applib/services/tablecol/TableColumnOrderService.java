@@ -18,19 +18,16 @@
  */
 package org.apache.isis.applib.services.tablecol;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.List;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 
 public interface TableColumnOrderService {
 
@@ -52,7 +49,6 @@ public interface TableColumnOrderService {
     @Order(OrderPrecedence.LOW)
     @Primary
     @Qualifier("Default")
-    @Log4j2
     public static class Default implements TableColumnOrderService {
 
         @Override

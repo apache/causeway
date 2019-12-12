@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.jaxb;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -30,26 +28,25 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
+import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
-import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 
 @Service
 @Named("isisApplib.JaxbServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class JaxbServiceDefault extends JaxbService.Simple {
 
     @Override

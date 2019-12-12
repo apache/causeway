@@ -19,9 +19,9 @@
 
 package org.apache.isis.applib.query;
 
-import lombok.Getter;
-
 import org.apache.isis.commons.internal.context._Context;
+
+import lombok.Getter;
 
 /**
  * Convenience adapter class for {@link Query}.

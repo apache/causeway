@@ -19,16 +19,17 @@
 package org.apache.isis.security.keycloak.authorization;
 
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisSecurityKeycloak.AuthorizorKeycloak")

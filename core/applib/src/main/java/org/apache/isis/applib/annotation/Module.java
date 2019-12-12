@@ -19,16 +19,13 @@
 
 package org.apache.isis.applib.annotation;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.command.CommandDtoProcessor;
-import org.apache.isis.applib.services.command.CommandWithDto;
-import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandDto;
-import org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCommandsDto;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

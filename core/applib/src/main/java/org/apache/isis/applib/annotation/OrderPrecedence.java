@@ -19,9 +19,9 @@
 
 package org.apache.isis.applib.annotation;
 
-import lombok.experimental.UtilityClass;
-
 import org.springframework.core.Ordered;
+
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class OrderPrecedence {

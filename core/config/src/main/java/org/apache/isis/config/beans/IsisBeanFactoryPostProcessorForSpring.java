@@ -18,6 +18,8 @@
  */
 package org.apache.isis.config.beans;
 
+import javax.inject.Named;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -31,8 +33,6 @@ import org.apache.isis.applib.annotation.ViewModel;
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Named;
 
 /**
  * The framework's stereotypes {@link DomainService}, {@link DomainObject}, {@link ViewModel}, etc. 

@@ -64,9 +64,9 @@ isis:
           name: Apache Isis
 
       themes:
-        initial: bootstrap-theme
+        initial: Flatly
         showChooser: true
-        enabled: bootstrap-theme,Cosmo,Flatly,Darkly,Sandstone,United
+        enabled: Cosmo,Flatly,Darkly,Sandstone,United
 
       max-title-length-in-standalone-tables: 0
       max-title-length-in-parented-tables: 0
@@ -87,6 +87,7 @@ isis:
         # to DataNucleus, and must use camelCase rather than kebab-case
         datanucleus:
           schema:
+            autoCreateTables: true
             validateTables: true
             validateConstraints: true
 

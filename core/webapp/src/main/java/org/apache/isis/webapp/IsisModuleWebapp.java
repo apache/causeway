@@ -18,15 +18,15 @@
  */
 package org.apache.isis.webapp;
 
-import org.apache.isis.runtime.IsisModuleRuntime;
-import org.apache.isis.webapp.health.HealthIndicatorUsingHealthCheckService;
-import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer;
-import org.apache.isis.webapp.webappctx.IsisWebAppContextListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.runtime.IsisModuleRuntime;
+import org.apache.isis.webapp.health.HealthIndicatorUsingHealthCheckService;
 import org.apache.isis.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.isis.webapp.modules.templresources.WebModuleTemplateResources;
+import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer;
+import org.apache.isis.webapp.webappctx.IsisWebAppContextListener;
 
 @Configuration
 @Import({
