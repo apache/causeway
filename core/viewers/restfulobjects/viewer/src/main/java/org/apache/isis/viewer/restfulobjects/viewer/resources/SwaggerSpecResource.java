@@ -31,7 +31,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.webapp.util.IsisWebAppUtils;
 
 import lombok.RequiredArgsConstructor;

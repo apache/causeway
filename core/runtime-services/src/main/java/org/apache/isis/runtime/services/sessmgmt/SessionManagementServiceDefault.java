@@ -29,8 +29,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
-import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSession;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import lombok.extern.log4j.Log4j2;
 import lombok.val;

@@ -32,7 +32,7 @@ import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtime.system.context.session.RuntimeContext;
+import org.apache.isis.runtime.context.session.RuntimeContext;
 
 import lombok.extern.log4j.Log4j2;
 

@@ -32,7 +32,8 @@ import javax.jdo.listener.LoadLifecycleListener;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.runtime.system.transaction.ChangedObjectsService;
+import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;

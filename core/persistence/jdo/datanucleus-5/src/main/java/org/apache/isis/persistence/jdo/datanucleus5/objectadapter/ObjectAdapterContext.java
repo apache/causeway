@@ -38,8 +38,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.context.session.RuntimeContextBase;
+import org.apache.isis.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.Getter;

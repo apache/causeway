@@ -20,8 +20,8 @@ package org.apache.isis.runtime.services.changes;
 
 import org.junit.Test;
 
-import org.apache.isis.runtime.system.transaction.IsisTransactionPlaceholder;
-import org.apache.isis.runtime.system.transaction.PreAndPostValues;
+import org.apache.isis.runtime.persistence.transaction.IsisTransactionPlaceholder;
+import org.apache.isis.runtime.persistence.transaction.PreAndPostValues;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

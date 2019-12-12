@@ -32,7 +32,7 @@ import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.ActiveThemeProvider;

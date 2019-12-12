@@ -20,7 +20,7 @@
 package org.apache.isis.runtime.persistence.query;
 
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.system.persistence.PersistenceQuery;
+import org.apache.isis.runtime.persistence.session.PersistenceQuery;
 
 public abstract class PersistenceQueryAbstract implements PersistenceQuery {
 

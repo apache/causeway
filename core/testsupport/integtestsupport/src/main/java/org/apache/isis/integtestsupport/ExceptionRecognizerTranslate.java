@@ -24,7 +24,7 @@ import org.junit.runners.model.Statement;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import lombok.RequiredArgsConstructor;
 

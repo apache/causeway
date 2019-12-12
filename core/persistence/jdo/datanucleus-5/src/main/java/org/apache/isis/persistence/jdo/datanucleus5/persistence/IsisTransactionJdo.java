@@ -39,10 +39,10 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.transaction.AuditerDispatchService;
-import org.apache.isis.runtime.system.transaction.IsisTransactionFlushException;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerException;
+import org.apache.isis.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.runtime.persistence.transaction.AuditerDispatchService;
+import org.apache.isis.runtime.persistence.transaction.IsisTransactionFlushException;
+import org.apache.isis.runtime.persistence.transaction.IsisTransactionManagerException;
 
 import lombok.Getter;
 import lombok.val;

@@ -32,12 +32,12 @@ import org.springframework.transaction.support.AbstractPlatformTransactionManage
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.runtime.system.internal.InitialisationSession;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
-import org.apache.isis.runtime.system.transaction.IsisTransactionObject;
+import org.apache.isis.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.runtime.persistence.transaction.IsisTransactionAspectSupport;
+import org.apache.isis.runtime.persistence.transaction.IsisTransactionObject;
+import org.apache.isis.runtime.session.IsisSession;
+import org.apache.isis.runtime.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.init.InitialisationSession;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.val;

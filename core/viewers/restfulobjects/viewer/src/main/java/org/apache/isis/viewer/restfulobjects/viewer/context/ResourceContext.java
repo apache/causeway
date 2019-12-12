@@ -39,7 +39,7 @@ import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
+import org.apache.isis.runtime.context.session.RuntimeContextBase;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;

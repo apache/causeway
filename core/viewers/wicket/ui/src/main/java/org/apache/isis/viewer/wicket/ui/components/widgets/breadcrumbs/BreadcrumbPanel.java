@@ -35,7 +35,7 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

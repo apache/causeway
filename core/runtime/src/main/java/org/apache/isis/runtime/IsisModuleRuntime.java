@@ -22,14 +22,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.metamodel.IsisModuleMetamodel;
-import org.apache.isis.runtime.system.context.session.RuntimeEventService;
-import org.apache.isis.runtime.system.context.session.RuntimeEventSupport_Spring;
-import org.apache.isis.runtime.system.persistence.events.PersistenceEventService;
-import org.apache.isis.runtime.system.persistence.events.PersistenceEventService_Spring;
-import org.apache.isis.runtime.system.persistence.events.TimestampService;
-import org.apache.isis.runtime.system.session.IsisSessionFactoryDefault;
-import org.apache.isis.runtime.system.transaction.AuditerDispatchService;
-import org.apache.isis.runtime.system.transaction.ChangedObjectsService;
+import org.apache.isis.runtime.context.session.RuntimeEventService;
+import org.apache.isis.runtime.context.session.RuntimeEventSupport_Spring;
+import org.apache.isis.runtime.persistence.session.events.PersistenceEventService;
+import org.apache.isis.runtime.persistence.session.events.PersistenceEventService_Spring;
+import org.apache.isis.runtime.persistence.session.events.TimestampService;
+import org.apache.isis.runtime.persistence.transaction.AuditerDispatchService;
+import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
+import org.apache.isis.runtime.session.IsisSessionFactoryDefault;
 
 @Configuration
 @Import({

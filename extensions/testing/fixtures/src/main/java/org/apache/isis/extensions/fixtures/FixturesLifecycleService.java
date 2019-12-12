@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 
 @Service
 @Named("isisExtFixtures.FixturesLifecycleService")

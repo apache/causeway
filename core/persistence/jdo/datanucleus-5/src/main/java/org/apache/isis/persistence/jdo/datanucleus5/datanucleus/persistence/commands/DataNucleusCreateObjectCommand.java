@@ -22,7 +22,7 @@ import javax.jdo.PersistenceManager;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;

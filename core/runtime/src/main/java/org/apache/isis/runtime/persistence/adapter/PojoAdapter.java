@@ -31,7 +31,7 @@ import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.runtime.session.IsisSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

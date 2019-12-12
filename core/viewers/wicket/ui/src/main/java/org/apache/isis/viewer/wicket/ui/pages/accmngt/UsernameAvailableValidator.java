@@ -22,7 +22,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 

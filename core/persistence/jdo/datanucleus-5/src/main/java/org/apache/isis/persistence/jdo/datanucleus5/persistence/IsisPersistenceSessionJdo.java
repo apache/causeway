@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.runtime.persistence.objectstore.transaction.TransactionalResource;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
 /**
  * 

@@ -44,9 +44,9 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusLifeC
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusPropertiesAware;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.query.JdoQueryFacet;
+import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 

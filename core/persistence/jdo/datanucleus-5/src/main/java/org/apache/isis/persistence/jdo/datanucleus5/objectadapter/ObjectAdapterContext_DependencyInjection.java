@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
 
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.system.context.session.RuntimeContext;
+import org.apache.isis.runtime.context.session.RuntimeContext;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

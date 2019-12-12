@@ -22,8 +22,8 @@ import org.apache.isis.extensions.excel.dom.WorksheetContent;
 import org.apache.isis.extensions.excel.dom.WorksheetSpec;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
-import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.runtime.context.session.RuntimeContextBase;
+import org.apache.isis.runtime.session.IsisSession;
 
 import lombok.SneakyThrows;
 

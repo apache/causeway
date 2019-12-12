@@ -59,7 +59,7 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.runtime.services.wrapper.dom.employees.Employee;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;

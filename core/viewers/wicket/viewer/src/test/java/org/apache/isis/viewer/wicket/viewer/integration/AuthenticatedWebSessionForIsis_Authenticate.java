@@ -25,7 +25,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.api.authentication.standard.Authenticator;

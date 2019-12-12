@@ -89,7 +89,7 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObject
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.runtime.system.persistence.PersistenceQuery;
+import org.apache.isis.runtime.persistence.session.PersistenceQuery;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import static java.util.Objects.requireNonNull;

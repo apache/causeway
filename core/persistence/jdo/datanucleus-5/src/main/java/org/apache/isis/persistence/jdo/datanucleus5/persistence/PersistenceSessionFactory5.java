@@ -47,8 +47,8 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSetti
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.persistence.jdo.datanucleus5.entities.JdoEntityTypeRegistry;
 import org.apache.isis.persistence.jdo.datanucleus5.lifecycles.JdoStoreLifecycleListenerForIsis;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.runtime.persistence.session.PersistenceSessionFactory;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.Getter;
@@ -205,7 +205,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     }
 
     /**
-     * Called by {@link org.apache.isis.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
+     * Called by {@link org.apache.isis.runtime.session.IsisSessionFactory#openSession(AuthenticationSession)}.
      */
 
     @Override

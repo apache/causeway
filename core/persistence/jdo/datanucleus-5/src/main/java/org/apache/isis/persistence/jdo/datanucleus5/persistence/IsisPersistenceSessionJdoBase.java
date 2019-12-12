@@ -42,8 +42,8 @@ import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.system.persistence.PersistenceQueryFactory;
-import org.apache.isis.runtime.system.transaction.ChangedObjectsService;
+import org.apache.isis.runtime.persistence.session.PersistenceQueryFactory;
+import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.Getter;

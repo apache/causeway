@@ -52,8 +52,8 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectPersistenceException;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 

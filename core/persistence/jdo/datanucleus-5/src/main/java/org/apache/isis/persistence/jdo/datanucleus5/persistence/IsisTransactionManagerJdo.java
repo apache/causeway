@@ -29,9 +29,9 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerException;
-import org.apache.isis.runtime.system.transaction.IsisTransactionObject;
+import org.apache.isis.runtime.persistence.transaction.IsisTransactionAspectSupport;
+import org.apache.isis.runtime.persistence.transaction.IsisTransactionManagerException;
+import org.apache.isis.runtime.persistence.transaction.IsisTransactionObject;
 
 import lombok.Getter;
 import lombok.val;

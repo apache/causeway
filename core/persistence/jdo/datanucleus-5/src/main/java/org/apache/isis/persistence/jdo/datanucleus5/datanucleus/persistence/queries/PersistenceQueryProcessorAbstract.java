@@ -30,8 +30,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
+import org.apache.isis.runtime.persistence.session.PersistenceQuery;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.system.persistence.PersistenceQuery;
 
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
 implements PersistenceQueryProcessor<T> {

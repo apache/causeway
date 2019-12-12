@@ -63,7 +63,7 @@ import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDef
 import org.apache.isis.runtime.services.wrapper.dom.employees.Employee;
 import org.apache.isis.runtime.services.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.runtime.services.wrapper.dom.employees.EmployeeRepositoryImpl;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
