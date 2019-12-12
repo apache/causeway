@@ -18,19 +18,15 @@
  */
 package org.apache.isis.runtime.services.auth;
 
-import lombok.extern.log4j.Log4j2;
-
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
@@ -38,12 +34,13 @@ import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 
+import lombok.val;
+
 @Service
 @Named("isisRuntimeServices.AuthenticationSessionProviderDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 
     @Inject protected UserServiceDefault userServiceDefault;
@@ -59,13 +56,12 @@ public class AuthenticationSessionProviderDefault implements AuthenticationSessi
     @Override
     public AuthenticationSession getAuthenticationSession() {
 
-        // if user/role has been overridden by SudoService, then honour that value.
-        final UserServiceDefault.UserAndRoleOverrides userAndRoleOverrides =
-                userServiceDefault.currentOverridesIfAny();
+        // if user/role has been overridden by SudoService, then honor that value.
+        val userAndRoleOverrides = userServiceDefault.currentOverridesIfAny();
 
         if(userAndRoleOverrides != null) {
-            final String user = userAndRoleOverrides.getUser();
-            final List<String> roles = userAndRoleOverrides.getRoles();
+            val user = userAndRoleOverrides.getUser();
+            val roles = userAndRoleOverrides.getRoles();
             return new SimpleSession(user, roles);
         }
 

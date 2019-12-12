@@ -186,6 +186,18 @@ public interface Can<T> extends Iterable<T> {
 
         return Can_Multiple.of(nonNullElements);
     }
+    
+    public static <T> Can<T> ofIterable(@Nullable Iterable<T> iterable) {
+        
+        if(iterable==null) {
+            return empty();
+        }
+        
+        val elements = new ArrayList<T>();
+        iterable.forEach(elements::add);
+        
+        return ofCollection(elements);
+    }
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code stream} 
@@ -362,6 +374,8 @@ public interface Can<T> extends Iterable<T> {
                 Collectors.toList(), 
                 Can::ofCollection);
     }
+
+    
 
 
 }

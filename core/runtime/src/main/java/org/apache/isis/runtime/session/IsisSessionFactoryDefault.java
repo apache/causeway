@@ -27,7 +27,6 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -35,6 +34,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.util.schema.ChangesDtoUtils;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
@@ -45,12 +48,8 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.context.session.RuntimeEventService;
 import org.apache.isis.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.runtime.session.init.IsisTimeZoneInitializer;
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -76,7 +75,6 @@ import lombok.extern.log4j.Log4j2;
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     @Inject private AuthenticationManager authenticationManager;
-    @Inject private AuthorizationManager authorizationManager;
     @Inject private RuntimeEventService runtimeEventService;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private MetaModelContext metaModelContext;
@@ -187,10 +185,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
                 sessionFactory.closeSession();
             }
         }
-    }
-
-    private AuthorizationManager getAuthorizationManager() {
-        return authorizationManager;
     }
 
 

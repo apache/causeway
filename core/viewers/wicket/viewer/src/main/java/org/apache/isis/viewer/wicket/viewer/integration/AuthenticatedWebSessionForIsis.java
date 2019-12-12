@@ -195,7 +195,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         }
 
         final Roles roles = new Roles();
-        getAuthenticationSession().streamRoles()
+        getAuthenticationSession().getRoles().stream()
         .forEach(roles::add);
         return roles;
     }

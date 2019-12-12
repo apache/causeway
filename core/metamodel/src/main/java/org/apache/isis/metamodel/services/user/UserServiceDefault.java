@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.services.user;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -28,26 +26,29 @@ import java.util.Stack;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
+
+import lombok.val;
 
 @Service
 @Named("isisMetaModel.UserServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class UserServiceDefault implements UserService {
+    
+    @Inject private AuthenticationSessionProvider authenticationSessionProvider;
 
     @Override
     public UserMemento getUser() {
@@ -58,7 +59,7 @@ public class UserServiceDefault implements UserService {
 
             final String username = userAndRoleOverrides.user;
 
-            final List<String> roles;
+            final Can<String> roles;
             if (userAndRoleOverrides.roles != null) {
                 roles = userAndRoleOverrides.roles;
             } else {
@@ -70,40 +71,38 @@ public class UserServiceDefault implements UserService {
             return new UserMemento(username, roleMementos);
 
         } else {
-            final AuthenticationSession session =
+            val authenticationSession =
                     authenticationSessionProvider.getAuthenticationSession();
-            return session.createUserMemento();
+            return authenticationSession.createUserMemento();
         }
     }
 
-    private List<String> previousRoles() {
-        final List<String> roles;
-
-        final AuthenticationSession session =
+    private Can<String> previousRoles() {
+        val authenticationSession =
                 authenticationSessionProvider.getAuthenticationSession();
-        roles = session.getRoles();
+        val roles = authenticationSession.getRoles();
         return roles;
     }
 
     public static class UserAndRoleOverrides {
         final String user;
-        final List<String> roles;
+        final Can<String> roles;
 
 
         UserAndRoleOverrides(final String user) {
             this(user, null);
         }
 
-        UserAndRoleOverrides(final String user, final List<String> roles) {
+        UserAndRoleOverrides(final String user, final Iterable<String> roles) {
             this.user = user;
-            this.roles = roles;
+            this.roles = Can.ofIterable(roles);
         }
 
         public String getUser() {
             return user;
         }
 
-        public List<String> getRoles() {
+        public Can<String> getRoles() {
             return roles;
         }
     }
@@ -117,7 +116,7 @@ public class UserServiceDefault implements UserService {
 
 
     private void overrideUserAndRoles(final String user, final List<String> rolesIfAny) {
-        final List<String> roles = rolesIfAny != null ? rolesIfAny : inheritRoles();
+        final Iterable<String> roles = rolesIfAny != null ? rolesIfAny : inheritRoles();
         this.overrides.get().push(new UserAndRoleOverrides(user, roles));
     }
 
@@ -135,14 +134,14 @@ public class UserServiceDefault implements UserService {
                         : null;
     }
 
-    private List<String> inheritRoles() {
+    private Can<String> inheritRoles() {
         final UserAndRoleOverrides currentOverridesIfAny = currentOverridesIfAny();
         return currentOverridesIfAny != null
                 ? currentOverridesIfAny.getRoles()
                         : authenticationSessionProvider.getAuthenticationSession().getRoles();
     }
 
-    private static List<RoleMemento> asRoleMementos(final List<String> roles) {
+    private static List<RoleMemento> asRoleMementos(final Can<String> roles) {
         final List<RoleMemento> mementos = new ArrayList<RoleMemento>();
         if (roles != null) {
             for (final String role : roles) {
@@ -157,7 +156,6 @@ public class UserServiceDefault implements UserService {
     @Named("isisMetaModel.UserServiceDefault.SudoServiceSpi")
     @Order(OrderPrecedence.MIDPOINT)
     @Qualifier("UserServiceDefault")
-    @Log4j2
     public static class SudoServiceSpi implements SudoService.Spi {
 
         @Override
@@ -174,7 +172,6 @@ public class UserServiceDefault implements UserService {
         UserServiceDefault userServiceDefault;
     }
 
-    @Inject
-    AuthenticationSessionProvider authenticationSessionProvider;
+    
 
 }

@@ -20,11 +20,9 @@
 package org.apache.isis.security.api.authentication;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 
@@ -42,18 +40,8 @@ public interface AuthenticationSession extends Encodable, Serializable {
 
     /**
      * The roles this user belongs to
-     * @deprecated use streamRoles()
      */
-    @Deprecated 
-    default List<String> getRoles() {
-        return streamRoles().collect(Collectors.toList());
-    }
-
-    /**
-     * The roles this user belongs to
-     * @since 2.0
-     */
-    Stream<String> streamRoles();
+    Can<String> getRoles();
 
     /**
      * Whether this user has specified {@code role}

@@ -19,20 +19,19 @@
 
 package org.apache.isis.security.api.authorization.manager;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
 /**
  * Authorizes the user in the current session view and use members of an object.
@@ -42,7 +41,6 @@ import org.springframework.stereotype.Service;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class AuthorizationManager {
 
     private final Authorizor authorizor;
@@ -71,7 +69,7 @@ public class AuthorizationManager {
             return true;
         }
 
-        if(session.streamRoles()
+        if(session.getRoles().stream()
                 .anyMatch(roleName->authorizor.isUsableInRole(roleName, identifier)) ) {
             return true;
         }
@@ -103,7 +101,7 @@ public class AuthorizationManager {
         if (authorizor.isVisibleInAnyRole(identifier)) {
             return true;
         }
-        if(session.streamRoles()
+        if(session.getRoles().stream()
                 .anyMatch(roleName->authorizor.isVisibleInRole(roleName, identifier)) ) {
             return true;
         }

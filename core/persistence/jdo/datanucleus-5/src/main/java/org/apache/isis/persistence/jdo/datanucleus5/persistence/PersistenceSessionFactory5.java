@@ -204,10 +204,6 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
         this.storeLifecycleListener = null;
     }
 
-    /**
-     * Called by {@link org.apache.isis.runtime.session.IsisSessionFactory#openSession(AuthenticationSession)}.
-     */
-
     @Override
     public PersistenceSession5 createPersistenceSession(
             final AuthenticationSession authenticationSession) {

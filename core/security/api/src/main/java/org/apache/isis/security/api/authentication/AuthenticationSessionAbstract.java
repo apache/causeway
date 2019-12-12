@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -48,6 +49,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     private final String name;
     private final Set<String> roles = _Sets.newHashSet();
+    private transient Can<String> rolesImmutable;
     private final String validationCode;
 
     private final Map<String, Object> attributeByName = new HashMap<String, Object>();
@@ -73,6 +75,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     public AuthenticationSessionAbstract(final DataInputExtended input) throws IOException {
         this.name = input.readUTF();
         this.roles.addAll(Arrays.asList(input.readUTFs()));
+        
         this.validationCode = input.readUTF();
         this.messageBroker = new MessageBroker();
         // nothing to do
@@ -102,8 +105,11 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     // -- Roles
 
     @Override
-    public Stream<String> streamRoles() {
-        return roles.stream();
+    public Can<String> getRoles() {
+        if(rolesImmutable==null) { // lazy in support of serialization
+            rolesImmutable = Can.ofCollection(roles);
+        }
+        return rolesImmutable;
     }
 
     @Override
