@@ -28,9 +28,8 @@ package org.apache.isis.commons.internal.components;
  * Analogous to Hibernate's <tt>SessionFactory</tt>.
  *
  * @see SessionScopedComponent
- * @see TransactionScopedComponent
  */
-public interface ApplicationScopedComponent extends Component {
+public interface ApplicationScopedComponent {
 
 
 }

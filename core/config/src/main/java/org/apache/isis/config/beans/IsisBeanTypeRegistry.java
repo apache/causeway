@@ -39,8 +39,6 @@ import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
-import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
@@ -237,14 +235,6 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             return BeanSort.VIEW_MODEL;
         }
 
-        if(ApplicationScopedComponent.class.isAssignableFrom(type)) {
-            return BeanSort.MANAGED_BEAN;
-        }
-
-        if(TransactionScopedComponent.class.isAssignableFrom(type)) {
-            return BeanSort.MANAGED_BEAN;
-        }
-        
         val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {

@@ -32,7 +32,6 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Inbox;
-import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -61,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
 @Vetoed @Log4j2
-public class IsisTransactionJdo implements TransactionScopedComponent, Transaction {
+public class IsisTransactionJdo implements Transaction {
 
     public enum State {
         /**
