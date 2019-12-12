@@ -188,7 +188,6 @@ public class FixtureScripts extends AbstractService {
     private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
 
     public FixtureScripts(
-            @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
             final Optional<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider,
             final ServiceRegistry serviceRegistry) {
 
@@ -341,11 +340,7 @@ public class FixtureScripts extends AbstractService {
     	String parameters = null;
     	
     	transactionService.executeWithinTransaction(()->{
-    	    try {
-    	        runScript(singleScript, parameters);
-    	    } catch (Exception e) {
-    	        throw _Exceptions.unrecoverable(e);
-            }
+    	    runScript(singleScript, parameters);
     	});
     }
 
