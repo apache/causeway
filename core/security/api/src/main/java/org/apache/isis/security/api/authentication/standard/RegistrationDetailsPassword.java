@@ -18,10 +18,9 @@
  */
 package org.apache.isis.security.api.authentication.standard;
 
-import lombok.Data;
-import lombok.Getter;
-
 import org.apache.isis.security.api.authentication.manager.RegistrationDetails;
+
+import lombok.Data;
 
 @Data
 public class RegistrationDetailsPassword implements RegistrationDetails {

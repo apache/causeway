@@ -19,16 +19,17 @@
 
 package org.apache.isis.security.api.authentication.manager;
 
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.util.ToString;
@@ -37,18 +38,20 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
-import org.apache.isis.security.api.authentication.standard.*;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
+import org.apache.isis.security.api.authentication.standard.Authenticator;
+import org.apache.isis.security.api.authentication.standard.NoAuthenticatorException;
+import org.apache.isis.security.api.authentication.standard.RandomCodeGenerator;
+import org.apache.isis.security.api.authentication.standard.Registrar;
+import org.apache.isis.security.api.authentication.standard.SimpleSession;
+
+import lombok.Getter;
+import lombok.val;
 
 @Service
 @Named("isisSecurityApi.AuthenticationManager")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class AuthenticationManager {
 
     private final Map<String, String> userByValidationCode = _Maps.newHashMap();
