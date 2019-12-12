@@ -49,22 +49,12 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
-import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
-import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi.JdoObjectIdSerializer;
-import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext;
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.PojoRefreshException;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.LoadedCallbackFacet;
@@ -84,12 +74,21 @@ import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
+import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
+import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.runtime.scoping.RequestScopedService;
 import org.apache.isis.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
@@ -161,10 +160,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         // tell the proxy of all request-scoped services to instantiate the underlying
         // services, store onto the thread-local and inject into them...
-        startRequestOnRequestScopedServices();
+        //startRequestOnRequestScopedServices();
 
         // ... and invoke all @PostConstruct
-        postConstructOnRequestScopedServices();
+        //postConstructOnRequestScopedServices();
 
         if(metricsService instanceof InstanceLifecycleListener) {
             val metricsService = (InstanceLifecycleListener) this.metricsService;
@@ -188,16 +187,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
 
         this.state = State.OPEN;
-    }
-
-    private void postConstructOnRequestScopedServices() {
-        serviceRegistry.select(RequestScopedService.class)
-        .forEach(RequestScopedService::__isis_postConstruct);
-    }
-
-    private void startRequestOnRequestScopedServices() {
-        serviceRegistry.select(RequestScopedService.class)
-        .forEach(service->service.__isis_startRequest(serviceInjector));
     }
 
     private Command createCommand() {
@@ -248,10 +237,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         // tell the proxy of all request-scoped services to invoke @PreDestroy
         // (if any) on all underlying services stored on their thread-locals...
-        preDestroyOnRequestScopedServices();
+        //preDestroyOnRequestScopedServices();
 
         // ... and then remove those underlying services from the thread-local
-        endRequestOnRequestScopeServices();
+        //endRequestOnRequestScopeServices();
 
         persistenceManager.removeInstanceLifecycleListener(storeLifecycleListener);
         
@@ -268,15 +257,15 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         this.state = State.CLOSED;
     }
 
-    private void endRequestOnRequestScopeServices() {
-        serviceRegistry.select(RequestScopedService.class)
-        .forEach(RequestScopedService::__isis_endRequest);
-    }
-
-    private void preDestroyOnRequestScopedServices() {
-        serviceRegistry.select(RequestScopedService.class)
-        .forEach(RequestScopedService::__isis_preDestroy);
-    }
+//    private void endRequestOnRequestScopeServices() {
+//        serviceRegistry.select(RequestScopedService.class)
+//        .forEach(RequestScopedService::__isis_endRequest);
+//    }
+//
+//    private void preDestroyOnRequestScopedServices() {
+//        serviceRegistry.select(RequestScopedService.class)
+//        .forEach(RequestScopedService::__isis_preDestroy);
+//    }
 
     private void completeCommandFromInteractionAndClearDomainEvents() {
 
