@@ -61,7 +61,20 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public String toString() {
-        return "Bin["+element+"]";
+        return "Can["+element+"]";
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Can) {
+            return ((Can<?>) obj).isEqualTo(this); 
+        }
+        return false;
     }
 
+    @Override
+    public int hashCode() {
+        return element.hashCode();
+    }
+    
 }

@@ -67,7 +67,20 @@ final class Can_Multiple<T> implements Can<T> {
         val literal = stream()
                 .map(s->""+s)
                 .collect(Collectors.joining(", "));
-        return "Bin["+literal+"]";
+        return "Can["+literal+"]";
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Can) {
+            return ((Can<?>) obj).isEqualTo(this); 
+        }
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        return elements.hashCode();
     }
 
 }

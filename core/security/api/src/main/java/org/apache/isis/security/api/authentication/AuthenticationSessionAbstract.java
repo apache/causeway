@@ -106,7 +106,9 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     @Override
     public Can<String> getRoles() {
-        if(rolesImmutable==null) { // lazy in support of serialization
+        if(rolesImmutable==null) { 
+            // lazy in support of serialization, 
+            // its also (practically) thread-safe without doing any synchronization here 
             rolesImmutable = Can.ofCollection(roles);
         }
         return rolesImmutable;

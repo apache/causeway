@@ -61,5 +61,20 @@ final class Can_Empty<T> implements Can<T> {
     public Iterator<T> iterator() {
         return Collections.<T>emptyList().iterator();
     }
+    
+    @Override
+    public String toString() {
+        return "Can[]";
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        return INSTANCE == obj;
+    }
+    
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 
 }

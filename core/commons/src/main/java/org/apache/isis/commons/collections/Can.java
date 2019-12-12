@@ -346,6 +346,32 @@ public interface Can<T> extends Iterable<T> {
         requires(action, "action");
         stream().forEach(action);
     }
+    
+    // -- EQUALITY
+    
+    /**
+     * @param other
+     * @return whether this is element-wise equal to {@code other}
+     */
+    default boolean isEqualTo(Can<?> other) {
+        if(other==null) {
+            return false;
+        }
+        if(this.size()!=other.size()) {
+            return false;
+        }
+        
+        val otherIterator = other.iterator();
+        
+        for(T element: this) {
+            val otherElement = otherIterator.next();
+            if(!element.equals(otherElement)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
 
     // -- SHORTCUTS FOR PREDICATES
 
@@ -375,7 +401,7 @@ public interface Can<T> extends Iterable<T> {
                 Can::ofCollection);
     }
 
-    
+   
 
 
 }
