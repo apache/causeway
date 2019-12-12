@@ -438,12 +438,13 @@ public class FacetedMethodsBuilder {
     private boolean representsAction(
             final Method actionMethod) {
 
-        // try to short-circuit as much as possible
-        if(explicitActionAnnotationConfigured()) {
-            if(!_Annotations.isPresent(actionMethod, Action.class)) {
-                return false;
-            }
-        }
+        //XXX commented out, because this is not applicable for Mixins in support of ISIS-1998 
+// try to short-circuit as much as possible
+//        if(isExplicitActionAnnotationConfigured()) {
+//            if(!_Annotations.isPresent(actionMethod, Action.class)) {
+//                return false;
+//            }
+//        }
 
         if (MethodUtil.isStatic(actionMethod)) {
             return false;
@@ -473,7 +474,7 @@ public class FacetedMethodsBuilder {
             return true;
         } 
         
-        if(explicitActionAnnotationConfigured()) {
+        if(isExplicitActionAnnotationConfigured()) {
             
             if(_Annotations.isPresent(actionMethod, Action.class)) {
                 log.debug("  identified action {}", actionMethod);
@@ -495,7 +496,7 @@ public class FacetedMethodsBuilder {
     }
 
 
-    private boolean explicitActionAnnotationConfigured() {
+    private boolean isExplicitActionAnnotationConfigured() {
         return explicitAnnotationsForActions;
     }
 
