@@ -20,7 +20,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
 /**
@@ -28,8 +27,24 @@ import org.apache.isis.runtime.persistence.session.PersistenceSession;
  * @since 2.0
  */
 public interface IsisPersistenceSessionJdo 
-extends PersistenceSession, TransactionalResource, SessionScopedComponent, ObjectAdapterProvider {
+extends PersistenceSession, SessionScopedComponent, ObjectAdapterProvider {
 
+    /**
+     * to tell the underlying object store to start a transaction.
+     */
+    void startTransaction();
+
+    /**
+     * to tell the underlying object store to commit a transaction.
+     */
+    void endTransaction();
+
+    /**
+     * to tell the underlying object store to abort a transaction.
+     */
+    void abortTransaction();
+    
+    
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
      * @param cls
