@@ -18,7 +18,10 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
+import java.util.List;
+
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
 /**
@@ -28,6 +31,8 @@ import org.apache.isis.runtime.persistence.session.PersistenceSession;
 public interface IsisPersistenceSessionJdo 
 extends PersistenceSession, ObjectAdapterProvider {
 
+    void execute(List<PersistenceCommand> persistenceCommandList);
+    
     /**
      * to tell the underlying object store to start a transaction.
      */

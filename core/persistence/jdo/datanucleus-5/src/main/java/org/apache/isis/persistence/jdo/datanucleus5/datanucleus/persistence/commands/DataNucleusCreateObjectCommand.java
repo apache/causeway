@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.com
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
 import lombok.val;

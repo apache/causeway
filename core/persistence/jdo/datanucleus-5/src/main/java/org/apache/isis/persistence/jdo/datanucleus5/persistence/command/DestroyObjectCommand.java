@@ -17,8 +17,8 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.persistence.objectstore.transaction;
+package org.apache.isis.persistence.jdo.datanucleus5.persistence.command;
 
-public interface CreateObjectCommand extends PersistenceCommand {
+public interface DestroyObjectCommand extends PersistenceCommand {
 
 }

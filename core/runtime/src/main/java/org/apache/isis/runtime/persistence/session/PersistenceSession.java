@@ -29,7 +29,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 
 public interface PersistenceSession {
 
@@ -123,8 +122,6 @@ public interface PersistenceSession {
     void makePersistentInTransaction(ManagedObject adapter);
 
     // -- OTHERS
-
-    void execute(List<PersistenceCommand> persistenceCommandList);
 
     long getLifecycleStartedAtSystemNanos();
 

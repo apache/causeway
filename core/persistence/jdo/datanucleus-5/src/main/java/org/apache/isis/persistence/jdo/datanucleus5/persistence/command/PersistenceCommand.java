@@ -17,8 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.persistence.objectstore.transaction;
+package org.apache.isis.persistence.jdo.datanucleus5.persistence.command;
 
-public interface DestroyObjectCommand extends PersistenceCommand {
+import org.apache.isis.metamodel.spec.ManagedObject;
 
+public interface PersistenceCommand {
+    void execute();
+
+    ManagedObject onManagedObject();
 }

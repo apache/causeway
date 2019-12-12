@@ -17,12 +17,8 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.persistence.objectstore.transaction;
+package org.apache.isis.persistence.jdo.datanucleus5.persistence.command;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
+public interface CreateObjectCommand extends PersistenceCommand {
 
-public interface PersistenceCommand {
-    void execute();
-
-    ManagedObject onManagedObject();
 }

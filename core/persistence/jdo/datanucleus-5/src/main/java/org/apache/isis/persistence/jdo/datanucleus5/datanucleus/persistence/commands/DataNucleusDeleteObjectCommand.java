@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.com
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.DestroyObjectCommand;
 
 import lombok.extern.log4j.Log4j2;
 

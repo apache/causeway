@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionManagerException;
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionObject;

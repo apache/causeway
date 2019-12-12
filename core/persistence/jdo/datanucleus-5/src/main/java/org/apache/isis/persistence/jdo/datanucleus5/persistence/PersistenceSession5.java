@@ -84,9 +84,9 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.quer
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.spi.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext;
-import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.DestroyObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtime.persistence.session.PersistenceQuery;
