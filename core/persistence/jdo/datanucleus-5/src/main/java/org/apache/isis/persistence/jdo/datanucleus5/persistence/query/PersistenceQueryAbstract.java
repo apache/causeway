@@ -17,10 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.persistence.query;
+package org.apache.isis.persistence.jdo.datanucleus5.persistence.query;
 
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.persistence.session.PersistenceQuery;
 
 public abstract class PersistenceQueryAbstract implements PersistenceQuery {
 

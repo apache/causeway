@@ -37,12 +37,12 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFactory;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.persistence.session.PersistenceQueryFactory;
 import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 

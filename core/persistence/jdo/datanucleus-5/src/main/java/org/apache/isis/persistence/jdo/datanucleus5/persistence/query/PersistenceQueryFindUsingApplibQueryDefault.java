@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.persistence.query;
+package org.apache.isis.persistence.jdo.datanucleus5.persistence.query;
 
 import java.util.Collections;
 import java.util.Map;

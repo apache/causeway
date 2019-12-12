@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.persistence.session;
+package org.apache.isis.persistence.jdo.datanucleus5.persistence.query;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -29,8 +29,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

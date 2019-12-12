@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.que
 import java.util.List;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.persistence.session.PersistenceQuery;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQuery;
 
 public interface PersistenceQueryProcessor<T extends PersistenceQuery> {
     List<ObjectAdapter> process(T query);

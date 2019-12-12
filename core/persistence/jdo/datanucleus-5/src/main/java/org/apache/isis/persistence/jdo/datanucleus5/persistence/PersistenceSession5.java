@@ -87,9 +87,9 @@ import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterC
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.DestroyObjectCommand;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.runtime.persistence.session.PersistenceQuery;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQuery;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import static java.util.Objects.requireNonNull;

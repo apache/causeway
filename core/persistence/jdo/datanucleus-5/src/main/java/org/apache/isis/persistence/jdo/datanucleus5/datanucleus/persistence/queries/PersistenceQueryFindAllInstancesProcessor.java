@@ -21,8 +21,8 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.que
 import java.util.List;
 
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
