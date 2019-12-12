@@ -231,7 +231,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         _Blackhole.consume(getValidationResult()); // as a side effect memoizes the validation result
 
         stopWatch.stop();
-        log.info("Metamodel created. (took " + stopWatch + ")");
+        log.info("Metamodel created in " + (long)stopWatch.getMillis() + " ms.");
 
     }
     
