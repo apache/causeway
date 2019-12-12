@@ -27,6 +27,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -435,16 +439,32 @@ public class FacetedMethodsBuilder {
         return true;
     }
 
-    private boolean representsAction(
-            final Method actionMethod) {
+    private boolean representsAction(final Method actionMethod) {
 
-        //XXX commented out, because this is not applicable for Mixins in support of ISIS-1998 
-// try to short-circuit as much as possible
-//        if(isExplicitActionAnnotationConfigured()) {
-//            if(!_Annotations.isPresent(actionMethod, Action.class)) {
-//                return false;
-//            }
-//        }
+        // just an optimization, not strictly required 
+        if(isExplicitActionAnnotationConfigured()) {
+
+            // even though when @Action is mandatory, Mixins now can provide actions,
+            // that do not need to be annotated at method-level (see ISIS-1998)
+            val type = actionMethod.getDeclaringClass();
+            val hasActionAnnotation = _Annotations.isPresent(actionMethod, Action.class);
+            val hasInferredActionAnnotation = 
+                    _Annotations.isPresent(type, Action.class)
+                    || _Annotations.isPresent(type, Property.class)
+                    || _Annotations.isPresent(type, org.apache.isis.applib.annotation.Collection.class)
+                    || (_Annotations.isPresent(type, Mixin.class) 
+                            && (_Annotations.isPresent(actionMethod, Property.class)
+                                || _Annotations.isPresent(actionMethod, org.apache.isis.applib.annotation.Collection.class)
+                                || _Annotations.isPresent(actionMethod, PropertyLayout.class)
+                                || _Annotations.isPresent(actionMethod, CollectionLayout.class)
+                            )
+                       );
+        
+            // try to short-circuit as much as possible
+            if(!(hasActionAnnotation || hasInferredActionAnnotation)) {
+                return false;
+            }
+        }
 
         if (MethodUtil.isStatic(actionMethod)) {
             return false;

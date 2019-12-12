@@ -28,19 +28,20 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.oid.ParentedOid;
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.MethodExtensions;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
@@ -112,14 +113,14 @@ public interface ManagedObject {
         return titleString(null);
     }
 
-    default String titleString(ManagedObject contextAdapterIfAny) {
+    default String titleString(@Nullable ManagedObject contextAdapterIfAny) {
         return TitleUtil.titleString(this, contextAdapterIfAny);
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class TitleUtil {
+    static final class TitleUtil {
 
-        public static String titleString(ManagedObject managedObject, ManagedObject contextAdapterIfAny) {
+        private static String titleString(ManagedObject managedObject, ManagedObject contextAdapterIfAny) {
             if (managedObject.getSpecification().isParentedOrFreeCollection()) {
                 final CollectionFacet facet = managedObject.getSpecification().getFacet(CollectionFacet.class);
                 return collectionTitleString(managedObject, facet);

@@ -27,6 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Product;
@@ -96,7 +97,8 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void typeLevelAnnotations_shouldBeHonored_onMixins() {
         
-        val holderSpec = specificationLoader.loadSpecification(ProperActionSupport.class);
+        val holderSpec = specificationLoader.loadSpecification(ProperActionSupport.class, 
+                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
         val mx_mixin = holderSpec.getObjectAction("mixin"); // proper mix-in support
         assertNotNull(mx_mixin);

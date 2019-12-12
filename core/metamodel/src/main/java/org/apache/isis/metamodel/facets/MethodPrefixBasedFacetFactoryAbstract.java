@@ -57,7 +57,7 @@ implements MethodPrefixBasedFacetFactory {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        // we can safely skip this validation if the @Action annoation is mandatory
+        // we can safely skip this validation if the @Action annotation is mandatory
         if(getConfiguration().getReflector().getExplicitAnnotations().isAction()) {
             return;
         }
