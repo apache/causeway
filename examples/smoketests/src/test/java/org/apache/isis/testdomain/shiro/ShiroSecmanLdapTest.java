@@ -32,7 +32,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
@@ -64,7 +63,7 @@ import lombok.val;
         properties = {
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
-                IsisPresets.DebugPersistence,
+                //IsisPresets.DebugPersistence,
                 "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateDatabase=true",
         })
 @Import({
@@ -90,8 +89,6 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 
     @BeforeEach
     void beforeEach() {
-        
-        org.apache.isis.extensions.shirorealmldap.realm.IsisLdapContextFactory f;
         
         setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
         

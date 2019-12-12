@@ -39,7 +39,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
-import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -62,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
                 "logging.config=log4j2-test.xml",
         })
 @TestPropertySource({
-    IsisPresets.DebugPersistence
+    //IsisPresets.DebugPersistence
 })
 @Incubating("inconsitent state when run in a test batch")
 //@Transactional //XXX this test is non transactional

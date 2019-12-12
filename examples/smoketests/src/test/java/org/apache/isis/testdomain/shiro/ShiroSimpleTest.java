@@ -18,10 +18,6 @@
  */
 package org.apache.isis.testdomain.shiro;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -35,6 +31,10 @@ import org.mockito.Mockito;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.testdomain.Smoketest;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import lombok.val;
 

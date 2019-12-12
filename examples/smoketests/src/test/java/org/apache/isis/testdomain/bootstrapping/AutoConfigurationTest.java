@@ -30,7 +30,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.metamodel.context.MetaModelContexts;
@@ -62,7 +61,7 @@ import lombok.val;
                 // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-    IsisPresets.DebugDiscovery
+    //IsisPresets.DebugDiscovery
 })
 //@Incubating("under construction, not tested with surefire yet")
 class AutoConfigurationTest {

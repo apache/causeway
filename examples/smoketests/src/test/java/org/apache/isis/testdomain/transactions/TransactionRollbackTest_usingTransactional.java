@@ -29,7 +29,6 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -50,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-                IsisPresets.DebugPersistence,
+                //IsisPresets.DebugPersistence,
         })
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

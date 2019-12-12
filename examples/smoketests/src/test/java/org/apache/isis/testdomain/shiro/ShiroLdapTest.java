@@ -31,7 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.ldap.LdapConstants;
@@ -52,11 +52,12 @@ import lombok.extern.log4j.Log4j2;
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-                IsisPresets.DebugPersistence,
+                //IsisPresets.DebugPersistence,
         })
 @Import({
     LdapServerService.class,
 })
+@Incubating("inconsitent state when run in a test batch")
 @Log4j2
 class ShiroLdapTest extends AbstractShiroTest {
 

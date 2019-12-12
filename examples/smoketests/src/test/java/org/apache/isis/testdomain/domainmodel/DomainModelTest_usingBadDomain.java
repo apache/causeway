@@ -27,10 +27,9 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.spec.DomainModelException;
-import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -57,7 +56,7 @@ import lombok.val;
         })
 @TestPropertySource({
     //IsisPresets.DebugMetaModel,
-    IsisPresets.DebugProgrammingModel,
+    //IsisPresets.DebugProgrammingModel,
 })
 //@Incubating("does not work, when executed in sequence with other smoketests")
 class DomainModelTest_usingBadDomain {

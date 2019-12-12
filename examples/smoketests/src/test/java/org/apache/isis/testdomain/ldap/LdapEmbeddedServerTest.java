@@ -18,9 +18,6 @@
  */
 package org.apache.isis.testdomain.ldap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.Hashtable;
 
 import javax.inject.Inject;
@@ -33,6 +30,9 @@ import org.junit.runners.model.InitializationError;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.apache.isis.testdomain.Smoketest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 

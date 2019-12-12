@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,9 +32,9 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.config.presets.IsisPresets;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -58,7 +57,7 @@ import lombok.val;
                 // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-    IsisPresets.DebugDiscovery
+    //IsisPresets.DebugDiscovery
 })
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {

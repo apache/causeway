@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.shiro;
 
 import javax.inject.Inject;
 
-import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +44,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
 import org.apache.isis.testdomain.rest.RestEndpointService;
+import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
 
 import static java.time.Duration.ofMillis;
 import static org.junit.jupiter.api.Assertions.assertEquals;
