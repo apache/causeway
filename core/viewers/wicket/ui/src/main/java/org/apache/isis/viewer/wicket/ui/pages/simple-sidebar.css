@@ -27,6 +27,7 @@ body {
     }
 
     #sidebar-wrapper {
+        width: 0;
         left: 20%;
         margin-left: -20%;
     }
@@ -56,6 +57,7 @@ body {
     }
 
     #sidebar-wrapper {
+        width: 0;
         left: 30%;
         margin-left: -30%;
     }
@@ -85,6 +87,7 @@ body {
     }
 
     #sidebar-wrapper {
+        width: 0;
         left: 50%;
         margin-left: -50%;
     }
@@ -131,6 +134,7 @@ body {
     }
 
     #sidebar-wrapper {
+        width: 0;
         left: 100%;
         margin-left: -100%;
     }
@@ -155,7 +159,6 @@ body {
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
-    width: 0;
     height: 100%;
     overflow-y: auto;
     border: 1px dotted;
