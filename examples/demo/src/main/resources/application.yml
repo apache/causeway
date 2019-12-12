@@ -58,11 +58,10 @@ isis:
         js: scripts/application.js
         about: Apache Isis Hello World
 
-
-      credit[0]:
-        image: /images/apache-isis/logo-48x48.png
-        name: Apache Isis
-        url: http://isis.apache.org
+      credit:
+        - url:  http://isis.apache.org
+          image: /images/apache-isis/logo-48x48.png
+          name: Apache Isis
 
       themes:
         initial: bootstrap-theme
