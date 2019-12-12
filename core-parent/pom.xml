@@ -791,6 +791,7 @@ under the License.
 				<module>../incubator</module>
 				<module>../legacy</module>
 				<module>../starters</module>
+				<module>../examples/smoketests</module>
 			</modules>
 		</profile>
 
@@ -806,17 +807,17 @@ under the License.
 			</modules>
 		</profile>
 
-		<profile>
-			<id>smoketests-module</id>
-			<activation>
-				<property>
-					<name>smoketests-module</name>
-				</property>
-			</activation>
-			<modules>
-				<module>../examples/smoketests</module>
-			</modules>
-		</profile>
+<!-- 		<profile> -->
+<!-- 			<id>smoketests-module</id> -->
+<!-- 			<activation> -->
+<!-- 				<property> -->
+<!-- 					<name>smoketests-module</name> -->
+<!-- 				</property> -->
+<!-- 			</activation> -->
+<!-- 			<modules> -->
+<!-- 				<module>../examples/smoketests</module> -->
+<!-- 			</modules> -->
+<!-- 		</profile> -->
 
 		<!-- APACHE ISIS customisation 5/5: end -->
 
