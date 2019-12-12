@@ -40,7 +40,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
-import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.reflection._Reflect;
@@ -239,10 +238,6 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         }
 
         if(ApplicationScopedComponent.class.isAssignableFrom(type)) {
-            return BeanSort.MANAGED_BEAN;
-        }
-
-        if(SessionScopedComponent.class.isAssignableFrom(type)) {
             return BeanSort.MANAGED_BEAN;
         }
 

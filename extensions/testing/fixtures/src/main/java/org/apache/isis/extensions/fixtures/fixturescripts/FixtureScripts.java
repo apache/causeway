@@ -341,7 +341,11 @@ public class FixtureScripts extends AbstractService {
     	String parameters = null;
     	
     	transactionService.executeWithinTransaction(()->{
-    		runScript(singleScript, parameters);
+    	    try {
+    	        runScript(singleScript, parameters);
+    	    } catch (Exception e) {
+    	        throw _Exceptions.unrecoverable(e);
+            }
     	});
     }
 

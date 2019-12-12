@@ -18,7 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
-import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
@@ -27,7 +26,7 @@ import org.apache.isis.runtime.persistence.session.PersistenceSession;
  * @since 2.0
  */
 public interface IsisPersistenceSessionJdo 
-extends PersistenceSession, SessionScopedComponent, ObjectAdapterProvider {
+extends PersistenceSession, ObjectAdapterProvider {
 
     /**
      * to tell the underlying object store to start a transaction.
