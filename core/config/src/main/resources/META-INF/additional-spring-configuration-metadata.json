@@ -66,45 +66,6 @@
     },
     {
       "name": "isis.persistor.datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass"
-    },
-    {
-      "name": "isis.viewer.wicket.credit.url[0]",
-      "type": "java.net.URL"
-    },
-    {
-      "name": "isis.viewer.wicket.credit[0].name",
-      "type": "java.lang.String"
-    },
-    {
-      "name": "isis.viewer.wicket.credit[0].image",
-      "type": "java.lang.String",
-      "description": "Path of image, relative to webapp root."
-    },
-    {
-      "name": "isis.viewer.wicket.credit.url[1]",
-      "type": "java.net.URL"
-    },
-    {
-      "name": "isis.viewer.wicket.credit[1].name",
-      "type": "java.lang.String"
-    },
-    {
-      "name": "isis.viewer.wicket.credit[1].image",
-      "type": "java.lang.String",
-      "description": "Path of image, relative to webapp root."
-    },
-    {
-      "name": "isis.viewer.wicket.credit.url[2]",
-      "type": "java.net.URL"
-    },
-    {
-      "name": "isis.viewer.wicket.credit[2].name",
-      "type": "java.lang.String"
-    },
-    {
-      "name": "isis.viewer.wicket.credit[2].image",
-      "type": "java.lang.String",
-      "description": "Path of image, relative to webapp root."
     }
   ],
   "hints": [

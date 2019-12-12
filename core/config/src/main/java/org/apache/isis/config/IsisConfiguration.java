@@ -907,10 +907,17 @@ public class IsisConfiguration {
                  */
                 private boolean showChooser = true;
             }
-            
-            
-            //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes 
-            private List<Credit> credit = _Lists.newArrayList();
+
+
+            /**
+             * IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
+             *
+             * For further discussion, see for example this stackoverflow question:
+             * https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects
+             * and this wiki page: https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo and
+             * 
+             */
+            private List<Credit> credit = new ArrayList<>();
             
             @Data
             public static class Credit {
