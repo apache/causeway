@@ -40,6 +40,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.runtime.services.message.MessageServiceDefault;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -72,6 +73,8 @@ import lombok.val;
         })
 @TestPropertySource({
     //IsisPresets.DebugDiscovery
+    IsisPresets.SilenceMetaModel,
+    IsisPresets.SilenceProgrammingModel
 })
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceInjectOrderTest {

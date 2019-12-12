@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.config.presets.IsisPresets;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -58,6 +59,8 @@ import lombok.val;
         })
 @TestPropertySource({
     //IsisPresets.DebugDiscovery
+    IsisPresets.SilenceMetaModel,
+    IsisPresets.SilenceProgrammingModel
 })
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {

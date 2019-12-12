@@ -32,6 +32,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.metamodel.context.MetaModelContexts;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -62,6 +63,8 @@ import lombok.val;
         })
 @TestPropertySource({
     //IsisPresets.DebugDiscovery
+    IsisPresets.SilenceMetaModel,
+    IsisPresets.SilenceProgrammingModel
 })
 //@Incubating("under construction, not tested with surefire yet")
 class AutoConfigurationTest {
