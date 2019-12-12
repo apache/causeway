@@ -77,6 +77,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<!-- don't bring in Spring's default logging, otherwise breaks DN enhancer -->
+            		<groupId>org.springframework.boot</groupId>
+            		<artifactId>spring-boot-starter</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
 
         <!-- TESTING -->
@@ -85,7 +92,13 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
-        </dependency>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.springframework.boot</groupId>
+            		<artifactId>spring-boot-starter</artifactId>
+            	</exclusion>
+            </exclusions>
+		</dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
