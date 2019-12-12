@@ -26,13 +26,15 @@ import javax.annotation.Nonnull;
 
 import org.apache.isis.applib.annotation.Value;
 
+import lombok.NonNull;
+
 /**
  * Represents a local resource path, typically a relative path originating at this web-app's root or context-root.
  */
 @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
 public final class LocalResourcePath implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final String path;
+    @NonNull private final String path;
 
     public LocalResourcePath(final String path) throws IllegalArgumentException {
 
@@ -41,7 +43,7 @@ public final class LocalResourcePath implements Serializable {
         this.path = (path != null) ? path : "";
     }
 
-    @Nonnull
+    @NonNull
     public Object getValue() {
         return path;
     }
@@ -58,25 +60,30 @@ public final class LocalResourcePath implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj==null)
+        if(obj==null) {
             return false;
-
+        }
         return (obj instanceof LocalResourcePath) ?	isEqualTo((LocalResourcePath)obj) : false;
+    }
+    
+    @Override
+    public int hashCode() {
+        return path.hashCode();
     }
 
     public boolean isEqualTo(LocalResourcePath other) {
-        if(other==null)
+        if(other==null) {
             return false;
-
+        }
         return this.getPath().equals(other.getPath());
     }
 
     // -- HELPER
 
     private void validate(String path) throws IllegalArgumentException {
-        if(path==null)
+        if(path==null) {
             return;
-
+        }
         try {
             // used for syntax testing
             new java.net.URI("http://localhost/"+path);
