@@ -7,6 +7,8 @@ fi
 
 echo "building ..."
 export ANTORA_CMD=antora
+
+echo "\$PLAYBOOK_FILE = $PLAYBOOK_FILE"
 sh build-site.sh $PLAYBOOK_FILE || exit 1
 
 echo "serving ..."
