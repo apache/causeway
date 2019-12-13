@@ -38,6 +38,9 @@ else
   else
     # generate automated site content (adoc files)
     echo "doc gen: generating config .adoc from Spring metadata ..."
+
+    rm -rf $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
+
     ${GROOVY_CMD} $SCRIPT_DIR/../generateConfigDocs.groovy \
       -f $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json \
       -o $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
