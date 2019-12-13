@@ -13,18 +13,12 @@ if [ ! -f "$PLAYBOOK" ]; then
   PLAYBOOK=site.yml
 fi
 
-if [ -f "$PLAYBOOK" ]; then
-  PLAYBOOK=$(realpath -s $PLAYBOOK)
-else
-  PLAYBOOK=$(realpath -s site.yml)
-fi
-
 echo "\$PLAYBOOK = $PLAYBOOK"
 
 
 SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
-  PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
+  PROJECT_ROOT_PATH=$(cd $SCRIPT_DIR/../.. ; pwd)
 fi
 
 if [ -z "$REVISION" ]; then

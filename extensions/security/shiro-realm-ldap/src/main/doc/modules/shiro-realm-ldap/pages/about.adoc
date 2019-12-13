@@ -8,7 +8,7 @@ see `shiro.ini` (example)
 
 [source,properties]
 ----
-include::security:shirorealmldap:example$shiro.ini[]
+include::security:shiro-realm-ldap:example$shiro.ini[]
 ----
 
 == Setting up Users/Groups in Apache Directory Studio

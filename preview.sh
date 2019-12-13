@@ -7,7 +7,7 @@ fi
 
 echo "building ..."
 export ANTORA_CMD=antora
-sh build-site.sh $PLAYBOOK_FILE
+sh build-site.sh $PLAYBOOK_FILE || exit 1
 
 echo "serving ..."
 serve antora/target/site
