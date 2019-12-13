@@ -7,6 +7,9 @@ if [ -z "$PROJECT_ROOT_PATH" ]; then
 fi
 
 SITE_CONFIG=$1
+if [ -z "$SITE_CONFIG" ]; then
+  SITE_CONFIG=site.yml
+fi
 
 if [ -z "$REVISION" ]; then
   if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
