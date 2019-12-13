@@ -19,7 +19,8 @@ if [ ! -f "$PLAYBOOK" ]; then
   PLAYBOOK=site.yml
 fi
 
-echo "\$PLAYBOOK = PROJECT_ROOT_PATH/$PLAYBOOK"
+PLAYBOOK=$PROJECT_ROOT_PATH/$PLAYBOOK
+echo "\$PLAYBOOK = $PLAYBOOK"
 
 if [ -z "$REVISION" ]; then
   if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
