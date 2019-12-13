@@ -2,13 +2,15 @@
 
 SRC_MAIN_JAVA=../../../java
 SCRIPT_DIR=$( dirname "$0" )
-cd $SCRIPT_DIR
+cd $SCRIPT_DIR || exit 1
 
 
 
 SRC_APPLIB=$SRC_MAIN_JAVA/org/apache/isis/applib
 
-# annotations
-mkdir -p examples/annotation
-cp -R $SRC_APPLIB/annotation/* examples/annotation
-
+for dir in annotation
+do
+  rm -rf examples/$dir
+  mkdir -p examples/$dir
+  cp -R $SRC_APPLIB/$dir/* examples/$dir
+done
