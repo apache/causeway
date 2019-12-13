@@ -1,0 +1,56 @@
+| isis.viewer.restfulobjects. +
+base-path
+|  /restful
+| 
+
+| isis.viewer.restfulobjects. +
+gsoc2013.legacy-param-details
+| 
+| 
+
+| isis.viewer.restfulobjects. +
+honor-ui-hints
+| 
+| 
+
+| isis.viewer.restfulobjects. +
+object-property-values-only
+| 
+| 
+
+| isis.viewer.restfulobjects. +
+strict-accept-checking
+| 
+| 
+
+| isis.viewer.restfulobjects. +
+suppress-described-by-links
+| 
+| 
+
+| isis.viewer.restfulobjects. +
+suppress-member-disabled- +
+reason
+| 
+| 
+
+| isis.viewer.restfulobjects. +
+suppress-member-extensions
+| 
+| 
+
+| isis.viewer.restfulobjects. +
+suppress-member-id
+| 
+| 
+
+| isis.viewer.restfulobjects. +
+suppress-member-links
+| 
+| 
+
+| isis.viewer.restfulobjects. +
+suppress-update-link
+| 
+| 
+
