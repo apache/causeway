@@ -39,5 +39,6 @@ if [ -z "$ANTORA_CMD" ]; then
 fi
 
 echo "running antora ..."
+echo "$ANTORA_CMD --stacktrace $PLAYBOOK"
 $ANTORA_CMD --stacktrace $PLAYBOOK
 
