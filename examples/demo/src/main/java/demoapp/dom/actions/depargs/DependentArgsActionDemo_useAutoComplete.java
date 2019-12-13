@@ -41,7 +41,6 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     @Inject MessageService messageService;
 
-
     private final DependentArgsActionDemo holder;
 
     @ActionLayout(named="Auto Complete", promptStyle = PromptStyle.DIALOG_MODAL)
@@ -66,7 +65,7 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     public Collection<DemoItem> autoComplete1$$(
 
-            Parity parity, 
+            Parity parity, // <-- the refining parameter from the dialog above
 
             @MinLength(3) String search) {
 

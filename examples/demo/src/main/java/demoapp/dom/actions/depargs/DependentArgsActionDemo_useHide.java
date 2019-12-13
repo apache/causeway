@@ -38,7 +38,6 @@ public class DependentArgsActionDemo_useHide {
 
     @Inject MessageService messageService;
 
-
     private final DependentArgsActionDemo holder;
 
     @ActionLayout(named="Hide", promptStyle = PromptStyle.DIALOG_MODAL)
@@ -46,8 +45,8 @@ public class DependentArgsActionDemo_useHide {
     public DependentArgsActionDemo $$(
 
             // PARAM 0
-            @ParameterLayout(named = "Hide Last Argument")
-            boolean hideLastArg,
+            @ParameterLayout(named = "Hide Message Field")
+            boolean hideMessageField,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
@@ -62,9 +61,10 @@ public class DependentArgsActionDemo_useHide {
 
     // -- PARAM 1 (String message)
 
-    public boolean hide1$$(boolean hideLastArg) {
-        return hideLastArg;
+    public boolean hide1$$(boolean hideMessageField) {
+        return hideMessageField;
     }
+    
 
 }
 

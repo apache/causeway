@@ -38,7 +38,6 @@ public class DependentArgsActionDemo_useDisable {
 
     @Inject MessageService messageService;
 
-
     private final DependentArgsActionDemo holder;
 
     @ActionLayout(named="Disable", promptStyle = PromptStyle.DIALOG_MODAL)
@@ -46,8 +45,8 @@ public class DependentArgsActionDemo_useDisable {
     public DependentArgsActionDemo $$(
 
             // PARAM 0
-            @ParameterLayout(named = "Disable Last Argument")
-            boolean disableLastArg,
+            @ParameterLayout(named = "Disable Message Field")
+            boolean disableMessageField,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
@@ -56,14 +55,14 @@ public class DependentArgsActionDemo_useDisable {
 
             ) {
 
-        messageService.informUser(message);
+        messageService.informUser(message); 
         return holder;
     }
 
     // -- PARAM 1 (String message)
 
-    public String disable1$$(boolean disableLastArg) {
-        return disableLastArg
+    public String disable1$$(boolean disableMessageField) {
+        return disableMessageField
                 ? "disabled by dependent argument"
                         : null;
     }

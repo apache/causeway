@@ -40,7 +40,6 @@ public class DependentArgsActionDemo_useChoices {
 
     @Inject MessageService messageService;
 
-
     private final DependentArgsActionDemo holder;
 
     @ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
@@ -63,7 +62,12 @@ public class DependentArgsActionDemo_useChoices {
 
     // -- PARAM 1 (DemoItem)
 
-    public Collection<DemoItem> choices1$$(Parity parity) {
+    public Collection<DemoItem> choices1$$(
+            
+            Parity parity // <-- the refining parameter from the dialog above
+            
+            ) {
+        
         if(parity == null) {
             return holder.getItems();
         }
