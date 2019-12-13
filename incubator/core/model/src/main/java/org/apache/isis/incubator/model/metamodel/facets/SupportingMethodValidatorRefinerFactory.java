@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.incubator.model.applib.annotation.Model;
+import org.apache.isis.incubator.model.applib.annotation.Supporting;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.commons.MethodUtil;
@@ -73,7 +73,7 @@ implements MetaModelRefiner {
             // methods intended by the coder to be known to the metamodel
             val intendedMethods = _Sets.<Method>newHashSet(); 
             for(val method: type.getDeclaredMethods()) {
-                if(method.getDeclaredAnnotation(Model.class)!=null) {
+                if(method.getDeclaredAnnotation(Supporting.class)!=null) {
                     intendedMethods.add(method);
                 }
             }
@@ -94,7 +94,7 @@ implements MetaModelRefiner {
                         messageFormat,
                         spec.getIdentifier().getClassName(),
                         notRecognizedMethod.getName(),
-                        Model.class.getSimpleName(),
+                        Supporting.class.getSimpleName(),
                         unmetContraints.stream()
                         .collect(Collectors.joining("; ")));
             });

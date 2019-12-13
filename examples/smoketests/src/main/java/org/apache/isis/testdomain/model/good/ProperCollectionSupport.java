@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.incubator.model.applib.annotation.Model;
+import org.apache.isis.incubator.model.applib.annotation.Supporting;
 import org.apache.isis.applib.annotation.Nature;
 
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class ProperCollectionSupport {
     private List<String> myCollection;
     
     // proper support
-    @Model
+    @Supporting
     public boolean hideMyCollection() {
         return false;
     }

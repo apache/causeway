@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.incubator.model.applib.annotation.Model;
+import org.apache.isis.incubator.model.applib.annotation.Supporting;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -38,7 +38,7 @@ public class ProperActionSupport_property {
     }
     
     // proper support
-    @Model
+    @Supporting
     public boolean hide$$() {
         return false;
     }

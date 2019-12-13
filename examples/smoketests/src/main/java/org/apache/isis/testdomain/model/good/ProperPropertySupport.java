@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain.model.good;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.incubator.model.applib.annotation.Model;
+import org.apache.isis.incubator.model.applib.annotation.Supporting;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 
@@ -34,7 +34,7 @@ public class ProperPropertySupport {
     private String myProperty;
     
     // proper support
-    @Model
+    @Supporting
     public boolean hideMyProperty() {
         return false;
     }
