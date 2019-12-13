@@ -33,6 +33,7 @@ import org.apache.isis.extensions.secman.jdo.IsisModuleSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleSecmanRealmShiro;
 import org.apache.isis.extensions.sse.IsisModuleExtSse;
+import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
@@ -94,6 +95,8 @@ public class DemoApp extends SpringBootServletInitializer {
 
         IsisModuleExtFixtures.class,
 
+        IsisModuleIncModelMetaModel.class, // @Supporting support (incubator)
+        
         LibraryPreloadingService.class // just a performance enhancement
 
     })

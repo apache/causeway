@@ -45,7 +45,7 @@ import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 @Import({
     IsisModuleSpringBoot.class,
     IsisModuleSecurityBypass.class,
-    IsisModuleIncModelMetaModel.class // @Model support
+    IsisModuleIncModelMetaModel.class // @Supporting support
 })
 @PropertySources({
     @PropertySource(IsisPresets.NoTranslations),

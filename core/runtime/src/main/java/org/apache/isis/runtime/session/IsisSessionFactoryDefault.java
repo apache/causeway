@@ -42,6 +42,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -109,6 +110,19 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         taskList.submit(_ConcurrentContext.forkJoin());
         taskList.await();
+        
+        { // log any validation failures, experimental code however, not sure how to best propagate failures
+            val validationResult = specificationLoader.getValidationResult();
+            if(validationResult.getNumberOfFailures()==0) {
+                log.info("Validation PASSED");
+            } else {
+                log.error("### Validation FAILED, failure count: {}", validationResult.getNumberOfFailures());
+                validationResult.forEach(failure->{
+                    log.error("# " + failure.getMessage());
+                });
+                //throw _Exceptions.unrecoverable("Validation FAILED");
+            }
+        }
 
         runtimeEventService.fireAppPostMetamodel();
 
