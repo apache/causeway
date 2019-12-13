@@ -19,7 +19,6 @@ if [ ! -f "$PLAYBOOK" ]; then
   PLAYBOOK=site.yml
 fi
 
-PLAYBOOK=$PROJECT_ROOT_PATH/$PLAYBOOK
 echo "\$PLAYBOOK = $PLAYBOOK"
 
 if [ -z "$REVISION" ]; then

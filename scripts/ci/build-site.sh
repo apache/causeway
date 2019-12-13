@@ -21,7 +21,7 @@ if [ "$WC" -ne "0" ]; then
   exit 1
 fi
 
-bash $SCRIPT_DIR/_adoc-antora.sh $*
+bash $SCRIPT_DIR/_adoc-antora.sh ${PROJECT_ROOT_PATH}/$*
 
 # add a marker, that tells github not to use jekyll on the github pages folder
 touch ${PROJECT_ROOT_PATH}/antora/target/site/.nojekyll
