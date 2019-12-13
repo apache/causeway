@@ -20,7 +20,7 @@ if [ -z "$MVN_STAGES" ]; then
   MVN_STAGES="clean install"
 fi
 
-sh $SCRIPT_DIR/print-environment.sh "build-demo-app"
+sh $SCRIPT_DIR/_print-environment.sh "build-demo-app"
 
 export FLAVOR=$1
 export ISIS_VERSION=$REVISION

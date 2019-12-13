@@ -20,44 +20,22 @@ fi
 
 SITE_CONFIG=$1
 
+bash $SCRIPT_DIR/_print-environment.sh "build-site"
+
+bash $SCRIPT_DIR/_adoc-copy-examples.sh
+bash $SCRIPT_DIR/_adoc-gen-config.sh
+
 
 ##
-## run groovy
+## check if anything had not been sync'd
 ##
-GROOVY_CMD=`command -v groovy`
-
-bash $SCRIPT_DIR/print-environment.sh "build-site"
-
-echo ""
-echo "\$SITE_CONFIG: ${SITE_CONFIG}"
-echo "\$GROOVY_CMD : ${GROOVY_CMD}"
-echo ""
- 
-# for now meant to run with nightly builds only 
-if [ -z "${GROOVY_CMD}" ]; then
-  echo "doc gen: no groovy, skipping"
-else
-  if [ ! -f "$PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json" ]; then
-    echo "doc gen: no spring-configuration-metadata.json to parse: skipping"
-  else
-    # generate automated site content (adoc files)
-    echo "doc gen: generating config .adoc from Spring metadata ..."
-    ${GROOVY_CMD} $SCRIPT_DIR/../generateConfigDocs.groovy \
-      -f $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json \
-      -o $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
-  fi
+WC=$(git status --porcelain | wc -l)
+if [ "$WC" -ne "0" ]; then
+  echo "Some examples are out of date; run sync-examples.sh and commit, then try again" >&2
+  exit 1
 fi
 
 
-##
-## copy over examples
-##
-echo "copying over examples ..."
-for examples_sh in $(find $PROJECT_ROOT_PATH -name examples.sh -print)
-do
-  echo $examples_sh
-  sh $examples_sh
-done
 
 
 ##

@@ -20,7 +20,7 @@ if [ -z "$MVN_STAGES" ]; then
   MVN_STAGES="clean install"
 fi
 
-sh $SCRIPT_DIR/print-environment.sh "build-smoketests"
+sh $SCRIPT_DIR/_print-environment.sh "build-smoketests"
 
 #
 # update version (but just for the modules we need to build)
