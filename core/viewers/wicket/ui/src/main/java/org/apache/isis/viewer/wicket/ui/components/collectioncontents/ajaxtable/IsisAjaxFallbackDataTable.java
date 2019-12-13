@@ -59,10 +59,10 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     public IsisAjaxFallbackDataTable(
             final String id,
             final List<? extends IColumn<T, S>> columns,
-                    final CollectionContentsSortableDataProvider dataProvider,
-                    final int rowsPerPage,
-                    final ObjectAdapterToggleboxColumn toggleboxColumn)
-    {
+            final CollectionContentsSortableDataProvider dataProvider,
+            final int rowsPerPage,
+            final ObjectAdapterToggleboxColumn toggleboxColumn) {
+        
         super(id, columns, (ISortableDataProvider<T, S>)dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
         this.toggleboxColumn = toggleboxColumn;
@@ -75,6 +75,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     protected void onInitialize() {
         super.onInitialize();
         buildGui();
+        honorHints();
     }
 
     private void buildGui() {
@@ -174,7 +175,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
 
     }
 
-    public void honourHints() {
+    private void honorHints() {
         headersToolbar.honourSortOrderHints();
         navigationToolbar.honourHints();
         honourPageNumberHint();

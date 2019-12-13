@@ -49,7 +49,6 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import lombok.val;
@@ -70,7 +69,6 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String INVISIBLE_CLASS = "link-selector-panel-invisible";
     private static final int MAX_NUM_UNDERLYING_VIEWS = 10;
 
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
@@ -225,7 +223,7 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
                                     continue;
                                 }
                                 final boolean isSelected = i == underlyingViewNum;
-                                applyCssVisibility(component, isSelected);
+                                PanelAbstract.setVisible(component, isSelected);
                                 component.setDefaultModel(isSelected? model: dummyModel);
                             }
 
@@ -303,7 +301,7 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
             Component component = underlyingViews[i];
             if(component != null) {
                 if(i != selected) {
-                    component.add(new CssClassAppender(INVISIBLE_CLASS));
+                    super.setVisible(component, /*visible*/ false);
                 } else {
                     selectedComponent = component;
                 }
@@ -333,14 +331,6 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
      */
     protected EntityModel dummyOf(EntityModel model) {
         return model;
-    }
-
-    protected static void applyCssVisibility(final Component component, final boolean visible) {
-        if(component == null) {
-            return;
-        }
-        AttributeModifier modifier = visible ? new CssClassRemover(INVISIBLE_CLASS) : new CssClassAppender(INVISIBLE_CLASS);
-        component.add(modifier);
     }
 
     protected int honourViewHintElseDefault(final List<ComponentFactory> componentFactories, final IModel<?> model) {

@@ -113,10 +113,9 @@ implements CollectionCountProvider {
 
         addPropertyColumnsIfRequired(columns);
 
-        final CollectionContentsSortableDataProvider dataProvider = new CollectionContentsSortableDataProvider(model);
+        val dataProvider = new CollectionContentsSortableDataProvider(model);
         dataTable = new IsisAjaxFallbackDataTable<>(ID_TABLE, columns, dataProvider, model.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
-        dataTable.honourHints();
 
     }
 
