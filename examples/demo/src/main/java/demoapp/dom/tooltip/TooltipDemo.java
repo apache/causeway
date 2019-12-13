@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Markup;
+import org.apache.isis.incubator.model.applib.annotation.Supporting;
 
 import demoapp.dom.actions.assoc.DemoItem;
 import demoapp.utils.DemoStub;
@@ -105,11 +106,12 @@ public class TooltipDemo extends DemoStub {
     @ActionLayout(
             named="Disabled Action", // metamodel validation is picky when method prefix 'disabled' is used
             describedAs="This is a disabled action with a tooltip.")
-    public TooltipDemo disAbledAction(){
+    public TooltipDemo disabledAction(){
         return this;
     }
 
-    public String disableDisAbledAction() {
+    @Supporting
+    public String disableDisabledAction() {
         return "Disabled for demonstration.";
     }
 
@@ -119,11 +121,12 @@ public class TooltipDemo extends DemoStub {
             cssClass="btn-danger",
             describedAs="This is a disabled action with a tooltip and 'are you sure' "
                     + "semantics.")
-    public TooltipDemo disAbledActionWithConfirmation(){
+    public TooltipDemo disabledActionWithConfirmation(){
         return this;
     }
 
-    public String disableDisAbledActionWithConfirmation() {
+    @Supporting
+    public String disableDisabledActionWithConfirmation() {
         return "Disabled for demonstration.";
     }
 

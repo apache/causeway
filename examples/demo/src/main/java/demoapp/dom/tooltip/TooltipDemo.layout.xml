@@ -31,8 +31,8 @@
 			</cpt:fieldSet>
 
 			<cpt:fieldSet name="Actions" id="a3">
-				<cpt:action id="disAbledAction" />
-				<cpt:action id="disAbledActionWithConfirmation" />
+				<cpt:action id="disabledAction" />
+				<cpt:action id="disabledActionWithConfirmation" />
 				<cpt:property id="text3"/>
 			</cpt:fieldSet>
 			

@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.incubator.model.applib.annotation.Supporting;
 
 import lombok.RequiredArgsConstructor;
 
@@ -62,6 +63,7 @@ public class DependentArgsActionDemo_useChoices {
 
     // -- PARAM 1 (DemoItem)
 
+    //@Supporting
     public Collection<DemoItem> choices1$$(
             
             Parity parity // <-- the refining parameter from the dialog above

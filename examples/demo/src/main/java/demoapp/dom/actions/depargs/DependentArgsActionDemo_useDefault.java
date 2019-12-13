@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.incubator.model.applib.annotation.Supporting;
 
 import lombok.RequiredArgsConstructor;
 
@@ -62,6 +63,7 @@ public class DependentArgsActionDemo_useDefault {
 
     // -- PARAM 1 (String message)
 
+    //@Supporting
     public String default1$$(Parity parity) {
         if(parity == null) {
             return "no parity selected";
