@@ -35,7 +35,9 @@ import org.apache.isis.metamodel.facets.param.choices.ActionParameterChoicesFace
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoicesFacetAbstract implements ImperativeFacet {
+public class ActionParameterChoicesFacetViaMethod 
+extends ActionParameterChoicesFacetAbstract 
+implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesType;
@@ -95,7 +97,8 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
         return "method=" + method + ",type=" + choicesType;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
         attributeMap.put("choicesType", choicesType);

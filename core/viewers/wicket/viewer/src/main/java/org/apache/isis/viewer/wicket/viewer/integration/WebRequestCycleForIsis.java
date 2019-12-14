@@ -239,13 +239,13 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
             final List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
             final Optional<Throwable> hiddenIfAny = causalChain.stream()
-                    .filter(ObjectMember.HiddenException.isInstanceOf()).findFirst();
+                    .filter(ObjectMember.HiddenException::isInstanceOf).findFirst();
             if(hiddenIfAny.isPresent()) {
                 addMessage("hidden");
                 return respondGracefully(cycle);
             }
             final Optional<Throwable> disabledIfAny = causalChain.stream()
-                    .filter(ObjectMember.DisabledException.isInstanceOf()).findFirst();
+                    .filter(ObjectMember.DisabledException::isInstanceOf).findFirst();
             if(disabledIfAny.isPresent()) {
                 addTranslatedMessage(disabledIfAny.get().getMessage());
                 return respondGracefully(cycle);

@@ -29,13 +29,13 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -71,7 +71,6 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
@@ -79,7 +78,6 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("BS3")
-@Log4j2
 public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
@@ -185,11 +183,11 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
 
         final Map<String, OneToOneAssociation> oneToOneAssociationById =
-                ObjectMember.Util.mapById(getOneToOneAssociations(objectSpec));
+                ObjectMember.mapById(getOneToOneAssociations(objectSpec));
         final Map<String, OneToManyAssociation> oneToManyAssociationById =
-                ObjectMember.Util.mapById(getOneToManyAssociations(objectSpec));
+                ObjectMember.mapById(getOneToManyAssociations(objectSpec));
         final Map<String, ObjectAction> objectActionById =
-                ObjectMember.Util.mapById(
+                ObjectMember.mapById(
                         objectSpec.streamObjectActions(Contributed.INCLUDED));
 
         final BS3Grid bs3Grid = (BS3Grid) grid;

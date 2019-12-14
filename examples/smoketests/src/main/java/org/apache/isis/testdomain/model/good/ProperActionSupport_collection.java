@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.incubator.model.applib.annotation.Supporting;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,8 +41,8 @@ public class ProperActionSupport_collection {
     }
     
     // proper support
-    @Supporting
-    public boolean hide$$() {
+    @Model
+    public boolean hideColl() {
         return false;
     }
 

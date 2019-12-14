@@ -753,10 +753,13 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         val objectSpecificationDefault = getJavaSpecificationOfOwningClass(method);
         val member = objectSpecificationDefault.getMember(method);
 
-        if (member == null) {
-            final String methodName = method.getName();
-            throw new UnsupportedOperationException("Method '" + methodName + "' being invoked does not correspond to any of the object's fields or actions.");
+        if(member == null) {
+            val methodName = method.getName();
+            val msg = "Method '" + methodName + "' being invoked does not correspond "
+                    + "to any of the object's fields or actions.";
+            throw new UnsupportedOperationException(msg);
         }
+        
         return member;
     }
 

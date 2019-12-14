@@ -21,19 +21,19 @@ package org.apache.isis.testdomain.model.good;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.incubator.model.applib.annotation.Supporting;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperActionSupport {
 
     // proper action
     @Action
-    public void myAction() {
+    public void myAction(String param) {
 
     }
     
     // proper support
-    @Supporting
+    @Model
     public boolean hideMyAction() {
         return false;
     }

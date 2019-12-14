@@ -23,7 +23,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -51,12 +50,12 @@ import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.interactions.InteractionContext;
 import org.apache.isis.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
@@ -86,13 +85,6 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
         public final static Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE = 
                 (final ObjectSpecification s1, final ObjectSpecification s2) -> 
         s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
-    }
-
-    final class Functions {
-        private Functions(){}
-
-        public static final Function<ObjectSpecification, String> FULL_IDENTIFIER = 
-                ObjectSpecification::getFullIdentifier;
     }
 
     ObjectMember getMember(String memberId);
@@ -428,10 +420,14 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
         
         val self = Stream.of(this);
         val actions = streamObjectActions(Contributed.EXCLUDED);
+        val actionParameters = streamObjectActions(Contributed.EXCLUDED)
+                .flatMap(action->action.getParameterCount()>0
+                        ? action.getParameters().stream()
+                                : Stream.empty());
         val properties = streamProperties(Contributed.EXCLUDED);
         val collections = streamCollections(Contributed.EXCLUDED);
 
-        return _Streams.concat(self, actions, properties, collections);
+        return _Streams.concat(self, actions, actionParameters, properties, collections);
         
     }
 

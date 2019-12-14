@@ -36,7 +36,8 @@ public final class InteractionUtils {
         
         facetHolder.streamFacets(HidingInteractionAdvisor.class)
         .forEach(advisor->{
-            iaResult.advise(advisor.hides(context), advisor);
+            val hidingReason = advisor.hides(context);
+            iaResult.advise(hidingReason, advisor);
         });
         
         return iaResult;
@@ -48,8 +49,8 @@ public final class InteractionUtils {
         
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .forEach(advisor->{
-            final String disables = advisor.disables(context);
-            isResult.advise(disables, advisor);
+            val disablingReason = advisor.disables(context);
+            isResult.advise(disablingReason, advisor);
         });
         
         return isResult;
@@ -61,7 +62,8 @@ public final class InteractionUtils {
         
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
         .forEach(advisor->{
-            iaResult.advise(advisor.invalidates(context), advisor);
+            val invalidatingReason = advisor.invalidates(context); 
+            iaResult.advise(invalidatingReason, advisor);
         });
         
         return iaResult;

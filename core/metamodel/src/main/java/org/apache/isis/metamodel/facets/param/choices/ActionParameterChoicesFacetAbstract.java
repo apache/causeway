@@ -23,7 +23,9 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
-public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract implements ActionParameterChoicesFacet {
+public abstract class ActionParameterChoicesFacetAbstract 
+extends FacetAbstract 
+implements ActionParameterChoicesFacet {
 
     public static Class<? extends Facet> type() {
         return ActionParameterChoicesFacet.class;

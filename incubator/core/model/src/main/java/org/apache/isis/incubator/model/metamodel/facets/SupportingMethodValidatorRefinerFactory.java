@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.incubator.model.applib.annotation.Supporting;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.commons.MethodUtil;
@@ -61,7 +61,21 @@ implements MetaModelRefiner {
 
             val type = spec.getCorrespondingClass();
 
-            // methods known to the metamodel
+//XXX for debugging ...            
+//            if(spec.getSpecId().asString().contains("ProperActionSupport")) {
+//                
+//                val sb = new StringBuffer();
+//                
+//                sb.append("\n### debug " + spec.getSpecId().asString()).append("\n");
+//                
+//                spec.streamFacetHolders()
+//                .flatMap(FacetHolder::streamFacets)
+//                .forEach(facet->sb.append("facet: " + facet).append("\n"));
+//                
+//                System.out.println(sb);
+//            }
+
+            // methods known to the meta-model
             val recognizedMethods = spec.streamFacetHolders()
                     .flatMap(FacetHolder::streamFacets)
                     .filter(ImperativeFacet.class::isInstance)
@@ -69,16 +83,16 @@ implements MetaModelRefiner {
                     .map(ImperativeFacet::getMethods)
                     .flatMap(List::stream)
                     .collect(Collectors.toCollection(HashSet::new));
-
-            // methods intended by the coder to be known to the metamodel
+            
+            // methods intended to be included with the meta-model
             val intendedMethods = _Sets.<Method>newHashSet(); 
             for(val method: type.getDeclaredMethods()) {
-                if(method.getDeclaredAnnotation(Supporting.class)!=null) {
+                if(method.getDeclaredAnnotation(Model.class)!=null) {
                     intendedMethods.add(method);
                 }
             }
 
-            // methods intended by the coder but not known to the metamodel
+            // methods intended to be included with the meta-model but missing
             val notRecognizedMethods =
                     _Sets.minus(intendedMethods, recognizedMethods);
 
@@ -86,7 +100,7 @@ implements MetaModelRefiner {
             notRecognizedMethods.forEach(notRecognizedMethod->{
                 val unmetContraints = unmetContraints(spec, notRecognizedMethod);
 
-                val messageFormat = "%s#%s: has annotion %s, is assumed to support "
+                val messageFormat = "%s#%s: has annotation @%s, is assumed to support "
                         + "a property, collection or action. Unmet constraint(s): %s";
                 validationFailures.onFailure(
                         spec,
@@ -94,7 +108,7 @@ implements MetaModelRefiner {
                         messageFormat,
                         spec.getIdentifier().getClassName(),
                         notRecognizedMethod.getName(),
-                        Supporting.class.getSimpleName(),
+                        Model.class.getSimpleName(),
                         unmetContraints.stream()
                         .collect(Collectors.joining("; ")));
             });

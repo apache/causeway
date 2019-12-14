@@ -54,7 +54,6 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -205,11 +204,11 @@ implements GridSystemService<G> {
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
 
         final Map<String, OneToOneAssociation> oneToOneAssociationById =
-                ObjectMember.Util.mapById(getOneToOneAssociations(objectSpec));
+                ObjectMember.mapById(getOneToOneAssociations(objectSpec));
         final Map<String, OneToManyAssociation> oneToManyAssociationById =
-                ObjectMember.Util.mapById(getOneToManyAssociations(objectSpec));
+                ObjectMember.mapById(getOneToManyAssociations(objectSpec));
         final Map<String, ObjectAction> objectActionById =
-                ObjectMember.Util.mapById(objectSpec.streamObjectActions(Contributed.INCLUDED));
+                ObjectMember.mapById(objectSpec.streamObjectActions(Contributed.INCLUDED));
 
 
         final AtomicInteger propertySequence = new AtomicInteger(0);

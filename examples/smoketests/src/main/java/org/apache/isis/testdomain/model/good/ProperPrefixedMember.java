@@ -2,7 +2,7 @@ package org.apache.isis.testdomain.model.good;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.incubator.model.applib.annotation.Supporting;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 
@@ -19,7 +19,7 @@ public class ProperPrefixedMember {
     }
     
     // should be identified as support
-    @Supporting
+    @Model
     public String disableDisableSomething() {
         return null;
     }

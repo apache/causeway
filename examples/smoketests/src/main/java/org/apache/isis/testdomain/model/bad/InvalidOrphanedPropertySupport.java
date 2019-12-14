@@ -19,14 +19,14 @@
 package org.apache.isis.testdomain.model.bad;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.incubator.model.applib.annotation.Supporting;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 import org.apache.isis.applib.annotation.Nature;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class InvalidOrphanedPropertySupport {
 
     // should fail
-    @Supporting
+    @Model
     public boolean hideMyProperty() {
         return false;
     }

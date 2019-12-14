@@ -71,7 +71,7 @@ public interface ObjectMember extends ObjectFeature {
 
 
     /**
-     * Determines if this member is visible, represented as a {@link Consent}.
+     * Determines if this member is visible (not hidden), represented as a {@link Consent}.
      * @param target
      *            may be <tt>null</tt> if just checking for authorization.
      * @param interactionInitiatedBy
@@ -87,7 +87,7 @@ public interface ObjectMember extends ObjectFeature {
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Determines whether this member is usable, represented as a
+     * Determines whether this member is usable (not disabled), represented as a
      * {@link Consent}.
      * @param target
      *            may be <tt>null</tt> if just checking for authorization.
@@ -176,15 +176,11 @@ public interface ObjectMember extends ObjectFeature {
         public HiddenException() {
             super(null);
         }
-
-        public static Predicate<Throwable> isInstanceOf() {
-            return new Predicate<Throwable>() {
-                @Override
-                public boolean test(@Nullable final Throwable throwable) {
-                    return throwable instanceof HiddenException;
-                }
-            };
+        
+        public static boolean isInstanceOf(Throwable throwable) {
+            return throwable instanceof HiddenException;
         }
+        
     }
 
     class DisabledException extends AuthorizationException {
@@ -194,30 +190,21 @@ public interface ObjectMember extends ObjectFeature {
             super(message, null);
         }
 
-        public static Predicate<Throwable> isInstanceOf() {
-            return new Predicate<Throwable>() {
-                @Override
-                public boolean test(@Nullable final Throwable throwable) {
-                    return throwable instanceof DisabledException;
-                }
-            };
+        public static boolean isInstanceOf(Throwable throwable) {
+            return throwable instanceof DisabledException;
         }
     }
 
-    class Util {
+    public static <T extends ObjectMember> Map<String, T> mapById(final Stream<T> members) {
 
-        private Util(){}
-
-        public static <T extends ObjectMember> Map<String, T> mapById(final Stream<T> members) {
-
-            val memberById = _Maps.<String, T>newLinkedHashMap();
-            members.forEach(member->{
-                // if there are multiple members with same id, just disregard
-                memberById.put(member.getId(), member);
-            });
-            return memberById;
-        }
+        val memberById = _Maps.<String, T>newLinkedHashMap();
+        members.forEach(member->{
+            // if there are multiple members with same id, just disregard
+            memberById.put(member.getId(), member);
+        });
+        return memberById;
     }
+
 
     // //////////////////////////////////////////////////////
     // Comparators

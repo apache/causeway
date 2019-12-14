@@ -135,12 +135,6 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
         context.checking(new Expectations() {
             {
 
-//                allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
-//                will(returnValue(mockEmployeeAdapter));
-//                
-//                allowing(mockPersistenceSessionServiceInternal).adapterFor(passwordValue);
-//                will(returnValue(mockPasswordAdapter));
-
                 allowing(mockObjectManager).adapt(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 

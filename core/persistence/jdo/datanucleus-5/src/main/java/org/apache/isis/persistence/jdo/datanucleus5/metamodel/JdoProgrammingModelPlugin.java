@@ -209,7 +209,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
             private String asCsv(final List<ObjectSpecification> specList) {
                 return stream(specList)
-                        .map(ObjectSpecification.Functions.FULL_IDENTIFIER)
+                        .map(ObjectSpecification::getFullIdentifier)
                         .collect(Collectors.joining(","));
             }
 

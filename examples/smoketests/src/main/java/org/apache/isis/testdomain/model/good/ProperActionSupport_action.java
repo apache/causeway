@@ -20,7 +20,7 @@ package org.apache.isis.testdomain.model.good;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.incubator.model.applib.annotation.Supporting;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,8 +38,8 @@ public class ProperActionSupport_action {
     }
     
     // proper support
-    @Supporting
-    public boolean hide$$() {
+    @Model
+    public boolean hideAct() {
         return false;
     }
 

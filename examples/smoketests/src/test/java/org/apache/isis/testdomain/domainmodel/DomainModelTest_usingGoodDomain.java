@@ -100,7 +100,7 @@ class DomainModelTest_usingGoodDomain {
     void typeLevelAnnotations_shouldBeHonored_onMixins() {
         
         val holderSpec = specificationLoader.loadSpecification(ProperActionSupport.class, 
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                        IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
         val mx_mixin = holderSpec.getObjectAction("mixin"); // proper mix-in support
         assertNotNull(mx_mixin);

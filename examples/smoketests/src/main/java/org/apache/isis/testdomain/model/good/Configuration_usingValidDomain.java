@@ -20,8 +20,14 @@ package org.apache.isis.testdomain.model.good;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 
 @Configuration
+@Import({
+    IsisModuleIncModelMetaModel.class
+})
 @ComponentScan(
         basePackageClasses= {               
                 Configuration_usingValidDomain.class

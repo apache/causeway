@@ -20,19 +20,21 @@
 package org.apache.isis.metamodel.specloader.specimpl.dflt;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.commons.ToString;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetedMethod;
@@ -48,6 +50,7 @@ import org.apache.isis.metamodel.facets.object.plural.inferred.PluralFacetInferr
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.facets.object.wizard.WizardFacet;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.spec.ActionType;
 import org.apache.isis.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -57,7 +60,6 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.metamodel.specloader.specimpl.FacetedMethodsBuilder;
@@ -363,8 +365,13 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 .orElse(null);
     }
 
-    // -- getMember, catalog... (not API)
-
+    /**
+     * @param method
+     * @return ObjectMember associated with given {@code method}, or else {@code null}
+     * @apiNote not API; refactoring result type to Optional<ObjectMember> would be desired, 
+     * but did not work with JMock tests on first attempt
+     */
+    @Nullable
     public ObjectMember getMember(final Method method) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
@@ -374,34 +381,34 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return membersByMethod.get(method);
     }
 
-    private HashMap<Method, ObjectMember> catalogueMembers() {
-        final HashMap<Method, ObjectMember> membersByMethod = _Maps.newHashMap();
-        cataloguePropertiesAndCollections(membersByMethod);
-        catalogueActions(membersByMethod);
+    private Map<Method, ObjectMember> catalogueMembers() {
+        val membersByMethod = _Maps.<Method, ObjectMember>newHashMap();
+        cataloguePropertiesAndCollections(membersByMethod::put);
+        catalogueActions(membersByMethod::put);
         return membersByMethod;
     }
 
-    private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
-        final Stream<ObjectAssociation> fields = streamAssociations(Contributed.EXCLUDED);
-        fields.forEach(field->{
+    private void cataloguePropertiesAndCollections(BiConsumer<Method, ObjectMember> onMember) {
+        streamAssociations(Contributed.EXCLUDED)
+        .forEach(field->{
             final Stream<Facet> facets = field.streamFacets().filter(ImperativeFacet.PREDICATE);
             facets.forEach(facet->{
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
-                    membersByMethod.put(imperativeFacetMethod, field);
+                    onMember.accept(imperativeFacetMethod, field);
                 }
             });
         });
     }
 
-    private void catalogueActions(final Map<Method, ObjectMember> membersByMethod) {
-        final Stream<ObjectAction> userActions = streamObjectActions(Contributed.INCLUDED);
-        userActions.forEach(userAction->{
+    private void catalogueActions(BiConsumer<Method, ObjectMember> onMember) {
+        streamObjectActions(Contributed.INCLUDED)
+        .forEach(userAction->{
             final Stream<Facet> facets = userAction.streamFacets().filter(ImperativeFacet.PREDICATE);
             facets.forEach(facet->{
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
-                    membersByMethod.put(imperativeFacetMethod, userAction);
+                    onMember.accept(imperativeFacetMethod, userAction);
                 }
             });
         });

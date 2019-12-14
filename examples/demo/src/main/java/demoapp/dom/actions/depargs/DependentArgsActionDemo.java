@@ -18,20 +18,29 @@
  */
 package demoapp.dom.actions.depargs;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Markup;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import demoapp.utils.DemoStub;
 import lombok.Getter;
@@ -59,6 +68,43 @@ public class DependentArgsActionDemo extends DemoStub {
         items.add(DemoItem.of("third", Parity.ODD));
         items.add(DemoItem.of("last", Parity.EVEN));
     }
+    
+    // -- DEBUG
+    
+//    @ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
+//    @Action(semantics = SemanticsOf.SAFE)
+//    public DependentArgsActionDemo useChoices(
+//
+//            // PARAM 0
+//            @Parameter(optionality = Optionality.MANDATORY)
+//            Parity parity,
+//
+//            // PARAM 1
+//            @Parameter(optionality = Optionality.MANDATORY)
+//            DemoItem item
+//
+//            ) {
+//        
+//        return this;
+//    }
+//
+//    // -- PARAM 1 (DemoItem)
+//
+//    
+//    public Collection<DemoItem> choices1useChoices(
+//            
+//            Parity parity // <-- the refining parameter from the dialog above
+//            
+//            ) {
+//        
+//        if(parity == null) {
+//            return this.getItems();
+//        }
+//        return this.getItems()
+//                .stream()
+//                .filter(item->parity == item.getParity())
+//                .collect(Collectors.toList());
+//    }
 
 }
 

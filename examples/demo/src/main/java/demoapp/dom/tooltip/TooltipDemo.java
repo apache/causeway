@@ -42,7 +42,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.incubator.model.applib.annotation.Supporting;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import demoapp.dom.actions.assoc.DemoItem;
 import demoapp.utils.DemoStub;
@@ -110,7 +110,7 @@ public class TooltipDemo extends DemoStub {
         return this;
     }
 
-    @Supporting
+    @Model
     public String disableDisabledAction() {
         return "Disabled for demonstration.";
     }
@@ -125,7 +125,7 @@ public class TooltipDemo extends DemoStub {
         return this;
     }
 
-    @Supporting
+    @Model
     public String disableDisabledActionWithConfirmation() {
         return "Disabled for demonstration.";
     }
