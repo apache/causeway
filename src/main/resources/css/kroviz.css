@@ -1,9 +1,3 @@
-/*
-
-I will show you how to change a height of a standard Bootstrap navbar.
-
-*/
-
 .navbar {
     min-height: 24px;
     height: 24px;
@@ -44,6 +38,7 @@ div.tabulator-cell {
 
 div.tabulator-header {
     font-weight: lighter !important;
+    font-size: small !important;
 }
 
 .text-danger {
