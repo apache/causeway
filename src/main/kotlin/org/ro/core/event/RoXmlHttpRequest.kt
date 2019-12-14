@@ -60,6 +60,24 @@ class RoXmlHttpRequest {
         EventStore.start(url, method, body, aggregator)
     }
 
+    fun processAnonymous(link: Link, aggregator: IAggregator?) {
+        val method = link.method
+        val url = link.href
+
+        val xhr = XMLHttpRequest()
+        xhr.open(method, url, true)
+        xhr.setRequestHeader("Content-Type", "text/plain")
+        xhr.setRequestHeader("Accept", "image/svg+xml")
+
+        xhr.onload = { _ -> resultHandler(url, xhr.responseText) }
+        xhr.onerror = { _ -> errorHandler(url, xhr.responseText) }
+        xhr.ontimeout = { _ -> errorHandler(url, xhr.responseText) }
+
+        val body = Utils.argumentsAsList(link)
+        xhr.send(body)
+        EventStore.start(url, method, body, aggregator)
+    }
+
     private fun resultHandler(url: String, responseText: String) {
         val jsonString: String = responseText
         val logEntry: LogEntry? = EventStore.end(url, jsonString)

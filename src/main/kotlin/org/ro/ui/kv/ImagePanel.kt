@@ -29,5 +29,6 @@ class ImagePanel : VPanel() {
         }
 
     }
-}
+
+ }
 

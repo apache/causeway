@@ -62,7 +62,7 @@ object RoMenuBar : SimplePanel() {
             ddLink(sampleTitle,
                     icon = IconManager.find(sampleTitle)
             ).onClick {
-                val panel = ImagePanel()
+                val panel = PlantumlPanel() as SimplePanel
                 UiManager.add(sampleTitle, panel)
             }
         }

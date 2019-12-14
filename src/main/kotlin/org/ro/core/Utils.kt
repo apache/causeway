@@ -70,6 +70,11 @@ object Utils {
         return argumentsAsString(args, "?", "&", "")
     }
 
+    fun argumentsAsList(link: Link): String {
+        val args = link.args
+        return argumentsAsList(args, "{", ",", "}")
+    }
+
     internal fun argumentsAsString(
             args: Map<String, Argument?>?,
             start: String,
@@ -89,9 +94,26 @@ object Utils {
         }
     }
 
+    internal fun argumentsAsList(
+            args: Map<String, Argument?>?,
+            start: String,
+            sep: String,
+            end: String): String {
+        if (args.isNullOrEmpty()) {
+            return ""
+        } else {
+            var answer = start
+            args.forEach { kv ->
+                val arg = kv.value!!
+                answer = answer + arg.key + ":" + arg.value + sep  //IMPROVE define a function
+            }
+            val len = answer.length
+            answer = answer.replaceRange(len - 1, len, end)
+            return answer
+        }
+    }
+
     internal fun asBody(arg: Argument): String {
-        console.log("[Utils.asBody]")
-        console.log(arg)
         var v = arg.value!!
         val isHttp = v.startsWith("http")
         v = quote(v)
@@ -108,7 +130,5 @@ object Utils {
     private fun quote(s: String): String {
         return "\"" + s + "\""
     }
-
-
 
 }

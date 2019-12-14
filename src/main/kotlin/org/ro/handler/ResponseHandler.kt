@@ -24,6 +24,7 @@ object ResponseHandler {
     private var _10 = UserHandler()
     private var _11 = VersionHandler()
     private var _12 = DomainTypesHandler()
+    private var _13 = DiagramHandler()
     private var last = DefaultHandler()
 
     init {
@@ -40,7 +41,8 @@ object ResponseHandler {
         _9.successor = _10
         _10.successor = _11
         _11.successor = _12
-        _12.successor = last
+        _12.successor = _13
+        _13.successor = last
 
         delegate = _1
     }
