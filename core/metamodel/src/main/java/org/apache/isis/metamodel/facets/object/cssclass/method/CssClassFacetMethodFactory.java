@@ -42,7 +42,7 @@ public class CssClassFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbs
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod(
-                cls, MethodLiteralConstants.CSS_CLASS_PREFIX, String.class, NO_PARAMETERS_TYPES);
+                cls, MethodLiteralConstants.CSS_CLASS_PREFIX, String.class, NO_ARG);
         if (method == null) {
             return;
         }

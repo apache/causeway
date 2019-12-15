@@ -19,11 +19,12 @@
 
 package org.apache.isis.metamodel.facets.properties;
 
-import lombok.val;
-
 import java.lang.reflect.Method;
 
+import org.jmock.auto.Mock;
+
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
@@ -63,7 +64,8 @@ import org.apache.isis.metamodel.facets.properties.validating.method.PropertyVal
 import org.apache.isis.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.jmock.auto.Mock;
+
+import lombok.val;
 
 public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -362,7 +364,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyChoicesMethod = findMethod(Customer.class, "choicesFirstName");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(
+                Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyChoicesFacet.class);
         assertNotNull(facet);
@@ -403,7 +406,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyAutoCompleteMethod = findMethod(Customer.class, "autoCompleteFirstName", new Class[]{String.class});
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(
+                Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyAutoCompleteFacet.class);
         assertNotNull(facet);
@@ -432,7 +436,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyDefaultMethod = findMethod(Customer.class, "defaultFirstName");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(
+                Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyDefaultFacet.class);
         assertNotNull(facet);

@@ -63,7 +63,9 @@ implements FacetFactory, MetaModelContextAware, MetaModelContext.Delegating {
     
     // -- METHOD UTILITITES
     
-    protected static final Class<?>[] NO_PARAMETERS_TYPES = new Class<?>[0];
+    protected static final Class<?> NO_RETURN = (Class<?>)null;
+    protected static final Class<?>[] NO_ARG = new Class<?>[0];
+    protected static final Class<?>[] STRING_ARG = new Class<?>[] {String.class};
 
 
 }

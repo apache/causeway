@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets.properties.autocomplete.method;
 
-import java.lang.reflect.Method;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -37,7 +35,8 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.AUTO_COMPLETE_PREFIX);
 
     public PropertyAutoCompleteFacetMethodFactory() {
-        super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        // to also support properties from mixins, need to not only include properties but also actions
+        super(FeatureType.PROPERTIES_AND_ACTIONS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override
@@ -48,22 +47,25 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
 
     private void attachPropertyAutoCompleteFacetIfChoicesMethodIsFound(
             final ProcessMethodContext processMethodContext) {
-
-        final Method getter = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asJavaBaseName(getter.getName());
-
-        val getterName = getter.toString();
-        if(getterName.contains("ProperMemberSupport")) {
-            System.out.println("#autoComplete# " + getter);
-        }
         
-        final Class<?> cls = processMethodContext.getCls();
-        final Class<?> returnType = getter.getReturnType();
-        final Method autoCompleteMethod = MethodFinderUtils
+        // optimization step, not strictly required
+        if(!super.isPropertyOrMixinMain(processMethodContext)) {
+            return;
+        }
+
+        val getterOrMixinMain = processMethodContext.getMethod();
+        val capitalizedName = processMethodContext.isMixinMain() 
+                ? StringExtensions.asCapitalizedName(getterOrMixinMain.getName())
+                        : StringExtensions.asJavaBaseName(getterOrMixinMain.getName());
+        
+        val cls = processMethodContext.getCls();
+        val returnType = getterOrMixinMain.getReturnType();
+        val autoCompleteMethod = MethodFinderUtils
                 .findMethod(
                         cls, 
                         MethodLiteralConstants.AUTO_COMPLETE_PREFIX + capitalizedName, 
-                        (Class<?>)null, new Class[]{String.class});
+                        NO_RETURN, 
+                        STRING_ARG);
         if (autoCompleteMethod == null) {
             return;
         }

@@ -40,7 +40,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        val method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        val method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             super.addFacet(new CreatedCallbackFacetViaMethod(method, facetHolder));
             processClassContext.removeMethod(method);

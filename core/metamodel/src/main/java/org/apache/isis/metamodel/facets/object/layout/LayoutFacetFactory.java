@@ -42,7 +42,7 @@ public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod(
-                cls, MethodLiteralConstants.LAYOUT_METHOD_NAME, String.class, NO_PARAMETERS_TYPES);
+                cls, MethodLiteralConstants.LAYOUT_METHOD_NAME, String.class, NO_ARG);
 
         final LayoutFacet facet;
         if (method == null) {

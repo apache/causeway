@@ -95,7 +95,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         final FacetHolder property = processMethodContext.getFacetHolder();
 
         final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
-        final Method clearMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.CLEAR_PREFIX + capitalizedName, void.class, NO_PARAMETERS_TYPES);
+        final Method clearMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.CLEAR_PREFIX + capitalizedName, void.class, NO_ARG);
 
         if (clearMethod == null) {
             return null;

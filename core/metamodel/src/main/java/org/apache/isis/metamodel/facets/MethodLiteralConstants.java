@@ -29,10 +29,6 @@ public final class MethodLiteralConstants {
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
     public static final String SET_PREFIX = "set";
-    public static final String CLEAR_PREFIX = "clear";
-    public static final String MODIFY_PREFIX = "modify";
-    public static final String ADD_TO_PREFIX = "addTo";
-    public static final String REMOVE_FROM_PREFIX = "removeFrom";
 
     public static final String DEFAULT_PREFIX = "default";
     public static final String CHOICES_PREFIX = "choices";
@@ -43,9 +39,6 @@ public final class MethodLiteralConstants {
     public static final String DISABLE_PREFIX = "disable";
     public static final String VALIDATE_PREFIX = "validate";
     
-    public static final String VALIDATE_ADD_TO_PREFIX = "validateAddTo";
-    public static final String VALIDATE_REMOVE_FROM_PREFIX = "validateRemoveFrom";
-
     public static final String CREATED_PREFIX = "created";
     public static final String LOADED_PREFIX = "loaded";
     public static final String LOADING_PREFIX = "loading";
@@ -70,6 +63,15 @@ public final class MethodLiteralConstants {
     public static final String HIDDEN_PREFIX = "hidden";
     public static final String ICON_NAME_PREFIX = "iconName";
     public static final String LAYOUT_METHOD_NAME = "layout";
+    
+    // -- DEPRECATIONS
+    
+    @Deprecated public static final String VALIDATE_ADD_TO_PREFIX = "validateAddTo";
+    @Deprecated public static final String VALIDATE_REMOVE_FROM_PREFIX = "validateRemoveFrom";
+    @Deprecated public static final String CLEAR_PREFIX = "clear";
+    @Deprecated public static final String MODIFY_PREFIX = "modify";
+    @Deprecated public static final String ADD_TO_PREFIX = "addTo";
+    @Deprecated public static final String REMOVE_FROM_PREFIX = "removeFrom";
     
 
 }

@@ -69,7 +69,7 @@ public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBa
             val disableMethod = MethodFinderUtils.findMethod_returningText(
                     cls,
                     hideName,
-                    NO_PARAMETERS_TYPES);
+                    NO_ARG);
 
             if (disableMethod != null) {
                 processParameterContext.removeMethod(disableMethod);

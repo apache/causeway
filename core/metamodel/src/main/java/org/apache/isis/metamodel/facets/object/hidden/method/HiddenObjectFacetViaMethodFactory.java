@@ -78,7 +78,7 @@ public class HiddenObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFac
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod(
-                cls, MethodLiteralConstants.HIDDEN_PREFIX, returnType, NO_PARAMETERS_TYPES);
+                cls, MethodLiteralConstants.HIDDEN_PREFIX, returnType, NO_ARG);
         if (method == null) {
             return false;
         }

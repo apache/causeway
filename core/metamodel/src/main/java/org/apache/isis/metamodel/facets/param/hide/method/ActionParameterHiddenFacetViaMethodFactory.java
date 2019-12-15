@@ -67,7 +67,7 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
                     cls,
                     hideName,
                     boolean.class,
-                    NO_PARAMETERS_TYPES);
+                    NO_ARG);
 
             if (hideMethod != null) {
                 processParameterContext.removeMethod(hideMethod);

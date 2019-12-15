@@ -53,7 +53,7 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
 
         Method method = MethodFinderUtils
                 .findMethod(cls, REMOVING_PREFIX, void.class,
-                        NO_PARAMETERS_TYPES);
+                        NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             val facet = facetHolder.getFacet(RemovingCallbackFacet.class);
@@ -64,7 +64,7 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, REMOVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, REMOVED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             val facet = facetHolder.getFacet(RemovedCallbackFacet.class);

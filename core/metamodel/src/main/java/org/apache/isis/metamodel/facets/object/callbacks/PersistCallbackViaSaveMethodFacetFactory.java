@@ -50,7 +50,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
         val facets = new ArrayList<Facet>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.SAVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.SAVING_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             val facet = facetHolder.getFacet(PersistingCallbackFacet.class);
@@ -61,7 +61,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.SAVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.SAVED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             val facet = facetHolder.getFacet(PersistedCallbackFacet.class);

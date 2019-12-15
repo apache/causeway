@@ -99,7 +99,7 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
                 returnTypes,
                 cls,
                 name,
-                new Class[]{String.class});
+                STRING_ARG);
     }
 
 }

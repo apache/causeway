@@ -48,7 +48,7 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
         final Method method = MethodFinderUtils.findMethod_returningText(
                 cls,
                 VALIDATE_PREFIX,
-                NO_PARAMETERS_TYPES);
+                NO_ARG);
         if (method != null) {
             final TranslationService translationService = getTranslationService();
             // sadness: same as in TranslationFactory

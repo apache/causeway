@@ -58,7 +58,7 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
         Method method = MethodFinderUtils.findMethod_returningText(
                 cls,
                 TITLE,
-                NO_PARAMETERS_TYPES);
+                NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             final TranslationService translationService = getTranslationService();

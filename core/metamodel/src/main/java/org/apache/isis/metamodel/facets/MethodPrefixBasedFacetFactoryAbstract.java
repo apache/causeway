@@ -106,4 +106,12 @@ implements MethodPrefixBasedFacetFactory {
         });
     }
 
+    protected boolean isPropertyOrMixinMain(ProcessMethodContext processMethodContext) {
+        return processMethodContext.isMixinMain() 
+                || (
+                        processMethodContext.getFeatureType()!=null // yet to support some JUnit tests
+                        && processMethodContext.getFeatureType().isProperty()
+                   );
+    }
+
 }

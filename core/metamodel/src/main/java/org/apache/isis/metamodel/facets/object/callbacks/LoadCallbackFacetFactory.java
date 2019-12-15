@@ -48,13 +48,13 @@ public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
         val facetHolder = processClassContext.getFacetHolder();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, LOADING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, LOADING_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             super.addFacet(new LoadingCallbackFacetViaMethod(method, facetHolder));
         }
 
-        method = MethodFinderUtils.findMethod(cls, LOADED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, LOADED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             super.addFacet(new LoadedCallbackFacetViaMethod(method, facetHolder));

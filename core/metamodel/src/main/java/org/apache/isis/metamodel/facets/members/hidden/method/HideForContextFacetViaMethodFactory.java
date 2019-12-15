@@ -31,8 +31,6 @@ import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
-import lombok.val;
-
 public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDE_PREFIX);
@@ -57,12 +55,8 @@ public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetF
     private void attachHideFacetIfHideMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method getter = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(getter.getName());
-
-        val getterName = getter.toString();
-        if(getterName.contains("ProperMemberSupport")) {
-            System.out.println("#hide# " + getter);
-        }
+        final String capitalizedName = 
+                StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(getter.getName());
         
         final Class<?> cls = processMethodContext.getCls();
         Method hideMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});

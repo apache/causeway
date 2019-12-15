@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets.properties.defaults.method;
 
-import java.lang.reflect.Method;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -30,12 +28,15 @@ import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
+import lombok.val;
+
 public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.DEFAULT_PREFIX);
 
     public PropertyDefaultFacetViaMethodFactory() {
-        super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+     // to also support properties from mixins, need to not only include properties but also actions
+        super(FeatureType.PROPERTIES_AND_ACTIONS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override
@@ -46,12 +47,24 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
 
     private void attachPropertyDefaultFacetIfDefaultMethodIsFound(final ProcessMethodContext processMethodContext) {
 
-        final Method getMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
+        // optimization step, not strictly required
+        if(!super.isPropertyOrMixinMain(processMethodContext)) {
+            return;
+        }
 
-        final Class<?> cls = processMethodContext.getCls();
-        final Class<?> returnType = getMethod.getReturnType();
-        final Method method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.DEFAULT_PREFIX + capitalizedName, returnType, NO_PARAMETERS_TYPES);
+        val getterOrMixinMain = processMethodContext.getMethod();
+        val capitalizedName = processMethodContext.isMixinMain() 
+                ? StringExtensions.asCapitalizedName(getterOrMixinMain.getName())
+                        : StringExtensions.asJavaBaseName(getterOrMixinMain.getName());
+
+        val cls = processMethodContext.getCls();
+        val returnType = getterOrMixinMain.getReturnType();
+        val method = MethodFinderUtils
+                .findMethod(
+                    cls,
+                    MethodLiteralConstants.DEFAULT_PREFIX + capitalizedName, 
+                    returnType, 
+                    NO_ARG);
         if (method == null) {
             return;
         }

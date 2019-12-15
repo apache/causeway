@@ -43,7 +43,7 @@ public class IconFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstrac
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod(
-                cls, MethodLiteralConstants.ICON_NAME_PREFIX, String.class, NO_PARAMETERS_TYPES);
+                cls, MethodLiteralConstants.ICON_NAME_PREFIX, String.class, NO_ARG);
         if (method == null) {
             return;
         }

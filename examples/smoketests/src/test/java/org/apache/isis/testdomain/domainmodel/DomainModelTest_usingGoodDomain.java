@@ -91,7 +91,7 @@ class DomainModelTest_usingGoodDomain {
     
     @Test
     void goodDomain_shouldPassValidation() {
-        debug();
+        //debug();
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
         
         val validateDomainModel = new ValidateDomainModel(specificationLoader);
