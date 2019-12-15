@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.EnumSet;
 import java.util.Optional;
 
 import org.jmock.Expectations;
@@ -33,10 +33,10 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.metamodel.context.MetaModelContext;
-import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
@@ -139,11 +139,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
         return Utils.contains(types, type);
     }
 
-    protected boolean contains(final FeatureType[] featureTypes, final FeatureType featureType) {
-        return Utils.contains(featureTypes, featureType);
-    }
-
-    protected static boolean contains(final List<FeatureType> featureTypes, final FeatureType featureType) {
+    protected static boolean contains(final EnumSet<FeatureType> featureTypes, final FeatureType featureType) {
         return Utils.contains(featureTypes, featureType);
     }
 

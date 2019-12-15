@@ -20,6 +20,7 @@
 package org.apache.isis.metamodel.facets.object.disabled.method;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
@@ -47,7 +48,7 @@ import lombok.val;
  */
 public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { DISABLED };
+    private static final Can<String> PREFIXES = Can.ofSingleton(DISABLED);
 
     public DisabledObjectFacetViaMethodFactory() {
         super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);

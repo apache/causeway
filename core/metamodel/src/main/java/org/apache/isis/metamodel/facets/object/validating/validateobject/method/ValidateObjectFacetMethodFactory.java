@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.object.validating.validateobject.method
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -33,7 +34,7 @@ import static org.apache.isis.metamodel.facets.MethodLiteralConstants.VALIDATE_P
 
 public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { VALIDATE_PREFIX, };
+    private static final Can<String> PREFIXES = Can.ofSingleton(VALIDATE_PREFIX);
 
     public ValidateObjectFacetMethodFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);

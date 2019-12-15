@@ -19,16 +19,17 @@
 package org.apache.isis.incubator.model.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.incubator.model.applib.annotation.Model;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
@@ -42,11 +43,12 @@ import lombok.val;
  * @since 2.0
  *
  */
-public class SupportingMethodValidatorRefinerFactory extends FacetFactoryAbstract 
+public class SupportingMethodValidatorRefinerFactory 
+extends FacetFactoryAbstract 
 implements MetaModelRefiner {
 
     public SupportingMethodValidatorRefinerFactory() {
-        super(Collections.emptyList()); // does not contribute any facets
+        super(EnumSet.noneOf(FeatureType.class)); // does not contribute any facets
     }
 
     @Override

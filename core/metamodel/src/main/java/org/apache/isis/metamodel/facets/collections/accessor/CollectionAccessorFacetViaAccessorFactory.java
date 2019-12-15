@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -35,7 +36,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 public class CollectionAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.GET_PREFIX };
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.GET_PREFIX);
 
     public CollectionAccessorFacetViaAccessorFactory() {
         super(FeatureType.COLLECTIONS_ONLY, PREFIXES);

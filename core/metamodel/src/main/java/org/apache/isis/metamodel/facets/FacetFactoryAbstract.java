@@ -19,9 +19,8 @@
 
 package org.apache.isis.metamodel.facets;
 
-import java.util.List;
+import java.util.EnumSet;
 
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -37,15 +36,11 @@ implements FacetFactory, MetaModelContextAware, MetaModelContext.Delegating {
     @Getter(onMethod = @__({@Override})) @Setter(onMethod = @__({@Override}))
     private MetaModelContext metaModelContext;
     
-    private final List<FeatureType> featureTypes;
+    @Getter(onMethod = @__({@Override}))
+    private final EnumSet<FeatureType> featureTypes;
 
-    public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
-        this.featureTypes = _Lists.unmodifiable(featureTypes);
-    }
-
-    @Override
-    public List<FeatureType> getFeatureTypes() {
-        return featureTypes;
+    public FacetFactoryAbstract(EnumSet<FeatureType> featureTypes) {
+        this.featureTypes = featureTypes;
     }
 
     @Override

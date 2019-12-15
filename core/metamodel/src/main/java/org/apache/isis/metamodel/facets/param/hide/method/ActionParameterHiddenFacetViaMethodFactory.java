@@ -24,6 +24,7 @@ import lombok.val;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -39,7 +40,7 @@ import org.apache.isis.metamodel.facets.param.hide.ActionParameterHiddenFacet;
  */
 public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.HIDE_PREFIX };
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDE_PREFIX);
 
     public ActionParameterHiddenFacetViaMethodFactory() {
         super(FeatureType.PARAMETERS_ONLY, OrphanValidation.VALIDATE, PREFIXES);

@@ -22,6 +22,8 @@ package org.apache.isis.metamodel.facets.properties.accessor;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -33,7 +35,9 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.GET_PREFIX, MethodLiteralConstants.IS_PREFIX };
+    private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
+            MethodLiteralConstants.GET_PREFIX, 
+            MethodLiteralConstants.IS_PREFIX));
 
     public PropertyAccessorFacetViaAccessorFactory() {
         super(FeatureType.PROPERTIES_ONLY, PREFIXES);

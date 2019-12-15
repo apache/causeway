@@ -21,10 +21,9 @@ package org.apache.isis.metamodel.facetapi;
 
 import java.beans.Introspector;
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.EnumSet;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facets.FacetFactory;
 
@@ -86,34 +85,34 @@ public enum FeatureType {
         }
     };
 
-    public final static List<FeatureType> COLLECTIONS_ONLY = _Lists.of(COLLECTION);
-    public final static List<FeatureType> COLLECTIONS_AND_ACTIONS = _Lists.of(COLLECTION, ACTION);
-    public final static List<FeatureType> ACTIONS_ONLY = _Lists.of(ACTION);
-    public final static List<FeatureType> PARAMETERS_ONLY = _Lists.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
-    public final static List<FeatureType> PROPERTIES_ONLY = _Lists.of(PROPERTY);
-    public final static List<FeatureType> PROPERTIES_AND_ACTIONS = _Lists.of(PROPERTY, ACTION);
-    public final static List<FeatureType> OBJECTS_ONLY = _Lists.of(OBJECT);
-    public final static List<FeatureType> MEMBERS = _Lists.of(PROPERTY, COLLECTION, ACTION);
-    public final static List<FeatureType> OBJECTS_AND_PROPERTIES = _Lists.of(OBJECT, PROPERTY);
-    public final static List<FeatureType> PROPERTIES_AND_COLLECTIONS = _Lists.of(PROPERTY, COLLECTION);
-    public final static List<FeatureType> OBJECTS_AND_COLLECTIONS = _Lists.of(OBJECT, COLLECTION);
-    public final static List<FeatureType> OBJECTS_AND_ACTIONS = _Lists.of(OBJECT, ACTION);
-    public final static List<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = _Lists.of(OBJECT, PROPERTY, COLLECTION);
-
-    public static final List<FeatureType> ACTIONS_AND_PARAMETERS =
-            _Lists.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public final static EnumSet<FeatureType> COLLECTIONS_ONLY = EnumSet.of(COLLECTION);
+    public final static EnumSet<FeatureType> COLLECTIONS_AND_ACTIONS = EnumSet.of(COLLECTION, ACTION);
+    public final static EnumSet<FeatureType> ACTIONS_ONLY = EnumSet.of(ACTION);
+    public final static EnumSet<FeatureType> PARAMETERS_ONLY = EnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public final static EnumSet<FeatureType> PROPERTIES_ONLY = EnumSet.of(PROPERTY);
+    public final static EnumSet<FeatureType> PROPERTIES_AND_ACTIONS = EnumSet.of(PROPERTY, ACTION);
+    public final static EnumSet<FeatureType> OBJECTS_ONLY = EnumSet.of(OBJECT);
+    public final static EnumSet<FeatureType> MEMBERS = EnumSet.of(PROPERTY, COLLECTION, ACTION);
+    public final static EnumSet<FeatureType> OBJECTS_AND_PROPERTIES = EnumSet.of(OBJECT, PROPERTY);
+    public final static EnumSet<FeatureType> PROPERTIES_AND_COLLECTIONS = EnumSet.of(PROPERTY, COLLECTION);
+    public final static EnumSet<FeatureType> OBJECTS_AND_COLLECTIONS = EnumSet.of(OBJECT, COLLECTION);
+    public final static EnumSet<FeatureType> OBJECTS_AND_ACTIONS = EnumSet.of(OBJECT, ACTION);
+    public final static EnumSet<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = EnumSet.of(OBJECT, PROPERTY, COLLECTION);
+    public static final EnumSet<FeatureType> ACTIONS_AND_PARAMETERS =
+            EnumSet.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
 
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public final static List<FeatureType> EVERYTHING_BUT_PARAMETERS = _Lists.of(OBJECT, PROPERTY, COLLECTION, ACTION);
+    public final static EnumSet<FeatureType> EVERYTHING_BUT_PARAMETERS = 
+            EnumSet.complementOf(
+                    EnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION));
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public final static List<FeatureType> EVERYTHING =
-            _Lists.of(OBJECT, PROPERTY, COLLECTION, ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public final static EnumSet<FeatureType> EVERYTHING = EnumSet.allOf(FeatureType.class); 
 
     private final String name;
 

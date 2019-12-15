@@ -32,8 +32,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.context.MetaModelContext;
-import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
@@ -82,7 +82,7 @@ public class FacetProcessor {
      * {@link MethodPrefixBasedFacetFactory}.
      *
      */
-    private final _Lazy<List<String>> methodPrefixes = 
+    private final _Lazy<Set<String>> methodPrefixes = 
             _Lazy.threadSafe(this::init_methodPrefixes);
 
     /**
@@ -433,12 +433,12 @@ public class FacetProcessor {
         return factoryListByFeatureType;
     }
 
-    private List<String> init_methodPrefixes() {
-        val cachedMethodPrefixes = _Lists.<String>newArrayList();
+    private Set<String> init_methodPrefixes() {
+        val cachedMethodPrefixes = _Sets.<String>newHashSet();
         for (val facetFactory : factories) {
             if (facetFactory instanceof MethodPrefixBasedFacetFactory) {
                 val methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
-                ListExtensions.mergeWith(cachedMethodPrefixes, methodPrefixBasedFacetFactory.getPrefixes());
+                methodPrefixBasedFacetFactory.getPrefixes().forEach(cachedMethodPrefixes::add);
             }
         }
         return cachedMethodPrefixes;

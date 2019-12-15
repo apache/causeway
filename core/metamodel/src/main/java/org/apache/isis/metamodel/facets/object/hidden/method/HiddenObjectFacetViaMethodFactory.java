@@ -21,11 +21,13 @@ package org.apache.isis.metamodel.facets.object.hidden.method;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -44,9 +46,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectMember;
  */
 public class HiddenObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String HIDDEN_PREFIX = "hidden";
-
-    private static final String[] PREFIXES = { HIDDEN_PREFIX, };
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDDEN_PREFIX);
 
     public HiddenObjectFacetViaMethodFactory() {
         super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
@@ -77,7 +77,8 @@ public class HiddenObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFac
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(cls, HIDDEN_PREFIX, returnType, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(
+                cls, MethodLiteralConstants.HIDDEN_PREFIX, returnType, NO_PARAMETERS_TYPES);
         if (method == null) {
             return false;
         }

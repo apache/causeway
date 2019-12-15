@@ -18,42 +18,42 @@
  */
 package org.apache.isis.metamodel.facets;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.EnumSet;
 import java.util.Objects;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
 implements MethodPrefixBasedFacetFactory {
 
-    private final List<String> prefixes;
+    @Getter(onMethod = @__(@Override))
+    private final Can<String> prefixes;
 
     private final OrphanValidation orphanValidation; 
 
-    protected enum OrphanValidation { // remove?
+    protected enum OrphanValidation {
         VALIDATE,
         DONT_VALIDATE
     }
 
-    public MethodPrefixBasedFacetFactoryAbstract(final List<FeatureType> featureTypes, final OrphanValidation orphanValidation, final String... prefixes) {
+    public MethodPrefixBasedFacetFactoryAbstract(
+            @NonNull final EnumSet<FeatureType> featureTypes, 
+            @NonNull final OrphanValidation orphanValidation, 
+            @NonNull final Can<String> prefixes) {
+        
         super(featureTypes);
         this.orphanValidation = orphanValidation;
-        this.prefixes = Collections.unmodifiableList(Arrays.asList(prefixes));
+        this.prefixes = prefixes;
     }
     
-    @Override
-    public List<String> getPrefixes() {
-        return prefixes;
-    }
-
- 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 

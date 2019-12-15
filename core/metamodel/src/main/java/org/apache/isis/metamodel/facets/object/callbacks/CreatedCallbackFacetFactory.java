@@ -19,6 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.callbacks;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
@@ -28,7 +29,7 @@ import lombok.val;
 
 public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.CREATED_PREFIX, };
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CREATED_PREFIX);
 
     public CreatedCallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);

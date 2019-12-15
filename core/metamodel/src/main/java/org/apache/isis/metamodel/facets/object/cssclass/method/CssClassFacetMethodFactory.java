@@ -21,16 +21,16 @@ package org.apache.isis.metamodel.facets.object.cssclass.method;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 public class CssClassFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String CSS_CLASS_PREFIX = "cssClass";
-
-    private static final String[] PREFIXES = { CSS_CLASS_PREFIX, };
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CSS_CLASS_PREFIX);
 
     public CssClassFacetMethodFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -41,7 +41,8 @@ public class CssClassFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbs
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(cls, CSS_CLASS_PREFIX, String.class, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(
+                cls, MethodLiteralConstants.CSS_CLASS_PREFIX, String.class, NO_PARAMETERS_TYPES);
         if (method == null) {
             return;
         }

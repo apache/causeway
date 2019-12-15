@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.param.defaults.methodnum;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
@@ -41,7 +42,7 @@ import lombok.val;
  */
 public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = {};
+    private static final Can<String> PREFIXES = Can.empty();
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from

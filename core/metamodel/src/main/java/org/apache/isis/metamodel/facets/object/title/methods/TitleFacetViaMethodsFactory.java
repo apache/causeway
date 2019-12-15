@@ -22,6 +22,8 @@ package org.apache.isis.metamodel.facets.object.title.methods;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -36,7 +38,9 @@ import static org.apache.isis.metamodel.facets.MethodLiteralConstants.TO_STRING;
 
 public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { TO_STRING, TITLE, };
+    private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
+            TO_STRING, 
+            TITLE));
 
     public TitleFacetViaMethodsFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);

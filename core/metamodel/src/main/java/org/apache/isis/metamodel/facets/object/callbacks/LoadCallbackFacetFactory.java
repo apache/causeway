@@ -21,6 +21,8 @@ package org.apache.isis.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
@@ -32,7 +34,9 @@ import lombok.val;
 
 public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { LOADED_PREFIX, LOADING_PREFIX, };
+    private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
+            LOADED_PREFIX, 
+            LOADING_PREFIX));
 
     public LoadCallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);

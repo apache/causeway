@@ -19,8 +19,9 @@
 
 package org.apache.isis.metamodel.facets;
 
-import java.util.List;
+import java.util.EnumSet;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 
@@ -28,8 +29,10 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
 extends MethodPrefixBasedFacetFactoryAbstract
 implements PropertyOrCollectionIdentifyingFacetFactory {
 
-
-    public PropertyOrCollectionIdentifyingFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {
+    public PropertyOrCollectionIdentifyingFacetFactoryAbstract(
+            final EnumSet<FeatureType> featureTypes, 
+            final Can<String> prefixes) {
+        
         super(featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
     }
 

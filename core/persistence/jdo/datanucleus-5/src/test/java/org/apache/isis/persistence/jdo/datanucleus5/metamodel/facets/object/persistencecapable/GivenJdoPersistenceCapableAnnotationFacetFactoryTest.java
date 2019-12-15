@@ -18,14 +18,9 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable;
 
-import java.util.List;
-
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetAnnotation;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -34,11 +29,10 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 
-import junit.framework.Assert;
+import lombok.val;
 
-
-public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
-AbstractFacetFactoryTest {
+public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private JdoPersistenceCapableAnnotationFacetFactory facetFactory;
 
@@ -56,20 +50,12 @@ AbstractFacetFactoryTest {
     }
 
     public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory
-                .getFeatureTypes();
-        Assert
-        .assertTrue(contains(featureTypes,
-                FeatureType.OBJECT));
-        assertFalse(contains(featureTypes,
-                FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes,
-                FeatureType.COLLECTION));
-        Assert
-        .assertFalse(contains(featureTypes,
-                FeatureType.ACTION));
-        assertFalse(contains(featureTypes,
-                FeatureType.ACTION_PARAMETER_SCALAR));
+        val featureTypes = facetFactory.getFeatureTypes();
+        assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
+        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER_SCALAR));
     }
 
     public void testPersistenceCapableAnnotationPickedUpOnClass() {

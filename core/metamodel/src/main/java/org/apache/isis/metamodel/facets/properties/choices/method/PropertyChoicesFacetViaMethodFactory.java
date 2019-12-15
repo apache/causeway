@@ -21,17 +21,18 @@ package org.apache.isis.metamodel.facets.properties.choices.method;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.CHOICES_PREFIX };
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CHOICES_PREFIX);
 
     public PropertyChoicesFacetViaMethodFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);

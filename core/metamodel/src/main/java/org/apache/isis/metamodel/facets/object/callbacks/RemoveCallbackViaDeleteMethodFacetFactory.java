@@ -22,6 +22,8 @@ package org.apache.isis.metamodel.facets.object.callbacks;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -35,7 +37,10 @@ import lombok.val;
 
 public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { DELETED_PREFIX, DELETING_PREFIX, };
+    private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
+            DELETED_PREFIX, 
+            DELETING_PREFIX));
+    
 
     public RemoveCallbackViaDeleteMethodFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);

@@ -20,16 +20,16 @@
 package org.apache.isis.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.EnumSet;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -149,7 +149,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         return Utils.contains(types, type);
     }
 
-    protected static boolean contains(final List<FeatureType> featureTypes, final FeatureType featureType) {
+    protected static boolean contains(final EnumSet<FeatureType> featureTypes, final FeatureType featureType) {
         return Utils.contains(featureTypes, featureType);
     }
 

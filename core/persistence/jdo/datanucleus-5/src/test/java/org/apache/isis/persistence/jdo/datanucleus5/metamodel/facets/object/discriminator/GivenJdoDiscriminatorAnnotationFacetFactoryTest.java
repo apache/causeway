@@ -18,15 +18,9 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.discriminator;
 
-import java.util.List;
-
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.discriminator.JdoDiscriminatorFacet;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.discriminator.JdoDiscriminatorFacetDefault;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.discriminator.ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -36,6 +30,8 @@ import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
+
+import lombok.val;
 
 public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -55,7 +51,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
     }
 
     public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        val featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, FeatureType.OBJECT));
         assertFalse(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));

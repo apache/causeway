@@ -19,11 +19,10 @@
 
 package org.apache.isis.metamodel.facets.actions.validate.method;
 
-import lombok.val;
-
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -33,12 +32,15 @@ import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.actions.validate.ActionValidationFacet;
 
+import lombok.val;
+
 /**
  * Sets up {@link ActionValidationFacet}.
  */
 public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.VALIDATE_PREFIX };
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.VALIDATE_PREFIX);
+
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from

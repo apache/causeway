@@ -21,18 +21,20 @@ package org.apache.isis.metamodel.facets.properties.autocomplete.method;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+
+import lombok.val;
 
 public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.AUTO_COMPLETE_PREFIX };
-
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.AUTO_COMPLETE_PREFIX);
 
     public PropertyAutoCompleteFacetMethodFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -50,7 +52,10 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
         final Method getter = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseName(getter.getName());
 
-        System.out.println("### " + getter);
+        val getterName = getter.toString();
+        if(getterName.contains("ProperMemberSupport")) {
+            System.out.println("#autoComplete# " + getter);
+        }
         
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getter.getReturnType();

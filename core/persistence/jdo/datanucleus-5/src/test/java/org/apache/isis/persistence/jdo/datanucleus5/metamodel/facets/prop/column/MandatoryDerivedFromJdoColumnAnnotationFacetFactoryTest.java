@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.column;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
@@ -28,6 +27,8 @@ import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -49,7 +50,7 @@ public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest extends Abs
     }
 
     public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        val featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, FeatureType.OBJECT));
         assertTrue(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));

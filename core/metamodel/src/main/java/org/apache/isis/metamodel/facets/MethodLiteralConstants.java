@@ -66,5 +66,10 @@ public final class MethodLiteralConstants {
     public static final String TITLE = "title";
     public static final String TO_STRING = "toString";
     
+    public static final String CSS_CLASS_PREFIX = "cssClass";
+    public static final String HIDDEN_PREFIX = "hidden";
+    public static final String ICON_NAME_PREFIX = "iconName";
+    public static final String LAYOUT_METHOD_NAME = "layout";
+    
 
 }

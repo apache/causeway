@@ -18,15 +18,10 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.datastoreidentity;
 
-import java.util.List;
-
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacet;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacetAnnotation;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -34,11 +29,10 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
 
-import junit.framework.Assert;
+import lombok.val;
 
-
-public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
-AbstractFacetFactoryTest {
+public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private JdoDatastoreIdentityAnnotationFacetFactory facetFactory;
 
@@ -56,14 +50,12 @@ AbstractFacetFactoryTest {
     }
 
     public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory
-                .getFeatureTypes();
-        Assert.assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        val featureTypes = facetFactory.getFeatureTypes();
+        assertTrue(contains(featureTypes, FeatureType.OBJECT));
         assertFalse(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        Assert.assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes,
-                FeatureType.ACTION_PARAMETER_SCALAR));
+        assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER_SCALAR));
     }
 
     public void testDatastoreIdentityAnnotationPickedUpOnClass() {

@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.column;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -29,6 +28,8 @@ import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -48,7 +49,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends Ab
     }
 
     public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        val featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, FeatureType.OBJECT));
         assertTrue(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));

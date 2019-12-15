@@ -19,12 +19,11 @@
 
 package org.apache.isis.metamodel.facets.param.disable.method;
 
-import lombok.val;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -35,12 +34,14 @@ import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.param.disable.ActionParameterDisabledFacet;
 
+import lombok.val;
+
 /**
  * Sets up {@link ActionParameterDisabledFacet}.
  */
 public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.DISABLE_PREFIX };
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.DISABLE_PREFIX);
 
     public ActionParameterDisabledFacetViaMethodFactory() {
         super(FeatureType.PARAMETERS_ONLY, OrphanValidation.VALIDATE, PREFIXES);

@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.collections.modify;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -41,8 +42,7 @@ import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateR
  */
 public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String[] PREFIXES = {};
-
+    private static final Can<String> PREFIXES = Can.empty();
 
     public CollectionAddToRemoveFromAndValidateFacetFactory() {
         super(FeatureType.COLLECTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);

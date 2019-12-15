@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.facets.collections.clear;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -31,8 +32,7 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionClearFacet;
 
 public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.CLEAR_PREFIX };
-
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CLEAR_PREFIX);
 
     public CollectionClearFacetFactory() {
         super(FeatureType.COLLECTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);

@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.facets;
 
-import java.util.List;
+import java.util.EnumSet;
 
 import org.apache.isis.applib.annotation.Facets;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -49,7 +49,7 @@ public class FacetsFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public static class CustomerFacetFactory implements FacetFactory {
         @Override
-        public List<FeatureType> getFeatureTypes() {
+        public EnumSet<FeatureType> getFeatureTypes() {
             return null;
         }
 
@@ -68,7 +68,7 @@ public class FacetsFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public static class CustomerFacetFactory2 implements FacetFactory {
         @Override
-        public List<FeatureType> getFeatureTypes() {
+        public EnumSet<FeatureType> getFeatureTypes() {
             return null;
         }
 

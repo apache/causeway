@@ -21,13 +21,15 @@ package org.apache.isis.metamodel.facets.properties.update;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaClearMethod;
 import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
@@ -36,7 +38,9 @@ import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterF
 
 public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodLiteralConstants.SET_PREFIX, MethodLiteralConstants.CLEAR_PREFIX };
+    private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
+            MethodLiteralConstants.SET_PREFIX, 
+            MethodLiteralConstants.CLEAR_PREFIX));
 
     public PropertySetAndClearFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);

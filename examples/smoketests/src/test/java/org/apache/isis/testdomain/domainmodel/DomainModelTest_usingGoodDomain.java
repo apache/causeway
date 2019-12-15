@@ -20,15 +20,17 @@ package org.apache.isis.testdomain.domainmodel;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.isis.schema.metamodel.v1.DomainClassDto;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Product;
@@ -62,35 +64,34 @@ import lombok.val;
 //@Transactional
 class DomainModelTest_usingGoodDomain {
     
-//    @Inject private MetaModelService metaModelService;
-//    @Inject private JaxbService jaxbService;
+    @Inject private MetaModelService metaModelService;
+    @Inject private JaxbService jaxbService;
 //    @Inject private FactoryService factoryService;
     @Inject private SpecificationLoader specificationLoader;
 
     void debug() {
-           
-        
-//        val config = new MetaModelService.Config()
-////              .withIgnoreNoop()
-////              .withIgnoreAbstractClasses()
-////              .withIgnoreBuiltInValueTypes()
-////              .withIgnoreInterfaces()
-//                //.withPackagePrefix("*")
-//                .withPackagePrefix("org.apache.isis.testdomain.")
-//                ;
-//
-//        System.out.println("!!! listing MM");
-//        val metamodelDto = metaModelService.exportMetaModel(config);
-//        for (DomainClassDto domainClass : metamodelDto.getDomainClassDto()) {
-//            System.out.println("dc: " + domainClass.getId());
-//            val xmlString = jaxbService.toXml(domainClass);
-//            System.out.println(xmlString);
-//        }
-//        System.out.println("!!! ---");
+        val config = new MetaModelService.Config()
+//              .withIgnoreNoop()
+//              .withIgnoreAbstractClasses()
+//              .withIgnoreBuiltInValueTypes()
+//              .withIgnoreInterfaces()
+                //.withPackagePrefix("*")
+                .withPackagePrefix("org.apache.isis.testdomain.")
+                ;
+
+        System.out.println("!!! listing MM");
+        val metamodelDto = metaModelService.exportMetaModel(config);
+        for (DomainClassDto domainClass : metamodelDto.getDomainClassDto()) {
+            System.out.println("dc: " + domainClass.getId());
+            val xmlString = jaxbService.toXml(domainClass);
+            System.out.println(xmlString);
+        }
+        System.out.println("!!! ---");
     }
     
-    @Test  @Disabled("autoComplete, default, choices, don't get added to the MM with property contributed by mixins")
+    @Test
     void goodDomain_shouldPassValidation() {
+        debug();
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
         
         val validateDomainModel = new ValidateDomainModel(specificationLoader);

@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.List;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -143,7 +143,7 @@ public interface FacetFactory {
      * the meta-model.
      * 
      */
-    List<FeatureType> getFeatureTypes();
+    EnumSet<FeatureType> getFeatureTypes();
 
 
     // //////////////////////////////////////

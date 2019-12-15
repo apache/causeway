@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.primarykey;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import javax.jdo.annotations.PrimaryKey;
 
@@ -29,6 +28,8 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+
+import lombok.val;
 
 public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -48,7 +49,7 @@ public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest extends AbstractFacetF
     }
 
     public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        val featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, FeatureType.OBJECT));
         assertTrue(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));

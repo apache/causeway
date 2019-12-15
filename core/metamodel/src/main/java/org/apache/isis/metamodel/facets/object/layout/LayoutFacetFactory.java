@@ -21,16 +21,16 @@ package org.apache.isis.metamodel.facets.object.layout;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String LAYOUT_METHOD_NAME = "layout";
-
-    private static final String[] PREFIXES = { LAYOUT_METHOD_NAME, };
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.LAYOUT_METHOD_NAME);
 
     public LayoutFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -41,7 +41,8 @@ public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(cls, LAYOUT_METHOD_NAME, String.class, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(
+                cls, MethodLiteralConstants.LAYOUT_METHOD_NAME, String.class, NO_PARAMETERS_TYPES);
 
         final LayoutFacet facet;
         if (method == null) {

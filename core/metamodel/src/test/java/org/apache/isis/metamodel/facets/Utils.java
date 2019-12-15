@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.EnumSet;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -40,17 +40,11 @@ class Utils {
         return false;
     }
 
-    protected static boolean contains(final FeatureType[] array, final FeatureType val) {
-        for (final FeatureType element : array) {
-            if (element == val) {
-                return true;
-            }
+    protected static boolean contains(EnumSet<FeatureType> featureTypes, final FeatureType featureType) {
+        if(featureTypes==null || featureType==null) {
+            return false;
         }
-        return false;
-    }
-
-    protected static boolean contains(final List<FeatureType> list, final FeatureType val) {
-        return list.contains(val);
+        return featureTypes.contains(featureType);
     }
 
     protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {

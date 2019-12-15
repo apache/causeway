@@ -18,20 +18,17 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.version;
 
-import java.util.List;
-
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Version;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.version.JdoVersionFacet;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.version.JdoVersionFacetFromAnnotation;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
+
+import lombok.val;
 
 public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -51,7 +48,7 @@ public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        val featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, FeatureType.OBJECT));
         assertFalse(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));

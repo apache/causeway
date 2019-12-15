@@ -19,8 +19,7 @@
 
 package org.apache.isis.metamodel.facets;
 
-import java.util.List;
-
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 
@@ -36,5 +35,5 @@ public interface MethodPrefixBasedFacetFactory extends FacetFactory, MetaModelRe
     /**
      * All prefixes recognized by this {@link FacetFactory}.
      */
-    public List<String> getPrefixes();
+    public Can<String> getPrefixes();
 }
