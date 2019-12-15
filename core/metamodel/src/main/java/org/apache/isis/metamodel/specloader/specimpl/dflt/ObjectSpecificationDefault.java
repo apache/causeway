@@ -105,6 +105,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final String nameIfIsManagedBean,
             final PostProcessor postProcessor,
             final ClassSubstitutor classSubstitutor) {
+        
         super(correspondingClass, determineShortName(correspondingClass), facetProcessor, postProcessor);
 
         setMetaModelContext(metaModelContext);
@@ -240,13 +241,13 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private List<ObjectAction> createActions() {
-        final List<ObjectAction> actions = _Lists.newArrayList();
+        val actions = _Lists.<ObjectAction>newArrayList();
         if(isExcludedFromMetamodel()) {
             // create no actions
         } else {
-            final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
-            for (FacetedMethod facetedMethod : actionFacetedMethods) {
-                final ObjectAction action = createAction(facetedMethod);
+            val actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
+            for (val facetedMethod : actionFacetedMethods) {
+                val action = createAction(facetedMethod);
                 if(action != null) {
                     actions.add(action);
                 }

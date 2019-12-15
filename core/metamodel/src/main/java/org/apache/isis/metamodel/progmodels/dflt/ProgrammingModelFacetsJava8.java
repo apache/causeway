@@ -17,10 +17,9 @@
 
 package org.apache.isis.metamodel.progmodels.dflt;
 
-import lombok.val;
-
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.authorization.standard.AuthorizationFacetFactory;
+import org.apache.isis.metamodel.facets.OrphanedSupportingMethodValidator;
 import org.apache.isis.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
@@ -49,7 +48,12 @@ import org.apache.isis.metamodel.facets.members.hidden.method.HideForContextFace
 import org.apache.isis.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 import org.apache.isis.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
-import org.apache.isis.metamodel.facets.object.callbacks.*;
+import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
+import org.apache.isis.metamodel.facets.object.callbacks.LoadCallbackFacetFactory;
+import org.apache.isis.metamodel.facets.object.callbacks.PersistCallbackFacetFactory;
+import org.apache.isis.metamodel.facets.object.callbacks.PersistCallbackViaSaveMethodFacetFactory;
+import org.apache.isis.metamodel.facets.object.callbacks.RemoveCallbackFacetFactory;
+import org.apache.isis.metamodel.facets.object.callbacks.UpdateCallbackFacetFactory;
 import org.apache.isis.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 import org.apache.isis.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
@@ -145,7 +149,6 @@ import org.apache.isis.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.services.title.TitlesAndTranslationsValidator;
 
-@SuppressWarnings("deprecation")
 public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
 
     public ProgrammingModelFacetsJava8(ServiceInjector serviceInjector) {
@@ -260,6 +263,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, NotContributedFacetDerivedFromMixinFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, OrphanedSupportingMethodValidator.class);
 
         addFactory(FacetProcessingOrder.F1_LAYOUT, GridFacetFactory.class);
 
@@ -357,7 +361,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
         addValidator(new TitlesAndTranslationsValidator());
-
 
     }
 

@@ -19,7 +19,6 @@
 package org.apache.isis.metamodel.facets;
 
 import java.util.EnumSet;
-import java.util.Objects;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -57,38 +56,40 @@ implements MethodPrefixBasedFacetFactory {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        // we can safely skip this validation if the @Action annotation is mandatory
-        if(getConfiguration().getReflector().getExplicitAnnotations().isAction()) {
+        if(orphanValidation == OrphanValidation.DONT_VALIDATE
+                || getConfiguration().getReflector().getExplicitAnnotations().isAction()) {
             return;
         }
         
-        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
-            return;
-        }
-
         val noParamsOnly = getConfiguration().getReflector().getValidator().isNoParamsOnly();
 
         programmingModel.addValidator((objectSpec, metaModelValidator) -> {
-
-            val objectActionStream = objectSpec.streamObjectActions(Contributed.EXCLUDED);
-
-            objectActionStream.forEach(objectAction->{
-                for (final String prefix : prefixes) {
-                    String actionId = objectAction.getId();
-
-                    if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
+            
+            // ensure accepted actions do not have any of the reserved prefixes
+            objectSpec.streamObjectActions(Contributed.EXCLUDED)
+            .forEach(objectAction->{
+                
+                val actionId = objectAction.getId();
+                
+                for (val prefix : prefixes) {
+                    
+                    if (isPrefixed(actionId, prefix)) {
 
                         val explanation =
-                                objectAction.getParameterCount() > 0 &&
-                                noParamsOnly &&
-                                (Objects.equals(prefix, MethodLiteralConstants.HIDE_PREFIX) ||
-                                        Objects.equals(prefix, MethodLiteralConstants.DISABLE_PREFIX))
-                                ? " (note that such methods must have no parameters, '"
+                                objectAction.getParameterCount() > 0 
+                                && noParamsOnly 
+                                && (MethodLiteralConstants.HIDE_PREFIX.equals(prefix) 
+                                        || MethodLiteralConstants.DISABLE_PREFIX.equals(prefix))
+                                ? " (such methods must have no parameters, '"
                                     + "isis.reflector.validator.no-params-only"
                                     + "' config property)"
                                         : "";
 
-                        val message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
+                        val message = "%s#%s: has prefix %s, is probably intended as a supporting method "
+                                + "for a property, collection or action%s.  If the method is intended to "
+                                + "be an action, then rename and use @ActionLayout(named=\"...\") or ignore "
+                                + "completely using @Programmatic";
+                        
                         metaModelValidator.onFailure(
                                 objectSpec,
                                 objectSpec.getIdentifier(),
@@ -106,10 +107,14 @@ implements MethodPrefixBasedFacetFactory {
         });
     }
 
+    private static boolean isPrefixed(String actionId, String prefix) {
+        return actionId.startsWith(prefix) && actionId.length() > prefix.length();
+    }
+
     protected boolean isPropertyOrMixinMain(ProcessMethodContext processMethodContext) {
         return processMethodContext.isMixinMain() 
                 || (
-                        processMethodContext.getFeatureType()!=null // yet to support some JUnit tests
+                        processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
                         && processMethodContext.getFeatureType().isProperty()
                    );
     }

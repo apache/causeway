@@ -20,7 +20,11 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -48,8 +52,8 @@ import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodReturn;
 
@@ -141,7 +145,7 @@ public class FacetedMethodsBuilder {
 
 
     private final boolean explicitAnnotationsForActions;
-
+    
     // ////////////////////////////////////////////////////////////////////////////
     // Constructor & finalize
     // ////////////////////////////////////////////////////////////////////////////
@@ -440,6 +444,12 @@ public class FacetedMethodsBuilder {
     }
 
     private boolean representsAction(final Method actionMethod) {
+        
+        //System.out.println("####" + actionMethod.toString());
+        
+        if(actionMethod.toString().contains("InvalidOrphanedActionSupportNoActionEnforced")) {
+            System.out.println("####" + actionMethod.toString());
+        }
 
         // just an optimization, not strictly required 
         if(isExplicitActionAnnotationConfigured()) {
@@ -507,6 +517,8 @@ public class FacetedMethodsBuilder {
 
         // exclude those that have eg. reserved prefixes
         if (getFacetProcessor().recognizes(actionMethod)) {
+            // this is a potential orphan candidate, collect these, than use when validating
+            inspectedTypeSpec.getPotentialOrphans().add(actionMethod);
             return false;
         }
 

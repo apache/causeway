@@ -19,6 +19,7 @@
 
 package org.apache.isis.metamodel.specloader.specimpl;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,8 +43,8 @@ import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
@@ -89,11 +90,12 @@ import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
@@ -153,6 +155,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // -- ACTIONS
     
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
+    
+    /** not API, used for validation, when {@code @Action} is NOT mandatory */
+    @Getter private final Set<Method> potentialOrphans = _Sets.newHashSet();
 
     // defensive immutable lazy copy of objectActions
     private final _Lazy<List<ObjectAction>> unmodifiableActions = 
