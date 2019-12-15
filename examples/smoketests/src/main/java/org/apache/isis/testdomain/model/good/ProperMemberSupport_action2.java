@@ -18,27 +18,79 @@
  */
 package org.apache.isis.testdomain.model.good;
 
+import java.util.Set;
+
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
 @Mixin @RequiredArgsConstructor
-public class ProperActionSupport_mixin {
+public class ProperMemberSupport_action2 {
     
-    private final ProperActionSupport holder;
+    private final ProperMemberSupport holder;
 
     // proper mix-in action
     @Action
-    public ProperActionSupport $$() {
+    public ProperMemberSupport $$(String p0, String p1) {
         return holder;
     }
     
-    // proper support
+    @Model
+    public String disable$$() {
+        return null;
+    }
+    
     @Model
     public boolean hide$$() {
         return false;
+    }
+
+    @Model
+    public String validate$$(String p0, String p1) {
+        return null;
+    }
+    
+    @Model
+    public Set<String> autoComplete0$$(@MinLength(3) String search) {
+        return null;
+    }
+
+    @Model
+    public Set<String> autoComplete1$$(@MinLength(3) String search) {
+        return null;
+    }
+    
+    @Model
+    public Set<String> choices0$$(String p0) {
+        return null;
+    }
+
+    @Model
+    public Set<String> choices1$$(String p0) {
+        return null;
+    }
+    
+    @Model
+    public String default0$$() {
+        return null;
+    }
+
+    @Model
+    public String default1$$() {
+        return null;
+    }
+
+    @Model
+    public String validate0$$(String p0) {
+        return null;
+    }
+
+    @Model
+    public String validate1$$(String p1) {
+        return null;
     }
 
     

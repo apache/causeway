@@ -23,27 +23,39 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Collection
-@CollectionLayout(named = "foo", describedAs = "bar")
-@RequiredArgsConstructor
-public class ProperActionSupport_collection {
+@Mixin @RequiredArgsConstructor
+public class ProperMemberSupport_collection2 {
     
-    private final ProperActionSupport holder;
+    private final ProperMemberSupport holder;
 
     //@Action(semantics=SAFE)   // <-- inferred (required)
     //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
-    public List<String> coll() {
+    @Collection
+    @CollectionLayout(named = "foo", describedAs = "bar")
+    public List<String> $$() {
         return Collections.singletonList(holder.toString());
     }
     
-    // proper support
+    // -- PROPERLY DECLARED SUPPORTING METHODS 
+    
     @Model
-    public boolean hideColl() {
+    public boolean hide$$() {
         return false;
+    }
+    
+    @Model
+    public String disable$$() {
+        return null;
+    }
+    
+    @Model //TODO not documented with the support-matrix, what to do here?
+    public String validate$$() {
+        return null;
     }
 
     

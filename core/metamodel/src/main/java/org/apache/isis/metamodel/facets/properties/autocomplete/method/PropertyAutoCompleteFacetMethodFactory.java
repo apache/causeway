@@ -44,14 +44,21 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
         attachPropertyAutoCompleteFacetIfChoicesMethodIsFound(processMethodContext);
     }
 
-    private void attachPropertyAutoCompleteFacetIfChoicesMethodIsFound(final ProcessMethodContext processMethodContext) {
+    private void attachPropertyAutoCompleteFacetIfChoicesMethodIsFound(
+            final ProcessMethodContext processMethodContext) {
 
-        final Method getMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
+        final Method getter = processMethodContext.getMethod();
+        final String capitalizedName = StringExtensions.asJavaBaseName(getter.getName());
 
+        System.out.println("### " + getter);
+        
         final Class<?> cls = processMethodContext.getCls();
-        final Class<?> returnType = getMethod.getReturnType();
-        final Method autoCompleteMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.AUTO_COMPLETE_PREFIX + capitalizedName, (Class<?>)null, new Class[]{String.class});
+        final Class<?> returnType = getter.getReturnType();
+        final Method autoCompleteMethod = MethodFinderUtils
+                .findMethod(
+                        cls, 
+                        MethodLiteralConstants.AUTO_COMPLETE_PREFIX + capitalizedName, 
+                        (Class<?>)null, new Class[]{String.class});
         if (autoCompleteMethod == null) {
             return;
         }

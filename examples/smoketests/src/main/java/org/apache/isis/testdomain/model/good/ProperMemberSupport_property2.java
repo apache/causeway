@@ -18,30 +18,51 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
 @Mixin @RequiredArgsConstructor
-public class ProperActionSupport_collection2 {
+public class ProperMemberSupport_property2 {
     
-    private final ProperActionSupport holder;
+    private final ProperMemberSupport holder;
 
     //@Action(semantics=SAFE)   // <-- inferred (required)
     //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
-    @Collection
-    @CollectionLayout(named = "foo", describedAs = "bar")
-    public List<String> $$() {
-        return Collections.singletonList(holder.toString());
+    @Property
+    @PropertyLayout(named= "foo", describedAs = "bar")
+    public String $$() {
+        return holder.toString();
     }
     
-    // proper support
+    // -- PROPERLY DECLARED SUPPORTING METHODS 
+    
+    @Model
+    public Set<String> autoComplete$$(@MinLength(3) String search) {
+        return null;
+    }
+    
+    @Model
+    public Set<String> choices$$() {
+        return null;
+    }
+    
+    @Model
+    public String default$$() {
+        return "";
+    }
+
+    @Model
+    public String disable$$() {
+        return null;
+    }
+    
     @Model
     public boolean hide$$() {
         return false;

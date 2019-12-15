@@ -18,30 +18,43 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Action 
-@ActionLayout(named = "foo", describedAs = "bar")  
+@Collection
+@CollectionLayout(named = "foo", describedAs = "bar")
 @RequiredArgsConstructor
-public class ProperActionSupport_action {
+public class ProperMemberSupport_collection {
     
-    private final ProperActionSupport holder;
+    private final ProperMemberSupport holder;
 
-    // proper mix-in action
-    //@Action // <-- inferred by annotation on type above
-    public ProperActionSupport act() {
-        return holder;
+    //@Action(semantics=SAFE)   // <-- inferred (required)
+    //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
+    public List<String> coll() {
+        return Collections.singletonList(holder.toString());
     }
     
-    // proper support
+    // -- PROPERLY DECLARED SUPPORTING METHODS 
+    
     @Model
-    public boolean hideAct() {
+    public boolean hideColl() {
         return false;
     }
-
+    
+    @Model
+    public String disableColl() {
+        return null;
+    }
+    
+    @Model //TODO not documented with the support-matrix, what to do here?
+    public String validateColl() {
+        return null;
+    }
     
 }

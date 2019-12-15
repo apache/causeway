@@ -18,31 +18,54 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.incubator.model.applib.annotation.Model;
+import java.util.Set;
+
+import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin @RequiredArgsConstructor
-public class ProperActionSupport_property2 {
+@Property
+@PropertyLayout(named = "foo", describedAs = "bar")
+@RequiredArgsConstructor
+public class ProperMemberSupport_property {
     
-    private final ProperActionSupport holder;
+    private final ProperMemberSupport holder;
 
     //@Action(semantics=SAFE)   // <-- inferred (required)
     //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
-    @Property
-    @PropertyLayout(named= "foo", describedAs = "bar")
-    public String $$() {
+    public String prop() {
         return holder.toString();
     }
     
-    // proper support
+    // -- PROPERLY DECLARED SUPPORTING METHODS 
+    
     @Model
-    public boolean hide$$() {
-        return false;
+    public Set<String> autoCompleteProp(@MinLength(3) String search) {
+        return null;
+    }
+    
+    @Model
+    public Set<String> choicesProp() {
+        return null;
+    }
+    
+    @Model
+    public String defaultProp() {
+        return "";
     }
 
+    @Model
+    public String disableProp() {
+        return null;
+    }
+    
+    @Model
+    public boolean hideProp() {
+        return false;
+    }
+    
     
 }
