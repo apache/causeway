@@ -19,8 +19,13 @@
 package org.apache.isis.metamodel.facets;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -50,9 +55,9 @@ public final class MethodFinderUtils {
     public static Method findMethod(
             final Class<?> type,
             final String name,
-            final Class<?> returnType,
+            final Class<?> expectedReturnType,
             final Class<?>[] paramTypes) {
-
+        
         val methodCache = _MethodCache.getInstance();
         
         val method = methodCache.lookupMethod(type, name, paramTypes);
@@ -72,12 +77,12 @@ public final class MethodFinderUtils {
             return null;
         }
 
-        if (returnType != null && !returnType.isAssignableFrom(method.getReturnType())) {
+        if (expectedReturnType != null && !expectedReturnType.isAssignableFrom(method.getReturnType())) {
             return null;
         }
 
         if (paramTypes != null) {
-            final Class<?>[] parameterTypes = method.getParameterTypes();
+            val parameterTypes = method.getParameterTypes();
             if (paramTypes.length != parameterTypes.length) {
                 return null;
             }
@@ -91,8 +96,7 @@ public final class MethodFinderUtils {
 
         return method;
     }
-
-
+    
     public static Method findMethod_returningAnyOf(
             final Class<?>[] returnTypes,
             final Class<?> type,
@@ -107,7 +111,7 @@ public final class MethodFinderUtils {
         }
         return null;
     }
-
+    
     public static Method findMethod(final Class<?> type, final String name, final Class<?> returnType) {
         try {
             final Method[] methods = type.getMethods();
@@ -125,7 +129,9 @@ public final class MethodFinderUtils {
         }
     }
 
-    public static List<Method> findMethodsWithAnnotation(final Class<?> type, final Class<? extends Annotation> annotationClass) {
+    public static List<Method> findMethodsWithAnnotation(
+            final Class<?> type, 
+            final Class<? extends Annotation> annotationClass) {
 
         // Validate arguments
         if (type == null || annotationClass == null) {
@@ -192,6 +198,8 @@ public final class MethodFinderUtils {
         return nullableMethod;
     }
 
+    
+    
     // -- SHORTCUTS
     
     public static final Class<?>[] TEXT_TYPES = new Class<?>[]{
@@ -204,6 +212,19 @@ public final class MethodFinderUtils {
             final String name,
             final Class<?>[] paramTypes) {
         return findMethod_returningAnyOf(TEXT_TYPES, type, name, paramTypes);
+    }
+    
+    public static Method findMethod_returningNonScalar(
+            final Class<?> type,
+            final String name, 
+            final Class<?> elementReturnType,
+            final Class<?>[] paramTypes) {
+        
+        val nonScalarTypes = new Class<?>[]{
+            Collection.class, 
+            Array.newInstance(elementReturnType, 0).getClass()};
+        
+        return findMethod_returningAnyOf(nonScalarTypes, type, name, paramTypes);
     }
 
 }

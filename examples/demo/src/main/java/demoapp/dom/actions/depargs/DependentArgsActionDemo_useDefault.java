@@ -63,7 +63,7 @@ public class DependentArgsActionDemo_useDefault {
 
     // -- PARAM 1 (String message)
 
-    //@Supporting
+    @Model
     public String default1$$(Parity parity) {
         if(parity == null) {
             return "no parity selected";

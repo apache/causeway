@@ -36,7 +36,7 @@ implements MethodPrefixBasedFacetFactory {
     @Getter(onMethod = @__(@Override))
     private final Can<String> prefixes;
 
-    private final OrphanValidation orphanValidation; 
+    private final OrphanValidation orphanValidation;
 
     protected enum OrphanValidation {
         VALIDATE,
@@ -107,10 +107,6 @@ implements MethodPrefixBasedFacetFactory {
         });
     }
 
-    private static boolean isPrefixed(String actionId, String prefix) {
-        return actionId.startsWith(prefix) && actionId.length() > prefix.length();
-    }
-
     protected boolean isPropertyOrMixinMain(ProcessMethodContext processMethodContext) {
         return processMethodContext.isMixinMain() 
                 || (
@@ -118,5 +114,13 @@ implements MethodPrefixBasedFacetFactory {
                         && processMethodContext.getFeatureType().isProperty()
                    );
     }
+    
+    // -- HELPER
+    
+    private static boolean isPrefixed(String actionId, String prefix) {
+        return actionId.startsWith(prefix) && actionId.length() > prefix.length();
+    }
+
+
 
 }

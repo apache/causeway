@@ -19,13 +19,13 @@
 
 package org.apache.isis.metamodel.facets.actions;
 
-import lombok.val;
-
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import org.jmock.Expectations;
 
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
@@ -53,7 +53,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.testspec.ObjectSpecificationStub;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.jmock.Expectations;
+
+import lombok.val;
 
 public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 

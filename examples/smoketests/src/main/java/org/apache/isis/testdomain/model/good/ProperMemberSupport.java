@@ -85,14 +85,20 @@ public class ProperMemberSupport {
     }
     
     @Model
-    public Set<String> choices0MyAction(String p0) {
+    public Set<String> choices0MyAction() {
         return null;
     }
 
     @Model
-    public Set<String> choices1MyAction(String p0) {
+    public Set<String> choices1MyAction() {
         return null;
     }
+    
+// variant with dependent arg
+//    @Model
+//    public Set<String> choices1MyAction(String p0) {
+//        return null;
+//    }
     
     @Model
     public String default0MyAction() {

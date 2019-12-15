@@ -19,25 +19,24 @@
 
 package org.apache.isis.metamodel.facets.param.choices.methodnum;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.DependentArgUtils;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.param.choices.ActionChoicesFacet;
 
-public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+import lombok.val;
+
+public class ActionParameterChoicesFacetViaMethodFactory 
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.empty();
 
@@ -63,81 +62,46 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
 
     }
 
-    private void attachChoicesFacetForParametersIfChoicesNumMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    private void attachChoicesFacetForParametersIfChoicesNumMethodIsFound(
+            final ProcessMethodContext processMethodContext, 
+            final List<FacetedMethodParameter> parameters) {
 
         if (parameters.isEmpty()) {
             return;
         }
 
-        final Method actionMethod = processMethodContext.getMethod();
-        final Class<?>[] paramTypes = actionMethod.getParameterTypes();
+        val actionMethod = processMethodContext.getMethod();
+        val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
-        for (int i = 0; i < paramTypes.length; i++) {
+        val searchRequest = DependentArgUtils.ParamSupportingMethodSearchRequest.of(
+                processMethodContext, 
+                null,
+                paramIndex -> MethodLiteralConstants.CHOICES_PREFIX + paramIndex + capitalizedName);    
 
-            final Class<?> arrayOfParamType = (Array.newInstance(paramTypes[i], 0)).getClass();
-
-            final Method choicesMethod = findChoicesNumMethodReturning(processMethodContext, i);
-            if (choicesMethod == null) {
-                continue;
-            }
-
+        DependentArgUtils.findParamSupportingMethods(searchRequest, searchResult -> {
+            
+            val choicesMethod = searchResult.getSupportingMethod();
+            val paramIndex = searchResult.getParamIndex();
+            val returnType = searchResult.getReturnType();
+            
             processMethodContext.removeMethod(choicesMethod);
 
-            final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
+            val facetedMethod = processMethodContext.getFacetHolder();
             if (facetedMethod.containsNonFallbackFacet(ActionChoicesFacet.class)) {
-                final Class<?> cls = processMethodContext.getCls();
-                throw new MetaModelException(cls + " uses both old and new choices syntax - must use one or other");
+                val cls = processMethodContext.getCls();
+                throw new MetaModelException(cls + " uses both old and new choices syntax - "
+                        + "must use one or other");
             }
-
+            
             // add facets directly to parameters, not to actions
-            final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            super.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder));
-        }
+            val paramAsHolder = parameters.get(paramIndex);
+            super.addFacet(
+                    new ActionParameterChoicesFacetViaMethod(
+                            choicesMethod, returnType, paramAsHolder));
+        });
+        
     }
-
-    /**
-     * search successively for the default method, trimming number of param types each loop
-     */
-    private static Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int n) {
-
-        final Method actionMethod = processMethodContext.getMethod();
-        final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
-
-        final Class<?> arrayOfParamType = (Array.newInstance(paramTypes.get(n), 0)).getClass();
-
-        final int numParamTypes = paramTypes.size();
-
-        for(int i=0; i< numParamTypes+1; i++) {
-            Method method;
-
-            method = findChoicesNumMethodReturning(processMethodContext, n, paramTypes.toArray(new Class<?>[]{}), arrayOfParamType);
-            if(method != null) {
-                return method;
-            }
-            method = findChoicesNumMethodReturning(processMethodContext, n, paramTypes.toArray(new Class<?>[]{}), Collection.class);
-            if(method != null) {
-                return method;
-            }
-
-            // remove last, and search again
-            if(!paramTypes.isEmpty()) {
-                paramTypes.remove(paramTypes.size()-1);
-            }
-        }
-
-        return null;
-    }
-
-
-
-    private static Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int n, Class<?>[] paramTypes, final Class<?> returnType) {
-        final Class<?> cls = processMethodContext.getCls();
-        final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        final String name = MethodLiteralConstants.CHOICES_PREFIX + n + capitalizedName;
-        return MethodFinderUtils.findMethod(cls, name, returnType, paramTypes);
-    }
-
-
+    
+    
 
 }

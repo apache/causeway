@@ -62,7 +62,7 @@ public class DependentArgsActionDemo_useHide {
 
     // -- PARAM 1 (String message)
 
-    //@Supporting
+    //@Model //TODO waits for dep args to be implemented
     public boolean hide1$$(boolean hideMessageField) {
         return hideMessageField;
     }

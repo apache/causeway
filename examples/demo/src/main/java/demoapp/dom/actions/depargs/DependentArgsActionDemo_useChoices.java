@@ -63,7 +63,7 @@ public class DependentArgsActionDemo_useChoices {
 
     // -- PARAM 1 (DemoItem)
 
-    //@Supporting
+    @Model
     public Collection<DemoItem> choices1$$(
             
             Parity parity // <-- the refining parameter from the dialog above

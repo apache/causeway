@@ -39,6 +39,7 @@ import org.apache.isis.metamodel.testspec.ObjectSpecificationStub;
 
 import lombok.val;
 
+@SuppressWarnings("unused")
 public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractFacetFactoryTest {
 
     private final ObjectSpecification voidSpec = new ObjectSpecificationStub("VOID");
@@ -65,7 +66,6 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
-            @SuppressWarnings("unused")
             public void someAction() {
             }
         }
@@ -87,7 +87,6 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
-            @SuppressWarnings("unused")
             public void someAction() {
             }
         }
@@ -105,7 +104,6 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         allowing_specificationLoader_loadSpecification_any_willReturn(stringSpec);
 
         class Customer {
-            @SuppressWarnings("unused")
             public String someAction() {
                 return null;
             }
@@ -124,7 +122,6 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         allowing_specificationLoader_loadSpecification_any_willReturn(customerSpec);
 
         class Customer {
-            @SuppressWarnings("unused")
             public String someAction() {
                 return null;
             }
@@ -143,7 +140,6 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
-            @SuppressWarnings("unused")
             public void someAction(final int x, final long y) {
             }
         }
@@ -173,11 +169,11 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         
         
         class Customer {
-            @SuppressWarnings("unused")
+            
             public void someAction(final int x, final long y) {
             }
 
-            @SuppressWarnings("unused")
+            
             public int[] choices0SomeAction() {
                 return new int[0];
             }
@@ -189,12 +185,12 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
                 return new int[0];
             }
 
-            @SuppressWarnings("unused")
+            
             public long[] choices1SomeAction() {
                 return new long[0];
             }
 
-            @SuppressWarnings("unused")
+            
             public String disableSomeAction(final int x, final long y) {
                 return null;
             }

@@ -64,7 +64,7 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     // -- PARAM 1 (DemoItem)
 
-    //@Supporting
+    @Model
     public Collection<DemoItem> autoComplete1$$(
 
             Parity parity, // <-- the refining parameter from the dialog above

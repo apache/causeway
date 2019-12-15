@@ -19,20 +19,20 @@
 
 package org.apache.isis.metamodel.facets.param.autocomplete.method;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
+import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.DependentArgUtils;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
+
+import lombok.val;
 
 public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -55,51 +55,93 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
         attachAutoCompleteFacetForParametersIfAutoCompleteNumMethodIsFound(processMethodContext, holderList);
 
     }
-
-    private void attachAutoCompleteFacetForParametersIfAutoCompleteNumMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    
+    private void attachAutoCompleteFacetForParametersIfAutoCompleteNumMethodIsFound(
+            final ProcessMethodContext processMethodContext, 
+            final List<FacetedMethodParameter> parameters) {
 
         if (parameters.isEmpty()) {
             return;
         }
 
-        final Method actionMethod = processMethodContext.getMethod();
-        final Class<?>[] params = actionMethod.getParameterTypes();
+        val actionMethod = processMethodContext.getMethod();
+        val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
-        for (int i = 0; i < params.length; i++) {
+        val searchRequest = DependentArgUtils.ParamSupportingMethodSearchRequest.of(
+                processMethodContext,
+                String.class,
+                paramIndex -> MethodLiteralConstants.AUTO_COMPLETE_PREFIX + paramIndex + capitalizedName);    
 
-            final Class<?> paramType = params[i];
-            final Class<?> arrayOfParamType = (Array.newInstance(paramType, 0)).getClass();
-
-            @SuppressWarnings("rawtypes")
-            final Class[] returnTypes = { arrayOfParamType, List.class, Set.class, Collection.class };
-            Method autoCompleteMethod = findAutoCompleteNumMethodReturning(processMethodContext, i, returnTypes);
-            if (autoCompleteMethod == null) {
-                continue;
-            }
+        DependentArgUtils.findParamSupportingMethods(searchRequest, searchResult -> {
+            
+            val autoCompleteMethod = searchResult.getSupportingMethod();
+            val paramIndex = searchResult.getParamIndex();
+            val paramType = searchResult.getParamType();
+            
             processMethodContext.removeMethod(autoCompleteMethod);
 
+            val facetedMethod = processMethodContext.getFacetHolder();
+            if (facetedMethod.containsNonFallbackFacet(ActionParameterAutoCompleteFacet.class)) {
+                val cls = processMethodContext.getCls();
+                throw new MetaModelException(cls + " uses both old and new autoComplete syntax - "
+                        + "must use one or other");
+            }
+            
             // add facets directly to parameters, not to actions
-            final FacetedMethodParameter paramAsHolder = parameters.get(i);
+            val paramAsHolder = parameters.get(paramIndex);
             super.addFacet(
                     new ActionParameterAutoCompleteFacetViaMethod(
                             autoCompleteMethod, paramType, paramAsHolder));
-        }
+        });
+        
     }
-
-    private Method findAutoCompleteNumMethodReturning(
-            final ProcessMethodContext processMethodContext,
-            final int paramNum,
-            final Class<?>[] returnTypes) {
-
-        final Class<?> cls = processMethodContext.getCls();
-        final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        final String name = MethodLiteralConstants.AUTO_COMPLETE_PREFIX + paramNum + capitalizedName;
-        return MethodFinderUtils.findMethod_returningAnyOf(
-                returnTypes,
-                cls,
-                name,
-                STRING_ARG);
-    }
+    
+// legacy of ...
+//    private void attachAutoCompleteFacetForParametersIfAutoCompleteNumMethodIsFound(
+//            final ProcessMethodContext processMethodContext, 
+//            final List<FacetedMethodParameter> parameters) {
+//
+//        if (parameters.isEmpty()) {
+//            return;
+//        }
+//
+//        val actionMethod = processMethodContext.getMethod();
+//        val paramTypes = actionMethod.getParameterTypes();
+//
+//        for (int i = 0; i < paramTypes.length; i++) {
+//
+//            final Class<?> paramType = paramTypes[i];
+//            final Class<?> arrayOfParamType = Array.newInstance(paramType, 0).getClass();
+//            final Class<?>[] returnTypes = { arrayOfParamType, List.class, Set.class, Collection.class };
+//            
+//            val autoCompleteMethod = findAutoCompleteNumMethodReturning(processMethodContext, i, returnTypes);
+//            if (autoCompleteMethod == null) {
+//                continue;
+//            }
+//            processMethodContext.removeMethod(autoCompleteMethod);
+//
+//            // add facets directly to parameters, not to actions
+//            final FacetedMethodParameter paramAsHolder = parameters.get(i);
+//            super.addFacet(
+//                    new ActionParameterAutoCompleteFacetViaMethod(
+//                            autoCompleteMethod, paramType, paramAsHolder));
+//        }
+//    }
+//
+//    private Method findAutoCompleteNumMethodReturning(
+//            final ProcessMethodContext processMethodContext,
+//            final int paramNum,
+//            final Class<?>[] returnTypes) {
+//
+//        final Class<?> cls = processMethodContext.getCls();
+//        final Method actionMethod = processMethodContext.getMethod();
+//        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
+//        final String name = MethodLiteralConstants.AUTO_COMPLETE_PREFIX + paramNum + capitalizedName;
+//        return MethodFinderUtils.findMethod_returningAnyOf(
+//                returnTypes,
+//                cls,
+//                name,
+//                STRING_ARG);
+//    }
 
 }

@@ -62,16 +62,28 @@ public class ProperMemberSupport_action2 {
     public Set<String> autoComplete1$$(@MinLength(3) String search) {
         return null;
     }
+
+// variant with dependent arg
+//    @Model
+//    public Set<String> autoComplete1$$(String p0, @MinLength(3) String search) {
+//        return null;
+//    }
     
     @Model
-    public Set<String> choices0$$(String p0) {
+    public Set<String> choices0$$() {
         return null;
     }
 
     @Model
-    public Set<String> choices1$$(String p0) {
+    public Set<String> choices1$$() {
         return null;
     }
+
+// variant with dependent arg    
+//    @Model 
+//    public Set<String> choices1$$(String p0) {
+//        return null;
+//    }
     
     @Model
     public String default0$$() {
