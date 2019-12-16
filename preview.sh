@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 PLAYBOOK_FILE=site.yml
 if [[ $# -gt 0 ]]; then
-  PLAYBOOK_FILE=antora/playbooks/site-$1.yml
+
+  if [ -f $1 ]; then
+    PLAYBOOK_FILE=$1
+  else
+    PLAYBOOK_FILE=antora/playbooks/site-$1.yml
+  fi
   shift
 fi
 
