@@ -11,14 +11,16 @@ content:
       start_path: antora/components/toc # toc
       branches: HEAD
 
-# starters
     - url: .
-      start_path: starters/src/main/doc # toc
+      start_path: antora/components/incubator # incubator
       branches: HEAD
 
-# mavendeps
+# incubator
     - url: .
-      start_path: mavendeps/src/main/doc # toc
+      start_path: incubator/core/model/src/main/doc # incubator
+      branches: HEAD
+    - url: .
+      start_path: incubator/core/microprofile/src/main/doc # incubator
       branches: HEAD
 
 

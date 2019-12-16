@@ -11,14 +11,19 @@ content:
       start_path: antora/components/toc # toc
       branches: HEAD
 
-# starters
     - url: .
-      start_path: starters/src/main/doc # toc
+      start_path: antora/components/extensions # extensions
       branches: HEAD
 
-# mavendeps
+# extensions
     - url: .
-      start_path: mavendeps/src/main/doc # toc
+      start_path: extensions/core/spring/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/persistence/h2console/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/persistence/hsqldbmgr/src/main/doc # extensions
       branches: HEAD
 
 

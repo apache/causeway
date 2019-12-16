@@ -11,15 +11,24 @@ content:
       start_path: antora/components/toc # toc
       branches: HEAD
 
-# starters
     - url: .
-      start_path: starters/src/main/doc # toc
+      start_path: antora/components/legacy # legacy
       branches: HEAD
 
-# mavendeps
+# legacy
     - url: .
-      start_path: mavendeps/src/main/doc # toc
+      start_path: legacy/core/applib/src/main/doc # legacy
       branches: HEAD
+    - url: .
+      start_path: legacy/core/commons/src/main/doc # legacy
+      branches: HEAD
+    - url: .
+      start_path: legacy/core/runtime/src/main/doc # legacy
+      branches: HEAD
+    - url: .
+      start_path: legacy/vro/restclient/src/main/doc # legacy
+      branches: HEAD
+
 
 
 ui:

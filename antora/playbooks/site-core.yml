@@ -8,10 +8,11 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/core # core
-      branches: HEAD
-    - url: .
       start_path: antora/components/toc # toc
+      branches: HEAD
+
+    - url: .
+      start_path: antora/components/core # core
       branches: HEAD
 
 # core

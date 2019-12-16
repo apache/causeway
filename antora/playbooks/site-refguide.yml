@@ -8,10 +8,11 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/refguide
+      start_path: antora/components/toc # toc
       branches: HEAD
+
     - url: .
-      start_path: antora/components/toc
+      start_path: antora/components/refguide # refguide
       branches: HEAD
 
 # core

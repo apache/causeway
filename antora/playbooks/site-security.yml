@@ -8,10 +8,11 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/security
+      start_path: antora/components/toc # toc
       branches: HEAD
+
     - url: .
-      start_path: antora/components/toc
+      start_path: antora/components/security # security
       branches: HEAD
 
 # core
@@ -30,22 +31,22 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/security/secman/src/main/doc # security secman
+      start_path: extensions/security/secman/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/api/src/main/doc # security secman
+      start_path: extensions/security/secman/api/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/encryption-jbcrypt/src/main/doc # security secman
+      start_path: extensions/security/secman/encryption-jbcrypt/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/model/src/main/doc # security secman
+      start_path: extensions/security/secman/model/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/persistence-jdo/src/main/doc # security secman
+      start_path: extensions/security/secman/pjdo/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/shiro-shiro/src/main/doc # security secman
+      start_path: extensions/security/secman/shiro-realm/src/main/doc # security
       branches: HEAD
     - url: .
       start_path: extensions/security/shiro-realm-ldap/src/main/doc # security
