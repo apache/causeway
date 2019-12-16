@@ -44,6 +44,16 @@ else
     ${GROOVY_CMD} $SCRIPT_DIR/../generateConfigDocs.groovy \
       -f $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json \
       -o $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
+
+    if [ ! -z "dos2unix" ]; then
+      for FILE in $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated/*
+      do
+        dos2unix $FILE
+      done
+      echo
+      echo
+      echo
+    fi
   fi
 fi
 
