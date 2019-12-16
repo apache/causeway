@@ -13,5 +13,5 @@ This page provides user/config guides for each of the main components of the fra
 
 == Persistence
 
-*  xref:odn:ROOT:about.adoc[DataNucleus Object Store]
+*  xref:pjdo:ROOT:about.adoc[DataNucleus Object Store]
 

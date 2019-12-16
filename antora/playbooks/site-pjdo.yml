@@ -8,12 +8,12 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc
+      start_path: antora/components/toc # toc
       branches: HEAD
 
 # core
     - url: .
-      start_path: core/persistence/jdo/src/main/doc # odn
+      start_path: core/persistence/jdo/src/main/doc # pjdo
       branches: HEAD
 
 

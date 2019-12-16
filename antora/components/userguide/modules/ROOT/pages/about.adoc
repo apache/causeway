@@ -18,7 +18,7 @@ There are a number of other guides:
 
 * xref:vw:ROOT:about.adoc[Wicket viewer]
 * xref:vro:ROOT:about.adoc[Restful Objects viewer]
-* xref:odn:ROOT:about.adoc[DataNucleus object store]
+* xref:pjdo:ROOT:about.adoc[DataNucleus object store]
 
 
 

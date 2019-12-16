@@ -25,7 +25,7 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 (`false`)
 |Enables bulk load of standalone collections.
 
-Further xref:odn:ROOT:configuring.adoc#bulk-load[discussion below].
+Further xref:pjdo:ROOT:configuring.adoc#bulk-load[discussion below].
 
 |`isis.persistor.` +
 `datanucleus.` +
@@ -93,7 +93,7 @@ Only intended for "emergency use" as a workaround while pending fix/patch to Apa
 `datanucleus.persistenceByReachabilityAtCommit`
 |`false`
 |We recommend this setting is disabled.  +
-Further xref:odn:ROOT:configuring.adoc#disabling-persistence-by-reachability[discussion below].
+Further xref:pjdo:ROOT:configuring.adoc#disabling-persistence-by-reachability[discussion below].
 
 |===
 

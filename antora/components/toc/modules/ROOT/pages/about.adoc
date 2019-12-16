@@ -49,7 +49,7 @@ include::_attributes.adoc[]
 
 * xref:vw:ROOT:about.adoc[Wicket UI]
 * xref:vro:ROOT:about.adoc[Restful Objects (REST API)]
-* xref:odn:ROOT:about.adoc[DataNucleus Object Store]
+* xref:pjdo:ROOT:about.adoc[DataNucleus Object Store]
 
 
 

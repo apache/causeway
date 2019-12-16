@@ -55,7 +55,7 @@ content:
       start_path: core/metamodel/src/main/doc # core
       branches: HEAD
     - url: .
-      start_path: core/persistence/jdo/src/main/doc # odn
+      start_path: core/persistence/jdo/src/main/doc # pjdo
       branches: HEAD
     - url: .
       start_path: core/runtime/src/main/doc # core
