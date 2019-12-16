@@ -7,42 +7,42 @@ content:
   sources:
 
 # antora
-    - url: .
+    - url: ../..
       start_path: antora/components/toc # toc
       branches: HEAD
 
-    - url: .
+    - url: ../..
       start_path: antora/components/core # core
       branches: HEAD
 
 # core
-    - url: .
+    - url: ../..
       start_path: core/codegen-bytebuddy/src/main/doc # core
       branches: HEAD
-    - url: .
+    - url: ../..
       start_path: core/commons/src/main/doc # core
       branches: HEAD
-    - url: .
+    - url: ../..
       start_path: core/detached-tests/src/main/doc # core
       branches: HEAD
-    - url: .
+    - url: ../..
       start_path: core/metamodel/src/main/doc # core
       branches: HEAD
-    - url: .
+    - url: ../..
       start_path: core/runtime/src/main/doc # core
       branches: HEAD
-    - url: .
+    - url: ../..
       start_path: core/webboot-springboot/src/main/doc # core
       branches: HEAD
-    - url: .
+    - url: ../..
       start_path: core/runtime-services/src/main/doc # core
       branches: HEAD
-    - url: .
+    - url: ../..
       start_path: core/webapp/src/main/doc # core
       branches: HEAD
 
 # examples
-    - url: .
+    - url: ../..
       start_path: examples/smoketests/src/main/doc # core
       branches: HEAD
 
