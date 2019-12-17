@@ -36,17 +36,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 
@@ -63,32 +57,13 @@ extends ObjectAdapterMementoProviderAbstract {
 
     @Override
     protected List<ObjectMemento> obtainMementos(String term) {
-        final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
-        final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-        final List<ManagedObject> autoCompleteAdapters =
-                autoCompleteFacet.execute(term,InteractionInitiatedBy.USER);
-        
+        val typeOfSpecification = getScalarModel().getTypeOfSpecification();
+        val autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
+        val autoCompleteAdapters = autoCompleteFacet.execute(term,InteractionInitiatedBy.USER);
         val commonContext = super.getCommonContext();
         
         return _Lists.map(autoCompleteAdapters, commonContext::mementoFor);
     }
 
-    @Override
-    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-        
-        val commonContext = super.getCommonContext();
-
-        return _NullSafe.stream(ids)
-                .map(id -> {
-                    if(NULL_PLACEHOLDER.equals(id)) {
-                        return null;
-                    }
-                    val rootOid = RootOid.deString(id);
-                    val memento = commonContext.mementoFor(rootOid);
-                    return memento;
-                })
-                .collect(Collectors.toList());
-
-    }
 
 }

@@ -21,13 +21,16 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -139,6 +142,24 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         }
 
         return matches;
+    }
+
+    @Override
+    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
+        
+        return _NullSafe.stream(ids)
+                .map(this::idToMemento)
+                .collect(Collectors.toList());
+    }
+    
+    // -- HELPER
+    
+    private ObjectMemento idToMemento(String id) {
+        if(NULL_PLACEHOLDER.equals(id)) {
+            return null;
+        }
+        val rootOid = RootOid.deString(id);
+        return getCommonContext().mementoFor(rootOid);
     }
 
 

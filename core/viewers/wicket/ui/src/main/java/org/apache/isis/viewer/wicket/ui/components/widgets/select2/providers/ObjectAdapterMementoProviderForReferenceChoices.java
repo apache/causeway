@@ -36,23 +36,20 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 
-import lombok.val;
+import lombok.Getter;
 
 public class ObjectAdapterMementoProviderForReferenceChoices
 extends ObjectAdapterMementoProviderAbstract 
 implements ObjectAdapterMementoProviderForChoices {
 
     private static final long serialVersionUID = 1L;
+    
+    @Getter(onMethod = @__(@Override))
     private final List<ObjectMemento> choiceMementos;
 
     public ObjectAdapterMementoProviderForReferenceChoices(
@@ -66,25 +63,6 @@ implements ObjectAdapterMementoProviderForChoices {
     @Override
     protected List<ObjectMemento> obtainMementos(String term) {
         return super.obtainMementos(term, choiceMementos);
-    }
-
-    @Override
-    public List<ObjectMemento> getChoiceMementos() {
-        return choiceMementos;
-    }
-
-    @Override
-    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-        final Function<String, ObjectMemento> idToMemento = (final String input) -> {
-            if(NULL_PLACEHOLDER.equals(input)) {
-                return null;
-            }
-            val rootOid = RootOid.deString(input);
-            return super.getCommonContext().mementoFor(rootOid);
-        };
-        return _NullSafe.stream(ids)
-                .map(idToMemento)
-                .collect(Collectors.toList());
     }
 
 

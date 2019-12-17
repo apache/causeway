@@ -36,14 +36,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
@@ -76,22 +71,5 @@ extends ObjectAdapterMementoProviderAbstract {
         return _Lists.map(autoCompleteChoices, commonContext::mementoFor);
         
     }
-
-    @Override
-    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-        val commonContext = super.getCommonContext();
-        
-        final Function<String, ObjectMemento> function = (final String input)->{
-            if(NULL_PLACEHOLDER.equals(input)) {
-                return null;
-            }
-            val rootOid = RootOid.deString(input);
-            val memento = commonContext.mementoFor(rootOid);
-            return memento;
-            
-        };
-        return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
-    }
-
 
 }
