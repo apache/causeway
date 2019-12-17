@@ -54,7 +54,6 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -174,47 +173,41 @@ implements ScalarModelSubscriber2 {
                 .getDefault(scalarModel, pendingArguments, paramNumUpdated,
                         commonContext.getAuthenticationSession());
 
-        final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
-        final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
+        val actionParameterMemento = new ActionParameterMemento(actionParameter);
+        val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);
 
         val pendingArg = pendingArgumentArray[paramNumToPossiblyUpdate];
-
+        
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);
-
             scalarModel.setPendingAdapter(defaultIfAny);
             actionArgumentModel.setObject(defaultIfAny);
         } else {
 
-            if(pendingArg != null & scalarModel.hasChoices()) {
-                // make sure the object is one of the choices, else blank it out.
-                val choices = scalarModel
-                        .getChoices(pendingArguments, commonContext.getAuthenticationSession());
-
-                if(ManagedObject.isValue(pendingArg)) {
-                    // we have to do this if the ObjectAdapters are value type (eg a string)
-                    //  because we can end up with a different ObjectAdapter for the same underlying value
-                    //  (values have no intrinsic identity)
-
-                    // it might not be necessary to have this special casing; we could probably use this code
-                    // even for reference types
-                    final Object pendingValue = pendingArg.getPojo();
-                    final List<Object> choiceValues = ManagedObject.unwrapPojoListElseEmpty(choices);
-                    if(!choiceValues.contains(pendingValue)) {
-                        scalarModel.setObject(null);
-                        scalarModel.setPending(null);
-                        actionArgumentModel.setObject(null);
-                    }
-                } else {
-                    if(!choices.contains(pendingArg)) {
-                        scalarModel.setObject(null);
-                        scalarModel.setPending(null);
-                        actionArgumentModel.setObject(null);
-                    }
-
+            boolean shouldBlankout = false;
+            
+            if(pendingArg != null) {
+                if(scalarModel.hasChoices()) {
+                    // make sure the object is one of the choices, else blank it out.
+                    val choices = scalarModel
+                            .getChoices(pendingArguments, commonContext.getAuthenticationSession());
+                    
+                    shouldBlankout = 
+                            ! isPartOfChoicesConsideringDependentArgs(scalarModel, pendingArg, choices);
+                    
+                } else if(scalarModel.hasAutoComplete()) {
+                    
+                    // poor man's implementation: blank-out in any case 
+                    shouldBlankout = true;
                 }
-
             }
+            
+            if(shouldBlankout) {
+                scalarModel.setObject(null);
+                scalarModel.setPending(null);
+                actionArgumentModel.setObject(null);
+            }
+            
         }
 
         // repaint the entire form if visibility has changed
@@ -233,7 +226,16 @@ implements ScalarModelSubscriber2 {
                         : Repaint.NOTHING;
     }
 
-
+    // blank out the parameter n based on dependent params 0 .. n-1
+    private boolean isPartOfChoicesConsideringDependentArgs(
+            ScalarModel scalarModel, 
+            ManagedObject pendingArg, 
+            List<ManagedObject> choices) {
+        
+        val choiceValues = ManagedObject.unwrapPojoSetElseEmpty(choices);
+        val pendingValue = pendingArg.getPojo();
+        return choiceValues.contains(pendingValue);
+    }
 
     public static class InlinePromptConfig {
         private final boolean supported;
@@ -303,8 +305,6 @@ implements ScalarModelSubscriber2 {
 
     private void buildGuiAndCallHooks() {
 
-        val commonContext = super.getCommonContext();
-        
         buildGui();
 
         final ScalarModel scalarModel = getModel();

@@ -171,8 +171,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             val paramPanel = paramPanels.get(paramNumToUpdate);
             val repaint = paramPanel
                     .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate, target);
-
-            final boolean multiPart = isMultiPart(); //TODO keep side-effects(?) or remove
+            
+            //final boolean multiPart = isMultiPart(); // side-effects(?) or remove
 
             switch (repaint) {
             case ENTIRE_FORM:

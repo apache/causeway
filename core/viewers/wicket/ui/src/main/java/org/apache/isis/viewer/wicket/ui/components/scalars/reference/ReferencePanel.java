@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.AttributeModifier;
@@ -36,7 +35,6 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -365,7 +363,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
     // called by setProviderAndCurrAndPending
     @Override
-    protected void syncIfNull(final Select2 select2, final List<ObjectMemento> choiceMementos) {
+    protected void syncIfNull(final Select2 select2) {
         final ObjectMemento curr = select2.getModelObject();
 
         if(!getModel().isCollection()) {

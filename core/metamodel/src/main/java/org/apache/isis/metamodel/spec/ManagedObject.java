@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -283,6 +284,15 @@ public interface ManagedObject {
         return adapters.stream()
                 .map(ManagedObject::unwrapPojo)
                 .collect(Collectors.toList());
+    }
+    
+    public static Set<Object> unwrapPojoSetElseEmpty(Collection<? extends ManagedObject> adapters) {
+        if (adapters == null) {
+            return Collections.emptySet();
+        }
+        return adapters.stream()
+                .map(ManagedObject::unwrapPojo)
+                .collect(Collectors.toSet());
     }
 
     // -- SHORTCUTS

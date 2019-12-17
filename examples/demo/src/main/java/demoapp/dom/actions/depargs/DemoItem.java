@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,6 +36,7 @@ import lombok.Setter;
 @Named("depargs.DemoItem")
 @NoArgsConstructor 
 @AllArgsConstructor(staticName="of")
+@EqualsAndHashCode
 public class DemoItem {
 
     public String title() {

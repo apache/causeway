@@ -38,7 +38,6 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForChoices;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
@@ -120,10 +119,13 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         select2.setProvider(choiceProvider);
         getModel().clearPending();
 
-        if(choiceProvider instanceof ObjectAdapterMementoProviderForChoices) {
-            val providerForChoices = (ObjectAdapterMementoProviderForChoices) choiceProvider;
-            syncIfNull(select2, providerForChoices.getChoiceMementos());
-        }
+        syncIfNull(select2);
+        
+//legacy of        
+//        if(choiceProvider instanceof ObjectAdapterMementoProviderForChoices) {
+//            val providerForChoices = (ObjectAdapterMementoProviderForChoices) choiceProvider;
+//            syncIfNull(select2, providerForChoices.getChoiceMementos());
+//        }
     }
 
     /**
@@ -134,8 +136,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, Can<ManagedObject>)})
      */
-    protected abstract void syncIfNull(Select2 select2, List<ObjectMemento> choicesMementos);
-
+    protected abstract void syncIfNull(Select2 select2);
 
     // //////////////////////////////////////
 

@@ -20,8 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,7 +33,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
@@ -174,7 +171,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
     @Override
-    protected void syncIfNull(final Select2 select2, final List<ObjectMemento> choicesMementos) {
+    protected void syncIfNull(final Select2 select2) {
         final ObjectMemento curr = getModel().getObjectAdapterMemento();
 
         if(curr == null) {
@@ -182,13 +179,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
         }
     }
 
-
     public ScalarModel getScalarModel() {
         return scalarModel;
     }
-
-    @Inject
-    WicketViewerSettings wicketViewerSettings;
 
     @Override
     protected String getScalarPanelType() {
