@@ -20,11 +20,11 @@
 package org.apache.isis.metamodel.facets.param.hide.method;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.hide.ActionParameterHiddenFacetAbstract;
@@ -57,8 +57,12 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
     }
 
     @Override
-    public boolean isHidden(final ManagedObject owningAdapter, final ManagedObject[] argumentAdapters) {
-        final Object returnValue = ManagedObject.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters != null ? Arrays.asList(argumentAdapters) : null);
+    public boolean isHidden(
+            final ManagedObject owningAdapter, 
+            final ManagedObject[] argumentAdapters) {
+        
+        final Object returnValue = ManagedObject.InvokeUtil
+                .invokeAutofit(method, owningAdapter, Can.ofArray(argumentAdapters));
         if(returnValue instanceof Boolean) {
             return (Boolean) returnValue;
         }

@@ -20,13 +20,13 @@
 package org.apache.isis.metamodel.facets.param.disable.method;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.disable.ActionParameterDisabledFacetAbstract;
@@ -65,9 +65,12 @@ public class ActionParameterDisabledFacetViaMethod extends ActionParameterDisabl
     }
 
     @Override
-    public String disabledReason(final ManagedObject owningAdapter, final ManagedObject[] argumentAdapters) {
+    public String disabledReason(
+            final ManagedObject owningAdapter, 
+            final ManagedObject[] argumentAdapters) {
         
-        final Object returnValue = ManagedObject.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters != null ? Arrays.asList(argumentAdapters) : null);
+        final Object returnValue = ManagedObject.InvokeUtil
+                .invokeAutofit(method, owningAdapter, Can.ofArray(argumentAdapters));
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

@@ -33,7 +33,6 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResultSet;
@@ -492,7 +491,11 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterDefaultsFacet paramFacet = parameters.get(i).getFacet(ActionParameterDefaultsFacet.class);
                 if (paramFacet != null && !paramFacet.isFallback()) {
-                    parameterDefaultPojos[i] = paramFacet.getDefault(target, null, null);
+                    parameterDefaultPojos[i] = paramFacet
+                            .getDefault(
+                                    target, 
+                                    /*parameters*/ null, 
+                                    /*paramNumUpdated*/null);
                 } else {
                     parameterDefaultPojos[i] = null;
                 }

@@ -32,8 +32,10 @@ implements ObjectActionParameterMixedIn {
     private final ObjectActionMixedIn mixedInAction;
 
     public ObjectActionParameterMixedInAbstract(
-            final FeatureType featureType, final ObjectActionParameterAbstract mixinParameter,
+            final FeatureType featureType, 
+            final ObjectActionParameterAbstract mixinParameter,
             final ObjectActionMixedIn mixedInAction) {
+        
         super(featureType, mixinParameter.getNumber(), mixedInAction, mixinParameter.getPeer());
         this.mixinParameter = mixinParameter;
         this.mixedInAction = mixedInAction;
@@ -42,10 +44,14 @@ implements ObjectActionParameterMixedIn {
     @Override
     public ManagedObject[] getAutoComplete(
             final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentsIfAvailable,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         return mixinParameter.getAutoComplete(
-                mixinAdapterFor(mixedInAdapter), searchArg,
+                mixinAdapterFor(mixedInAdapter),
+                argumentsIfAvailable,
+                searchArg,
                 interactionInitiatedBy);
     }
 

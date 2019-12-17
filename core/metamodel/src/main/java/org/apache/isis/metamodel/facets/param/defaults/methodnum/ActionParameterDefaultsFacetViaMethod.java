@@ -24,10 +24,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaultsFacetAbstract implements ImperativeFacet {
 
@@ -68,12 +71,12 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     @Override
     public Object getDefault(
             final ManagedObject target,
-            final List<ManagedObject> argumentsIfAvailable,
+            final Can<ManagedObject> dependentArgs,
             final Integer paramNumUpdated) {
 
         // this isn't a dependent defaults situation, so just evaluate the default.
-        if (argumentsIfAvailable == null || paramNumUpdated == null) {
-            return ManagedObject.InvokeUtil.invokeAutofit(method, target, argumentsIfAvailable);
+        if (dependentArgs.isEmpty() || paramNumUpdated == null) {
+            return ManagedObject.InvokeUtil.invokeAutofit(method, target, dependentArgs);
         }
 
         // this could be a dependent defaults situation, but has a previous parameter been updated
@@ -85,16 +88,21 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
             // eg, suppose the method is default2Foo(int, int), and the second param is updated... we want to re-evaluate
             // so numParams == 2, and paramNumUpdated == 1, and (paramNumUpdated < numParams) is TRUE
             //
-            // converesly, if method default2Foo(int), and the second param is updated... we don't want to re-evaluate
+            // conversely, if method default2Foo(int), and the second param is updated... we don't want to re-evaluate
             // so numParams == 1, and paramNumUpdated == 1, and (paramNumUpdated < numParams) is FALSE
             //
-            return ManagedObject.InvokeUtil.invokeAutofit(method, target, argumentsIfAvailable);
+            return ManagedObject.InvokeUtil.invokeAutofit(method, target, dependentArgs);
         }
 
         // otherwise, just return the arguments that are already known; we don't want to recompute the default
         // because if we did then this would trample over any pending changes already made by the end-user.
-        final ManagedObject objectAdapter = argumentsIfAvailable.get(paramNum);
-        return objectAdapter != null ? objectAdapter.getPojo() : null;
+        val argPojo = dependentArgs.stream()
+                .skip(paramNum)
+                .findFirst()
+                .map(ManagedObject::getPojo)
+                .orElse(null) ;
+                
+        return argPojo;
     }
 
     @Override

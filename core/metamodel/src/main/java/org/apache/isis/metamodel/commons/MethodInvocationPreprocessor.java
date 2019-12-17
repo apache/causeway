@@ -54,14 +54,13 @@ public class MethodInvocationPreprocessor {
             return method.invoke(targetPojo, executionParameters);
         }
 
-        final Class<?>[] parameterTypes = method.getParameterTypes();
-        final Object[] adaptedExecutionParameters = new Object[executionParameters.length];
+        val parameterTypes = method.getParameterTypes();
+        val paramCount = parameterTypes.length;
+        val adaptedExecutionParameters = new Object[paramCount];
 
-        int i=0;
-
-        for(Object param : executionParameters) {
-            adaptedExecutionParameters[i] = adapt(param, parameterTypes[i]);
-            ++i;
+        for(int i=0; i<paramCount; ++i) {
+            val origParam = _Arrays.get(executionParameters, i).orElse(null);
+            adaptedExecutionParameters[i] = adapt(origParam, parameterTypes[i]);
         }
 
         try {
@@ -129,8 +128,10 @@ public class MethodInvocationPreprocessor {
         val expectedParamCount = _NullSafe.size(parameterTypes);
         val actualParamCount = _NullSafe.size(adaptedExecutionParameters);
         if(expectedParamCount!=actualParamCount) {
-            sb.append(String.format("expected-param-count mismatch: expected %d, got %d\n", 
+            sb.append(String.format("param-count mismatch: expected %d, got %d\n", 
                     expectedParamCount, actualParamCount));
+        } else {
+            sb.append("expected param type mismatch\n");
         }
         
         for(int j=0;j<parameterTypes.length;++j) {
@@ -140,7 +141,7 @@ public class MethodInvocationPreprocessor {
                     .map(Class::getName)
                     .orElse("missing or null");
 
-            sb.append(String.format("expected-param-type[%d]: '%s', got '%s'\n", 
+            sb.append(String.format("param-type[%d]: '%s', got '%s'\n", 
                     j, parameterType.getName(), parameterValueTypeLiteral));
         }
         

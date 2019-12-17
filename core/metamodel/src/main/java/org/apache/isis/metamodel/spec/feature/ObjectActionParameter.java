@@ -92,6 +92,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     ManagedObject[] getAutoComplete(
             final ManagedObject adapter,
+            final ManagedObject[] argumentsIfAvailable,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy);
 

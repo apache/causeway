@@ -65,7 +65,7 @@ implements ObjectAdapterMementoProviderForChoices {
 
     @Override
     protected List<ObjectMemento> obtainMementos(String term) {
-        return obtainMementos(term, choiceMementos);
+        return super.obtainMementos(term, choiceMementos);
     }
 
     @Override
@@ -75,14 +75,16 @@ implements ObjectAdapterMementoProviderForChoices {
 
     @Override
     public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-        final Function<String, ObjectMemento> function = (final String input) -> {
+        final Function<String, ObjectMemento> idToMemento = (final String input) -> {
             if(NULL_PLACEHOLDER.equals(input)) {
                 return null;
             }
             val rootOid = RootOid.deString(input);
             return super.getCommonContext().mementoFor(rootOid);
         };
-        return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
+        return _NullSafe.stream(ids)
+                .map(idToMemento)
+                .collect(Collectors.toList());
     }
 
 

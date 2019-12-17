@@ -19,22 +19,21 @@
 
 package org.apache.isis.metamodel.specloader.specimpl;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.commons.ClassExtensions;
-import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.consent.Allow;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.consent.InteractionResultSet;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.TypedHolder;
@@ -61,6 +60,8 @@ import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.val;
 
 public abstract class ObjectActionParameterAbstract 
 implements ObjectActionParameter, FacetHolder.Delegating {
@@ -230,6 +231,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public ManagedObject[] getAutoComplete(
             final ManagedObject adapter,
+            final ManagedObject[] argumentsIfAvailable,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -237,19 +239,14 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
 
         if (facet != null) {
-
-            final Object[] choices = facet.autoComplete(adapter, searchArg,
-                    interactionInitiatedBy);
+            val dependentArgs = Can.ofArray(argumentsIfAvailable);
+            final Object[] choices = facet
+                    .autoComplete(adapter, dependentArgs, searchArg, interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 adapters.add(getObjectManager().adapt(choice));
             }
         }
-        /* // now incorporated into above choices processing (BoundedFacet is no more)
-        if (adapters.size() == 0 && ChoicesFacetUtils.hasChoices(getSpecification())) {
-            addAllInstancesForType(adapters);
-        }
-         */
         return adapters.toArray(new ManagedObject[0]);
     }
 
@@ -274,24 +271,23 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final ManagedObject adapter,
             final ManagedObject[] argumentsIfAvailable,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final List<ManagedObject> argListIfAvailable = ListExtensions.mutableCopy(argumentsIfAvailable);
-
-        final ManagedObject target = targetForDefaultOrChoices(adapter);
-        final List<ManagedObject> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
+        
+        val args = argsForDefaultOrChoices(adapter, Can.ofArray(argumentsIfAvailable));
+        val target = targetForDefaultOrChoices(adapter);
 
         return findChoices(target, args, interactionInitiatedBy);
     }
 
     private ManagedObject[] findChoices(
             final ManagedObject target,
-            final List<ManagedObject> args,
+            final Can<ManagedObject> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         final List<ManagedObject> adapters = _Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
         if (facet != null) {
-            final Object[] choices = facet.getChoices(target, args,
-                    interactionInitiatedBy);
+            final Object[] choices = facet.getChoices(target, args, interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 ManagedObject adapter = choice != null? getObjectManager().adapt(choice) : null;
@@ -318,15 +314,16 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final Integer paramNumUpdated) {
 
         final ManagedObject target = targetForDefaultOrChoices(adapter);
-        final List<ManagedObject> args = argsForDefaultOrChoices(adapter, argumentsIfAvailable != null ? Arrays.asList(argumentsIfAvailable) : null);
+        val args = argsForDefaultOrChoices(adapter, Can.ofArray(argumentsIfAvailable));
 
         return findDefault(target, args, paramNumUpdated);
     }
 
     private ManagedObject findDefault(
             final ManagedObject target,
-            final List<ManagedObject> args,
+            final Can<ManagedObject> args,
             final Integer paramNumUpdated) {
+        
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
             final Object dflt = defaultsFacet.getDefault(target, args, paramNumUpdated);
@@ -350,9 +347,9 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected List<ManagedObject> argsForDefaultOrChoices(
+    protected Can<ManagedObject> argsForDefaultOrChoices(
             final ManagedObject adapter,
-            final List<ManagedObject> argumentsIfAvailable) {
+            final Can<ManagedObject> argumentsIfAvailable) {
         return argumentsIfAvailable;
     }
 

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -57,8 +58,9 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
     @Override
     public Object getDefault(
             final ManagedObject target,
-            List<ManagedObject> argumentsIfAvailable,
+            final Can<ManagedObject> dependentArgs,
             final Integer paramNumUpdated) {
+        
         return selectedPojos.get();
     }
 

@@ -19,12 +19,13 @@
 
 package org.apache.isis.metamodel.facets.param.autocomplete;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
- * Obtain autocompletion for each of the parameters of the action.
+ * Obtain auto-completion for each of the parameters of the action.
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
@@ -34,9 +35,10 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 public interface ActionParameterAutoCompleteFacet extends Facet {
 
     public Object[] autoComplete(
-            final ManagedObject inObject,
-            final String searchArg,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject inObject,
+            Can<ManagedObject> dependentArgs,
+            String searchArg,
+            InteractionInitiatedBy interactionInitiatedBy);
     /**
      * The minimum number of characters that need to be entered.
      */

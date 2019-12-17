@@ -19,8 +19,7 @@
 
 package org.apache.isis.metamodel.facets.param.choices.enums;
 
-import java.util.List;
-
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -39,7 +38,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
     @Override
     public Object[] getChoices(
             final ManagedObject adapter,
-            final List<ManagedObject> arguments,
+            final Can<ManagedObject> dependentArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final FacetHolder facetHolder = getFacetHolder();

@@ -229,6 +229,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
+                    final ManagedObject[] argumentsIfAvailable, // ignored for properties
                     final String searchArg,
                     final AuthenticationSession authenticationSession) {
 
@@ -238,7 +239,8 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                         scalarModel.getParentEntityModel().load();
                 final ManagedObject[] choices =
                         property.getAutoComplete(
-                                parentAdapter, searchArg,
+                                parentAdapter, 
+                                searchArg,
                                 InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
             }
@@ -441,6 +443,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                     final ScalarModel scalarModel,
                     final ManagedObject[] argumentsIfAvailable,
                     final AuthenticationSession authenticationSession) {
+                
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
@@ -449,7 +452,8 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
                 final ManagedObject[] choices =
                         actionParameter.getChoices(
-                                parentAdapter, argumentsIfAvailable,
+                                parentAdapter, 
+                                argumentsIfAvailable,
                                 InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
             }
@@ -463,14 +467,18 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
+                    final ManagedObject[] argumentsIfAvailable,
                     final String searchArg,
                     final AuthenticationSession authenticationSession) {
+                
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
                 ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
                 final ManagedObject[] choices = actionParameter.getAutoComplete(
-                        parentAdapter, searchArg,
+                        parentAdapter,
+                        argumentsIfAvailable,
+                        searchArg,
                         InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
             }
@@ -621,22 +629,23 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
         }
 
         public abstract ManagedObject getDefault(
-                final ScalarModel scalarModel,
-                final ManagedObject[] argsIfAvailable,
-                final int paramNumUpdated,
-                final AuthenticationSession authenticationSession);
+                ScalarModel scalarModel,
+                ManagedObject[] argsIfAvailable,
+                int paramNumUpdated,
+                AuthenticationSession authenticationSession);
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
         public abstract List<ManagedObject> getChoices(
-                final ScalarModel scalarModel,
-                final ManagedObject[] argumentsIfAvailable,
-                final AuthenticationSession authenticationSession);
+                ScalarModel scalarModel,
+                ManagedObject[] argumentsIfAvailable,
+                AuthenticationSession authenticationSession);
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
         public abstract List<ManagedObject> getAutoComplete(
                 ScalarModel scalarModel,
+                ManagedObject[] argumentsIfAvailable,
                 String searchArg,
-                final AuthenticationSession authenticationSession);
+                AuthenticationSession authenticationSession);
 
         public abstract int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel);
 
@@ -923,9 +932,10 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     }
 
     public List<ManagedObject> getAutoComplete(
+            final ManagedObject[] argumentsIfAvailable,
             final String searchTerm,
             final AuthenticationSession authenticationSession) {
-        return kind.getAutoComplete(this, searchTerm, authenticationSession);
+        return kind.getAutoComplete(this, argumentsIfAvailable, searchTerm, authenticationSession);
     }
 
     /**

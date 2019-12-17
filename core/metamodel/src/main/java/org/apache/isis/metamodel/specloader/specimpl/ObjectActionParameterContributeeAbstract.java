@@ -18,14 +18,23 @@
  */
 package org.apache.isis.metamodel.specloader.specimpl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 
+/**
+ * 
+ * @deprecated contributed actions from services are deprecated, use mixins instead
+ *
+ */
+@Deprecated
 public abstract class ObjectActionParameterContributeeAbstract
 extends ObjectActionParameterAbstract
 implements ObjectActionParameterContributee {
@@ -40,6 +49,7 @@ implements ObjectActionParameterContributee {
             final ObjectActionParameterAbstract serviceActionParameter,
             final int contributeeParamNumber,
             final ObjectActionContributee contributeeAction) {
+        
         super(featureType, contributeeParamNumber, contributeeAction, serviceActionParameter.getPeer());
         this.servicePojo = servicePojo;
         this.serviceActionParameter = serviceActionParameter;
@@ -49,9 +59,14 @@ implements ObjectActionParameterContributee {
     @Override
     public ManagedObject[] getAutoComplete(
             final ManagedObject adapter,
+            final ManagedObject[] argumentsIfAvailable,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return serviceActionParameter.getAutoComplete(getServiceAdapter(), searchArg,
+        
+        return serviceActionParameter.getAutoComplete(
+                getServiceAdapter(),
+                argumentsIfAvailable,
+                searchArg,
                 interactionInitiatedBy);
     }
 
@@ -64,17 +79,17 @@ implements ObjectActionParameterContributee {
         return getServiceAdapter();
     }
 
+    
     @Override
-    protected List<ManagedObject> argsForDefaultOrChoices(
+    protected Can<ManagedObject> argsForDefaultOrChoices(
             final ManagedObject contributee,
-            final List<ManagedObject> argumentsIfAvailable) {
+            final Can<ManagedObject> dependentArgs) {
 
-        final List<ManagedObject> suppliedArgs = ListExtensions.mutableCopy(argumentsIfAvailable);
-
+        final List<ManagedObject> suppliedArgs = dependentArgs.stream()
+                .collect(Collectors.toCollection(ArrayList::new));
         final int contributeeParam = contributeeAction.getContributeeParam();
         ListExtensions.insert(suppliedArgs, contributeeParam, contributee);
-
-        return suppliedArgs;
+        return Can.ofCollection(suppliedArgs);
     }
 
 }

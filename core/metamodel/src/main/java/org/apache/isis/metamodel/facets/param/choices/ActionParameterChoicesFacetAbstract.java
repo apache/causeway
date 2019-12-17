@@ -31,8 +31,7 @@ implements ActionParameterChoicesFacet {
         return ActionParameterChoicesFacet.class;
     }
 
-    public ActionParameterChoicesFacetAbstract(
-            final FacetHolder holder) {
+    public ActionParameterChoicesFacetAbstract(FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
     }
 

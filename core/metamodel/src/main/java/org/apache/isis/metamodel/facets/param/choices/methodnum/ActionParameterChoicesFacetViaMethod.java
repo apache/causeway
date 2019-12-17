@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -68,13 +69,13 @@ implements ImperativeFacet {
 
     @Override
     public Object[] getChoices(
-            final ManagedObject adapter,
-            final List<ManagedObject> argumentsIfAvailable,
+            final ManagedObject owningAdapter,
+            final Can<ManagedObject> dependentArgs, 
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final Object choices =
                 ManagedObject.InvokeUtil.invokeAutofit(
-                        method, adapter, argumentsIfAvailable);
+                        method, owningAdapter, dependentArgs);
         if (choices == null) {
             return _Constants.emptyObjects;
         }

@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -37,7 +38,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class ActionParameterAutoCompleteFacetViaMethod 
-extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
+extends ActionParameterAutoCompleteFacetAbstract 
+implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesType;
@@ -76,10 +78,13 @@ extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
     @Override
     public Object[] autoComplete(
             final ManagedObject owningAdapter,
+            final Can<ManagedObject> dependentArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final Object collectionOrArray = ManagedObject.InvokeUtil.invoke(method, owningAdapter, searchArg);
+        final Object collectionOrArray = 
+                ManagedObject.InvokeUtil.invokeAutofit(
+                        method, owningAdapter, dependentArgs, Can.ofSingleton(searchArg));
         if (collectionOrArray == null) {
             return _Constants.emptyObjects;
         }

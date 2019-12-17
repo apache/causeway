@@ -66,8 +66,10 @@ extends ObjectAdapterMementoProviderAbstract {
         
         val autoCompleteChoices = _Lists.<ManagedObject>newArrayList();
         if (getScalarModel().hasAutoComplete()) {
-            val autoCompleteAdapters =
-                    getScalarModel().getAutoComplete(term, commonContext.getAuthenticationSession());
+            // this implementation will not recover any dependentArgs
+            val dependentArgs = (ManagedObject[])null; 
+            val autoCompleteAdapters = getScalarModel()
+                    .getAutoComplete(dependentArgs, term, commonContext.getAuthenticationSession());
             autoCompleteChoices.addAll(autoCompleteAdapters);
         }
         

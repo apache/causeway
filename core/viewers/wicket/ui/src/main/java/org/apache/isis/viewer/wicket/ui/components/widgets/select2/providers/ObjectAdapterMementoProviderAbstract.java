@@ -85,7 +85,8 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             return NULL_PLACEHOLDER;
         }
         final ObjectSpecId objectSpecId = choice.getObjectSpecId();
-        final ObjectSpecification spec = commonContext.getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
+        final ObjectSpecification spec = commonContext.getSpecificationLoader()
+                .lookupBySpecIdElseLoad(objectSpecId);
 
         // support enums that are implementing an interface; only know this late in the day
         // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their objectSpecId
@@ -97,7 +98,10 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     }
 
     @Override
-    public void query(final String term, final int page, final org.wicketstuff.select2.Response<ObjectMemento> response) {
+    public void query(
+            final String term, 
+            final int page, 
+            final org.wicketstuff.select2.Response<ObjectMemento> response) {
 
         final List<ObjectMemento> mementos = _Lists.newArrayList(obtainMementos(term));
         // if not mandatory, and the list doesn't contain null already, then add it in.
@@ -117,7 +121,10 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
      * @param choicesMementos The collections of choices to filter
      * @return A list of all matching choices
      */
-    protected final List<ObjectMemento> obtainMementos(String term, Collection<ObjectMemento> choicesMementos) {
+    protected final List<ObjectMemento> obtainMementos(
+            String term, 
+            Collection<ObjectMemento> choicesMementos) {
+        
         List<ObjectMemento> matches = _Lists.newArrayList();
         if (Strings.isEmpty(term)) {
             matches.addAll(choicesMementos);
