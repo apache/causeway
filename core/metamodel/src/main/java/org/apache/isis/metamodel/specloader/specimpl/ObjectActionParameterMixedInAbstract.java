@@ -18,6 +18,7 @@
  */
 package org.apache.isis.metamodel.specloader.specimpl;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.interactions.ActionArgValidityContext;
@@ -44,13 +45,13 @@ implements ObjectActionParameterMixedIn {
     @Override
     public ManagedObject[] getAutoComplete(
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] argumentsIfAvailable,
+            final Can<ManagedObject> dependentArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return mixinParameter.getAutoComplete(
                 mixinAdapterFor(mixedInAdapter),
-                argumentsIfAvailable,
+                dependentArgs,
                 searchArg,
                 interactionInitiatedBy);
     }

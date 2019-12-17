@@ -59,13 +59,13 @@ implements ObjectActionParameterContributee {
     @Override
     public ManagedObject[] getAutoComplete(
             final ManagedObject adapter,
-            final ManagedObject[] argumentsIfAvailable,
+            final Can<ManagedObject> dependentArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return serviceActionParameter.getAutoComplete(
                 getServiceAdapter(),
-                argumentsIfAvailable,
+                dependentArgs,
                 searchArg,
                 interactionInitiatedBy);
     }

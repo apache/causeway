@@ -19,7 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -33,6 +35,7 @@ import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -339,29 +342,24 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
     @Override
     protected ChoiceProvider<ObjectMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable) {
-
+        
+        val commonContext = super.getCommonContext();
+        
         if (getModel().hasChoices()) {
-            List<ObjectMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
+            val choices = getModel().getChoices(argsIfAvailable, commonContext.getAuthenticationSession());
+            val choiceMementos = _Lists.map(choices, commonContext::mementoFor);
             return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
         }
 
         if(getModel().hasAutoComplete()) {
-            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(getModel());
+            val dependentArgMementos = _NullSafe.stream(argsIfAvailable)
+                    .map(commonContext::mementoFor)
+                    .collect(Collectors.toCollection(ArrayList::new)); // serializable
+            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(
+                    getModel(), dependentArgMementos);
         }
 
         return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel());
-    }
-
-    // called by setProviderAndCurrAndPending
-    private List<ObjectMemento> obtainChoiceMementos(ManagedObject[] argsIfAvailable) {
-        
-        val commonContext = super.getCommonContext();
-        
-        val choices = _Lists.<ManagedObject>newArrayList();
-        if(getModel().hasChoices()) {
-            choices.addAll(getModel().getChoices(argsIfAvailable, commonContext.getAuthenticationSession()));
-        }
-        return _Lists.map(choices, commonContext::mementoFor);
     }
 
     // called by setProviderAndCurrAndPending
@@ -378,13 +376,6 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
         }
     }
-
-    //TODO [ahuber ]not used, remove?
-    //    private boolean autoSelect() {
-    //        final boolean disableAutoSelect = getConfiguration().getBoolean(KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION, false);
-    //        final boolean autoSelect = !disableAutoSelect;
-    //        return autoSelect;
-    //    }
 
     // //////////////////////////////////////
     // getInput, convertInput

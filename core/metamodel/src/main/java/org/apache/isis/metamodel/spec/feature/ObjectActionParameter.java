@@ -25,6 +25,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
@@ -92,7 +93,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     ManagedObject[] getAutoComplete(
             final ManagedObject adapter,
-            final ManagedObject[] argumentsIfAvailable,
+            final Can<ManagedObject> dependentArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy);
 

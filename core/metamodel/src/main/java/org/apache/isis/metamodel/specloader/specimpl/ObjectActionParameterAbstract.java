@@ -231,7 +231,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public ManagedObject[] getAutoComplete(
             final ManagedObject adapter,
-            final ManagedObject[] argumentsIfAvailable,
+            final Can<ManagedObject> dependentArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -239,7 +239,6 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
 
         if (facet != null) {
-            val dependentArgs = Can.ofArray(argumentsIfAvailable);
             final Object[] choices = facet
                     .autoComplete(adapter, dependentArgs, searchArg, interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());

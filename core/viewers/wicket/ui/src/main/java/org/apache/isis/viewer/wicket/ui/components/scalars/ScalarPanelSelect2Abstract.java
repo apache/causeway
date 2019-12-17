@@ -120,7 +120,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         getModel().clearPending();
 
         if(choiceProvider instanceof ObjectAdapterMementoProviderForChoices) {
-            final ObjectAdapterMementoProviderForChoices providerForChoices = (ObjectAdapterMementoProviderForChoices) choiceProvider;
+            val providerForChoices = (ObjectAdapterMementoProviderForChoices) choiceProvider;
             syncIfNull(select2, providerForChoices.getChoiceMementos());
         }
     }
