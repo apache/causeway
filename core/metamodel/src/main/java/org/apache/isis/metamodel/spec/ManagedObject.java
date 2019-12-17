@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -443,7 +444,7 @@ public interface ManagedObject {
                 final Method method, 
                 final ManagedObject target, 
                 final Can<? extends ManagedObject> dependentArgs,
-                final Can<Object> additionalArgValues) {
+                final Can<Optional<Object>> additionalArgValues) {
     
             val argArray = adjust(method, dependentArgs, additionalArgValues);
             
@@ -457,13 +458,14 @@ public interface ManagedObject {
                 final Method method, 
                 final ManagedObject target, 
                 final Can<? extends ManagedObject> dependentArgs) {
+            
             return invokeAutofit(method, target, dependentArgs, Can.empty());
         }
     
         private static Object[] adjust(
                 final Method method, 
                 final Can<? extends ManagedObject> dependentArgs,
-                final Can<Object> additionalArgValues) {
+                final Can<Optional<Object>> additionalArgValues) {
             
             val parameterTypes = method.getParameterTypes();
             val paramCount = parameterTypes.length;
@@ -483,7 +485,8 @@ public interface ManagedObject {
             // add the additional parameter values (if any)
             int paramIndex = dependentArgsToConsiderCount;
             for(val additionalArg : additionalArgValues) {
-                adjusted[paramIndex] = additionalArg;
+                val paramType = parameterTypes[paramIndex];
+                adjusted[paramIndex] = honorPrimitiveDefaults(paramType, additionalArg.orElse(null));
                 ++paramIndex;
             }
             

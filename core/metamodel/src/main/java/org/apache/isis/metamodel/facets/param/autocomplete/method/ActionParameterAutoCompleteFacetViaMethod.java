@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
@@ -84,7 +85,9 @@ implements ImperativeFacet {
 
         final Object collectionOrArray = 
                 ManagedObject.InvokeUtil.invokeAutofit(
-                        method, owningAdapter, dependentArgs, Can.ofSingleton(searchArg));
+                        method, owningAdapter, dependentArgs, 
+                        Can.ofSingleton(Optional.ofNullable(searchArg)));
+        
         if (collectionOrArray == null) {
             return _Constants.emptyObjects;
         }
