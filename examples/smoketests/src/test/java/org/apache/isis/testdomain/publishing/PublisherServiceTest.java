@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -40,8 +41,10 @@ import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -50,6 +53,7 @@ import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.Getter;
 import lombok.val;
@@ -66,6 +70,9 @@ import lombok.val;
                 // "isis.reflector.introspector.parallelize=false",
                 // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
         })
+@TestPropertySource({
+    IsisPresets.SilenceWicket // just to have any config properties at all
+})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Incubating("inconsitent state when run in a test batch")
 class PublisherServiceTest {
@@ -117,7 +124,7 @@ class PublisherServiceTest {
     }
 
     @Test @Order(2)
-    void publisherServiceShouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() 
+    void publisherService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() 
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // given
@@ -125,7 +132,7 @@ class PublisherServiceTest {
         publisherService.clearHistory();
 
         // when - running within its own background task
-        val future = wrapper.async(book, ExecutionMode.SKIP_RULES) //TODO why do we fail when not skipping rules?
+        val future = wrapper.async(book, ExecutionMode.SKIP_RULES) // don't enforce rules for this test
                 .run(Book::setName, "Book #2");
 
         future.get(1000, TimeUnit.SECONDS);
@@ -137,6 +144,35 @@ class PublisherServiceTest {
         //assertEquals(0, history.get("loaded"));
         assertEquals(2, history.get("updated"));
         assertEquals(1, history.get("modified"));
+
+    }
+    
+    
+    @Test @Order(3)
+    void publisherService_shouldNotBeAwareOfInventoryChanges_whenUsingAsyncExecutionFails() 
+            throws InterruptedException, ExecutionException, TimeoutException {
+
+        // given
+        val book = repository.allInstances(Book.class).listIterator().next();
+        publisherService.clearHistory();
+
+        // when - running within its own background task
+        assertThrows(DisabledException.class, ()->{
+            
+            val future = wrapper.async(book, ExecutionMode.EXECUTE) 
+                .run(Book::setName, "Book #2");
+            
+            future.get(1000, TimeUnit.SECONDS);
+            
+        });
+
+        // then - after the commit
+        val history = publisherService.getHistory();
+        assertEquals(null, history.get("created"));
+        assertEquals(null, history.get("deleted"));
+        assertEquals(null, history.get("loaded"));
+        assertEquals(null, history.get("updated"));
+        assertEquals(null, history.get("modified"));
 
     }
 

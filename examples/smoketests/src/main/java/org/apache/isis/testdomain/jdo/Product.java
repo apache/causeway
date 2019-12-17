@@ -32,6 +32,7 @@ import javax.jdo.annotations.Persistent;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 
 import lombok.AccessLevel;
@@ -54,7 +55,7 @@ public class Product {
         return toString();
     }
 
-    @Property
+    @Property(editing = Editing.DISABLED) // used for an async rule check test
     @Getter @Setter @Column(allowsNull = "true")
     private String name;
 

@@ -37,8 +37,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -47,6 +49,7 @@ import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -61,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
                 "logging.config=log4j2-test.xml",
         })
 @TestPropertySource({
-    //IsisPresets.DebugPersistence
+    IsisPresets.SilenceWicket // just to have any config properties at all
 })
 @Incubating("inconsitent state when run in a test batch")
 //@Transactional //XXX this test is non transactional
@@ -122,7 +125,7 @@ class AuditerServiceTest {
         auditerService.clearHistory();
 
         // when - running within its own background task
-        val future = wrapper.async(book, ExecutionMode.SKIP_RULES) //TODO why do we fail when not skipping rules?
+        val future = wrapper.async(book, ExecutionMode.SKIP_RULES) // don't enforce rules for this test
         .run(Book::setName, "Book #2");
 
         future.get(1000, TimeUnit.SECONDS);
@@ -130,6 +133,30 @@ class AuditerServiceTest {
         // then - after the commit
         assertEquals("targetClassName=Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
                 auditerService.getHistory());
+    }
+    
+    @Test
+    void auditerService_shouldNotBeAwareOfInventoryChanges_whenUsingAsyncExecutionThatFails() 
+            throws InterruptedException, ExecutionException, TimeoutException {
+
+        // given
+        val books = repository.allInstances(Book.class);
+        assertEquals(1, books.size());
+        val book = books.listIterator().next();
+        auditerService.clearHistory();
+
+        // when - running within its own background task
+        assertThrows(DisabledException.class, ()->{
+        
+            val future = wrapper.async(book, ExecutionMode.EXECUTE)
+                    .run(Book::setName, "Book #2");
+
+            future.get(1000, TimeUnit.SECONDS);
+            
+        });
+        
+        // then - after the exception
+        assertEquals("", auditerService.getHistory());
     }
 
     // -- HELPER
