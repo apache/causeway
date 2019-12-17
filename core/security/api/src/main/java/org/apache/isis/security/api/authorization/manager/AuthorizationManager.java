@@ -19,6 +19,7 @@
 
 package org.apache.isis.security.api.authorization.manager;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -108,7 +109,10 @@ public class AuthorizationManager {
         return false;
     }
 
-    private static boolean containsSudoSuperuserRole(final AuthenticationSession session) {
+    private static boolean containsSudoSuperuserRole(@Nullable final AuthenticationSession session) {
+        if(session==null) {
+            return false;
+        }
         return session.hasRole(SudoService.ACCESS_ALL_ROLE);
     }
 

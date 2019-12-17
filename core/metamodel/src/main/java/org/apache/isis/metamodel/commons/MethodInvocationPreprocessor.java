@@ -27,10 +27,13 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
+
+import lombok.val;
 
 /**
  * Utility for method invocation pre-processing.
@@ -121,15 +124,26 @@ public class MethodInvocationPreprocessor {
             Object[] adaptedExecutionParameters,
             IllegalArgumentException e) {
 
-        final StringBuilder sb = new StringBuilder();
-
+        val sb = new StringBuilder();
+        
+        val expectedParamCount = _NullSafe.size(parameterTypes);
+        val actualParamCount = _NullSafe.size(adaptedExecutionParameters);
+        if(expectedParamCount!=actualParamCount) {
+            sb.append(String.format("expected-param-count mismatch: expected %d, got %d\n", 
+                    expectedParamCount, actualParamCount));
+        }
+        
         for(int j=0;j<parameterTypes.length;++j) {
             final Class<?> parameterType = parameterTypes[j];
-            final Object parameterValue = adaptedExecutionParameters[j];
+            final String parameterValueTypeLiteral = _Arrays.get(adaptedExecutionParameters, j)
+                    .map(Object::getClass)
+                    .map(Class::getName)
+                    .orElse("missing or null");
 
-            sb.append(String.format("expected-param-type[%d]: %s, got %s\n", 
-                    j, parameterType.getName(), parameterValue.getClass().getName()));
+            sb.append(String.format("expected-param-type[%d]: '%s', got '%s'\n", 
+                    j, parameterType.getName(), parameterValueTypeLiteral));
         }
+        
 
         // re-throw more verbose
         return new IllegalArgumentException(sb.toString(), e);

@@ -22,6 +22,7 @@ package org.apache.isis.commons.internal.collections;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.stream.Collector;
 
@@ -295,6 +296,27 @@ public final class _Arrays {
             return null;
         }
         return arrayType.getComponentType();
+    }
+    
+    // -- ACCESSOR
+
+    /**
+     * Optionally returns an array element by index, based on whether the index is valid.
+     * @param <T>
+     * @param array
+     * @param index
+     */
+    public static <T> Optional<T> get(@Nullable T[] array, int index) {
+        val size = _NullSafe.size(array);
+        if(size==0) {
+            return Optional.empty();
+        }
+        val minIndex = 0;
+        val maxIndex = size - 1;
+        if(index < minIndex ||  index > maxIndex) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(array[index]);
     }
 
     // --
