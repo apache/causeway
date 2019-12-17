@@ -33,8 +33,8 @@ Domain services placed on the `TERTIARY` appear in the menu bar associated with 
 image::reference-annotations/DomainServiceLayout/menuBar-tertiary.png[width="720px",link="{imagesdir}/reference-annotations/DomainServiceLayout/menuBar-tertiary.png"]
 
 
-The grouping of multiple domain services actions within a single drop-down is managed by the xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
-
+The grouping of multiple domain services actions within a single drop-down is managed by the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
+Alternatively, use `menubars.layout.xml` layout file to organize menu action items arbitrarily.
 
 [NOTE]
 ====

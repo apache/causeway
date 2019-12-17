@@ -12,6 +12,7 @@ fi
 
 echo "building ..."
 export ANTORA_CMD=antora
+export CHECK_FOR_STALE_EXAMPLES=skip
 
 echo "\$PLAYBOOK_FILE = $PLAYBOOK_FILE"
 sh build-site.sh $PLAYBOOK_FILE || exit 1

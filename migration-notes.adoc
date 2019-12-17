@@ -8,6 +8,7 @@ Search also for: "TODO: v2: " in the .adoc documentation.
 
 * `o.a.isis.schema.utils.Xxx` in the applib have moved to `o.a.isis.applib.util.schema`
 * `o.a.isis.schema.utils.jaxbadapters.Xxx` in the applib have moved to `o.a.isis.applib.jaxbadapters`
+* `BackgroundService` replaced by the `WrapperFactory#async(Object)`
 
 
 === Server-Sent-Event (SSE) Support (ISIS-2102)

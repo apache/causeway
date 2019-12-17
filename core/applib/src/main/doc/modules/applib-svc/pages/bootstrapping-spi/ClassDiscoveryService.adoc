@@ -41,7 +41,7 @@ This implementation is also used to discover domain services annotated with xref
 Currently this logic uses the implementation directly, so is not pluggable.
 ====
 
-To use an alternative implementation, implement the `ClassDiscoveryService` interface and use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `ClassDiscoveryService` interface and use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
 
 
 

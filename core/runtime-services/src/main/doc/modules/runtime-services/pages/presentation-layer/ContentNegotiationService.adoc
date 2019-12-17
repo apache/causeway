@@ -193,7 +193,7 @@ If the property is not set, then the default depends on the xref:refguide:config
 
 Apache Isis' default implementations of `ContentNegotiationService` service are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-To use an alternative implementation, use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
 
 
 

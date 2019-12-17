@@ -53,7 +53,7 @@ In fact, the `MementoServiceDefault` implementation does provide a mechanism to 
 not part of the `MementoService` public API. Note also that the encoding method is not pluggable.
 ====
 
-To use an alternative implementation, implement `MementoService` interface and use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement `MementoService` interface and use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
 
 The types of objects that are supported by the `MementoService` are implementation-specific, but would typically
 include all the usual value types as well as Apache Isis' `Bookmark` class (to represent references to arbitrary

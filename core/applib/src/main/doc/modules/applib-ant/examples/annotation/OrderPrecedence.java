@@ -23,6 +23,7 @@ import org.springframework.core.Ordered;
 
 import lombok.experimental.UtilityClass;
 
+// tag::refguide[]
 @UtilityClass
 public class OrderPrecedence {
 
@@ -56,3 +57,4 @@ public class OrderPrecedence {
     public static final int LOW = OrderPrecedence.LOWEST / 2;
 
 }
+// end::refguide[]

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.command;
 
+import lombok.Getter;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -43,11 +45,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 @Qualifier("Default")
 public class CommandContext {
 
+    @Getter
     private Command command;
-
-    public Command getCommand() {
-        return command;
-    }
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.

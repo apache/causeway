@@ -144,11 +144,6 @@ Implementing business logic using a (no-arg) action, and associating with a prop
 
 
 
-|link:https://www.youtube.com/watch?v=0naoVsWppuQ[013^] +
-Invoking (no-arg) action on multiple objects at once (using xref:refguide:applib-ant:Action.adoc#invokeOn[`@Action#invokeOn()`], and using the xref:refguide:applib-svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`] domain service for a smoother end-user experience.
-|||x||||||x||
-
-
 
 
 

@@ -37,10 +37,6 @@ The instanceId for services is always "1".
 |if this domain service acts as a repository for an entity type, specify that entity type.  This is used to determine an icon to use for the service (eg as shown in action prompts).
 
 
-|`menuOrder()`
-|
-|Deprecated in 1.8.0; use instead xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`]
-
 |===
 
 

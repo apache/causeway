@@ -1,13 +1,13 @@
 [[BackgroundService]]
-= `BackgroundService2`
+= `BackgroundService`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
 :page-partial:
 
 
-The `BackgroundService2` domain service (and its various supertypes), and also the companion xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
+The `BackgroundService` domain service (and its various supertypes), and also the companion xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
 
-The `BackgroundService2` is responsible for capturing a memento representing the command in a typesafe way, and persisting it rather than executing it directly.
+The `BackgroundService` is responsible for capturing a memento representing the command in a typesafe way, and persisting it rather than executing it directly.
 
 The default `BackgroundServiceDefault` implementation works by using a proxy wrapper around the target so that it can capture the action to invoke and its arguments.
 
@@ -27,7 +27,7 @@ The API is:
 
 [source,java]
 ----
-public interface BackgroundService2 {
+public interface BackgroundService {
     <T> T execute(final T object);                              // <1>
     <T> T executeMixin(Class<T> mixinClass, Object mixedIn);    // <2>
 }
@@ -37,7 +37,7 @@ public interface BackgroundService2 {
 
 The default implementation is provided by core (`o.a.i.core.runtime.services.background.BackgroundServiceDefault`).
 
-To provide an alternative implementation, subclass and use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To provide an alternative implementation, subclass and link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] or equivalent (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
 
 
 == Usage

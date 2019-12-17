@@ -32,7 +32,7 @@ This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implement
 And, as you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
 
 
-To use an alternative implementation, subclass and use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, subclass and use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
 
 
 

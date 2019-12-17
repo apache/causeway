@@ -13,12 +13,14 @@ bash $SCRIPT_DIR/_adoc-copy-examples.sh
 bash $SCRIPT_DIR/_adoc-gen-config.sh
 
 
-# check if anything had not been sync'd
-WC=$(git status --porcelain | wc -l)
-if [ "$WC" -ne "0" ]; then
-  git status --porcelain
-  echo "Some examples are out of date; run sync-adoc.sh and commit, then try again" >&2
-  exit 1
+# check if any examples have not been sync'd
+if [ "$CHECK_FOR_STALE_EXAMPLES" != "skip" ]; then
+  WC=$(git status --porcelain | grep examples | wc -l)
+  if [ "$WC" -ne "0" ]; then
+    git status --porcelain
+    echo "Some examples are out of date; run sync-adoc.sh and commit, then try again" >&2
+    exit 1
+  fi
 fi
 
 bash $SCRIPT_DIR/_adoc-antora.sh ${PROJECT_ROOT_PATH}/$*

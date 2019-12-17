@@ -28,11 +28,6 @@ The table below summarizes the annotation's attributes.
 |the menubar in which the menu that holds this service's actions should reside.
 
 
-|xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`menuOrder()`]
-|
-|the order of the service's menu with respect to other service's.
-
-
 |xref:refguide:applib-ant:DomainServiceLayout.adoc#named[`named()`]
 |string, eg "Customers"
 |name of this class (overriding the name derived from its name in code)

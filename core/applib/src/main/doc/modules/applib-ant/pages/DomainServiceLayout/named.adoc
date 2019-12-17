@@ -8,13 +8,6 @@ include::_attributes.adoc[]
 The `named()` attribute explicitly specifies the domain service's name, overriding the name that would normally be inferred from the Java source code.
 
 
-
-[TIP]
-====
-The value of this attribute also has an important role to play in the positioning of the domain service's actions relative to the actions of other domain services.
-See xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`menuOrder()`] for a full discussion with examples.
-====
-
 For example:
 
 [source,java]

@@ -2,6 +2,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
 :page-partial:
+:page-role: -toc -title
 
 
 
@@ -20,18 +21,6 @@ It also lists their corresponding implementation, either a default implementatio
 |Implementation
 |Notes
 
-|xref:refguide:applib-svc:application-layer-api/ActionInvocationContext.adoc[`o.a.i.applib.` +
-`services.actinv` +
-`ActionInvocation-` +
-`Context`]
-|Request-scoped access to whether action is invoked on object and/or on collection of objects
-|`ActionInvocationContext` +
-``o.a.i.core`` +
-``isis-core-applib``
-|API is also concrete class
-
-
-
 |xref:refguide:applib-svc:application-layer-api/BackgroundService.adoc[`o.a.i.applib.` +
 `services.background` +
 `BackgroundService`]
@@ -42,6 +31,8 @@ It also lists their corresponding implementation, either a default implementatio
 ``isis-core-runtime``
 |depends on: +
 xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommand-Service`]
+
+NOTE: TODO: v2: this has been replaced by `WrapperFactory#async(...)`
 
 
 |xref:refguide:applib-svc:application-layer-api/CommandContext.adoc[`o.a.i.applib.` +

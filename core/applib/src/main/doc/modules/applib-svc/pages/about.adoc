@@ -84,68 +84,47 @@ Alternatively the object can be instantiated simply using `new`, then services i
 
 The framework provides default implementations for many of the domain services.
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
+This is most commonly done using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation.
+Inspect the source code of the default implementation to determine which value to use.
+The `OrderPrecedence` class provides some pre-defined precedences:
 
-The trick is to use the xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`]
-attribute, specifying a low number (typically `"1"`).
+[source,java]
+----
+include::applib-ant:example$annotation/OrderPrecedence.java[tags=refguide]
+----
 
-[NOTE]
-====
-For a small number of domain services, all implementations are used (following the chain-of-responsibility pattern), not just the first one.
-The services in question are:
+Spring offers a number of other mechanisms to specify the ordering; these can also be used.
+
+For some domain services, all framework will delegate to all available implementation, using a chain-of-responsibility pattern):
+These include:
+
 xref:refguide:applib-svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`],
 xref:refguide:applib-svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`], and
 xref:refguide:applib-svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`].
-====
 
 For example, suppose you wanted to provide your own implementation of xref:refguide:applib-svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`].
-Here's how:
+The default implementation has these annotations:
 
 [source,java]
 ----
-@DomainService(
-        nature = NatureOfService.DOMAIN
-)
-@DomainServiceLayout(
-        menuOrder = "1"                             // <1>
-)
-public class MyLocaleProvider implements LocaleProvider {
-    @Override
-    public Locale getLocale() {
-        return ...
-    }
-}
+@Service
+@Named("isisWicketViewer.LocaleProviderWicket")
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("Wicket")
+@Log4j2
+public class LocaleProviderWicket implements LocaleProvider { /* ... */ }
 ----
-<1> takes precedence over the default implementation.
 
-
-It's also quite common to want to decorate the existing implementation (ie have your own implementation delegate to the default); this is also possible and quite easy.
-The idea is to have the framework inject all implementations of the service, and then to delegate to the first one that isn't "this" one:
+To override this, use something like:
 
 [source,java]
 ----
-@DomainService(nature=NatureOfService.DOMAIN)
-@DomainServiceLayout(
-        menuOrder = "1"                                                                 // <1>
-)
-public class MyLocaleProvider implements LocaleProvider {
-    @Override
-    public Locale getLocale() {
-        return getDelegateLocaleProvider().getLocale();                                 // <2>
-    }
-    private LocaleProvider getDelegateLocaleProvider() {
-        return Iterables.tryFind(localeProviders, input -> input != this).orNull();     // <3>
-    }
-    @Inject
-    List<LocaleProvider> localeProviders;                                               // <4>
-}
+@Service
+@Order(OrderPrecedence.HIGH)
+public class MyLocaleProvider implements LocaleProvider { /* ... */ }
 ----
-<1> takes precedence over the default implementation when injected elsewhere.
-<2> this implementation merely delegates to the default implementation
-<3> find the first implementation that isn't _this_ implementation (else infinite loop!)
-<4> injects all implementations, including this implemenation
 
-The above code could be improved by caching the delegateLocaleProvider once located (rather than searching each time).
-
+It's not necessary to annotate `@Named` or `@Qualifier`, but could be considered good practice.
 
 
 == Command and Events

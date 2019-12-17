@@ -39,7 +39,6 @@ Commands/Interactions/Background/Auditing/Publishing/Profiling:
 Information Sharing:
 
 * xref:refguide:applib-svc:core-domain-api/Scratchpad.adoc[`Scratchpad`]
-* xref:refguide:applib-svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`]
 * xref:refguide:applib-svc:persistence-layer-api/QueryResultsCache.adoc[`QueryResultsCache`]
 
 UserManagement:

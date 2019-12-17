@@ -6,37 +6,39 @@ include::_attributes.adoc[]
 
 
 
-The `CommandContext` service is a xref:refguide:applib-ant:RequestScoped.adoc[request-scoped] service that reifies the invocation of an action on a domain object into an object itself. This reified information is encapsulated within the `Command` object.
+The `CommandContext` service is a xref:refguide:applib-ant:RequestScoped.adoc[request-scoped] service that reifies the invocation of an action on a domain object into an object itself.
+This reified information is encapsulated within the `Command` object.
 
 By default, the `Command` is held in-memory only; once the action invocation has completed, the `Command` object is gone.
 The optional supporting xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`] enables the implementation of `Command` to be pluggable.
-With an appropriate implementation (eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`]) the `Command` may then be persisted.
+With an appropriate implementation
+// TODO: v2: update for extensions (eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`])
+the `Command` may then be persisted.
 
-The primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:refguide:applib-svc:application-layer-api/BackgroundService.adoc[`BackgroundService`], or implicitly by way of the xref:refguide:applib-ant:Action.adoc#command[`@Action#command()`] annotation.
-
-There are a number of related use cases:
+There are a number of use cases:
 
 * to enable profiling of the running application (which actions are invoked then most often, what is their response time)
 * if a xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
-* if a xref:refguide:applib-svc:spi/AuderService.adoc[`AuditerService`] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
+* if a xref:refguide:applib-svc:spi/AuditerService.adoc[`AuditerService`] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
+* to allow ``Command``s to be replicated and replayed to another system (usually for testing or dual-running/migration purposes).
 
-However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module.
-
-
-
+In general, though, However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module.
 
 
-== Screencast
 
 
-The link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] provides a run-through of the command (profiling) service, auditing service, publishing service (note: auditing service has since been replaced by `AuditerService`, and publishing service by `PublisherService`).
-It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
 
-
-[NOTE]
-====
-Note that this screencast shows an earlier version of the xref:vw:ROOT:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
-====
+//== Screencast
+//
+//
+//The link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] provides a run-through of the command (profiling) service, auditing service, publishing service (note: auditing service has since been replaced by `AuditerService`, and publishing service by `PublisherService`).
+//It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
+//
+//
+//[NOTE]
+//====
+//Note that this screencast shows an earlier version of the xref:vw:ROOT:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
+//====
 
 
 
@@ -54,10 +56,10 @@ public class CommandContext {
 }
 ----
 
-This class (`o.a.i.applib.services.CommandContext`) is also the default implementation.
+This class (`o.a.i.applib.services.command.CommandContext`) is also the default implementation.
 
 Under normal circumstances there shouldn't be any need to replace this implementation with another.
-But if you do need to for some reason, then subclass and use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+But if you do need to for some reason, then subclass and use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
 
 
 The `Command` type referenced above is in fact an interface, defined as:

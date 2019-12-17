@@ -33,8 +33,6 @@
 
 
 ** xref:refguide:applib-svc:application-layer-api.adoc[Application Layer API]
-*** xref:refguide:applib-svc:application-layer-api/ActionInvocationContext.adoc[ActionInvocationContext]
-
 *** xref:refguide:applib-svc:application-layer-api/BackgroundService.adoc[BackgroundService]
 **** xref:refguide:applib-svc:application-layer-api/BackgroundService/BackgroundCommandExecution.adoc[BackgroundCommandExecution]
 **** xref:refguide:applib-svc:application-layer-api/BackgroundService/Quartz.adoc[Quartz]

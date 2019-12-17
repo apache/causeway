@@ -19,8 +19,8 @@ xref:refguide:applib-ant:Action.adoc#invokeOn[`@Action#invokeOn()`]), then this 
 per selected object (not one `Interaction` with multiple top-level ``Execution``s).
 
 
-It is possible for ``Interaction.Execution``s to be persisted; this is supported by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module, for example.  Persistent
-``Interaction``s support several use cases:
+It is possible for ``Interaction.Execution``s to be persisted; this is supported by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module, for example.
+Persistent``Interaction``s support several use cases:
 
 * they enable profiling of the running application (which actions are invoked then most often, what is their response
 time)

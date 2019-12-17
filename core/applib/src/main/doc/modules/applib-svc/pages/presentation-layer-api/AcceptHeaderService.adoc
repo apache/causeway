@@ -19,25 +19,19 @@ The API defined by the service is:
 
 [source,java]
 ----
-@DomainService(nature = NatureOfService.DOMAIN)
-@RequestScoped                                      // <1>
-public interface AcceptHeaderService {
-    @Programmatic
-    List<MediaType> getAcceptableMediaTypes();      // <2>
-}
+include::example$services/acceptheader/AcceptHeaderService.java[tags=refguide]
 ----
-<1> is xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
-<2> returns the list of media types found in the HTTP Accept header.
+<1> returns the list of media types found in the HTTP Accept header.
 
-
-The default implementation is provided by `o.a.i.v.ro.rendering.service.acceptheader.AcceptHeaderServiceForRest`.
+The default implementation is provided by `o.a.i.v.ro.rendering.service.acceptheader.AcceptHeaderServiceForRest`, and is xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`].
 
 [NOTE]
 ====
 Note that the service will only return a list when the request is initiated through the xref:vro:ROOT:about.adoc[Restful Objects viewer].  Otherwise the service will return `null`.
 ====
 
-To use an alternative implementation, use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
+
 
 
 == Usage

@@ -13,10 +13,8 @@ See xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc
 
 [NOTE]
 ====
-Unlike most other domain services, the framework (that is, `ContentNegotiationService`) will check _all_ available
-implementations of `ContentMappingService` to convert the domain object to the requested media type, rather than merely
-the first implementation found; in other words it uses the chain-of-responsibility pattern.  Services are checked
-in the ordering defined by xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`]).
+Unlike most other domain services, the framework (that is, `ContentNegotiationService`) will check _all_ available implementations of `ContentMappingService` to convert the domain object to the requested media type, rather than merely the first implementation found; in other words it uses the chain-of-responsibility pattern.
+Services are checked in the ordering defined by the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
 The mapped object used will be the first non-`null` result returned by an implementation.
 ====
 

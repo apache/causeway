@@ -24,9 +24,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+// tag::refguide[]
 public interface AcceptHeaderService {
-
-    @Programmatic
-    List<MediaType> getAcceptableMediaTypes();
-
+    List<MediaType> getAcceptableMediaTypes();  // <1>
 }
+// end::refguide[]

@@ -46,5 +46,5 @@ The framework provides a default implementation -- `UrlEncodingServiceWithCompre
 As already noted, be aware that the maximum length of a URL should not exceed 2083 characters.
 For large view models, there's the possibility that this limit could be exceeded; in such cases register an alternative implementation of this service.
 
-To use an alternative implementation, implement the `UrlEncodingService` interface and use xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:refguide:applib-svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `UrlEncodingService` interface and use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
 

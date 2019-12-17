@@ -47,8 +47,13 @@ include::_attributes.adoc[]
 [discrete]
 == Components
 
+_Viewers_
+
 * xref:vw:ROOT:about.adoc[Wicket UI]
 * xref:vro:ROOT:about.adoc[Restful Objects (REST API)]
+
+_Persistence_
+
 * xref:pjdo:ROOT:about.adoc[DataNucleus Object Store]
 
 
@@ -65,14 +70,19 @@ include::_attributes.adoc[]
 [discrete]
 == Support
 
-* xref:toc:devguide:about.adoc[Developers' Guide]
+* *xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[Mailing Lists]*
+* link:https://the-asf.slack.com/archives/CFC42LWBV[Slack]
+* link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA]
+
+
+_Resources_
+
+
+* *xref:toc:devguide:about.adoc[Developers' Guide]*
 * xref:toc:mavendeps:about.adoc[Maven dependencies]
-
-_Mailing Lists_
-
-* xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[How to subscribe]
-* link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
-
+* link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
+* link:https://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+* link:https://twitter.com/ApacheIsis[Twitter]
 
 |
 [discrete]
@@ -82,11 +92,12 @@ _Mailing Lists_
 * xref:toc:relnotes:about.adoc[Release Notes]
 * xref:toc:mignotes:about.adoc[Migration Notes]
 
-_Other Resources_
+_Nightly Builds (not ASF)_
 
-* link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
-* link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
-* link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+* link:https://github.com/apache-isis-committers/isis-nightly[CI]
+* link:https://repo.incode.cloud/[Maven Repo]
+* link:https://apache-isis-committers.github.io/isis-nightly/toc/about.html[Website preview]
+
 
 
 |
@@ -96,9 +107,14 @@ _Other Resources_
 *  xref:toc:comguide:about.adoc[Committers' Guide]
 ** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
 ** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
-*  xref:core:ROOT:about.adoc[Core Framework]
-
+* xref:core:ROOT:about.adoc[Core Framework]
 * xref:more-thanks/more-thanks.adoc[Acknowledgements]
+
+
+_Analysis_
+
+* link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
+* link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
 
 |
 [discrete]
@@ -142,7 +158,6 @@ _Experiments_
 
 * link:https://github.com/sebastianslutzky/AngularViewerCLI[AngularViewer]
 * link:https://github.com/joerg-rade/kroviz[Kroviz]
-* link:https://platform.incode.org[Incode Platform]
 
 _nb: not ASF_
 

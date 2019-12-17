@@ -10,46 +10,30 @@ The framework provides default implementations for many of the xref:refguide:app
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
 For example, suppose you wanted to provide your own implementation of xref:refguide:applib-svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`].
-The trick is to use the xref:refguide:applib-ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute, specifying a low number (typically `"1"`).
+The trick is to use the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation or equivalent mechanism.
 
 Here's how:
 
 [source,java]
 ----
-@DomainService(
-        nature = NatureOfService.DOMAIN
-)
+@Service
+@Order(OrderPrecedence.HIGH)                                // <1>
 public class MyLocaleProvider implements LocaleProvider {
     @Override
-    public Locale getLocale() {
-        return ...
-    }
+    public Locale getLocale() { /* ... */ }
 }
 ----
-
-The framework uses the value of the `menuOrder` attribute to determine priority; lowest number wins.
-
-However, there is no need to specify the `menuOrder` attribute: its default value is now set to a lower value (specifically: `Integer.MAX_VALUE - 100`) than all of the framework-provided implementations, and thus always takes precedence.
-
-Thus, if a single instance is to be injected, eg:
-
-[source,java]
-----
-@javax.inject.Inject
-LocalProvider localeProvider;
-----
-
-then the custom implementation will be used in preference to the framework's default implementation.
+<1> `OrderPrecedence` (in the Apache Isis applib) provides some standard values.
 
 If multiple instances are injected, eg:
 
 [source,java]
 ----
 @javax.inject.Inject
-List<LocalProvider> localeProviders;
+private List<LocalProvider> localeProviders;
 ----
 
-then all implementations will be present in the list, ordered by priority; your custom implementation will be first in the list.
+then all implementations will be present in the list, ordered by priority.
 
 
 

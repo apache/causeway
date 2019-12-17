@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.services.background;
+package org.apache.isis.runtime.services.command;
 
 import java.sql.Timestamp;
 import java.util.Collections;
