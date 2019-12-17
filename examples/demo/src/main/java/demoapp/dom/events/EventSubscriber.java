@@ -26,6 +26,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -35,6 +37,7 @@ import static demoapp.utils.DemoUtils.emphasize;
 import demoapp.dom.events.EventLogMenu.EventTestProgrammaticEvent;
 import lombok.extern.log4j.Log4j2;
 
+@DomainService // allows async invocation of the storeEvent(...) Action
 @Service
 @Named("demoapp.eventSubscriber")
 @Qualifier("demo")
@@ -62,12 +65,14 @@ public class EventSubscriber {
 
         log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
         
-        // store in event log
+        // store in event log, by calling the storeEvent(...) Action
         wrapper.async(this)
         .run(EventSubscriber::storeEvent, ev);
 
     }
 
+    
+    @Action // allows async invocation 
     public void storeEvent(EventTestProgrammaticEvent ev) {
         eventLogRepository.add(EventLogEntry.of(ev));
     }

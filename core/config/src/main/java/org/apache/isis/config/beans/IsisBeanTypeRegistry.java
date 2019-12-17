@@ -30,7 +30,6 @@ import java.util.Set;
 import javax.enterprise.inject.Vetoed;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
@@ -127,7 +126,7 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         
         val isManagedBeanToBeInspected = beanSort.isManagedBean() 
                 && (findNearestAnnotation(type, DomainService.class).isPresent()
-                        || findNearestAnnotation(type, Service.class).isPresent()
+                        // || findNearestAnnotation(type, Service.class).isPresent() 
                         );
         
         val isManagedObjectToBeInspected = !beanSort.isManagedBean() 
