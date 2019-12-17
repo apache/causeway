@@ -512,8 +512,8 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         val targetAdapter = getTargetAdapter();
         final ManagedObject[] proposedArguments = getArgumentsAsArray();
         final ObjectAction objectAction = getAction();
-        final Consent validity = objectAction.isProposedArgumentSetValid(targetAdapter, proposedArguments,
-                InteractionInitiatedBy.USER);
+        final Consent validity = objectAction
+                .isProposedArgumentSetValid(targetAdapter, proposedArguments, InteractionInitiatedBy.USER);
         return validity.isAllowed() ? null : validity.getReason();
     }
 

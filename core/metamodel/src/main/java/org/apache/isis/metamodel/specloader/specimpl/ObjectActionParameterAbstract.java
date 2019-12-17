@@ -268,10 +268,10 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public ManagedObject[] getChoices(
             final ManagedObject adapter,
-            final ManagedObject[] argumentsIfAvailable,
+            final Can<ManagedObject> dependentArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val args = argsForDefaultOrChoices(adapter, Can.ofArray(argumentsIfAvailable));
+        val args = argsForDefaultOrChoices(adapter, dependentArgs);
         val target = targetForDefaultOrChoices(adapter);
 
         return findChoices(target, args, interactionInitiatedBy);
@@ -279,41 +279,33 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     private ManagedObject[] findChoices(
             final ManagedObject target,
-            final Can<ManagedObject> args,
+            final Can<ManagedObject> dependentArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final List<ManagedObject> adapters = _Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
         if (facet != null) {
-            final Object[] choices = facet.getChoices(target, args, interactionInitiatedBy);
+            final Object[] choices = facet.getChoices(target, dependentArgs, interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 ManagedObject adapter = choice != null? getObjectManager().adapt(choice) : null;
                 adapters.add(adapter);
             }
         }
-        // now incorporated into above choices processing (BoundedFacet is no more)
-        /*
-           if (adapters.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
-            addAllInstancesForType(adapters);
-        }
-         */
         return adapters.toArray(new ManagedObject[adapters.size()]);
     }
-
-
 
     // -- Defaults
 
     @Override
     public ManagedObject getDefault(
             final ManagedObject adapter,
-            final ManagedObject[] argumentsIfAvailable,
+            final Can<ManagedObject> dependentArgs,
             final Integer paramNumUpdated) {
 
         final ManagedObject target = targetForDefaultOrChoices(adapter);
-        val args = argsForDefaultOrChoices(adapter, Can.ofArray(argumentsIfAvailable));
+        val args = argsForDefaultOrChoices(adapter, dependentArgs);
 
         return findDefault(target, args, paramNumUpdated);
     }
@@ -390,22 +382,22 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     private ActionArgVisibilityContext createArgumentVisibilityContext(
             final ManagedObject objectAdapter,
-            final ManagedObject[] proposedArguments,
+            final Can<ManagedObject> dependentArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return new ActionArgVisibilityContext(
-                objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+                objectAdapter, parentAction, getIdentifier(), dependentArgs, position, interactionInitiatedBy);
     }
 
     @Override
     public Consent isVisible(
             final ManagedObject targetAdapter,
-            final ManagedObject[] pendingArguments,
+            final Can<ManagedObject> dependentArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final VisibilityContext<?> ic = createArgumentVisibilityContext(
-                targetAdapter, pendingArguments, getNumber(), interactionInitiatedBy
+                targetAdapter, dependentArgs, getNumber(), interactionInitiatedBy
                 );
 
         final InteractionResult visibleResult = InteractionUtils.isVisibleResult(this, ic);
@@ -418,22 +410,27 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     private ActionArgUsabilityContext createArgumentUsabilityContext(
             final ManagedObject objectAdapter,
-            final ManagedObject[] proposedArguments,
+            final Can<ManagedObject> dependentArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return new ActionArgUsabilityContext(
-                objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+                objectAdapter, 
+                parentAction, 
+                getIdentifier(), 
+                dependentArgs, 
+                position, 
+                interactionInitiatedBy);
     }
 
     @Override
     public Consent isUsable(
             final ManagedObject targetAdapter,
-            final ManagedObject[] pendingArguments,
+            final Can<ManagedObject> dependentArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final UsabilityContext<?> ic = createArgumentUsabilityContext(
-                targetAdapter, pendingArguments, getNumber(), interactionInitiatedBy
+                targetAdapter, dependentArgs, getNumber(), interactionInitiatedBy
                 );
 
         final InteractionResult usableResult = InteractionUtils.isUsableResult(this, ic);

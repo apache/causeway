@@ -59,10 +59,10 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
     @Override
     public boolean isHidden(
             final ManagedObject owningAdapter, 
-            final ManagedObject[] argumentAdapters) {
+            final Can<ManagedObject> argumentAdapters) {
         
         final Object returnValue = ManagedObject.InvokeUtil
-                .invokeAutofit(method, owningAdapter, Can.ofArray(argumentAdapters));
+                .invokeAutofit(method, owningAdapter, argumentAdapters);
         if(returnValue instanceof Boolean) {
             return (Boolean) returnValue;
         }

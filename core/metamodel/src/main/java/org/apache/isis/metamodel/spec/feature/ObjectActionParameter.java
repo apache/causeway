@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.spec.feature;
 
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -75,10 +74,10 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(
-            final ManagedObject targetObject,
-            final ManagedObject[] args,
-            final int position,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject targetObject,
+            ManagedObject[] args,
+            int position,
+            InteractionInitiatedBy interactionInitiatedBy);
 
 
     /**
@@ -92,10 +91,10 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * user can choose from, based on the input search argument.
      */
     ManagedObject[] getAutoComplete(
-            final ManagedObject adapter,
-            final Can<ManagedObject> dependentArgs,
-            final String searchArg,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject adapter,
+            Can<ManagedObject> dependentArgs,
+            String searchArg,
+            InteractionInitiatedBy interactionInitiatedBy);
 
 
 
@@ -111,40 +110,40 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * user can choose from.
      */
     ManagedObject[] getChoices(
-            final ManagedObject adapter,
-            final ManagedObject[] argumentsIfAvailable,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject adapter,
+            Can<ManagedObject> dependentArgs,
+            InteractionInitiatedBy interactionInitiatedBy);
 
 
     ManagedObject getDefault(
             ManagedObject adapter,
-            final ManagedObject[] argumentsIfAvailable,
-            final Integer paramNumUpdated);
+            Can<ManagedObject> dependentArgs,
+            Integer paramNumUpdated);
 
 
     /**
      * Whether this parameter is visible given the entered previous arguments
      * @param targetAdapter
-     * @param pendingArguments
+     * @param dependentArgs
      * @param interactionInitiatedBy
      * @return
      */
     Consent isVisible(
-            final ManagedObject targetAdapter,
-            final ManagedObject[] pendingArguments,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject targetAdapter,
+            Can<ManagedObject> dependentArgs,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Whether this parameter is disabled given the entered previous arguments
      * @param targetAdapter
-     * @param pendingArguments
+     * @param dependentArgs
      * @param interactionInitiatedBy
      * @return
      */
     Consent isUsable(
-            final ManagedObject targetAdapter,
-            final ManagedObject[] pendingArguments,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject targetAdapter,
+            Can<ManagedObject> dependentArgs,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Whether proposed value for this parameter is valid.
@@ -158,19 +157,6 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             final ManagedObject adapter,
             final Object proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy);
-
-    @Vetoed
-    public static class Functions {
-        public static final Function<ObjectActionParameter, String> GET_NAME =
-                ObjectActionParameter::getName;
-
-        public static final Function<ObjectActionParameter, Class<?>> GET_TYPE = 
-                (final ObjectActionParameter input) ->
-        input.getSpecification().getCorrespondingClass();
-
-        private Functions(){}
-
-    }
 
     @Vetoed
     public static class Predicates {

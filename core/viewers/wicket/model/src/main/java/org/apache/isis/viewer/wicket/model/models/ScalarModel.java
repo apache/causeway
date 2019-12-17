@@ -58,6 +58,8 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 
@@ -187,12 +189,13 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final ManagedObject[] argsIfAvailable,
+                    final Can<ManagedObject> dependentArgs,
                     final int paramNumUpdated,
                     final AuthenticationSession authenticationSession) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
+                final OneToOneAssociation property = propertyMemento
+                        .getProperty(scalarModel.getSpecificationLoader());
                 ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
                 return property.getDefault(parentAdapter);
             }
@@ -207,11 +210,12 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final ManagedObject[] argumentsIfAvailable,
+                    final Can<ManagedObject> dependentArgs,
                     final AuthenticationSession authenticationSession) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
+                final OneToOneAssociation property = propertyMemento
+                        .getProperty(scalarModel.getSpecificationLoader());
                 ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
                 final ManagedObject[] choices = property.getChoices(
                         parentAdapter,
@@ -421,7 +425,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final ManagedObject[] argsIfAvailable,
+                    final Can<ManagedObject> dependentArgs,
                     final int paramNumUpdated,
                     final AuthenticationSession authenticationSession) {
 
@@ -430,7 +434,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
                 //XXX lombok issue, no val
                 ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
-                return actionParameter.getDefault(parentAdapter, argsIfAvailable, paramNumUpdated);
+                return actionParameter.getDefault(parentAdapter, dependentArgs, paramNumUpdated);
             }
 
             @Override
@@ -442,7 +446,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final ManagedObject[] argumentsIfAvailable,
+                    final Can<ManagedObject> dependentArgs,
                     final AuthenticationSession authenticationSession) {
                 
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
@@ -454,7 +458,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 final ManagedObject[] choices =
                         actionParameter.getChoices(
                                 parentAdapter, 
-                                argumentsIfAvailable,
+                                dependentArgs,
                                 InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
             }
@@ -631,14 +635,14 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
         public abstract ManagedObject getDefault(
                 ScalarModel scalarModel,
-                ManagedObject[] argsIfAvailable,
+                Can<ManagedObject> dependentArgs,
                 int paramNumUpdated,
                 AuthenticationSession authenticationSession);
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
         public abstract List<ManagedObject> getChoices(
                 ScalarModel scalarModel,
-                ManagedObject[] argumentsIfAvailable,
+                Can<ManagedObject> dependentArgs,
                 AuthenticationSession authenticationSession);
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
@@ -923,9 +927,10 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     }
 
     public List<ManagedObject> getChoices(
-            final ManagedObject[] argumentsIfAvailable,
+            final Can<ManagedObject> dependentArgs,
             final AuthenticationSession authenticationSession) {
-        return kind.getChoices(this, argumentsIfAvailable, authenticationSession);
+        
+        return kind.getChoices(this, dependentArgs, authenticationSession);
     }
 
     public boolean hasAutoComplete() {
@@ -936,6 +941,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             final Can<ManagedObject> dependentArgs,
             final String searchTerm,
             final AuthenticationSession authenticationSession) {
+        
         return kind.getAutoComplete(this, dependentArgs, searchTerm, authenticationSession);
     }
 
@@ -1241,25 +1247,14 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 associatedActionsIfProperty().hasAssociatedActionWithInlineAsIfEdit();
     }
 
-    // //////////////////////////////////////
-
-    /**
-     * transient because only temporary hint.
-     */
-    private transient ManagedObject[] actionArgsHint;
-
-    @Override
-    public void setActionArgsHint(ManagedObject[] actionArgsHint) {
-        this.actionArgsHint = actionArgsHint;
-    }
-
     /**
      * The initial call of choicesXxx() for any given scalar argument needs the current values
      * of all args (possibly as initialized through a defaultNXxx().
+     * @implNote transient because only temporary hint.
      */
-    public ManagedObject[] getActionArgsHint() {
-        return actionArgsHint;
-    }
+    @Getter @Setter
+    private transient Can<ManagedObject> actionArgsHint;
+
 
     @Override
     public String toString() {

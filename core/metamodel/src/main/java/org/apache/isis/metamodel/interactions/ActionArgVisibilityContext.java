@@ -23,6 +23,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionArgumentVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -31,41 +32,38 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
 import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojoArray;
 
+import lombok.Getter;
+
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionArgumentEvent}.
  */
-public class ActionArgVisibilityContext extends VisibilityContext<ActionArgumentVisibilityEvent> implements ActionInteractionContext {
+public class ActionArgVisibilityContext 
+extends VisibilityContext<ActionArgumentVisibilityEvent> 
+implements ActionInteractionContext {
 
-    private final ObjectAction objectAction;
-    private final ManagedObject[] args;
-    private final int position;
-
+    @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
+    @Getter private final Can<ManagedObject> args;
+    @Getter private final int position;
+    
     public ActionArgVisibilityContext(
             final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final ManagedObject[] args,
+            final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.ACTION_PARAMETER_VISIBLE, targetAdapter, id, interactionInitiatedBy, Where.OBJECT_FORMS);
+        
+        super(InteractionContextType.ACTION_PARAMETER_VISIBLE, 
+                targetAdapter, 
+                id, 
+                interactionInitiatedBy, 
+                Where.OBJECT_FORMS);
+        
         this.objectAction = objectAction;
 
         this.args = args;
         this.position = position;
-    }
-
-    @Override
-    public ObjectAction getObjectAction() {
-        return objectAction;
-    }
-
-    public ManagedObject[] getArgs() {
-        return args;
-    }
-
-    public int getPosition() {
-        return position;
     }
 
     @Override

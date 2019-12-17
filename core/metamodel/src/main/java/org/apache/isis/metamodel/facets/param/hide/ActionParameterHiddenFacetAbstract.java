@@ -26,8 +26,9 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 
-public abstract class ActionParameterHiddenFacetAbstract extends FacetAbstract implements
-ActionParameterHiddenFacet {
+public abstract class ActionParameterHiddenFacetAbstract 
+extends FacetAbstract 
+implements ActionParameterHiddenFacet {
 
     public static Class<? extends Facet> type() {
         return ActionParameterHiddenFacet.class;
@@ -43,6 +44,10 @@ ActionParameterHiddenFacet {
             return null;
         }
         final ActionArgVisibilityContext actionArgVisibilityContext = (ActionArgVisibilityContext) context;
-        return isHidden(actionArgVisibilityContext.getTarget(), actionArgVisibilityContext.getArgs()) ? "Hidden" : null;
+        return isHidden(
+                actionArgVisibilityContext.getTarget(), 
+                actionArgVisibilityContext.getArgs()) 
+                ? "Hidden" 
+                        : null;
     }
 }

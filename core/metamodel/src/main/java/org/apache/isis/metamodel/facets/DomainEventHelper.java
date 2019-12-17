@@ -37,6 +37,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 
@@ -127,13 +128,13 @@ public class DomainEventHelper {
                     final List<ObjectActionParameter> parameters = objectAction.getParameters();
 
                     final List<String> parameterNames = parameters.stream()
-                            .map(ObjectActionParameter.Functions.GET_NAME)
+                            .map(ObjectActionParameter::getName)
                             .collect(Collectors.toList());
 
                     final List<Class<?>> parameterTypes = parameters.stream()
-                            .map(ObjectActionParameter.Functions.GET_TYPE)
+                            .map(ObjectActionParameter::getSpecification)
+                            .map(ObjectSpecification::getCorrespondingClass)
                             .collect(Collectors.toList());
-
 
                     event.setParameterNames(Collections.unmodifiableList(parameterNames));
                     event.setParameterTypes(Collections.unmodifiableList(parameterTypes));

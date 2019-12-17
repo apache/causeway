@@ -35,6 +35,7 @@ import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
@@ -341,18 +342,18 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable) {
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> dependentArgs) {
         
         val commonContext = super.getCommonContext();
         
         if (getModel().hasChoices()) {
-            val choices = getModel().getChoices(argsIfAvailable, commonContext.getAuthenticationSession());
+            val choices = getModel().getChoices(dependentArgs, commonContext.getAuthenticationSession());
             val choiceMementos = _Lists.map(choices, commonContext::mementoFor);
             return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
         }
 
         if(getModel().hasAutoComplete()) {
-            val dependentArgMementos = _NullSafe.stream(argsIfAvailable)
+            val dependentArgMementos = dependentArgs.stream()
                     .map(commonContext::mementoFor)
                     .collect(Collectors.toCollection(ArrayList::new)); // serializable
             return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(

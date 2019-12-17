@@ -32,6 +32,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -112,9 +113,9 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.
      */
-    private void setProviderAndCurrAndPending(Select2 select2, ManagedObject[] argsIfAvailable) {
+    private void setProviderAndCurrAndPending(Select2 select2, Can<ManagedObject> dependentArgs) {
 
-        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(argsIfAvailable);
+        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(dependentArgs);
 
         select2.setProvider(choiceProvider);
         getModel().clearPending();
@@ -126,12 +127,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ManagedObject[])})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, Can<ManagedObject>)})
      */
-    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(ManagedObject[] argsIfAvailable);
+    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> dependentArgs);
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ManagedObject[])})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, Can<ManagedObject>)})
      */
     protected abstract void syncIfNull(Select2 select2, List<ObjectMemento> choicesMementos);
 
@@ -178,27 +179,28 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             final int paramNumToPossiblyUpdate,
             final AjaxRequestTarget target) {
 
-        final ManagedObject[] argumentsAsArray = actionModel.getArgumentsAsArray();
+        val arguments = Can.ofArray(actionModel.getArgumentsAsArray());
 
-        final Repaint repaint =
-                super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate, target);
+        val repaint = super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate, target);
 
-        final boolean choicesUpdated = updateChoices(argumentsAsArray);
+        final boolean choicesUpdated = updateChoices(arguments);
 
-        if (repaint == Repaint.NOTHING)
-            if (choicesUpdated)
+        if (repaint == Repaint.NOTHING) {
+            if (choicesUpdated) {
                 return Repaint.PARAM_ONLY;
-            else
+            } else {
                 return Repaint.NOTHING;
-        else
+            }
+        } else {
             return repaint;
+        }
     }
 
-    private boolean updateChoices(ManagedObject[] argsIfAvailable) {
+    private boolean updateChoices(Can<ManagedObject> dependentArgs) {
         if (select2 == null) {
             return false;
         }
-        setProviderAndCurrAndPending(select2, argsIfAvailable);
+        setProviderAndCurrAndPending(select2, dependentArgs);
 
         return true;
     }

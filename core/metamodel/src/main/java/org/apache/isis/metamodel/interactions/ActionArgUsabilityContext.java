@@ -23,6 +23,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionArgumentUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -30,6 +31,8 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
 import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojoArray;
+
+import lombok.Getter;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -39,35 +42,28 @@ public class ActionArgUsabilityContext
 extends UsabilityContext<ActionArgumentUsabilityEvent> 
 implements ActionInteractionContext {
 
-    private final ObjectAction objectAction;
-    private final ManagedObject[] args;
-    private final int position;
+    @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
+    @Getter private final Can<ManagedObject> args;
+    @Getter private final int position;
 
     public ActionArgUsabilityContext(
             final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final ManagedObject[] args,
+            final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.ACTION_PARAMETER_USABLE, targetAdapter, id, interactionInitiatedBy, Where.OBJECT_FORMS);
+        
+        super(InteractionContextType.ACTION_PARAMETER_USABLE,
+                targetAdapter, 
+                id, 
+                interactionInitiatedBy, 
+                Where.OBJECT_FORMS);
+        
         this.objectAction = objectAction;
 
         this.args = args;
         this.position = position;
-    }
-
-    @Override
-    public ObjectAction getObjectAction() {
-        return objectAction;
-    }
-
-    public ManagedObject[] getArgs() {
-        return args;
-    }
-
-    public int getPosition() {
-        return position;
     }
 
     @Override

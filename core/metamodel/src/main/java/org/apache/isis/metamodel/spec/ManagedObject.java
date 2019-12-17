@@ -241,6 +241,18 @@ public interface ManagedObject {
         return adapter != null ? adapter.getPojo() : null;
     }
 
+    public static Object[] unwrapPojoArray(final Can<ManagedObject> adapters) {
+        if (adapters == null) {
+            return null;
+        }
+        final Object[] unwrappedObjects = new Object[adapters.size()];
+        int i = 0;
+        for (final ManagedObject adapter : adapters) {
+            unwrappedObjects[i++] = unwrapPojo(adapter);
+        }
+        return unwrappedObjects;
+    }
+    
     public static Object[] unwrapPojoArray(final ManagedObject[] adapters) {
         if (adapters == null) {
             return null;

@@ -29,6 +29,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -78,7 +80,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             rv.add(container);
 
             final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
-            actionArgumentModel.setActionArgsHint(actionModel.getArgumentsAsArray());
+            actionArgumentModel.setActionArgsHint(Can.ofArray(actionModel.getArgumentsAsArray()));
             final ScalarPanelAbstract2 paramPanel = newParamPanel(container, actionArgumentModel);
             paramPanels.add(paramPanel);
 
@@ -158,32 +160,33 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
         final int paramNumberUpdated = scalarPanelUpdated.getModel().getParameterMemento().getNumber();
         
-        {
-            final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+        val action = actionModel.getActionMemento().getAction(getSpecificationLoader());
 
-            final int numParams = action.getParameterCount();
+        final int numParams = action.getParameterCount();
 
-            // only updates subsequent parameter panels to this one.
-            for (int paramNumToUpdate = paramNumberUpdated + 1; paramNumToUpdate < numParams; paramNumToUpdate++) {
-                final ScalarPanelAbstract2 paramPanel = paramPanels.get(paramNumToUpdate);
-                final ScalarPanelAbstract2.Repaint repaint = paramPanel
-                        .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate, target);
+        // only updates subsequent parameter panels to this one.
+        for (int i = paramNumberUpdated + 1; i < numParams; i++) {
 
-                final boolean multiPart = isMultiPart();
-                switch (repaint) {
-                case ENTIRE_FORM:
-                    target.add(this);
-                    break;
-                case PARAM_ONLY:
-                    paramPanel.repaint(target);
-                    break;
-                case NOTHING:
-                    break;
-                default:
-                    throw new IllegalStateException("Unknown: " + repaint);
-                }
+            val paramNumToUpdate = i;
+            val paramPanel = paramPanels.get(paramNumToUpdate);
+            val repaint = paramPanel
+                    .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate, target);
+
+            final boolean multiPart = isMultiPart(); //TODO keep side-effects(?) or remove
+
+            switch (repaint) {
+            case ENTIRE_FORM:
+                target.add(this);
+                break;
+            case PARAM_ONLY:
+                paramPanel.repaint(target);
+                break;
+            case NOTHING:
+                break;
+            default:
+                throw _Exceptions.unmatchedCase(repaint);
             }
-        } 
+        }
 
         // previously this method was also doing:
         // target.add(this);

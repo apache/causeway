@@ -39,6 +39,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
@@ -134,7 +135,8 @@ implements ScalarModelSubscriber2 {
             final AjaxRequestTarget target) {
 
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-        final ManagedObject[] pendingArguments = actionModel.getArgumentsAsArray();
+        val pendingArgumentArray = actionModel.getArgumentsAsArray();
+        val pendingArguments = Can.ofArray(pendingArgumentArray);
 
 
         // could almost certainly simplify this... (used by visibility and usability checks)
@@ -143,7 +145,8 @@ implements ScalarModelSubscriber2 {
         val realTargetAdapter = action.realTargetAdapter(targetAdapter);
 
         // check visibility
-        final Consent visibilityConsent = actionParameter.isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+        final Consent visibilityConsent = actionParameter
+                .isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
 
         final boolean visibilityBefore = isVisible();
         final boolean visibilityAfter = visibilityConsent.isAllowed();
@@ -151,7 +154,8 @@ implements ScalarModelSubscriber2 {
 
 
         // check usability
-        final Consent usabilityConsent = actionParameter.isUsable(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+        final Consent usabilityConsent = actionParameter
+                .isUsable(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
 
         final boolean usabilityBefore = isEnabled();
         final boolean usabilityAfter = usabilityConsent.isAllowed();
@@ -173,7 +177,7 @@ implements ScalarModelSubscriber2 {
         final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
         final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
 
-        val pendingArg = pendingArguments[paramNumToPossiblyUpdate];
+        val pendingArg = pendingArgumentArray[paramNumToPossiblyUpdate];
 
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);
