@@ -30,6 +30,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -494,7 +495,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                     parameterDefaultPojos[i] = paramFacet
                             .getDefault(
                                     target, 
-                                    /*parameters*/ null, 
+                                    /*parameters*/ Can.empty(), 
                                     /*paramNumUpdated*/null);
                 } else {
                     parameterDefaultPojos[i] = null;

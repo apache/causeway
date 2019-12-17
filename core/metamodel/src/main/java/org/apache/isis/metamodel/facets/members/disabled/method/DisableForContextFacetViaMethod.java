@@ -33,7 +33,9 @@ import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstract implements ImperativeFacet {
+public class DisableForContextFacetViaMethod 
+extends DisableForContextFacetAbstract 
+implements ImperativeFacet {
 
     private final Method method;
     private final TranslationService translationService;
@@ -89,7 +91,8 @@ public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstr
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }

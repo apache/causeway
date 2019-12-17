@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Tuples.Tuple2;
+import org.apache.isis.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.ClassExtensions;
@@ -411,19 +411,19 @@ public interface ManagedObject {
         public static Object invokeC(
                 Method method, 
                 ManagedObject adapter, 
-                Stream<Tuple2<Integer, ? extends ManagedObject>> paramsAndIndexes) {
+                Stream<Indexed<? extends ManagedObject>> paramsAndIndexes) {
             return invoke(method, adapter, asArray(paramsAndIndexes, method.getParameterTypes().length));
         }
     
         private static ManagedObject[] asArray(
-                Stream<Tuple2<Integer, ? extends ManagedObject>> paramsAndIndexes, 
+                Stream<Indexed<? extends ManagedObject>> paramsAndIndexes, 
                 int length) {
             
             final ManagedObject[] args = new ManagedObject[length];
             paramsAndIndexes.forEach(entry->{
-                final Integer paramNum = entry.get_1();
+                final int paramNum = entry.getIndex();
                 if(paramNum < length) {
-                    args[paramNum] = entry.get_2();
+                    args[paramNum] = entry.getValue();
                 }
             });
             return args;

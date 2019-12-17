@@ -445,12 +445,6 @@ public class FacetedMethodsBuilder {
 
     private boolean representsAction(final Method actionMethod) {
         
-        //System.out.println("####" + actionMethod.toString());
-        
-        if(actionMethod.toString().contains("InvalidOrphanedActionSupportNoActionEnforced")) {
-            System.out.println("####" + actionMethod.toString());
-        }
-
         // just an optimization, not strictly required 
         if(isExplicitActionAnnotationConfigured()) {
 

@@ -19,6 +19,8 @@
 
 package org.apache.isis.commons.internal.base;
 
+import lombok.Value;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -34,6 +36,8 @@ package org.apache.isis.commons.internal.base;
 public final class _Tuples {
 
     private _Tuples(){}
+    
+    // -- TUPLE 2
 
     public static class Tuple2<T1, T2>{
         private final T1 _1;
@@ -56,6 +60,18 @@ public final class _Tuples {
 
     public static <T1, T2> Tuple2<T1, T2> pair(T1 _1, T2 _2) {
         return new Tuple2<T1, T2>(_1, _2);
+    }
+    
+    // -- INDEXED 
+    
+    @Value(staticConstructor = "of")
+    public static class Indexed<T>{
+        int index;
+        T value;
+    }
+    
+    public static <T> Indexed<T> indexed(int index, T value) {
+        return Indexed.of(index, value);
     }
 
 }

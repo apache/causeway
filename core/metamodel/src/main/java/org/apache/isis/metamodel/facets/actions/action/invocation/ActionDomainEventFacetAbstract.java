@@ -27,7 +27,6 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.DomainEventHelper;
@@ -43,6 +42,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 public abstract class ActionDomainEventFacetAbstract
 extends SingleClassValueFacetAbstract 
@@ -141,12 +141,14 @@ implements ActionDomainEventFacet {
         return ((ActionInteractionContext) ic).getObjectAction();
     }
 
-    private static ManagedObject[] argumentAdaptersFrom(final InteractionContext<? extends InteractionEvent> ic) {
-        final Tuple2<Integer, ManagedObject> contributee = ic.getContributeeWithParamIndex();
+    private static ManagedObject[] argumentAdaptersFrom(
+            final InteractionContext<? extends InteractionEvent> ic) {
+        
+        val contributee = ic.getContributeeWithParamIndex();
 
         if(contributee!=null) {
-            int paramIndex = contributee.get_1(); 
-            ManagedObject adapter = contributee.get_2();
+            int paramIndex = contributee.getIndex(); 
+            ManagedObject adapter = contributee.getValue();
             return new ManagedObject[]{paramIndex==0 ? adapter : null};
         }
 

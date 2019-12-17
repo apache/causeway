@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal.base._Tuples;
+import org.apache.isis.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -139,11 +140,11 @@ public abstract class InteractionContext<T extends InteractionEvent> {
         this.contributee = contributee;
     }
 
-    public @Nullable _Tuples.Tuple2<Integer, ManagedObject> getContributeeWithParamIndex() {
+    public @Nullable Indexed<ManagedObject> getContributeeWithParamIndex() {
         if(contributee==null) {
             return null;
         }
-        return _Tuples.pair(contributeeParam, contributee);
+        return _Tuples.indexed(contributeeParam, contributee);
     }
 
     // //////////////////////////////////////
