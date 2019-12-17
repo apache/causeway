@@ -1,8 +1,8 @@
 package org.ro.bs3.parser
 
 import org.ro.bs3.parser.BaseXmlHandler
-import org.ro.bs3.to.Bs3Object
-import org.ro.bs3.to.Link
+import org.ro.to.bs3.Bs3Object
+import org.ro.to.bs3.Link
 
 class LinkHandler : BaseXmlHandler() {
     override fun doHandle() {

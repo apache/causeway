@@ -1,7 +1,7 @@
 package org.ro.bs3.parser
 
-import org.ro.bs3.parser.BaseXmlHandler
-import org.ro.bs3.to.*
+import org.ro.to.bs3.*
+
 
 class DomainObjectHandler : BaseXmlHandler() {
     override fun doHandle() {
@@ -15,7 +15,7 @@ class DomainObjectHandler : BaseXmlHandler() {
         var describedAs = ""
         var plural = ""
         var metadataError = ""
-        var link = LinkHandler().parse(xmlStr)  as Link
+        var link = LinkHandler().parse(xmlStr) as Link
 //    @XmlAttribute(name = "bookmarking")
         var bookmarking = BookmarkPolicy.AS_CHILD
         var cssClass = ""

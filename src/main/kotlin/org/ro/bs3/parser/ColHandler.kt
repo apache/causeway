@@ -1,7 +1,6 @@
 package org.ro.bs3.parser
 
-import org.ro.bs3.parser.BaseXmlHandler
-import org.ro.bs3.to.*
+import org.ro.to.bs3.*
 
 class ColHandler : BaseXmlHandler() {
     override fun doHandle() {

@@ -53,8 +53,7 @@ open class IntegrationTest {
     fun wait(milliseconds: Long) {
         GlobalScope.launch {
             delay(milliseconds)
-            console.log("[TestUtil.wait] $milliseconds")
-        }
+       }
     }
 
 }

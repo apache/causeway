@@ -1,9 +1,9 @@
 package org.ro.bs3.parser
 
 import org.ro.bs3.parser.BaseXmlHandler
-import org.ro.bs3.to.Bs3Object
-import org.ro.bs3.to.Bs3RowContent
-import org.ro.bs3.to.Row
+import org.ro.to.bs3.Bs3Object
+import org.ro.to.bs3.Bs3RowContent
+import org.ro.to.bs3.Row
 
 class RowHandler : BaseXmlHandler() {
     override fun doHandle() {

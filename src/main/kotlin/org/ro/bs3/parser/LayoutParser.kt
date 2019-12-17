@@ -2,7 +2,7 @@ package org.ro.bs3.parser
 
 import org.ro.bs3.parser.BaseXmlHandler
 import org.ro.bs3.parser.RowHandler
-import org.ro.bs3.to.Bs3Object
+import org.ro.to.bs3.Bs3Object
 
 class LayoutParser : BaseXmlHandler() {
     override fun doHandle() {

@@ -1,9 +1,9 @@
 package org.ro.bs3.parser
 
 import org.ro.bs3.parser.BaseXmlHandler
-import org.ro.bs3.to.Bs3Object
-import org.ro.bs3.to.ClearFixHidden
-import org.ro.bs3.to.Size
+import org.ro.to.bs3.Bs3Object
+import org.ro.to.bs3.ClearFixHidden
+import org.ro.to.bs3.Size
 
 class ClearFixVisibleHandler : BaseXmlHandler() {
     override fun doHandle() {

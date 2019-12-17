@@ -1,9 +1,9 @@
 package org.ro.bs3.parser
 
 import org.ro.bs3.parser.BaseXmlHandler
-import org.ro.bs3.to.Bs3Object
-import org.ro.bs3.to.Tab
-import org.ro.bs3.to.TabGroup
+import org.ro.to.bs3.Bs3Object
+import org.ro.to.bs3.Tab
+import org.ro.to.bs3.TabGroup
 
 class TabGroupHandler : BaseXmlHandler() {
     override fun doHandle() {
