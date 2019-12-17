@@ -551,7 +551,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                         scalarModel.getSpecificationLoader());
                 final ManagedObject parentAdapter =
                         scalarModel.getParentEntityModel().load();
-                final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter, null, null);
+                final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter, Can.empty(), null);
                 scalarModel.setObject(defaultAdapter);
             }
 
