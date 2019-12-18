@@ -30,7 +30,6 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
@@ -103,7 +102,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     protected synchronized Can<ObjectActionParameter> determineParameters() {
 
         val serviceParameters = serviceAction.getParameters();
-        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters(); //side effects?
+        //final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters(); //side effects?
 
         final List<ObjectActionParameter> contributeeParameters = _Lists.newArrayList();
         int contributeeParamNum = 0;
@@ -124,9 +123,9 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
                             : new OneToManyActionParameterContributee(
                                     servicePojo, serviceParameter, contributeeParamNum, this);
 
-                            contributeeParameters.add(contributedParam);
+            contributeeParameters.add(contributedParam);
 
-                            contributeeParamNum++;
+            contributeeParamNum++;
         }
         return Can.ofCollection(contributeeParameters);
     }
@@ -241,18 +240,6 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     }
 
     // //////////////////////////////////////
-
-//    static <T> T[] addElementToArray(T[] array, final int n, final T element, final T[] type) {
-//        List<T> list = _Lists.newArrayList(Arrays.asList(array));
-//        list.add(n, element);
-//        return list.toArray(type);
-//    }
-//
-//    static <T> T[] removeElementFromArray(T[] array, int n, T[] t) {
-//        List<T> list = _Lists.newArrayList(Arrays.asList(array));
-//        list.remove(n);
-//        return list.toArray(t);
-//    }
 
     public ManagedObject getServiceAdapter() {
         return getObjectManager().adapt(servicePojo);

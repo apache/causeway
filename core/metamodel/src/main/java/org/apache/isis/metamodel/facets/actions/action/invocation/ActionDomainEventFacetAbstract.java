@@ -147,9 +147,14 @@ implements ActionDomainEventFacet {
         
         val contributee = ic.getContributeeWithParamIndex();
 
-        if(contributee!=null && contributee.getIndex() == 0) {
-            ManagedObject adapter = contributee.getValue();
+        if(contributee!=null) {
+
+            val adapter = contributee.getIndex() == 0
+                    ? contributee.getValue()
+                            : ManagedObject.empty();
+            
             return Can.ofSingleton(adapter);    
+                
         }
 
         return Can.empty();
