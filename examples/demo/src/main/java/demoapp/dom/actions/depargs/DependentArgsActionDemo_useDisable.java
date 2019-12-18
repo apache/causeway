@@ -62,7 +62,7 @@ public class DependentArgsActionDemo_useDisable {
 
     // -- PARAM 1 (String message)
 
-    //@Model //TODO waits for dep args to be implemented
+    @Model
     public String disable1$$(boolean disableMessageField) {
         return disableMessageField
                 ? "disabled by dependent argument"

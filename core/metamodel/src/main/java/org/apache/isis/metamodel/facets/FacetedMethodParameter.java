@@ -24,7 +24,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 
-public class FacetedMethodParameter extends TypedHolderDefault implements IdentifiedHolder {
+public class FacetedMethodParameter 
+extends TypedHolderDefault 
+implements IdentifiedHolder {
 
     private final Identifier identifier;
 
@@ -33,8 +35,9 @@ public class FacetedMethodParameter extends TypedHolderDefault implements Identi
             final Class<?> declaringType,
             final Method method,
             final Class<?> type) {
+        
         super(featureType, type);
-
+        
         // best we can do...
         this.identifier = FeatureType.ACTION.identifierFor(declaringType, method);
     }
@@ -43,6 +46,5 @@ public class FacetedMethodParameter extends TypedHolderDefault implements Identi
     public Identifier getIdentifier() {
         return identifier;
     }
-
 
 }

@@ -64,11 +64,21 @@ public class ProperMemberSupport {
         return null;
     }
     
+    @Model // variant with dependent args
+    public String disable1MyAction(String p0) {
+        return null;
+    }
+    
     @Model
     public boolean hideMyAction() {
         return false;
     }
 
+    @Model // variant with dependent args
+    public boolean hide1MyAction(String p0) {
+        return false;
+    }
+    
     @Model
     public String validateMyAction(String p0, String p1) {
         return null;
@@ -94,7 +104,7 @@ public class ProperMemberSupport {
         return null;
     }
     
-// variant with dependent arg
+// variant with dependent args
 //    @Model
 //    public Set<String> choices1MyAction(String p0) {
 //        return null;

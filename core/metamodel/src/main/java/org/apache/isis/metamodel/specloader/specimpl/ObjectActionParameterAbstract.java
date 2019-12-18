@@ -373,8 +373,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final VisibilityContext<?> ic = createArgumentVisibilityContext(
-                targetAdapter, pendingArgs, getNumber(), interactionInitiatedBy
-                );
+                targetAdapter, pendingArgs, getNumber(), interactionInitiatedBy);
 
         final InteractionResult visibleResult = InteractionUtils.isVisibleResult(this, ic);
         return visibleResult.createConsent();
@@ -406,8 +405,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final UsabilityContext<?> ic = createArgumentUsabilityContext(
-                targetAdapter, pendingArgs, getNumber(), interactionInitiatedBy
-                );
+                targetAdapter, pendingArgs, getNumber(), interactionInitiatedBy);
 
         final InteractionResult usableResult = InteractionUtils.isUsableResult(this, ic);
         return usableResult.createConsent();

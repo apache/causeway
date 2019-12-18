@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -88,7 +89,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             val realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
                     .realTargetAdapter(targetAdapter);
             final Consent consent = apm.getActionParameter(getSpecificationLoader())
-                    .isVisible(realTargetAdapter, null, InteractionInitiatedBy.USER);
+                    .isVisible(realTargetAdapter, Can.empty(), InteractionInitiatedBy.USER);
             final boolean allowed = consent.isAllowed();
             paramPanel.setVisible(allowed);
         }

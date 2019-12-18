@@ -19,17 +19,12 @@
 
 package org.apache.isis.metamodel.facets.param.disable.method;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.StringExtensions;
-import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.metamodel.facets.DependentArgUtils;
+import org.apache.isis.metamodel.facets.DependentArgUtils.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.param.disable.ActionParameterDisabledFacet;
@@ -39,55 +34,106 @@ import lombok.val;
 /**
  * Sets up {@link ActionParameterDisabledFacet}.
  */
-public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
+public class ActionParameterDisabledFacetViaMethodFactory 
+extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.DISABLE_PREFIX);
 
     public ActionParameterDisabledFacetViaMethodFactory() {
-        super(FeatureType.PARAMETERS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        //super(FeatureType.PARAMETERS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
+    @Override
+    public void process(final ProcessMethodContext processMethodContext) {
+
+        val facetedMethod = processMethodContext.getFacetHolder();
+        val parameters = facetedMethod.getParameters();
+
+        if (parameters.isEmpty()) {
+            return;
+        }
+
+        // attach ActionParameterDisabledFacet if disableNumMethod is found ...
+        
+        val translationService = getMetaModelContext().getTranslationService();
+        val actionMethod = processMethodContext.getMethod();
+        val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
+
+        val searchRequest = DependentArgUtils.ParamSupportingMethodSearchRequest.builder()
+                .processMethodContext(processMethodContext)
+                .returnType(ReturnType.TEXT)
+                .paramIndexToMethodName(paramIndex -> 
+                    MethodLiteralConstants.DISABLE_PREFIX + paramIndex + capitalizedName)
+                .build();
+        
+        DependentArgUtils.findParamSupportingMethods(searchRequest, searchResult -> {
+            
+            val disableMethod = searchResult.getSupportingMethod();
+            val paramIndex = searchResult.getParamIndex();
+            
+            processMethodContext.removeMethod(disableMethod);
+
+            if (facetedMethod.containsNonFallbackFacet(ActionParameterDisabledFacet.class)) {
+                val cls = processMethodContext.getCls();
+                throw new MetaModelException(cls + " uses both old and new 'disable' syntax - "
+                        + "must use one or other");
+            }
+            
+            // add facets directly to parameters, not to actions
+            val paramAsHolder = parameters.get(paramIndex);
+            val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
+            
+            super.addFacet(
+                    new ActionParameterDisabledFacetViaMethod(
+                            disableMethod, translationService, translationContext, paramAsHolder));
+        });
+        
+    }
+    
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
 
-        final Class<?> cls = processParameterContext.getCls();
-        final Method actionMethod = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-        final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
-
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
-
-        final String hideName = MethodLiteralConstants.DISABLE_PREFIX + paramNum + capitalizedName;
-
-        final int numParamTypes = paramTypes.size();
-
-        final TranslationService translationService = getMetaModelContext().getTranslationService();
-
-        for(int i=0; i< numParamTypes+1; i++) {
-            val disableMethod = MethodFinderUtils.findMethod_returningText(
-                    cls,
-                    hideName,
-                    NO_ARG);
-
-            if (disableMethod != null) {
-                processParameterContext.removeMethod(disableMethod);
-
-                // sadness: same as in TranslationFactory
-                final String translationContext = facetHolder.getIdentifier().toFullIdentityString();
-
-                final Facet facet = new ActionParameterDisabledFacetViaMethod(disableMethod,
-                        translationService, translationContext, facetHolder);
-                super.addFacet(facet);
-                return;
-            }
-
-            // remove last, and search again
-            if(!paramTypes.isEmpty()) {
-                paramTypes.remove(paramTypes.size()-1);
-            }
-        }
+        //FIXME remove
+        
+//        final Class<?> cls = processParameterContext.getCls();
+//        final Method actionMethod = processParameterContext.getMethod();
+//        final int paramNum = processParameterContext.getParamNum();
+//        final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
+//
+//        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
+//        final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
+//
+//        final String hideName = MethodLiteralConstants.DISABLE_PREFIX + paramNum + capitalizedName;
+//
+//        final int numParamTypes = paramTypes.size();
+//
+//        val translationService = getMetaModelContext().getTranslationService();
+//
+//        for(int i=0; i< numParamTypes+1; i++) {
+//            val disableMethod = MethodFinderUtils.findMethod_returningText(
+//                    cls,
+//                    hideName,
+//                    NO_ARG);
+//
+//            if (disableMethod != null) {
+//                processParameterContext.removeMethod(disableMethod);
+//
+//                // sadness: same as in TranslationFactory
+//                final String translationContext = facetHolder.getIdentifier().toFullIdentityString();
+//
+//                final Facet facet = new ActionParameterDisabledFacetViaMethod(disableMethod,
+//                        translationService, translationContext, facetHolder);
+//                super.addFacet(facet);
+//                return;
+//            }
+//
+//            // remove last, and search again
+//            if(!paramTypes.isEmpty()) {
+//                paramTypes.remove(paramTypes.size()-1);
+//            }
+//        }
 
     }
 

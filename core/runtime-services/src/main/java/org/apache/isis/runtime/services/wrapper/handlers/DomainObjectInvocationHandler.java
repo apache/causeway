@@ -626,8 +626,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 if(contributeeMember instanceof ObjectActionContributee) {
                     val objectActionContributee = (ObjectActionContributee) contributeeMember;
                     val contributeeArgAdapters = asObjectAdaptersUnderlying(contributeeArgs);
-                    //TODO remove cast after refactored 
-                    checkValidity(contributeeAdapter, (ObjectAction) objectActionContributee, contributeeArgAdapters);
+                    checkValidity(contributeeAdapter, objectActionContributee, contributeeArgAdapters);
                 }
                 // nothing to do for contributed properties or collections
                 

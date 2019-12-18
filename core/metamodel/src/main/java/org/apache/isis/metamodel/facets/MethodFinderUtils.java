@@ -198,11 +198,20 @@ public final class MethodFinderUtils {
         return nullableMethod;
     }
 
-    
-    
     // -- SHORTCUTS
     
-    public static final Class<?>[] TEXT_TYPES = new Class<?>[]{
+    private static final Class<?>[] BOOLEAN_TYPES = new Class<?>[]{
+        boolean.class};
+
+    
+    public static Method findMethod_returningBoolean(
+            final Class<?> type,
+            final String name,
+            final Class<?>[] paramTypes) {
+        return findMethod_returningAnyOf(BOOLEAN_TYPES, type, name, paramTypes);
+    }
+    
+    private static final Class<?>[] TEXT_TYPES = new Class<?>[]{
         String.class, 
         TranslatableString.class};
 

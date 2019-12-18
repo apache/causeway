@@ -19,18 +19,15 @@
 
 package org.apache.isis.metamodel.facets.param.choices.methodnum;
 
-import java.util.List;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.DependentArgUtils;
-import org.apache.isis.metamodel.facets.FacetedMethod;
-import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.metamodel.facets.DependentArgUtils.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.metamodel.facets.param.choices.ActionChoicesFacet;
 
 import lombok.val;
@@ -55,28 +52,24 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
-        final List<FacetedMethodParameter> holderList = facetedMethod.getParameters();
-
-        attachChoicesFacetForParametersIfChoicesNumMethodIsFound(processMethodContext, holderList);
-
-    }
-
-    private void attachChoicesFacetForParametersIfChoicesNumMethodIsFound(
-            final ProcessMethodContext processMethodContext, 
-            final List<FacetedMethodParameter> parameters) {
+        val facetedMethod = processMethodContext.getFacetHolder();
+        val parameters = facetedMethod.getParameters();
 
         if (parameters.isEmpty()) {
             return;
         }
+        
+        // attach ActionChoicesFacet if choicesNumMethod is found ...
 
         val actionMethod = processMethodContext.getMethod();
         val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
-        val searchRequest = DependentArgUtils.ParamSupportingMethodSearchRequest.of(
-                processMethodContext, 
-                null,
-                paramIndex -> MethodLiteralConstants.CHOICES_PREFIX + paramIndex + capitalizedName);    
+        val searchRequest = DependentArgUtils.ParamSupportingMethodSearchRequest.builder()
+                .processMethodContext(processMethodContext)
+                .returnType(ReturnType.NON_SCALAR)
+                .paramIndexToMethodName(paramIndex -> 
+                    MethodLiteralConstants.CHOICES_PREFIX + paramIndex + capitalizedName)
+                .build();
 
         DependentArgUtils.findParamSupportingMethods(searchRequest, searchResult -> {
             
@@ -86,7 +79,6 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             
             processMethodContext.removeMethod(choicesMethod);
 
-            val facetedMethod = processMethodContext.getFacetHolder();
             if (facetedMethod.containsNonFallbackFacet(ActionChoicesFacet.class)) {
                 val cls = processMethodContext.getCls();
                 throw new MetaModelException(cls + " uses both old and new choices syntax - "

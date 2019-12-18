@@ -65,8 +65,13 @@ public class ProperMemberSupport_action {
         return null;
     }
     
+//    @Model
+//    public Set<String> autoComplete1Act(String p0, @MinLength(3) String search) {
+//        return null;
+//    }
+    
     @Model
-    public Set<String> choices0Act(String p0) {
+    public Set<String> choices0Act() {
         return null;
     }
 

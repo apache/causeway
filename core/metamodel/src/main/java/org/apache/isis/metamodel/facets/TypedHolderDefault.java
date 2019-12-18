@@ -49,5 +49,10 @@ public class TypedHolderDefault extends FacetHolderImpl implements TypedHolder {
     public void setType(final Class<?> type) {
         this.type = type;
     }
+    
+    @Override // as used for logging, not strictly required
+    public String toString() {
+        return type.getSimpleName();
+    }
 
 }

@@ -32,7 +32,9 @@ import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.disable.ActionParameterDisabledFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-public class ActionParameterDisabledFacetViaMethod extends ActionParameterDisabledFacetAbstract implements ImperativeFacet {
+public class ActionParameterDisabledFacetViaMethod 
+extends ActionParameterDisabledFacetAbstract 
+implements ImperativeFacet {
 
     private final Method method;
     private final TranslationService translationService;

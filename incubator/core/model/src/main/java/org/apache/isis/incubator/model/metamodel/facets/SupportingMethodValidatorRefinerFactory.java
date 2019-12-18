@@ -64,7 +64,7 @@ implements MetaModelRefiner {
             val type = spec.getCorrespondingClass();
 
 //XXX for debugging ...            
-            if(spec.getSpecId().asString().contains("DependentArgsActionDemo_useDisable")) {
+            if(spec.getSpecId().asString().contains("ProperMemberSupport")) {
                 
                 val sb = new StringBuffer();
                 

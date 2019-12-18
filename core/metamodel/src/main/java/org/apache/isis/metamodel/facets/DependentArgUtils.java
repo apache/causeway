@@ -22,30 +22,44 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 
  * @since 2.0
  *
  */
-@UtilityClass
+@UtilityClass @Log4j2
 public class DependentArgUtils {
     
-    @Value(staticConstructor = "of")
+    @Value @Builder
     public static class ParamSupportingMethodSearchRequest {
-        ProcessMethodContext processMethodContext;
+        
+        public static enum ReturnType {
+            NON_SCALAR,
+            TEXT,
+            BOOLEAN
+        }
+        
+        @NonNull ProcessMethodContext processMethodContext;
+        @NonNull IntFunction<String> paramIndexToMethodName;
+        @NonNull ReturnType returnType;
         Class<?> additionalParamType;
-        IntFunction<String> paramIndexToMethodName;
         
         @Getter(lazy = true)
         Class<?>[] paramTypes = getProcessMethodContext().getMethod().getParameterTypes();
@@ -59,7 +73,7 @@ public class DependentArgUtils {
         Class<?> returnType;
     }
 
-    public void findParamSupportingMethods(
+    public static void findParamSupportingMethods(
             final DependentArgUtils.ParamSupportingMethodSearchRequest searchRequest, 
             final Consumer<DependentArgUtils.ParamSupportingMethodSearchResult> onMethodFound) {
         
@@ -70,6 +84,12 @@ public class DependentArgUtils {
 
             val paramIndex = i;
             val searchResult = findParamSupportingMethod(searchRequest, paramIndex);
+            
+            if(log.isDebugEnabled()) {
+                log.debug("search {}{}", 
+                        searchResult != null ? "FOUND " : "",
+                        toString(searchRequest, paramIndex));
+            }
 
             if (searchResult != null) {
                 onMethodFound.accept(searchResult);
@@ -91,29 +111,52 @@ public class DependentArgUtils {
         val methodName = searchRequest.getParamIndexToMethodName().apply(paramIndex);
         val paramType = paramTypes[paramIndex];
         val additionalParamType = searchRequest.getAdditionalParamType();
+        val additionalParamCount = additionalParamType!=null ? 1 : 0;
         
-        int paramsConsidered = paramTypes.length - 1; 
-        while(paramsConsidered>=0) {
+        int paramsConsideredCount = paramIndex + additionalParamCount; 
+        while(paramsConsideredCount>=0) {
         
-            val paramTypesToLookFor = concat(paramTypes, paramsConsidered, additionalParamType);
+            val paramTypesToLookFor = concat(paramTypes, paramsConsideredCount, additionalParamType);
             
-            val supportingMethod = MethodFinderUtils
+            final Method supportingMethod;
+            
+            switch(searchRequest.getReturnType()) {
+            case BOOLEAN:
+                supportingMethod = MethodFinderUtils
+                    .findMethod_returningBoolean(type, methodName, paramTypesToLookFor);
+                break;
+            case TEXT:
+                supportingMethod = MethodFinderUtils
+                    .findMethod_returningText(type, methodName, paramTypesToLookFor);
+                break;
+            case NON_SCALAR:
+                supportingMethod = MethodFinderUtils
                     .findMethod_returningNonScalar(type, methodName, paramType, paramTypesToLookFor);
+                break;
+            default:
+                supportingMethod = null;
+            }
+            
+            if(log.isDebugEnabled()) {
+                log.debug(". signature ({}) {}", 
+                        toString(paramTypesToLookFor),
+                        supportingMethod != null ? "found -> " + supportingMethod : "");
+            }
             
             if(supportingMethod != null) {
-                val searchResult = ParamSupportingMethodSearchResult.of(
-                        paramIndex, paramType, supportingMethod, supportingMethod.getReturnType());
+                val searchResult = ParamSupportingMethodSearchResult
+                        .of(paramIndex, paramType, supportingMethod, supportingMethod.getReturnType());
                 return searchResult;
             }
 
             // remove last, and search again
-            paramsConsidered--;
+            paramsConsideredCount--;
         }
 
         return null;
     }
     
-    public static Class<?>[] concat(
+    private static Class<?>[] concat(
             final Class<?>[] paramTypes,
             final int paramsConsidered,
             @Nullable final Class<?> additionalParamType) {
@@ -134,5 +177,24 @@ public class DependentArgUtils {
                 
         return withAdditional;
     }
+    
+    private String toString(
+            DependentArgUtils.ParamSupportingMethodSearchRequest searchRequest, 
+            int paramIndex) {
+        
+        return String.format("%s.%s(%s) : %s",
+                searchRequest.getProcessMethodContext().getCls().getSimpleName(),
+                searchRequest.getParamIndexToMethodName().apply(paramIndex),
+                toString(searchRequest.getParamTypes()),
+                searchRequest.getReturnType().name()
+                );
+    }
+    
+    private String toString(Class<?>[] types) {
+        return _NullSafe.stream(types)
+                .map(Class::getSimpleName)
+                .collect(Collectors.joining(","));
+    }
+    
     
 }
