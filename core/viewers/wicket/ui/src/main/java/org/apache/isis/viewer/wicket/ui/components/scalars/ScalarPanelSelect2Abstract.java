@@ -38,6 +38,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
@@ -119,13 +120,13 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         select2.setProvider(choiceProvider);
         getModel().clearPending();
 
-        syncIfNull(select2);
+        val dependsOnPreviousArgs = (choiceProvider instanceof ObjectAdapterMementoProviderAbstract)
+                && ((ObjectAdapterMementoProviderAbstract) choiceProvider).dependsOnPreviousArgs();
         
-//legacy of        
-//        if(choiceProvider instanceof ObjectAdapterMementoProviderForChoices) {
-//            val providerForChoices = (ObjectAdapterMementoProviderForChoices) choiceProvider;
-//            syncIfNull(select2, providerForChoices.getChoiceMementos());
-//        }
+        if(dependsOnPreviousArgs) {
+            syncIfNull(select2);
+        }
+        
     }
 
     /**

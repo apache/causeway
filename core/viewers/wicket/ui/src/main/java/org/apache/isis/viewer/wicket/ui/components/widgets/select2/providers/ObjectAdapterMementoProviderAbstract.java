@@ -152,6 +152,11 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
                 .collect(Collectors.toList());
     }
     
+    /** whether this adapter is dependent on previous (pending) arguments */
+    public boolean dependsOnPreviousArgs() {
+        return true;
+    }
+    
     // -- HELPER
     
     private ObjectMemento idToMemento(String id) {
@@ -161,6 +166,8 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         val rootOid = RootOid.deString(id);
         return getCommonContext().mementoFor(rootOid);
     }
+
+    
 
 
 }
