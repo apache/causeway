@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName="of")
@@ -65,6 +66,32 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
+    public Can<T> add(@NonNull T element) {
+        return Can.ofStream(Stream.of(this.element, element)); // append
+    }
+    
+    @Override
+    public Can<T> add(int index, @NonNull T element) {
+        if(index==0) {
+            return Can.ofStream(Stream.of(element, this.element)); // insert before
+        }
+        if(index==1) {
+            return Can.ofStream(Stream.of(this.element, element)); // append   
+        }
+        throw new IndexOutOfBoundsException(
+                "cannot add to singleton with index other than 0 or 1; got " + index);
+    }
+
+    @Override
+    public Can<T> remove(int index) {
+        if(index==0) {
+            return Can.empty();    
+        }
+        throw new IndexOutOfBoundsException(
+                "cannot remove from singleton with index other than 0; got " + index);
+    }
+    
+    @Override
     public String toString() {
         return "Can["+element+"]";
     }
@@ -81,5 +108,7 @@ final class Can_Singleton<T> implements Can<T> {
     public int hashCode() {
         return element.hashCode();
     }
+    
+
     
 }

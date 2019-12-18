@@ -353,6 +353,42 @@ public interface Can<T> extends Iterable<T> {
         stream().forEach(action);
     }
     
+    // -- MANIPULATION
+    
+    Can<T> add(T element);
+    
+    /**
+     * Inserts the specified element at the specified position in this list
+     * (optional operation).  Shifts the element currently at that position
+     * (if any) and any subsequent elements to the right (adds one to their
+     * indices).
+     *
+     * @param index index at which the specified element is to be inserted
+     * @param element element to be inserted
+     * @return new instance
+     * @throws ClassCastException if the class of the specified element
+     *         prevents it from being added to this list
+     * @throws NullPointerException if the specified element is null
+     * @throws IllegalArgumentException if some property of the specified
+     *         element prevents it from being added to this list
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *         (<tt>index &lt; 0 || index &gt; size()</tt>)
+     */
+    Can<T> add(int index, T element);
+
+    /**
+     * Removes the element at the specified position in this list (optional
+     * operation).  Shifts any subsequent elements to the left (subtracts one
+     * from their indices).  Returns the element that was removed from the
+     * list.
+     *
+     * @param index the index of the element to be removed
+     * @return new instance
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
+     */
+    Can<T> remove(int index);
+    
     // -- EQUALITY
     
     /**
@@ -406,6 +442,8 @@ public interface Can<T> extends Iterable<T> {
                 Collectors.toList(), 
                 Can::ofCollection);
     }
+
+
 
    
 

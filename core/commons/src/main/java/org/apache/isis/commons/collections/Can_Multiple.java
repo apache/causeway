@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.collections;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -78,6 +80,26 @@ final class Can_Multiple<T> implements Can<T> {
         return Collections.unmodifiableList(elements).iterator();
     }
 
+    @Override
+    public Can<T> add(@NonNull T element) {
+        val elementStream = Stream.concat(elements.stream(), Stream.of(element)); // append
+        return Can.ofStream(elementStream); 
+    }
+    
+    @Override
+    public Can<T> add(int index, @NonNull T element) {
+        val newElements = new ArrayList<T>(elements);
+        newElements.add(index, element);
+        return Can.ofCollection(newElements);
+    }
+
+    @Override
+    public Can<T> remove(int index) {
+        val newElements = new ArrayList<T>(elements);
+        newElements.remove(index);
+        return Can.ofCollection(newElements);
+    }
+    
     @Override
     public String toString() {
         val literal = stream()

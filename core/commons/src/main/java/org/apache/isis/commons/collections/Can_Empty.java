@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Value;
 
 @Value @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -66,6 +67,25 @@ final class Can_Empty<T> implements Can<T> {
     public Iterator<T> iterator() {
         return Collections.<T>emptyList().iterator();
     }
+
+    @Override
+    public Can<T> add(@NonNull T element) {
+        return Can.ofSingleton(element);
+    }
+    
+    @Override
+    public Can<T> add(int index, @NonNull T element) {
+        if(index!=0) {
+            throw new IndexOutOfBoundsException(
+                    "cannot add to empty can with index other than 0; got " + index);
+        }
+        return Can.ofSingleton(element);
+    }
+
+    @Override
+    public Can<T> remove(int index) {
+        throw new IndexOutOfBoundsException("cannot remove anything from an empty Can");
+    }
     
     @Override
     public String toString() {
@@ -81,6 +101,8 @@ final class Can_Empty<T> implements Can<T> {
     public int hashCode() {
         return 0;
     }
+
+
 
 
 
