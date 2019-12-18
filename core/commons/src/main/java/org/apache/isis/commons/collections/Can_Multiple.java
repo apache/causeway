@@ -56,6 +56,22 @@ final class Can_Multiple<T> implements Can<T> {
     public int size() {
         return elements.size();
     }
+    
+    @Override
+    public Optional<T> get(int elementIndex) {
+        // we do an index out of bounds check ourselves, in order to prevent any stack-traces, 
+        // that pollute the heap
+        val size = size();
+        if(size==0) {
+            return Optional.empty();
+        }
+        val minIndex = 0;
+        val maxIndex = size - 1;
+        if(elementIndex < minIndex ||  elementIndex > maxIndex) {
+            return Optional.empty();
+        }
+        return Optional.of(elements.get(elementIndex));
+    }
 
     @Override
     public Iterator<T> iterator() {

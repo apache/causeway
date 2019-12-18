@@ -51,6 +51,11 @@ final class Can_Empty<T> implements Can<T> {
     public Optional<T> getFirst() {
         return Optional.empty();
     }
+    
+    @Override
+    public Optional<T> get(int elementIndex) {
+        return Optional.empty();
+    }
 
     @Override
     public int size() {
@@ -76,5 +81,7 @@ final class Can_Empty<T> implements Can<T> {
     public int hashCode() {
         return 0;
     }
+
+
 
 }

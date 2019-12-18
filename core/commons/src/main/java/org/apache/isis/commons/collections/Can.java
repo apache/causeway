@@ -66,6 +66,12 @@ public interface Can<T> extends Iterable<T> {
      * @return number of elements this Can contains 
      */
     int size();
+    
+    /**
+     * @param elementIndex
+     * @return optionally this Can's element with index {@code elementIndex} 
+     */
+    Optional<T> get(int elementIndex);
 
     /**
      * @return Stream of elements this Can contains

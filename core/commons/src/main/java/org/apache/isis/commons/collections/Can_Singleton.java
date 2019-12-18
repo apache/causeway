@@ -48,6 +48,11 @@ final class Can_Singleton<T> implements Can<T> {
     public Optional<T> getFirst() {
         return getSingleton();
     }
+    
+    @Override
+    public Optional<T> get(int elementIndex) {
+        return getSingleton();
+    }
 
     @Override
     public int size() {
