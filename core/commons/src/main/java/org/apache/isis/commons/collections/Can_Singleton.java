@@ -18,14 +18,18 @@
  */
 package org.apache.isis.commons.collections;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(staticName="of")
 final class Can_Singleton<T> implements Can<T> {
@@ -112,6 +116,18 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public int hashCode() {
         return element.hashCode();
+    }
+    
+    @Override
+    public List<T> toList() {
+        return Collections.singletonList(element); // serializable and immutable
+    }
+    
+    @Override
+    public <C extends Collection<T>> C toCollection(@NonNull Supplier<C> collectionFactory) {
+        val collection = collectionFactory.get();
+        collection.add(element);
+        return collection;
     }
     
 

@@ -18,9 +18,12 @@
  */
 package org.apache.isis.commons.collections;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import lombok.AccessLevel;
@@ -107,8 +110,15 @@ final class Can_Empty<T> implements Can<T> {
         return 0;
     }
 
-
-
+    @Override
+    public List<T> toList() {
+        return Collections.emptyList(); // serializable and immutable
+    }
+    
+    @Override
+    public <C extends Collection<T>> C toCollection(@NonNull Supplier<C> collectionFactory) {
+        return collectionFactory.get();
+    }
 
 
 }

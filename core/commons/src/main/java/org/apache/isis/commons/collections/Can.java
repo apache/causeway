@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -478,4 +479,23 @@ public interface Can<T> extends Iterable<T> {
                 Can::ofCollection);
     }
 
+    // -- CONVERSIONS
+    
+    /**
+     * @return an serializable and immutable List, containing the elements of this Can
+     */
+    List<T> toList();
+
+//XXX to implement when needed    
+//    Set<T> toSet();
+//    Set<T> toSortedSet();
+//    Set<T> toSortedSet(Comparator<T> comparator);
+
+    /**
+     * @param <C>
+     * @param collectionFactory
+     * @return a collection, containing the elements of this Can
+     */
+    <C extends Collection<T>> C toCollection(Supplier<C> collectionFactory);
+    
 }
