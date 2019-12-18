@@ -189,7 +189,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> dependentArgs,
+                    final Can<ManagedObject> pendingArgs,
                     final int paramNumUpdated,
                     final AuthenticationSession authenticationSession) {
 
@@ -210,7 +210,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> dependentArgs,
+                    final Can<ManagedObject> pendingArgs,
                     final AuthenticationSession authenticationSession) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
@@ -234,7 +234,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> dependentArgs, // ignored for properties
+                    final Can<ManagedObject> pendingArgs, // ignored for properties
                     final String searchArg,
                     final AuthenticationSession authenticationSession) {
 
@@ -425,7 +425,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> dependentArgs,
+                    final Can<ManagedObject> pendingArgs,
                     final int paramNumUpdated,
                     final AuthenticationSession authenticationSession) {
 
@@ -434,7 +434,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
                 //XXX lombok issue, no val
                 ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
-                return actionParameter.getDefault(parentAdapter, dependentArgs, paramNumUpdated);
+                return actionParameter.getDefault(parentAdapter, pendingArgs, paramNumUpdated);
             }
 
             @Override
@@ -446,7 +446,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> dependentArgs,
+                    final Can<ManagedObject> pendingArgs,
                     final AuthenticationSession authenticationSession) {
                 
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
@@ -458,7 +458,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 final ManagedObject[] choices =
                         actionParameter.getChoices(
                                 parentAdapter, 
-                                dependentArgs,
+                                pendingArgs,
                                 InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
             }
@@ -472,7 +472,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> dependentArgs,
+                    final Can<ManagedObject> pendingArgs,
                     final String searchArg,
                     final AuthenticationSession authenticationSession) {
                 
@@ -482,7 +482,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
                 final ManagedObject[] choices = actionParameter.getAutoComplete(
                         parentAdapter,
-                        dependentArgs,
+                        pendingArgs,
                         searchArg,
                         InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
@@ -635,20 +635,20 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
         public abstract ManagedObject getDefault(
                 ScalarModel scalarModel,
-                Can<ManagedObject> dependentArgs,
+                Can<ManagedObject> pendingArgs,
                 int paramNumUpdated,
                 AuthenticationSession authenticationSession);
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
         public abstract List<ManagedObject> getChoices(
                 ScalarModel scalarModel,
-                Can<ManagedObject> dependentArgs,
+                Can<ManagedObject> pendingArgs,
                 AuthenticationSession authenticationSession);
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
         public abstract List<ManagedObject> getAutoComplete(
                 ScalarModel scalarModel,
-                Can<ManagedObject> dependentArgs,
+                Can<ManagedObject> pendingArgs,
                 String searchArg,
                 AuthenticationSession authenticationSession);
 
@@ -927,10 +927,10 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     }
 
     public List<ManagedObject> getChoices(
-            final Can<ManagedObject> dependentArgs,
+            final Can<ManagedObject> pendingArgs,
             final AuthenticationSession authenticationSession) {
         
-        return kind.getChoices(this, dependentArgs, authenticationSession);
+        return kind.getChoices(this, pendingArgs, authenticationSession);
     }
 
     public boolean hasAutoComplete() {
@@ -938,11 +938,11 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     }
 
     public List<ManagedObject> getAutoComplete(
-            final Can<ManagedObject> dependentArgs,
+            final Can<ManagedObject> pendingArgs,
             final String searchTerm,
             final AuthenticationSession authenticationSession) {
         
-        return kind.getAutoComplete(this, dependentArgs, searchTerm, authenticationSession);
+        return kind.getAutoComplete(this, pendingArgs, searchTerm, authenticationSession);
     }
 
     /**

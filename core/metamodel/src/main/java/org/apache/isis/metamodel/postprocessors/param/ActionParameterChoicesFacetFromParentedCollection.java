@@ -47,7 +47,7 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
     @Override
     public Object[] getChoices(
             final ManagedObject target,
-            final Can<ManagedObject> dependentArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ManagedObject parentAdapter = determineParentAdapter(target);

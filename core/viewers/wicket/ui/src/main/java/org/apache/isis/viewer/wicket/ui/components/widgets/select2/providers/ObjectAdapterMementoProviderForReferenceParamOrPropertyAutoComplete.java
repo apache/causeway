@@ -52,10 +52,10 @@ extends ObjectAdapterMementoProviderAbstract {
         
         val autoCompleteChoices = _Lists.<ManagedObject>newArrayList();
         if (getScalarModel().hasAutoComplete()) {
-            // recover any dependentArgs
-            val dependentArgs = reconstructDependentArgs(dependentArgMementos); 
+            // recover any pendingArgs
+            val pendingArgs = reconstructDependentArgs(dependentArgMementos); 
             val autoCompleteAdapters = getScalarModel()
-                    .getAutoComplete(dependentArgs, term, commonContext.getAuthenticationSession());
+                    .getAutoComplete(pendingArgs, term, commonContext.getAuthenticationSession());
             autoCompleteChoices.addAll(autoCompleteAdapters);
         }
         
@@ -65,11 +65,11 @@ extends ObjectAdapterMementoProviderAbstract {
     
     private Can<ManagedObject> reconstructDependentArgs(List<ObjectMemento> dependentArgMementos) {
         val commonContext = super.getCommonContext();
-        val dependentArgsStream = _NullSafe.stream(dependentArgMementos)
+        val pendingArgsStream = _NullSafe.stream(dependentArgMementos)
             .map(commonContext::reconstructObject)
             .map(ManagedObject.class::cast);
         
-        return Can.ofStream(dependentArgsStream);
+        return Can.ofStream(pendingArgsStream);
     }
 
 }

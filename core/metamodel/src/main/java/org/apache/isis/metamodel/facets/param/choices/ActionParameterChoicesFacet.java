@@ -36,6 +36,6 @@ public interface ActionParameterChoicesFacet extends Facet {
 
     public Object[] getChoices(
             ManagedObject target,
-            Can<ManagedObject> dependentArgs,
+            Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 }

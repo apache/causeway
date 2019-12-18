@@ -36,7 +36,7 @@ public interface ActionParameterAutoCompleteFacet extends Facet {
 
     public Object[] autoComplete(
             ManagedObject inObject,
-            Can<ManagedObject> dependentArgs,
+            Can<ManagedObject> pendingArgs,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);
     /**

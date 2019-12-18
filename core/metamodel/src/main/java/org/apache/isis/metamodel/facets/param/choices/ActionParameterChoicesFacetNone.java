@@ -33,7 +33,7 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
     @Override
     public Object[] getChoices(
             final ManagedObject adapter,
-            final Can<ManagedObject> dependentArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return new ManagedObject[0];

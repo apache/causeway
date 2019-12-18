@@ -70,12 +70,12 @@ implements ImperativeFacet {
     @Override
     public Object[] getChoices(
             final ManagedObject owningAdapter,
-            final Can<ManagedObject> dependentArgs, 
+            final Can<ManagedObject> pendingArgs, 
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final Object choices =
                 ManagedObject.InvokeUtil.invokeAutofit(
-                        method, owningAdapter, dependentArgs);
+                        method, owningAdapter, pendingArgs);
         if (choices == null) {
             return _Constants.emptyObjects;
         }

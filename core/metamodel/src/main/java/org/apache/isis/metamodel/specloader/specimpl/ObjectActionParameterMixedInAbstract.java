@@ -45,13 +45,13 @@ implements ObjectActionParameterMixedIn {
     @Override
     public ManagedObject[] getAutoComplete(
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> dependentArgs,
+            final Can<ManagedObject> pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return mixinParameter.getAutoComplete(
                 mixinAdapterFor(mixedInAdapter),
-                dependentArgs,
+                pendingArgs,
                 searchArg,
                 interactionInitiatedBy);
     }

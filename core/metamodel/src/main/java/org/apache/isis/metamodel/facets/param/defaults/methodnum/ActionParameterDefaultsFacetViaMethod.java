@@ -71,12 +71,12 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     @Override
     public Object getDefault(
             final ManagedObject target,
-            final Can<ManagedObject> dependentArgs,
+            final Can<ManagedObject> pendingArgs,
             final Integer paramNumUpdated) {
 
         // this isn't a dependent defaults situation, so just evaluate the default.
-        if (dependentArgs.isEmpty() || paramNumUpdated == null) {
-            return ManagedObject.InvokeUtil.invokeAutofit(method, target, dependentArgs);
+        if (pendingArgs.isEmpty() || paramNumUpdated == null) {
+            return ManagedObject.InvokeUtil.invokeAutofit(method, target, pendingArgs);
         }
 
         // this could be a dependent defaults situation, but has a previous parameter been updated
@@ -91,12 +91,12 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
             // conversely, if method default2Foo(int), and the second param is updated... we don't want to re-evaluate
             // so numParams == 1, and paramNumUpdated == 1, and (paramNumUpdated < numParams) is FALSE
             //
-            return ManagedObject.InvokeUtil.invokeAutofit(method, target, dependentArgs);
+            return ManagedObject.InvokeUtil.invokeAutofit(method, target, pendingArgs);
         }
 
         // otherwise, just return the arguments that are already known; we don't want to recompute the default
         // because if we did then this would trample over any pending changes already made by the end-user.
-        val argPojo = dependentArgs.stream()
+        val argPojo = pendingArgs.stream()
                 .skip(paramNum)
                 .findFirst()
                 .map(ManagedObject::getPojo)

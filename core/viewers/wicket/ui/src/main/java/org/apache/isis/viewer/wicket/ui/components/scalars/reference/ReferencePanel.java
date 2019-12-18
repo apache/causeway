@@ -340,18 +340,18 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> dependentArgs) {
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs) {
         
         val commonContext = super.getCommonContext();
         
         if (getModel().hasChoices()) {
-            val choices = getModel().getChoices(dependentArgs, commonContext.getAuthenticationSession());
+            val choices = getModel().getChoices(pendingArgs, commonContext.getAuthenticationSession());
             val choiceMementos = _Lists.map(choices, commonContext::mementoFor);
             return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
         }
 
         if(getModel().hasAutoComplete()) {
-            val dependentArgMementos = dependentArgs.stream()
+            val dependentArgMementos = pendingArgs.stream()
                     .map(commonContext::mementoFor)
                     .collect(Collectors.toCollection(ArrayList::new)); // serializable
             return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(

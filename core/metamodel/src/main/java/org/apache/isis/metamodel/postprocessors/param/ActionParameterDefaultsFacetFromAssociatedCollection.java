@@ -58,7 +58,7 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
     @Override
     public Object getDefault(
             final ManagedObject target,
-            final Can<ManagedObject> dependentArgs,
+            final Can<ManagedObject> pendingArgs,
             final Integer paramNumUpdated) {
         
         return selectedPojos.get();

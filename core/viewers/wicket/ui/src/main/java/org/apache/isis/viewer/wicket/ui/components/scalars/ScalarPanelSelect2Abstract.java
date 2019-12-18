@@ -112,9 +112,9 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.
      */
-    private void setProviderAndCurrAndPending(Select2 select2, Can<ManagedObject> dependentArgs) {
+    private void setProviderAndCurrAndPending(Select2 select2, Can<ManagedObject> pendingArgs) {
 
-        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(dependentArgs);
+        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(pendingArgs);
 
         select2.setProvider(choiceProvider);
         getModel().clearPending();
@@ -131,7 +131,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, Can<ManagedObject>)})
      */
-    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> dependentArgs);
+    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs);
 
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, Can<ManagedObject>)})
@@ -197,11 +197,11 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         }
     }
 
-    private boolean updateChoices(Can<ManagedObject> dependentArgs) {
+    private boolean updateChoices(Can<ManagedObject> pendingArgs) {
         if (select2 == null) {
             return false;
         }
-        setProviderAndCurrAndPending(select2, dependentArgs);
+        setProviderAndCurrAndPending(select2, pendingArgs);
 
         return true;
     }

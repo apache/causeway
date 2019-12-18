@@ -74,12 +74,12 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
 
-    private List<ObjectMemento> getChoiceMementos(final Can<ManagedObject> dependentArgs) {
+    private List<ObjectMemento> getChoiceMementos(final Can<ManagedObject> pendingArgs) {
         
         val commonContext = super.getCommonContext();
         
         val choices =
-                scalarModel.getChoices(dependentArgs, commonContext.getAuthenticationSession());
+                scalarModel.getChoices(pendingArgs, commonContext.getAuthenticationSession());
 
         return _Lists.map(choices, commonContext::mementoFor);
     }
@@ -165,8 +165,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
     // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> dependentArgs) {
-        final List<ObjectMemento> choicesMementos = getChoiceMementos(dependentArgs);
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs) {
+        final List<ObjectMemento> choicesMementos = getChoiceMementos(pendingArgs);
         return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos);
     }
 

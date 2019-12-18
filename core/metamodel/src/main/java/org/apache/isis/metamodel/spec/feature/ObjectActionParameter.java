@@ -92,7 +92,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     ManagedObject[] getAutoComplete(
             ManagedObject adapter,
-            Can<ManagedObject> dependentArgs,
+            Can<ManagedObject> pendingArgs,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -111,38 +111,38 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     ManagedObject[] getChoices(
             ManagedObject adapter,
-            Can<ManagedObject> dependentArgs,
+            Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
 
     ManagedObject getDefault(
             ManagedObject adapter,
-            Can<ManagedObject> dependentArgs,
+            Can<ManagedObject> pendingArgs,
             Integer paramNumUpdated);
 
 
     /**
      * Whether this parameter is visible given the entered previous arguments
      * @param targetAdapter
-     * @param dependentArgs
+     * @param pendingArgs
      * @param interactionInitiatedBy
      * @return
      */
     Consent isVisible(
             ManagedObject targetAdapter,
-            Can<ManagedObject> dependentArgs,
+            Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Whether this parameter is disabled given the entered previous arguments
      * @param targetAdapter
-     * @param dependentArgs
+     * @param pendingArgs
      * @param interactionInitiatedBy
      * @return
      */
     Consent isUsable(
             ManagedObject targetAdapter,
-            Can<ManagedObject> dependentArgs,
+            Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
     /**

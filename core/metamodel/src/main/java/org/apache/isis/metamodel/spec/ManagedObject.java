@@ -465,10 +465,10 @@ public interface ManagedObject {
         public static Object invokeAutofit(
                 final Method method, 
                 final ManagedObject target, 
-                final Can<? extends ManagedObject> dependentArgs,
+                final Can<? extends ManagedObject> pendingArgs,
                 final Can<Optional<Object>> additionalArgValues) {
     
-            val argArray = adjust(method, dependentArgs, additionalArgValues);
+            val argArray = adjust(method, pendingArgs, additionalArgValues);
             
             return MethodExtensions.invoke(method, unwrapPojo(target), argArray);
         }
@@ -479,24 +479,24 @@ public interface ManagedObject {
         public static Object invokeAutofit(
                 final Method method, 
                 final ManagedObject target, 
-                final Can<? extends ManagedObject> dependentArgs) {
+                final Can<? extends ManagedObject> pendingArgs) {
             
-            return invokeAutofit(method, target, dependentArgs, Can.empty());
+            return invokeAutofit(method, target, pendingArgs, Can.empty());
         }
     
         private static Object[] adjust(
                 final Method method, 
-                final Can<? extends ManagedObject> dependentArgs,
+                final Can<? extends ManagedObject> pendingArgs,
                 final Can<Optional<Object>> additionalArgValues) {
             
             val parameterTypes = method.getParameterTypes();
             val paramCount = parameterTypes.length;
             val additionalArgCount = additionalArgValues.size();
-            val dependentArgsToConsiderCount = paramCount - additionalArgCount;
+            val pendingArgsToConsiderCount = paramCount - additionalArgCount;
             
-            val argIterator = dependentArgs.iterator();
+            val argIterator = pendingArgs.iterator();
             val adjusted = new Object[paramCount];
-            for(int i=0; i<dependentArgsToConsiderCount; i++) {
+            for(int i=0; i<pendingArgsToConsiderCount; i++) {
                 
                 val paramType = parameterTypes[i];
                 val arg = argIterator.hasNext() ? unwrapPojo(argIterator.next()) : null;
@@ -505,7 +505,7 @@ public interface ManagedObject {
             }
             
             // add the additional parameter values (if any)
-            int paramIndex = dependentArgsToConsiderCount;
+            int paramIndex = pendingArgsToConsiderCount;
             for(val additionalArg : additionalArgValues) {
                 val paramType = parameterTypes[paramIndex];
                 adjusted[paramIndex] = honorPrimitiveDefaults(paramType, additionalArg.orElse(null));

@@ -38,7 +38,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
     @Override
     public Object[] getChoices(
             final ManagedObject adapter,
-            final Can<ManagedObject> dependentArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final FacetHolder facetHolder = getFacetHolder();

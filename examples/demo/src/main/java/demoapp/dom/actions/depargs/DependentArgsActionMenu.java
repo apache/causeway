@@ -37,7 +37,7 @@ public class DependentArgsActionMenu {
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
-    public DependentArgsActionDemo dependentArgsActions(){
+    public DependentArgsActionDemo pendingArgsActions(){
         val demo = factoryService.instantiate(DependentArgsActionDemo.class);
         demo.initDefaults();
         return demo;
