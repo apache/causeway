@@ -1,3 +1,8 @@
+package org.ro.urls
+
+object SO_LAYOUT_XML: Response() {
+    override val url = "http://localhost:8080/restful/domain-types/simple.SimpleObject/layout"
+    override val str = """
 <bs3:grid xmlns:cpt="http://isis.apache.org/applib/layout/component"
           xmlns:lnk="http://isis.apache.org/applib/layout/links"
           xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3">
@@ -71,3 +76,5 @@
         </bs3:col>
     </bs3:row>
 </bs3:grid>
+"""
+}

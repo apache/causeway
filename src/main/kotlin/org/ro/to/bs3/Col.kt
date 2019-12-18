@@ -1,22 +1,35 @@
 package org.ro.to.bs3
 
-//    @XmlElement(namespace = "http://isis.apache.org/applib/layout/component")
-data class Col(
-        protected var sizeSpan: List<SizeSpan>? = ArrayList<SizeSpan>(),
-        var domainObject: DomainObject,
-        protected var action: List<Action>? = ArrayList(),
-        protected var row: List<Row>? = ArrayList<Row>(),
-        protected var tabGroup: List<TabGroup>? = ArrayList<TabGroup>(),
-        protected var fieldSet: List<FieldSet>? = ArrayList<FieldSet>(),
-        protected var collection: List<Collection>? = ArrayList<Collection>(),
-        var metadataError: String,
-        var id: String,
-        // @XmlAttribute(name = "span", required = true)
-        var span: Int = 0,
-        // @XmlAttribute(name = "unreferencedActions")
-        var isUnreferencedActions: Boolean,
-        // @XmlAttribute(name = "unreferencedCollections")
-        var isUnreferencedCollections: Boolean,
-        override var size: Size,
-        override var cssClass: String
-) : Bs3RowContent(size, cssClass)
+import org.w3c.dom.Node
+import org.w3c.dom.asList
+
+class Col(node: Node) {
+    var domainObject: DomainObject? = null
+    var tabGroups = mutableListOf<TabGroup>()
+    var fieldSet:FieldSet? = null
+    var span: Int = 0
+
+    init {
+        val dyNode = node.asDynamic()
+        span = dyNode.getAttribute("span")
+
+        val nodeList = node.childNodes.asList()
+        val doNodes = nodeList.filter { it.nodeName.equals("cpt:domainObject") }
+        if (!doNodes.isEmpty()) {
+            domainObject = DomainObject(doNodes.first())
+        }
+
+        val tgNodes = nodeList.filter { it.nodeName.equals("bs3:tabGroup") }
+        for (n:Node in tgNodes) {
+            val tabGroup = TabGroup(n)
+            tabGroups.add(tabGroup)
+        }
+
+        val fieldSetList = nodeList.filter { it.nodeName.equals("cpt:fieldSet") }
+        if (fieldSetList.size == 1) {
+            val n = fieldSetList.get(0)
+            fieldSet = FieldSet(n)
+        }
+    }
+
+}

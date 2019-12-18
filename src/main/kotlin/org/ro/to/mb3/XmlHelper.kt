@@ -1,4 +1,4 @@
-package org.ro.org.ro.to.mb3
+package org.ro.to.mb3
 
 import org.w3c.dom.Node
 import org.w3c.dom.asList

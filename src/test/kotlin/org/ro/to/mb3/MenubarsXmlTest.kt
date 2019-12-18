@@ -17,12 +17,10 @@ class MenubarsXmlTest {
         val p = DOMParser()
         val doc = p.parseFromString(xmlStr, "application/xml")
 
-        console.log("[LayoutTest.testParseXmlMenubars]")
+        //then
         assertNotNull(doc)
 
         val menuBars = Menubars(doc)
-        console.log("[testParseXmlMenubars]")
-        console.log(menuBars)
         assertNotNull(menuBars.primary)
         assertNotNull(menuBars.secondary)
         assertNotNull(menuBars.tertiary)

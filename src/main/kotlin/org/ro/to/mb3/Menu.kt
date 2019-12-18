@@ -1,6 +1,6 @@
 package org.ro.to.mb3
 
-import org.ro.org.ro.to.mb3.XmlHelper
+import org.ro.to.mb3.XmlHelper
 import org.w3c.dom.Node
 
 class Menu(node: Node) {

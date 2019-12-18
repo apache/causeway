@@ -3,14 +3,14 @@ package org.ro.to.mb3
 import org.w3c.dom.Document
 import org.w3c.dom.asList
 
-class Menubars(menuBars: Document) {
+class Menubars(document: Document) {
     var primary: Menu
     var secondary: Menu
     var tertiary: Menu
 
     init {
-        val root = menuBars.firstChild
-        val kids = root!!.childNodes
+        val root = document.firstChild!!
+        val kids = root.childNodes
         val mbNodes = kids.asList()
         val mbList = mbNodes.filter { it.nodeName.startsWith("mb3") }
         primary = Menu(mbList.get(0))
