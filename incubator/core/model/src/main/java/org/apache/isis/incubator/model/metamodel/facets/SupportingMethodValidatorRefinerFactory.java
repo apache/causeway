@@ -64,18 +64,18 @@ implements MetaModelRefiner {
             val type = spec.getCorrespondingClass();
 
 //XXX for debugging ...            
-            if(spec.getSpecId().asString().contains("ProperMemberSupport")) {
-                
-                val sb = new StringBuffer();
-                
-                sb.append("\n### debug " + spec.getSpecId().asString()).append("\n");
-                
-                spec.streamFacetHolders()
-                .flatMap(FacetHolder::streamFacets)
-                .forEach(facet->sb.append("facet: " + facet).append("\n"));
-                
-                System.out.println(sb);
-            }
+//            if(spec.getSpecId().asString().contains("ProperMemberSupport")) {
+//                
+//                val sb = new StringBuffer();
+//                
+//                sb.append("\n### debug " + spec.getSpecId().asString()).append("\n");
+//                
+//                spec.streamFacetHolders()
+//                .flatMap(FacetHolder::streamFacets)
+//                .forEach(facet->sb.append("facet: " + facet).append("\n"));
+//                
+//                System.out.println(sb);
+//            }
 
             // methods known to the meta-model
             val recognizedMethods = spec.streamFacetHolders()

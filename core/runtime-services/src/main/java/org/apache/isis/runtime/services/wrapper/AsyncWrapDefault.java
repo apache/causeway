@@ -207,8 +207,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
                                 "[cannot resolve method name - not implemented]",//wrappedMethod.getName(),
                                 domainObject.getClass());
                 
-                
-
+                e.printStackTrace();
                 
                 exceptionHandler.accept(_Exceptions.unrecoverable(msg, e));
 

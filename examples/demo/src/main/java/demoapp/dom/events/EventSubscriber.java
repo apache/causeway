@@ -63,7 +63,7 @@ public class EventSubscriber {
             return;
         }
 
-        log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
+        log.info(emphasize("DomainEvent: " + ev.getClass().getName()));
         
         // store in event log, by calling the storeEvent(...) Action
         wrapper.async(this)

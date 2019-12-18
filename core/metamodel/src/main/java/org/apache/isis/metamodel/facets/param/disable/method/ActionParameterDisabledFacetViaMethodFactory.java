@@ -90,51 +90,5 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         });
         
     }
-    
-
-    @Override
-    public void processParams(final ProcessParameterContext processParameterContext) {
-
-        //FIXME remove
-        
-//        final Class<?> cls = processParameterContext.getCls();
-//        final Method actionMethod = processParameterContext.getMethod();
-//        final int paramNum = processParameterContext.getParamNum();
-//        final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
-//
-//        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-//        final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
-//
-//        final String hideName = MethodLiteralConstants.DISABLE_PREFIX + paramNum + capitalizedName;
-//
-//        final int numParamTypes = paramTypes.size();
-//
-//        val translationService = getMetaModelContext().getTranslationService();
-//
-//        for(int i=0; i< numParamTypes+1; i++) {
-//            val disableMethod = MethodFinderUtils.findMethod_returningText(
-//                    cls,
-//                    hideName,
-//                    NO_ARG);
-//
-//            if (disableMethod != null) {
-//                processParameterContext.removeMethod(disableMethod);
-//
-//                // sadness: same as in TranslationFactory
-//                final String translationContext = facetHolder.getIdentifier().toFullIdentityString();
-//
-//                final Facet facet = new ActionParameterDisabledFacetViaMethod(disableMethod,
-//                        translationService, translationContext, facetHolder);
-//                super.addFacet(facet);
-//                return;
-//            }
-//
-//            // remove last, and search again
-//            if(!paramTypes.isEmpty()) {
-//                paramTypes.remove(paramTypes.size()-1);
-//            }
-//        }
-
-    }
 
 }

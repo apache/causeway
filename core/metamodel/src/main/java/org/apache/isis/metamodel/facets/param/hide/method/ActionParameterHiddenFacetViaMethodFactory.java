@@ -86,46 +86,6 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
         });
         
     }
-    
 
-    @Override
-    public void processParams(final ProcessParameterContext processParameterContext) {
-
-      //FIXME remove
-        
-//        final Class<?> cls = processParameterContext.getCls();
-//        final Method actionMethod = processParameterContext.getMethod();
-//        final int paramNum = processParameterContext.getParamNum();
-//        final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
-//
-//        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-//        final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
-//
-//        final String hideName = MethodLiteralConstants.HIDE_PREFIX + paramNum + capitalizedName;
-//
-//        final int numParamTypes = paramTypes.size();
-//
-//        for(int i=0; i< numParamTypes+1; i++) {
-//            val hideMethod = MethodFinderUtils.findMethod(
-//                    cls,
-//                    hideName,
-//                    boolean.class,
-//                    NO_ARG);
-//
-//            if (hideMethod != null) {
-//                processParameterContext.removeMethod(hideMethod);
-//
-//                final Facet facet = new ActionParameterHiddenFacetViaMethod(hideMethod, facetHolder);
-//                super.addFacet(facet);
-//                return;
-//            }
-//
-//            // remove last, and search again
-//            if(!paramTypes.isEmpty()) {
-//                paramTypes.remove(paramTypes.size()-1);
-//            }
-//        }
-//
-    }
 
 }

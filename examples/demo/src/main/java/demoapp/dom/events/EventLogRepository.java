@@ -23,11 +23,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.services.repository.RepositoryService;
 
 @Repository
 @Named("demoapp.eventLogRepository")
