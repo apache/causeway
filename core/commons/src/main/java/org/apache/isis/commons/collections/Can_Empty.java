@@ -88,6 +88,11 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
+    public int indexOf(T element) {
+        return -1;
+    }
+    
+    @Override
     public String toString() {
         return "Can[]";
     }

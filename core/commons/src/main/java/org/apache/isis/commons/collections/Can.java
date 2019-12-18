@@ -403,6 +403,27 @@ public interface Can<T> extends Iterable<T> {
      */
     Can<T> remove(int index);
     
+    // -- SEARCH
+    
+    /**
+     * Returns the index of the first occurrence of the specified element
+     * in this list, or -1 if this list does not contain the element.
+     * More formally, returns the lowest index <tt>i</tt> such that
+     * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>,
+     * or -1 if there is no such index.
+     *
+     * @param element element to search for
+     * @return the index of the first occurrence of the specified element in
+     *         this list, or -1 if this list does not contain the element
+     * @throws ClassCastException if the type of the specified element
+     *         is incompatible with this list
+     *         (<a href="Collection.html#optional-restrictions">optional</a>)
+     * @throws NullPointerException if the specified element is null and this
+     *         list does not permit null elements
+     *         (<a href="Collection.html#optional-restrictions">optional</a>)
+     */
+    int indexOf(T element);
+    
     // -- EQUALITY
     
     /**

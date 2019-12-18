@@ -101,6 +101,11 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
+    public int indexOf(@NonNull T element) {
+        return this.elements.indexOf(element);
+    }
+    
+    @Override
     public String toString() {
         val literal = stream()
                 .map(s->""+s)

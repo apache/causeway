@@ -92,6 +92,11 @@ final class Can_Singleton<T> implements Can<T> {
     }
     
     @Override
+    public int indexOf(@NonNull T element) {
+        return this.element.equals(element) ? 0 : -1;
+    }
+    
+    @Override
     public String toString() {
         return "Can["+element+"]";
     }
