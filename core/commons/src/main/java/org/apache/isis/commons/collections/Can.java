@@ -21,6 +21,7 @@ package org.apache.isis.commons.collections;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -72,6 +73,19 @@ public interface Can<T> extends Iterable<T> {
      * @return optionally this Can's element with index {@code elementIndex} 
      */
     Optional<T> get(int elementIndex);
+    
+    /**
+     * Shortcut to {@code get(elementIndex).orElseThrow(...)}
+     * @param elementIndex
+     * @return this Can's element with index {@code elementIndex}
+     * @throws NoSuchElementException
+     * @see {@link #get(int)} 
+     */
+    default T getOrThrow(final int elementIndex) {
+        return get(elementIndex)
+                .orElseThrow(()->new NoSuchElementException(
+                        "no element with elementIndex = " + elementIndex));
+    }
 
     /**
      * @return Stream of elements this Can contains
@@ -442,10 +456,5 @@ public interface Can<T> extends Iterable<T> {
                 Collectors.toList(), 
                 Can::ofCollection);
     }
-
-
-
-   
-
 
 }
