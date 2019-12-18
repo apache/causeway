@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -290,7 +291,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // -- getObjectAction
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(
+            final ActionType type, 
+            final String id, 
+            final Can<ObjectSpecification> parameters) {
+        
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         final Stream<ObjectAction> actions =
                 streamObjectActions(type, Contributed.INCLUDED);
@@ -318,7 +323,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private static ObjectAction firstAction(
             final Stream<ObjectAction> candidateActions,
             final String actionName,
-            final List<ObjectSpecification> parameters) {
+            final Can<ObjectSpecification> parameters) {
 
         return candidateActions
                 .filter(action->actionName == null || actionName.equals(action.getId()))
@@ -328,14 +333,18 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private static  boolean isMatchingSignature(
-            final List<ObjectSpecification> a,
-            final List<ObjectActionParameter> b) {
+            final Can<ObjectSpecification> a,
+            final Can<ObjectActionParameter> b) {
 
         if(a.size() != b.size()) {
             return false;
         }
         for (int j = 0; j < a.size(); j++) {
-            if (!a.get(j).isOfType(b.get(j).getSpecification())) {
+            
+            val elementA = a.get(j).get(); 
+            val elementB = b.get(j).get();
+            
+            if (!elementA.isOfType(elementB.getSpecification())) {
                 return false;
             }
         }

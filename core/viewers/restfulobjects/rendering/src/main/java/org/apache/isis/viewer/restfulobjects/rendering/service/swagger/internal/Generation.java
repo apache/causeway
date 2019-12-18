@@ -441,7 +441,7 @@ class Generation {
         final String serviceId = serviceIdFor(serviceSpec);
         final String actionId = serviceAction.getId();
 
-        final List<ObjectActionParameter> parameters = serviceAction.getParameters();
+        val parameters = serviceAction.getParameters();
         final Path path = new Path();
         swagger.path(String.format("/services/%s/actions/%s/invoke", serviceId, actionId), path);
 
@@ -550,7 +550,7 @@ class Generation {
         final String objectType = objectTypeFor(objectSpec);
         final String actionId = objectAction.getId();
 
-        final List<ObjectActionParameter> parameters = objectAction.getParameters();
+        val parameters = objectAction.getParameters();
         final Path path = new Path();
         swagger.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", objectType, actionId), path);
 

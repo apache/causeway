@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import java.util.List;
-
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -44,6 +42,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCo
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty2;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
+
+import lombok.val;
 
 class DomainResourceHelper {
 
@@ -215,11 +215,9 @@ class DomainResourceHelper {
             final JsonRepresentation arguments,
             final ActionResultReprRenderer.SelfLink selfLink) {
 
-        final ManagedObject objectAdapter = this.objectAdapter;
-
-        final ObjectActionArgHelper argHelper = new ObjectActionArgHelper(resourceContext, objectAdapter, action);
-
-        final List<ManagedObject> argAdapters = argHelper.parseAndValidateArguments(arguments);
+        val objectAdapter = this.objectAdapter;
+        val argHelper = new ObjectActionArgHelper(resourceContext, objectAdapter, action);
+        val argAdapters = argHelper.parseAndValidateArguments(arguments);
 
         if(resourceContext.isValidateOnly()) {
             // nothing more to do.
@@ -229,9 +227,8 @@ class DomainResourceHelper {
 
         // invoke
         final ManagedObject mixedInAdapter = null; // action will automatically fill in if a mixin
-        final ManagedObject[] argAdapterArr = argAdapters.toArray(new ManagedObject[argAdapters.size()]);
         final ManagedObject returnedAdapter = action.execute(
-                objectAdapter,  mixedInAdapter, argAdapterArr,
+                objectAdapter,  mixedInAdapter, argAdapters,
                 InteractionInitiatedBy.USER);
 
         final ObjectAndActionInvocation objectAndActionInvocation =

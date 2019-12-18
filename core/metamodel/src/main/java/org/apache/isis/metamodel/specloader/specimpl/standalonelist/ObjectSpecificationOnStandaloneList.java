@@ -19,8 +19,7 @@
 
 package org.apache.isis.metamodel.specloader.specimpl.standalonelist;
 
-import java.util.List;
-
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -134,7 +133,11 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
      * Review: is it necessary to override for this subclass?
      */
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(
+            final ActionType type, 
+            final String id, 
+            final Can<ObjectSpecification> parameters) {
+        
         return null;
     }
 

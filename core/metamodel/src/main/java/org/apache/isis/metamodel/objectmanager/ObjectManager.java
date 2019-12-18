@@ -84,10 +84,9 @@ public interface ObjectManager {
         getObjectRefresher().refreshObject(managedObject);
     }
     
-    @Nullable
     public default ManagedObject adapt(@Nullable Object pojo) {
         if(pojo==null) {
-            return null; // don't propagate null into ManagedObject, null has no type 
+            return ManagedObject.empty(); 
         }
         return ManagedObject.of(this::loadSpecification, pojo);
     }

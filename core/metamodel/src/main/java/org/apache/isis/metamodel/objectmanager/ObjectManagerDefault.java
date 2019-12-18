@@ -22,12 +22,12 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
@@ -35,7 +35,6 @@ import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.metamodel.objectmanager.refresh.ObjectRefresher;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -48,7 +47,6 @@ import lombok.val;
 @Order(OrderPrecedence.HIGH)
 @Primary
 @Qualifier("DEFAULT")
-@Log4j2
 public class ObjectManagerDefault implements ObjectManager {
     
     @Inject @Getter(onMethod = @__(@Override)) private MetaModelContext metaModelContext;

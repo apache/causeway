@@ -20,7 +20,6 @@ package org.apache.isis.metamodel.services.metamodel;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 
@@ -59,6 +58,8 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.metamodel.specloader.specimpl.MixedInMember;
+
+import lombok.val;
 
 @XmlRootElement(name = "domain-member")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -180,7 +181,7 @@ public class DomainMemberDefault implements DomainMember {
         case COLLECTION:
             return "";
         default:
-            final List<ObjectActionParameter> parameters = this.action.getParameters();
+            val parameters = this.action.getParameters();
             final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterChoicesFacet facet = param.getFacet(ActionParameterChoicesFacet.class);
@@ -199,7 +200,7 @@ public class DomainMemberDefault implements DomainMember {
         } else if(memberType == MemberType.COLLECTION) {
             return "";
         } else {
-            final List<ObjectActionParameter> parameters = this.action.getParameters();
+            val parameters = this.action.getParameters();
             final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterAutoCompleteFacet facet = param.getFacet(ActionParameterAutoCompleteFacet.class);
@@ -216,7 +217,7 @@ public class DomainMemberDefault implements DomainMember {
         } else if(memberType == MemberType.COLLECTION) {
             return "";
         } else {
-            final List<ObjectActionParameter> parameters = this.action.getParameters();
+            val parameters = this.action.getParameters();
             final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterDefaultsFacet facet = param.getFacet(ActionParameterDefaultsFacet.class);

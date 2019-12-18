@@ -36,8 +36,8 @@ import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 
 import lombok.val;
@@ -123,9 +123,9 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     @Override
     protected JsonRepresentation mutatorArgs(final MutatorSpec mutatorSpec) {
         final JsonRepresentation argMap = JsonRepresentation.newMap();
-        final List<ObjectActionParameter> parameters = objectMember.getParameters();
+        val parameters = objectMember.getParameters();
         for (int i = 0; i < objectMember.getParameterCount(); i++) {
-            argMap.mapPut(parameters.get(i).getId() + ".value", argValueFor(i));
+            argMap.mapPut(parameters.getOrThrow(i).getId() + ".value", argValueFor(i));
         }
         return argMap;
     }
@@ -144,7 +144,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         if(gsoc2013) {
             final List<Object> parameters = _Lists.newArrayList();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {
-                final ObjectActionParameter param = objectMember.getParameters().get(i);
+                final ObjectActionParameter param = objectMember.getParameters().getOrThrow(i);
                 final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
                 parameters.add(paramDetails);
             }
@@ -152,7 +152,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         } else {
             final Map<String,Object> parameters = _Maps.newLinkedHashMap();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {
-                final ObjectActionParameter param = objectMember.getParameters().get(i);
+                final ObjectActionParameter param = objectMember.getParameters().getOrThrow(i);
                 final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
                 parameters.put(param.getId(), paramDetails);
             }
@@ -181,8 +181,9 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     private Object choicesFor(
             final ObjectActionParameter param,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ManagedObject[] choiceAdapters = param.getChoices(objectAdapter, null, interactionInitiatedBy);
-        if (choiceAdapters == null || choiceAdapters.length == 0) {
+        
+        val choiceAdapters = param.getChoices(objectAdapter, null, interactionInitiatedBy);
+        if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
         }
         final List<Object> list = _Lists.newArrayList();

@@ -75,7 +75,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(
             ManagedObject targetObject,
-            ManagedObject[] args,
+            Can<ManagedObject> args,
             int position,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -90,7 +90,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from, based on the input search argument.
      */
-    ManagedObject[] getAutoComplete(
+    Can<ManagedObject> getAutoComplete(
             ManagedObject adapter,
             Can<ManagedObject> pendingArgs,
             String searchArg,
@@ -109,7 +109,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from.
      */
-    ManagedObject[] getChoices(
+    Can<ManagedObject> getChoices(
             ManagedObject adapter,
             Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);

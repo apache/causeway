@@ -24,11 +24,19 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
@@ -45,14 +53,7 @@ import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidsDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
@@ -60,7 +61,6 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
     @Inject private CommandContext commandContext;
@@ -70,7 +70,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     public CommandDto asCommandDto(
             final List<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
-            final ManagedObject[] argAdapters) {
+            final Can<ManagedObject> argAdapters) {
 
         final CommandDto dto = asCommandDto(targetAdapters);
 
@@ -130,7 +130,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     public void addActionArgs(
             final ObjectAction objectAction,
             final ActionDto actionDto,
-            final ManagedObject[] argAdapters) {
+            final Can<ManagedObject> argAdapters) {
         
         final String actionId = CommandUtil.memberIdentifierFor(objectAction);
         final ObjectSpecification onType = objectAction.getOnType();
@@ -139,12 +139,12 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         actionDto.setLogicalMemberIdentifier(objectType + "#" + localId);
         actionDto.setMemberIdentifier(actionId);
 
-        List<ObjectActionParameter> actionParameters = objectAction.getParameters();
+        val actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
-            final ObjectActionParameter actionParameter = actionParameters.get(paramNum);
+            final ObjectActionParameter actionParameter = actionParameters.getOrThrow(paramNum);
             final String parameterName = actionParameter.getName();
             final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
-            final ManagedObject argAdapter = argAdapters[paramNum];
+            final ManagedObject argAdapter = argAdapters.getOrThrow(paramNum);
             final Object arg = argAdapter != null? argAdapter.getPojo(): null;
             final ParamsDto parameters = CommandDtoUtils.parametersFor(actionDto);
             final List<ParamDto> parameterList = parameters.getParameter();

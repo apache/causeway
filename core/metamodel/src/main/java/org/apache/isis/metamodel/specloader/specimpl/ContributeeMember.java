@@ -37,7 +37,7 @@ public interface ContributeeMember extends ObjectMember {
     /**
      * Which parameter of the original contributed action was contributed to (zero-based).
      */
-    int getContributeeParamPosition();
+    int getContributeeParamIndex();
 
     ObjectSpecification getServiceContributedBy();
 

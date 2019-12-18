@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.postprocessors.param;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -138,7 +137,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         objectActions.forEach(objectAction -> {
 
             // ... for each action parameter
-            final List<ObjectActionParameter> parameters = objectAction.getParameters();
+            val parameters = objectAction.getParameters();
 
             for (final ObjectActionParameter parameter : parameters) {
 
@@ -193,15 +192,10 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             .filter(ObjectAction.Predicates.associatedWith(collection))
             .forEach(action->{
 
-                final List<ObjectActionParameter> parameters = action.getParameters();
+                val parameters = action.getParameters();
 
-                final List<ObjectActionParameter> compatibleCollectionParams =
-                        Collections.unmodifiableList(
-                                _Lists.filter(parameters, whetherCollectionParamOfType));
-
-                final List<ObjectActionParameter> compatibleScalarParams = 
-                        Collections.unmodifiableList(
-                                _Lists.filter(parameters, whetherScalarParamOfType));
+                val compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
+                val compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
 
                 // for collection parameters, install an defaults facet (if there isn't one already)
                 // this will cause the UI to render the collection with toggleboxes
@@ -409,11 +403,11 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         // this loop within the outer loop (for every param) is really weird,
         // but arises from porting the old facet factory
         final ObjectAction objectAction = parameter.getAction();
-        final List<ObjectSpecification> parameterSpecs = objectAction.getParameterTypes();
+        val parameterSpecs = objectAction.getParameterTypes();
         final DefaultedFacet[] parameterTypeDefaultedFacets = new DefaultedFacet[parameterSpecs.size()];
         boolean hasAtLeastOneDefault = false;
         for (int i = 0; i < parameterSpecs.size(); i++) {
-            final ObjectSpecification parameterSpec = parameterSpecs.get(i);
+            final ObjectSpecification parameterSpec = parameterSpecs.getOrThrow(i);
             parameterTypeDefaultedFacets[i] = parameterSpec.getFacet(DefaultedFacet.class);
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }

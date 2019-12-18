@@ -19,6 +19,7 @@
 package org.apache.isis.metamodel.services.homepage;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -39,7 +40,7 @@ public final class HomePageAction {
     public Object getHomePagePojo() {
 
         final ManagedObject mixedInAdapter = null;
-        final ManagedObject[] parameters = {};
+        final Can<ManagedObject> parameters = Can.empty();
 
         final ManagedObject resultAdapter = objectAction.executeWithRuleChecking(
                 objectAdapter, mixedInAdapter, parameters,

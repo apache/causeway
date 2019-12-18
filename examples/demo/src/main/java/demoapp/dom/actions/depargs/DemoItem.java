@@ -36,7 +36,7 @@ import lombok.Setter;
 @Named("depargs.DemoItem")
 @NoArgsConstructor 
 @AllArgsConstructor(staticName="of")
-@EqualsAndHashCode
+@EqualsAndHashCode // required for the Dependent Arguments demo to work properly
 public class DemoItem {
 
     public String title() {

@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
@@ -152,7 +153,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String name, final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(
+            final ActionType type, 
+            final String name, 
+            final Can<ObjectSpecification> parameters) {
+        
         if (action != null && action.getId().equals(name)) {
             return action;
         }

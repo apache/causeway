@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -139,7 +140,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
                     @Override
                     public ManagedObject exec() {
                         return mixinAction.executeInternal(
-                                mixinAdapter, mixedInAdapter, new ManagedObject[0], interactionInitiatedBy);
+                                mixinAdapter, mixedInAdapter, Can.empty(), interactionInitiatedBy);
                     }
                 }
                 );

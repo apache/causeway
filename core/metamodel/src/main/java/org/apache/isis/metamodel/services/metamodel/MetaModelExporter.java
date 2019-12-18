@@ -326,7 +326,7 @@ class MetaModelExporter {
 
         addFacets(oa, actionType.getFacets(), config);
 
-        final List<ObjectActionParameter> parameters = oa.getParameters();
+        val parameters = oa.getParameters();
         final List<Param> params = actionType.getParams().getParam();
         for (final ObjectActionParameter parameter : parameters) {
             params.add(asXsdType(parameter, domainClassByObjectSpec, config));

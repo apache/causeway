@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
@@ -241,12 +242,14 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     private static String actionArgumentsFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
         final StringBuilder buf = new StringBuilder();
-        final List<ObjectActionParameter> parameters = objectAndActionInvocation.getAction().getParameters();
-        final List<ManagedObject> argAdapters = objectAndActionInvocation.getArgAdapters();
+        val parameters = objectAndActionInvocation.getAction().getParameters();
+        val argAdapters = objectAndActionInvocation.getArgAdapters();
         if(parameters.size() == argAdapters.size()) {
             for (int i = 0; i < parameters.size(); i++) {
-                final ObjectActionParameter param = parameters.get(i);
-                final ManagedObject argAdapter = argAdapters.get(i);
+                
+                val paramIndex = i;
+                val param = parameters.getOrThrow(paramIndex);
+                val argAdapter = argAdapters.getOrThrow(paramIndex);
 
                 if(buf.length() > 0) {
                     buf.append(",");

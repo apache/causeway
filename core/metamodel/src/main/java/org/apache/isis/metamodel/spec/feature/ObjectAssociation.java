@@ -29,9 +29,11 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.WhereValueFacet;
@@ -89,7 +91,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * Returns a list of possible references/values for this field, which the
      * user can choose from.
      */
-    public ManagedObject[] getChoices(
+    public Can<ManagedObject> getChoices(
             ManagedObject object,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -103,7 +105,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * Returns a list of possible references/values for this field, which the
      * user can choose from, based on the provided search argument.
      */
-    public ManagedObject[] getAutoComplete(
+    public Can<ManagedObject> getAutoComplete(
             ManagedObject object,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);

@@ -705,7 +705,25 @@ public interface ManagedObject {
         return adapter.getSpecification().getBeanSort().isCollection();
     }
 
+    static class EmptyUtil {
+        private final static ManagedObject EMPTY = new ManagedObject() {
 
+            @Override
+            public ObjectSpecification getSpecification() {
+                throw _Exceptions.unsupportedOperation();
+            }
+
+            @Override
+            public Object getPojo() {
+                return null;
+            }
+            
+        };
+    }
+    
+    static ManagedObject empty() {
+        return EmptyUtil.EMPTY;
+    }
 
 
 }

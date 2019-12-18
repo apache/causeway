@@ -18,11 +18,11 @@
  */
 package org.apache.isis.metamodel.specloader.specimpl;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -39,11 +39,13 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 
+import lombok.val;
+
 public class ObjectActionContributee extends ObjectActionDefault implements ContributeeMember {
 
     private final Object servicePojo;
     private final ObjectActionDefault serviceAction;
-    private final int contributeeParam;
+    private final int contributeeParamIndex;
     private final ObjectSpecification contributeeType;
 
     /**
@@ -65,7 +67,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         this.servicePojo = servicePojo;
         this.serviceAction = serviceAction;
         this.contributeeType = contributeeType;
-        this.contributeeParam = contributeeParam;
+        this.contributeeParamIndex = contributeeParam;
 
         // copy over facets from contributed to own.
         FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
@@ -87,41 +89,33 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         return serviceAction.getParameterCount() - 1;
     }
 
-    public int getContributeeParam() {
-        return contributeeParam;
-    }
-
     @Override
     public boolean isContributedBy(final ObjectAction serviceAction) {
         return serviceAction == this.serviceAction;
     }
 
     @Override
-    public int getContributeeParamPosition() {
-        return contributeeParam;
+    public int getContributeeParamIndex() {
+        return contributeeParamIndex;
     }
 
     @Override
-    protected synchronized List<ObjectActionParameter> determineParameters() {
-        if (parameters != null) {
-            // because possible race condition (caller isn't synchronized)
-            return parameters;
-        }
+    protected synchronized Can<ObjectActionParameter> determineParameters() {
 
-        final List<ObjectActionParameter> serviceParameters = serviceAction.getParameters();
+        val serviceParameters = serviceAction.getParameters();
         final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters(); //side effects?
 
         final List<ObjectActionParameter> contributeeParameters = _Lists.newArrayList();
         int contributeeParamNum = 0;
 
         for (int serviceParamNum = 0; serviceParamNum < serviceParameters.size(); serviceParamNum++ ) {
-            if(serviceParamNum == contributeeParam) {
+            if(serviceParamNum == contributeeParamIndex) {
                 // skip so is omitted from the Contributed action
                 continue;
             }
 
             final ObjectActionParameterAbstract serviceParameter =
-                    (ObjectActionParameterAbstract) serviceParameters.get(serviceParamNum);
+                    (ObjectActionParameterAbstract) serviceParameters.getOrThrow(serviceParamNum);
 
             final ObjectActionParameterContributee contributedParam =
                     serviceParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
@@ -134,7 +128,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
 
                             contributeeParamNum++;
         }
-        return contributeeParameters;
+        return Can.ofCollection(contributeeParameters);
     }
 
     @Override
@@ -144,7 +138,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
             Where where) {
         final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(getServiceAdapter(),
                 interactionInitiatedBy, where);
-        ic.putContributee(this.contributeeParam, contributee);
+        ic.putContributee(this.contributeeParamIndex, contributee);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
 
@@ -154,69 +148,77 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
         final UsabilityContext<?> ic = serviceAction.createUsableInteractionContext(getServiceAdapter(),
                 interactionInitiatedBy, where);
-        ic.putContributee(this.contributeeParam, contributee);
+        ic.putContributee(this.contributeeParamIndex, contributee);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
     @Override
-    public ManagedObject[] getDefaults(final ManagedObject target) {
-        final ManagedObject[] contributorDefaults = serviceAction.getDefaults(getServiceAdapter());
-        return removeElementFromArray(contributorDefaults, contributeeParam, new ManagedObject[]{});
+    public Can<ManagedObject> getDefaults(final ManagedObject target) {
+        val contributorDefaults = serviceAction.getDefaults(getServiceAdapter());
+        return contributorDefaults.remove(contributeeParamIndex);
     }
 
     @Override
-    public ManagedObject[][] getChoices(
+    public Can<Can<ManagedObject>> getChoices(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ManagedObject[][] serviceChoices = serviceAction.getChoices(getServiceAdapter(),
-                interactionInitiatedBy);
-        return removeElementFromArray(serviceChoices, contributeeParam, new ManagedObject[][]{});
+        val serviceChoices = serviceAction.getChoices(getServiceAdapter(), interactionInitiatedBy);
+        return serviceChoices.remove(contributeeParamIndex);
     }
 
     @Override
     public Consent isProposedArgumentSetValid(
             final ManagedObject contributee,
-            final ManagedObject[] proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ManagedObject[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
-        return serviceAction.isProposedArgumentSetValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
+        
+        val serviceArguments = argsPlusContributee(contributee, proposedArguments);
+        return serviceAction
+                .isProposedArgumentSetValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
     }
 
     @Override
     public Consent isEachIndividualArgumentValid(
             final ManagedObject contributee,
-            final ManagedObject[] proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ManagedObject[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
-        return serviceAction.isEachIndividualArgumentValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
+        
+        val serviceArguments = argsPlusContributee(contributee, proposedArguments);
+        return serviceAction
+                .isEachIndividualArgumentValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
     }
 
     @Override
     public Consent isArgumentSetValid(
             final ManagedObject contributee,
-            final ManagedObject[] proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ManagedObject[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
-        return serviceAction.isArgumentSetValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
+        
+        val serviceArguments = argsPlusContributee(contributee, proposedArguments);
+        return serviceAction
+                .isArgumentSetValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
     }
 
     @Override
     public ManagedObject execute(
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setupCommand(targetAdapter, argumentAdapters);
 
-        final ManagedObject[] serviceArguments = argsPlusContributee(targetAdapter, argumentAdapters);
+        val serviceArguments = argsPlusContributee(targetAdapter, argumentAdapters);
         return serviceAction.executeInternal(
                 getServiceAdapter(), mixedInAdapter, serviceArguments, interactionInitiatedBy);
     }
 
 
-    private ManagedObject[] argsPlusContributee(final ManagedObject contributee, final ManagedObject[] arguments) {
-        return addElementToArray(arguments, contributeeParam, contributee, new ManagedObject[]{});
+    private Can<ManagedObject> argsPlusContributee(
+            final ManagedObject contributee, 
+            final Can<ManagedObject> arguments) {
+        
+        return arguments.add(contributeeParamIndex, contributee);
     }
 
     // //////////////////////////////////////
@@ -240,17 +242,17 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
 
     // //////////////////////////////////////
 
-    static <T> T[] addElementToArray(T[] array, final int n, final T element, final T[] type) {
-        List<T> list = _Lists.newArrayList(Arrays.asList(array));
-        list.add(n, element);
-        return list.toArray(type);
-    }
-
-    static <T> T[] removeElementFromArray(T[] array, int n, T[] t) {
-        List<T> list = _Lists.newArrayList(Arrays.asList(array));
-        list.remove(n);
-        return list.toArray(t);
-    }
+//    static <T> T[] addElementToArray(T[] array, final int n, final T element, final T[] type) {
+//        List<T> list = _Lists.newArrayList(Arrays.asList(array));
+//        list.add(n, element);
+//        return list.toArray(type);
+//    }
+//
+//    static <T> T[] removeElementFromArray(T[] array, int n, T[] t) {
+//        List<T> list = _Lists.newArrayList(Arrays.asList(array));
+//        list.remove(n);
+//        return list.toArray(t);
+//    }
 
     public ManagedObject getServiceAdapter() {
         return getObjectManager().adapt(servicePojo);

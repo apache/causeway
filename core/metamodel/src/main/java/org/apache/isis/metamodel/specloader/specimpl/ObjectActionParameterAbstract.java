@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.Can;
@@ -148,27 +147,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public String getId() {
-        final NamedFacet facet = getFacet(NamedFacet.class);
-        if (facet != null && facet.value() != null) {
-            return StringExtensions.asCamelLowerFirst(facet.value());
-        }
-        final String name = getSpecification().getSingularName();
-        final List<ObjectActionParameter> parameters = this.getAction().getParameters(new Predicate<ObjectActionParameter>() {
-
-            @Override
-            public boolean test(final ObjectActionParameter t) {
-                return equalsShortIdentifier(t.getSpecification(), getSpecification());
-            }
-
-            protected boolean equalsShortIdentifier(final ObjectSpecification spec1, final ObjectSpecification spec2) {
-                return spec1.getShortIdentifier().toLowerCase().equals(spec2.getShortIdentifier().toLowerCase());
-            }
-        });
-        if (parameters.size() == 1) {
-            return StringExtensions.asCamelLowerFirst(name);
-        }
-        final int indexOf = parameters.indexOf(this);
-        return StringExtensions.asCamelLowerFirst(name + (indexOf + 1));
+        return StringExtensions.asCamelLowerFirst(getName());
     }
 
     @Override
@@ -177,23 +156,20 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         if (facet != null && facet.value() != null) {
             return facet.value();
         }
-        final String name = getSpecification().getSingularName();
-        final List<ObjectActionParameter> parameters = getAction().getParameters(new Predicate<ObjectActionParameter>() {
-
-            @Override
-            public boolean test(final ObjectActionParameter t) {
-                return equalsShortIdentifier(t.getSpecification(), getSpecification());
-            }
-
-            protected boolean equalsShortIdentifier(final ObjectSpecification spec1, final ObjectSpecification spec2) {
-                return spec1.getShortIdentifier().toLowerCase().equals(spec2.getShortIdentifier().toLowerCase());
-            }
-        });
-        if (parameters.size() == 1) {
-            return name;
+        val singularName = getSpecification().getSingularName();
+        val parameters = getAction().getParameters(this::equalsShortIdentifier);
+        if (parameters.isCardinalityOne()) {
+            return singularName;
         }
         final int indexOf = parameters.indexOf(this);
-        return name + " " + (indexOf + 1);
+        return singularName + " " + (indexOf + 1);
+    }
+    
+    private boolean equalsShortIdentifier(final ObjectActionParameter objParam) {
+        val spec1 = objParam.getSpecification(); 
+        val spec2 = getSpecification();
+        return spec1.getShortIdentifier().toLowerCase()
+                .equals(spec2.getShortIdentifier().toLowerCase());
     }
 
     @Override
@@ -229,7 +205,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     }
 
     @Override
-    public ManagedObject[] getAutoComplete(
+    public Can<ManagedObject> getAutoComplete(
             final ManagedObject adapter,
             final Can<ManagedObject> pendingArgs,
             final String searchArg,
@@ -246,7 +222,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
                 adapters.add(getObjectManager().adapt(choice));
             }
         }
-        return adapters.toArray(new ManagedObject[0]);
+        return Can.ofCollection(adapters);
     }
 
     @Override
@@ -266,7 +242,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     }
 
     @Override
-    public ManagedObject[] getChoices(
+    public Can<ManagedObject> getChoices(
             final ManagedObject adapter,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -277,7 +253,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         return findChoices(target, args, interactionInitiatedBy);
     }
 
-    private ManagedObject[] findChoices(
+    private Can<ManagedObject> findChoices(
             final ManagedObject target,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -293,7 +269,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
                 adapters.add(adapter);
             }
         }
-        return adapters.toArray(new ManagedObject[adapters.size()]);
+        return Can.ofCollection(adapters);
     }
 
     // -- Defaults
@@ -445,7 +421,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
             final ManagedObject objectAdapter,
-            final ManagedObject[] proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -472,10 +448,9 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             }
         }
 
-        final ManagedObject[] argumentAdapters = arguments(proposedValueAdapter);
+        val argumentAdapters = arguments(proposedValueAdapter);
         final ValidityContext<?> ic = createProposedArgumentInteractionContext(
-                objectAdapter, argumentAdapters, getNumber(), interactionInitiatedBy
-                );
+                objectAdapter, argumentAdapters, getNumber(), interactionInitiatedBy);
 
         final InteractionResultSet buf = new InteractionResultSet();
         InteractionUtils.isValidResultSet(this, ic, buf);
@@ -492,11 +467,14 @@ implements ObjectActionParameter, FacetHolder.Delegating {
      * to do this in two passes, one to build up the argument set as a single
      * unit, and then validate each in turn.
      */
-    private ManagedObject[] arguments(final ManagedObject proposedValue) {
+    private Can<ManagedObject> arguments(final ManagedObject proposedValue) {
         final int parameterCount = getAction().getParameterCount();
         final ManagedObject[] arguments = new ManagedObject[parameterCount];
+        for(int i=0; i< parameterCount; ++i) {
+            arguments[i] = ManagedObject.empty();
+        }
         arguments[getNumber()] = proposedValue;
-        return arguments;
+        return Can.ofArray(arguments);
     }
 
 

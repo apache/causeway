@@ -41,6 +41,8 @@ import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
@@ -142,7 +144,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return delegate(method, args);
         }
 
-        final ManagedObject targetAdapter = adapterForPojo(getDelegate());
+        final ManagedObject targetAdapter = getObjectManager().adapt(getDelegate());
 
         if (isTitleMethod(method)) {
             return handleTitleMethod(targetAdapter);
@@ -437,7 +439,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             checkUsability(targetAdapter, property);
         });
         
-        val argumentAdapter = adapterForPojo(singleArg);
+        val argumentAdapter = getObjectManager().adapt(singleArg);
         
         resolveIfRequired(targetAdapter);
 
@@ -539,7 +541,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         });
         
         resolveIfRequired(targetAdapter);
-        val argumentAdapter = adapterForPojo(singleArg);
+        val argumentAdapter = getObjectManager().adapt(singleArg);
         
         runValidationTask(()->{
             val interactionResult = otma.isValidToAdd(targetAdapter, argumentAdapter,
@@ -575,7 +577,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         });
 
         resolveIfRequired(targetAdapter);
-        val argumentAdapter = adapterForPojo(singleArg);
+        val argumentAdapter = getObjectManager().adapt(singleArg);
 
         runValidationTask(()->{
             val interactionResult = collection.isValidToRemove(targetAdapter, argumentAdapter,
@@ -604,10 +606,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final ManagedObject contributeeAdapter;
         final Object[] contributeeArgs;
         if(contributeeMember != null) {
-            val contributeeParamPosition = contributeeMember.getContributeeParamPosition();
+            val contributeeParamPosition = contributeeMember.getContributeeParamIndex();
             val contributee = args[contributeeParamPosition];
             
-            contributeeAdapter = adapterForPojo(contributee);
+            contributeeAdapter = getObjectManager().adapt(contributee);
             contributeeArgs = _Arrays.removeByIndex(args, contributeeParamPosition); 
         } else {
             contributeeAdapter = null;
@@ -624,7 +626,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 if(contributeeMember instanceof ObjectActionContributee) {
                     val objectActionContributee = (ObjectActionContributee) contributeeMember;
                     val contributeeArgAdapters = asObjectAdaptersUnderlying(contributeeArgs);
-                    checkValidity(contributeeAdapter, objectActionContributee, contributeeArgAdapters);
+                    //TODO remove cast after refactored 
+                    checkValidity(contributeeAdapter, (ObjectAction) objectActionContributee, contributeeArgAdapters);
                 }
                 // nothing to do for contributed properties or collections
                 
@@ -651,26 +654,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private void checkValidity(
             final ManagedObject targetAdapter, 
             final ObjectAction objectAction, 
-            final ManagedObject[] argAdapters) {
+            final Can<ManagedObject> argAdapters) {
         
-        val interactionResult = objectAction.isProposedArgumentSetValid(targetAdapter, argAdapters,
-                getInteractionInitiatedBy()).getInteractionResult();
+        val interactionResult = objectAction
+                .isProposedArgumentSetValid(targetAdapter, argAdapters,getInteractionInitiatedBy())
+                .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
-    private ManagedObject[] asObjectAdaptersUnderlying(final Object[] args) {
-
-        val argAdapters = new ManagedObject[args.length];
-        int i = 0;
-        for (final Object arg : args) {
-            argAdapters[i++] = adapterForPojo(underlying(arg));
-        }
-
+    private Can<ManagedObject> asObjectAdaptersUnderlying(final Object[] args) {
+        val argAdapters = _NullSafe.stream(args)
+        .map(getObjectManager()::adapt)
+        .collect(Can.toCan());
+        
         return argAdapters;
-    }
-
-    private ManagedObject adapterForPojo(final Object pojo) {
-        return pojo != null ? getObjectManager().adapt(pojo) : null;
     }
 
     private Object underlying(final Object arg) {

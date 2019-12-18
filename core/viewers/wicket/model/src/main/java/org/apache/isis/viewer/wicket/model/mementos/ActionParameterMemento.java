@@ -78,10 +78,10 @@ public class ActionParameterMemento implements Serializable {
 
     private static ObjectActionParameter actionParameterFor(
             final ActionMemento actionMemento,
-            final int number,
+            final int paramIndex,
             final SpecificationLoader specificationLoader) {
         final ObjectAction action = actionMemento.getAction(specificationLoader);
-        return action.getParameters().get(number);
+        return action.getParameters().getOrThrow(paramIndex);
     }
 
     /**

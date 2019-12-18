@@ -20,6 +20,7 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -235,10 +236,11 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
     // -- choices & autoComplete
 
     @Override
-    public ManagedObject[] getChoices(
+    public Can<ManagedObject> getChoices(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ManagedObject[0];
+        
+        return Can.empty();
     }
 
     @Override
@@ -253,11 +255,12 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
     }
 
     @Override
-    public ManagedObject[] getAutoComplete(
+    public Can<ManagedObject> getAutoComplete(
             ManagedObject object,
             String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ManagedObject[0];
+        
+        return Can.empty();
     }
 
     @Override

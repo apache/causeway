@@ -33,14 +33,13 @@ import org.apache.isis.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.metamodel.facets.value.biginteger.BigIntegerValueFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 
 import lombok.val;
@@ -213,11 +212,10 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
     }
 
     private Object propertyChoices() {
-        final ManagedObject[] choiceAdapters =
-                objectMember.getChoices(
-                        objectAdapter,
-                        getInteractionInitiatedBy());
-        if (choiceAdapters == null || choiceAdapters.length == 0) {
+        val choiceAdapters = objectMember
+                .getChoices(objectAdapter, getInteractionInitiatedBy());
+        
+        if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
         }
         final List<Object> list = _Lists.newArrayList();

@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.DomainEventHelper;
@@ -141,18 +142,17 @@ implements ActionDomainEventFacet {
         return ((ActionInteractionContext) ic).getObjectAction();
     }
 
-    private static ManagedObject[] argumentAdaptersFrom(
+    private static Can<ManagedObject> argumentAdaptersFrom(
             final InteractionContext<? extends InteractionEvent> ic) {
         
         val contributee = ic.getContributeeWithParamIndex();
 
-        if(contributee!=null) {
-            int paramIndex = contributee.getIndex(); 
+        if(contributee!=null && contributee.getIndex() == 0) {
             ManagedObject adapter = contributee.getValue();
-            return new ManagedObject[]{paramIndex==0 ? adapter : null};
+            return Can.ofSingleton(adapter);    
         }
 
-        return null;
+        return Can.empty();
     }
 
 }

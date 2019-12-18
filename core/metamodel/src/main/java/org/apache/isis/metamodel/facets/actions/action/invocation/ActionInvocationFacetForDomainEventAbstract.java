@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -47,10 +46,12 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.metamodel.MetaModelService.Mode;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.commons.MethodInvocationPreprocessor;
 import org.apache.isis.metamodel.commons.ThrowableExtensions;
@@ -120,7 +121,7 @@ implements ImperativeFacet {
             final ObjectAction owningAction,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ManagedObject executionResult = 
@@ -153,7 +154,7 @@ implements ImperativeFacet {
             final ObjectAction owningAction,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         // similar code in PropertySetterOrClearFacetFDEA
 
@@ -187,18 +188,20 @@ implements ImperativeFacet {
 
             final Object mixinElseRegularPojo = ManagedObject.unwrapPojo(mixinElseRegularAdapter);
 
-            final List<ManagedObject> argumentAdapterList = Arrays.asList(argumentAdapters);
-            final List<Object> argumentPojos = ManagedObject.unwrapPojoListElseEmpty(argumentAdapterList);
+            final List<Object> argumentPojos = argumentAdapters.stream()
+                    .map(ManagedObject::unwrapPojo)
+                    .collect(_Lists.toUnmodifiable());
 
             final String targetMember = targetNameFor(owningAction, mixedInAdapter);
             final String targetClass = CommandUtil.targetClassNameFor(mixinElseRegularAdapter);
 
             final Interaction.ActionInvocation execution =
-                    new Interaction.ActionInvocation(interaction, actionId, mixinElseRegularPojo, argumentPojos, targetMember,
+                    new Interaction.ActionInvocation(
+                            interaction, actionId, mixinElseRegularPojo, argumentPojos, targetMember,
                             targetClass);
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
                     new DomainEventMemberExecutor(
-                            argumentAdapters, targetAdapter, argumentAdapterList, command, owningAction,
+                            argumentAdapters, targetAdapter, argumentAdapters, command, owningAction,
                             mixinElseRegularAdapter, mixedInAdapter, execution);
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
@@ -255,15 +258,12 @@ implements ImperativeFacet {
     }
 
     private Object invokeMethodElseFromCache(
-            final ManagedObject targetAdapter, final ManagedObject[] arguments)
+            final ManagedObject targetAdapter, 
+            final Can<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
-        final Object[] executionParameters = new Object[arguments.length];
-        for (int i = 0; i < arguments.length; i++) {
-            executionParameters[i] = unwrap(arguments[i]);
-        }
-
-        final Object targetPojo = unwrap(targetAdapter);
+        final Object[] executionParameters = ManagedObject.unwrapPojoArray(arguments);
+        final Object targetPojo = ManagedObject.unwrapPojo(targetAdapter);
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
@@ -388,10 +388,6 @@ implements ImperativeFacet {
         }
     }
 
-    private static Object unwrap(final ManagedObject adapter) {
-        return adapter == null ? null : adapter.getPojo();
-    }
-    
     private CommandContext getCommandContext() {
         return serviceRegistry.lookupServiceElseFail(CommandContext.class);
     }
@@ -424,9 +420,9 @@ implements ImperativeFacet {
     private final class DomainEventMemberExecutor 
     implements Interaction.MemberExecutor<Interaction.ActionInvocation> {
         
-        private final ManagedObject[] argumentAdapters;
+        private final Can<ManagedObject> argumentAdapters;
         private final ManagedObject targetAdapter;
-        private final List<ManagedObject> argumentAdapterList;
+        private final Can<ManagedObject> argumentAdapterList;
         private final Command command;
         private final ObjectAction owningAction;
         private final ManagedObject mixinElseRegularAdapter;

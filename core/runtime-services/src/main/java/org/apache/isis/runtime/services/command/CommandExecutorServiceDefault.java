@@ -27,12 +27,12 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -44,6 +44,9 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -68,8 +71,6 @@ import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.OidsDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -161,7 +162,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
                         // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
                         // it will switch the targetAdapter to be the mixedInAdapter transparently
-                        final ManagedObject[] argAdapters = argAdaptersFor(actionDto);
+                        val argAdapters = argAdaptersFor(actionDto);
                         val resultAdapter = objectAction.execute(
                                 targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
@@ -298,15 +299,16 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     }
 
-    private ManagedObject[] argAdaptersFor(final ActionDto actionDto) {
+    private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
         
         val paramDtos = paramDtosFrom(actionDto);
         
-        return paramDtos
+        val argStream = paramDtos
                 .stream()
                 .map(CommonDtoUtils::getValue)
-                .map(this::adapterFor)
-                .collect(_Arrays.toArray(ManagedObject.class, paramDtos.size()));
+                .map(this::adapterFor);
+                
+        return Can.ofStream(argStream);
     }
 
     private static List<ParamDto> paramDtosFrom(final ActionDto actionDto) {

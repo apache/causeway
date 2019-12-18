@@ -19,6 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.action.invocation;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -39,7 +40,7 @@ public interface ActionInvocationFacet extends Facet {
             ObjectAction owningAction,
             ManagedObject targetAdapter,
             ManagedObject mixedInAdapter,  // null for regular or contributed (not mixin) actions
-            ManagedObject[] argumentAdapters,
+            Can<ManagedObject> argumentAdapters,
             InteractionInitiatedBy interactionInitiatedBy);
     
     ObjectSpecification getReturnType();

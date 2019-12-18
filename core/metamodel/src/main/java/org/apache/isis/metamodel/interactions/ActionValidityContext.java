@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -28,38 +29,35 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
 
+import lombok.Getter;
+
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionInvocationEvent}.
  */
-public class ActionValidityContext extends ValidityContext<ActionInvocationEvent> implements ActionInteractionContext {
+public class ActionValidityContext
+extends ValidityContext<ActionInvocationEvent> 
+implements ActionInteractionContext {
 
-    private final ObjectAction objectAction;
-    private final ManagedObject[] args;
+    @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
+    @Getter private final Can<ManagedObject> args;
 
     public ActionValidityContext(
             final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final ManagedObject[] args,
+            final Can<ManagedObject> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         super(InteractionContextType.ACTION_INVOKE, targetAdapter, id, interactionInitiatedBy);
         this.objectAction = objectAction;
         this.args = args;
     }
 
     @Override
-    public ObjectAction getObjectAction() {
-        return objectAction;
-    }
-
-    public ManagedObject[] getArgs() {
-        return args;
-    }
-
-    @Override
     public ActionInvocationEvent createInteractionEvent() {
-        return new ActionInvocationEvent(unwrapPojo(getTarget()), getIdentifier(), ManagedObject.unwrapPojoArray(getArgs()));
+        return new ActionInvocationEvent(
+                unwrapPojo(getTarget()), getIdentifier(), ManagedObject.unwrapPojoArray(getArgs()));
     }
 
 }

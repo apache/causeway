@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -32,6 +33,8 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+
+import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for parsing arguments to be invoked by an
@@ -52,21 +55,21 @@ public class ObjectActionArgHelper {
         this.action = action;
     }
 
-    public List<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
+    public Can<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 
         final List<ManagedObject> argAdapters = _Lists.newArrayList();
-        final List<ObjectActionParameter> parameters = action.getParameters();
+        val parameters = action.getParameters();
         boolean valid = true;
         for (int i = 0; i < argList.size(); i++) {
             final JsonRepresentation argRepr = argList.get(i);
-            final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
+            final ObjectSpecification paramSpec = parameters.getOrThrow(i).getSpecification();
             try {
                 final ManagedObject argAdapter = new JsonParserHelper(resourceContext, paramSpec).objectAdapterFor(argRepr);
                 argAdapters.add(argAdapter);
 
                 // validate individual arg
-                final ObjectActionParameter parameter = parameters.get(i);
+                final ObjectActionParameter parameter = parameters.getOrThrow(i);
                 final Object argPojo = argAdapter!=null?argAdapter.getPojo():null;
                 final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, InteractionInitiatedBy.USER);
                 if (reasonNotValid != null) {
@@ -80,8 +83,9 @@ public class ObjectActionArgHelper {
         }
 
         // validate entire argument set
-        final ManagedObject[] argArray = argAdapters.toArray(new ManagedObject[0]);
-        final Consent consent = action.isArgumentSetValid(objectAdapter, argArray, InteractionInitiatedBy.USER);
+        val args = Can.ofCollection(argAdapters);
+        final Consent consent = action.isArgumentSetValid(
+                objectAdapter, args, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());
             valid = false;
@@ -94,7 +98,7 @@ public class ObjectActionArgHelper {
                     "Validation failed, see body for details");
         }
 
-        return argAdapters;
+        return args;
     }
 
     private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {
@@ -127,7 +131,7 @@ public class ObjectActionArgHelper {
 
         // ensure that an argument value has been provided for all non-optional
         // parameters
-        final List<ObjectActionParameter> parameters = action.getParameters();
+        val parameters = action.getParameters();
         for (final ObjectActionParameter param : parameters) {
             final String paramId = param.getId();
             final JsonRepresentation argRepr = arguments.getRepresentation(paramId);

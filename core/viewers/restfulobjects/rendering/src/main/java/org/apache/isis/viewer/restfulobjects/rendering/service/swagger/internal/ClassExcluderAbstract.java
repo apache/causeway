@@ -18,12 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
+
+import lombok.val;
 
 public abstract class ClassExcluderAbstract implements ClassExcluder {
 
@@ -53,7 +54,7 @@ public abstract class ClassExcluderAbstract implements ClassExcluder {
             return true;
         }
 
-        final List<ObjectSpecification> parameterTypes = objectAction.getParameterTypes();
+        val parameterTypes = objectAction.getParameterTypes();
         for (ObjectSpecification parameterType : parameterTypes) {
             if(exclude(parameterType)) {
                 return true;

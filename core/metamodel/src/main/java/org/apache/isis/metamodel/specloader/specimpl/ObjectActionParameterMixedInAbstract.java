@@ -43,7 +43,7 @@ implements ObjectActionParameterMixedIn {
     }
 
     @Override
-    public ManagedObject[] getAutoComplete(
+    public Can<ManagedObject> getAutoComplete(
             final ManagedObject mixedInAdapter,
             final Can<ManagedObject> pendingArgs,
             final String searchArg,
@@ -68,7 +68,7 @@ implements ObjectActionParameterMixedIn {
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
 

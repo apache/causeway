@@ -22,11 +22,13 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.wicket.request.IRequestHandler;
@@ -48,8 +50,8 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -187,14 +189,12 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
         val adapter = getTargetAdapter();
-        final ObjectAction objectAction = getAction();
-        final PageParameters pageParameters = createPageParameters(
-                adapter, objectAction);
+        val objectAction = getAction();
+        val pageParameters = createPageParameters(adapter, objectAction);
 
         // capture argument values
-        final ManagedObject[] argumentsAsArray = getArgumentsAsArray();
-        for(val argumentAdapter: argumentsAsArray) {
-            final String encodedArg = encodeArg(argumentAdapter);
+        for(val argumentAdapter: getArgumentsAsImmutable()) {
+            val encodedArg = encodeArg(argumentAdapter);
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
         }
 
@@ -213,8 +213,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         final ObjectAction objectAction = getAction();
 
         final StringBuilder buf = new StringBuilder();
-        final ManagedObject[] argumentsAsArray = getArgumentsAsArray();
-        for(val argumentAdapter: argumentsAsArray) {
+        for(val argumentAdapter: getArgumentsAsImmutable()) {
             if(buf.length() > 0) {
                 buf.append(",");
             }
@@ -318,16 +317,16 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         }
     }
 
-    private void setArgumentsIfPossible(
-            final PageParameters pageParameters) {
+    private void setArgumentsIfPossible(final PageParameters pageParameters) {
+        
         final List<String> args = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
 
-        final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
-        final List<ObjectSpecification> parameterTypes = action.getParameterTypes();
+        val action = actionMemento.getAction(getSpecificationLoader());
+        val parameterTypes = action.getParameterTypes();
 
         for (int paramNum = 0; paramNum < args.size(); paramNum++) {
             final String encoded = args.get(paramNum);
-            setArgument(paramNum, parameterTypes.get(paramNum), encoded);
+            setArgument(paramNum, parameterTypes.getOrThrow(paramNum), encoded);
         }
     }
 
@@ -346,8 +345,8 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
             return false;
         }
 
-        final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
-        final List<ObjectSpecification> parameterTypes = action.getParameterTypes();
+        val action = actionMemento.getAction(getSpecificationLoader());
+        val parameterTypes = action.getParameterTypes();
         final int parameterCount = parameterTypes.size();
 
         final Map.Entry<Integer, String> mapEntry = parse(paramContext);
@@ -358,7 +357,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         }
 
         final String encoded = mapEntry.getValue();
-        setArgument(paramNum, parameterTypes.get(paramNum), encoded);
+        setArgument(paramNum, parameterTypes.getOrThrow(paramNum), encoded);
 
         return true;
     }
@@ -403,7 +402,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     private void setArgument(int paramNum, ManagedObject argumentAdapter) {
         
         final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
-        final ObjectActionParameter actionParam = action.getParameters().get(paramNum);
+        final ObjectActionParameter actionParam = action.getParameters().getOrThrow(paramNum);
         final ActionParameterMemento apm = new ActionParameterMemento(actionParam);
         final ActionArgumentModel actionArgumentModel = getArgumentModel(apm);
         actionArgumentModel.setObject(argumentAdapter);
@@ -451,7 +450,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     private ManagedObject executeAction() {
 
         val targetAdapter = getTargetAdapter();
-        final ManagedObject[] arguments = getArgumentsAsArray();
+        val arguments = getArgumentsAsImmutable();
         final ObjectAction action = getAction();
 
         // if this action is a mixin, then it will fill in the details automatically.
@@ -510,7 +509,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     public String getReasonInvalidIfAny() {
         val targetAdapter = getTargetAdapter();
-        final ManagedObject[] proposedArguments = getArgumentsAsArray();
+        val proposedArguments = getArgumentsAsImmutable();
         final ObjectAction objectAction = getAction();
         final Consent validity = objectAction
                 .isProposedArgumentSetValid(targetAdapter, proposedArguments, InteractionInitiatedBy.USER);
@@ -522,7 +521,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
     }
 
-    public ManagedObject[] getArgumentsAsArray() {
+    public Can<ManagedObject> getArgumentsAsImmutable() {
         if(this.arguments.size() < getAction().getParameterCount()) {
             primeArgumentModels();
         }
@@ -533,7 +532,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
             final ActionArgumentModel actionArgumentModel = this.arguments.get(i);
             arguments[i] = actionArgumentModel.getObject();
         }
-        return arguments;
+        return Can.ofArray(arguments);
     }
 
     @Override
@@ -636,22 +635,24 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     public List<ActionParameterMemento> primeArgumentModels() {
         final ObjectAction objectAction = getAction();
 
-        final List<ObjectActionParameter> parameters = objectAction.getParameters();
-        final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
-        for (final ActionParameterMemento apm : mementos) {
-            getArgumentModel(apm);
+        val parameters = objectAction.getParameters();
+        val actionParameterMementos = buildParameterMementos(parameters);
+        for (val actionParameterMemento : actionParameterMementos) {
+            getArgumentModel(actionParameterMemento);
         }
 
-        return mementos;
+        return actionParameterMementos;
     }
 
 
-    private static List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
-        final List<ActionParameterMemento> parameterMementoList =
-                _Lists.map(parameters, ActionParameterMemento::new);
+    private static List<ActionParameterMemento> buildParameterMementos(
+            final Can<ObjectActionParameter> parameters) {
+
         // we copy into a new array list otherwise we get lazy evaluation =
         // reference to a non-serializable object
-        return _Lists.newArrayList(parameterMementoList);
+        return parameters.stream()
+                .map(ActionParameterMemento::new)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 

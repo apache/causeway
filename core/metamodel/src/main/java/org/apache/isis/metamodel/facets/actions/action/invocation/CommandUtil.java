@@ -19,9 +19,8 @@
 
 package org.apache.isis.metamodel.facets.actions.action.invocation;
 
-import java.util.List;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -64,15 +63,15 @@ public class CommandUtil {
     
     public static String argDescriptionFor(
             final ObjectAction owningAction,
-            final ManagedObject[] arguments) {
+            final Can<ManagedObject> arguments) {
         
         val argsBuf = new StringBuilder();
-        List<ObjectActionParameter> parameters = owningAction.getParameters();
-        if(parameters.size() == arguments.length) {
+        val parameters = owningAction.getParameters();
+        if(parameters.size() == arguments.size()) {
             // should be the case
             int i=0;
             for (ObjectActionParameter param : parameters) {
-                CommandUtil.appendParamArg(argsBuf, param, arguments[i++]);
+                CommandUtil.appendParamArg(argsBuf, param, arguments.getOrThrow(i++));
             }
         }
         return argsBuf.toString();

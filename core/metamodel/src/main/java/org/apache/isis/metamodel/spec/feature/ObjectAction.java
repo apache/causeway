@@ -35,12 +35,13 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
 import org.apache.isis.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
@@ -108,7 +109,7 @@ public interface ObjectAction extends ObjectMember {
     ManagedObject executeWithRuleChecking(
             final ManagedObject target,
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] parameters,
+            final Can<ManagedObject> parameters,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) throws AuthorizationException;
 
@@ -123,7 +124,7 @@ public interface ObjectAction extends ObjectMember {
     ManagedObject execute(
             ManagedObject targetAdapter,
             ManagedObject mixedInAdapter,
-            ManagedObject[] parameters,
+            Can<ManagedObject> parameters,
             final InteractionInitiatedBy interactionInitiatedBy);
 
 
@@ -143,17 +144,17 @@ public interface ObjectAction extends ObjectMember {
      */
     Consent isProposedArgumentSetValid(
             ManagedObject object,
-            ManagedObject[] proposedArguments,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            Can<ManagedObject> proposedArguments,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isEachIndividualArgumentValid(
             ManagedObject objectAdapter,
-            ManagedObject[] proposedArguments,
+            Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isArgumentSetValid(
             ManagedObject objectAdapter,
-            ManagedObject[] proposedArguments,
+            Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
 
@@ -173,20 +174,19 @@ public interface ObjectAction extends ObjectMember {
      *
      * @return
      */
-    List<ObjectActionParameter> getParameters();
+    Can<ObjectActionParameter> getParameters();
 
     /**
      * Returns the {@link ObjectSpecification type} of each of the {@link #getParameters() parameters}.
      */
-    List<ObjectSpecification> getParameterTypes();
+    Can<ObjectSpecification> getParameterTypes();
 
     /**
      * Returns set of parameter information matching the supplied filter.
      *
      * @return
      */
-    List<ObjectActionParameter> getParameters(
-            Predicate<ObjectActionParameter> predicate);
+    Can<ObjectActionParameter> getParameters(Predicate<ObjectActionParameter> predicate);
 
     /**
      * Returns the parameter with provided id.
@@ -215,13 +215,13 @@ public interface ObjectAction extends ObjectMember {
     /**
      * Returns the defaults references/values to be used for the action.
      */
-    ManagedObject[] getDefaults(ManagedObject target);
+    Can<ManagedObject> getDefaults(ManagedObject target);
 
     /**
      * Returns a list of possible references/values for each parameter, which
      * the user can choose from.
      */
-    ManagedObject[][] getChoices(
+    Can<Can<ManagedObject>> getChoices(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy);
 

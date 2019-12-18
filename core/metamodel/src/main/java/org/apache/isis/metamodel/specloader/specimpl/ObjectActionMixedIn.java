@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.Consent;
@@ -44,6 +45,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
+import lombok.val;
 
 public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
 
@@ -71,7 +73,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
      */
-    private List<ObjectActionParameter> parameters;
+    private Can<ObjectActionParameter> parameters;
 
     private final Identifier identifier;
 
@@ -134,22 +136,22 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    protected synchronized List<ObjectActionParameter> determineParameters() {
+    protected synchronized Can<ObjectActionParameter> determineParameters() {
         if (parameters != null) {
             // because possible race condition (caller isn't synchronized)
             return parameters;
         }
-        final List<ObjectActionParameter> mixinActionParameters = mixinAction.getParameters();
+        val mixinActionParameters = mixinAction.getParameters();
         final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
 
         final List<ObjectActionParameter> mixedInParameters = _Lists.newArrayList();
 
-        for(int paramNum = 0; paramNum < mixinActionParameters.size(); paramNum++) {
+        for(int paramIndex = 0; paramIndex < mixinActionParameters.size(); paramIndex++) {
 
-            final ObjectActionParameterAbstract mixinParameter =
-                    (ObjectActionParameterAbstract) mixinActionParameters.get(paramNum);
+            val mixinParameter =
+                    (ObjectActionParameterAbstract) mixinActionParameters.getOrThrow(paramIndex);
 
-            final TypedHolder paramPeer = paramPeers.get(paramNum);
+            final TypedHolder paramPeer = paramPeers.get(paramIndex);
             getSpecificationLoader().loadSpecification(paramPeer.getType());
 
             final ObjectActionParameterMixedIn mixedInParameter =
@@ -158,7 +160,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
                             : new OneToManyActionParameterMixedIn(mixinParameter, this);
                     mixedInParameters.add(mixedInParameter);
         }
-        return mixedInParameters;
+        return Can.ofCollection(mixedInParameters);
     }
 
     @Override
@@ -187,13 +189,13 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    public ManagedObject[] getDefaults(final ManagedObject mixedInAdapter) {
+    public Can<ManagedObject> getDefaults(final ManagedObject mixedInAdapter) {
         final ManagedObject mixinAdapter = mixinAdapterFor(mixedInAdapter);
         return mixinAction.getDefaults(mixinAdapter);
     }
 
     @Override
-    public ManagedObject[][] getChoices(
+    public Can<Can<ManagedObject>> getChoices(
             final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ManagedObject mixinAdapter = mixinAdapterFor(mixedInAdapter);
@@ -207,7 +209,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     @Override
     protected void validateArgumentSet(
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
 
@@ -226,7 +228,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     public ManagedObject execute(
             final ManagedObject target,         // will be the mixedInAdapter
             final ManagedObject mixedInAdapter, // will be passed in as null
-            final ManagedObject[] arguments,
+            final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
 

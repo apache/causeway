@@ -20,10 +20,10 @@
 package org.apache.isis.metamodel.spec.feature;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.spec.ActionType;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
@@ -34,7 +34,7 @@ public interface ObjectActionContainer {
     /**
      * Returns the action of the specified type with the specified signature.
      */
-    ObjectAction getObjectAction(ActionType type, String id, List<ObjectSpecification> parameters);
+    ObjectAction getObjectAction(ActionType type, String id, Can<ObjectSpecification> parameters);
 
     /**
      * Get the action object represented by the specified identity string.

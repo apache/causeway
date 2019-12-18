@@ -23,8 +23,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -217,11 +215,11 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 final OneToOneAssociation property = propertyMemento
                         .getProperty(scalarModel.getSpecificationLoader());
                 ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
-                final ManagedObject[] choices = property.getChoices(
+                final Can<ManagedObject> choices = property.getChoices(
                         parentAdapter,
                         InteractionInitiatedBy.USER);
 
-                return choicesAsList(choices);
+                return choices.toList();
             }
 
             @Override
@@ -242,12 +240,12 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final ManagedObject parentAdapter =
                         scalarModel.getParentEntityModel().load();
-                final ManagedObject[] choices =
+                final Can<ManagedObject> choices =
                         property.getAutoComplete(
                                 parentAdapter, 
                                 searchArg,
                                 InteractionInitiatedBy.USER);
-                return choicesAsList(choices);
+                return choices.toList();
             }
 
             @Override
@@ -455,12 +453,12 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 //XXX lombok issue, no val
                 ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
 
-                final ManagedObject[] choices =
+                final Can<ManagedObject> choices =
                         actionParameter.getChoices(
                                 parentAdapter, 
                                 pendingArgs,
                                 InteractionInitiatedBy.USER);
-                return choicesAsList(choices);
+                return choices.toList();
             }
 
             @Override
@@ -480,12 +478,12 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
                 ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
-                final ManagedObject[] choices = actionParameter.getAutoComplete(
+                final Can<ManagedObject> choices = actionParameter.getAutoComplete(
                         parentAdapter,
                         pendingArgs,
                         searchArg,
                         InteractionInitiatedBy.USER);
-                return choicesAsList(choices);
+                return choices.toList();
             }
 
             @Override
@@ -598,14 +596,6 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             }
 
         };
-
-        private static List<ManagedObject> choicesAsList(final ManagedObject[] choices) {
-            if (choices != null && choices.length > 0) {
-                return Stream.of(choices)
-                        .collect(Collectors.toList());
-            }
-            return Collections.emptyList();
-        }
 
         public abstract String getName(ScalarModel scalarModel);
 

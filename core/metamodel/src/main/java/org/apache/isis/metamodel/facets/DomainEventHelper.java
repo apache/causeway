@@ -24,7 +24,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
@@ -33,7 +32,9 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -67,7 +68,7 @@ public class DomainEventHelper {
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null, objectAction, identified, 
@@ -82,7 +83,7 @@ public class DomainEventHelper {
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         return postEventForAction(phase, 
@@ -98,7 +99,7 @@ public class DomainEventHelper {
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final ManagedObject[] argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);
@@ -125,19 +126,19 @@ public class DomainEventHelper {
                     // should always be the case...
                     event.setActionSemantics(objectAction.getSemantics());
 
-                    final List<ObjectActionParameter> parameters = objectAction.getParameters();
+                    val parameters = objectAction.getParameters();
 
-                    final List<String> parameterNames = parameters.stream()
+                    val parameterNames = parameters.stream()
                             .map(ObjectActionParameter::getName)
-                            .collect(Collectors.toList());
+                            .collect(_Lists.toUnmodifiable());
 
-                    final List<Class<?>> parameterTypes = parameters.stream()
+                    val parameterTypes = parameters.stream()
                             .map(ObjectActionParameter::getSpecification)
                             .map(ObjectSpecification::getCorrespondingClass)
-                            .collect(Collectors.toList());
+                            .collect(_Lists.toUnmodifiable());
 
-                    event.setParameterNames(Collections.unmodifiableList(parameterNames));
-                    event.setParameterTypes(Collections.unmodifiableList(parameterTypes));
+                    event.setParameterNames(parameterNames);
+                    event.setParameterTypes(parameterTypes);
                 }
             }
 

@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -80,7 +79,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             rv.add(container);
 
             final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
-            actionArgumentModel.setActionArgsHint(Can.ofArray(actionModel.getArgumentsAsArray()));
+            actionArgumentModel.setActionArgsHint(actionModel.getArgumentsAsImmutable());
             final ScalarPanelAbstract2 paramPanel = newParamPanel(container, actionArgumentModel);
             paramPanels.add(paramPanel);
 
@@ -164,7 +163,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
         final int numParams = action.getParameterCount();
 
-        // only updates subsequent parameter panels to this one.
+        // only updates subsequent parameter panels starting from [paramNumberUpdated + 1] 
         for (int i = paramNumberUpdated + 1; i < numParams; i++) {
 
             val paramNumToUpdate = i;

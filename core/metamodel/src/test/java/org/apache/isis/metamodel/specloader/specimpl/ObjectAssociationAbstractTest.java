@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -93,7 +94,7 @@ public class ObjectAssociationAbstractTest {
             }
 
             @Override
-            public ManagedObject[] getChoices(
+            public Can<ManagedObject> getChoices(
                     final ManagedObject object,
                     final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
@@ -133,7 +134,7 @@ public class ObjectAssociationAbstractTest {
             }
 
             @Override
-            public ManagedObject[] getAutoComplete(
+            public Can<ManagedObject> getAutoComplete(
                     ManagedObject object,
                     String searchArg,
                     final InteractionInitiatedBy interactionInitiatedBy) {

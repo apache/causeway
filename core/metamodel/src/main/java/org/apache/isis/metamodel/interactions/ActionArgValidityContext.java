@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -28,22 +29,24 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
 
+import lombok.Getter;
+
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionArgumentEvent}.
  */
 public class ActionArgValidityContext extends ValidityContext<ActionArgumentEvent> implements ProposedHolder, ActionInteractionContext {
 
-    private final ObjectAction objectAction;
-    private final ManagedObject[] args;
-    private final int position;
-    private final ManagedObject proposed;
+    @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
+    @Getter(onMethod = @__(@Override)) private final ManagedObject proposed;
+    @Getter private final Can<ManagedObject> args;
+    @Getter private final int position;
 
     public ActionArgValidityContext(
             final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final ManagedObject[] args,
+            final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, targetAdapter, id, interactionInitiatedBy);
@@ -51,25 +54,7 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
 
         this.args = args;
         this.position = position;
-        this.proposed = args[position];
-    }
-
-    @Override
-    public ObjectAction getObjectAction() {
-        return objectAction;
-    }
-
-    public ManagedObject[] getArgs() {
-        return args;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    @Override
-    public ManagedObject getProposed() {
-        return proposed;
+        this.proposed = args.getOrThrow(position);
     }
 
     @Override

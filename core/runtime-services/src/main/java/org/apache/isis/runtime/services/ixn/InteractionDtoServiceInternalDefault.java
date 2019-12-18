@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -66,7 +67,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
     public ActionInvocationDto asActionInvocationDto(
             final ObjectAction objectAction,
             final ManagedObject targetAdapter,
-            final List<ManagedObject> argumentAdapters) {
+            final Can<ManagedObject> argumentAdapters) {
 
         final Interaction interaction = interactionContext.getInteraction();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
@@ -81,8 +82,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final String currentUser = userService.getUser().getName();
 
         final ActionDto actionDto = new ActionDto();
-        commandDtoServiceInternal.addActionArgs(
-                objectAction, actionDto, argumentAdapters.toArray(new ManagedObject[]{}));
+        commandDtoServiceInternal.addActionArgs(objectAction, actionDto, argumentAdapters);
         final List<ParamDto> parameterDtos = CommandDtoUtils.parametersFor(actionDto).getParameter();
 
         return InteractionDtoUtils.newActionInvocation(

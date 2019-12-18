@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -165,7 +166,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
-                will(returnValue(_Lists.of(objectActionParameter)));
+                will(returnValue(Can.ofCollection(_Lists.of(objectActionParameter))));
             }
         });
 
@@ -184,7 +185,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
-                will(returnValue(_Lists.of(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
+                will(returnValue(Can.ofCollection(_Lists.of(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2))));
             }
         });
 
@@ -203,7 +204,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
-                will(returnValue(_Lists.of(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
+                will(returnValue(Can.ofCollection(_Lists.of(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2))));
             }
         });
 

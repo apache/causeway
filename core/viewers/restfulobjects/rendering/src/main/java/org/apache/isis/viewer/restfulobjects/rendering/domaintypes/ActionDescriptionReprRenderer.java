@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import java.util.List;
-
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -27,9 +25,11 @@ import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
+
+import lombok.val;
 
 public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<ActionDescriptionReprRenderer, ObjectAction> {
 
@@ -53,7 +53,7 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
 
     private void addParameters() {
         final JsonRepresentation parameterList = JsonRepresentation.newArray();
-        final List<ObjectActionParameter> parameters = getObjectFeature().getParameters();
+        val parameters = getObjectFeature().getParameters();
         for (final ObjectActionParameter parameter : parameters) {
             final LinkBuilder linkBuilder = ActionParameterDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, objectSpecification, parameter);
             parameterList.arrayAdd(linkBuilder.build());

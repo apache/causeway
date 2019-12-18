@@ -20,12 +20,10 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
@@ -256,7 +254,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     @Override
-    public ManagedObject[] getChoices(
+    public Can<ManagedObject> getChoices(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -269,10 +267,10 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
                 ownerAdapter,
                 interactionInitiatedBy);
 
-        List<ManagedObject> adapters = _NullSafe.stream(pojoOptions)
-                .map(  getObjectManager()::adapt )
-                .collect(Collectors.toList());
-        return adapters.toArray(new ManagedObject[]{});
+        val adapters = _NullSafe.stream(pojoOptions)
+                .map(getObjectManager()::adapt)
+                .collect(Can.toCan());
+        return adapters;
     }
 
 
@@ -283,21 +281,19 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     @Override
-    public ManagedObject[] getAutoComplete(
+    public Can<ManagedObject> getAutoComplete(
             final ManagedObject ownerAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
-        final Object[] pojoOptions = propertyAutoCompleteFacet.autoComplete(ownerAdapter, searchArg,
-                interactionInitiatedBy);
-        if (pojoOptions != null) {
-            final ManagedObject[] options = new ManagedObject[pojoOptions.length];
-            for (int i = 0; i < options.length; i++) {
-                options[i] = getObjectManager().adapt(pojoOptions[i]);
-            }
-            return options;
-        }
-        return null;
+        final Object[] pojoOptions = propertyAutoCompleteFacet
+                .autoComplete(ownerAdapter, searchArg, interactionInitiatedBy);
+        
+        val adapters = _NullSafe.stream(pojoOptions)
+                .map(getObjectManager()::adapt)
+                .collect(Can.toCan());
+        return adapters;
     }
 
     @Override

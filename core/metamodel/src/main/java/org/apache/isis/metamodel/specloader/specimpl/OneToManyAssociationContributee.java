@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -124,7 +125,9 @@ extends OneToManyAssociationDefault implements ContributeeMember {
             final ManagedObject ownerAdapter, 
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        return serviceAction.execute(getServiceAdapter(), null, new ManagedObject[]{ownerAdapter}, interactionInitiatedBy);
+        val params = Can.ofSingleton(ownerAdapter);
+        
+        return serviceAction.execute(getServiceAdapter(), /*mixin*/null, params, interactionInitiatedBy);
     }
 
     @Override
@@ -143,7 +146,7 @@ extends OneToManyAssociationDefault implements ContributeeMember {
     }
 
     @Override
-    public int getContributeeParamPosition() {
+    public int getContributeeParamIndex() {
         // always 0 for contributed collections
         return 0;
     }
