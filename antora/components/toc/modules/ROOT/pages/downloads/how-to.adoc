@@ -13,7 +13,7 @@ Use for prototyping or production.
 
 == Getting Started
 
-If you just want to get going quickly, we suggest using our xref:starters:simpleapp:about.adoc[Maven archetype].
+If you just want to get going quickly, we suggest using our link:https://github.com/apache/isis-app-simpleapp[Maven archetype].
 
 
 

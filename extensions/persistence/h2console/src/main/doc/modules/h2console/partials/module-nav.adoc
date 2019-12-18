@@ -1,3 +1,0 @@
-* xref:extensions:spring:about.adoc[Spring (extension)]
-
-

@@ -7,8 +7,8 @@
 
 * Starter Apps
 
-** xref:starters:helloworld:about.adoc[HelloWorld]
-** xref:starters:simpleapp:about.adoc[SimpleApp]
+** link:https://github.com/apache/isis-app-helloworld[HelloWorld]
+** link:https://github.com/apache/isis-app-simpleapp[SimpleApp]
 
 * Demos & Tutorials
 

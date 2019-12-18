@@ -255,7 +255,7 @@ In other words these describe how the application chooses to configure the frame
 +
 The classic example here is the JDBC URL.
 
-For example, the xref:starters:simpleapp:about.adoc[SimpleApp archetype]'s `AppManifest` is defined as:
+For example, the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype]'s `AppManifest` is defined as:
 
 [source,java]
 ----

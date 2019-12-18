@@ -201,30 +201,34 @@
 
 	<modules>
 		<module>core/spring</module>
-		<module>persistence/h2console</module>
-		<module>persistence/hsqldbmgr</module>
-		<module>security/secman</module>
-		<module>security/shiro-realm-ldap</module>
-		<module>testing/fixtures</module>
-		<module>testing/specsupport</module>
-		<module>vro/restclient</module>
-		<module>vw/asciidoc</module>
-		<module>vw/exceldownload</module>
-		<module>vw/markdown</module>
-		<module>vw/sse</module>
-
 		<module>lib/base/impl</module>
 <!--
 		<module>lib/excel/fixture</module>
 		<module>lib/excel/integtests</module>
 -->
 		<module>lib/excel/impl</module>
-		<module>lib/fakedata/impl</module>
-		<module>lib/fakedata/fixture</module>
+
+		<module>persistence/h2console/impl</module>
+		<module>persistence/hsqldbmgr/impl</module>
+
+		<module>security/secman</module>
+		<module>security/shiro-realm-ldap</module>
+
+		<module>testing/fakedata/impl</module>
+		<module>testing/fakedata/fixture</module>
 <!--
-		<module>lib/fakedata/integtests</module>
+		<module>testing/fakedata/integtests</module>
 -->
-		<module>lib/unittestsupport/impl</module>
+		<module>testing/fixtures</module>
+		<module>testing/specsupport</module>
+		<module>testing/unittestsupport/impl</module>
+
+		<module>vro/restclient</module>
+		<module>vw/asciidoc</module>
+		<module>vw/exceldownload</module>
+		<module>vw/markdown</module>
+		<module>vw/sse</module>
+
 	</modules>
 
 	<profiles>

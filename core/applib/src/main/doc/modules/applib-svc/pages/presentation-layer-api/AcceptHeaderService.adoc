@@ -19,11 +19,13 @@ The API defined by the service is:
 
 [source,java]
 ----
-include::example$services/acceptheader/AcceptHeaderService.java[tags=refguide]
+public interface AcceptHeaderService {
+    List<MediaType> getAcceptableMediaTypes();  // <1>
+}
 ----
 <1> returns the list of media types found in the HTTP Accept header.
 
-The default implementation is provided by `o.a.i.v.ro.rendering.service.acceptheader.AcceptHeaderServiceForRest`, and is xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`].
+The default implementation is provided by `o.a.i.v.ro.rendering.service.acceptheader.AcceptHeaderServipceForRest`, and is xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`].
 
 [NOTE]
 ====

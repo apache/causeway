@@ -37,7 +37,6 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-// tag::refguide[]
 @Service
 @Named("isisApplib.CommandContext")
 @RequestScoped
@@ -57,4 +56,3 @@ public class CommandContext {
     }
 
 }
-// end::refguide[]

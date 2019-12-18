@@ -22,8 +22,8 @@ include::_attributes.adoc[]
 [discrete]
 == Starter Apps
 
-* xref:starters:helloworld:about.adoc[Hello World]
-* xref:starters:simpleapp:about.adoc[SimpleApp]
+* link:https://github.com/apache/isis-app-helloworld[Hello World]
+* link:https://github.com/apache/isis-app-simpleapp[SimpleApp]
 
 |
 [discrete]

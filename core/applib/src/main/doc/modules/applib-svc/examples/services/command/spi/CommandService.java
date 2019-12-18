@@ -26,8 +26,12 @@ import org.apache.isis.applib.services.command.Command;
 public interface CommandService {
 
     /**
-     * Simply instantiate the appropriate instance of the {@link Command}.  Its members will be populated automatically
-     * by the framework (the {@link Command}'s {@link Command#getTimestamp()}, {@link Command#getUser()} and {@link Command#getUniqueId()}).
+     * Simply instantiate the appropriate instance of the {@link Command}.
+     *
+     * <p>
+     * Its members will be populated automatically by the framework (the {@link Command}'s
+     * {@link Command#getTimestamp()}, {@link Command#getUser()} and {@link Command#getUniqueId()}).
+     * </p>
      */
     Command create();
 

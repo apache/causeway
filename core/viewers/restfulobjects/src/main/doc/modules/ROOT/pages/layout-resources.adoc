@@ -13,7 +13,7 @@ This chapter provides details of these resources, the link ``Rel``s to access th
 
 The xref:refguide:applib-svc:presentation-layer-spi/MenuBarsService.adoc[`MenuBarsService`] provides the `menu.layout.xml` XML document which defines how to group the various domain service actions into menubars, menus and menu sections.
 
-For example, the xref:starters:helloworld:about.adoc[Hello World starter app] has the following layout:
+For example, the link:https://github.com/apache/isis-app-helloworld[Hello World starter app] has the following layout:
 
 [source,xml]
 ----
@@ -135,7 +135,7 @@ Note that because of dynamic icons (the xref:refguide:applib-cm:methods.adoc#ico
 The xref:refguide:applib-svc:presentation-layer-spi/GridService.adoc[`GridService`] provides an XML document which defines the layout of any of domain object.
 Typically this is the contents of the `Xxx.layout.xml` file (where `Xxx` is the domain type).
 
-For example, in the xref:starters:helloworld:about.adoc[Hello World starter app] the `HelloWorld` domain object has a layout defined by `HelloWorld.layout.xml`.
+For example, in the link:https://github.com/apache/isis-app-helloworld[Hello World starter app] the `HelloWorld` domain object has a layout defined by `HelloWorld.layout.xml`.
 
 The representation returned by the domain object resource (section 14.4 of the RO spec v1.0) has been extended to provide a link to this resource:
 

@@ -46,14 +46,14 @@ Add the following dependency to the `webapp` project's `pom.xml`:
 <1> for Isis v1.9.0, use the value shown.
 For Isis v1.8.0, use 3.2.3.
 
-In the xref:starters:simpleapp:about.adoc[SimpleApp archetype] this is defined under the "neo4j" profile so can be activated using `-P neo4j`.
+In the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype] this is defined under the "neo4j" profile so can be activated using `-P neo4j`.
 
 
 == Try it out!
 
 If you want to quickly try out neo4j for yourself:
 
-* run the xref:starters:simpleapp:about.adoc[SimpleApp archetype] (v1.8.0)
+* run the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype] (v1.8.0)
 
 * build the app:
 

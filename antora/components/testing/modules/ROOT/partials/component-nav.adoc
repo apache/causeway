@@ -1,9 +1,9 @@
-// the navs of all modules in this component use this file as their own nav's.
-
 include::testing:ROOT:partial$module-nav.adoc[]
 include::testing:unit-test-support:partial$module-nav.adoc[]
+include::testing:unit-test-support-ext:partial$module-nav.adoc[]
 include::testing:integ-test-support:partial$module-nav.adoc[]
 include::testing:specsupport:partial$module-nav.adoc[]
 include::testing:fixtures:partial$module-nav.adoc[]
+include::testing:fakedata:partial$module-nav.adoc[]
 
 

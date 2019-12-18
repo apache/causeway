@@ -140,11 +140,25 @@ content:
     - url: .
       start_path: extensions/core/spring/src/main/doc # extensions
       branches: HEAD
+
     - url: .
-      start_path: extensions/persistence/h2console/src/main/doc # extensions
+      start_path: extensions/lib/base/impl/src/main/doc # extensions
       branches: HEAD
     - url: .
-      start_path: extensions/persistence/hsqldbmgr/src/main/doc # extensions
+      start_path: extensions/lib/docx/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/lib/excel/impl/src/main/doc # extensions
+      branches: HEAD
+
+    - url: .
+      start_path: extensions/persistence/flywayjdo/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/persistence/h2console/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/persistence/hsqldbmgr/impl/src/main/doc # extensions
       branches: HEAD
 
     - url: .
@@ -168,12 +182,20 @@ content:
     - url: .
       start_path: extensions/security/shiro-realm-ldap/src/main/doc # security
       branches: HEAD
+
+    - url: .
+      start_path: extensions/testing/fakedata/impl/src/main/doc # testing
+      branches: HEAD
     - url: .
       start_path: extensions/testing/fixtures/src/main/doc # testing
       branches: HEAD
     - url: .
       start_path: extensions/testing/specsupport/src/main/doc # testing
       branches: HEAD
+    - url: .
+      start_path: extensions/testing/unittestsupport/impl/src/main/doc # testing
+      branches: HEAD
+
     - url: .
       start_path: extensions/vro/restclient/src/main/doc # vro
       branches: HEAD

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.iactn;
 
+import lombok.Getter;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -44,15 +46,11 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 @RequestScoped
 public class InteractionContext {
 
-    private Interaction interaction;
-
     /**
-     * Returns the currently active {@link Interaction} for this thread.
-     * @return
+     * The currently active {@link Interaction} for this thread.
      */
-    public Interaction getInteraction() {
-        return interaction;
-    }
+    @Getter                                 // <1>
+    private Interaction interaction;
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -60,5 +58,4 @@ public class InteractionContext {
     public void setInteraction(final Interaction interaction) {
         this.interaction = interaction;
     }
-
 }

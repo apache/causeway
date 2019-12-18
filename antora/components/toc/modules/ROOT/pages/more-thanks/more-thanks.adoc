@@ -24,7 +24,7 @@ In addition to the http://www.apache.org/foundation/thanks.html[support given to
 
 
 |image::more-thanks/icons8-logo.png[link="http://icons8.com"]
-|Icons8, for selected icons on this website and in the link:https://github.com/apache/isis/tree/master/example/application/simpleapp/dom/src/main/resources/images[simpleapp] used to generate the xref:starters:simpleapp:about.adoc[simpleapp archetype]
+|Icons8, for selected icons on this website and in the link:https://github.com/apache/isis/tree/master/example/application/simpleapp/dom/src/main/resources/images[simpleapp] used to generate the link:https://github.com/apache/isis-app-simpleapp[simpleapp archetype]
 
 |===
 
