@@ -28,7 +28,7 @@ abstract class BaseAggregator : IAggregator {
         var href: String?
         for (l in links) {
             href = l.href
-            if (href.isNotEmpty() && href.endsWith("layout")) {
+            if (href.isNotEmpty() && href.contains("layout")) {
                 return l
             }
         }

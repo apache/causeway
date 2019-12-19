@@ -5,6 +5,10 @@ import org.ro.to.Link
 
 object Utils {
 
+    fun isXml(response: String): Boolean {
+        return response.startsWith("<") && response.endsWith(">")
+    }
+
     fun enCamel(input: String): String {
         var output = ""
         val words = input.split(" ")

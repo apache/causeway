@@ -22,8 +22,6 @@ object RoView {
             panel: Component) {
 
         val index = tabPanel.findTab(title)
-        console.log("[RV.addTab] $title")
-        console.log(index)
         if (index != null) {
             val tab = tabPanel.getChildComponent(index) as SimplePanel
             removeTab(tab)

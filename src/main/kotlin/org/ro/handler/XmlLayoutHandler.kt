@@ -1,6 +1,6 @@
 package org.ro.handler
 
-import kotlinx.serialization.UnstableDefault
+import org.ro.core.Utils
 import org.ro.layout.Layout
 import org.ro.to.TransferObject
 import org.ro.to.bs3.Grid
@@ -13,7 +13,10 @@ class XmlLayoutHandler : BaseHandler(), IResponseHandler {
         update()
     }
 
-    @UnstableDefault
+    override fun canHandle(response: String): Boolean {
+        return Utils.isXml(response) && !response.contains("svg")
+    }
+
     override fun parse(response: String): TransferObject? {
         val doc = parseXml(response)
         val grid = Grid(doc)
@@ -24,6 +27,5 @@ class XmlLayoutHandler : BaseHandler(), IResponseHandler {
         val p = DOMParser()
         return p.parseFromString(xmlStr, "application/xml")
     }
-
 
 }

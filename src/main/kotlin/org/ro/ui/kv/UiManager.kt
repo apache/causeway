@@ -3,11 +3,13 @@ package org.ro.ui.kv
 import org.ro.core.Session
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.core.aggregator.IAggregator
+import org.ro.core.aggregator.ObjectAggregator
 import org.ro.core.aggregator.UndefinedAggregator
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
+import org.ro.to.TObject
 import org.ro.ui.Point
 import org.ro.ui.RoStatusBar
 import org.w3c.dom.events.KeyboardEvent
@@ -94,6 +96,16 @@ object UiManager {
         val displayable = aggregator.dsp
         val title: String = displayable!!.extractTitle()
         val panel = RoDisplay(displayable as DisplayObject)
+        add(title, panel, aggregator)
+        displayable.isRendered = true
+    }
+
+    fun openObjectView(tObject: TObject) {
+        val displayable = DisplayObject("sample")
+        displayable.addData(tObject)
+        val aggregator = ObjectAggregator("icon clicked in list")
+        val title: String = tObject.title
+        val panel = RoDisplay(displayable)
         add(title, panel, aggregator)
         displayable.isRendered = true
     }

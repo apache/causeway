@@ -14,8 +14,6 @@ class RoTabPanel : TabPanel() {
 
     fun findTab(title: String) : Int? {
         val kids = getChildren()
-        console.log("[RoTabPanel.findTab]")
-        console.log(kids)
         kids.forEachIndexed { index, component ->
             when (component) {
                 is VPanel -> if (component.title == title) {
