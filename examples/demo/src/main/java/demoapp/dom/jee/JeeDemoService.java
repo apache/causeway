@@ -18,15 +18,12 @@
  */
 package demoapp.dom.jee;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
 @Service
 @Named("demoapp.JeeDemoService")
-@Log4j2
 public class JeeDemoService {
 
     public String getMessage() {

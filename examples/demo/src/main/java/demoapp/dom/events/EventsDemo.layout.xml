@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid xsi:schemaLocation="http://isis.apache.org/applib/layout/componenthttp://isis.apache.org/applib/layout/component/component.xsdhttp://isis.apache.org/applib/layout/linkshttp://isis.apache.org/applib/layout/links/links.xsdhttp://isis.apache.org/applib/layout/grid/bootstrap3http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="http://isis.apache.org/applib/layout/component" xmlns:lnk="http://isis.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject/>
+            <cpt:action id="clearHints"/>
+            <cpt:action id="downloadLayoutXml"/>
+            <cpt:action id="openRestApi"/>
+            <cpt:action id="rebuildMetamodel"/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="5">
+        
+         	<cpt:collection defaultView="table" id="allEvents">
+         		<cpt:action id="triggerEvent"/>
+         	</cpt:collection>
+        
+        </bs3:col>
+        <bs3:col span="7" unreferencedCollections="true">
+			<cpt:fieldSet name="Description" id="description" unreferencedProperties="true">
+				<cpt:property labelPosition="NONE" id="description" />
+			</cpt:fieldSet>
+		</bs3:col>
+    </bs3:row>
+
+    
+</bs3:grid>

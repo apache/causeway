@@ -18,8 +18,6 @@
  */
 package demoapp.dom.events;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -27,29 +25,24 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.factory.FactoryService;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.EventLogMenu")
-@DomainObjectLayout(named="Event Demo")
-public class EventLogMenu {
+import lombok.val;
 
-    @Inject private EventLogRepository eventLog;
-    @Inject private EventBusService eventBusService;
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.EventsDemoMenu")
+@DomainObjectLayout(named="Events Demo")
+public class EventsDemoMenu {
 
-    @Action
-    public List<EventLogEntry> listEvents(){
-        return eventLog.listAll();
-    }
-
-    public static class EventTestProgrammaticEvent extends ActionDomainEvent<EventLogMenu>  {}
+    @Inject private FactoryService factoryService;
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
-    public List<EventLogEntry> triggerEvent(){
-        eventBusService.post(new EventTestProgrammaticEvent());
-        return listEvents();
+    public EventsDemo eventsDemo(){
+        val demo = factoryService.instantiate(EventsDemo.class);
+        demo.initDefaults();
+        return demo;
     }
-
+    
+    
 
 }

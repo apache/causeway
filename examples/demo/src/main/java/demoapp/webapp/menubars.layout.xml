@@ -53,28 +53,19 @@
         <mb3:menu>
             <mb3:named>Events</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.EventLogMenu" id="listEvents">
-                    <cpt:named>List Events</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.EventLogMenu" id="triggerEvent">
-                    <cpt:named>Trigger Event</cpt:named>
-                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.EventsDemoMenu" id="eventsDemo" />
             </mb3:section>
         </mb3:menu>
         <mb3:menu>
             <mb3:named>Error Handling</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.ErrorMenu" id="errorHandling">
-                    <cpt:named>Error Handling</cpt:named>
-                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.ErrorMenu" id="errorHandling" />
             </mb3:section>
         </mb3:menu>
 		<mb3:menu>
             <mb3:named>JEE/CDI</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo">
-                    <cpt:named>JEE Inject Demo</cpt:named>
-                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo" />
             </mb3:section>
         </mb3:menu>
         
