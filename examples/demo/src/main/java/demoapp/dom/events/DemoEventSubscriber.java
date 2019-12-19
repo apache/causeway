@@ -27,26 +27,28 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 import static demoapp.utils.DemoUtils.emphasize;
 
 import demoapp.dom.events.EventLogMenu.EventTestProgrammaticEvent;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@DomainService // allows async invocation of the storeEvent(...) Action
 @Service
 @Named("demoapp.eventSubscriber")
 @Qualifier("demo")
 @Log4j2
-public class EventSubscriber {
+public class DemoEventSubscriber {
 
     @Inject private WrapperFactory wrapper;
     @Inject private EventBusService eventBusService;
-    @Inject private EventLogRepository eventLogRepository;
+    @Inject private FactoryService factoryService;
 
     public static class EventSubscriberEvent extends AbstractDomainEvent<Object> {}
 
@@ -65,16 +67,28 @@ public class EventSubscriber {
 
         log.info(emphasize("DomainEvent: " + ev.getClass().getName()));
         
+        val eventLogWriter = factoryService.instantiate(EventLogWriter.class);
+        
         // store in event log, by calling the storeEvent(...) Action
-        wrapper.async(this)
-        .run(EventSubscriber::storeEvent, ev);
+        wrapper.async(eventLogWriter)
+        .run(EventLogWriter::storeEvent, ev);
 
     }
 
+    @DomainObject(
+            nature = Nature.INMEMORY_ENTITY, 
+            objectType = "demoapp.eventLogWriter")
+    public static class EventLogWriter {
+
+        @Inject private EventLogRepository eventLogRepository;
+        
+        @Action // called asynchronously above invocation 
+        public void storeEvent(EventTestProgrammaticEvent ev) {
+            eventLogRepository.add(EventLogEntry.of(ev));
+        }
+        
+    }
     
-    @Action // allows async invocation 
-    public void storeEvent(EventTestProgrammaticEvent ev) {
-        eventLogRepository.add(EventLogEntry.of(ev));
-    }
+    
 
 }
