@@ -16,7 +16,7 @@ class UtilsTest {
         val rel = "urn:org.restfulobjects:rels/invoke;action='runFixtureScript'"
         val type = "application/json;profile='urn:org.restfulobjects:repr-types/object-action'"
         val link = Link(method = Method.POST.operation, href = href, rel = rel, type = type)
-        val arguments = LinkedHashMap<String, String>() //
+//        val arguments = LinkedHashMap<String, String>() //
  //       link.setArgument(arguments)
 
         // when
