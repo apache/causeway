@@ -2,12 +2,13 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
+import org.ro.to.bs3.Col
 import org.ro.ui.uicomp.HBox
 import org.ro.ui.uicomp.UIComponent
 
 @Serializable
 data class ColLayout(val domainObject: DomainObjectLayout? = null,
-                     val action: List<ActionLayout> = emptyList(),  // org.ro.authors
+                     val action: MutableList<ActionLayout> = mutableListOf<ActionLayout>(),  // org.ro.authors
                      val named: String? = "",
                      val describedAs: String? = "",
                      val plural: String? = "",
@@ -23,9 +24,17 @@ data class ColLayout(val domainObject: DomainObjectLayout? = null,
                      val span: Int? = 0,
                      val unreferencedActions: Boolean? = false,
                      val unreferencedCollections: Boolean? = false,
-                     val tabGroup: List<TabGroupLayout> = emptyList(),
-                     val fieldSet: List<FieldSetLayout> = emptyList()
+                     val tabGroup: MutableList<TabGroupLayout> = mutableListOf<TabGroupLayout>(),
+                     val fieldSet: MutableList<FieldSetLayout> = mutableListOf<FieldSetLayout>()
 ) {
+    constructor(col: Col) : this() {
+        col.tabGroups.forEach {
+            tabGroup.add(TabGroupLayout(it))
+        }
+        val fs = col.fieldSet!!
+        fieldSet.add(FieldSetLayout(fs))
+    }
+
     fun build(): HBox {
         val result = HBox("ColLayout")
         var b: UIComponent

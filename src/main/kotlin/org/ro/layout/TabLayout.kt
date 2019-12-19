@@ -1,6 +1,7 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
+import org.ro.to.bs3.Tab
 import org.ro.ui.uicomp.TabNavigator
 import org.ro.ui.uicomp.UIComponent
 import org.ro.ui.uicomp.VBox
@@ -8,7 +9,13 @@ import org.ro.ui.uicomp.VBox
 @Serializable
 data class TabLayout(val cssClass: String? = null,
                      val name: String? = null,
-                     val row: List<RowLayout> = emptyList()) {
+                     val row: MutableList<RowLayout> = mutableListOf<RowLayout>()
+) {
+    constructor(tab: Tab) : this() {
+        tab.rows.forEach {
+            row.add(RowLayout(it))
+        }
+    }
 
     fun build(): UIComponent {
         val result = TabNavigator("TabLayout")

@@ -1,14 +1,21 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
+import org.ro.to.bs3.TabGroup
 import org.ro.ui.uicomp.TabNavigator
 import org.ro.ui.uicomp.UIComponent
 
 @Serializable
 data class TabGroupLayout(val cssClass: String? = "",
                           val metadataError: String? = "",
-                          val tab: List<TabLayout> = emptyList(),
-                          val unreferencedCollections: Boolean? = false) {
+                          val tab: MutableList<TabLayout> = mutableListOf<TabLayout>(),
+                          val unreferencedCollections: Boolean? = false
+) {
+    constructor(tabGroup: TabGroup) : this() {
+        tabGroup.tabs.forEach {
+            tab.add(TabLayout(it))
+        }
+    }
 
     fun build(): UIComponent {
         val result = TabNavigator("TabGroupLayout")

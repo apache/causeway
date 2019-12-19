@@ -2,11 +2,12 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
+import org.ro.to.bs3.Property
 
 @Serializable
 data class PropertyLayout(val named: String? = null,
                           val describedAs: String? = null,
-                          val action: List<ActionLayout> = emptyList(),
+                          val action: MutableList<ActionLayout> = mutableListOf<ActionLayout>(),
                           var metadataError: String? = null,
                           val link: Link? = null,
                           val id: String? = null,
@@ -19,4 +20,11 @@ data class PropertyLayout(val named: String? = null,
                           val renderedAsDayBefore: Boolean? = false,
                           val typicalLength: Int? = null,
                           val unchanging: String? = null
-)
+) {
+    constructor(property: Property) : this() {
+        val act = property.action
+//FIXME        action.add(ActionLayout(act))
+    }
+
+}
+

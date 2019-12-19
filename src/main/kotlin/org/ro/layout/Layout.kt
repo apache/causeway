@@ -3,6 +3,7 @@ package org.ro.layout
 import kotlinx.serialization.Serializable
 import org.ro.to.TransferObject
 import org.ro.to.bs3.Grid
+import org.ro.to.bs3.Row
 import org.ro.ui.uicomp.VBox
 
 /**
@@ -14,12 +15,14 @@ import org.ro.ui.uicomp.VBox
  */
 @Serializable
 data class Layout(val cssClass: String? = null,
-                  val row: List<RowLayout> = emptyList()) : TransferObject {
+                  val row: MutableList<RowLayout> = mutableListOf<RowLayout>()) : TransferObject {
 
     var properties = listOf<PropertyLayout>()
 
     constructor(grid: Grid) : this() {
-      //TODO
+           grid.rows.forEach {
+               row.add(RowLayout(it))
+           }
     }
 
     init {
