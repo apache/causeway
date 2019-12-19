@@ -19,8 +19,8 @@ import org.ro.to.TransferObject
 interface IResponseHandler {
 
     fun handle(logEntry: LogEntry)
-    fun canHandle(jsonStr: String): Boolean
+    fun canHandle(response: String): Boolean
     fun doHandle()
-    fun parse(jsonStr: String): TransferObject?
+    fun parse(response: String): TransferObject?
 }
 

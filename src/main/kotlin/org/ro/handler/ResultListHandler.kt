@@ -15,8 +15,8 @@ class ResultListHandler : BaseHandler() {
     }
 
     @UnstableDefault
-    override fun parse(jsonStr: String): TransferObject? {
-        return Json.parse(ResultList.serializer(), jsonStr)
+    override fun parse(response: String): TransferObject? {
+        return Json.parse(ResultList.serializer(), response)
     }
 
 }

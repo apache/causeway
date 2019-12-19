@@ -12,8 +12,8 @@ class ServiceHandler : BaseHandler(), IResponseHandler {
     }
 
     @UnstableDefault
-    override fun parse(jsonStr: String): TransferObject? {
-        return Json.parse(Service.serializer(), jsonStr)
+    override fun parse(response: String): TransferObject? {
+        return Json.parse(Service.serializer(), response)
     }
 
 }

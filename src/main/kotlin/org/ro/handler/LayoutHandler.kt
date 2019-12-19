@@ -12,8 +12,8 @@ class LayoutHandler : BaseHandler(), IResponseHandler {
     }
 
     @UnstableDefault
-    override fun parse(jsonStr: String): TransferObject? {
-        return Json.parse(Layout.serializer(), jsonStr)
+    override fun parse(response: String): TransferObject? {
+        return Json.parse(Layout.serializer(), response)
     }
 
 }

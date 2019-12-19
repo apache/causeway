@@ -15,8 +15,8 @@ class ResultValueHandler : BaseHandler(), IResponseHandler {
     }
 
     @UnstableDefault
-    override fun parse(jsonStr: String): TransferObject? {
-        return Json.parse(ResultValue.serializer(), jsonStr)
+    override fun parse(response: String): TransferObject? {
+        return Json.parse(ResultValue.serializer(), response)
     }
 
 }

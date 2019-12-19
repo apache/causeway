@@ -4,7 +4,7 @@ import org.ro.core.aggregator.UndefinedAggregator
 
 class DefaultHandler : BaseHandler(), IResponseHandler {
 
-    override fun canHandle(jsonStr: String): Boolean {
+    override fun canHandle(response: String): Boolean {
         return true
     }
 

@@ -12,8 +12,8 @@ class VersionHandler: BaseHandler(), IResponseHandler {
     }
 
     @UnstableDefault
-    override fun parse(jsonStr: String): TransferObject? {
-        return Json.parse(Version.serializer(), jsonStr)
+    override fun parse(response: String): TransferObject? {
+        return Json.parse(Version.serializer(), response)
     }
 
 }

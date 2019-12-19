@@ -17,9 +17,9 @@ abstract class BaseHandler : IResponseHandler {
      */
     override fun handle(logEntry: LogEntry) {
         this.logEntry = logEntry
-        val jsonStr: String? = logEntry.getResponse()
-        if (null !== jsonStr) {
-            if (canHandle(jsonStr)) {
+        val response: String? = logEntry.getResponse()
+        if (null !== response) {
+            if (canHandle(response)) {
                 doHandle()
             } else {
                 successor!!.handle(logEntry)
@@ -32,10 +32,10 @@ abstract class BaseHandler : IResponseHandler {
      * @param jsonObj
      * @return
      */
-    override fun canHandle(jsonStr: String): Boolean {
+    override fun canHandle(response: String): Boolean {
         var answer = false
         try {
-            val obj = parse(jsonStr)
+            val obj = parse(response)
             logEntry.setTransferObject(obj)
             answer = true
         } catch (ex: Exception) {
@@ -56,7 +56,7 @@ abstract class BaseHandler : IResponseHandler {
      * Must be overridden in subclasses
      * @return
      */
-    override fun parse(jsonStr: String): TransferObject? {
+    override fun parse(response: String): TransferObject? {
         throw Exception("Subclass Responsibility")
     }
 
