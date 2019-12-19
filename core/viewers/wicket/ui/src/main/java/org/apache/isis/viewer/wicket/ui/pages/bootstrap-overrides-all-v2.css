@@ -982,6 +982,7 @@ li.select2-results__option {
 
 a.form-control.scalarValueInlinePromptLink {
     text-decoration: none;
+    overflow: hidden;
 }
 
 .booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
