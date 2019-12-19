@@ -48,3 +48,7 @@ div.tabulator-header {
 .text-normal {
     color: black;
 }
+
+.nav-link {
+    padding: 4px 12px !important;
+}
