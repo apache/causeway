@@ -51,7 +51,7 @@
     </div>
     <div class="social-links float-right">
       <a href="https://lists.apache.org/list.html?users@isis.apache.org" class="email"><i class="fa fa-at"></i></a>
-      <a href="https://the-asf.slack.com/archives/CFC42LWBV" class="slack"><i class="fa fa-slack"></i></a>
+      <a href="https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack" class="slack"><i class="fa fa-slack"></i></a>
       <a href="https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87" class="bug"><i class="fa fa-bug"></i></a>
       <a href="https://stackoverflow.com/questions/tagged/isis" class="stackoverflow"><i class="fa fa-stack-overflow"></i></a>
       <a href="https://twitter.com/ApacheIsis" class="twitter"><i class="fa fa-twitter"></i></a>
@@ -103,11 +103,12 @@
             <li><a href="toc/landing-page/quick-start.html">Quick Start</a></li>
             <li><a href="toc/landing-page/guides.html">Guides</a></li>
             <li><a href="toc/landing-page/components.html">Components</a></li>
-            <li><a href="toc/landing-page/extension-catalog.html">Extension Catalog</a></li>
+            <li><a href="toc/landing-page/extensions-catalog.html">Extensions Catalog</a></li>
             <li><a href="toc/landing-page/support.html">Support</a></li>
             <li><a href="toc/landing-page/releases.html">Releases</a></li>
           </ul>
         </li>
+        <li><a href="#contact">Support</a></li>
         <li class="menu-has-children">
           <a href="">ASF</a>
           <ul>
@@ -123,7 +124,6 @@
             <li><a href="https://whimsy.apache.org/board/minutes/Isis.html">PMC Board Minutes</a></li>
           </ul>
         </li>
-        <li><a href="#contact">Support</a></li>
       </ul>
     </nav><!-- #nav-menu-container -->
   </div>
@@ -168,8 +168,8 @@
         </div>
 
         <div class="col-lg-6 content">
-          <h2>Domain Driven Applications, Quickly</h2>
-          <h3>Apache Isis™ is a framework to rapidly develop domain-driven apps, running on top of Spring Boot.</h3>
+          <h2>Domain Driven Apps, with a UI&nbsp;for&nbsp;Free</h2>
+          <h3>Apache Isis™ accelerates the feedback loop with your domain experts with a dynamically rendered web UI.</h3>
 
           <ul>
             <li><i class="ion-android-checkmark-circle"></i>Write your business logic in entities, domain services or view models.</li>
@@ -648,113 +648,39 @@ commented out Johan's, cos he's sice come on board as a committer.
       <div class="row">
         <div class="col-lg-12 text-center text-lg-left">
           <h3 class="cta-title">Quick Start</h3>
-          <p class="cta-text">Start developing your own Apache Isis application using either the minimal <a href="#">helloworld</a> archetype or alternatively with the more structured <a href="#">simpleapp</a> archetype.</p>
+          <p class="cta-text">Start developing your own Apache Isis application from either the minimal <a href="https://github.com/apache/isis-app-helloworld">helloworld</a> starter app or with the more structured <a href="https://github.com/apache/isis-app-simpleapp">simpleapp</a> starter app.</p>
           <div class="row">
             <div class="col-lg-6 text-center text-lg-left">
               <p>
                 <pre>
-                mvn archetype:generate  \
-                -D archetypeGroupId=org.apache.isis.archetype \
-                -D archetypeArtifactId=helloworld-archetype \
-                -D archetypeVersion=2.0.0-M2 \
-                -D groupId=com.mycompany \
-                -D artifactId=myapp \
-                -D version=1.0-SNAPSHOT \
-                -B
-                </pre>
+REPO=isis-app-helloworld
+BRANCH=master
+
+curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
+mv $REPO-$BRANCH $REPO
+cd $REPO
+
+mvn clean install
+mvn spring-boot:run</pre>
               </p>
             </div>
             <div class="col-lg-6 text-center text-lg-left">
               <p>
                 <pre>
-                mvn archetype:generate  \
-                -D archetypeGroupId=org.apache.isis.archetype \
-                -D archetypeArtifactId=simpleapp-archetype \
-                -D archetypeVersion=2.0.0-M2 \
-                -D groupId=com.mycompany \
-                -D artifactId=myapp \
-                -D version=1.0-SNAPSHOT \
-                -B
-                </pre>
+REPO=isis-app-simpleapp
+BRANCH=master
+
+curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
+mv $REPO-$BRANCH $REPO
+cd $REPO
+
+mvn clean install
+mvn -pl webapp spring-boot:run</pre>
               </p>
             </div>
         </div>
       </div>
     </div>
-    </div>
-  </section>
-
-  <!--==========================
-  Committers
-  ============================-->
-  <section id="team" class="wow fadeInUp">
-    <div class="container">
-      <div class="section-header">
-        <h2>Committers</h2>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <p class="cta-text">Apache Isis currently has 14 committers, including:</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-3 col-md-6">
-          <div class="member">
-            <div class="pic"><img src="_/img/home/team/DanHaywood.jfif" height="255px" alt=""></div>
-            <div class="details">
-              <h4>Dan Haywood</h4>
-              <span>Haywood Associates Ltd.</span>
-              <div class="social">
-                <a href="https://github.com/danhaywood"><i class="fa fa-github"></i></a>
-                <a href="https://twitter.com/dkhaywood"><i class="fa fa-twitter"></i></a>
-                <a href="https://www.linkedin.com/in/dkhaywood"><i class="fa fa-linkedin"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="member">
-            <div class="pic"><img src="_/img/home/team/AndiHuber.jpg" height="255px" alt=""></div>
-            <div class="details">
-              <h4>Andi Huber</h4>
-              <span>Java Enthusiast</span>
-              <div class="social">
-                <a href="https://github.com/andi-huber"><i class="fa fa-github"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="member">
-            <div class="pic"><img src="_/img/home/team/JeroenVanDerWal.jfif" height="255px" alt=""></div>
-            <div class="details">
-              <h4>Jeroen van der Wal</h4>
-              <span>Incode Software</span>
-              <div class="social">
-                <a href="https://github.com/jcvanderwal"><i class="fa fa-github"></i></a>
-                <a href="https://www.linkedin.com/in/jcvanderwal/"><i class="fa fa-linkedin"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="member">
-            <div class="pic"><img src="_/img/home/team/JohanDoornenbal.jfif" height="255px" alt=""></div>
-            <div class="details">
-              <h4>Johan Doornenbal</h4>
-              <span>Incode Software</span>
-              <div class="social">
-                <a href="https://github.com/johandoornenbal"><i class="fa fa-github"></i></a>
-                <a href="https://www.linkedin.com/in/johan-doornenbal-3b286210/"><i class="fa fa-linkedin"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -774,17 +700,16 @@ commented out Johan's, cos he's sice come on board as a committer.
           <div class="contact-email">
             <i class="ion-ios-email-outline"></i>
             <h3>Subscribe</h3>
-            <p><a href="mailto:users-subscribe@example.com">users mailing list</a></p>
-            <p><a href="mailto:dev-subscribe@example.com">dev mailing list</a></p>
+            <p><a href="mailto:users-subscribe@example.com">users mailing list</a> <br/>(<a href="https://lists.apache.org/list.html?users@isis.apache.org">archives</a>)</p>
+            <p><a href="mailto:dev-subscribe@example.com">dev mailing list</a> <br/>(<a href="https://lists.apache.org/list.html?dev@isis.apache.org">archives</a>)</p>
           </div>
         </div>
 
         <div class="col-md-4">
           <div class="contact-email">
             <i class="ion-ios-filing-outline"></i>
-            <h3>ML Archives</h3>
-            <p><a href="https://lists.apache.org/list.html?users@isis.apache.org">users mailing list</a></p>
-            <p><a href="https://lists.apache.org/list.html?dev@isis.apache.org">dev mailing list</a></p>
+            <h3>Slack</h3>
+            <p><a href="https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack">Join #apache-isis <br/>(on the ASF slack workspace)</a></p>
           </div>
         </div>
 
@@ -799,6 +724,80 @@ commented out Johan's, cos he's sice come on board as a committer.
 
       </div>
     </div>
+
+    <!--==========================
+    Committers
+    ============================-->
+    <section id="team" class="wow fadeInUp">
+      <div class="container">
+        <div class="section-header">
+          <h2>Committers</h2>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="cta-text">Apache Isis currently has 14 committers, including:</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6">
+            <div class="member">
+              <div class="pic"><img src="_/img/home/team/DanHaywood.jfif" height="255px" alt=""></div>
+              <div class="details">
+                <h4>Dan Haywood</h4>
+                <span>Haywood Associates Ltd.</span>
+                <div class="social">
+                  <a href="https://github.com/danhaywood"><i class="fa fa-github"></i></a>
+                  <a href="https://twitter.com/dkhaywood"><i class="fa fa-twitter"></i></a>
+                  <a href="https://www.linkedin.com/in/dkhaywood"><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="member">
+              <div class="pic"><img src="_/img/home/team/AndiHuber.jpg" height="255px" alt=""></div>
+              <div class="details">
+                <h4>Andi Huber</h4>
+                <span>Java Enthusiast</span>
+                <div class="social">
+                  <a href="https://github.com/andi-huber"><i class="fa fa-github"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="member">
+              <div class="pic"><img src="_/img/home/team/JeroenVanDerWal.jfif" height="255px" alt=""></div>
+              <div class="details">
+                <h4>Jeroen van der Wal</h4>
+                <span>Incode Software</span>
+                <div class="social">
+                  <a href="https://github.com/jcvanderwal"><i class="fa fa-github"></i></a>
+                  <a href="https://www.linkedin.com/in/jcvanderwal/"><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="member">
+              <div class="pic"><img src="_/img/home/team/JohanDoornenbal.jfif" height="255px" alt=""></div>
+              <div class="details">
+                <h4>Johan Doornenbal</h4>
+                <span>Incode Software</span>
+                <div class="social">
+                  <a href="https://github.com/johandoornenbal"><i class="fa fa-github"></i></a>
+                  <a href="https://www.linkedin.com/in/johan-doornenbal-3b286210/"><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <!--
           <div class="container mb-4">

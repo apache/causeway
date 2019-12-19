@@ -3,6 +3,8 @@
 include::_attributes.adoc[]
 
 
+// TODO: v2: this is massively out of date...
+
 The quickest way to start learning about Apache Isis is to run the `helloworld` archetype.
 This will generate a tiny Apache Isis app, consisting of a simple one-class domain model, called `HelloWorldObject`, and a supporting `HelloWorldObjects` domain service.
 Both the business logic and supporting bootstrapping classes are in a single Maven module (in different Java packages).

@@ -40,24 +40,22 @@
 
 * Support
 
+** xref:toc:ROOT:support/slack-channel.adoc[Slack]
+** xref:toc:ROOT:support/mailing-list.adoc[Mailing Lists]
+** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[ASF JIRA]
+
+* Resources
+
 ** xref:toc:devguide:about.adoc[Developers' Guide]
 *** xref:toc:mavendeps:about.adoc[Maven Dependencies]
-*** xref:toc:mixins:about.adoc[Maven Mixins]
-
-** xref:toc:ROOT:mailing-list.adoc#how-to-subscribe[Mailing Lists]
-
-** Other Resources
-*** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[ASF JIRA]
-*** link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
-*** link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
 *** link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+
 
 * Releases
 
 ** xref:toc:ROOT:downloads/how-to.adoc[Downloads]
 ** xref:toc:relnotes:about.adoc[Release Notes]
 ** xref:toc:mignotes:about.adoc[Migration Notes]
-
 
 
 * Internal

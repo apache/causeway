@@ -7,10 +7,48 @@ To get started with a new application, use one of the two git repos on Github th
 * link:https://github.com/apache/isis-app-helloworld[HelloWorld]
 +
 This is a very minimal app, intended just as a starting point to learn what the framework is all about.
++
+[source,bash]
+----
+REPO=isis-app-helloworld
+BRANCH=master
+
+curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
+mv $REPO-$BRANCH $REPO
+cd $REPO
+
+mvn clean install
+mvn spring-boot:run
+----
 
 * link:https://github.com/apache/isis-app-simpleapp[Simple App]
 +
 This app has the same functionality as _HelloWorld_, but is structured so it can be used as a starting point for developing your own applications.
 +
+[source,bash]
+----
+REPO=isis-app-simpleapp
+BRANCH=master
+
+curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
+mv $REPO-$BRANCH $REPO
+cd $REPO
+
+mvn clean install
+mvn -pl webapp spring-boot:run
+----
++
 It also includes some xref:testing:integ-test-support[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:spec-support[BDD (Cucumber)] specs.
 
+In both cases you can bump to newer versions of the framework just by updating the `<version>` of the `<parent>`:
+
+[source,bash]
+.pom.xml
+----
+<parent>
+    <groupId>org.apache.isis.app</groupId>
+    <artifactId>isis-app-starter-parent</artifactId>
+    <version>2.0.0</version>  <!--1-->
+</parent>
+----
+<1> update as required.

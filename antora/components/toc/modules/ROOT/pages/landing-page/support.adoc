@@ -5,25 +5,33 @@ include::_attributes.adoc[]
 This page lists additional resources to assist the developer when building applications with the framework.
 
 
-== Resources
+== Support
 
-* xref:toc:devguide:about.adoc[Developers' Guide]
-** xref:toc:devguide:about.adoc#intellij[IntelliJ] & xref:toc:devguide:about.adoc#eclipse[Eclipse]
-** xref:toc:devguide:contributing.adoc[Pull requests]
+* *xref:toc:ROOT:support/slack-channel.adoc[Slack]*
+* xref:toc:ROOT:support/mailing-list.adoc[Mailing Lists]
+* link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA]
 
+
+_Resources_
+
+
+* *xref:toc:devguide:about.adoc[Developers' Guide]*
 * xref:toc:mavendeps:about.adoc[Maven dependencies]
+* link:https://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+* link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
+* link:https://twitter.com/ApacheIsis[Twitter]
 
-
-== Help
-
-* xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[How to subscribe]
-
-* link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
-_for bug reports & feature requests_
-
+|
+[discrete]
 == Releases
 
 * xref:toc:ROOT:downloads/how-to.adoc[Downloads]
 * xref:toc:relnotes:about.adoc[Release Notes]
 * xref:toc:mignotes:about.adoc[Migration Notes]
+
+_Nightly Builds (not ASF)_
+
+* link:https://github.com/apache-isis-committers/isis-nightly[CI]
+* link:https://repo.incode.cloud/[Maven Repo]
+* link:https://apache-isis-committers.github.io/isis-nightly/toc/about.html[Website preview]
 

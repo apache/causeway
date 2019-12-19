@@ -4,10 +4,12 @@ include::_attributes.adoc[]
 
 This page lists the user and reference guides available for developers to create applications with the framework.
 
+== Guides
 
-* xref:userguide:ROOT:about.adoc[User Guide] (Fundamentals & Beyond)
-* xref:refguide:ROOT:about.adoc[Reference Guide]
-* xref:security:ROOT:about.adoc[Security]
-* xref:testing:ROOT:about.adoc[Testing & Prototyping]
+* *xref:userguide:ROOT:about.adoc[User Guide]*
+* *xref:refguide:ROOT:about.adoc[Reference Guide]*
+* xref:security:ROOT:about.adoc[Security Guide]
+** xref:secman:ROOT:about.adoc[SecMan (extension)]
+* *xref:testing:ROOT:about.adoc[Testing]*
 
 

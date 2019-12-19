@@ -70,8 +70,8 @@ _Persistence_
 [discrete]
 == Support
 
-* *xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[Mailing Lists]*
-* link:https://the-asf.slack.com/archives/CFC42LWBV[Slack]
+* *xref:toc:ROOT:support/slack-channel.adoc[Slack]*
+* xref:toc:ROOT:support/mailing-list.adoc[Mailing Lists]
 * link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA]
 
 
@@ -79,9 +79,9 @@ _Resources_
 
 
 * *xref:toc:devguide:about.adoc[Developers' Guide]*
-* xref:toc:mavendeps:about.adoc[Maven dependencies]
-* link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
+** xref:toc:mavendeps:about.adoc[Maven dependencies]
 * link:https://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+* link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
 * link:https://twitter.com/ApacheIsis[Twitter]
 
 |
