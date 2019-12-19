@@ -111,7 +111,11 @@ object UiManager {
     }
 
     fun getUrl(): String {
-        return session!!.url
+        if (session == null) {
+            return ""
+        } else {
+            return session!!.url
+        }
     }
 
     fun login(url: String, username: String, password: String) {
