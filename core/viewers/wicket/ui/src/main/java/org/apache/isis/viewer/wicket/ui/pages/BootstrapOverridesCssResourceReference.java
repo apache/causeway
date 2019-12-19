@@ -30,6 +30,6 @@ public class BootstrapOverridesCssResourceReference extends CssResourceReference
     private static final long serialVersionUID = 1L;
 
     public BootstrapOverridesCssResourceReference() {
-        super(BootstrapOverridesCssResourceReference.class, "bootstrap-overrides.css");
+        super(BootstrapOverridesCssResourceReference.class, "bootstrap-overrides-all-v2.css");
     }
 }
