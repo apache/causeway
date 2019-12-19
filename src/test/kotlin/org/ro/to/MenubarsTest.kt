@@ -1,15 +1,13 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.handler.ResultListHandler
-import org.ro.snapshots.ai1_16_0.RESTFUL_MENUBARS
 
 @UnstableDefault
 class MenubarsTest {
 
     //@Test
     fun testParse() {
-        val list = ResultListHandler().parse(RESTFUL_MENUBARS.str) as ResultList
+//        val list = ResultListHandler().parse(RESTFUL_MENUBARS.str) as ResultList
         //TODO implements userName: String, roles [], links [], extensions
     }
 }
