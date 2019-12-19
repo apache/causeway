@@ -39,6 +39,14 @@ body {
     left: initial;
 }
 
+.panel-default .panel-heading {
+	padding: 3px 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 3px 15px;
+}
+
 .table .form-control:disabled {
     background-color: transparent;
     border: none;
@@ -518,8 +526,7 @@ span .fontAwesomeIcon {
 
 ul.additionalLinkList,
 div.additionalLinkList {
-    margin-right: -10px;
-    padding-bottom: 10px;
+	line-height: 2.4; /* multiple action buttons, when line-breaking, need some vertical space */
 }
 
 .collections div.additionalLinkList,
@@ -543,7 +550,7 @@ div.additionalLinkList {
 .col .additionalLinksAndSelectorDropDown,
 .entityPropertiesPanel .additionalLinks,
 .entityCollectionsPanel .additionalLinksAndSelectorDropDown {
-    margin-top: -6px;
+    /*margin-top: -0.3em;*/
 }
 
 .collection.panel-body {
@@ -758,7 +765,7 @@ div.referencePanel.scalarNameAndValueComponentType {
 }
 
 .scalarValueWrapper ul.additionalLinkListInline li.additionalLinkItem {
-    padding-bottom: 5px;
+    /*padding-bottom: 5px;*/
 }
 
 .scalarValueWrapper .help-block {
@@ -929,7 +936,7 @@ footer .footer-image {
 
 .entityHeaderPanel .entityActions ul.additionalLinkList li.additionalLinkItem {
     padding-top: 3px;
-    padding-bottom: 7px;
+    /*padding-bottom: 7px;*/
 }
 
 .propertyEditForm .buttons .wicket-ajax-indicator,
@@ -1076,9 +1083,8 @@ h4.iconAndTitle a:focus {
     padding-right: 0px;
 }
 
-/* multiple action buttons, when line-breaking, need some vertical space */
 .list-inline > li.additionalLinkItem {
-    padding-bottom: 5px;
+    padding-left: 0.4em;
 }
 
 ul.sidebar-nav {

@@ -234,7 +234,7 @@
 }
 
 .entityCollectionsPanel .panel-heading .additionalLinkList {
-    margin-right: 10px;
+    /*margin-right: 10px;*/
 }
 
 
@@ -250,9 +250,9 @@
 
 .additionalLinkListInline li > span,
 .additionalLinkListInline li > a{
-    float:left;
-    margin-right:10px;
-    margin-bottom: -5px;
+    float:inherit;
+    margin-right: 0px;
+    margin-bottom: 0px;
 }
 
 .additionalLinkListInline ul.dropdown-menu li > a{
