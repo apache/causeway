@@ -1,6 +1,6 @@
 package org.ro.to.mb3
 
-import org.ro.urls.RESTFUL_MENUBARS
+import org.ro.snapshots.ai1_16_0.RESTFUL_MENUBARS
 import org.w3c.dom.parsing.DOMParser
 import kotlin.test.Test
 import kotlin.test.assertEquals

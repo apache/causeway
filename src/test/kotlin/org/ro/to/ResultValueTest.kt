@@ -4,8 +4,8 @@ import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.core.aggregator.ObjectAggregator
 import org.ro.handler.ResultValueHandler
-import org.ro.urls.ACTIONS_DOWNLOAD_VALUE
-import org.ro.urls.ACTIONS_OPEN_SWAGGER_UI
+import org.ro.snapshots.ai1_16_0.ACTIONS_DOWNLOAD_VALUE
+import org.ro.snapshots.ai1_16_0.ACTIONS_OPEN_SWAGGER_UI
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -2,7 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.ResultListHandler
-import org.ro.urls.RESTFUL_MENUBARS
+import org.ro.snapshots.ai1_16_0.RESTFUL_MENUBARS
 
 @UnstableDefault
 class MenubarsTest {

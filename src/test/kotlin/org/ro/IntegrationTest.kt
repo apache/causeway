@@ -10,7 +10,7 @@ import org.ro.core.event.LogEntry
 import org.ro.handler.ResponseHandler
 import org.ro.to.Method
 import org.ro.ui.kv.UiManager
-import org.ro.urls.Response
+import org.ro.snapshots.ai1_16_0.Response
 import org.w3c.xhr.XMLHttpRequest
 
 // subclasses expect a running backend, here SimpleApp localhost:8080/restful*

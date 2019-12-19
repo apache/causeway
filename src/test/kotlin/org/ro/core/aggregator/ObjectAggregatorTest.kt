@@ -4,7 +4,7 @@ import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.to.ResultObject
 import org.ro.to.ResultType
-import org.ro.urls.ACTION_SO_CREATE
+import org.ro.snapshots.ai1_16_0.ACTION_SO_CREATE
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

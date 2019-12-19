@@ -6,7 +6,7 @@ import org.ro.IntegrationTest
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
 import org.ro.handler.ActionHandler
-import org.ro.urls.ACTIONS_RUN_FIXTURE_SCRIPT
+import org.ro.snapshots.ai1_16_0.ACTIONS_RUN_FIXTURE_SCRIPT
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

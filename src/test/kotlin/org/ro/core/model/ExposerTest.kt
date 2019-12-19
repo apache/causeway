@@ -4,8 +4,8 @@ import kotlinx.serialization.UnstableDefault
 import org.ro.handler.TObjectHandler
 import org.ro.to.TObject
 import org.ro.to.Value
-import org.ro.urls.CFG_1
-import org.ro.urls.SO_0
+import org.ro.snapshots.ai1_16_0.CFG_1
+import org.ro.snapshots.ai1_16_0.SO_0
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

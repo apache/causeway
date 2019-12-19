@@ -2,8 +2,8 @@ package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.HttpErrorHandler
-import org.ro.urls.HTTP_ERROR
-import org.ro.urls.HTTP_ERROR_500_UNIQUE_CONSTRAINT_VIOLATION
+import org.ro.snapshots.ai1_16_0.HTTP_ERROR
+import org.ro.snapshots.ai1_16_0.HTTP_ERROR_500_UNIQUE_CONSTRAINT_VIOLATION
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

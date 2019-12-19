@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 import org.ro.to.Link
 import org.ro.to.Member
 import org.ro.to.TObject
-import org.ro.urls.FR_OBJECT_BAZ
+import org.ro.snapshots.ai1_16_0.FR_OBJECT_BAZ
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

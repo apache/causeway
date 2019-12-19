@@ -3,7 +3,7 @@ package org.ro.to
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.UserHandler
 import org.ro.to.User
-import org.ro.urls.RESTFUL_USER
+import org.ro.snapshots.ai1_16_0.RESTFUL_USER
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

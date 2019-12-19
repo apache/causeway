@@ -3,7 +3,7 @@ package org.ro.to
 import kotlinx.serialization.UnstableDefault
 import org.ro.core.Menu
 import org.ro.handler.ServiceHandler
-import org.ro.urls.SO_MENU
+import org.ro.snapshots.ai1_16_0.SO_MENU
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue

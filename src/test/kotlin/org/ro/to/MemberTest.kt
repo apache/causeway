@@ -3,7 +3,7 @@ package org.ro.to
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.ro.handler.MemberHandler
-import org.ro.urls.FR_PROPERTY_DESCRIPTION
+import org.ro.snapshots.ai1_16_0.FR_PROPERTY_DESCRIPTION
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

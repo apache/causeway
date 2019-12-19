@@ -2,7 +2,7 @@ package org.ro.handler;
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.to.Property
-import org.ro.urls.SO_PROPERTY
+import org.ro.snapshots.ai1_16_0.SO_PROPERTY
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 

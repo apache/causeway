@@ -2,7 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.ResultHandler
-import org.ro.urls.RESTFUL_SERVICES
+import org.ro.snapshots.ai1_16_0.RESTFUL_SERVICES
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

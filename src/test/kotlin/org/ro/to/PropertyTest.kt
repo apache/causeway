@@ -2,8 +2,8 @@ package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.PropertyHandler
-import org.ro.urls.FR_OBJECT_PROPERTY_
-import org.ro.urls.SO_PROPERTY
+import org.ro.snapshots.ai1_16_0.FR_OBJECT_PROPERTY_
+import org.ro.snapshots.ai1_16_0.SO_PROPERTY
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

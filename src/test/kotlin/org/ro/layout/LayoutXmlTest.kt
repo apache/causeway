@@ -1,7 +1,7 @@
 package org.ro.layout
 
+import org.ro.snapshots.ai1_16_0.SO_LAYOUT_XML
 import org.ro.to.bs3.Grid
-import org.ro.urls.SO_LAYOUT_XML
 import org.w3c.dom.parsing.DOMParser
 import kotlin.test.Test
 import kotlin.test.assertEquals

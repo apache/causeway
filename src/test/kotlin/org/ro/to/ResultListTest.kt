@@ -2,7 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.ResultListHandler
-import org.ro.urls.SO_LIST_ALL_INVOKE
+import org.ro.snapshots.ai1_16_0.SO_LIST_ALL_INVOKE
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
