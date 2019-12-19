@@ -44,7 +44,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	min-height: 3em;
+	min-height: 3em; /* for panel-headings that contain no buttons, to make them same height */
 }
 
 .table .form-control:disabled {
@@ -526,7 +526,9 @@ span .fontAwesomeIcon {
 
 ul.additionalLinkList,
 div.additionalLinkList {
-	line-height: 2.4; /* multiple action buttons, when line-breaking, need some vertical space */
+	display: flex;
+	flex-wrap: wrap;
+  	justify-content: flex-end;
 }
 
 .collections div.additionalLinkList,
@@ -536,6 +538,7 @@ div.additionalLinkList {
 .entityCollectionsPanel div.additionalLinkList,
 .entityCollectionsPanel ul.additionalLinkList {
     padding-bottom: 0px;
+   
 }
 
 
@@ -705,7 +708,7 @@ div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
     margin-top: -4px;
 }
 .standaloneCollectionPanel .selectorDropdown {
-    margin-top: -4px;
+    /*margin-top: -4px;*/
 }
 .standaloneCollectionPanel div.iconAndTitle {
     min-height: 45px;
@@ -1085,6 +1088,7 @@ h4.iconAndTitle a:focus {
 
 .list-inline > li.additionalLinkItem {
     padding-left: 0.4em;
+    margin: 1px;
 }
 
 ul.sidebar-nav {
