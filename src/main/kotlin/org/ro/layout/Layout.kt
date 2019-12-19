@@ -2,6 +2,7 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.TransferObject
+import org.ro.to.bs3.Grid
 import org.ro.ui.uicomp.VBox
 
 /**
@@ -16,6 +17,10 @@ data class Layout(val cssClass: String? = null,
                   val row: List<RowLayout> = emptyList()) : TransferObject {
 
     var properties = listOf<PropertyLayout>()
+
+    constructor(grid: Grid) : this() {
+      //TODO
+    }
 
     init {
         val row1 = row[1]

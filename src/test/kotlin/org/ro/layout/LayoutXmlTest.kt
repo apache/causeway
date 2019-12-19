@@ -1,8 +1,8 @@
 package org.ro.layout
 
+import org.ro.handler.XmlLayoutHandler
 import org.ro.snapshots.ai1_16_0.SO_LAYOUT_XML
 import org.ro.to.bs3.Grid
-import org.w3c.dom.parsing.DOMParser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -15,8 +15,7 @@ class LayoutXmlTest {
         //given
         val xmlStr = SO_LAYOUT_XML.str
         //when
-        val p = DOMParser()
-        val doc = p.parseFromString(xmlStr, "application/xml")
+        val doc = XmlLayoutHandler().parseXml(xmlStr)
 
         assertNotNull(doc)
 
@@ -50,7 +49,6 @@ class LayoutXmlTest {
 
         val theRow = generalRows.first()
         val theCol = theRow.cols.first()
-        console.log(theCol)
 
         val fieldSet = theCol.fieldSet!!
         assertEquals("Name", fieldSet.name)
