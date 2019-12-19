@@ -44,7 +44,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 3px 15px;
+	min-height: 3em;
 }
 
 .table .form-control:disabled {
