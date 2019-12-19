@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<jdo xmlns="http://xmlns.jcp.org/xml/ns/jdo/jdo"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/jdo/jdo http://xmlns.jcp.org/xml/ns/jdo/jdo_3_1.xsd"
+	version="3.1">
+
+	<package name="org.apache.isis.testdomain.jdo">
+		<class name="Product" />
+		<class name="Book" />
+		<class name="Inventory" />
+	</package>
+
+</jdo>
+
