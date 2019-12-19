@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
@@ -24,9 +23,11 @@ fi
 ## run groovy
 ##
 GROOVY_CMD=$(command -v groovy)
+DOS2UNIX_CMD=$(command -v dos2unix)
 
 echo ""
-echo "\$GROOVY_CMD : ${GROOVY_CMD}"
+echo "\$GROOVY_CMD   : ${GROOVY_CMD}"
+echo "\$DOS2UNIX_CMD : ${DOS2UNIX_CMD}"
 echo ""
  
 # for now meant to run with nightly builds only 
@@ -45,10 +46,10 @@ else
       -f $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json \
       -o $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
 
-    if [ ! -z "dos2unix" ]; then
+    if [ ! -z "${DOS2UNIX_CMD}" ]; then
       for FILE in $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated/*
       do
-        dos2unix $FILE
+        ${DOS2UNIX_CMD} $FILE
       done
       echo
       echo
