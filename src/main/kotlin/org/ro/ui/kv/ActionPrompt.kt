@@ -13,9 +13,9 @@ import pl.treksoft.kvision.form.text.TextArea
 
 class ActionPrompt(val action: Action) : Command {
 
-    lateinit var form: RoDialog
+    private lateinit var form: RoDialog
 
-    fun open(at:Point) {
+    fun open(at: Point) {
         val formItems = buildFormItems()
         form = RoDialog(
                 caption = buildLabel(),
@@ -61,8 +61,8 @@ class ActionPrompt(val action: Action) : Command {
         return selectionList
     }
 
-    internal fun extractUserInput(): Link {
-        //TODO function has a sideeffect, ie. amends link with arguments
+    private fun extractUserInput(): Link {
+        //IMPROVE function has a side effect, ie. amends link with arguments
         val link = action.getInvokeLink()!!
         var value: String? = null
         var key: String? = null
