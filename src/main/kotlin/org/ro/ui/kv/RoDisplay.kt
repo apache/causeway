@@ -23,12 +23,18 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
         console.log("[RoDisplay]")
         console.log(tObject)
         tObject.members.entries.forEach { it ->
-            val label = it.key
-            val type = "Text" //it.value.memberType
-            val content = it.key //it.value.value
-            val item = FormItem(label, type, content)
-            console.log(item)
-            items.add(item)
+            if (it.value.memberType.equals("property")) {
+                val label = it.key
+                val type = "Text" //it.value.memberType
+                var content = it.key
+                if (it.value.value != null) {
+                    val value = it.value.value!!.content
+                    content = value.toString()
+                }
+                val item = FormItem(label, type, content)
+                console.log(item)
+                items.add(item)
+            }
         }
 
         panel = formPanel {

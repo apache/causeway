@@ -52,3 +52,8 @@ div.tabulator-header {
 .nav-link {
     padding: 4px 12px !important;
 }
+
+label.control-label {
+    font-weight: lighter !important;
+    font-size: small !important;
+}
