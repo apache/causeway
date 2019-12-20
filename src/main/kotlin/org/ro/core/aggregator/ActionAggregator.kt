@@ -45,13 +45,7 @@ class ActionAggregator(val at: Point = Point(100,100)) : BaseAggregator() {
     }
 
     private fun Link.isInvokeAction(): Boolean {
-        if (rel.contains("invokeaction")) {
-            return true
-        }
-        if (rel.contains("invoke;action")) {
-            return true
-        }
-        return false
+        return rel.contains("invoke") && rel.contains("action")
     }
 
 }
