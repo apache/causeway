@@ -1,6 +1,8 @@
 package org.ro.ui.kv
 
+import org.ro.core.event.EventStore
 import org.ro.core.model.DisplayObject
+import org.ro.to.TObject
 import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.FormPanel
@@ -20,16 +22,17 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
         val model = displayObject.data!!
         val items: MutableList<FormItem> = mutableListOf<FormItem>()
         val tObject = model.delegate
+        loadLayout(tObject)
         console.log("[RoDisplay]")
         console.log(tObject)
         tObject.members.entries.forEach { it ->
-            if (it.value.memberType.equals("property")) {
+            if (it.value.memberType == "property") {
                 val label = it.key
                 val type = "Text" //it.value.memberType
                 var content = it.key
-                if (it.value.value != null) {
-                    val value = it.value.value!!.content
-                    content = value.toString()
+                val value = it.value.value
+                if (value != null) {
+                    content = value.content.toString()
                 }
                 val item = FormItem(label, type, content)
                 console.log(item)
@@ -65,5 +68,19 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
             }
         }
 
+    }
+
+    private fun loadLayout(tObject: TObject) {
+        val layoutLink = tObject.links.firstOrNull {
+            it.rel.contains("object-layout")
+        }
+        console.log("[RoDisplay.loadLayout]")
+        console.log(layoutLink)
+
+        if (layoutLink != null) {
+            val href = layoutLink.href
+            val logEntry = EventStore.find(href)
+            console.log(logEntry)
+        }
     }
 }
