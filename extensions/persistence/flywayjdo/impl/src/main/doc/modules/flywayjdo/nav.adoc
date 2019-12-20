@@ -1,2 +1,2 @@
-include::extensions:h2console:partial$component-nav.adoc[]
+include::pjdo:flywayjdo:partial$component-nav.adoc[]
 

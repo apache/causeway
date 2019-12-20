@@ -9,43 +9,43 @@ Anyone can join:
 
 * navigate to https://s.apache.org/slack-invite[]
 +
-image:support/slack/010.png[link=${imagedir}/support/slack/010.png]
+image:support/slack/010.png[link={imagesdir}/support/slack/010.png]
 
 * enter your email:
 +
-image:support/slack/020.png[link=${imagedir}/support/slack/020.png]
+image:support/slack/020.png[link={imagesdir}/support/slack/020.png]
 +
-image:support/slack/030.png[link=${imagedir}/support/slack/030.png]
+image:support/slack/030.png[link={imagesdir}/support/slack/030.png]
 
 * as it says, check your email:
 +
-image:support/slack/040.png[link=${imagedir}/support/slack/040.png]
+image:support/slack/040.png[link={imagesdir}/support/slack/040.png]
 
 * as it says, check your email:
 +
-image:support/slack/050.png[link=${imagedir}/support/slack/050.png]
+image:support/slack/050.png[link={imagesdir}/support/slack/050.png]
 
 * Create an account on the Slack:
 +
-image:support/slack/060.png[link=${imagedir}/support/slack/060.png]
+image:support/slack/060.png[link={imagesdir}/support/slack/060.png]
 
 * you'll then arrive in the Slack, with the following welcome page.  You can skip this first step (1):
 +
-image:support/slack/070.png[link=${imagedir}/support/slack/070.png]
+image:support/slack/070.png[link={imagesdir}/support/slack/070.png]
 
 * Instead, scroll down the page to the step (2) to browse channels:
 +
-image:support/slack/080.png[link=${imagedir}/support/slack/080.png]
+image:support/slack/080.png[link={imagesdir}/support/slack/080.png]
 
 * Enter 'isis' in the search box, and click through to the `#apache-isis` channel:
 +
-image:support/slack/090.png[link=${imagedir}/support/slack/090.png]
+image:support/slack/090.png[link={imagesdir}/support/slack/090.png]
 
 * At this point you are still just previewing the channel, so press `Join Channel`:
 +
-image:support/slack/100.png[link=${imagedir}/support/slack/100.png]
+image:support/slack/100.png[link={imagesdir}/support/slack/100.png]
 
 * Finally, say hello:
 +
-image:support/slack/110.png[link=${imagedir}/support/slack/110.png]
+image:support/slack/110.png[link={imagesdir}/support/slack/110.png]
 

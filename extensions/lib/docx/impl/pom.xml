@@ -21,13 +21,13 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-flywayjdo-dom</artifactId>
-	<name>Apache Isis Ext - FlywayJDO</name>
-	<description>Integrates FlywayDB when using JDO Object Store</description>
+	<artifactId>isis-extensions-docx-dom</artifactId>
+	<name>Apache Isis Ext - Docx</name>
+	<description>Integrates POI library for mail merge functions of .docx Word documents</description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.flywayjdo.dom</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/flywayjdo/dom</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.docx.dom</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/docx/dom</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>

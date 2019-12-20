@@ -150,6 +150,30 @@ content:
     - url: .
       start_path: extensions/lib/excel/impl/src/main/doc # extensions
       branches: HEAD
+    - url: .
+      start_path: extensions/lib/freemarker/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/lib/jaxrsclient/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/lib/minio/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/lib/ognl/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/lib/pdfbox/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/lib/slack/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/lib/xdocreport/impl/src/main/doc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/lib/zip/impl/src/main/doc # extensions
+      branches: HEAD
 
     - url: .
       start_path: extensions/persistence/flywayjdo/impl/src/main/doc # extensions

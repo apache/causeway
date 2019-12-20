@@ -44,11 +44,9 @@
 ** xref:toc:ROOT:support/mailing-list.adoc[Mailing Lists]
 ** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[ASF JIRA]
 
-* Resources
-
 ** xref:toc:devguide:about.adoc[Developers' Guide]
 *** xref:toc:mavendeps:about.adoc[Maven Dependencies]
-*** link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+** link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
 
 
 * Releases

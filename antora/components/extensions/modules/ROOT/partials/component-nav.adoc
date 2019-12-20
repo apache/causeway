@@ -1,9 +1,22 @@
 include::extensions:ROOT:partial$module-nav.adoc[]
-include::extensions:spring:partial$module-nav.adoc[]
-include::extensions:h2console:partial$module-nav.adoc[]
-include::extensions:hsqldbmgr:partial$module-nav.adoc[]
 
+// core
+include::extensions:spring:partial$module-nav.adoc[]
+
+// lib
 include::extensions:base:partial$module-nav.adoc[]
 include::extensions:docx:partial$module-nav.adoc[]
 include::extensions:excel:partial$module-nav.adoc[]
+include::extensions:freemarker:partial$module-nav.adoc[]
+include::extensions:jaxrsclient:partial$module-nav.adoc[]
+include::extensions:minio:partial$module-nav.adoc[]
+include::extensions:ognl:partial$module-nav.adoc[]
+include::extensions:pdfbox:partial$module-nav.adoc[]
+include::extensions:slack:partial$module-nav.adoc[]
+include::extensions:xdocreport:partial$module-nav.adoc[]
+include::extensions:zip:partial$module-nav.adoc[]
+
+// persistence
+include::extensions:h2console:partial$module-nav.adoc[]
+include::extensions:hsqldbmgr:partial$module-nav.adoc[]
 

@@ -4,5 +4,14 @@ include::_attributes.adoc[]
 :page-partial:
 
 This catalog lists a number of extensions to the framework.
+These typically are for use directly within by the domain application itself.
 
-There are also a small number of extensions documented elsewhere in other guides (in the xref:testing:ROOT:about.adoc[testing] guide, xref:security:ROOT:about.adoc[security] guide, and the xref:vw:ROOT:about.adoc[wicket viewer] guide).
+There are also a number of extensions documented elsewhere in other guides:
+
+* in the xref:security:ROOT:about.adoc[security] guide, and the xref:vw:ROOT:about.adoc[wicket viewer] guide).
++
+These extensions extend the capability of those components, or provide alternative implementations
+
+* in the xref:testing:ROOT:about.adoc[testing] guide
++
+The extensions here _are_ for use by the domain application, but only for testing or prototyping (eg fixtures) rather than in the business logic itself.

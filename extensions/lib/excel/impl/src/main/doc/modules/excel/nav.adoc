@@ -1,2 +1,2 @@
-include::extensions:h2console:partial$component-nav.adoc[]
+include::extensions:ROOT:partial$component-nav.adoc[]
 
