@@ -61,7 +61,8 @@ abstract class BaseHandler : IResponseHandler {
     }
 
     protected fun update() {
-        logEntry.aggregator!!.update(logEntry)
+        //FIXME is the first agg the right one?
+        logEntry.getAggregator()!!.update(logEntry)
     }
 
 }

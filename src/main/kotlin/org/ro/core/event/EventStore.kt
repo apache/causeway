@@ -27,7 +27,9 @@ object EventStore {
 
     fun start(url: String, method: String, body: String = "", aggregator: IAggregator? = null): LogEntry {
         val entry = LogEntry(url, method, body)
-        entry.aggregator = aggregator
+        if (aggregator != null) {
+            entry.addAggregator(aggregator)
+        }
         log(entry)
         updateStatus(entry)
         return entry
@@ -50,7 +52,8 @@ object EventStore {
         val logEntry = findView(title)
         if (null != logEntry) {
             logEntry.setClose()
-            logEntry.aggregator?.reset()
+            //FIXME is the first agg the right one to reset?
+            logEntry.getAggregator()!!.reset()
             updateStatus(logEntry)
         }
     }

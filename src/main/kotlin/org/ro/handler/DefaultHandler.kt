@@ -9,7 +9,7 @@ class DefaultHandler : BaseHandler(), IResponseHandler {
     }
 
     override fun doHandle() {
-        logEntry.aggregator = UndefinedAggregator()
+        logEntry.addAggregator(UndefinedAggregator())
         update()
     }
 

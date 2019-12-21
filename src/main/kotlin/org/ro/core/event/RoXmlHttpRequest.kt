@@ -25,7 +25,8 @@ class RoXmlHttpRequest {
     private fun processCached(url: String) {
         val le = EventStore.find(url)!!
         if (le.isRoot) {
-            le.aggregator?.reset()
+            //FIXME is the first agg always the right one?
+            le.getAggregator()!!.reset()
         }
         le.retrieveResponse()
         ResponseHandler.handle(le)

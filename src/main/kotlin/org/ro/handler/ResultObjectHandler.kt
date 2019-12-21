@@ -9,7 +9,7 @@ import org.ro.to.TransferObject
 class ResultObjectHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
-        logEntry.aggregator = ObjectAggregator(logEntry.title)
+        logEntry.addAggregator(ObjectAggregator(logEntry.title))
         logEntry.isRoot = true
         update()
     }

@@ -23,8 +23,6 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
         val items: MutableList<FormItem> = mutableListOf<FormItem>()
         val tObject = model.delegate
         loadLayout(tObject)
-        console.log("[RoDisplay]")
-        console.log(tObject)
         tObject.members.entries.forEach { it ->
             if (it.value.memberType == "property") {
                 val label = it.key
@@ -35,7 +33,6 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
                     content = value.content.toString()
                 }
                 val item = FormItem(label, type, content)
-                console.log(item)
                 items.add(item)
             }
         }
@@ -75,6 +72,7 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
             it.rel.contains("object-layout")
         }
         console.log("[RoDisplay.loadLayout]")
+        console.log(tObject)
         console.log(layoutLink)
 
         if (layoutLink != null) {

@@ -34,7 +34,7 @@ class ListAggregatorTest : IntegrationTest() {
             val descLink = links.find {
                 it.rel == RelType.DESCRIBEDBY.type
             }
-            val actObs = pLe.aggregator as ListAggregator
+            val actObs = pLe.getAggregator() as ListAggregator
             val dl = obs.dsp
             val property = pdLe.getTransferObject() as Property
             val propertyLabels = (dl as DisplayList).propertyLabels
@@ -44,7 +44,7 @@ class ListAggregatorTest : IntegrationTest() {
             assertNotNull(descLink)                  //2
             assertEquals(obs, actObs)              //3
             assertNotNull(actObs.dsp!!.layout)         // 4
-            assertEquals(pdLe.aggregator, layoutLe.aggregator) // 5
+            assertEquals(pdLe.getAggregator(), layoutLe.getAggregator()) // 5
             assertNotNull(dl.layout) // 6
             assertTrue(propertyLabels.size > 0)   // 7
             assertEquals("ResultListResult class", lbl)

@@ -9,7 +9,7 @@ import org.ro.to.TransferObject
 class HttpErrorHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
-        logEntry.aggregator = ErrorAggregator()
+        logEntry.addAggregator(ErrorAggregator())
         update()
     }
 
