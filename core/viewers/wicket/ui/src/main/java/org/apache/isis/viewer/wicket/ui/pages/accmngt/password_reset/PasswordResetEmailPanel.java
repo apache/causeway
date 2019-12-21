@@ -22,8 +22,6 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -33,15 +31,14 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
-import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
-import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
 import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
+
+import lombok.val;
 
 /**
  * A panel with a form for creation of new users
@@ -49,11 +46,6 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 public class PasswordResetEmailPanel extends PanelBase<Void> {
 
     private static final long serialVersionUID = 1L;
-
-    @Inject private transient EmailNotificationService emailNotificationService;
-    @Inject private transient EmailVerificationUrlService emailVerificationUrlService;
-    @Inject private transient PageNavigationService pageNavigationService;
-//    @Inject private transient WebAppConfigBean webAppConfigBean;
 
     /**
      * Constructor
@@ -64,60 +56,56 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
     public PasswordResetEmailPanel(final String id) {
         super(id);
 
-        StatelessForm<Void> form = new StatelessForm<>("signUpForm");
+        val form = new StatelessForm<Void>("signUpForm");
         addOrReplace(form);
 
-        final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
+        val emailField = new RequiredTextField<String>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
         emailField.add(EmailAvailableValidator.exists(getCommonContext()));
 
-        FormGroup formGroup = new FormGroup("formGroup", emailField);
+        val formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);
 
         formGroup.add(emailField);
 
-        Button signUpButton = new Button("passwordResetSubmit") {
+        val signUpButton = new Button("passwordResetSubmit") {
+
             private static final long serialVersionUID = 1L;
+            private final RequiredTextField<String> _emailField = emailField;
 
             @Override
             public void onSubmit() {
                 super.onSubmit();
-
-                String email = emailField.getModelObject();
-
-                String confirmationUrl = emailVerificationUrlService.createVerificationUrl(PageType.PASSWORD_RESET, email);
-
-                //TODO [2033] remove ...                
-                //                /**
-                //                 * We have to init() the services here because the Isis runtime is not available to us
-                //                 * (guice will have instantiated a new instance of the service).
-                //                 *
-                //                 * We do it this way just so that the programming model for the EmailService is similar to regular Isis-managed services.
-                //                 */
-                //                emailNotificationService.init();
-                //                emailService.init();
-
-                final PasswordResetEvent passwordResetEvent = new PasswordResetEvent(
-                        email, 
-                        confirmationUrl, 
-                        getWebAppConfigBean().getApplicationName());
-
-                boolean emailSent = emailNotificationService.send(passwordResetEvent);
-                if (emailSent) {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("email", email);
-                    IModel<Map<String, String>> model = Model.ofMap(map);
-                    String emailSentMessage = getString("emailSentMessage", model);
-
-                    CookieUtils cookieUtils = new CookieUtils();
-                    cookieUtils.save(AccountManagementPageAbstract.FEEDBACK_COOKIE_NAME, emailSentMessage);
-                    pageNavigationService.navigateTo(PageType.SIGN_IN);
-                }
+                passwordResetSubmit(_emailField);
             }
         };
 
         form.add(signUpButton);
+    }
+    
+    private void passwordResetSubmit(final RequiredTextField<String> emailField) {
+
+        String email = emailField.getModelObject();
+
+        String confirmationUrl = super.getEmailVerificationUrlService().createVerificationUrl(PageType.PASSWORD_RESET, email);
+
+        val passwordResetEvent = new PasswordResetEvent(
+                email, 
+                confirmationUrl, 
+                getWebAppConfigBean().getApplicationName());
+
+        boolean emailSent = super.getEmailNotificationService().send(passwordResetEvent);
+        if (emailSent) {
+            Map<String, String> map = new HashMap<>();
+            map.put("email", email);
+            IModel<Map<String, String>> model = Model.ofMap(map);
+            String emailSentMessage = getString("emailSentMessage", model);
+
+            CookieUtils cookieUtils = new CookieUtils();
+            cookieUtils.save(AccountManagementPageAbstract.FEEDBACK_COOKIE_NAME, emailSentMessage);
+            super.getPageNavigationService().navigateTo(PageType.SIGN_IN);
+        }
     }
 
 
