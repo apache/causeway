@@ -25,6 +25,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ContextClosedEvent;
@@ -107,6 +108,14 @@ public class IsisSystemEnvironment {
         this.iocContainer = null;
         _Context.clear();
     }
+    
+    @EventListener(ApplicationFailedEvent.class)
+    public void onContextRefreshed(ApplicationFailedEvent event) {
+        // happens eg. when DN finds non enhanced entity classes 
+        log.error("Application failed to start");
+        event.getException().printStackTrace();
+    }
+    
     
     // -- SHORTCUTS
     
