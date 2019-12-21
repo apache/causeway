@@ -21,13 +21,12 @@ package org.apache.isis.metamodel.facets.value;
 
 import java.util.Locale;
 
-import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.value.Money;
+import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
@@ -37,11 +36,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @Ignore
-// TODO once the sematics provide has a way to reset the formatters for the new
+// TODO once the semantics provider has a way to reset the formatters for the new
 // local then this test can be reinstated.
-@RunWith(JMock.class)
 public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
+    
     private static final String CURRENCY_SPACE = "\u00a0";
     private static final String ZLOTYCH_SYMBOL = "\u007a\u0142";
     private static final String EURO_SYMBOL = "\u20AC";
@@ -51,10 +50,13 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Before
     public void setUpObjects() throws Exception {
+        
         Locale.setDefault(new Locale("pl", "PL"));
         originalMoney = new Money(10.50, "pln");
         holder = new FacetHolderImpl();
-        setValue(adapter = new MoneyValueSemanticsProvider(holder));
+        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
+        
+        super.setValue(adapter = new MoneyValueSemanticsProvider(holder));
     }
 
     private Money createMoney(final double amount, final String currency) {

@@ -311,17 +311,6 @@ public final class InteractionDtoUtils {
         return invocation;
     }
 
-    // TODO not used
-    //    private static PropertyEditDto propertyEditFor(final InteractionDto interactionDto) {
-    //        PropertyEditDto edit = (PropertyEditDto) interactionDto.getExecution();
-    //        if(edit == null) {
-    //            edit = new PropertyEditDto();
-    //            interactionDto.setExecution(edit);
-    //            edit.setInteractionType(InteractionType.PROPERTY_EDIT);
-    //        }
-    //        return edit;
-    //    }
-
     private static List<ParamDto> parameterListFor(final InteractionDto ixnDto) {
         return parameterListFor(actionInvocationFor(ixnDto));
     }

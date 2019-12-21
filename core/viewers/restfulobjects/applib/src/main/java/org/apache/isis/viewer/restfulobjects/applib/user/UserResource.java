@@ -34,7 +34,6 @@ public interface UserResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
-    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response user();
 
     @DELETE
@@ -52,7 +51,6 @@ public interface UserResource {
     @GET
     @Path("/logout")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
-    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response logout();
 
 }

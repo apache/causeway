@@ -80,7 +80,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final String pkOtoaId = pkOtoa.getId();
         final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
 
-        /* FIXME[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
+        /* XXX[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
          * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead
          */
         final Query<?> jdoQuery = persistenceSession.newJdoQuery(cls, filter);
@@ -110,7 +110,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         val serviceRegistry = spec.getMetaModelContext().getServiceRegistry();
         val isisJdoSupport = isisJdoSupport(serviceRegistry);
 
-        /* FIXME[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
+        /* XXX[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
          * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead 
          */
         final Query<?> jdoQuery = persistenceSession.newJdoNamedQuery(cls, queryName); 

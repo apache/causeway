@@ -34,7 +34,6 @@ public interface VersionResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
-    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response version();
 
     @DELETE

@@ -27,10 +27,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ServerSentEvents {
     
-    /**
-     * TODO
-     *
-     */
     Class<? extends SseSource> observe() default SseSource.Noop.class;
 
 }

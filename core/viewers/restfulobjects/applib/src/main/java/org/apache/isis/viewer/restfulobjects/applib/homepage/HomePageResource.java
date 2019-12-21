@@ -34,7 +34,6 @@ public interface HomePageResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
-    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response homePage();
 
     @DELETE
@@ -53,7 +52,6 @@ public interface HomePageResource {
     @GET
     @Path("/notAuthenticated")
     @Produces({ MediaType.APPLICATION_JSON })
-    //TODO deprecated @ClientResponseType(entityType = String.class)
     public Response notAuthenticated();
 
 }
