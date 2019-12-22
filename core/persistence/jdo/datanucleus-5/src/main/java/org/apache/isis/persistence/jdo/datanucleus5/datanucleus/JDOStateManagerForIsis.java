@@ -19,7 +19,6 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.datanucleus;
 
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.eventbus.EventBusServiceJdo;
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.cache.CachedPC;
 import org.datanucleus.enhancement.Persistable;
@@ -29,11 +28,12 @@ import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.fieldmanager.FieldManager;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.eventbus.EventBusServiceJdo;
 
-/**
- * @deprecated This is bad practice: The lifecycle of persistent entities is usually decoupled from the lifecycle of a managed bean
- */
-@Deprecated
+import lombok.extern.log4j.Log4j2;
+
+//FIXME currently is a noop, resurrect or remove see https://stackoverflow.com/a/11648163/9269480
+@Log4j2
 public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
 
     private final ServiceInjector serviceInjector = null;
@@ -42,6 +42,7 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
         super(ec, cmd);
 //        this.serviceInjector = (ServiceInjector) ec.getProperty("serviceInjector");
 //        requires(serviceInjector, "serviceInjector");
+        log.warn("not implemented: #injectServicesInto(...)");
     }
 
     public enum Hint {
@@ -63,62 +64,62 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
     @Override
     public void initialiseForHollow(Object id, FieldValues fv, Class pcClass) {
         super.initialiseForHollow(id, fv, pcClass);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
     public void initialiseForHollowAppId(FieldValues fv, Class pcClass) {
         super.initialiseForHollowAppId(fv, pcClass);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
     public void initialiseForHollowPreConstructed(Object id, Persistable pc) {
         super.initialiseForHollowPreConstructed(id, pc);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
     public void initialiseForPersistentClean(Object id, Persistable pc) {
         super.initialiseForPersistentClean(id, pc);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
     public void initialiseForEmbedded(Persistable pc, boolean copyPc) {
         super.initialiseForEmbedded(pc, copyPc);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
     public void initialiseForPersistentNew(Persistable pc,
             FieldValues preInsertChanges) {
         super.initialiseForPersistentNew(pc, preInsertChanges);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
     public void initialiseForTransactionalTransient(Persistable pc) {
         super.initialiseForTransactionalTransient(pc);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
     public void initialiseForDetached(Persistable pc, Object id, Object version) {
         super.initialiseForDetached(pc, id, version);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
     public void initialiseForPNewToBeDeleted(Persistable pc) {
         super.initialiseForPNewToBeDeleted(pc);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
     public void initialiseForCachedPC(CachedPC<Persistable> cachedPC, Object id) {
         super.initialiseForCachedPC(cachedPC, id);
-        mapIntoIsis(myPC);
+        injectServicesInto(myPC);
     }
 
     @Override
@@ -220,7 +221,7 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
         }
     }
 
-    protected void mapIntoIsis(Persistable pc) {
+    protected void injectServicesInto(Persistable pc) {
         if(serviceInjector!=null) {
             serviceInjector.injectServicesInto(pc);
         }

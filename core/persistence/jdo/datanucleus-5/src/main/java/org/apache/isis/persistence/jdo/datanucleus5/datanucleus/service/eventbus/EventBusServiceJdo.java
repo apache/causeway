@@ -32,10 +32,6 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.JDOStateManagerF
  * {@link #post(Object) posted} from the setters of entities, automatically ignoring any calls to those setters that
  * occur as a side-effect of the JDO load/detach lifecycle.
  *
- * <p>
- * This implementation has no UI and there are no other implementations of the service API, and so it is annotated
- * with {@link org.apache.isis.applib.annotation.DomainService}.  Because it is implemented in the core, this means
- * that it is automatically registered and available for use; no further configuration is required.
  */
 @Deprecated //FIXME[2112] find a replacement for that feature!?
 public class EventBusServiceJdo /*extends EventBusServiceDefault*/ {
