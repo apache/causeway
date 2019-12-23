@@ -10,7 +10,7 @@ import org.ro.ui.kv.ActionPrompt
 
 class ActionAggregator(val at: Point = Point(100,100)) : BaseAggregator() {
 
-    lateinit override var dsp: BaseDisplayable
+    override lateinit var dsp: BaseDisplayable
 
     override fun update(logEntry: LogEntry) {
         val action = logEntry.getTransferObject() as Action

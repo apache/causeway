@@ -112,10 +112,10 @@ object UiManager {
     }
 
     fun getUrl(): String {
-        if (session == null) {
-            return ""
+        return if (session == null) {
+            ""
         } else {
-            return session!!.url
+            session!!.url
         }
     }
 
@@ -132,11 +132,10 @@ object UiManager {
         popups.add(widget)
     }
 
-    fun pop() {
+    private fun pop() {
         val len = popups.size
         if (len > 0) {
-            val widget = popups[len - 1]
-            when (widget) {
+            when (val widget = popups[len - 1]) {
                 is RoDialog -> widget.close()
                 is ContextMenu -> {
                     widget.hide()

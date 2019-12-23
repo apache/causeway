@@ -9,13 +9,9 @@ import org.ro.to.TObject
 import org.ro.ui.ErrorAlert
 import org.ro.ui.kv.UiManager
 
-class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
+class ObjectAggregator(actionTitle: String) : BaseAggregator() {
 
-    lateinit override var dsp: BaseDisplayable
-
-    init {
-        dsp = DisplayObject(actionTitle)
-    }
+    override var dsp: BaseDisplayable = DisplayObject(actionTitle)
 
     override fun update(logEntry: LogEntry) {
         val obj = logEntry.getTransferObject()

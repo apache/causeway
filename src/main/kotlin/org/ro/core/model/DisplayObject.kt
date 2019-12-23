@@ -10,14 +10,13 @@ class DisplayObject(override val title: String) : BaseDisplayable() {
     override fun canBeDisplayed(): Boolean {
         if (layout == null) {
             return false
-        } else {
-            return !isRendered
         }
+        return !isRendered
     }
 
     override fun addData(obj: TObject) {
         val exo = Exposer(obj)
-        data = exo.dynamise()
+        data = exo.dynamise() as? Exposer
     }
 
     override fun reset() {
