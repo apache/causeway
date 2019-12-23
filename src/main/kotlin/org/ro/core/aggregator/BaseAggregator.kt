@@ -9,7 +9,7 @@ import org.ro.to.TObject
 abstract class BaseAggregator : IAggregator {
 
     open var isRendered = false
-    open var dsp:BaseDisplayable? = null
+    abstract var dsp:BaseDisplayable
 
     override fun reset() : BaseAggregator{
         //do nothing and

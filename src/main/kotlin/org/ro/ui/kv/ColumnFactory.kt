@@ -77,11 +77,8 @@ class ColumnFactory {
                 width = "40",
                 formatterComponentFunction = { _, _, data ->
                     Button(text = "", icon = data["iconName"], style = ButtonStyle.LINK).onClick {
-//                        console.log("[ColumnFactory.buildLinkIcon]")
-//                        console.log(data)
-                        //TODO should this be done indirectly via ObjectAggregator ?
                         val tObject = (data as Exposer).delegate
-                        UiManager.openObjectView(tObject)
+                        UiManager.displayObject(tObject)
                     }
                 })
         return icon

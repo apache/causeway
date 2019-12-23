@@ -10,7 +10,8 @@ import org.ro.ui.ErrorAlert
 import org.ro.ui.kv.UiManager
 
 class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
-    override var dsp: BaseDisplayable? = null
+
+    lateinit override var dsp: BaseDisplayable
 
     init {
         dsp = DisplayObject(actionTitle)
@@ -26,13 +27,13 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
             else -> log(logEntry)
         }
 
-        if (dsp!!.canBeDisplayed()) {
+        if (dsp.canBeDisplayed()) {
             UiManager.openObjectView(this)
         }
     }
 
-    private fun handleObject(obj: TObject) {
-        dsp!!.addData(obj)
+    fun handleObject(obj: TObject) {
+        dsp.addData(obj)
         val l = obj.getLayoutLink()
         if (l != null) {
             invoke(l)
@@ -40,14 +41,15 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleLayout(layout: Layout) {
+        dsp.layout = layout
         layout.properties.forEach {
             val l = it.link!!
             invoke(l)
         }
     }
 
-    override fun reset() : ObjectAggregator{
-        dsp!!.isRendered = false
+    override fun reset(): ObjectAggregator {
+        dsp.isRendered = false
         return this
     }
 

@@ -43,7 +43,7 @@ class ListAggregatorTest : IntegrationTest() {
             assertEquals("className", p.id) //1
             assertNotNull(descLink)                  //2
             assertEquals(obs, actObs)              //3
-            assertNotNull(actObs.dsp!!.layout)         // 4
+            assertNotNull(actObs.dsp.layout)         // 4
             assertEquals(pdLe.getAggregator(), layoutLe.getAggregator()) // 5
             assertNotNull(dl.layout) // 6
             assertTrue(propertyLabels.size > 0)   // 7

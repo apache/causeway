@@ -54,15 +54,6 @@ object UiManager {
         }
     }
 
-    /**
-     * Keeps a list of closed/minmized/docked views in order to recreate them.
-     * When a tab is 'docked' it can be looked up here.
-     * And instead of creating a view a second time, it can be taken from here.
-     * setVisible(false) ?
-     *
-     * A unique id is required in order to be able to look it up and setVisible(true) again.
-     */
-
     fun amendMenu() {
         RoMenuBar.amendMenu()
     }
@@ -75,18 +66,9 @@ object UiManager {
         RoStatusBar.updateUser(user)
     }
 
-    fun updatePower(by: String) {
-//        RoView.updatePowered(by)
-        RoStatusBar.brand("#FF00FF")
-        // https://www.w3schools.com/css/css3_gradients.asp
-        //  #grad {
-        //    background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
-        // }
-    }
-
     fun openListView(aggregator: BaseAggregator) {
         val displayable = aggregator.dsp
-        val title: String = displayable!!.extractTitle()
+        val title: String = displayable.extractTitle()
         val panel = RoTable(displayable as DisplayList)
         add(title, panel, aggregator)
         displayable.isRendered = true
@@ -94,20 +76,27 @@ object UiManager {
 
     fun openObjectView(aggregator: BaseAggregator) {
         val displayable = aggregator.dsp
-        val title: String = displayable!!.extractTitle()
+        val title: String = displayable.extractTitle()
         val panel = RoDisplay(displayable as DisplayObject)
         add(title, panel, aggregator)
         displayable.isRendered = true
     }
 
-    fun openObjectView(tObject: TObject) {
-        val displayable = DisplayObject("sample")
-        displayable.addData(tObject)
+    fun displayObject(tObject: TObject) {
         val aggregator = ObjectAggregator("icon clicked in list")
-        val title: String = tObject.title
-        val panel = RoDisplay(displayable)
-        add(title, panel, aggregator)
-        displayable.isRendered = true
+        linkLayout(tObject, aggregator)
+        val logEntry = EventStore.find(tObject)!!
+        logEntry.addAggregator(aggregator)
+        aggregator.update(logEntry)
+        aggregator.handleObject(tObject)
+    }
+
+    private fun linkLayout(tObject: TObject, aggregator: ObjectAggregator) {
+        val layoutLink = tObject.links.firstOrNull {
+            it.rel.contains("object-layout")
+        }
+        val logEntry = EventStore.find(layoutLink!!.href)
+        logEntry!!.addAggregator(aggregator)
     }
 
     fun openDialog(panel: RoDialog, at: Point = Point(100, 100)) {

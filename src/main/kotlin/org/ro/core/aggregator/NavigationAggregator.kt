@@ -11,7 +11,7 @@ import org.ro.ui.kv.UiManager
 
 @Serializable
 class NavigationAggregator : BaseAggregator() {
-    override var dsp: BaseDisplayable?
+    override var dsp: BaseDisplayable
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         set(value) {}
     private var serviceTotal = 0

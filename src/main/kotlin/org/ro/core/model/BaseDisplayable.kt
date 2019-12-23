@@ -20,7 +20,11 @@ abstract class BaseDisplayable() {
     fun extractTitle(): String {
         val strList = this.title.split("/")
         val len = strList.size
-        return strList.get(len - 2)
+        if (len > 2) {
+            return strList.get(len - 2)
+        } else {
+            return "no title"
+        }
     }
 
 }

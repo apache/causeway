@@ -1,6 +1,7 @@
 package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
+import org.ro.core.model.BaseDisplayable
 import org.ro.core.model.DisplayList
 import org.ro.layout.Layout
 import org.ro.to.Property
@@ -16,6 +17,9 @@ import org.ro.ui.kv.UiManager
  * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
 class ListAggregator(val actionTitle: String) : BaseAggregator() {
+
+    lateinit override var dsp: BaseDisplayable
+
     init {
         dsp = DisplayList(actionTitle)
     }
@@ -31,7 +35,7 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
             else -> log(logEntry)
         }
 
-        if (dsp!!.canBeDisplayed()) {
+        if (dsp.canBeDisplayed()) {
             UiManager.openListView(this)
         }
     }
@@ -47,7 +51,7 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleObject(obj: TObject) {
-        dsp!!.addData(obj)
+        dsp.addData(obj)
         val l = obj.getLayoutLink()
         if (l != null) {
             invoke(l)
@@ -55,7 +59,7 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleLayout(layout: Layout) {
-        dsp!!.layout = layout
+        dsp.layout = layout
         layout.properties.forEach {
             val l = it.link!!
             invoke(l)
@@ -64,16 +68,16 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
 
     private fun handleProperty(p: Property) {
         if (p.isPropertyDescription()) {
-            (dsp!! as DisplayList).addPropertyLabel(p)
+            (dsp as DisplayList).addPropertyLabel(p)
         } else {
-            (dsp!! as DisplayList).addProperty(p)
+            (dsp as DisplayList).addProperty(p)
             val l = p.descriptionLink()!!
             invoke(l)
         }
     }
 
     override fun reset() : ListAggregator {
-        dsp!!.reset()
+        dsp.reset()
         return this
     }
 

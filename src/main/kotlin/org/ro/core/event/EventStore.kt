@@ -2,6 +2,7 @@ package org.ro.core.event
 
 import org.ro.core.Utils
 import org.ro.core.aggregator.IAggregator
+import org.ro.to.TransferObject
 import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.state.observableListOf
@@ -97,6 +98,10 @@ object EventStore {
         } else {
             return findExact(url)
         }
+    }
+
+    fun find(to: TransferObject): LogEntry? {
+        return log.firstOrNull { it.obj == to }
     }
 
     private fun urlContains(url: String, search: String): Boolean {
