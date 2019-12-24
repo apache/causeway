@@ -9,9 +9,7 @@ import org.ro.to.TransferObject
 class ResultListHandler : BaseHandler() {
 
     override fun doHandle() {
-        console.log("[ResultListHandler.doHandle]")
         logEntry.addAggregator(ListAggregator(logEntry.title))
-        console.log(logEntry)
         logEntry.isRoot = true
         update()
     }
