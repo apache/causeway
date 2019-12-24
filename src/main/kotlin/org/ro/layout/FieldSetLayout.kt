@@ -28,9 +28,12 @@ data class FieldSetLayout(val name: String? = null,
     fun build(): FormPanel<String>? {
         val items = mutableListOf<FormItem>()
         for (p in property) {
-            val label = p.named ?: "label not set"
-            val type = "Text"// if mutiline use a different type of input p.multiLine
-            val content = "sample content"
+            val label = p.id ?: "label not set"
+            var type = "Text"
+           if (p.multiLine.asDynamic() != null) {
+                type = "TextArea"
+            }
+            val content = "sample content"//p.link
             val fi = FormItem(label, type, content)
             items.add(fi)
         }
