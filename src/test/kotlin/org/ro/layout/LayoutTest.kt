@@ -33,14 +33,14 @@ class LayoutTest : IntegrationTest() {
             val view = lo.build()
             assertNotNull(view) // 5
 
-            val kids = view.children
+/*            val kids = view.
             assertEquals(2, kids.size) // 6 row[0] is not to be rendered though
 
             val row1 = kids[1]
             assertEquals(2, row1.children.size)  // 7
 
             val h2 = row1.children[1]
-            assertEquals(1, h2.children.size)   // 8
+            assertEquals(1, h2.children.size)   // 8  */
         }
     }
 

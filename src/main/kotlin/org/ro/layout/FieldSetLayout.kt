@@ -2,9 +2,9 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.bs3.FieldSet
-import org.ro.ui.uicomp.Form
+import org.ro.ui.kv.FormPanelFactory
 import org.ro.ui.uicomp.FormItem
-import org.ro.ui.uicomp.HBox
+import pl.treksoft.kvision.form.FormPanel
 
 @Serializable
 data class FieldSetLayout(val name: String? = null,
@@ -25,19 +25,17 @@ data class FieldSetLayout(val name: String? = null,
         }
     }
 
-    fun build(): HBox {
-        val result = HBox("FieldSetLayout")
-        var fi: FormItem?
-        val form = Form("new Form")
+    fun build(): FormPanel<String>? {
+        val items = mutableListOf<FormItem>()
         for (p in property) {
             val label = p.named ?: "label not set"
             val type = "Text"// if mutiline use a different type of input p.multiLine
             val content = "sample content"
-            fi = FormItem(label, type, content)
-            form.addElement(fi)
+            val fi = FormItem(label, type, content)
+            items.add(fi)
         }
-        result.addChild(form)
-        return result
+        val formPanel = FormPanelFactory(items).panel
+        return formPanel
     }
 
 }

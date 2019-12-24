@@ -2,8 +2,7 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.bs3.Row
-import org.ro.ui.uicomp.Box
-import org.ro.ui.uicomp.VBox
+import pl.treksoft.kvision.panel.VPanel
 
 @Serializable
 data class RowLayout(val cols: MutableList<ColsLayout> = mutableListOf<ColsLayout>(),
@@ -19,12 +18,12 @@ data class RowLayout(val cols: MutableList<ColsLayout> = mutableListOf<ColsLayou
         }
     }
 
-    fun build(): VBox {
-        val result = VBox("RowLayout")
-        var b: Box
+    fun build(): VPanel {
+        val result = VPanel()
+        var b: VPanel
         for (c in cols) {
             b = c.build()
-            result.addChild(b)
+            result.add(b)
         }
         return result
     }

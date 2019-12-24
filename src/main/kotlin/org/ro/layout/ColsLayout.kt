@@ -2,8 +2,8 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.bs3.Col
-import org.ro.ui.uicomp.Box
-import org.ro.ui.uicomp.VBox
+import pl.treksoft.kvision.panel.HPanel
+import pl.treksoft.kvision.panel.VPanel
 
 @Serializable
 data class ColsLayout(var col: ColLayout? = null) {
@@ -12,10 +12,10 @@ data class ColsLayout(var col: ColLayout? = null) {
         col = ColLayout(c)
     }
 
-    fun build(): VBox {
-        val result = VBox("ColsLayout/tab")
-        val b: Box = col!!.build()
-        result.addChild(b)
+    fun build(): VPanel {
+        val result = VPanel()
+        val b: HPanel = col!!.build()
+        result.add(b)
         return result
     }
 }

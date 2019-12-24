@@ -2,9 +2,11 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.bs3.Tab
-import org.ro.ui.uicomp.TabNavigator
-import org.ro.ui.uicomp.UIComponent
-import org.ro.ui.uicomp.VBox
+import pl.treksoft.kvision.core.Component
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
+import pl.treksoft.kvision.panel.TabPanel
+import pl.treksoft.kvision.panel.VPanel
 
 @Serializable
 data class TabLayout(val cssClass: String? = null,
@@ -17,16 +19,15 @@ data class TabLayout(val cssClass: String? = null,
         }
     }
 
-    fun build(): UIComponent {
-        val result = TabNavigator("TabLayout")
-        result.percentWidth = 100
-        result.percentHeight = 100
-        result.tabFocusEnabled = true
+    fun build(): Component {
+        val result = TabPanel()
+        result.width = CssSize(100, UNIT.perc)
+        result.height = CssSize(100, UNIT.perc)
 
-        var b: VBox
+        var b: VPanel
         for (rl in row) {
             b = rl.build()
-            result.addChild(b)
+            result.add(b)
         }
         return result
     }

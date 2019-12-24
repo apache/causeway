@@ -3,8 +3,7 @@ package org.ro.layout
 import kotlinx.serialization.Serializable
 import org.ro.to.TransferObject
 import org.ro.to.bs3.Grid
-import org.ro.to.bs3.Row
-import org.ro.ui.uicomp.VBox
+import pl.treksoft.kvision.panel.VPanel
 
 /**
  * Parse layout specification.
@@ -43,14 +42,14 @@ data class Layout(val cssClass: String? = null,
         properties = fieldSet0.property
     }
 
-    fun build(): VBox {
-        val result = VBox("Layout")
-        var b: VBox
+    fun build(): VPanel {
+        val result = VPanel()
+        var b: VPanel
         for (rl in row) {
             // row[0] (head) contains the object title and actions (for wicket viewer)
             // this is to be handled differently (tab)
             b = rl.build()
-            result.addChild(b)
+            result.add(b)
         }
         return result
     }
