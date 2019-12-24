@@ -11,8 +11,11 @@ Description
   Isis was accepted into the Apache Incubator in Sept 2010 and graduated in 
   Oct 2012.  Its first release as a TLP was in Dec 2012.
 
-  To participate in Isis, please join the mailing lists.  Send an empty message 
-  to users-subscribe@isis.apache.org (for users) or to 
+  To participate in Apache Isis community, please join the either the slack
+  channel or the mailing lists.  To join the slack channel, see
+  https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack.
+  to subscribe to the mailing lists, send an empty message to
+  users-subscribe@isis.apache.org (for users) or to
   dev-subscribe@isis.apache.org (for contributors).  Significant contributions 
   over a sustained period of time can earn a contributor commit access to the 
   codebase.
@@ -165,33 +168,37 @@ Incubating releases:
 
 Resources:
  
-  item           type   URL
-  -------------  -----  -----------------------------------------------------
-  Source code    git    https://github.com/apache/isis.git
-  Source code    gitrw  https://github.com/apache/isis.git
-  Status file    www    https://raw.githubusercontent.com/apache/isis/master/STATUS
-  Website        www    http://isis.apache.org
-  Mailing list   dev    dev@isis.apache.org
-  Mailing list   users  users@isis.apache.org
-  JIRA           www    http://issues.apache.org/jira/browse/ISIS
-  Wiki           www    http://cwiki.apache.org/confluence/display/ISIS/Index
-  CI             www    https://builds.apache.org/view/I/view/Isis/job/Isis%20master%20jdk8/
-  Fisheye        www    https://fisheye.apache.org/changelog/isis-git
+  item            type   URL
+  -------------   -----  -----------------------------------------------------
+  Source code     git    https://github.com/apache/isis.git
+  Source code     gitrw  https://github.com/apache/isis.git
+  Status file     www    https://raw.githubusercontent.com/apache/isis/master/STATUS
+  Website         www    http://isis.apache.org
+  Mailing list    dev    dev@isis.apache.org
+  Mailing list    users  users@isis.apache.org
+  Slack           slack  https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack
+  JIRA            www    http://issues.apache.org/jira/browse/ISIS
+  Wiki            www    http://cwiki.apache.org/confluence/display/ISIS/Index
+  Fisheye         www    https://fisheye.apache.org/changelog/isis-git
+  Sonarcloud      www    https://sonarcloud.io/dashboard?id=isis_180410
+  CI (unofficial) www    https://github.com/apache-isis-committers/isis-nightly/actions
 
 
 Team:
 
   role(s)              user id      name
   -----------------    -----        -------------------------------------
-  PMC Chair, Committer kevin        Kevin Meyer (CLA on file)
+  PMC, Committer       ahuber       Andi Huber (CLA on file)
+  PMC, Committer       bibryam      Bilgin Ibryam (CLA on file)
+  PMC, Committer       dslaughter   David Slaughter (CLA on file)
   PMC, Committer       danhaywood   Daniel Keir Haywood (CLA on file)
   PMC, Committer       jvanderwal   Jeroen van der Wal (CLA on file)
+  PMC, Committer       jdoornenbal  Johan Doornenbal (CLA on file)
+  PMC Chair, Committer kevin        Kevin Meyer (CLA on file)
+  PMC, Committer       madytyoo     Maurizio Taverna (CLA on file)
+  PMC, Committer       mgrigorov    Martin Grigorov (CLA on file)
+  PMC, Committer       mnour        Mohammad Nour El-Din (CLA on file)
+  PMC, Committer       oscarbou     Oscar Bou (CLA on file)
   PMC, Committer       rmatthews    Robert Charles Matthews (CLA on file)
   PMC, Committer       struberg     Mark Struberg (CLA on file)
-  PMC, Committer       mnour        Mohammad Nour El-Din (CLA on file)
   PMC, Committer       themalkolm   Alexander Krasnukhin (CLA on file)
-  PMC, Committer       dslaughter   David Slaughter (CLA on file)
-  PMC, Committer       madytyoo     Maurizio Taverna (CLA on file)
-  PMC, Committer       oscarbou     Oscar Bou (CLA on file)
-  PMC, Committer       mgrigorov    Martin Grigorov (CLA on file)
-  PMC, Committer       bibryam      Bilgin Ibryam (CLA on file)

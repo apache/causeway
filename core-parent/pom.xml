@@ -159,11 +159,20 @@ under the License.
 			<timezone>+1</timezone>
 		</developer>
 		<developer>
+			<id>bibryam</id>
+			<name>Bilgin Ibryam</name>
+			<email>bibryam@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+0</timezone>
+		</developer>
+		<developer>
 			<id>danhaywood</id>
 			<name>Dan Haywood</name>
 			<email>danhaywood@apache.org</email>
 			<roles>
-				<role>pmc chair</role>
 				<role>pmc</role>
 				<role>committer</role>
 			</roles>
@@ -182,7 +191,17 @@ under the License.
 		<developer>
 			<id>jcvanderwal</id>
 			<name>Jeroen van der Wal</name>
-			<email>jeroen@stromboli.it</email>
+			<email>jcvanderwal@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>jdoornenbal</id>
+			<name>Johan Doornenbal</name>
+			<email>jdoornenbal@apache.org</email>
 			<roles>
 				<role>pmc</role>
 				<role>committer</role>
@@ -194,6 +213,7 @@ under the License.
 			<name>Kevin Meyer</name>
 			<email>kevin@apache.org</email>
 			<roles>
+				<role>pmc chair</role>
 				<role>pmc</role>
 				<role>committer</role>
 			</roles>
@@ -202,7 +222,7 @@ under the License.
 		<developer>
 			<id>madytyoo</id>
 			<name>Maurizio Taverna</name>
-			<email>tavernamaurizio@gmail.com</email>
+			<email>madytyoo@apache.org</email>
 			<roles>
 				<role>pmc</role>
 				<role>committer</role>
@@ -232,7 +252,7 @@ under the License.
 		<developer>
 			<id>oscarbou</id>
 			<name>Oscar Bou</name>
-			<email>o.bou@gesconsultor.com</email>
+			<email>oscarbou@apache.org</email>
 			<roles>
 				<role>pmc</role>
 				<role>committer</role>
@@ -240,7 +260,7 @@ under the License.
 			<timezone>+1</timezone>
 		</developer>
 		<developer>
-			<id>rcmatthews</id>
+			<id>rmatthews</id>
 			<name>Robert Matthews</name>
 			<email>rmatthews@apache.org</email>
 			<roles>
