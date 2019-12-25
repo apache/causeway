@@ -1,6 +1,7 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
+import org.ro.to.Member
 import org.ro.to.bs3.Row
 import pl.treksoft.kvision.panel.VPanel
 
@@ -18,11 +19,11 @@ data class RowLayout(val cols: MutableList<ColsLayout> = mutableListOf<ColsLayou
         }
     }
 
-    fun build(): VPanel {
+    fun build(members : Map<String, Member>): VPanel {
         val result = VPanel()
         var b: VPanel
         for (c in cols) {
-            b = c.build()
+            b = c.build(members)
             result.add(b)
         }
         return result

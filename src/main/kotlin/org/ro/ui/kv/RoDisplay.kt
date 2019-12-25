@@ -13,7 +13,8 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
         val model = displayObject.data!!
         val items: MutableList<FormItem> = mutableListOf<FormItem>()
         val tObject = model.delegate
-        tObject.members.entries.forEach { it ->
+        val members = tObject.members
+        members.forEach { it ->
             if (it.value.memberType == "property") {
                 val label = it.key
                 val type = "Text" //it.value.memberType
@@ -30,7 +31,7 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
         panel = FormPanelFactory(items).panel
         panel?.let { add(it) }
 
-        val ui = displayObject.layout!!.build()
+        val ui = displayObject.layout!!.build(members)
         console.log("[RoDisplay.init]")
         console.log(displayObject)
         add(ui)

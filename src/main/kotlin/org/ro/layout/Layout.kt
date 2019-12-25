@@ -1,6 +1,7 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
+import org.ro.to.Member
 import org.ro.to.TransferObject
 import org.ro.to.bs3.Grid
 import pl.treksoft.kvision.panel.VPanel
@@ -19,9 +20,9 @@ data class Layout(val cssClass: String? = null,
     var properties = listOf<PropertyLayout>()
 
     constructor(grid: Grid) : this() {
-           grid.rows.forEach {
-               row.add(RowLayout(it))
-           }
+        grid.rows.forEach {
+            row.add(RowLayout(it))
+        }
     }
 
     init {
@@ -42,13 +43,13 @@ data class Layout(val cssClass: String? = null,
         properties = fieldSet0.property
     }
 
-    fun build(): VPanel {
+    fun build(members : Map<String, Member>): VPanel {
         val result = VPanel()
         var b: VPanel
         for (rl in row) {
             // row[0] (head) contains the object title and actions (for wicket viewer)
             // this is to be handled differently (tab)
-            b = rl.build()
+            b = rl.build(members)
             result.add(b)
         }
         return result

@@ -2,6 +2,7 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
+import org.ro.to.Member
 import org.ro.to.bs3.Col
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.panel.HPanel
@@ -35,15 +36,15 @@ data class ColLayout(val domainObject: DomainObjectLayout? = null,
         fieldSet.add(FieldSetLayout(fs))
     }
 
-    fun build(): HPanel {
+    fun build(members : Map<String, Member>): HPanel {
         val result = HPanel()
         var b: Component?
         for (tgl in tabGroup) {
-            b = tgl.build()
+            b = tgl.build(members)
             result.add(b)
         }
         for (fsl in fieldSet) {
-            b = fsl.build()
+            b = fsl.build(members)
             result.add(b!!)
         }
         // actions will not be rendered as buttons

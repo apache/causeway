@@ -1,6 +1,7 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
+import org.ro.to.Member
 import org.ro.to.bs3.FieldSet
 import org.ro.ui.kv.FormPanelFactory
 import org.ro.ui.uicomp.FormItem
@@ -25,15 +26,23 @@ data class FieldSetLayout(val name: String? = null,
         }
     }
 
-    fun build(): FormPanel<String>? {
+    fun build(members: Map<String, Member>): FormPanel<String>? {
         val items = mutableListOf<FormItem>()
         for (p in property) {
             val label = p.id ?: "label not set"
             var type = "Text"
-           if (p.multiLine.asDynamic() != null) {
+            if (p.multiLine.asDynamic() != null) {
                 type = "TextArea"
             }
-            val content = "sample content"//p.link
+            //FIXME
+            var content = "not set"
+            val member = members[label]
+            if (member != null) {
+                val value = member.value
+                if (value != null) {
+                    content = value.content.toString()
+                }
+            }
             val fi = FormItem(label, type, content)
             items.add(fi)
         }

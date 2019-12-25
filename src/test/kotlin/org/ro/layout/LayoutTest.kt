@@ -30,8 +30,8 @@ class LayoutTest : IntegrationTest() {
             //ensure tabgroup is TabNavigator
             assertEquals(2, lo.row.size) //4
 
-            val view = lo.build()
-            assertNotNull(view) // 5
+     //       val view = lo.build()
+       //     assertNotNull(view) // 5
 
 /*            val kids = view.
             assertEquals(2, kids.size) // 6 row[0] is not to be rendered though

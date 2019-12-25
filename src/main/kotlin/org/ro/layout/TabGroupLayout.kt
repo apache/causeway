@@ -1,6 +1,7 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
+import org.ro.to.Member
 import org.ro.to.bs3.TabGroup
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.CssSize
@@ -19,14 +20,14 @@ data class TabGroupLayout(val cssClass: String? = "",
         }
     }
 
-    fun build(): Component {
+    fun build(members : Map<String, Member>): Component {
         val result = TabPanel()
         result.width = CssSize(100, UNIT.perc)
         result.height = CssSize(100, UNIT.perc)
 
         var b: Component
         for (tl in tab) {
-            b = tl.build()
+            b = tl.build(members)
             result.add(b)
         }
         return result
