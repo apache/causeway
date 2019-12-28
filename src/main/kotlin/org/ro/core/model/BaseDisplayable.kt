@@ -23,7 +23,7 @@ abstract class BaseDisplayable() {
         if (len > 2) {
             return strList.get(len - 2)
         } else {
-            return "no title"
+            return ""
         }
     }
 

@@ -1,7 +1,9 @@
 package org.ro.ui.kv
 
 import org.ro.ui.IconManager
-import pl.treksoft.kvision.core.*
+import pl.treksoft.kvision.core.Component
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.panel.SimplePanel
 
 /**
@@ -43,24 +45,6 @@ object RoView {
     fun removeTab(tab: SimplePanel) {
         tabCount--
         UiManager.closeView(tab)
-    }
-
-    fun updatePowered(by: String) {
-        val color = Col.GOLD
-        val bg = Background(
-                //image = "fa fa-cube"
-                color = color
-        )
-        tabPanel.background = bg
-    }
-
-    fun display(dialog: RoDialog) {
-        tabPanel.add(dialog)
-        dialog.verticalAlign = VerticalAlign.MIDDLE
-        dialog.focus()
-    }
-    fun remove(dialog: RoDialog) {
-        tabPanel.remove(dialog)
     }
 
 }

@@ -9,7 +9,7 @@ import org.ro.to.TObject
 import org.ro.ui.ErrorAlert
 import org.ro.ui.kv.UiManager
 
-class ObjectAggregator(actionTitle: String) : BaseAggregator() {
+class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
 
     override var dsp: BaseDisplayable = DisplayObject(actionTitle)
 

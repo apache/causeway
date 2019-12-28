@@ -3,7 +3,7 @@ package org.ro.ui.kv
 import org.ro.ui.Command
 import org.ro.ui.IconManager
 import org.ro.ui.Point
-import org.ro.ui.uicomp.FormItem
+import org.ro.ui.FormItem
 import pl.treksoft.kvision.core.VerticalAlign
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.form.FormPanel

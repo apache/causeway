@@ -28,7 +28,7 @@ data class TabGroupLayout(val cssClass: String? = "",
         var b: Component
         for (tl in tab) {
             b = tl.build(members)
-            result.add(b)
+            result.addTab(tl.name!!, b)
         }
         return result
     }

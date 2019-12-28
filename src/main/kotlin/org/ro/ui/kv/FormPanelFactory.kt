@@ -1,6 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.ui.uicomp.FormItem
+import org.ro.ui.FormItem
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.formPanel
@@ -10,7 +10,6 @@ import pl.treksoft.kvision.form.text.Text
 import pl.treksoft.kvision.form.text.TextArea
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.utils.px
-
 
 class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
@@ -22,7 +21,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             for (fi: FormItem in items) {
                 when (fi.type) {
                     "Text" -> {
-                        add(Text(label = fi.label, value = fi.content as String))
+                        add(createText(fi))
                     }
                     "Password" -> {
                         add(Password(label = fi.label, value = fi.content as String))
@@ -44,6 +43,12 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                 }
             }
         }
+    }
+
+    private fun createText(fi: FormItem): Text {
+        val item = Text(label = fi.label, value = fi.content as String)
+        item.name = fi.description
+        return item
     }
 
 }

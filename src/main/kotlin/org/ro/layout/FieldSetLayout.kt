@@ -3,8 +3,8 @@ package org.ro.layout
 import kotlinx.serialization.Serializable
 import org.ro.to.Member
 import org.ro.to.bs3.FieldSet
+import org.ro.ui.FormItem
 import org.ro.ui.kv.FormPanelFactory
-import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.form.FormPanel
 
 @Serializable
@@ -34,8 +34,8 @@ data class FieldSetLayout(val name: String? = null,
             if (p.multiLine.asDynamic() != null) {
                 type = "TextArea"
             }
-            //FIXME
-            var content = "not set"
+            //TODO handle numbers, dates, etc. as well
+            var content = ""
             val member = members[label]
             if (member != null) {
                 val value = member.value
@@ -43,7 +43,8 @@ data class FieldSetLayout(val name: String? = null,
                     content = value.content.toString()
                 }
             }
-            val fi = FormItem(label, type, content)
+            val description = p.describedAs
+            val fi = FormItem(label, type, content, description = description)
             items.add(fi)
         }
         val formPanel = FormPanelFactory(items).panel

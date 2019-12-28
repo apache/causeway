@@ -6,7 +6,7 @@ import org.ro.to.Link
 import org.ro.to.Parameter
 import org.ro.ui.Command
 import org.ro.ui.Point
-import org.ro.ui.uicomp.FormItem
+import org.ro.ui.FormItem
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.select.SimpleSelect
 import pl.treksoft.kvision.form.text.TextArea

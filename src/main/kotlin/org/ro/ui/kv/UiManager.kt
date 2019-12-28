@@ -74,20 +74,25 @@ object UiManager {
         displayable.isRendered = true
     }
 
-    fun openObjectView(aggregator: BaseAggregator) {
+    fun openObjectView(aggregator: ObjectAggregator) {
         val displayable = aggregator.dsp
-        val title: String = displayable.extractTitle()
+        var title: String = displayable.extractTitle()
+        if (title.isEmpty()) {
+            title = aggregator.actionTitle
+        }
         val panel = RoDisplay(displayable as DisplayObject)
         add(title, panel, aggregator)
         displayable.isRendered = true
     }
 
     fun displayObject(tObject: TObject) {
-        val aggregator = ObjectAggregator("icon clicked in list")
+        val aggregator = ObjectAggregator(tObject.title)
         linkLayout(tObject, aggregator)
         val logEntry = EventStore.find(tObject)!!
         logEntry.addAggregator(aggregator)
         aggregator.update(logEntry)
+        console.log("[UiManager.displayObject]")
+        console.log(logEntry)
         aggregator.handleObject(tObject)
     }
 

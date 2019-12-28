@@ -1,7 +1,7 @@
 package org.ro.ui.kv
 
 import org.ro.core.model.DisplayObject
-import org.ro.ui.uicomp.FormItem
+import org.ro.ui.FormItem
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.panel.VPanel
 
@@ -29,7 +29,7 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
         }
 
         panel = FormPanelFactory(items).panel
-        panel?.let { add(it) }
+//        panel?.let { add(it) }
 
         val ui = displayObject.layout!!.build(members)
         console.log("[RoDisplay.init]")

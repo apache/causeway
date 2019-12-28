@@ -3,7 +3,7 @@ package org.ro.view
 import org.ro.core.event.LogEntry
 import org.ro.ui.kv.RoDialog
 import org.ro.ui.Command
-import org.ro.ui.uicomp.FormItem
+import org.ro.ui.FormItem
 
 class UndefinedAlert(val logEntry: LogEntry) : Command {
 
