@@ -23,7 +23,6 @@ data class TabLayout(val cssClass: String? = null,
         val result = VPanel()
         result.width = CssSize(100, UNIT.perc)
         result.height = CssSize(100, UNIT.perc)
- //       result.title = name
         var b: VPanel
         for (rl in row) {
             b = rl.build(members)

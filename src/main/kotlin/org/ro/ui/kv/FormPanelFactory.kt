@@ -24,21 +24,13 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                         add(createText(fi))
                     }
                     "Password" -> {
-                        add(Password(label = fi.label, value = fi.content as String))
+                        add(createPassword(fi))
                     }
                     "TextArea" -> {
-                        val rowCnt = maxOf(3, fi.size)
-                        add(TextArea(label = fi.label, value = fi.content as String, rows = rowCnt))
+                        add(createTextArea(fi))
                     }
                     "SimpleSelect" -> {
-                        @Suppress("UNCHECKED_CAST")
-                        val list = fi.content as List<StringPair>
-                        var preSelectedValue: String? = null
-                        if (list.isNotEmpty()) {
-                            preSelectedValue = list.first().first
-                        }
-                        val select = SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
-                        add(select)
+                        add(createSelect(fi))
                     }
                 }
             }
@@ -47,6 +39,31 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createText(fi: FormItem): Text {
         val item = Text(label = fi.label, value = fi.content as String)
+        item.name = fi.description
+        return item
+    }
+
+    private fun createPassword(fi: FormItem): Password {
+        val item = Password(label = fi.label, value = fi.content as String)
+        item.name = fi.description
+        return item
+    }
+
+    private fun createTextArea(fi: FormItem): TextArea {
+        val rowCnt = maxOf(3, fi.size)
+        val item = TextArea(label = fi.label, value = fi.content as String, rows = rowCnt)
+        item.name = fi.description
+        return item
+    }
+
+    private fun createSelect(fi: FormItem): SimpleSelect {
+        @Suppress("UNCHECKED_CAST")
+        val list = fi.content as List<StringPair>
+        var preSelectedValue: String? = null
+        if (list.isNotEmpty()) {
+            preSelectedValue = list.first().first
+        }
+        val item = SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
         item.name = fi.description
         return item
     }

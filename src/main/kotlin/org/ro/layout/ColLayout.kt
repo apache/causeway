@@ -46,7 +46,6 @@ data class ColLayout(val domainObject: DomainObjectLayout? = null,
         for (fsl in fieldSet) {
             b = fsl.build(members)
             result.add(b!!)
- //           result.title = fsl.name
         }
         // TODO actions to be rendered as context menu, not buttons
         return result

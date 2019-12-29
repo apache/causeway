@@ -47,8 +47,7 @@ data class FieldSetLayout(val name: String? = null,
             val fi = FormItem(label, type, content, description = description)
             items.add(fi)
         }
-        val formPanel = FormPanelFactory(items).panel
-        return formPanel
+        return FormPanelFactory(items).panel
     }
 
 }

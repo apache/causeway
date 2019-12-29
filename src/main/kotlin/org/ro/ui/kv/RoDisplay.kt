@@ -31,8 +31,8 @@ class RoDisplay(displayObject: DisplayObject) : VPanel() {
         panel = FormPanelFactory(items).panel
 //        panel?.let { add(it) }
 
-        val ui = displayObject.layout!!.build(members)
-        console.log("[RoDisplay.init]")
+        val ui = displayObject.layout!!.build(tObject, members)
+        console.log("[RoDisplay.binit]")
         console.log(displayObject)
         add(ui)
 

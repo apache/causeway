@@ -8,7 +8,7 @@ object IconManager {
 
     /* Recreate from configuration value*/
     val word2Icon = mapOf<String, String>(
-            "Actions" to "ellipsis-h",
+            "Actions" to "ellipsis-v",
             "Create" to "plus",
             "Edit" to "pencil",
             "Delete" to "trash",
