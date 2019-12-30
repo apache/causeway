@@ -38,16 +38,15 @@ data class ColLayout(val domainObject: DomainObjectLayout? = null,
 
     fun build(members : Map<String, Member>): HPanel {
         val result = HPanel()
-        var b: Component?
+        var cpt: Component?
         for (tgl in tabGroup) {
-            b = tgl.build(members)
-            result.add(b)
+            cpt = tgl.build(members)
+            result.add(cpt)
         }
         for (fsl in fieldSet) {
-            b = fsl.build(members)
-            result.add(b!!)
+            cpt = fsl.build(members)
+            result.add(cpt!!)
         }
-        // TODO actions to be rendered as context menu, not buttons
         return result
     }
 

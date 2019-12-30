@@ -25,10 +25,9 @@ data class TabGroupLayout(val cssClass: String? = "",
         result.width = CssSize(100, UNIT.perc)
         result.height = CssSize(100, UNIT.perc)
 
-        var b: Component
         for (tl in tab) {
-            b = tl.build(members)
-            result.addTab(tl.name!!, b)
+            val cpt = tl.build(members)
+            result.addTab(tl.name!!, cpt)
         }
         return result
     }

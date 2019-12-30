@@ -1,8 +1,6 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
-import org.ro.to.Action
-import org.ro.to.Member
 import org.ro.to.TObject
 import org.ro.to.TransferObject
 import org.ro.to.bs3.Grid
@@ -20,7 +18,6 @@ data class Layout(val cssClass: String? = null,
                   val row: MutableList<RowLayout> = mutableListOf<RowLayout>()) : TransferObject {
 
     var properties = listOf<PropertyLayout>()
-    var actions: Map<String, Action>? = null
 
     constructor(grid: Grid) : this() {
         grid.rows.forEach {
@@ -29,33 +26,35 @@ data class Layout(val cssClass: String? = null,
     }
 
     init {
-        val row1 = row[1]
-        var cols = row1.cols[0]
-        var col = cols.col
-        if (col != null) {
-            val tabGroup = col.tabGroup
-            if (tabGroup.size > 0) {
-                val tabGroup0 = tabGroup[0]
-                val tab0 = tabGroup0.tab[0]
-                val row0 = tab0.row[0]
-                cols = row0.cols[0]
+        // row[0] (head) contains the object title and actions
+        // row[1] contains data, tabs, collections, etc.
+        val secondRow = row[1] // traditional C braintwist
+        var colsLyt = secondRow.cols.first()
+        var colLyt = colsLyt.col
+        if (colLyt != null) {
+            val tgLyts = colLyt.tabGroup
+            if (tgLyts.isNotEmpty()) {
+                val tabGroup = tgLyts.first()
+                val tab = tabGroup.tab.first()
+                val row = tab.row.first()
+                colsLyt = row.cols.first()
             }
         }
-        col = cols.col!!
-        val fieldSet0 = col.fieldSet[0]
-        properties = fieldSet0.property
+        colLyt = colsLyt.col!!
+        val fsLyt = colLyt.fieldSet.first()
+        properties = fsLyt.property
     }
 
-    fun build(tObject: TObject, members : Map<String, Member>): VPanel {
+    fun build(tObject: TObject): VPanel {
         val result = VPanel()
+
         val rlt = row[0]
-        val oCpt = rlt.build(tObject, actions)
+        // row[0] (head) contains the object title and actions
+        val oCpt = rlt.build(tObject)
         result.add(oCpt)
 
         for (rl in row) {
-            // row[0] (head) contains the object title and actions (for wicket viewer)
-            // this is to be handled differently (tab)
-            val cpt = rl.build(members)
+            val cpt = rl.build(tObject.members)
             result.add(cpt)
         }
         return result

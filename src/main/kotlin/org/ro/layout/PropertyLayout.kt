@@ -23,7 +23,7 @@ data class PropertyLayout(val named: String? = null,
 ) {
     constructor(property: Property) : this() {
         val act = property.action
-//FIXME        action.add(ActionLayout(act))
+        action.add(ActionLayout(act))
     }
 
 }

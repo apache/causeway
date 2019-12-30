@@ -3,7 +3,6 @@ package org.ro.ui.kv
 import org.ro.core.model.DisplayList
 import org.ro.core.model.Exposer
 import org.w3c.dom.events.MouseEvent
-import org.w3c.dom.events.MouseEventInit
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
@@ -18,8 +17,6 @@ import pl.treksoft.kvision.utils.obj
  * Create ColumnDefinitions for Tabulator tables
  */
 class ColumnFactory {
-
-    //IMPROVE reduce paddingTop/paddingBottom for tabulator-col-content
 
     private val checkFormatterParams = obj {
         allowEmpty = true
@@ -44,7 +41,7 @@ class ColumnFactory {
         }
 
         val model = displayList.data as List<dynamic>
-        if (model[0].hasOwnProperty("iconName")) {
+        if (model[0].hasOwnProperty("iconName") as Boolean) {
             val icon = buildLinkIcon()
             columns.add(icon)
         }
@@ -76,7 +73,7 @@ class ColumnFactory {
                 align = Align.CENTER,
                 width = "40",
                 formatterComponentFunction = { _, _, data ->
-                    Button(text = "", icon = data["iconName"], style = ButtonStyle.LINK).onClick {
+                    Button(text = "", icon = data["iconName"] as? String, style = ButtonStyle.LINK).onClick {
                         val tObject = (data as Exposer).delegate
                         UiManager.displayObject(tObject)
                     }
@@ -90,7 +87,7 @@ class ColumnFactory {
                 field = "result",
                 headerFilter = Editor.INPUT,
                 formatterComponentFunction = { _, _, data ->
-                    Button(text = data["object"].title, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
+                    Button(text = data["object"].title as String, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
                         console.log("[ColumnFactory.buildLink]")
                         console.log(data)
                     }
@@ -137,25 +134,7 @@ class ColumnFactory {
     private fun buildContextMenu(mouseEvent: MouseEvent, cell: Tabulator.CellComponent): ContextMenu {
         val exposer = getData(cell)
         val tObject = exposer.delegate
-        val menu = MenuFactory.buildFor(tObject)
-        //FIXME x/y coordinates are sometimes off screen
-        //val menuWidth =  menu.maxWidth?.first!!.toInt()
-/*        val mei = MouseEventInit(
-                clientX = (mouseEvent.clientX - 250),
-                clientY = (mouseEvent.clientY - 500),
-                screenY = (mouseEvent.clientY - 500)) */
-        val mei = MouseEventInit(
-                clientX = (mouseEvent.clientX - 250),
-                clientY = (mouseEvent.clientY - 500),
-                screenY = (mouseEvent.clientY - 500))
-        val positionedEvent = MouseEvent("", mei)
-        positionedEvent.pageX //= 200 as Double
-        menu.positionMenu(positionedEvent)
-        console.log("[ColFac.showContextMenu]")
-        console.log(mouseEvent)
- //       menu.left = 200.px
- //       menu.top = 200.px
-        return menu
+        return  MenuFactory.buildContextMenu(mouseEvent, tObject)
     }
 
     private fun getData(cell: Tabulator.CellComponent): Exposer {
@@ -169,10 +148,6 @@ class ColumnFactory {
         val exposer = getData(cell)
         val oldValue = exposer.selected
         exposer.selected = !oldValue
-    }
-
-    private fun isSelected(cell: Tabulator.CellComponent): Boolean {
-        return getData(cell).selected
     }
 
 }
