@@ -1074,6 +1074,16 @@
 				<artifactId>fr.opensagres.xdocreport.converter.docx.xwpf</artifactId>
 				<version>${xdocreport.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>fr.opensagres.xdocreport</groupId>
+				<artifactId>org.apache.poi.xwpf.converter.pdf</artifactId>
+				<version>${xdocreport.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.opensagres.xdocreport</groupId>
+				<artifactId>org.apache.poi.xwpf.converter.core</artifactId>
+				<version>${xdocreport.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>io.swagger</groupId>

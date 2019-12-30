@@ -196,6 +196,18 @@
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-xdocreport-dom</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-zip-dom</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -208,6 +220,7 @@
 -->
 		<module>lib/excel/impl</module>
 
+		<module>lib/xdocreport/impl</module>
 		<module>lib/zip/impl</module>
 
 		<module>persistence/h2console/impl</module>
