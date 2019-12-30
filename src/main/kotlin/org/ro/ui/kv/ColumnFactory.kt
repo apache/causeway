@@ -2,8 +2,6 @@ package org.ro.ui.kv
 
 import org.ro.core.model.DisplayList
 import org.ro.core.model.Exposer
-import org.w3c.dom.events.MouseEvent
-import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.tabulator.Align
@@ -40,6 +38,9 @@ class ColumnFactory {
             columns.add(checkBox)
         }
 
+        val menu = buildMenu()
+        columns.add(menu)
+
         val model = displayList.data as List<dynamic>
         if (model[0].hasOwnProperty("iconName") as Boolean) {
             val icon = buildLinkIcon()
@@ -59,10 +60,6 @@ class ColumnFactory {
             }
             columns.add(cd)
         }
-
-        val menu = buildMenu()
-        columns.add(menu)
-
         return columns
     }
 
@@ -89,7 +86,7 @@ class ColumnFactory {
                 formatterComponentFunction = { _, _, data ->
                     Button(text = data["object"].title as String, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
                         console.log("[ColumnFactory.buildLink]")
-                        console.log(data)
+                        console.log(data as? Any)
                     }
                 })
     }
@@ -122,26 +119,21 @@ class ColumnFactory {
                 formatter = Formatter.TICKCROSS,
                 formatterParams = menuFormatterParams,
                 align = Align.CENTER,
-                width = "40",
+                width = "60",
                 headerSort = false,
-                cellClick = { evt, cell ->
-                    evt.stopPropagation()
-                    val cm = buildContextMenu(evt, cell)
-                    UiManager.push(cm)
+                formatterComponentFunction = { _, _, data ->
+                    val tObject = (data as Exposer).delegate
+                    MenuFactory.buildDdFor(
+                            tObject,
+                            false,
+                            ButtonStyle.LINK)
                 })
-    }
-
-    private fun buildContextMenu(mouseEvent: MouseEvent, cell: Tabulator.CellComponent): ContextMenu {
-        val exposer = getData(cell)
-        val tObject = exposer.delegate
-        return  MenuFactory.buildContextMenu(mouseEvent, tObject)
     }
 
     private fun getData(cell: Tabulator.CellComponent): Exposer {
         val row = cell.getRow()
         val data = row.getData().asDynamic()
-        val exposer = data as Exposer
-        return exposer
+        return data as Exposer
     }
 
     private fun toggleSelection(cell: Tabulator.CellComponent) {
