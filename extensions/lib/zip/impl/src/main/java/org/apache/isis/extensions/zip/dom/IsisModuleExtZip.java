@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.slack.dom;
+package org.apache.isis.extensions.zip.dom;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +24,6 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @ComponentScan
-public class IsisModuleExtSlack {
+public class IsisModuleExtZip {
 
 }

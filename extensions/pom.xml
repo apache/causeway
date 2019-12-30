@@ -208,6 +208,8 @@
 -->
 		<module>lib/excel/impl</module>
 
+		<module>lib/zip/impl</module>
+
 		<module>persistence/h2console/impl</module>
 		<module>persistence/hsqldbmgr/impl</module>
 

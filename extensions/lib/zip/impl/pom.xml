@@ -18,19 +18,42 @@
 		<groupId>org.apache.isis.extensions</groupId>
 		<artifactId>isis-extensions</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
+		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-xdocreport-dom</artifactId>
-	<name>Apache Isis Ext - xdocreport</name>
-	<description>Integrates XDoc Report Library</description>
+	<artifactId>isis-extensions-zip-dom</artifactId>
+	<name>Apache Isis Ext - zip</name>
+
+	<description>
+		A domain service for Apache Isis', for zipping utilities.
+	</description>
+
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.xdocreport.dom</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/xdocreport/dom</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.zip.dom</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/zip/dom</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
 
