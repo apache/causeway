@@ -26,7 +26,7 @@ public class Generate1Docx {
 
         // 1) Load Docx file by filling freemarker template engine and cache
         // it to the registry
-        InputStream in= new FileInputStream(new File("src/test/java/org/isisaddons/module/xdocreport/dom/example/template/Project-template.docx"));
+        InputStream in= new FileInputStream(new File("src/test/java/org/apache/isis/extensions/xdocreport/dom/impl/example/template/Project-template.docx"));
         IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in,TemplateEngineKind.Freemarker);
 
         // 2) Create fields metadata to manage lazy loop (#forech velocity)
