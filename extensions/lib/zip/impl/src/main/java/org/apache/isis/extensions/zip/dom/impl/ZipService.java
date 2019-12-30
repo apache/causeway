@@ -26,11 +26,16 @@ public class ZipService {
         private final File file;
     }
 
+    @Deprecated
+    public byte[] zip(final List<FileAndName> fileAndNameList) {
+        return zipNamedFiles(fileAndNameList);
+    }
+
     /**
      * Rather than use the name of the file (which might be temporary files, for example)
      * we explicitly provide the name to use (in the ZipEntry).
      */
-    public byte[] zip(final List<FileAndName> fileAndNameList) {
+    public byte[] zipNamedFiles(final List<FileAndName> fileAndNameList) {
 
         try {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -58,4 +63,37 @@ public class ZipService {
                            .collect(Collectors.toList())
                 );
     }
+
+    @Data
+    public static class BytesAndName {
+        private final String name;
+        private final byte[] bytes;
+    }
+
+    /**
+     * Similar to {@link #zipNamedFiles(List)}, but uses simple byte[] as the input, rather than files.
+     *
+     * @param bytesAndNameList
+     * @return
+     */
+    public byte[] zipNamedBytes(final List<BytesAndName> bytesAndNameList) {
+
+        final byte[] bytes;
+        try {
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final ZipOutputStream zos = new ZipOutputStream(baos);
+
+            for (final BytesAndName ban : bytesAndNameList) {
+                zos.putNextEntry(new ZipEntry(ban.getName()));
+                zos.write(ban.getBytes());
+                zos.closeEntry();
+            }
+            zos.close();
+            bytes = baos.toByteArray();
+        } catch (final IOException ex) {
+            throw new FatalException("Unable to create zip", ex);
+        }
+        return bytes;
+    }
+
 }
