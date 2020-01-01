@@ -423,6 +423,10 @@ public interface ManagedObject {
             return MethodExtensions.invoke(method, unwrapPojo(adapter), new Object[] {arg0});
         }
     
+        public static Object invoke(Method method, ManagedObject adapter, Can<ManagedObject> args) {
+            return invoke(method, adapter, args.toList().toArray(new ManagedObject[]{}));
+        }
+
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject arg0Adapter) {
             return invoke(method, adapter, unwrapPojo(arg0Adapter));
         }
