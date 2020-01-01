@@ -19,6 +19,8 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.datanucleus;
 
+import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.runtime.session.IsisSession;
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.cache.CachedPC;
 import org.datanucleus.enhancement.Persistable;
@@ -32,17 +34,21 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.eventbus
 
 import lombok.extern.log4j.Log4j2;
 
-//FIXME currently is a noop, resurrect or remove see https://stackoverflow.com/a/11648163/9269480
+import java.util.Optional;
+
+/**
+ * Although injection into domain objects is considered by some "unusual"
+ * (see eg https://stackoverflow.com/a/11648163/9269480)
+ * it has always been supported by the Apache Isis framework as one of the
+ * main mechanisms in support of "behaviourally complete" objects.
+ */
 @Log4j2
 public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
 
-    private final ServiceInjector serviceInjector = null;
-    
-    public JDOStateManagerForIsis(ExecutionContext ec, AbstractClassMetaData cmd) {
+    public JDOStateManagerForIsis(
+            final ExecutionContext ec,
+            final AbstractClassMetaData cmd) {
         super(ec, cmd);
-//        this.serviceInjector = (ServiceInjector) ec.getProperty("serviceInjector");
-//        requires(serviceInjector, "serviceInjector");
-        log.warn("not implemented: #injectServicesInto(...)");
     }
 
     public enum Hint {
@@ -222,8 +228,11 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
     }
 
     protected void injectServicesInto(Persistable pc) {
-        if(serviceInjector!=null) {
-            serviceInjector.injectServicesInto(pc);
+        final Optional<IsisSession> isisSessionIfAny = IsisContext.getCurrentIsisSession();
+        if(isisSessionIfAny.isPresent()) {
+            isisSessionIfAny.get().getServiceInjector().injectServicesInto(pc);
+        } else {
+            log.warn("could not inject into PC, no isis session");
         }
     }
     
