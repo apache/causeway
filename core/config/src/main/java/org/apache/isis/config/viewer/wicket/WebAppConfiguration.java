@@ -84,7 +84,7 @@ public class WebAppConfiguration {
         this.applicationJs = ignoreLeadingSlash(application.getJs());
 
         this.brandLogoHeader = Optional.ofNullable(honorContextPath(application.getBrandLogoHeader()))
-                .orElse(this.applicationName);
+                .orElse(null);
         this.brandLogoSignin = Optional.ofNullable(honorContextPath(application.getBrandLogoSignin()))
                 .orElse(null);
         this.faviconUrl = honorContextPath(application.getFaviconUrl());
