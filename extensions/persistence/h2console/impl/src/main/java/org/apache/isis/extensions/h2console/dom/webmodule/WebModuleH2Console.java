@@ -25,6 +25,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -53,15 +54,20 @@ public class WebModuleH2Console implements WebModule  {
 
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final IsisConfiguration isisConfiguration;
+    private final ServiceInjector serviceInjector;
 
     @Getter
     private final LocalResourcePath localResourcePathIfEnabled;
     private final boolean applicable;
 
     @Inject
-    public WebModuleH2Console(IsisSystemEnvironment isisSystemEnvironment, IsisConfiguration isisConfiguration) {
+    public WebModuleH2Console(
+            final IsisSystemEnvironment isisSystemEnvironment,
+            final IsisConfiguration isisConfiguration,
+            final ServiceInjector serviceInjector) {
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.isisConfiguration = isisConfiguration;
+        this.serviceInjector = serviceInjector;
         this.applicable = isPrototyping() && isUsesH2MemConnection();
         this.localResourcePathIfEnabled = applicable ? new LocalResourcePath(CONSOLE_PATH) : null;
     }
@@ -79,6 +85,7 @@ public class WebModuleH2Console implements WebModule  {
 
         val servlet = ctx.addServlet(SERVLET_NAME, WebServlet.class);
         if(servlet != null) {
+            serviceInjector.injectServicesInto(servlet);
             servlet.addMapping(CONSOLE_PATH + "/*");
             servlet.setInitParameter("webAllowOthers", "true");
         } else {
