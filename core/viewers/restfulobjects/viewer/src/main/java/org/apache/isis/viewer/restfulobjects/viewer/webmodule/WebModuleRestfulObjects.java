@@ -18,6 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.webmodule;
 
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
+import lombok.var;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -27,25 +32,16 @@ import javax.servlet.ServletException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
-
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._Strings.prefix;
-import static org.apache.isis.commons.internal.base._Strings.suffix;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
-
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-import lombok.var;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
@@ -64,14 +60,12 @@ public final class WebModuleRestfulObjects implements WebModule  {
     public static final String ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS = "IsisSessionFilterForRestfulObjects";
 
     private final IsisConfiguration isisConfiguration;
-    private final String restfulPathConfigValue;
     private final String restfulPath;
 
     @Inject
     public WebModuleRestfulObjects(final IsisConfiguration isisConfiguration) {
         this.isisConfiguration = isisConfiguration;
-        this.restfulPathConfigValue = this.isisConfiguration.getViewer().getRestfulobjects().getBasePath();
-        this.restfulPath = suffix(prefix(restfulPathConfigValue, "/"), "/");
+        this.restfulPath = this.isisConfiguration.getViewer().getRestfulobjects().getBasePath();
     }
 
 
@@ -85,7 +79,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
             return;
         }
 
-        putRestfulPath(this.restfulPathConfigValue);
+        putRestfulPath(this.restfulPath);
 
         // register this module as a viewer
         ctx.addViewer("restfulobjects");

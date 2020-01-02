@@ -72,7 +72,7 @@ public final class WebModuleWicket implements WebModule  {
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.isisConfiguration = isisConfiguration;
 
-        wicketBasePath = this.isisConfiguration.getViewer().getWicket().getBasePath();
+        this.wicketBasePath = this.isisConfiguration.getViewer().getWicket().getBasePath();
 
         deploymentMode = this.isisSystemEnvironment.isPrototyping()
                 ? "development"
@@ -83,7 +83,7 @@ public final class WebModuleWicket implements WebModule  {
         requireNonNull(wicketBasePath, "Config property 'isis.viewer.wicket.base-path' is required.");
         requireNonNull(wicketApp, "Config property 'isis.viewer.wicket.app' is required.");
 
-        this.urlPattern = suffix(prefix(wicketBasePath, "/"), "/") + "*";
+        this.urlPattern = wicketBasePath + "*";
     }
 
     @Getter

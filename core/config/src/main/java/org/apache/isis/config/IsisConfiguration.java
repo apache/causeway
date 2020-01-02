@@ -28,8 +28,10 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.RegEx;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -54,6 +56,7 @@ import org.apache.isis.config.metamodel.facets.PublishPropertiesConfiguration;
 import org.apache.isis.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.config.viewer.wicket.DialogMode;
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
 
@@ -67,6 +70,7 @@ import lombok.Data;
  */
 @ConfigurationProperties(ConfigurationConstants.ROOT_PREFIX)
 @Data
+@Validated
 public class IsisConfiguration {
 
     @Autowired private ConfigurableEnvironment environment;
@@ -651,7 +655,8 @@ public class IsisConfiguration {
         private final Restfulobjects restfulobjects = new Restfulobjects();
         @Data
         public static class Restfulobjects {
-            private String basePath = "/restful";
+            @javax.validation.constraints.Pattern(regexp="^[/].*[/]$")
+            private String basePath = "/restful/";
             private boolean honorUiHints = false;
             private boolean objectPropertyValuesOnly = false;
             private boolean strictAcceptChecking = false;
@@ -679,7 +684,8 @@ public class IsisConfiguration {
              */
             private boolean ajaxDebugMode = false;
 
-            private String basePath = "/wicket";
+            @javax.validation.constraints.Pattern(regexp="^[/].*[/]$")
+            private String basePath = "/wicket/";
 
             private boolean clearOriginalDestination = false;
 
