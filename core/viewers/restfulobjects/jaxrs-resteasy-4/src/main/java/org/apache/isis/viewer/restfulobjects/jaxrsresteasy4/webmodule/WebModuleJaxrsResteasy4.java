@@ -51,11 +51,11 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
  * @since 2.0
  */
 @Service
-@Named("isisRoViewer.WebModuleRestfulObjects")
+@Named("isisRoViewer.WebModuleJaxrsRestEasy4")
 @Order(OrderPrecedence.MIDPOINT - 80)
-@Qualifier("RestfulObjects")
+@Qualifier("JaxrsRestEasy4")
 @Log4j2
-public final class WebModuleRestfulObjects implements WebModule  {
+public final class WebModuleJaxrsResteasy4 implements WebModule  {
 
     private final static String RESTEASY_BOOTSTRAPPER = "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
     private final static String RESTEASY_DISPATCHER = "RestfulObjectsRestEasyDispatcher";
@@ -67,7 +67,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
     private final String restfulPath;
 
     @Inject
-    public WebModuleRestfulObjects(
+    public WebModuleJaxrsResteasy4(
             final IsisConfiguration isisConfiguration,
             final ServiceInjector serviceInjector) {
         this.isisConfiguration = isisConfiguration;
@@ -77,7 +77,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
 
 
     @Getter
-    private final String name = "RestEasy";
+    private final String name = "JaxrsRestEasy4";
 
     @Override
     public void prepare(WebModuleContext ctx) {
