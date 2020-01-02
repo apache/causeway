@@ -21,6 +21,8 @@ package org.apache.isis.webapp.modules.logonlog;
 import lombok.Getter;
 import lombok.var;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -28,6 +30,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -46,39 +49,30 @@ import org.apache.isis.webapp.modules.WebModuleContext;
 @Named("isisWebapp.WebModuleLogOnExceptionLogger")
 @Order(OrderPrecedence.HIGH - 100)
 @Qualifier("LogOnExceptionLogger")
-public final class WebModuleLogOnExceptionLogger implements WebModule  {
+public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
 
     private final static String LOGONLOGGER_FILTER_NAME = "IsisLogOnExceptionFilter";
 
-    private WebModuleContext webModuleContext;
 
     @Getter
     private final String name = "LogOn Exception Logger";
 
-    private final ServiceInjector serviceInjector;
-
     @Inject
     public WebModuleLogOnExceptionLogger(final ServiceInjector serviceInjector) {
-        this.serviceInjector = serviceInjector;
+        super(serviceInjector);
     }
 
-    @Override
-    public void prepare(final WebModuleContext ctx) {
-        this.webModuleContext = ctx;
-    }
 
     @Override
-    public ServletContextListener init(ServletContext ctx) throws ServletException {
+    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        var filter = ctx.addFilter(LOGONLOGGER_FILTER_NAME, IsisLogOnExceptionFilter.class);
-        if (filter != null) {
-            filter.addMappingForUrlPatterns(
-                    null,
-                    true, // filter is forced last
-                    webModuleContext.getProtectedPaths());
-        } else {
-            // was already registered, eg in web.xml.
-        }
+        registerFilter(ctx, LOGONLOGGER_FILTER_NAME, IsisLogOnExceptionFilter.class)
+            .ifPresent(filterReg -> {
+                filterReg.addMappingForUrlPatterns(
+                        null,
+                        true, // filterReg is forced last
+                        webModuleContext.getProtectedPaths());
+            });
 
         return null; // does not provide a listener
     }

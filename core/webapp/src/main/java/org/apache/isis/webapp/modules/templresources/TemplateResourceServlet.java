@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.RestEasyConfiguration;
 import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.metamodel.commons.InputStreamExtensions;
 import org.apache.isis.metamodel.commons.ResourceUtil;
@@ -54,7 +55,7 @@ public class TemplateResourceServlet extends HttpServlet {
     private TemplateResourceServlet_HtmlTemplateVariables templateVariables;
 
     @Inject
-    private IsisConfiguration isisConfiguration;
+    private RestEasyConfiguration restEasyConfiguration;
     @Inject
     private WebAppContextPath webAppContextPath;
 
@@ -62,7 +63,7 @@ public class TemplateResourceServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        final String restfulPath = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
+        final String restfulPath = restEasyConfiguration.getServlet().getMapping().getPrefix();
         final String restfulBase = webAppContextPath.prependContextPath(restfulPath);
         templateVariables = new TemplateResourceServlet_HtmlTemplateVariables(pair("restful-base", restfulBase));
     }

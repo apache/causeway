@@ -19,21 +19,20 @@
 package org.apache.isis.webapp.modules.templresources;
 
 import lombok.Getter;
-import lombok.var;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.webapp.modules.WebModule;
 
 /**
  * WebModule to provide static resources utilizing an in-memory cache.
@@ -44,7 +43,7 @@ import org.apache.isis.webapp.modules.WebModule;
 @Named("isisWebapp.WebModuleTemplateResources")
 @Order(OrderPrecedence.MIDPOINT - 100)
 @Qualifier("TemplateResources")
-public final class WebModuleTemplateResources implements WebModule  {
+public final class WebModuleTemplateResources extends WebModuleAbstract {
 
     private final static String[] urlPatterns = { "*.thtml" };
     private final static int cacheTimeSeconds = 86400;
@@ -55,41 +54,32 @@ public final class WebModuleTemplateResources implements WebModule  {
     @Getter
     private final String name = "TemplateResources";
 
-    private final ServiceInjector serviceInjector;
-
     @Inject
     public WebModuleTemplateResources(final ServiceInjector serviceInjector) {
-        this.serviceInjector = serviceInjector;
+        super(serviceInjector);
     }
 
     @Override
-    public ServletContextListener init(ServletContext ctx) throws ServletException {
+    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        var filter = ctx.addFilter(FILTER_NAME, TemplateResourceCachingFilter.class);
-        if (filter != null) {
-            serviceInjector.injectServicesInto(filter);
-            filter.setInitParameter(
-                    "CacheTime",
-                    ""+cacheTimeSeconds);
-            filter.addMappingForUrlPatterns(
-                    null,
-                    true,
-                    urlPatterns);
+        registerFilter(ctx, FILTER_NAME, TemplateResourceCachingFilter.class)
+            .ifPresent(filterReg -> {
+                filterReg.setInitParameter(
+                        "CacheTime",
+                        ""+cacheTimeSeconds);
+                filterReg.addMappingForUrlPatterns(
+                        null,
+                        true,
+                        urlPatterns);
 
-        } else {
-            // was already registered, eg in web.xml.
-        }
+            });
 
-        var servlet = ctx.addServlet(SERVLET_NAME, TemplateResourceServlet.class);
-        if (servlet != null) {
-            serviceInjector.injectServicesInto(servlet);
-            servlet.addMapping(urlPatterns);
-        } else {
-            // was already registered, eg in web.xml.
-        }
+        registerServlet(ctx, SERVLET_NAME, TemplateResourceServlet.class)
+            .ifPresent(servletReg -> {
+                servletReg.addMapping(urlPatterns);
+            });
 
         return null; // does not provide a listener
     }
-
 
 }

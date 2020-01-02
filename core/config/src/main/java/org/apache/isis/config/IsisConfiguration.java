@@ -655,8 +655,6 @@ public class IsisConfiguration {
         private final Restfulobjects restfulobjects = new Restfulobjects();
         @Data
         public static class Restfulobjects {
-            @javax.validation.constraints.Pattern(regexp="^[/].*[/]$")
-            private String basePath = "/restful/";
             private boolean honorUiHints = false;
             private boolean objectPropertyValuesOnly = false;
             private boolean strictAcceptChecking = false;

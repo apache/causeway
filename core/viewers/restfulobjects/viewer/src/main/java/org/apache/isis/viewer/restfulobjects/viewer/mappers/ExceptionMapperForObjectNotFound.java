@@ -22,7 +22,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.isis.metamodel.exceptions.persistence.ObjectNotFoundException;
+import org.springframework.stereotype.Component;
 
+@Component
 @Provider
 public class ExceptionMapperForObjectNotFound extends ExceptionMapperAbstract<ObjectNotFoundException> {
 

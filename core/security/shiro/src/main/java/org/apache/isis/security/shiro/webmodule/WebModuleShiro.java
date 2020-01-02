@@ -18,9 +18,7 @@
  */
 package org.apache.isis.security.shiro.webmodule;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,6 +27,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
@@ -44,7 +43,6 @@ import org.springframework.util.ReflectionUtils;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
 import lombok.*;
@@ -61,16 +59,14 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.HIGHEST + 200)
 @Qualifier("Shiro")
 @Log4j2
-public class WebModuleShiro implements WebModule  {
+public class WebModuleShiro extends WebModuleAbstract {
     
 
     private final static String SHIRO_FILTER_NAME = "ShiroFilter";
 
-    private final ServiceInjector serviceInjector;
-
     @Inject
     public WebModuleShiro(final ServiceInjector serviceInjector) {
-        this.serviceInjector = serviceInjector;
+        super(serviceInjector);
     }
 
     // -- CONFIGURATION
@@ -159,7 +155,8 @@ public class WebModuleShiro implements WebModule  {
     private final String name = "Shiro";
 
     @Override
-    public void prepare(WebModuleContext ctx) {
+    public void prepare(final WebModuleContext ctx) {
+        super.prepare(ctx);
         val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
         if(_Strings.isEmpty(customShiroEnvironmentClassName)) {
             setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
@@ -167,27 +164,23 @@ public class WebModuleShiro implements WebModule  {
     }
 
     @Override
-    public ServletContextListener init(ServletContext ctx) throws ServletException {
+    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        var filter = ctx.addFilter(SHIRO_FILTER_NAME, ShiroFilter.class);
-        if (filter != null) {
-            serviceInjector.injectServicesInto(filter);
-            filter.addMappingForUrlPatterns(
-                    null,
-                    false, // filter is forced first
-                    "/*");
-        } else {
-            // was already registered, eg in web.xml.
-        }
+        registerFilter(ctx, SHIRO_FILTER_NAME, ShiroFilter.class)
+            .ifPresent(filterReg -> {
+                filterReg.addMappingForUrlPatterns(
+                        null,
+                        false, // filter is forced first
+                        "/*");
+            });
 
         val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
         if(_Strings.isNotEmpty(customShiroEnvironmentClassName)) {
             ctx.setInitParameter("shiroEnvironmentClass", customShiroEnvironmentClassName);
         }
 
-        final EnvironmentLoaderListenerForIsis listener = ctx.createListener(EnvironmentLoaderListenerForIsis.class);
-        serviceInjector.injectServicesInto(listener);
-        return listener;
+        val listener = createListener(ctx, EnvironmentLoaderListenerForIsis.class);
+        return Collections.singletonList(listener);
 
     }
 

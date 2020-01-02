@@ -45,13 +45,23 @@ import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
     WebAppConfiguration.class,
     WebAppContextPath.class,
 })
-@EnableConfigurationProperties(IsisConfiguration.class)
+@EnableConfigurationProperties({
+        IsisConfiguration.class,
+        RestEasyConfiguration.class,
+})
 public class IsisModuleConfig {
     
     @ConfigurationProperties(prefix = "isis")
     @Bean("isis-settings")
-    public Map<String, String> getAsMap() {
+    public Map<String, String> getIsisConfigProps() {
         return new HashMap<>();
     }
+
+    @ConfigurationProperties(prefix = "resteasy")
+    @Bean("resteasy-settings")
+    public Map<String, String> getResteasyConfigProps() {
+        return new HashMap<>();
+    }
+
 
 }

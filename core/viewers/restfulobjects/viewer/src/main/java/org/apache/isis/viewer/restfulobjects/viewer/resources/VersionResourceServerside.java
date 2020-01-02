@@ -38,13 +38,15 @@ import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.springframework.stereotype.Component;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
  * with {@link Path} rather than the interface (at least under RestEasy 1.0.2
  * and 1.1-RC2).
  */
-//@Path("/version")
+@Component
+@Path("/version")
 public class VersionResourceServerside extends ResourceAbstract implements VersionResource {
 
     @Override

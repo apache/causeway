@@ -36,6 +36,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.RestEasyConfiguration;
 import org.apache.isis.config.util.ConfigUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -58,13 +59,16 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
     private final IsisSystemEnvironment systemEnvironment;
     private final IsisConfiguration configuration;
+    private final RestEasyConfiguration restEasyConfiguration;
 
     @Inject
     public ConfigurationViewServiceDefault(
             final IsisSystemEnvironment systemEnvironment,
-            final IsisConfiguration configuration) {
+            final IsisConfiguration configuration,
+            final RestEasyConfiguration restEasyConfiguration) {
         this.systemEnvironment = systemEnvironment;
         this.configuration = configuration;
+        this.restEasyConfiguration = restEasyConfiguration;
     }
 
     @Override
@@ -118,7 +122,8 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
 
-        configuration.getAsMap().forEach((k, v)->add(k, v, map));
+        configuration.getAsMap().forEach((k, v)->add("isis." + k, v, map));
+        restEasyConfiguration.getAsMap().forEach((k, v)->add("resteasy." + k, v, map));
 
         // for convenience add some additional info to the top ...
         add("[ Isis Version ]", IsisSystemEnvironment.VERSION, map);
@@ -138,6 +143,6 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
     @Override
     public Optional<String> getRestfulPath() {
-        return Optional.ofNullable(configuration.getViewer().getRestfulobjects().getBasePath());
+        return Optional.ofNullable(restEasyConfiguration.getServlet().getMapping().getPrefix() + "/");
     }
 }

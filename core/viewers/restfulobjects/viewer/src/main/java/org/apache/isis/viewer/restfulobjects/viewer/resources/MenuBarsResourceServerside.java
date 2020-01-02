@@ -37,7 +37,9 @@ import org.apache.isis.viewer.restfulobjects.applib.menubars.MenuBarsResource;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {
 
     @Override

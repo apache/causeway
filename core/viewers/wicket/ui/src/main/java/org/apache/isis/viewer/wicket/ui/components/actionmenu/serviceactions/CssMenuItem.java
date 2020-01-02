@@ -493,12 +493,4 @@ class CssMenuItem implements Serializable {
         }
     }
 
-    // //////////////////////////////////////////////////////////////
-    // dependencies
-    // //////////////////////////////////////////////////////////////
-
-    AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getCurrentAuthenticationSession().orElse(null);
-    }
-
 }

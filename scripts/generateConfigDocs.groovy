@@ -153,6 +153,20 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
+    prefix = "resteasy"
+    name = "RestEasy Configuration"
+    description = "Configuration that applies to the RestEasy framework (that bootstraps the Restful Objects viewer)"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "spring"
+    name = "Spring Configuration"
+    description = "Configuration that applies to Spring itself"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
     prefix = "" // 'isis.objects', 'isis.environment'
     name = "Other"
     description = "Any other general or miscellaneous configuration settings"

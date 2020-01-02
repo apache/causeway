@@ -22,6 +22,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.RestEasyConfiguration;
+import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -39,14 +41,16 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
 public class SwaggerServiceDefault implements SwaggerService {
 
     private final SwaggerSpecGenerator swaggerSpecGenerator;
-    private final IsisConfiguration isisConfiguration;
+    private final RestEasyConfiguration restEasyConfiguration;
     private final String basePath;
 
     @Inject
-    public SwaggerServiceDefault(final SwaggerSpecGenerator swaggerSpecGenerator, final IsisConfiguration isisConfiguration) {
+    public SwaggerServiceDefault(
+            final SwaggerSpecGenerator swaggerSpecGenerator,
+            final RestEasyConfiguration restEasyConfiguration) {
         this.swaggerSpecGenerator = swaggerSpecGenerator;
-        this.isisConfiguration = isisConfiguration;
-        basePath = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
+        this.restEasyConfiguration = restEasyConfiguration;
+        basePath = this.restEasyConfiguration.getServlet().getMapping().getPrefix() + "/";
     }
 
     @Override

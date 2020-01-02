@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.config.RestEasyConfiguration;
 import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -43,16 +43,16 @@ import lombok.extern.log4j.Log4j2;
 public class RestEndpointService {
     
     private final Environment environment;
-    private final IsisConfiguration isisConfiguration;
+    private final RestEasyConfiguration restEasyConfiguration;
     private final WebAppContextPath webAppContextPath;
 
     @Inject
     public RestEndpointService(
             final Environment environment,
-            final IsisConfiguration isisConfiguration,
+            final RestEasyConfiguration restEasyConfiguration,
             final WebAppContextPath webAppContextPath) {
         this.environment = environment;
-        this.isisConfiguration = isisConfiguration;
+        this.restEasyConfiguration = restEasyConfiguration;
         this.webAppContextPath = webAppContextPath;
     }
 
@@ -68,7 +68,8 @@ public class RestEndpointService {
     public RestfulClient newClient(boolean useRequestDebugLogging) {
 
         val restRootPath = 
-                "http://localhost:" + getPort() + "/" + webAppContextPath.prependContextPath(isisConfiguration.getViewer().getRestfulobjects().getBasePath());
+                "http://localhost:" + getPort() + "/" + webAppContextPath.prependContextPath(
+                        restEasyConfiguration.getServlet().getMapping().getPrefix() + "/");
 
         log.info("new restful client created for {}", restRootPath);
 

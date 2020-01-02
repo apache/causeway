@@ -68,9 +68,11 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprM
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
+import org.springframework.stereotype.Component;
 
 import lombok.extern.log4j.Log4j2;
 
+@Component
 @Path("/objects") @Log4j2
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
 

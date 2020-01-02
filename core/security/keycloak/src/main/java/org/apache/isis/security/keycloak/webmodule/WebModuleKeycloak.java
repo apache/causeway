@@ -25,6 +25,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,8 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.var;
 
+import java.util.List;
+
 /**
  * WebModule to enable support for Keycloak.
  */
@@ -45,36 +48,29 @@ import lombok.var;
 @Order(OrderPrecedence.HIGHEST + 100)
 @Qualifier("Keycloak")
 @Log4j2
-public final class WebModuleKeycloak implements WebModule  {
+public final class WebModuleKeycloak extends WebModuleAbstract {
 
     private final static String KEYCLOAK_FILTER_NAME = "KeycloakFilter";
 
     @Getter
     private final String name = "Keycloak";
 
-    private final ServiceInjector serviceInjector;
-
     @Inject
     public WebModuleKeycloak(ServiceInjector serviceInjector) {
-        this.serviceInjector = serviceInjector;
+        super(serviceInjector);
     }
 
     @Override
-    public void prepare(WebModuleContext ctx) {
-    }
+    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-    @Override
-    public ServletContextListener init(ServletContext ctx) throws ServletException {
+        registerFilter(ctx, KEYCLOAK_FILTER_NAME, KeycloakFilter.class)
+            .ifPresent(filterReg -> {
+                filterReg.addMappingForUrlPatterns(
+                        null,
+                        false, // filter is forced first
+                        "/*");
 
-        var filter = ctx.addFilter(KEYCLOAK_FILTER_NAME, KeycloakFilter.class);
-        if (filter != null) {
-            filter.addMappingForUrlPatterns(
-                    null,
-                    false, // filter is forced first
-                    "/*");
-        } else {
-            // was already registered, eg in web.xml.
-        }
+            });
 
         return null;
     }

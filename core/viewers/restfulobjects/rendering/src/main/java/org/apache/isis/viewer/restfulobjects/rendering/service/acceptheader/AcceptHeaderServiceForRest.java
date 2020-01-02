@@ -39,6 +39,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -74,6 +75,7 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
     }
 
 
+    @Component
     @Provider
     public static class RequestFilter implements ContainerRequestFilter  {
         @Override
@@ -88,6 +90,7 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
         }
     }
 
+    @Component
     @Provider
     public static class ResponseFilter implements ContainerResponseFilter {
         @Override

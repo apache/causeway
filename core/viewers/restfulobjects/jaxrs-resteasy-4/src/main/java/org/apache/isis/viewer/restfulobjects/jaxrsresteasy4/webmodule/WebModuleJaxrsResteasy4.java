@@ -23,6 +23,9 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import lombok.var;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -31,21 +34,16 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.RestEasyConfiguration;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsSessionFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisTransactionFilterForRestfulObjects;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
 import org.apache.isis.webapp.modules.WebModule;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
-import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
-import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
-
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
@@ -57,31 +55,30 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Order(OrderPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 @Log4j2
-public final class WebModuleJaxrsResteasy4 implements WebModule  {
+public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
-    private final static String RESTEASY_DISPATCHER = "RestfulObjectsRestEasyDispatcher";
-    public static final String ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS = "IsisSessionFilterForRestfulObjects";
+    private static final String ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS = "IsisSessionFilterForRestfulObjects";
+    private static final String ISIS_TRANSACTION_FILTER = "IsisTransactionFilterForRestfulObjects";
 
-    private final IsisConfiguration isisConfiguration;
-    private final ServiceInjector serviceInjector;
+    private final RestEasyConfiguration restEasyConfiguration;
 
     private final String restfulPath;
 
     @Inject
     public WebModuleJaxrsResteasy4(
-            final IsisConfiguration isisConfiguration,
+            final RestEasyConfiguration restEasyConfiguration,
             final ServiceInjector serviceInjector) {
-        this.isisConfiguration = isisConfiguration;
-        this.serviceInjector = serviceInjector;
-        this.restfulPath = this.isisConfiguration.getViewer().getRestfulobjects().getBasePath();
+        super(serviceInjector);
+        this.restEasyConfiguration = restEasyConfiguration;
+        this.restfulPath = this.restEasyConfiguration.getServlet().getMapping().getPrefix() + "/";
     }
-
 
     @Getter
     private final String name = "JaxrsRestEasy4";
 
     @Override
     public void prepare(WebModuleContext ctx) {
+        super.prepare(ctx);
 
         if(!isApplicable(ctx)) {
             return;
@@ -93,68 +90,60 @@ public final class WebModuleJaxrsResteasy4 implements WebModule  {
     }
 
     @Override
-    public ServletContextListener init(ServletContext ctx) throws ServletException {
+    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        // add IsisSessionFilters
+        registerFilter(ctx, ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class)
+                .ifPresent(filterReg -> {
+                    // this is mapped to the entire application;
+                    // however the IsisSessionFilter will
+                    // "notice" if the session filter has already been
+                    // executed for the request pipeline, and if so will do nothing
+                    filterReg.addMappingForUrlPatterns(
+                            null,
+                            true,
+                            getUrlPattern());
 
-        {
-            val filter = ctx.addFilter(ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class);
-            if(filter != null) {
+                    filterReg.setInitParameter(
+                            "authenticationSessionStrategy",
+                            AuthenticationSessionStrategyBasicAuth.class.getName());
+                    filterReg.setInitParameter(
+                            "whenNoSession", // what to do if no session was found ...
+                            "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
+                    filterReg.setInitParameter(
+                            "passThru",
+                            String.join(",", getRestfulPath()+"swagger", getRestfulPath()+"health"));
 
-                serviceInjector.injectServicesInto(filter);
+                } );
 
-                // this is mapped to the entire application;
-                // however the IsisSessionFilter will
-                // "notice" if the session filter has already been
-                // executed for the request pipeline, and if so will do nothing
-                filter.addMappingForServletNames(
+        registerFilter(ctx, ISIS_TRANSACTION_FILTER, IsisTransactionFilterForRestfulObjects.class)
+            .ifPresent(filterReg -> {
+                filterReg.addMappingForUrlPatterns(
                         null,
                         true,
-                        RESTEASY_DISPATCHER);   // applies only to requests that are served by the RestEasy dispatcher
-
-                filter.setInitParameter(
-                        "authenticationSessionStrategy",
-                        AuthenticationSessionStrategyBasicAuth.class.getName());
-                filter.setInitParameter(
-                        "whenNoSession", // what to do if no session was found ...
-                        "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
-                filter.setInitParameter(
-                        "passThru",
-                        String.join(",", getRestfulPath()+"swagger", getRestfulPath()+"health"));
-            }
-        }
-
-        {
-            val filter = ctx.addFilter(RESTEASY_DISPATCHER, IsisTransactionFilterForRestfulObjects.class);
-            if(filter != null) {
-                serviceInjector.injectServicesInto(filter);
-                filter.addMappingForServletNames(
-                        null,
-                        true,
-                        RESTEASY_DISPATCHER); // applies only to requests that are served by the RestEasy dispatcher
-            }
-        }
-
+                        getUrlPattern());
+            });
 
 
         // add RestEasy
 
-        // used by RestEasy to determine the JAX-RS resources and other related configuration
-        ctx.setInitParameter(
-                "javax.ws.rs.Application", 
-                org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsApplication.class.getName());
-
-        ctx.setInitParameter("resteasy.servlet.mapping.prefix", getRestfulPath());
-
-        var servlet = ctx.addServlet(RESTEASY_DISPATCHER, HttpServletDispatcher.class);
-        if(servlet != null) {
-            serviceInjector.injectServicesInto(servlet);
-            servlet.addMapping(getUrlPattern());
-        }
-
-        var listener = ctx.createListener(ResteasyBootstrap.class);
-        serviceInjector.injectServicesInto(listener);
-        return listener;
+//        // used by RestEasy to determine the JAX-RS resources and other related configuration
+//        ctx.setInitParameter(
+//                "javax.ws.rs.Application",
+//                org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsApplication.class.getName());
+//
+//        ctx.setInitParameter("resteasy.servlet.mapping.prefix", getRestfulPath());
+//        var servlet = ctx.addServlet(RESTEASY_DISPATCHER, HttpServletDispatcher.class);
+//        if(servlet != null) {
+//            serviceInjector.injectServicesInto(servlet);
+//            servlet.addMapping(getUrlPattern());
+//        }
+//
+//        // as per https://docs.jboss.org/resteasy/docs/4.4.2.Final/userguide/html/RESTEasy_Spring_Integration.html
+//        var bootstrapper = ctx.createListener(ResteasyBootstrap.class);
+//        serviceInjector.injectServicesInto(bootstrapper);
+//
+//        return Arrays.asList(bootstrapper);
+        return Collections.emptyList();
     }
 
 

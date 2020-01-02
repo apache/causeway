@@ -20,7 +20,7 @@ package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4;
 
 import javax.ws.rs.core.UriBuilder;
 
-import org.jboss.resteasy.specimpl.ResteasyUriBuilder;
+import org.jboss.resteasy.specimpl.ResteasyUriBuilderImpl;
 import org.jboss.resteasy.spi.Failure;
 
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -33,7 +33,7 @@ public class IsisResteasy4Plugin implements UriBuilderPlugin, IsisJaxrsServerPlu
 
     @Override
     public UriBuilder uriTemplate(String uriTemplate) {
-        return new ResteasyUriBuilder().uriTemplate(uriTemplate);
+        return new ResteasyUriBuilderImpl().uriTemplate(uriTemplate);
     }
 
     @Override

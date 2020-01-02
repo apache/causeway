@@ -136,7 +136,10 @@ public class WebModuleContext {
     private void addListener(ServletContext context, WebModule module) {
         log.info(String.format("Setup ServletContext, adding WebModule '%s'", module.getName()));
         try {
-            acceptIfPresent(module.init(context), activeListeners::add);
+            final List<ServletContextListener> listeners = module.init(context);
+            if(listeners != null) {
+                activeListeners.addAll(listeners);
+            }
         } catch (ServletException e) {
             log.error(String.format("Failed to add WebModule '%s' to the ServletContext.", module.getName()), e);
         }  

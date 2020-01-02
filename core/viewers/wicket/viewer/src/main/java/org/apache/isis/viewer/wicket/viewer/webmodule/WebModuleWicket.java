@@ -22,6 +22,8 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.var;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -30,6 +32,7 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -51,13 +54,12 @@ import static java.util.Objects.requireNonNull;
 @Order(OrderPrecedence.MIDPOINT - 80)
 @Qualifier("Wicket")
 @Log4j2
-public final class WebModuleWicket implements WebModule  {
+public final class WebModuleWicket extends WebModuleAbstract {
 
     private final static String WICKET_FILTER_NAME = "WicketFilter";
 
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final IsisConfiguration isisConfiguration;
-    private final ServiceInjector serviceInjector;
 
     private final String wicketBasePath;
     private final String deploymentMode;
@@ -69,10 +71,10 @@ public final class WebModuleWicket implements WebModule  {
             final IsisSystemEnvironment isisSystemEnvironment,
             final IsisConfiguration isisConfiguration,
             final ServiceInjector serviceInjector) {
+        super(serviceInjector);
 
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.isisConfiguration = isisConfiguration;
-        this.serviceInjector = serviceInjector;
 
         this.wicketBasePath = this.isisConfiguration.getViewer().getWicket().getBasePath();
 
@@ -92,28 +94,26 @@ public final class WebModuleWicket implements WebModule  {
     private final String name = "Wicket";
 
     @Override
-    public void prepare(WebModuleContext ctx) {
+    public void prepare(final WebModuleContext ctx) {
+        super.prepare(ctx);
         ctx.setHasBootstrapper();
         ctx.addViewer("wicket");
         ctx.addProtectedPath(this.urlPattern);
     }
 
     @Override
-    public ServletContextListener init(final ServletContext ctx) throws ServletException {
+    public List<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
-        var filter = ctx.addFilter(WICKET_FILTER_NAME, WicketFilter.class);
-        if (filter != null) {
-            serviceInjector.injectServicesInto(filter);
-            filter.setInitParameter("applicationClassName", wicketApp);
-            filter.setInitParameter("filterMappingUrlPattern", urlPattern);
-            filter.setInitParameter("configuration", deploymentMode);
-            filter.addMappingForUrlPatterns(
-                    null,
-                    true,
-                    urlPattern);
-        } else {
-            // was already registered, eg in web.xml.
-        }
+        registerFilter(ctx, WICKET_FILTER_NAME, WicketFilter.class)
+            .ifPresent(filterReg -> {
+                filterReg.setInitParameter("applicationClassName", wicketApp);
+                filterReg.setInitParameter("filterMappingUrlPattern", urlPattern);
+                filterReg.setInitParameter("configuration", deploymentMode);
+                filterReg.addMappingForUrlPatterns(
+                        null,
+                        true,
+                        urlPattern);
+            });
 
         return null; // does not provide a listener
     }

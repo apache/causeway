@@ -28,7 +28,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.springframework.stereotype.Component;
 
+@Component
 @Path("/image")
 public class ImageResourceServerside extends ResourceAbstract {
 

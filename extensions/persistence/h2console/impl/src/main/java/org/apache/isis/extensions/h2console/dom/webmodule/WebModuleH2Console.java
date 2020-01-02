@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -42,12 +43,14 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
+import java.util.List;
+
 @Service
 @Named("isisExtH2Console.WebModuleH2Console")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("H2Console")
 @Log4j2
-public class WebModuleH2Console implements WebModule  {
+public class WebModuleH2Console extends WebModuleAbstract {
 
     private final static String SERVLET_NAME = "H2Console";
     private final static String CONSOLE_PATH = "/db";
@@ -57,7 +60,6 @@ public class WebModuleH2Console implements WebModule  {
 
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final IsisConfiguration isisConfiguration;
-    private final ServiceInjector serviceInjector;
 
     private final boolean applicable;
 
@@ -66,9 +68,10 @@ public class WebModuleH2Console implements WebModule  {
             final IsisSystemEnvironment isisSystemEnvironment,
             final IsisConfiguration isisConfiguration,
             final ServiceInjector serviceInjector) {
+        super(serviceInjector);
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.isisConfiguration = isisConfiguration;
-        this.serviceInjector = serviceInjector;
+
         this.applicable = isPrototyping() && isUsesH2MemConnection();
         this.localResourcePathIfEnabled = applicable ? new LocalResourcePath(CONSOLE_PATH) : null;
     }
@@ -76,22 +79,15 @@ public class WebModuleH2Console implements WebModule  {
     @Getter
     private final String name = "H2Console";
 
-    @Override
-    public void prepare(WebModuleContext ctx) {
-        // nothing special required
-    }
 
     @Override
-    public ServletContextListener init(final ServletContext ctx) throws ServletException {
+    public List<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
-        val servlet = ctx.addServlet(SERVLET_NAME, WebServlet.class);
-        if(servlet != null) {
-            serviceInjector.injectServicesInto(servlet);
-            servlet.addMapping(CONSOLE_PATH + "/*");
-            servlet.setInitParameter("webAllowOthers", "true");
-        } else {
-            // was already registered, eg in web.xml.
-        }
+        registerServlet(ctx, SERVLET_NAME, WebServlet.class)
+            .ifPresent(servletReg -> {
+                servletReg.addMapping(CONSOLE_PATH + "/*");
+                servletReg.setInitParameter("webAllowOthers", "true");
+            });
 
         return null; // does not provide a listener
     }

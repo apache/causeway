@@ -19,11 +19,11 @@
 
 package org.apache.isis.viewer.restfulobjects.viewer;
 
+import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.*;
+import org.apache.isis.webapp.IsisModuleWebapp;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
-import org.apache.isis.webapp.IsisModuleWebapp;
 
 /**
  * 
@@ -34,6 +34,20 @@ import org.apache.isis.webapp.IsisModuleWebapp;
         // modules
         IsisModuleWebapp.class,
         IsisModuleRestfulObjectsRendering.class,
+
+        // @Service's
+        // RestfulObjectsApplication.class,
+
+        // @Component's
+        HomePageResourceServerside.class,
+        DomainTypeResourceServerside.class,
+        UserResourceServerside.class,
+        MenuBarsResourceServerside.class,
+        ImageResourceServerside.class,
+        DomainObjectResourceServerside.class,
+        DomainServiceResourceServerside.class,
+        VersionResourceServerside.class,
+        SwaggerSpecResource.class,
 
 })
 public class IsisModuleRestfulObjectsViewer {

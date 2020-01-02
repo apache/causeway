@@ -65,12 +65,14 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.util.UrlParserUtils;
+import org.springframework.stereotype.Component;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
  * with {@link Path} rather than the interface (at least under RestEasy 1.0.2
  * and 1.1-RC2).
  */
+@Component
 @Path("/domain-types")
 public class DomainTypeResourceServerside extends ResourceAbstract implements DomainTypeResource {
 

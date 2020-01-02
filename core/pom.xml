@@ -155,7 +155,8 @@
 
 		<quartz-scheduler.version>2.2.1</quartz-scheduler.version>
 
-		<resteasy4-jaxrs.version>4.0.0.Beta5</resteasy4-jaxrs.version> <!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
+		<resteasy4-jaxrs.version>4.4.1.Final</resteasy4-jaxrs.version>
+		<resteasy4-spring-boot-starter.version>4.4.0.Final</resteasy4-spring-boot-starter.version>
 		<reflections.version>0.9.11</reflections.version>
 
 		<select2.version>4.0.10</select2.version>
@@ -1441,6 +1442,19 @@
 				<artifactId>resteasy-jaxb-provider</artifactId>
 				<version>${resteasy4-jaxrs.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-spring</artifactId>
+				<version>${resteasy4-jaxrs.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-spring-boot-starter</artifactId>
+				<version>${resteasy4-spring-boot-starter.version}</version>
+			</dependency>
+
 
 			<dependency>
 				<groupId>org.jmock</groupId>

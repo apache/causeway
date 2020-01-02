@@ -96,7 +96,7 @@ public abstract class ResourceAbstract {
         if (!IsisSession.isInSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
-        if (IsisContext.getCurrentAuthenticationSession() == null) {
+        if (! IsisContext.getCurrentAuthenticationSession().isPresent()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 

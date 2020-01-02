@@ -31,9 +31,11 @@ import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
+import org.springframework.stereotype.Component;
 
 import lombok.val;
 
+@Component
 @Provider
 @Produces({"application/xml", "application/*+xml", "text/*+xml"})
 public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {

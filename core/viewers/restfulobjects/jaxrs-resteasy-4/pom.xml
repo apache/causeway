@@ -133,6 +133,10 @@
 			</exclusions>
 		</dependency>
 
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-spring-boot-starter</artifactId>
+		</dependency>
 
 		<dependency>
 			<!-- required because resteasy-jaxrs declares as a test dependency whereas 

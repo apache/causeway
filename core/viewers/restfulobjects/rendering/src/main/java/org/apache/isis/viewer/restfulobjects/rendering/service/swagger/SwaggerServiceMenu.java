@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -38,8 +37,8 @@ import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.RestEasyConfiguration;
 
 
 @Named("isisApplib.SwaggerServiceMenu")
@@ -52,18 +51,16 @@ public class SwaggerServiceMenu {
 
     private final SwaggerService swaggerService;
     private final ServiceRegistry serviceRegistry;
-    private final IsisConfiguration isisConfiguration;
     private final String basePath;
 
     @Inject
     public SwaggerServiceMenu(
             final SwaggerService swaggerService,
             final ServiceRegistry serviceRegistry,
-            final IsisConfiguration isisConfiguration) {
+            final RestEasyConfiguration restEasyConfiguration) {
         this.swaggerService = swaggerService;
         this.serviceRegistry = serviceRegistry;
-        this.isisConfiguration = isisConfiguration;
-        this.basePath = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
+        this.basePath = restEasyConfiguration.getServlet().getMapping().getPrefix() + "/";
     }
 
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<SwaggerServiceMenu> { }

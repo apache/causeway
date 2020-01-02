@@ -18,7 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.ws.rs.ApplicationPath;
+
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisJaxrsServerPlugin;
 import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForObjectNotFound;
@@ -33,34 +39,40 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.MenuBarsResourceSe
 import org.apache.isis.viewer.restfulobjects.viewer.resources.SwaggerSpecResource;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.UserResourceServerside;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.VersionResourceServerside;
+import org.springframework.stereotype.Service;
 
-public class RestfulObjectsApplication extends AbstractJaxRsApplication {
+/**
+ * Registered automatically by resteasy-spring-boot-starter.
+ *
+ * Note that this requires the resteasy.servlet.mapping.prefix config property to be explicitly defined.
+ * Note that this requires the resteasy.jaxrs.defaultPath config property to be explicitly defined.
+ */
+// @Service
+public class RestfulObjectsApplication /*extends AbstractJaxRsApplication*/ {
 
     public static final String SPEC_VERSION = "1.0.0";
 
     public RestfulObjectsApplication() {
-        addClass(HomePageResourceServerside.class);
-        addClass(DomainTypeResourceServerside.class);
-        addClass(UserResourceServerside.class);
-        addClass(MenuBarsResourceServerside.class);
-        addClass(ImageResourceServerside.class);
-        addClass(DomainObjectResourceServerside.class);
-        addClass(DomainServiceResourceServerside.class);
-        addClass(VersionResourceServerside.class);
-
-        addClass(SwaggerSpecResource.class);
+        //addClass(HomePageResourceServerside.class);
+        //addClass(DomainTypeResourceServerside.class);
+        //addClass(UserResourceServerside.class);
+        //addClass(MenuBarsResourceServerside.class);
+        //addClass(ImageResourceServerside.class);
+        //addClass(DomainObjectResourceServerside.class);
+        //addClass(DomainServiceResourceServerside.class);
+        //addClass(VersionResourceServerside.class);
+        //addClass(SwaggerSpecResource.class);
 
         //override=false, allows for IsisWicketApplication to take precedence
         _Context.setDefaultClassLoader(this.getClass().getClassLoader(), /*override*/false);
-        addSingleton(IsisJaxrsServerPlugin.get().newRestfulObjectsJaxbWriterForXml());
 
+        //addSingleton(IsisJaxrsServerPlugin.get().newRestfulObjectsJaxbWriterForXml());
 
-        addSingleton(new ExceptionMapperForRestfulObjectsApplication());
-        addSingleton(new ExceptionMapperForRuntimeException());
-        addSingleton(new ExceptionMapperForObjectNotFound());
-
-        addSingleton(new AcceptHeaderServiceForRest.RequestFilter());
-        addSingleton(new AcceptHeaderServiceForRest.ResponseFilter());
+        // addSingleton(new ExceptionMapperForRestfulObjectsApplication());
+        // addSingleton(new ExceptionMapperForRuntimeException());
+        // addSingleton(new ExceptionMapperForObjectNotFound());
+        // addSingleton(new AcceptHeaderServiceForRest.RequestFilter());
+        // addSingleton(new AcceptHeaderServiceForRest.ResponseFilter());
 
         // TODO: doesn't get injected
         // addSingleton(new TypedReprBuilderFactoryRegistry());
@@ -69,4 +81,14 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
         // addSingleton(new PreProcessInterceptorForIsisSession());
     }
 
+    @PostConstruct
+    public void init() {
+
+    }
+
+    @Inject
+    ServiceInjector serviceInjector;
+
+    @Inject
+    IsisConfiguration isisConfiguration;
 }

@@ -36,7 +36,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
 
     @Override

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.webapp.modules;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.annotation.Priority;
@@ -72,8 +73,9 @@ public interface WebModule {
      * Sets this WebModule's {@link Filter}s, {@link Servlet}s or {@link WebListener}s 
      * up and registers them with the {@link ServletContext} as provided via {@code ctx}.
      * @param ctx ServletContext
+     * @return
      */
-    public ServletContextListener init(ServletContext ctx) throws ServletException;
+    public List<ServletContextListener> init(ServletContext ctx) throws ServletException;
 
     /**
      * Expected to be called after all WebModules had a chance to prepare the WebModuleContext.

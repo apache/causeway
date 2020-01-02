@@ -23,7 +23,9 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.springframework.stereotype.Component;
 
+@Component
 @Provider
 public class ExceptionMapperForRestfulObjectsApplication extends ExceptionMapperAbstract<RestfulObjectsApplicationException> {
 

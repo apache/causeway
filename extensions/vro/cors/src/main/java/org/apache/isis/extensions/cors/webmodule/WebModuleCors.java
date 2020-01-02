@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.ebaysf.web.cors.CORSFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -38,6 +39,8 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.var;
 
+import java.util.List;
+
 /**
  * WebModule providing support for CORS
  * 
@@ -48,27 +51,19 @@ import lombok.var;
 @Qualifier("CORS")
 @Order(OrderPrecedence.HIGH)
 @Log4j2
-public final class WebModuleCors implements WebModule  {
+public final class WebModuleCors extends WebModuleAbstract {
 
     private final static String CORS_FILTER_NAME = "CORS Filter";
 
     @Getter
     private final String name = "CORS";
 
-    private final ServiceInjector serviceInjector;
-
-    private WebModuleContext webModuleContext;
-
     @Inject
     public WebModuleCors(ServiceInjector serviceInjector) {
-        this.serviceInjector = serviceInjector;
+        super(serviceInjector);
     }
 
 
-    @Override
-    public void prepare(final WebModuleContext webModuleContext) {
-        this.webModuleContext = webModuleContext;
-    }
 
     /*
     <filter>
@@ -93,23 +88,20 @@ public final class WebModuleCors implements WebModule  {
     </filter-mapping>
      */
     @Override
-    public ServletContextListener init(ServletContext ctx) throws ServletException {
+    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        var filter = ctx.addFilter(CORS_FILTER_NAME, CORSFilter.class);
-        if (filter != null) {
-            serviceInjector.injectServicesInto(filter);
-            filter.setInitParameter("cors.allowed.origins", "*");
-            filter.setInitParameter("cors.allowed.headers", "Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Cache-Control,If-Modified-Since,Pragma");
-            filter.setInitParameter("cors.exposed.headers", "Authorization");
+        registerFilter(ctx, CORS_FILTER_NAME, CORSFilter.class)
+            .ifPresent(filterReg -> {
+                filterReg.setInitParameter("cors.allowed.origins", "*");
+                filterReg.setInitParameter("cors.allowed.headers", "Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Cache-Control,If-Modified-Since,Pragma");
+                filterReg.setInitParameter("cors.exposed.headers", "Authorization");
 
-            filter.addMappingForUrlPatterns(
-                    null,
-                    false,
-                    this.webModuleContext.getProtectedPaths());
+                filterReg.addMappingForUrlPatterns(
+                        null,
+                        false,
+                        this.webModuleContext.getProtectedPaths());
 
-        } else {
-            // was already registered, eg in web.xml.
-        }
+            });
 
         return null;
     }
