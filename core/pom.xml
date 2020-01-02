@@ -156,7 +156,9 @@
 		<quartz-scheduler.version>2.2.1</quartz-scheduler.version>
 
 		<resteasy4-jaxrs.version>4.4.1.Final</resteasy4-jaxrs.version>
+		<resteasy4-jackson-provider.version>4.4.2.Final</resteasy4-jackson-provider.version>
 		<resteasy4-spring-boot-starter.version>4.4.0.Final</resteasy4-spring-boot-starter.version>
+
 		<reflections.version>0.9.11</reflections.version>
 
 		<select2.version>4.0.10</select2.version>
@@ -1428,7 +1430,7 @@
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jackson-provider</artifactId>
-				<version>${resteasy4-jaxrs.version}</version>
+				<version>${resteasy4-jackson-provider.version}</version>
 			</dependency>
 
 			<dependency>
