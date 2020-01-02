@@ -36,6 +36,7 @@ public class CreditImage extends WebComponent {
 
     public CreditImage(final String id, final String imageUrl) {
         super(id);
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class CreditImage extends WebComponent {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        this.imageUrl = prependContextPathIfRequired(imageUrl, isisSystemEnvironment);
+        this.imageUrl = isisSystemEnvironment.prependContextPathIfRequired(imageUrl);
         setVisible(imageUrl != null);
     }
 
