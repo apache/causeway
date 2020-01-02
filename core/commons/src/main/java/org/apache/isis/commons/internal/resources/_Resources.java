@@ -150,37 +150,6 @@ public final class _Resources {
         return url;
     }
 
-    // -- RESTFUL PATH RESOURCE
-
-//    /**
-//     * @return restful-path resource (if any) as stored previously by {@link #putRestfulPath(String)}
-//     */
-//    public final static String getRestfulPathIfAny() {
-//        final _Resources_RestfulPath resource = _Context.getIfAny(_Resources_RestfulPath.class);
-//        return resource!=null ? resource.getRestfulPath() : null;
-//    }
-
-//    /**
-//     *
-//     * @return restful-path resource as stored previously by {@link #putRestfulPath(String)}
-//     *  or throws if resource not found
-//     * @throws NullPointerException if resource not found
-//     */
-//    public final static String getRestfulPathOrThrow() {
-//        return ifPresentElseThrow(getRestfulPathIfAny(),
-//                ()->new NullPointerException(
-//                        "Could not find BasePath for the REST Service "
-//                                + "config value on the context."));
-//    }
-
-//    /**
-//     * Stores the {@code restfulPath} as an application scoped resource-object.
-//     * @param restfulPath
-//     * @throws IllegalArgumentException if the restfulPath is empty or is the root-path.
-//     */
-//    public final static void putRestfulPath(String restfulPath) {
-//        _Context.put(_Resources_RestfulPath.class, new _Resources_RestfulPath(restfulPath), false);
-//    }
 
     // -- LOCAL vs EXTERNAL resource path
 

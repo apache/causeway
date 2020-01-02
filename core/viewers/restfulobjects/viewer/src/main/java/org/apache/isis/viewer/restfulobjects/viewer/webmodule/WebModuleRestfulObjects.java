@@ -42,7 +42,6 @@ import org.springframework.stereotype.Service;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-// import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
@@ -84,8 +83,6 @@ public final class WebModuleRestfulObjects implements WebModule  {
         if(!isApplicable(ctx)) {
             return;
         }
-
-        // putRestfulPath(this.restfulPath);
 
         // register this module as a viewer
         ctx.addViewer("restfulobjects");
