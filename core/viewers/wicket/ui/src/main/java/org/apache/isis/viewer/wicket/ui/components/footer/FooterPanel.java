@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.ComponentTag;
@@ -91,9 +93,12 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
             creditItems.add(listItem);
             
             val creditLink = newCreditLinkComponent(credit);
-            listItem.add(creditLink);   
-            
-            creditLink.add(getServiceInjector().injectServicesInto(new CreditImage("creditImage", credit.getImage())));
+            listItem.add(creditLink);
+
+            final String imageUrl = getServiceRegistry().lookupService(WebAppConfiguration.class)
+                                    .map(x -> x.prependContextPathIfRequired(credit.getImage()))
+                                    .orElseThrow(_Exceptions::unexpectedCodeReach);
+            creditLink.add(new CreditImage("creditImage", imageUrl));
             creditLink.add(new CreditName("creditName", credit.getName()));
             
         });

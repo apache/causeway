@@ -21,6 +21,7 @@ package org.apache.isis.config.viewer.wicket;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -70,6 +71,7 @@ public class WebAppConfiguration {
     @Getter private String brandLogoHeader;
     @Getter private String brandLogoSignin;
 
+    @Inject
     public WebAppConfiguration(final IsisConfiguration isisConfiguration) {
         this.isisConfiguration = isisConfiguration;
     }

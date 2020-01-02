@@ -29,9 +29,7 @@ public class CreditImage extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    private String imageUrl;
-    @Inject
-    private WebAppConfiguration webAppConfiguration;
+    private final String imageUrl;
 
     public CreditImage(final String id, final String imageUrl) {
         super(id);
@@ -47,7 +45,6 @@ public class CreditImage extends WebComponent {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        this.imageUrl = webAppConfiguration.prependContextPathIfRequired(imageUrl);
         setVisible(imageUrl != null);
     }
 
