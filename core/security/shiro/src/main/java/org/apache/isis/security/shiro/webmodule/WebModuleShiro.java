@@ -44,7 +44,6 @@ import org.springframework.util.ReflectionUtils;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.webapp.util.IsisWebAppUtils;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
@@ -118,23 +117,30 @@ public class WebModuleShiro implements WebModule  {
      * Adds support for dependency injection into security realms
      * @since 2.0
      */
+    @NoArgsConstructor
     public static class EnvironmentLoaderListenerForIsis extends EnvironmentLoaderListener {
-        
+
+        @Inject
+        private ServiceInjector serviceInjector;
+
+        // for testing
+        public EnvironmentLoaderListenerForIsis(ServiceInjector serviceInjector) {
+            this.serviceInjector = serviceInjector;
+        }
+
         @Override 
         protected WebEnvironment createEnvironment(ServletContext servletContext) {
             val shiroEnvironment = super.createEnvironment(servletContext);
             val securityManager = shiroEnvironment.getSecurityManager();
-            val serviceInjector = IsisWebAppUtils.getManagedBean(ServiceInjector.class, servletContext);
-            
-            injectServicesIntoRealms(serviceInjector, securityManager);
+
+            injectServicesIntoRealms(securityManager);
             
             return shiroEnvironment;
         }
         
         @SuppressWarnings("unchecked")
         @SneakyThrows
-        public static void injectServicesIntoRealms(
-                ServiceInjector serviceInjector, 
+        public void injectServicesIntoRealms(
                 org.apache.shiro.mgt.SecurityManager securityManager) {
 
             // reflective access to SecurityManager.getRealms()
