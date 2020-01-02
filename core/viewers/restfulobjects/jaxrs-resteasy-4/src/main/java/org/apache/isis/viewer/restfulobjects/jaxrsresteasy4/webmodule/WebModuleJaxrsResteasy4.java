@@ -20,8 +20,6 @@ package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.webmodule;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import lombok.val;
-import lombok.var;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +36,6 @@ import org.apache.isis.config.RestEasyConfiguration;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsSessionFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisTransactionFilterForRestfulObjects;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
-import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -63,6 +60,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     private final RestEasyConfiguration restEasyConfiguration;
 
     private final String restfulPath;
+    private final String urlPattern;
 
     @Inject
     public WebModuleJaxrsResteasy4(
@@ -71,6 +69,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
         super(serviceInjector);
         this.restEasyConfiguration = restEasyConfiguration;
         this.restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
+        this.urlPattern = this.restfulPath + "*";
     }
 
     @Getter
@@ -84,9 +83,8 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
             return;
         }
 
-        // register this module as a viewer
         ctx.addViewer("restfulobjects");
-        ctx.addProtectedPath(this.restfulPath + "*");
+        ctx.addProtectedPath(urlPattern);
     }
 
     @Override
@@ -101,7 +99,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
                     filterReg.addMappingForUrlPatterns(
                             null,
                             true,
-                            getUrlPattern());
+                            this.urlPattern);
 
                     filterReg.setInitParameter(
                             "authenticationSessionStrategy",
@@ -111,7 +109,9 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
                             "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
                     filterReg.setInitParameter(
                             "passThru",
-                            String.join(",", getRestfulPath()+"swagger", getRestfulPath()+"health"));
+                            String.join(",",
+                                    this.restfulPath + "swagger",
+                                    this.restfulPath + "health"));
 
                 } );
 
@@ -120,41 +120,12 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
                 filterReg.addMappingForUrlPatterns(
                         null,
                         true,
-                        getUrlPattern());
+                        this.urlPattern);
             });
 
 
-        // add RestEasy
-
-//        // used by RestEasy to determine the JAX-RS resources and other related configuration
-//        ctx.setInitParameter(
-//                "javax.ws.rs.Application",
-//                org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsApplication.class.getName());
-//
-//        ctx.setInitParameter("resteasy.servlet.mapping.prefix", getRestfulPath());
-//        var servlet = ctx.addServlet(RESTEASY_DISPATCHER, HttpServletDispatcher.class);
-//        if(servlet != null) {
-//            serviceInjector.injectServicesInto(servlet);
-//            servlet.addMapping(getUrlPattern());
-//        }
-//
-//        // as per https://docs.jboss.org/resteasy/docs/4.4.2.Final/userguide/html/RESTEasy_Spring_Integration.html
-//        var bootstrapper = ctx.createListener(ResteasyBootstrap.class);
-//        serviceInjector.injectServicesInto(bootstrapper);
-//
-//        return Arrays.asList(bootstrapper);
         return Collections.emptyList();
     }
 
-
-    // -- HELPER
-
-    private String getUrlPattern() {
-        return getRestfulPath() + "*";
-    }
-
-    private String getRestfulPath() {
-        return this.restfulPath;
-    }
 
 }

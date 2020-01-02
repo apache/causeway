@@ -20,6 +20,10 @@
 package org.apache.isis.viewer.restfulobjects.viewer;
 
 import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
+import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
+import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForObjectNotFound;
+import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication;
+import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRuntimeException;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.*;
 import org.apache.isis.webapp.IsisModuleWebapp;
 import org.springframework.context.annotation.Configuration;
@@ -35,9 +39,6 @@ import org.springframework.context.annotation.Import;
         IsisModuleWebapp.class,
         IsisModuleRestfulObjectsRendering.class,
 
-        // @Service's
-        // RestfulObjectsApplication.class,
-
         // @Component's
         HomePageResourceServerside.class,
         DomainTypeResourceServerside.class,
@@ -48,6 +49,12 @@ import org.springframework.context.annotation.Import;
         DomainServiceResourceServerside.class,
         VersionResourceServerside.class,
         SwaggerSpecResource.class,
+
+        ExceptionMapperForRestfulObjectsApplication.class,
+        ExceptionMapperForRuntimeException.class,
+        ExceptionMapperForObjectNotFound.class,
+        AcceptHeaderServiceForRest.RequestFilter.class,
+        AcceptHeaderServiceForRest.ResponseFilter.class,
 
 })
 public class IsisModuleRestfulObjectsViewer {

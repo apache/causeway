@@ -18,36 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import lombok.experimental.UtilityClass;
 
-import javax.ws.rs.core.Application;
+@UtilityClass
+public class RestfulObjectsSpec {
 
-public abstract class AbstractJaxRsApplication extends Application {
-
-    private final Set<Object> singletons = new LinkedHashSet<Object>();
-    private final Set<Class<?>> classes = new LinkedHashSet<Class<?>>();
-
-    public AbstractJaxRsApplication() {
-    }
-
-    @Override
-    public Set<Class<?>> getClasses() {
-        return Collections.unmodifiableSet(classes);
-    }
-
-    @Override
-    public Set<Object> getSingletons() {
-        return Collections.unmodifiableSet(singletons);
-    }
-
-    protected boolean addClass(final Class<?> cls) {
-        return classes.add(cls);
-    }
-
-    protected boolean addSingleton(final Object resource) {
-        return singletons.add(resource);
-    }
+    public static final String SPEC_VERSION = "1.0.0";
 
 }

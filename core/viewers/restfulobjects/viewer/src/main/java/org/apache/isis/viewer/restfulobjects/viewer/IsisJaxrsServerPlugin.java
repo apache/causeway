@@ -26,8 +26,6 @@ public interface IsisJaxrsServerPlugin {
 
     // -- INTERFACE
 
-    public Object newRestfulObjectsJaxbWriterForXml();
-
     public HttpStatusCode getFailureStatusCodeIfAny(Throwable ex);
 
     // -- LOOKUP

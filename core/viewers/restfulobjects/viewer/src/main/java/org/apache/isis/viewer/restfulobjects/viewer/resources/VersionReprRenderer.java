@@ -29,7 +29,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsApplication;
+import org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsSpec;
 
 public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRenderer, Void> {
 
@@ -52,7 +52,7 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
             addLinkToUp();
         }
 
-        representation.mapPut("specVersion", RestfulObjectsApplication.SPEC_VERSION);
+        representation.mapPut("specVersion", RestfulObjectsSpec.SPEC_VERSION);
         representation.mapPut("implVersion", versionFromManifest());
 
         putOptionalCapabilities();
