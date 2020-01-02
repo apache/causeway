@@ -21,6 +21,7 @@ package org.apache.isis.webapp.modules.templresources;
 import lombok.Getter;
 import lombok.var;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
@@ -28,6 +29,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -57,11 +59,19 @@ public final class WebModuleTemplateResources implements WebModule  {
     @Getter
     private final String name = "TemplateResources";
 
+    private final ServiceInjector serviceInjector;
+
+    @Inject
+    public WebModuleTemplateResources(final ServiceInjector serviceInjector) {
+        this.serviceInjector = serviceInjector;
+    }
+
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
         var filter = ctx.addFilter(FILTER_NAME, TemplateResourceCachingFilter.class);
         if (filter != null) {
+            serviceInjector.injectServicesInto(filter);
             filter.setInitParameter(
                     "CacheTime",
                     ""+cacheTimeSeconds);
@@ -76,6 +86,7 @@ public final class WebModuleTemplateResources implements WebModule  {
 
         var servlet = ctx.addServlet(SERVLET_NAME, TemplateResourceServlet.class);
         if (servlet != null) {
+            serviceInjector.injectServicesInto(servlet);
             servlet.addMapping(urlPatterns);
         } else {
             // was already registered, eg in web.xml.

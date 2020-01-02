@@ -21,11 +21,13 @@ package org.apache.isis.webapp.modules.logonlog;
 import lombok.Getter;
 import lombok.var;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,13 @@ public final class WebModuleLogOnExceptionLogger implements WebModule  {
 
     @Getter
     private final String name = "LogOn Exception Logger";
+
+    private final ServiceInjector serviceInjector;
+
+    @Inject
+    public WebModuleLogOnExceptionLogger(final ServiceInjector serviceInjector) {
+        this.serviceInjector = serviceInjector;
+    }
 
     @Override
     public void prepare(final WebModuleContext ctx) {

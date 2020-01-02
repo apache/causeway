@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
@@ -47,11 +48,8 @@ import org.apache.isis.webapp.util.IsisWebAppUtils;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
-import lombok.Getter;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.extern.log4j.Log4j2;
-import lombok.val;
-import lombok.var;
 
 /**
  * WebModule to enable support for Shiro.
@@ -68,6 +66,13 @@ public class WebModuleShiro implements WebModule  {
     
 
     private final static String SHIRO_FILTER_NAME = "ShiroFilter";
+
+    private final ServiceInjector serviceInjector;
+
+    @Inject
+    public WebModuleShiro(final ServiceInjector serviceInjector) {
+        this.serviceInjector = serviceInjector;
+    }
 
     // -- CONFIGURATION
 
@@ -160,6 +165,7 @@ public class WebModuleShiro implements WebModule  {
 
         var filter = ctx.addFilter(SHIRO_FILTER_NAME, ShiroFilter.class);
         if (filter != null) {
+            serviceInjector.injectServicesInto(filter);
             filter.addMappingForUrlPatterns(
                     null,
                     false, // filter is forced first
@@ -173,7 +179,9 @@ public class WebModuleShiro implements WebModule  {
             ctx.setInitParameter("shiroEnvironmentClass", customShiroEnvironmentClassName);
         }
 
-        return ctx.createListener(EnvironmentLoaderListenerForIsis.class);
+        final EnvironmentLoaderListenerForIsis listener = ctx.createListener(EnvironmentLoaderListenerForIsis.class);
+        serviceInjector.injectServicesInto(listener);
+        return listener;
 
     }
 

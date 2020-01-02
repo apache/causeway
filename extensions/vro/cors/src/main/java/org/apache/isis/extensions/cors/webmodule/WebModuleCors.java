@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.cors.webmodule;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
@@ -26,6 +27,7 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.ebaysf.web.cors.CORSFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -60,7 +62,15 @@ public final class WebModuleCors implements WebModule  {
     @Getter
     private final String name = "CORS";
 
+    private final ServiceInjector serviceInjector;
+
     private WebModuleContext webModuleContext;
+
+    @Inject
+    public WebModuleCors(ServiceInjector serviceInjector) {
+        this.serviceInjector = serviceInjector;
+    }
+
 
     @Override
     public void prepare(final WebModuleContext webModuleContext) {
@@ -94,6 +104,7 @@ public final class WebModuleCors implements WebModule  {
 
         var filter = ctx.addFilter(CORS_FILTER_NAME, CORSFilter.class);
         if (filter != null) {
+            serviceInjector.injectServicesInto(filter);
             filter.setInitParameter("cors.allowed.origins", "*");
             filter.setInitParameter("cors.allowed.headers", "Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Cache-Control,If-Modified-Since,Pragma");
             filter.setInitParameter("cors.exposed.headers", "Authorization");

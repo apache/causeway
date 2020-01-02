@@ -18,12 +18,13 @@
  */
 package org.apache.isis.security.keycloak.webmodule;
 
+import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 import lombok.var;
 
@@ -55,6 +51,13 @@ public final class WebModuleKeycloak implements WebModule  {
 
     @Getter
     private final String name = "Keycloak";
+
+    private final ServiceInjector serviceInjector;
+
+    @Inject
+    public WebModuleKeycloak(ServiceInjector serviceInjector) {
+        this.serviceInjector = serviceInjector;
+    }
 
     @Override
     public void prepare(WebModuleContext ctx) {

@@ -29,6 +29,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -58,6 +59,7 @@ public final class WebModuleWicket implements WebModule  {
 
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final IsisConfiguration isisConfiguration;
+    private final ServiceInjector serviceInjector;
 
     private final String wicketBasePath;
     private final String deploymentMode;
@@ -67,10 +69,12 @@ public final class WebModuleWicket implements WebModule  {
     @Inject
     public WebModuleWicket(
             final IsisSystemEnvironment isisSystemEnvironment,
-            final IsisConfiguration isisConfiguration) {
+            final IsisConfiguration isisConfiguration,
+            final ServiceInjector serviceInjector) {
 
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.isisConfiguration = isisConfiguration;
+        this.serviceInjector = serviceInjector;
 
         this.wicketBasePath = this.isisConfiguration.getViewer().getWicket().getBasePath();
 
@@ -101,6 +105,7 @@ public final class WebModuleWicket implements WebModule  {
 
         var filter = ctx.addFilter(WICKET_FILTER_NAME, WicketFilter.class);
         if (filter != null) {
+            serviceInjector.injectServicesInto(filter);
             filter.setInitParameter("applicationClassName", wicketApp);
             filter.setInitParameter("filterMappingUrlPattern", urlPattern);
             filter.setInitParameter("configuration", deploymentMode);

@@ -60,11 +60,16 @@ public final class WebModuleRestfulObjects implements WebModule  {
     public static final String ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS = "IsisSessionFilterForRestfulObjects";
 
     private final IsisConfiguration isisConfiguration;
+    private final ServiceInjector serviceInjector;
+
     private final String restfulPath;
 
     @Inject
-    public WebModuleRestfulObjects(final IsisConfiguration isisConfiguration) {
+    public WebModuleRestfulObjects(
+            final IsisConfiguration isisConfiguration,
+            final ServiceInjector serviceInjector) {
         this.isisConfiguration = isisConfiguration;
+        this.serviceInjector = serviceInjector;
         this.restfulPath = this.isisConfiguration.getViewer().getRestfulobjects().getBasePath();
     }
 
@@ -96,6 +101,8 @@ public final class WebModuleRestfulObjects implements WebModule  {
                     ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class);
             if(filter != null) {
 
+                serviceInjector.injectServicesInto(filter);
+
                 // this is mapped to the entire application;
                 // however the IsisSessionFilter will
                 // "notice" if the session filter has already been
@@ -121,6 +128,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
             val filter = ctx.addFilter(RESTEASY_DISPATCHER,
                     IsisTransactionFilterForRestfulObjects.class);
             if(filter != null) {
+                serviceInjector.injectServicesInto(filter);
                 filter.addMappingForServletNames(
                         null,
                         true,

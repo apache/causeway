@@ -18,12 +18,14 @@
  */
 package org.apache.isis.extensions.sse.webmodule;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,13 @@ public final class WebModuleServerSentEvents implements WebModule  {
     @Getter
     private final String name = "ServerSentEvents";
 
+    private final ServiceInjector serviceInjector;
+
+    @Inject
+    public WebModuleServerSentEvents(ServiceInjector serviceInjector) {
+        this.serviceInjector = serviceInjector;
+    }
+
     @Override
     public void prepare(WebModuleContext ctx) {
         // nothing special required
@@ -62,6 +71,7 @@ public final class WebModuleServerSentEvents implements WebModule  {
 
         val servlet = ctx.addServlet(SERVLET_NAME, ServerSentEventsServlet.class);
         if(servlet != null) {
+            serviceInjector.injectServicesInto(servlet);
             servlet.setAsyncSupported(true);
             servlet.addMapping("/sse");
         } else {
