@@ -66,12 +66,13 @@ public class IsisSystemEnvironment {
     
     @Getter private IocContainer iocContainer;
 
-    public String prependContextPathIfRequired(String url, IsisSystemEnvironment isisSystemEnvironment) {
+    public String prependContextPathIfRequired(String url) {
+
         if(url==null) {
             return null;
         }
         if(_Resources.isLocalResource(url)) {
-            return isisSystemEnvironment.prependContextPathIfPresent(url);
+            return this.prependContextPathIfPresent(url);
         }
         return url;
     }
