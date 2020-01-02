@@ -43,7 +43,7 @@ import lombok.val;
 @Service
 @Named("isisExtSse.WebModuleServerSentEvents")
 @Qualifier("ServerSentEvents")
-@Order(OrderPrecedence.MIDPOINT-99)
+@Order(OrderPrecedence.MIDPOINT)
 @Log4j2
 public final class WebModuleServerSentEvents implements WebModule  {
 
