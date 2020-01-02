@@ -85,7 +85,6 @@ public class IsisWebAppContextListener implements ServletContextListener {
 
         log.info("=== PHASE 1 === Setting up ServletContext parameters, contextPath = " + contextPath);
 
-        // _Resources.putContextPathIfPresent(contextPath);
         isisSystemEnvironment.setContextPath(contextPath);
 
         final WebModuleContext webModuleContext = new WebModuleContext(servletContextResource, isisConfiguration, serviceRegistry);

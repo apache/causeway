@@ -98,28 +98,6 @@ public final class _Resources {
         return _Context.getDefaultClassLoader().getResource(absoluteResourceName);
     }
 
-    // -- CONTEXT PATH RESOURCE
-
-//    /**
-//     * @return context-path resource (if any) as stored previously by {@link #putContextPathIfPresent(String)}
-//     */
-//    public final static String getContextPathIfAny() {
-//        final _Resources_ContextPath resource = _Context.getIfAny(_Resources_ContextPath.class);
-//        return resource!=null ? resource.getContextPath() : null;
-//    }
-
-//    /**
-//     * Stores the {@code contextPath} as an application scoped resource-object.
-//     * If {@code contextPath} is null or an empty String, no path-resource object is stored.
-//     * @param contextPath
-//     * @throws IllegalArgumentException if an non-empty contextPath evaluates to being
-//     * equivalent to the root-path '/'
-//     */
-//    public final static void putContextPathIfPresent(String contextPath) {
-//        if(!_Strings.isEmpty(contextPath)) {
-//            _Context.put(_Resources_ContextPath.class, new _Resources_ContextPath(contextPath), false);
-//        }
-//    }
 
     public final static String prependContextPathIfPresent(String path, IsisSystemEnvironment isisSystemEnvironment) {
 
