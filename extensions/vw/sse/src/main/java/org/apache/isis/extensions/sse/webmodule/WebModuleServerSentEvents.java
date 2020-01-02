@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
@@ -48,10 +49,8 @@ public final class WebModuleServerSentEvents implements WebModule  {
 
     private final static String SERVLET_NAME = "ServerSentEventsServlet";
 
-    @Override
-    public String getName() {
-        return "ServerSentEvents";
-    }
+    @Getter
+    private final String name = "ServerSentEvents";
 
     @Override
     public void prepare(WebModuleContext ctx) {
@@ -62,17 +61,15 @@ public final class WebModuleServerSentEvents implements WebModule  {
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
         val servlet = ctx.addServlet(SERVLET_NAME, ServerSentEventsServlet.class);
-        servlet.setAsyncSupported(true);
-
-        ctx.getServletRegistration(SERVLET_NAME)
-        .addMapping("/sse");
+        if(servlet != null) {
+            servlet.setAsyncSupported(true);
+            servlet.addMapping("/sse");
+        } else {
+            // was already registered, eg in web.xml.
+        }
 
         return null; // does not provide a listener
     }
 
-    @Override
-    public boolean isApplicable(WebModuleContext ctx) {
-        return true;
-    }
 
 }

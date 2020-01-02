@@ -30,6 +30,7 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer.ServletContextResource;
 
@@ -98,11 +99,13 @@ public class WebModuleContext {
 
     /**
      * Streams the protected path names (<tt>isis.protected</tt> context param)
-     * @param ctx
      */
     public Stream<String> streamProtectedPaths() {
         final String list = protectedPath.toString();
         return _Strings.splitThenStream(list, ",");
+    }
+    public String[] getProtectedPaths() {
+        return streamProtectedPaths().collect(_Arrays.toArray(String.class));
     }
 
     public void prepare() {

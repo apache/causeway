@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Named;
-import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -48,13 +47,11 @@ import org.apache.isis.webapp.util.IsisWebAppUtils;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.var;
 
 /**
  * WebModule to enable support for Shiro.
@@ -69,8 +66,6 @@ import lombok.val;
 @Log4j2
 public class WebModuleShiro implements WebModule  {
     
-    private final static String SHIRO_LISTENER_CLASS_NAME = EnvironmentLoaderListenerForIsis.class.getName();
-    private final static String SHIRO_FILTER_CLASS_NAME = ShiroFilter.class.getName();
 
     private final static String SHIRO_FILTER_NAME = "ShiroFilter";
 
@@ -126,14 +121,14 @@ public class WebModuleShiro implements WebModule  {
             val securityManager = shiroEnvironment.getSecurityManager();
             val serviceInjector = IsisWebAppUtils.getManagedBean(ServiceInjector.class, servletContext);
             
-            injectServicesIntoReamls(serviceInjector, securityManager);
+            injectServicesIntoRealms(serviceInjector, securityManager);
             
             return shiroEnvironment;
         }
         
         @SuppressWarnings("unchecked")
         @SneakyThrows
-        public static void injectServicesIntoReamls(
+        public static void injectServicesIntoRealms(
                 ServiceInjector serviceInjector, 
                 org.apache.shiro.mgt.SecurityManager securityManager) {
 
@@ -149,11 +144,9 @@ public class WebModuleShiro implements WebModule  {
 
     // -- 
 
-    @Override
-    public String getName() {
-        return "Shiro";
-    }
-    
+    @Getter
+    private final String name = "Shiro";
+
     @Override
     public void prepare(WebModuleContext ctx) {
         val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
@@ -165,45 +158,23 @@ public class WebModuleShiro implements WebModule  {
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
-        final Dynamic filter;
-        try {
-            val filterClass = getDefaultClassLoader().loadClass(SHIRO_FILTER_CLASS_NAME);
-            val filterInstance = ctx.createFilter(uncheckedCast(filterClass));
-            filter = ctx.addFilter(SHIRO_FILTER_NAME, filterInstance);
-            if(filter==null) {
-                return null; // filter was already registered somewhere else (eg web.xml)
-            }
-        } catch (ClassNotFoundException e) {
-            // guarded against by isAvailable()
-            throw unexpectedCodeReach();
+        var filter = ctx.addFilter(SHIRO_FILTER_NAME, ShiroFilter.class);
+        if (filter != null) {
+            filter.addMappingForUrlPatterns(
+                    null,
+                    false, // filter is forced first
+                    "/*");
+        } else {
+            // was already registered, eg in web.xml.
         }
 
         val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
         if(_Strings.isNotEmpty(customShiroEnvironmentClassName)) {
-            ctx.setInitParameter("shiroEnvironmentClass", customShiroEnvironmentClassName);	
+            ctx.setInitParameter("shiroEnvironmentClass", customShiroEnvironmentClassName);
         }
 
-        val urlPattern = "/*";
-        filter.addMappingForUrlPatterns(null, false, urlPattern); // filter is forced first
+        return ctx.createListener(EnvironmentLoaderListenerForIsis.class);
 
-        try {
-            val listenerClass = getDefaultClassLoader().loadClass(SHIRO_LISTENER_CLASS_NAME);
-            return ctx.createListener(uncheckedCast(listenerClass));
-        } catch (ClassNotFoundException e) {
-            // guarded against by isAvailable()
-            throw unexpectedCodeReach();
-        }
-
-    }
-
-    @Override
-    public boolean isApplicable(WebModuleContext ctx) {
-        try {
-            getDefaultClassLoader().loadClass(SHIRO_LISTENER_CLASS_NAME);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
 

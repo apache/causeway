@@ -25,13 +25,13 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.webapp.modules.WebModule;
@@ -49,24 +49,25 @@ import lombok.val;
 public class WebModuleH2Console implements WebModule  {
 
     private final static String SERVLET_NAME = "H2Console";
-    private final static String SERVLET_CLASS_NAME = "org.h2.server.web.WebServlet";
-    private final static String CONSOLE_PATH = "/db"; //XXX could be made a config value 
+    private final static String CONSOLE_PATH = "/db";
 
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final IsisConfiguration isisConfiguration;
+
+    @Getter
+    private final LocalResourcePath localResourcePathIfEnabled;
+    private final boolean applicable;
 
     @Inject
     public WebModuleH2Console(IsisSystemEnvironment isisSystemEnvironment, IsisConfiguration isisConfiguration) {
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.isisConfiguration = isisConfiguration;
+        this.applicable = isPrototyping() && isUsesH2MemConnection();
+        this.localResourcePathIfEnabled = applicable ? new LocalResourcePath(CONSOLE_PATH) : null;
     }
 
-    @Getter private LocalResourcePath localResourcePathIfEnabled;
-
-    @Override
-    public String getName() {
-        return "H2Console";
-    }
+    @Getter
+    private final String name = "H2Console";
 
     @Override
     public void prepare(WebModuleContext ctx) {
@@ -74,48 +75,33 @@ public class WebModuleH2Console implements WebModule  {
     }
 
     @Override
-    public ServletContextListener init(ServletContext ctx) throws ServletException {
+    public ServletContextListener init(final ServletContext ctx) throws ServletException {
 
-        val servlet = ctx.addServlet(SERVLET_NAME, SERVLET_CLASS_NAME);
-        ctx.getServletRegistration(SERVLET_NAME)
-        .addMapping(CONSOLE_PATH+"/*");
-
-        servlet.setInitParameter("webAllowOthers", "true"); //XXX could be made a config value 
+        val servlet = ctx.addServlet(SERVLET_NAME, WebServlet.class);
+        if(servlet != null) {
+            servlet.addMapping(CONSOLE_PATH + "/*");
+            servlet.setInitParameter("webAllowOthers", "true");
+        } else {
+            // was already registered, eg in web.xml.
+        }
 
         return null; // does not provide a listener
     }
 
     @Override
     public boolean isApplicable(WebModuleContext ctx) {
-        val enabled = canEnable(ctx);
-        if(enabled) {
-            localResourcePathIfEnabled = new LocalResourcePath(CONSOLE_PATH);
-        }
-        return enabled;
+        return applicable;
     }
 
     // -- HELPER
 
-    private boolean canEnable(WebModuleContext ctx) {
+    private boolean isPrototyping() {
+        return isisSystemEnvironment.getDeploymentType().isPrototyping();
+    }
 
-        if(!isisSystemEnvironment.getDeploymentType().isPrototyping()) {
-            return false;
-        }
-
+    private boolean isUsesH2MemConnection() {
         val connectionUrl = isisConfiguration.getPersistor().getDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
-
-        val usesH2Connection = !_Strings.isNullOrEmpty(connectionUrl) && connectionUrl.contains(":h2:mem:");
-
-        if(!usesH2Connection) {
-            return false;
-        }
-
-        try {
-            _Context.loadClass(SERVLET_CLASS_NAME);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return !_Strings.isNullOrEmpty(connectionUrl) && connectionUrl.contains(":h2:mem:");
     }
 
 }

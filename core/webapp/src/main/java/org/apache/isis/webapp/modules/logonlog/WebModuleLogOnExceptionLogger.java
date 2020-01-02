@@ -18,9 +18,10 @@
  */
 package org.apache.isis.webapp.modules.logonlog;
 
+import lombok.Getter;
+import lombok.var;
+
 import javax.inject.Named;
-import javax.servlet.Filter;
-import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -30,14 +31,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.webapp.diagnostics.IsisLogOnExceptionFilter;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
-
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
 /**
  * WebModule to log log-on exceptions.
@@ -50,62 +46,36 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Qualifier("LogOnExceptionLogger")
 public final class WebModuleLogOnExceptionLogger implements WebModule  {
 
-    private final static String LOGONLOGGER_FILTER_CLASS_NAME = IsisLogOnExceptionFilter.class.getName();
     private final static String LOGONLOGGER_FILTER_NAME = "IsisLogOnExceptionFilter";
 
     private WebModuleContext webModuleContext;
 
+    @Getter
+    private final String name = "LogOn Exception Logger";
 
     @Override
-    public String getName() {
-        return "LogOn Exception Logger";
-    }
-
-    @Override
-    public void prepare(WebModuleContext ctx) {
+    public void prepare(final WebModuleContext ctx) {
         this.webModuleContext = ctx;
     }
 
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
-        final Filter filter;
-        try {
-            final Class<?> filterClass = getDefaultClassLoader().loadClass(LOGONLOGGER_FILTER_CLASS_NAME);
-            filter = ctx.createFilter(uncheckedCast(filterClass));
-        } catch (ClassNotFoundException e) {
-            // guarded against by isAvailable()
-            throw unexpectedCodeReach();
+        var filter = ctx.addFilter(LOGONLOGGER_FILTER_NAME, IsisLogOnExceptionFilter.class);
+        if (filter != null) {
+            filter.addMappingForUrlPatterns(
+                    null,
+                    true, // filter is forced last
+                    webModuleContext.getProtectedPaths());
+        } else {
+            // was already registered, eg in web.xml.
         }
-
-        final Dynamic reg = ctx.addFilter(LOGONLOGGER_FILTER_NAME, filter);
-        if(reg==null) {
-            return null; // filter was already registered somewhere else (eg web.xml)
-        }
-
-        reg.addMappingForUrlPatterns(null, true, getProtectedUrlPatterns() ); // filter is forced last
 
         return null; // does not provide a listener
     }
 
-    @Override
-    public boolean isApplicable(WebModuleContext ctx) {
-        try {
-            getDefaultClassLoader().loadClass(LOGONLOGGER_FILTER_CLASS_NAME);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     // -- HELPER
-
-    private String[] getProtectedUrlPatterns() {
-        return webModuleContext.streamProtectedPaths()
-                .collect(_Arrays.toArray(String.class));
-    }
-
-
 
 
 }

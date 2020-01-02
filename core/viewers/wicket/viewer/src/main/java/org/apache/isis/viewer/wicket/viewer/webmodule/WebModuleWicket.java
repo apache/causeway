@@ -18,12 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.viewer.webmodule;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+import lombok.var;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.Filter;
-import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -31,7 +31,6 @@ import javax.servlet.ServletException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -41,11 +40,8 @@ import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
 import static java.util.Objects.requireNonNull;
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._Strings.suffix;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
 /**
  * WebModule that provides the Wicket Viewer.
@@ -58,7 +54,6 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Log4j2
 public final class WebModuleWicket implements WebModule  {
 
-    private final static String WICKET_FILTER_CLASS_NAME = WicketFilter.class.getName();
     private final static String WICKET_FILTER_NAME = "WicketFilter";
 
     private final IsisSystemEnvironment isisSystemEnvironment;
@@ -67,9 +62,13 @@ public final class WebModuleWicket implements WebModule  {
     private final String wicketBasePath;
     private final String deploymentMode;
     private final String wicketApp;
+    private final String urlPattern;
 
     @Inject
-    public WebModuleWicket(final IsisSystemEnvironment isisSystemEnvironment, final IsisConfiguration isisConfiguration) {
+    public WebModuleWicket(
+            final IsisSystemEnvironment isisSystemEnvironment,
+            final IsisConfiguration isisConfiguration) {
+
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.isisConfiguration = isisConfiguration;
 
@@ -83,72 +82,37 @@ public final class WebModuleWicket implements WebModule  {
 
         requireNonNull(wicketBasePath, "Config property 'isis.viewer.wicket.base-path' is required.");
         requireNonNull(wicketApp, "Config property 'isis.viewer.wicket.app' is required.");
+
+        this.urlPattern = suffix(prefix(wicketBasePath, "/"), "/") + "*";
     }
 
-    @Override
-    public String getName() {
-        return "Wicket";
-    }
+    @Getter
+    private final String name = "Wicket";
 
     @Override
     public void prepare(WebModuleContext ctx) {
-        if(!isAvailable()) {
-            return;
-        }
-
         ctx.setHasBootstrapper();
         ctx.addViewer("wicket");
-        ctx.addProtectedPath(suffix(prefix(wicketBasePath, "/"), "/") + "*");
+        ctx.addProtectedPath(this.urlPattern);
     }
 
     @Override
-    public ServletContextListener init(ServletContext ctx) throws ServletException {
+    public ServletContextListener init(final ServletContext ctx) throws ServletException {
 
-        final Filter filter;
-        try {
-            final Class<?> filterClass = getDefaultClassLoader().loadClass(WICKET_FILTER_CLASS_NAME);
-            filter = ctx.createFilter(uncheckedCast(filterClass));
-        } catch (ClassNotFoundException e) {
-            // guarded against by isAvailable()
-            throw unexpectedCodeReach();
+        var filter = ctx.addFilter(WICKET_FILTER_NAME, WicketFilter.class);
+        if (filter != null) {
+            filter.setInitParameter("applicationClassName", wicketApp);
+            filter.setInitParameter("filterMappingUrlPattern", urlPattern);
+            filter.setInitParameter("configuration", deploymentMode);
+            filter.addMappingForUrlPatterns(
+                    null,
+                    true,
+                    urlPattern);
+        } else {
+            // was already registered, eg in web.xml.
         }
-
-        final Dynamic reg = ctx.addFilter(WICKET_FILTER_NAME, filter);
-        if(reg==null) {
-            return null; // filter was already registered somewhere else (eg web.xml)
-        }
-
-        final String urlPattern = getUrlPattern();
-
-        reg.setInitParameter("applicationClassName", wicketApp);
-        reg.setInitParameter("filterMappingUrlPattern", urlPattern);
-        reg.setInitParameter("configuration", deploymentMode);
-        reg.addMappingForUrlPatterns(null, true, urlPattern);
 
         return null; // does not provide a listener
     }
-
-    @Override
-    public boolean isApplicable(WebModuleContext ctx) {
-        return isAvailable();
-    }
-
-    // -- HELPER
-
-    private static boolean isAvailable() {
-        try {
-            getDefaultClassLoader().loadClass(WICKET_FILTER_CLASS_NAME);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private String getUrlPattern() {
-        final String wicketPathEnclosedWithSlashes = suffix(prefix(wicketBasePath, "/"), "/");
-        final String urlPattern = wicketPathEnclosedWithSlashes + "*";
-        return urlPattern;
-    }
-
 
 }

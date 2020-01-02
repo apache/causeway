@@ -18,11 +18,15 @@
  */
 package org.apache.isis.webapp.modules.templresources;
 
+import lombok.Getter;
+import lombok.var;
+
 import javax.inject.Named;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -47,41 +51,37 @@ public final class WebModuleTemplateResources implements WebModule  {
 
     private final static int cacheTimeSeconds = 86400;
 
+    public static final String FILTER_NAME = "TemplateResourceCachingFilter";
     private final static String SERVLET_NAME = "TemplateResourceServlet";
 
-    @Override
-    public String getName() {
-        return "TemplateResources";
-    }
-
-    @Override
-    public void prepare(WebModuleContext ctx) {
-        // nothing special required
-    }
+    @Getter
+    private final String name = "TemplateResources";
 
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
-        final Dynamic filter = ctx.addFilter("TemplateResourceCachingFilter", TemplateResourceCachingFilter.class);
-        if(filter==null) {
-            return null; // filter was already registered somewhere else (eg web.xml)
+        var filter = ctx.addFilter(FILTER_NAME, TemplateResourceCachingFilter.class);
+        if (filter != null) {
+            filter.setInitParameter(
+                    "CacheTime",
+                    ""+cacheTimeSeconds);
+            filter.addMappingForUrlPatterns(
+                    null,
+                    true,
+                    urlPatterns);
+
+        } else {
+            // was already registered, eg in web.xml.
         }
 
-        filter.setInitParameter(
-                "CacheTime", 
-                ""+cacheTimeSeconds);
-        filter.addMappingForUrlPatterns(null, true, urlPatterns);
-
-        ctx.addServlet(SERVLET_NAME, TemplateResourceServlet.class);
-        ctx.getServletRegistration(SERVLET_NAME)
-        .addMapping(urlPatterns);
+        var servlet = ctx.addServlet(SERVLET_NAME, TemplateResourceServlet.class);
+        if (servlet != null) {
+            servlet.addMapping(urlPatterns);
+        } else {
+            // was already registered, eg in web.xml.
+        }
 
         return null; // does not provide a listener
-    }
-
-    @Override
-    public boolean isApplicable(WebModuleContext ctx) {
-        return true;
     }
 
 

@@ -99,7 +99,7 @@ class AbstractShiroTest {
         val factory = new IniSecurityManagerFactory(ini);
         val securityManager = factory.getInstance();
         
-        EnvironmentLoaderListenerForIsis.injectServicesIntoReamls(serviceInjector, securityManager);
+        EnvironmentLoaderListenerForIsis.injectServicesIntoRealms(serviceInjector, securityManager);
         
 //debug        
 //        ini.getSections().forEach(section->{

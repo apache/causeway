@@ -36,8 +36,10 @@ import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.var;
 
 /**
  * WebModule to enable support for Keycloak.
@@ -49,14 +51,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class WebModuleKeycloak implements WebModule  {
 
-    private final static String KEYCLOAK_FILTER_CLASS_NAME = KeycloakFilter.class.getName();
     private final static String KEYCLOAK_FILTER_NAME = "KeycloakFilter";
 
-    @Override
-    public String getName() {
-        return "Keycloak";
-    }
-    
+    @Getter
+    private final String name = "Keycloak";
+
     @Override
     public void prepare(WebModuleContext ctx) {
     }
@@ -64,27 +63,17 @@ public final class WebModuleKeycloak implements WebModule  {
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
-        final Dynamic filter;
-        try {
-            val filterClass = getDefaultClassLoader().loadClass(KEYCLOAK_FILTER_CLASS_NAME);
-            val filterInstance = ctx.createFilter(uncheckedCast(filterClass));
-            filter = ctx.addFilter(KEYCLOAK_FILTER_NAME, filterInstance);
-            if(filter==null) {
-                return null; // filter was already registered somewhere else (eg web.xml)
-            }
-        } catch (ClassNotFoundException e) {
-            // guarded against by isAvailable()
-            throw unexpectedCodeReach();
+        var filter = ctx.addFilter(KEYCLOAK_FILTER_NAME, KeycloakFilter.class);
+        if (filter != null) {
+            filter.addMappingForUrlPatterns(
+                    null,
+                    false, // filter is forced first
+                    "/*");
+        } else {
+            // was already registered, eg in web.xml.
         }
-
-        val urlPattern = "/*";
-        filter.addMappingForUrlPatterns(null, false, urlPattern); // filter is forced first
 
         return null;
     }
 
-    @Override
-    public boolean isApplicable(WebModuleContext ctx) {
-        return true;
-    }
 }

@@ -42,8 +42,10 @@ import static org.apache.isis.commons.internal.context._Context.getDefaultClassL
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.var;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
@@ -59,20 +61,22 @@ public final class WebModuleRestfulObjects implements WebModule  {
 
     private final static String RESTEASY_BOOTSTRAPPER = "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
     private final static String RESTEASY_DISPATCHER = "RestfulObjectsRestEasyDispatcher";
+    public static final String ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS = "IsisSessionFilterForRestfulObjects";
 
     private final IsisConfiguration isisConfiguration;
     private final String restfulPathConfigValue;
+    private final String restfulPath;
 
     @Inject
     public WebModuleRestfulObjects(final IsisConfiguration isisConfiguration) {
         this.isisConfiguration = isisConfiguration;
         this.restfulPathConfigValue = this.isisConfiguration.getViewer().getRestfulobjects().getBasePath();
+        this.restfulPath = suffix(prefix(restfulPathConfigValue, "/"), "/");
     }
 
-    @Override
-    public String getName() {
-        return "RestEasy";
-    }
+
+    @Getter
+    private final String name = "RestEasy";
 
     @Override
     public void prepare(WebModuleContext ctx) {
@@ -85,7 +89,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
 
         // register this module as a viewer
         ctx.addViewer("restfulobjects");
-        ctx.addProtectedPath(suffix(prefix(this.restfulPathConfigValue, "/"), "/") + "*" );
+        ctx.addProtectedPath(this.restfulPath + "*");
     }
 
     @Override
@@ -95,30 +99,39 @@ public final class WebModuleRestfulObjects implements WebModule  {
 
         {
             val filter = ctx.addFilter(
-                    "IsisSessionFilterForRestfulObjects", IsisRestfulObjectsSessionFilter.class);
+                    ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class);
+            if(filter != null) {
 
-            // this is mapped to the entire application; 
-            // however the IsisSessionFilter will 
-            // "notice" if the session filter has already been
-            // executed for the request pipeline, and if so will do nothing
-            filter.addMappingForServletNames(null, true, RESTEASY_DISPATCHER); 
+                // this is mapped to the entire application;
+                // however the IsisSessionFilter will
+                // "notice" if the session filter has already been
+                // executed for the request pipeline, and if so will do nothing
+                filter.addMappingForServletNames(
+                        null,
+                        true,
+                        RESTEASY_DISPATCHER);   // applies only to requests that are served by the RestEasy dispatcher
 
-            filter.setInitParameter(
-                    "authenticationSessionStrategy", 
-                    AuthenticationSessionStrategyBasicAuth.class.getName());
-            filter.setInitParameter(
-                    "whenNoSession", // what to do if no session was found ...
-                    "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
-            filter.setInitParameter(
-                    "passThru", 
-                    String.join(",", getRestfulPath()+"swagger", getRestfulPath()+"health"));
-
+                filter.setInitParameter(
+                        "authenticationSessionStrategy",
+                        AuthenticationSessionStrategyBasicAuth.class.getName());
+                filter.setInitParameter(
+                        "whenNoSession", // what to do if no session was found ...
+                        "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
+                filter.setInitParameter(
+                        "passThru",
+                        String.join(",", getRestfulPath()+"swagger", getRestfulPath()+"health"));
+            }
         }
 
         {
-            val filter = ctx.addFilter("RestfulObjectsRestEasyDispatcher",
-                    IsisTransactionFilterForRestfulObjects.class.getName());
-            filter.addMappingForServletNames(null, true, RESTEASY_DISPATCHER); 
+            val filter = ctx.addFilter(RESTEASY_DISPATCHER,
+                    IsisTransactionFilterForRestfulObjects.class);
+            if(filter != null) {
+                filter.addMappingForServletNames(
+                        null,
+                        true,
+                        RESTEASY_DISPATCHER); // applies only to requests that are served by the RestEasy dispatcher
+            }
         }
 
 
@@ -128,14 +141,15 @@ public final class WebModuleRestfulObjects implements WebModule  {
         // used by RestEasy to determine the JAX-RS resources and other related configuration
         ctx.setInitParameter(
                 "javax.ws.rs.Application", 
-                "org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsApplication");
+                org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsApplication.class.getName());
 
         ctx.setInitParameter("resteasy.servlet.mapping.prefix", getRestfulPath());
 
-        ctx.addServlet(RESTEASY_DISPATCHER, 
+        var servlet = ctx.addServlet(RESTEASY_DISPATCHER,
                 "org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher");
-        ctx.getServletRegistration(RESTEASY_DISPATCHER)
-        .addMapping(getUrlPattern());
+        if(servlet != null) {
+            servlet.addMapping(getUrlPattern());
+        }
 
         try {
             final Class<?> listenerClass = getDefaultClassLoader().loadClass(RESTEASY_BOOTSTRAPPER);
@@ -147,15 +161,6 @@ public final class WebModuleRestfulObjects implements WebModule  {
 
     }
 
-    @Override
-    public boolean isApplicable(WebModuleContext ctx) {
-        try {
-            getDefaultClassLoader().loadClass(RESTEASY_BOOTSTRAPPER);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     // -- HELPER
 
@@ -164,9 +169,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
     }
 
     private String getRestfulPath() {
-        requireNonNull(restfulPathConfigValue, "This web-module needs to be prepared first.");
-        final String restfulPathEnclosedWithSlashes = suffix(prefix(restfulPathConfigValue, "/"), "/");
-        return restfulPathEnclosedWithSlashes;
+        return this.restfulPath;
     }
 
 }

@@ -80,7 +80,7 @@ public interface WebModule {
      * @param ctx WebModuleContext
      * @return whether this module is applicable/usable
      */
-    public boolean isApplicable(WebModuleContext ctx);
+    default public boolean isApplicable(WebModuleContext ctx) { return true; }
 
     // -- DISCOVERY 
 

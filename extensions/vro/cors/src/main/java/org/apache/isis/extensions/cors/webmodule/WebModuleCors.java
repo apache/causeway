@@ -25,6 +25,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.ebaysf.web.cors.CORSFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -33,8 +34,10 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.var;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
@@ -48,21 +51,20 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Service
 @Named("isisExtCors.WebModuleServerCors")
 @Qualifier("CORS")
-@Order(OrderPrecedence.MIDPOINT-99)
+@Order(OrderPrecedence.HIGH)
 @Log4j2
 public final class WebModuleCors implements WebModule  {
 
-    private final static String CORS_FILTER_CLASS_NAME = CORSFilter.class.getName();
     private final static String CORS_FILTER_NAME = "CORS Filter";
 
-    @Override
-    public String getName() {
-        return "CORS";
-    }
+    @Getter
+    private final String name = "CORS";
+
+    private WebModuleContext webModuleContext;
 
     @Override
-    public void prepare(WebModuleContext ctx) {
-        // nothing special required
+    public void prepare(final WebModuleContext webModuleContext) {
+        this.webModuleContext = webModuleContext;
     }
 
     /*
@@ -90,32 +92,21 @@ public final class WebModuleCors implements WebModule  {
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
-        final FilterRegistration.Dynamic filter;
-        try {
-            val filterClass = getDefaultClassLoader().loadClass(CORS_FILTER_CLASS_NAME);
-            val filterInstance = ctx.createFilter(uncheckedCast(filterClass));
-            filter = ctx.addFilter(CORS_FILTER_NAME, filterInstance);
-            if(filter==null) {
-                return null; // filter was already registered somewhere else (eg web.xml)
-            }
-        } catch (ClassNotFoundException e) {
-            // guarded against by isAvailable()
-            throw unexpectedCodeReach();
-        }
-
-        filter.setInitParameter("cors.allowed.origins", "*");
-        filter.setInitParameter("cors.allowed.headers", "Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Cache-Control,If-Modified-Since,Pragma");
-        filter.setInitParameter("cors.exposed.headers", "Authorization");
+        var filter = ctx.addFilter(CORS_FILTER_NAME, CORSFilter.class);
+        if (filter != null) {
+            filter.setInitParameter("cors.allowed.origins", "*");
+            filter.setInitParameter("cors.allowed.headers", "Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Cache-Control,If-Modified-Since,Pragma");
+            filter.setInitParameter("cors.exposed.headers", "Authorization");
 
         val urlPattern = "/*";
         filter.addMappingForUrlPatterns(null, false, urlPattern);
 
+        } else {
+            // was already registered, eg in web.xml.
+        }
+
         return null;
     }
 
-    @Override
-    public boolean isApplicable(WebModuleContext ctx) {
-        return true;
-    }
 
 }
