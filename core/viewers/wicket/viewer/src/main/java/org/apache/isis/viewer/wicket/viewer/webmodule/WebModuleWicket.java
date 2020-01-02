@@ -41,8 +41,6 @@ import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
 import static java.util.Objects.requireNonNull;
-import static org.apache.isis.commons.internal.base._Strings.prefix;
-import static org.apache.isis.commons.internal.base._Strings.suffix;
 
 /**
  * WebModule that provides the Wicket Viewer.

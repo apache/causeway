@@ -23,11 +23,9 @@ import lombok.var;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,7 +34,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.webapp.modules.WebModule;
-import org.apache.isis.webapp.modules.WebModuleContext;
 
 /**
  * WebModule to provide static resources utilizing an in-memory cache.
@@ -50,10 +47,9 @@ import org.apache.isis.webapp.modules.WebModuleContext;
 public final class WebModuleTemplateResources implements WebModule  {
 
     private final static String[] urlPatterns = { "*.thtml" };
-
     private final static int cacheTimeSeconds = 86400;
 
-    public static final String FILTER_NAME = "TemplateResourceCachingFilter";
+    private final static String FILTER_NAME = "TemplateResourceCachingFilter";
     private final static String SERVLET_NAME = "TemplateResourceServlet";
 
     @Getter
