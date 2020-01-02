@@ -42,7 +42,7 @@ import org.apache.isis.webapp.modules.WebModuleContext;
  */
 @Service
 @Named("isisWebapp.WebModuleLogOnExceptionLogger")
-@Order(OrderPrecedence.LOWEST) // TODO: should this not be the highest precedence, ie first in stack?
+@Order(OrderPrecedence.HIGH - 100)
 @Qualifier("LogOnExceptionLogger")
 public final class WebModuleLogOnExceptionLogger implements WebModule  {
 
