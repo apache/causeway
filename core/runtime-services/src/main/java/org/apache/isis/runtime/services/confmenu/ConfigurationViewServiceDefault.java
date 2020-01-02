@@ -19,6 +19,7 @@
 package org.apache.isis.runtime.services.confmenu;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.mixins.layout.Object_openRestApi;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -52,11 +54,19 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class ConfigurationViewServiceDefault implements ConfigurationViewService {
+public class ConfigurationViewServiceDefault implements ConfigurationViewService, Object_openRestApi.RestfulPathProvider {
 
-    @Inject private IsisSystemEnvironment systemEnvironment;
-    @Inject private IsisConfiguration configuration;
-    
+    private final IsisSystemEnvironment systemEnvironment;
+    private final IsisConfiguration configuration;
+
+    @Inject
+    public ConfigurationViewServiceDefault(
+            final IsisSystemEnvironment systemEnvironment,
+            final IsisConfiguration configuration) {
+        this.systemEnvironment = systemEnvironment;
+        this.configuration = configuration;
+    }
+
     @Override
     public Set<ConfigurationProperty> allProperties() {
         return new TreeSet<>(config.get().values());
@@ -126,6 +136,8 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
     }
 
 
-
-
+    @Override
+    public Optional<String> getRestfulPath() {
+        return Optional.ofNullable(configuration.getViewer().getRestfulobjects().getBasePath());
+    }
 }

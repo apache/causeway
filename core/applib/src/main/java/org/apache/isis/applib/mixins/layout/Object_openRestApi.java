@@ -29,18 +29,23 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import java.util.Optional;
+
 @Mixin(method="act")
 @RequiredArgsConstructor
 public class Object_openRestApi {
 
     @Inject private BookmarkService bookmarkService;
-    
+    @Inject private ConfigurationViewService configurationViewService;
+    @Inject private RestfulPathProvider restfulPathProvider;
+
     private final Object holder;
 
     public static class ActionDomainEvent
@@ -61,14 +66,17 @@ public class Object_openRestApi {
         val bookmark = bookmarkService.bookmarkForElseThrow(holder);
         val objType = bookmark.getObjectType();
         val objId = bookmark.getIdentifier();
-        val restfulPathIfAny = _Resources.getRestfulPathIfAny();
 
-        return restfulPathIfAny!=null
-                ? new LocalResourcePath(String.format(
-                        "/%s/objects/%s/%s", restfulPathIfAny, objType, objId))
-                        : new LocalResourcePath(String.format(
-                                "/objects/%s/%s", objType, objId));
+        val restfulPathIfAny = restfulPathProvider.getRestfulPath();
+
+        final String format = restfulPathIfAny
+                .map(path -> String.format("/%s/objects/%s/%s", path, objType, objId))
+                .orElseGet(() -> String.format("/objects/%s/%s", objType, objId));
+        return new LocalResourcePath(format);
     }
-    
+
+    public interface RestfulPathProvider {
+        Optional<String> getRestfulPath();
+    }
 
 }
