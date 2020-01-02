@@ -63,8 +63,27 @@ public class IsisSystemEnvironment {
     
     @Inject private ApplicationContext springContext;
     
-    @Getter private IocContainer iocContainer; 
-    
+    @Getter private IocContainer iocContainer;
+
+    public final static String prependContextPathIfPresent(String path, IsisSystemEnvironment isisSystemEnvironment) {
+
+        if(path==null) {
+            return null;
+        }
+
+        final String contextPath = isisSystemEnvironment.getContextPath();
+
+        if(contextPath==null) {
+            return path;
+        }
+
+        if(!path.startsWith("/")) {
+            return contextPath + "/" + path;
+        } else {
+            return "/" + contextPath + path;
+        }
+    }
+
     // -- LIFE-CYCLE
     
     @PostConstruct

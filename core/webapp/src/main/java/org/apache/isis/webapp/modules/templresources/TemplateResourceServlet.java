@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.commons.InputStreamExtensions;
 import org.apache.isis.metamodel.commons.ResourceUtil;
@@ -65,7 +64,7 @@ public class TemplateResourceServlet extends HttpServlet {
         super.init(config);
 
         final String restfulPath = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
-        final String restfulBase = _Resources.prependContextPathIfPresent(restfulPath, isisSystemEnvironment);
+        final String restfulBase = IsisSystemEnvironment.prependContextPathIfPresent(restfulPath, isisSystemEnvironment);
         templateVariables = new TemplateResourceServlet_HtmlTemplateVariables(
                 pair("restful-base", prefix(restfulBase, "/"))
                 );

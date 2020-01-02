@@ -27,7 +27,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.client.SuppressionType;
-import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.extensions.restclient.RestfulClient;
 import org.apache.isis.extensions.restclient.RestfulClientConfig;
@@ -69,7 +68,7 @@ public class RestEndpointService {
 
         val restRootPath = 
                 "http://localhost:" + getPort() + "/" + 
-                        _Resources.prependContextPathIfPresent(isisConfiguration.getViewer().getRestfulobjects().getBasePath(), isisSystemEnvironment);
+                        IsisSystemEnvironment.prependContextPathIfPresent(isisConfiguration.getViewer().getRestfulobjects().getBasePath(), isisSystemEnvironment);
 
         log.info("new restful client created for {}", restRootPath);
 

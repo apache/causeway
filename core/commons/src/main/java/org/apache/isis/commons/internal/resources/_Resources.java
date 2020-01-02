@@ -99,31 +99,12 @@ public final class _Resources {
     }
 
 
-    public final static String prependContextPathIfPresent(String path, IsisSystemEnvironment isisSystemEnvironment) {
-
-        if(path==null) {
-            return null;
-        }
-
-        final String contextPath = isisSystemEnvironment.getContextPath();
-
-        if(contextPath==null) {
-            return path;
-        }
-
-        if(!path.startsWith("/")) {
-            return contextPath + "/" + path;
-        } else {
-            return "/" + contextPath + path;
-        }
-    }
-
     public static String prependContextPathIfRequired(String url, IsisSystemEnvironment isisSystemEnvironment) {
         if(url==null) {
             return null; 
         }
         if(isLocalResource(url)) {
-            return prependContextPathIfPresent(url, isisSystemEnvironment);
+            return IsisSystemEnvironment.prependContextPathIfPresent(url, isisSystemEnvironment);
         }
         return url;
     }
