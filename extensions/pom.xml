@@ -148,6 +148,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-cors</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-sse</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
@@ -238,6 +243,7 @@
 		<module>testing/specsupport</module>
 		<module>testing/unittestsupport/impl</module>
 
+		<module>vro/cors</module>
 		<module>vro/restclient</module>
 		<module>vw/asciidoc</module>
 		<module>vw/exceldownload</module>
