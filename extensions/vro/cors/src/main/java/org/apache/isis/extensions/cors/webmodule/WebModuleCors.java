@@ -98,8 +98,10 @@ public final class WebModuleCors implements WebModule  {
             filter.setInitParameter("cors.allowed.headers", "Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Cache-Control,If-Modified-Since,Pragma");
             filter.setInitParameter("cors.exposed.headers", "Authorization");
 
-        val urlPattern = "/*";
-        filter.addMappingForUrlPatterns(null, false, urlPattern);
+            filter.addMappingForUrlPatterns(
+                    null,
+                    false,
+                    this.webModuleContext.getProtectedPaths());
 
         } else {
             // was already registered, eg in web.xml.
