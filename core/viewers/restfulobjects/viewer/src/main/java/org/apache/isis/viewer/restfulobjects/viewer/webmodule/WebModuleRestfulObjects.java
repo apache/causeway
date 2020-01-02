@@ -30,6 +30,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
 import org.apache.isis.webapp.modules.WebModule;
@@ -41,7 +42,7 @@ import org.springframework.stereotype.Service;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
+// import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
@@ -84,7 +85,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
             return;
         }
 
-        putRestfulPath(this.restfulPath);
+        // putRestfulPath(this.restfulPath);
 
         // register this module as a viewer
         ctx.addViewer("restfulobjects");
