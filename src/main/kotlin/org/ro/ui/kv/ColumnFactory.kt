@@ -30,7 +30,9 @@ class ColumnFactory {
         crossElement = "<i class='fa fa-ellipsis-v'></i>"
     }
 
-    fun buildColumns(displayList: DisplayList, withCheckBox: Boolean = false): List<ColumnDefinition<dynamic>> {
+    fun buildColumns(
+            displayList: DisplayList,
+            withCheckBox: Boolean = false): List<ColumnDefinition<dynamic>> {
 
         val columns = mutableListOf<ColumnDefinition<dynamic>>()
         if (withCheckBox) {
