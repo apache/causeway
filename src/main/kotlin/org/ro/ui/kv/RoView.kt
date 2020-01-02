@@ -16,7 +16,7 @@ object RoView {
     private var tabCount = 0
 
     init {
-        tabPanel.marginTop = CssSize(48, UNIT.px)
+        tabPanel.marginTop = CssSize(40, UNIT.px)
     }
 
     fun addTab(
