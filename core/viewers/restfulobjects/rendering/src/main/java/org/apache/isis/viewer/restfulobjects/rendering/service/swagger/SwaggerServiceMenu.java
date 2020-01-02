@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -38,6 +39,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.config.IsisConfiguration;
 
 
 @Named("isisApplib.SwaggerServiceMenu")
@@ -48,9 +50,22 @@ import org.apache.isis.commons.internal.resources._Resources;
 )
 public class SwaggerServiceMenu {
 
-    @Inject private SwaggerService swaggerService;
-    @Inject private ServiceRegistry serviceRegistry;
-    
+    private final SwaggerService swaggerService;
+    private final ServiceRegistry serviceRegistry;
+    private final IsisConfiguration isisConfiguration;
+    private final String basePath;
+
+    @Inject
+    public SwaggerServiceMenu(
+            final SwaggerService swaggerService,
+            final ServiceRegistry serviceRegistry,
+            final IsisConfiguration isisConfiguration) {
+        this.swaggerService = swaggerService;
+        this.serviceRegistry = serviceRegistry;
+        this.isisConfiguration = isisConfiguration;
+        this.basePath = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
+    }
+
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<SwaggerServiceMenu> { }
     public static class OpenSwaggerUiDomainEvent extends ActionDomainEvent { }
 
@@ -83,7 +98,7 @@ public class SwaggerServiceMenu {
             )
     @MemberOrder(sequence="500.600.2")
     public LocalResourcePath openRestApi() {
-        return new LocalResourcePath("/"+_Resources.getRestfulPathIfAny()+"/");
+        return new LocalResourcePath(basePath);
     }
     
     public String disableOpenRestApi() {
