@@ -73,11 +73,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jackson-provider</artifactId>
-		</dependency>
-
 		<!-- OVERRIDES RestEasy JAX-B 2.3, to be the newest, such that code can 
 			run on JDK 11+ -->
 		<dependency>
