@@ -104,7 +104,7 @@ public final class _Resources {
             return null; 
         }
         if(isLocalResource(url)) {
-            return isisSystemEnvironment.prependContextPathIfPresent(url, isisSystemEnvironment);
+            return isisSystemEnvironment.prependContextPathIfPresent(url);
         }
         return url;
     }

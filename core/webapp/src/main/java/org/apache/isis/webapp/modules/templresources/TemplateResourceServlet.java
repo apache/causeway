@@ -64,7 +64,7 @@ public class TemplateResourceServlet extends HttpServlet {
         super.init(config);
 
         final String restfulPath = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
-        final String restfulBase = isisSystemEnvironment.prependContextPathIfPresent(restfulPath, isisSystemEnvironment);
+        final String restfulBase = isisSystemEnvironment.prependContextPathIfPresent(restfulPath);
         templateVariables = new TemplateResourceServlet_HtmlTemplateVariables(
                 pair("restful-base", prefix(restfulBase, "/"))
                 );

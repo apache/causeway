@@ -68,7 +68,7 @@ public class RestEndpointService {
 
         val restRootPath = 
                 "http://localhost:" + getPort() + "/" +
-                        isisSystemEnvironment.prependContextPathIfPresent(isisConfiguration.getViewer().getRestfulobjects().getBasePath(), isisSystemEnvironment);
+                        isisSystemEnvironment.prependContextPathIfPresent(isisConfiguration.getViewer().getRestfulobjects().getBasePath());
 
         log.info("new restful client created for {}", restRootPath);
 

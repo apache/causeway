@@ -54,7 +54,7 @@ final class ListeningMarkupComponent_observing  {
         }
 
         final String targetId = UUID.randomUUID().toString();
-        final String observingPath = isisSystemEnvironment.prependContextPathIfPresent(observing.getPath(), isisSystemEnvironment);
+        final String observingPath = isisSystemEnvironment.prependContextPathIfPresent(observing.getPath());
 
         final StringBuilder sb = new StringBuilder();
         sb
