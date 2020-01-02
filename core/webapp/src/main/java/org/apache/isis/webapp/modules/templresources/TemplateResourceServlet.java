@@ -32,15 +32,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.metamodel.commons.InputStreamExtensions;
 import org.apache.isis.metamodel.commons.ResourceUtil;
 import org.apache.isis.metamodel.commons.StringExtensions;
 
 import static org.apache.isis.commons.internal.base._Strings.pair;
-import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
 
 import lombok.val;
@@ -58,17 +56,15 @@ public class TemplateResourceServlet extends HttpServlet {
     @Inject
     private IsisConfiguration isisConfiguration;
     @Inject
-    private WebAppConfiguration webAppConfiguration;
+    private WebAppContextPath webAppContextPath;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         final String restfulPath = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
-        final String restfulBase = webAppConfiguration.prependContextPathIfPresent(restfulPath);
-        templateVariables = new TemplateResourceServlet_HtmlTemplateVariables(
-                pair("restful-base", prefix(restfulBase, "/"))
-                );
+        final String restfulBase = webAppContextPath.prependContextPath(restfulPath);
+        templateVariables = new TemplateResourceServlet_HtmlTemplateVariables(pair("restful-base", restfulBase));
     }
 
     @Override

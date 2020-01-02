@@ -25,8 +25,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.resources._Resources;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -38,7 +36,6 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.config.IsisConfiguration;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 
 /**
@@ -53,6 +50,7 @@ import lombok.val;
 public class WebAppConfiguration {
     
     private final IsisConfiguration isisConfiguration;
+    private final WebAppContextPath webAppContextPath;
 
     @Getter private AbstractResource menubarsLayoutXml;
     
@@ -72,8 +70,11 @@ public class WebAppConfiguration {
     @Getter private String brandLogoSignin;
 
     @Inject
-    public WebAppConfiguration(final IsisConfiguration isisConfiguration) {
+    public WebAppConfiguration(
+            final IsisConfiguration isisConfiguration,
+            final WebAppContextPath webAppContextPath) {
         this.isisConfiguration = isisConfiguration;
+        this.webAppContextPath = webAppContextPath;
     }
 
     @PostConstruct
@@ -90,11 +91,9 @@ public class WebAppConfiguration {
         this.applicationCss = ignoreLeadingSlash(application.getCss());
         this.applicationJs = ignoreLeadingSlash(application.getJs());
 
-        this.brandLogoHeader = Optional.ofNullable(honorContextPath(application.getBrandLogoHeader()))
-                .orElse(null);
-        this.brandLogoSignin = Optional.ofNullable(honorContextPath(application.getBrandLogoSignin()))
-                .orElse(null);
-        this.faviconUrl = honorContextPath(application.getFaviconUrl());
+        this.brandLogoHeader = webAppContextPath.prependContextPathIfLocal(application.getBrandLogoHeader());
+        this.brandLogoSignin = webAppContextPath.prependContextPathIfLocal(application.getBrandLogoSignin());
+        this.faviconUrl = webAppContextPath.prependContextPathIfLocal(application.getFaviconUrl());
         
         this.faviconContentType = application.getFaviconContentType();
         
@@ -104,43 +103,8 @@ public class WebAppConfiguration {
 
     }
 
-    @Getter @Setter
-    private String contextPath;
-
-    public final String prependContextPathIfPresent(String path) {
-
-        if(path==null) {
-            return null;
-        }
-
-        final String contextPath = getContextPath();
-        if(contextPath==null) {
-            return path;
-        }
-
-        if(!path.startsWith("/")) {
-            return contextPath + "/" + path;
-        } else {
-            return "/" + contextPath + path;
-        }
-    }
-
-    public String prependContextPathIfRequired(String url) {
-
-        if(url==null) {
-            return null;
-        }
-        if(_Resources.isLocalResource(url)) {
-            return this.prependContextPathIfPresent(url);
-        }
-        return url;
-    }
 
     // -- HELPER
-
-    private String honorContextPath(String url) {
-        return prependContextPathIfRequired(url);
-    }
 
     private String ignoreLeadingSlash(String url) {
         if(url==null || url.length()<2) {

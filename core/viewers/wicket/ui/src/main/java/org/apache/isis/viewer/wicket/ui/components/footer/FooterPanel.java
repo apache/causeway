@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.ComponentTag;
@@ -28,7 +28,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
@@ -95,9 +94,10 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
             val creditLink = newCreditLinkComponent(credit);
             listItem.add(creditLink);
 
-            final String imageUrl = getServiceRegistry().lookupService(WebAppConfiguration.class)
-                                    .map(x -> x.prependContextPathIfRequired(credit.getImage()))
+            val imageUrl = getServiceRegistry().lookupService(WebAppContextPath.class)
+                                    .map(x -> x.prependContextPathIfLocal(credit.getImage()))
                                     .orElseThrow(_Exceptions::unexpectedCodeReach);
+
             creditLink.add(new CreditImage("creditImage", imageUrl));
             creditLink.add(new CreditName("creditName", credit.getName()));
             

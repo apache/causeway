@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer.ServletContextResource;
@@ -54,7 +55,7 @@ public class IsisWebAppContextListener implements ServletContextListener {
     @Inject private ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
     @Inject private IsisConfiguration isisConfiguration;
     @Inject private ServletContextResource servletContextResource;
-    @Inject private WebAppConfiguration webAppConfiguration;
+    @Inject private WebAppContextPath webAppContextPath;
 
 
     // -- INTERFACE IMPLEMENTATION
@@ -85,7 +86,7 @@ public class IsisWebAppContextListener implements ServletContextListener {
 
         log.info("=== PHASE 1 === Setting up ServletContext parameters, contextPath = " + contextPath);
 
-        webAppConfiguration.setContextPath(contextPath);
+        webAppContextPath.setContextPath(contextPath);
 
         final WebModuleContext webModuleContext = new WebModuleContext(servletContextResource, isisConfiguration, serviceRegistry);
         webModuleContext.prepare();

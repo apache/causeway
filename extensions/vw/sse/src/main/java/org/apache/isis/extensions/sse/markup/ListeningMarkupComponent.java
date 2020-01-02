@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.sse.markup;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.model.IModel;
@@ -36,7 +37,7 @@ public class ListeningMarkupComponent extends MarkupComponent {
     
     private final LocalResourcePath observing;
     @Inject
-    private IsisSystemEnvironment isisSystemEnvironment;
+    private WebAppContextPath webAppContextPath;
 
     public ListeningMarkupComponent(final String id, IModel<?> model, LocalResourcePath observing){
         super(id, model);
@@ -51,7 +52,7 @@ public class ListeningMarkupComponent extends MarkupComponent {
                 openTag, 
 
                 observing!=null 
-                ? ListeningMarkupComponent_observing.decorate(htmlContent, observing, isisSystemEnvironment)
+                ? ListeningMarkupComponent_observing.decorate(htmlContent, observing, webAppContextPath)
                         : htmlContent
 
                 );

@@ -21,6 +21,7 @@ package org.apache.isis.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +43,7 @@ import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 
     // @Service's
     WebAppConfiguration.class,
+    WebAppContextPath.class,
 })
 @EnableConfigurationProperties(IsisConfiguration.class)
 public class IsisModuleConfig {

@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 
 import static org.apache.isis.commons.internal.base._Strings.isNullOrEmpty;
 
@@ -35,7 +35,7 @@ final class ListeningMarkupComponent_observing  {
     static CharSequence decorate(
             final CharSequence htmlContent,
             final LocalResourcePath observing,
-            final IsisSystemEnvironment isisSystemEnvironment) {
+            final WebAppContextPath webAppContextPath) {
         if(observing==null) {
             return htmlContent;
         }
@@ -54,7 +54,7 @@ final class ListeningMarkupComponent_observing  {
         }
 
         final String targetId = UUID.randomUUID().toString();
-        final String observingPath = isisSystemEnvironment.prependContextPathIfPresent(observing.getPath());
+        final String observingPath = webAppContextPath.prependContextPath(observing.getPath());
 
         final StringBuilder sb = new StringBuilder();
         sb
