@@ -105,7 +105,7 @@ public class WebAppConfiguration {
     // -- HELPER
 
     private String honorContextPath(String url) {
-        return IsisSystemEnvironment.prependContextPathIfRequired(url, isisSystemEnvironment);
+        return isisSystemEnvironment.prependContextPathIfRequired(url, isisSystemEnvironment);
     }
 
     private String ignoreLeadingSlash(String url) {
