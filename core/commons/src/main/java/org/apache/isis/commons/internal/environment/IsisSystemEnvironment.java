@@ -65,24 +65,6 @@ public class IsisSystemEnvironment {
     
     @Getter private IocContainer iocContainer;
 
-    public final String prependContextPathIfPresent(String path) {
-
-        if(path==null) {
-            return null;
-        }
-
-        final String contextPath = getContextPath();
-        if(contextPath==null) {
-            return path;
-        }
-
-        if(!path.startsWith("/")) {
-            return contextPath + "/" + path;
-        } else {
-            return "/" + contextPath + path;
-        }
-    }
-
     // -- LIFE-CYCLE
     
     @PostConstruct
@@ -178,6 +160,25 @@ public class IsisSystemEnvironment {
 
     @Getter @Setter
     private String contextPath;
+
+    public final String prependContextPathIfPresent(String path) {
+
+        if(path==null) {
+            return null;
+        }
+
+        final String contextPath = getContextPath();
+        if(contextPath==null) {
+            return path;
+        }
+
+        if(!path.startsWith("/")) {
+            return contextPath + "/" + path;
+        } else {
+            return "/" + contextPath + path;
+        }
+    }
+
 
     // -- HELPER
 
