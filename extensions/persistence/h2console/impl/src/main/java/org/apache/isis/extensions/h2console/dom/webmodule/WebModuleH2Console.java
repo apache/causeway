@@ -52,12 +52,13 @@ public class WebModuleH2Console implements WebModule  {
     private final static String SERVLET_NAME = "H2Console";
     private final static String CONSOLE_PATH = "/db";
 
+    @Getter
+    private final LocalResourcePath localResourcePathIfEnabled;
+
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final IsisConfiguration isisConfiguration;
     private final ServiceInjector serviceInjector;
 
-    @Getter
-    private final LocalResourcePath localResourcePathIfEnabled;
     private final boolean applicable;
 
     @Inject
