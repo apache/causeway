@@ -66,17 +66,6 @@ public class IsisSystemEnvironment {
     
     @Getter private IocContainer iocContainer;
 
-    public String prependContextPathIfRequired(String url) {
-
-        if(url==null) {
-            return null;
-        }
-        if(_Resources.isLocalResource(url)) {
-            return this.prependContextPathIfPresent(url);
-        }
-        return url;
-    }
-
     // -- LIFE-CYCLE
     
     @PostConstruct
@@ -190,6 +179,18 @@ public class IsisSystemEnvironment {
             return "/" + contextPath + path;
         }
     }
+
+    public String prependContextPathIfRequired(String url) {
+
+        if(url==null) {
+            return null;
+        }
+        if(_Resources.isLocalResource(url)) {
+            return this.prependContextPathIfPresent(url);
+        }
+        return url;
+    }
+
 
 
     // -- HELPER
