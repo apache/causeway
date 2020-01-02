@@ -37,6 +37,8 @@ import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisTransactionFil
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
+import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
+import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -57,7 +59,6 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 @Log4j2
 public final class WebModuleJaxrsResteasy4 implements WebModule  {
 
-    private final static String RESTEASY_BOOTSTRAPPER = "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
     private final static String RESTEASY_DISPATCHER = "RestfulObjectsRestEasyDispatcher";
     public static final String ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS = "IsisSessionFilterForRestfulObjects";
 
@@ -97,8 +98,7 @@ public final class WebModuleJaxrsResteasy4 implements WebModule  {
         // add IsisSessionFilters
 
         {
-            val filter = ctx.addFilter(
-                    ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class);
+            val filter = ctx.addFilter(ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class);
             if(filter != null) {
 
                 serviceInjector.injectServicesInto(filter);
@@ -125,8 +125,7 @@ public final class WebModuleJaxrsResteasy4 implements WebModule  {
         }
 
         {
-            val filter = ctx.addFilter(RESTEASY_DISPATCHER,
-                    IsisTransactionFilterForRestfulObjects.class);
+            val filter = ctx.addFilter(RESTEASY_DISPATCHER, IsisTransactionFilterForRestfulObjects.class);
             if(filter != null) {
                 serviceInjector.injectServicesInto(filter);
                 filter.addMappingForServletNames(
@@ -147,20 +146,14 @@ public final class WebModuleJaxrsResteasy4 implements WebModule  {
 
         ctx.setInitParameter("resteasy.servlet.mapping.prefix", getRestfulPath());
 
-        var servlet = ctx.addServlet(RESTEASY_DISPATCHER,
-                "org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher");
+        var servlet = ctx.addServlet(RESTEASY_DISPATCHER, HttpServletDispatcher.class);
         if(servlet != null) {
             servlet.addMapping(getUrlPattern());
         }
 
-        try {
-            final Class<?> listenerClass = getDefaultClassLoader().loadClass(RESTEASY_BOOTSTRAPPER);
-            return ctx.createListener(uncheckedCast(listenerClass));
-        } catch (ClassNotFoundException e) {
-            // guarded against by isAvailable()
-            throw unexpectedCodeReach();
-        }
-
+        var listener = ctx.createListener(ResteasyBootstrap.class);
+        serviceInjector.injectServicesInto(listener);
+        return listener;
     }
 
 
