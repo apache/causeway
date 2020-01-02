@@ -65,7 +65,9 @@ public class IsisSystemEnvironment {
     
     @Getter private IocContainer iocContainer;
 
-    public final static String prependContextPathIfPresent(String path, IsisSystemEnvironment isisSystemEnvironment) {
+    public final String prependContextPathIfPresent(String path, IsisSystemEnvironment isisSystemEnvironmentx) {
+
+        IsisSystemEnvironment isisSystemEnvironment = this;
 
         if(path==null) {
             return null;
