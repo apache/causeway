@@ -24,7 +24,7 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 
-import static org.apache.isis.commons.internal.resources._Resources.prependContextPathIfRequired;
+import static org.apache.isis.commons.internal.environment.IsisSystemEnvironment.prependContextPathIfRequired;
 
 public class CreditImage extends WebComponent {
 

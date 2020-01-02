@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.apache.isis.commons.internal.resources._Resources;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationContext;
@@ -64,6 +65,16 @@ public class IsisSystemEnvironment {
     @Inject private ApplicationContext springContext;
     
     @Getter private IocContainer iocContainer;
+
+    public static String prependContextPathIfRequired(String url, IsisSystemEnvironment isisSystemEnvironment) {
+        if(url==null) {
+            return null;
+        }
+        if(_Resources.isLocalResource(url)) {
+            return isisSystemEnvironment.prependContextPathIfPresent(url);
+        }
+        return url;
+    }
 
     // -- LIFE-CYCLE
     

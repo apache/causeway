@@ -33,7 +33,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
 
 import lombok.Getter;
@@ -106,7 +105,7 @@ public class WebAppConfiguration {
     // -- HELPER
 
     private String honorContextPath(String url) {
-        return _Resources.prependContextPathIfRequired(url, isisSystemEnvironment);
+        return IsisSystemEnvironment.prependContextPathIfRequired(url, isisSystemEnvironment);
     }
 
     private String ignoreLeadingSlash(String url) {

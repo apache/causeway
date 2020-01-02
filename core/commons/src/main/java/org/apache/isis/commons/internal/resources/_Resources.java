@@ -99,17 +99,6 @@ public final class _Resources {
     }
 
 
-    public static String prependContextPathIfRequired(String url, IsisSystemEnvironment isisSystemEnvironment) {
-        if(url==null) {
-            return null; 
-        }
-        if(isLocalResource(url)) {
-            return isisSystemEnvironment.prependContextPathIfPresent(url);
-        }
-        return url;
-    }
-
-
     // -- LOCAL vs EXTERNAL resource path
 
     private static final Predicate<String> externalResourcePattern = 
