@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -153,7 +154,9 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         return Pattern.compile(".*\\." + input);
     };
 
+    @Inject
     private IsisSessionFactory isisSessionFactory;
+    @Inject
     private SpecificationLoader specificationLoader;
     
     private List<String> passThruList = Collections.emptyList();
@@ -253,10 +256,6 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         lookupPassThru(config);
         lookupRedirectToOnException(config);
         lookupIgnoreExtensions(config);
-        
-        val servletContext  = config.getServletContext();
-        isisSessionFactory = IsisWebAppUtils.getManagedBean(IsisSessionFactory.class, servletContext);
-        specificationLoader = IsisWebAppUtils.getManagedBean(SpecificationLoader.class, servletContext);
     }
 
     /**

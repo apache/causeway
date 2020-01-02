@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.webmodule;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -38,13 +39,8 @@ import lombok.val;
 //with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class IsisTransactionFilterForRestfulObjects implements Filter {
 
+    @Inject
     private TransactionService transactionService;
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        val servletContext = filterConfig.getServletContext();
-        transactionService = IsisWebAppUtils.getManagedBean(TransactionService.class, servletContext);
-    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 

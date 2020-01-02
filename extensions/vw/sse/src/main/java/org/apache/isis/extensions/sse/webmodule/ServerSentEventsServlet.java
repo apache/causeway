@@ -55,19 +55,15 @@ public class ServerSentEventsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ExecutorService threadPool;
 
-    @Inject private SseService sseService;
+    @Inject
+    private SseService sseService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         threadPool = ForkJoinPool.commonPool();
         
-        if(sseService==null) {
-            sseService = IsisWebAppUtils.getManagedBean(SseService.class, super.getServletContext());  
-        }
-
         requires(sseService, "sseService");
-        
     }
 
     @Override
