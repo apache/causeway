@@ -23,13 +23,25 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
     }
 
     private val columns = listOf(
-            ColumnDefinition<LogEntry>("Title", "title",
-                    headerFilter = Editor.INPUT,
-                    formatterComponentFunction = { _, _, data ->
-                        Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
-                            console.log(data)
-                        }
+            ColumnDefinition("",
+                    field = "title", // any existing field can be used
+                    formatter = Formatter.TICKCROSS,
+                    formatterParams = faFormatterParams,
+                    align = Align.CENTER,
+                    width = "50",
+                    headerSort = false,
+                    cellClick = { evt, cell ->
+                        evt.stopPropagation()
+                        showDetails(cell)
                     }),
+            ColumnDefinition<LogEntry>("Title", "title",
+            headerFilter = Editor.INPUT,
+            width = "350",
+            formatterComponentFunction = { _, _, data ->
+                Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
+                    console.log(data)
+                }
+            }),
             ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT),
             ColumnDefinition("Method", "method", width = "100"),
             ColumnDefinition("req.len", field = "requestLength", width = "100", align = Align.RIGHT),
@@ -49,18 +61,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
                     width = "100"),
             ColumnDefinition("duration", field = "duration", width = "100", align = Align.RIGHT),
-            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", align = Align.RIGHT),
-            ColumnDefinition("Details",
-                    field = "title", // any existing field can be used
-                    formatter = Formatter.TICKCROSS,
-                    formatterParams = faFormatterParams,
-                    align = Align.CENTER,
-                    width = "100",
-                    headerSort = false,
-                    cellClick = { evt, cell ->
-                        evt.stopPropagation()
-                        showDetails(cell)
-                    })
+            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", align = Align.RIGHT)
     )
 
     init {
