@@ -7,10 +7,6 @@ import org.ro.to.TransferObject
 
 class MemberHandler : BaseHandler(), IResponseHandler {
 
-    override fun doHandle() {
-        console.log("[MemberHandler.doHandle()] has no body")
-    }
-
     @UnstableDefault
     override fun parse(response: String): TransferObject? {
         return Json.parse(Member.serializer(), response)

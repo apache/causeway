@@ -87,7 +87,6 @@ object RoMenuBar : SimplePanel() {
                         icon = IconManager.find(label),
                         classes = styles
                 ).onClick { e ->
-                    val at = Point(e.pageX.toInt(), e.pageY.toInt())
                     val l = me.action.getInvokeLink()!!
                     ActionAggregator().invoke(l)
                 }

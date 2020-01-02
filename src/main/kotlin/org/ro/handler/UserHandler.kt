@@ -7,10 +7,6 @@ import org.ro.to.User
 
 class UserHandler : BaseHandler(), IResponseHandler {
 
-    override fun doHandle() {
-        update()
-    }
-
     @UnstableDefault
     override fun parse(response: String): TransferObject? {
         return Json.parse(User.serializer(), response)

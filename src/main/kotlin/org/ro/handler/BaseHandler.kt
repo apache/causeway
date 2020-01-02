@@ -33,15 +33,13 @@ abstract class BaseHandler : IResponseHandler {
      * @return
      */
     override fun canHandle(response: String): Boolean {
-        var answer = false
         try {
             val obj = parse(response)
             logEntry.setTransferObject(obj)
-            answer = true
+            return true
         } catch (ex: Exception) {
-            // empty catch by purpose - answer = false (default)
+            return false
         }
-        return answer
     }
 
     /**
@@ -61,7 +59,7 @@ abstract class BaseHandler : IResponseHandler {
     }
 
     protected fun update() {
-        //FIXME is the first agg the right one?
+        //TODO is the first agg the right one?
         logEntry.getAggregator()!!.update(logEntry)
     }
 

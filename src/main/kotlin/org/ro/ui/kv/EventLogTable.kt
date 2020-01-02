@@ -91,8 +91,8 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
     private fun showDetails(cell: pl.treksoft.kvision.tabulator.js.Tabulator.CellComponent) {
         val row = cell.getRow()
-        val data = row.getData() as Map<String, String>
-        val url: String = data.get("url")!!
+        val data = row.getData() as LogEntry
+        val url: String = data.url
         val logEntry = EventStore.find(url)!!
         EventLogDetail(logEntry).open()
     }

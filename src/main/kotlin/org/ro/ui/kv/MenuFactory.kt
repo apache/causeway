@@ -3,6 +3,7 @@ package org.ro.ui.kv
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.to.TObject
 import org.ro.ui.IconManager
+import pl.treksoft.kvision.core.onEvent
 import pl.treksoft.kvision.dropdown.Direction
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.dropdown.ddLink
@@ -32,11 +33,10 @@ object MenuFactory {
                 styles = setOf("text-danger")
             }
             val ddl = dd.ddLink(title, icon = iconName, classes = styles)
-            ddl.setEventListener {
+            ddl.onEvent {
                 click = { e ->
                     e.stopPropagation()
                     ActionAggregator().invoke(link)
-                    //ddl.
                 }
             }
             dd.add(ddl)

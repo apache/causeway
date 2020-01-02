@@ -40,11 +40,11 @@ class ActionAggregator(val at: Point = Point(100,100)) : BaseAggregator() {
     }
 
     private fun processPut(action: Action) {
-        throw Exception("[ActionAggregator.processPut] notImplementedYet")
+        throw Exception("[ActionAggregator.processPut] notImplementedYet $action")
     }
 
     private fun processDelete(action: Action) {
-        throw Exception("[ActionAggregator.processDelete] notImplementedYet")
+        throw Exception("[ActionAggregator.processDelete] notImplementedYet $action")
     }
 
     private fun Link.isInvokeAction(): Boolean {

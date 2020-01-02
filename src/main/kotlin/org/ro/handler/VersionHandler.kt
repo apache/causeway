@@ -7,10 +7,6 @@ import org.ro.to.Version
 
 class VersionHandler: BaseHandler(), IResponseHandler {
 
-    override fun doHandle() {
-        update()
-    }
-
     @UnstableDefault
     override fun parse(response: String): TransferObject? {
         return Json.parse(Version.serializer(), response)

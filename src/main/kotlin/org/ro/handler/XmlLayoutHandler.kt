@@ -9,10 +9,6 @@ import org.w3c.dom.parsing.DOMParser
 
 class XmlLayoutHandler : BaseHandler(), IResponseHandler {
 
-    override fun doHandle() {
-        update()
-    }
-
     override fun canHandle(response: String): Boolean {
         return Utils.isXml(response) && !response.contains("svg")
     }

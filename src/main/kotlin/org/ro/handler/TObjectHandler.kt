@@ -8,10 +8,6 @@ import org.ro.to.TransferObject
 
 class TObjectHandler : BaseHandler(), IResponseHandler {
 
-    override fun doHandle() {
-        update()
-    }
-
     @UnstableDefault
     override fun parse(response: String): TransferObject? {
         return Json.parse(TObject.serializer(), response)
