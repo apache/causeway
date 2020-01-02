@@ -79,7 +79,6 @@
             <artifactId>isis-security-api</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-core</artifactId>
@@ -120,6 +119,12 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-applib</artifactId>
             <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
             <scope>test</scope>
         </dependency>
 
