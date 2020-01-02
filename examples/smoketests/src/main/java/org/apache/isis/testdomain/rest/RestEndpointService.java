@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.rest;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -43,13 +44,16 @@ public class RestEndpointService {
     
     private final Environment environment;
     private final IsisConfiguration isisConfiguration;
+    private final IsisSystemEnvironment isisSystemEnvironment;
 
     @Inject
     public RestEndpointService(
             final Environment environment,
-            final IsisConfiguration isisConfiguration) {
+            final IsisConfiguration isisConfiguration,
+            final IsisSystemEnvironment isisSystemEnvironment) {
         this.environment = environment;
         this.isisConfiguration = isisConfiguration;
+        this.isisSystemEnvironment = isisSystemEnvironment;
     }
 
     public int getPort() {
@@ -65,7 +69,7 @@ public class RestEndpointService {
 
         val restRootPath = 
                 "http://localhost:" + getPort() + "/" + 
-                        _Resources.prependContextPathIfPresent(isisConfiguration.getViewer().getRestfulobjects().getBasePath());
+                        _Resources.prependContextPathIfPresent(isisConfiguration.getViewer().getRestfulobjects().getBasePath(), isisSystemEnvironment);
 
         log.info("new restful client created for {}", restRootPath);
 

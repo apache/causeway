@@ -51,6 +51,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
                 val markupComponent = new ListeningMarkupComponent(
                         id, model, getEventStreamResource((ScalarModel)model));
                 markupComponent.setEnabled(false);
+                getCommonContext().getServiceInjector().injectServicesInto(markupComponent);
                 return markupComponent;    
             };
         }
@@ -80,6 +81,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
                 val markupComponent = new ListeningMarkupComponent(id, model, /*observing*/ null);
+                getCommonContext().getServiceInjector().injectServicesInto(markupComponent);
                 return markupComponent;    
             };
         }

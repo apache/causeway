@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.sse.markup;
 
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.model.IModel;
@@ -27,12 +28,16 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponen
 
 import lombok.val;
 
+import javax.inject.Inject;
+
 public class ListeningMarkupComponent extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
     
     private final LocalResourcePath observing;
-    
+    @Inject
+    private IsisSystemEnvironment isisSystemEnvironment;
+
     public ListeningMarkupComponent(final String id, IModel<?> model, LocalResourcePath observing){
         super(id, model);
         this.observing = observing;
@@ -46,7 +51,7 @@ public class ListeningMarkupComponent extends MarkupComponent {
                 openTag, 
 
                 observing!=null 
-                ? ListeningMarkupComponent_observing.decorate(htmlContent, observing)
+                ? ListeningMarkupComponent_observing.decorate(htmlContent, observing, isisSystemEnvironment)
                         : htmlContent
 
                 );

@@ -31,8 +31,8 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 
-import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
@@ -121,13 +121,13 @@ public final class _Resources {
         }
     }
 
-    public final static String prependContextPathIfPresent(String path) {
+    public final static String prependContextPathIfPresent(String path, IsisSystemEnvironment isisSystemEnvironment) {
 
         if(path==null) {
             return null;
         }
 
-        final String contextPath = getContextPathIfAny();
+        final String contextPath = isisSystemEnvironment.getContextPath();
 
         if(contextPath==null) {
             return path;
@@ -140,12 +140,12 @@ public final class _Resources {
         }
     }
 
-    public static String prependContextPathIfRequired(String url) {
+    public static String prependContextPathIfRequired(String url, IsisSystemEnvironment isisSystemEnvironment) {
         if(url==null) {
             return null; 
         }
         if(isLocalResource(url)) {
-            return prependContextPathIfPresent(url);
+            return prependContextPathIfPresent(url, isisSystemEnvironment);
         }
         return url;
     }

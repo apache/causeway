@@ -21,10 +21,10 @@ package org.apache.isis.config.viewer.wicket;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -50,7 +50,8 @@ import lombok.val;
 @Qualifier("Default")
 public class WebAppConfiguration {
     
-    @Inject private IsisConfiguration isisConfiguration; 
+    private final IsisConfiguration isisConfiguration;
+    private final IsisSystemEnvironment isisSystemEnvironment;
 
     @Getter private AbstractResource menubarsLayoutXml;
     
@@ -68,7 +69,12 @@ public class WebAppConfiguration {
     @Getter private String faviconUrl;
     @Getter private String brandLogoHeader;
     @Getter private String brandLogoSignin;
-    
+
+    public WebAppConfiguration(final IsisConfiguration isisConfiguration, IsisSystemEnvironment isisSystemEnvironment) {
+        this.isisConfiguration = isisConfiguration;
+        this.isisSystemEnvironment = isisSystemEnvironment;
+    }
+
     @PostConstruct
     public void init() {
 
@@ -100,7 +106,7 @@ public class WebAppConfiguration {
     // -- HELPER
 
     private String honorContextPath(String url) {
-        return _Resources.prependContextPathIfRequired(url);
+        return _Resources.prependContextPathIfRequired(url, isisSystemEnvironment);
     }
 
     private String ignoreLeadingSlash(String url) {

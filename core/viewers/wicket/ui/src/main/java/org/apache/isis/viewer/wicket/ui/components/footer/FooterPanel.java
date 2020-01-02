@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
@@ -92,7 +93,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
             val creditLink = newCreditLinkComponent(credit);
             listItem.add(creditLink);   
             
-            creditLink.add(new CreditImage("creditImage", credit.getImage()));
+            creditLink.add(getServiceInjector().injectServicesInto(new CreditImage("creditImage", credit.getImage())));
             creditLink.add(new CreditName("creditName", credit.getName()));
             
         });
@@ -105,8 +106,8 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     private WebMarkupContainer newCreditLinkComponent(Credit credit) {
         
         val creditLinkId = "creditLink";
-        
-        val creditLink = (credit.getUrl() != null)
+
+        final WebMarkupContainer creditLink = (credit.getUrl() != null)
                 
                 ? new ExternalLink(creditLinkId, credit.getUrl()) {
                         private static final long serialVersionUID = 1L;

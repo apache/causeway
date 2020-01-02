@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
+import javax.inject.Inject;
+
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 
@@ -27,11 +30,12 @@ public class CreditImage extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    private final String imageUrl;
+    private String imageUrl;
+    @Inject
+    private IsisSystemEnvironment isisSystemEnvironment;
 
     public CreditImage(final String id, final String imageUrl) {
         super(id);
-        this.imageUrl = prependContextPathIfRequired(imageUrl);
     }
 
     @Override
@@ -43,6 +47,7 @@ public class CreditImage extends WebComponent {
     @Override
     protected void onConfigure() {
         super.onConfigure();
+        this.imageUrl = prependContextPathIfRequired(imageUrl, isisSystemEnvironment);
         setVisible(imageUrl != null);
     }
 
