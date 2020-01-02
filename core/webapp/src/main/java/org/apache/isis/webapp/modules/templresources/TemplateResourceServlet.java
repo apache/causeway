@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.commons.InputStreamExtensions;
 import org.apache.isis.metamodel.commons.ResourceUtil;
 import org.apache.isis.metamodel.commons.StringExtensions;
@@ -53,11 +55,14 @@ public class TemplateResourceServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateResourceServlet_HtmlTemplateVariables templateVariables;
 
+    @Inject
+    private IsisConfiguration isisConfiguration;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        final String restfulPath = ifPresentElse(_Resources.getRestfulPathIfAny(), "restful");
+        final String restfulPath = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
         final String restfulBase = _Resources.prependContextPathIfPresent(restfulPath);
         templateVariables = new TemplateResourceServlet_HtmlTemplateVariables(
                 pair("restful-base", prefix(restfulBase, "/"))
