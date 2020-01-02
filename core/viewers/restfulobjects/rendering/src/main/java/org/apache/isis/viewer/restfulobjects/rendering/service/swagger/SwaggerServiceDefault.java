@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.swagger;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -28,14 +29,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
-
-import static org.apache.isis.commons.internal.base._Strings.prefix;
-import static org.apache.isis.commons.internal.base._With.ifPresentElse;
-import static org.apache.isis.commons.internal.resources._Resources.getRestfulPathIfAny;
-import static org.apache.isis.commons.internal.resources._Resources.prependContextPathIfPresent;
 
 @Service
 @Named("isisMetaModel.swaggerServiceDefault")
@@ -44,32 +38,22 @@ import static org.apache.isis.commons.internal.resources._Resources.prependConte
 @Qualifier("Default")
 public class SwaggerServiceDefault implements SwaggerService {
 
-    @Inject SpecificationLoader specificationLoader;
     private final SwaggerSpecGenerator swaggerSpecGenerator;
+    private final IsisConfiguration isisConfiguration;
+    private final String basePath;
 
-    public SwaggerServiceDefault(SwaggerSpecGenerator swaggerSpecGenerator) {
+    @Inject
+    public SwaggerServiceDefault(final SwaggerSpecGenerator swaggerSpecGenerator, final IsisConfiguration isisConfiguration) {
         this.swaggerSpecGenerator = swaggerSpecGenerator;
+        this.isisConfiguration = isisConfiguration;
+        basePath = isisConfiguration.getViewer().getRestfulobjects().getBasePath();
     }
 
     @Override
     public String generateSwaggerSpec(
             final Visibility visibility,
             final Format format) {
-
-        final String swaggerSpec = swaggerSpecGenerator.generate(basePath.get(), visibility, format);
-        return swaggerSpec;
+        return swaggerSpecGenerator.generate(basePath, visibility, format);
     }
-
-    // -- HELPER
-
-    private _Lazy<String> basePath = _Lazy.threadSafe(this::lookupBasePath);
-
-    private String lookupBasePath() {
-        final String restfulPath = ifPresentElse(getRestfulPathIfAny(), "undefined");
-        return prefix(prependContextPathIfPresent(restfulPath), "/");
-    }
-
-
-
 
 }
