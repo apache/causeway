@@ -159,37 +159,6 @@ public class IsisSystemEnvironment {
         return getDeploymentType().isPrototyping();
     }
 
-    @Getter @Setter
-    private String contextPath;
-
-    public final String prependContextPathIfPresent(String path) {
-
-        if(path==null) {
-            return null;
-        }
-
-        final String contextPath = getContextPath();
-        if(contextPath==null) {
-            return path;
-        }
-
-        if(!path.startsWith("/")) {
-            return contextPath + "/" + path;
-        } else {
-            return "/" + contextPath + path;
-        }
-    }
-
-    public String prependContextPathIfRequired(String url) {
-
-        if(url==null) {
-            return null;
-        }
-        if(_Resources.isLocalResource(url)) {
-            return this.prependContextPathIfPresent(url);
-        }
-        return url;
-    }
 
 
 

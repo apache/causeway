@@ -25,6 +25,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -36,6 +37,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.config.IsisConfiguration;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -50,7 +52,6 @@ import lombok.val;
 public class WebAppConfiguration {
     
     private final IsisConfiguration isisConfiguration;
-    private final IsisSystemEnvironment isisSystemEnvironment;
 
     @Getter private AbstractResource menubarsLayoutXml;
     
@@ -69,9 +70,8 @@ public class WebAppConfiguration {
     @Getter private String brandLogoHeader;
     @Getter private String brandLogoSignin;
 
-    public WebAppConfiguration(final IsisConfiguration isisConfiguration, IsisSystemEnvironment isisSystemEnvironment) {
+    public WebAppConfiguration(final IsisConfiguration isisConfiguration) {
         this.isisConfiguration = isisConfiguration;
-        this.isisSystemEnvironment = isisSystemEnvironment;
     }
 
     @PostConstruct
@@ -101,11 +101,43 @@ public class WebAppConfiguration {
         this.welcomeMessage = ignoreLeadingSlash(welcome.getText());
 
     }
-    
+
+    @Getter @Setter
+    private String contextPath;
+
+    public final String prependContextPathIfPresent(String path) {
+
+        if(path==null) {
+            return null;
+        }
+
+        final String contextPath = getContextPath();
+        if(contextPath==null) {
+            return path;
+        }
+
+        if(!path.startsWith("/")) {
+            return contextPath + "/" + path;
+        } else {
+            return "/" + contextPath + path;
+        }
+    }
+
+    public String prependContextPathIfRequired(String url) {
+
+        if(url==null) {
+            return null;
+        }
+        if(_Resources.isLocalResource(url)) {
+            return this.prependContextPathIfPresent(url);
+        }
+        return url;
+    }
+
     // -- HELPER
 
     private String honorContextPath(String url) {
-        return isisSystemEnvironment.prependContextPathIfRequired(url);
+        return prependContextPathIfRequired(url);
     }
 
     private String ignoreLeadingSlash(String url) {
