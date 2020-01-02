@@ -39,6 +39,7 @@ import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.commons.internal.ioc.spring.IocContainerSpring;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -156,6 +157,9 @@ public class IsisSystemEnvironment {
     public boolean isPrototyping() {
         return getDeploymentType().isPrototyping();
     }
+
+    @Getter @Setter
+    private String contextPath;
 
     // -- HELPER
 
