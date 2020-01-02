@@ -50,7 +50,7 @@ public class SwaggerServiceDefault implements SwaggerService {
             final RestEasyConfiguration restEasyConfiguration) {
         this.swaggerSpecGenerator = swaggerSpecGenerator;
         this.restEasyConfiguration = restEasyConfiguration;
-        basePath = this.restEasyConfiguration.getServlet().getMapping().getPrefix() + "/";
+        basePath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
     }
 
     @Override

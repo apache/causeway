@@ -49,21 +49,16 @@ public class RestEasyConfiguration {
     @Inject @Named("resteasy-settings") private Map<String, String> resteasySettings;
     public Map<String, String> getAsMap() { return Collections.unmodifiableMap(resteasySettings); }
 
-    private final Servlet servlet = new Servlet();
-    @Data
-    public static class Servlet {
-        private final Mapping mapping = new Mapping();
-        @Data
-        public static class Mapping {
-            @javax.validation.constraints.Pattern(regexp="^[/].*[^/]$")
-            private String prefix = "/restful";
-        }
-    }
-
     private final Jaxrs jaxrs = new Jaxrs();
     @Data
     public static class Jaxrs {
 
+        /**
+         * Note that this is used rather than <code>resteasy.servlet.mapping.prefix</code>
+         * because there is <i>NO</i> implementation of {@link javax.ws.rs.core.Application}, so we rely on it being
+         * automatically created.
+         */
+        @javax.validation.constraints.Pattern(regexp="^[/].*[^/]$")
         private String defaultPath = "/restful";
 
         private final App app = new App();

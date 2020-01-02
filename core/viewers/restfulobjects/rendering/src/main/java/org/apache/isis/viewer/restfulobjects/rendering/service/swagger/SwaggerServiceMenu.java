@@ -51,6 +51,7 @@ public class SwaggerServiceMenu {
 
     private final SwaggerService swaggerService;
     private final ServiceRegistry serviceRegistry;
+    private final RestEasyConfiguration restEasyConfiguration;
     private final String basePath;
 
     @Inject
@@ -60,7 +61,8 @@ public class SwaggerServiceMenu {
             final RestEasyConfiguration restEasyConfiguration) {
         this.swaggerService = swaggerService;
         this.serviceRegistry = serviceRegistry;
-        this.basePath = restEasyConfiguration.getServlet().getMapping().getPrefix() + "/";
+        this.restEasyConfiguration = restEasyConfiguration;
+        this.basePath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
     }
 
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<SwaggerServiceMenu> { }

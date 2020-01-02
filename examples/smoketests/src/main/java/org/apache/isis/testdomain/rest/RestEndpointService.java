@@ -69,7 +69,7 @@ public class RestEndpointService {
 
         val restRootPath = 
                 "http://localhost:" + getPort() + "/" + webAppContextPath.prependContextPath(
-                        restEasyConfiguration.getServlet().getMapping().getPrefix() + "/");
+                        this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/");
 
         log.info("new restful client created for {}", restRootPath);
 

@@ -143,6 +143,6 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
     @Override
     public Optional<String> getRestfulPath() {
-        return Optional.ofNullable(restEasyConfiguration.getServlet().getMapping().getPrefix() + "/");
+        return Optional.ofNullable(restEasyConfiguration.getJaxrs().getDefaultPath());
     }
 }

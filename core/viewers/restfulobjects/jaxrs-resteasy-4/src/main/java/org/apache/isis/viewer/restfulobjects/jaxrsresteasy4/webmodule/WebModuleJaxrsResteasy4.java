@@ -70,7 +70,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
             final ServiceInjector serviceInjector) {
         super(serviceInjector);
         this.restEasyConfiguration = restEasyConfiguration;
-        this.restfulPath = this.restEasyConfiguration.getServlet().getMapping().getPrefix() + "/";
+        this.restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
     }
 
     @Getter

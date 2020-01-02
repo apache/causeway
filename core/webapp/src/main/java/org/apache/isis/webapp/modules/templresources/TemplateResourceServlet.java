@@ -63,7 +63,7 @@ public class TemplateResourceServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        final String restfulPath = restEasyConfiguration.getServlet().getMapping().getPrefix();
+        final String restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath();
         final String restfulBase = webAppContextPath.prependContextPath(restfulPath);
         templateVariables = new TemplateResourceServlet_HtmlTemplateVariables(pair("restful-base", restfulBase));
     }
