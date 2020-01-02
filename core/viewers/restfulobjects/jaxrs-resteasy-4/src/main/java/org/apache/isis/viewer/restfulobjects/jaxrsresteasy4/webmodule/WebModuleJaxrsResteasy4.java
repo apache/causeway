@@ -148,6 +148,7 @@ public final class WebModuleJaxrsResteasy4 implements WebModule  {
 
         var servlet = ctx.addServlet(RESTEASY_DISPATCHER, HttpServletDispatcher.class);
         if(servlet != null) {
+            serviceInjector.injectServicesInto(servlet);
             servlet.addMapping(getUrlPattern());
         }
 
