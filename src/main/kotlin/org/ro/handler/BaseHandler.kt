@@ -28,7 +28,7 @@ abstract class BaseHandler : IResponseHandler {
     }
 
     /**
-     * Default implementation - should be overridden in subclasses.
+     * Default implementation - may be overridden in subclasses.
      * @param jsonObj
      * @return
      */

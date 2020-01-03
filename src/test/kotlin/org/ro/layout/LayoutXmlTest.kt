@@ -1,7 +1,7 @@
 package org.ro.layout
 
-import org.ro.handler.XmlLayoutHandler
 import org.ro.snapshots.ai1_16_0.SO_LAYOUT_XML
+import org.ro.to.XmlHelper
 import org.ro.to.bs3.Grid
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -15,7 +15,7 @@ class LayoutXmlTest {
         //given
         val xmlStr = SO_LAYOUT_XML.str
         //when
-        val doc = XmlLayoutHandler().parseXml(xmlStr)
+        val doc = XmlHelper().parseXml(xmlStr)
 
         assertNotNull(doc)
 

@@ -11,7 +11,6 @@ class Action(node: Node) {
     var hidden: String // USE ENUM Where? = null
     var id: String
     var position: String //USE ENUM Position? = null
-
     var named = ""
     var describedAs = ""
 

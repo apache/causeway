@@ -10,7 +10,6 @@ class ResultListHandler : BaseHandler() {
 
     override fun doHandle() {
         logEntry.addAggregator(ListAggregator(logEntry.title))
-        logEntry.isRoot = true
         update()
     }
 

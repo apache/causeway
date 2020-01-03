@@ -153,7 +153,6 @@ object EventStore {
             when {
                 le.hasResponse() -> answer = true
                 le.isView() -> answer = true
-                le.isRoot -> answer = false
             }
         }
         return answer

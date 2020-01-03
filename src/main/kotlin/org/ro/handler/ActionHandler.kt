@@ -10,7 +10,6 @@ class ActionHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
         logEntry.addAggregator(ActionAggregator())
-        logEntry.isRoot = true
         update()
     }
 

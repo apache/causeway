@@ -2,8 +2,8 @@ package org.ro.ui.kv
 
 import org.ro.to.Link
 import org.ro.ui.Command
-import org.ro.ui.Point
 import org.ro.ui.FormItem
+import org.ro.ui.Point
 import pl.treksoft.kvision.form.text.Password
 import pl.treksoft.kvision.form.text.Text
 
@@ -28,13 +28,13 @@ class LoginPrompt() : Command {
     override fun execute() {
         extractUserInput()
         UiManager.login(url, username, password)
-        val link = Link(href = url + "restful/services/")
+        val link = Link(href = url + "restful/")
         invoke(link)
         UiManager.closeDialog(form)
     }
 
     fun extractUserInput() {
-        //TODO function has a sideeffect, ie. changes variable values
+        //TODO function has a side effect, ie. changes variable values
         var key: String?
         val formPanel = form.panel
         val kids = formPanel!!.getChildren()

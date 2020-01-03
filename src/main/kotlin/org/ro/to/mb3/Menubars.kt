@@ -1,9 +1,10 @@
 package org.ro.to.mb3
 
+import org.ro.to.TransferObject
 import org.w3c.dom.Document
 import org.w3c.dom.asList
 
-class Menubars(document: Document) {
+class Menubars(document: Document) : TransferObject {
     var primary: Menu
     var secondary: Menu
     var tertiary: Menu

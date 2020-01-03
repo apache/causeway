@@ -13,7 +13,6 @@ class LogEntry {
     object:TransferObject
     aggregator:Aggregator
     cacheHits:int
-    + isRoot()
 }
 LogEntry --> TransferObject
 LogEntry "n" --> "1" BaseAggregator

@@ -3,9 +3,7 @@ package org.ro.core.event
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
 import org.ro.core.Utils.removeHexCode
-import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.aggregator.IAggregator
-import org.ro.core.aggregator.ListAggregator
 import org.ro.to.TransferObject
 import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.core.Col
@@ -36,7 +34,6 @@ data class LogEntry(
     var requestLength: Int = 0
     var response = ""
     var responseLength: Int = 0
-    var isRoot: Boolean = false
 
     init {
         state = EventState.RUNNING
@@ -56,7 +53,6 @@ data class LogEntry(
     var duration: Int = 0
 
     var cacheHits = 0
-    //private var aggregator: IAggregator? = null
     private val aggregators = mutableListOf<IAggregator?>()
 
     @ContextualSerialization
@@ -157,9 +153,11 @@ data class LogEntry(
     }
 
     fun addAggregator(aggregator: IAggregator) {
-/*        console.log("[LogEntry.addAggregator()]")
-        console.log(aggregators)
-        console.log(aggregator) */
+        if (aggregators.size > 0) {
+            console.log("[LogEntry.addAggregator()]")
+            console.log(aggregators)
+            console.log(aggregator)
+        }
         aggregators.add(aggregator)
     }
 

@@ -10,6 +10,8 @@ object ResponseHandler {
     private var delegate: IResponseHandler
 
     //IMPROVE sequence of handlers should follow frequency of invocation in order to minimize the time taken by unneeded calls to 'canHandle()'
+    private var _0 = RestfulHandler()
+    private var _0a = XmlMenuBarsHandler()
     private var _1 = ResultHandler()
     private var _2 = ActionHandler()
     private var _3 = ServiceHandler()
@@ -18,7 +20,7 @@ object ResponseHandler {
     private var _4b = ResultValueHandler()
     private var _5 = TObjectHandler()
     private var _6 = LayoutHandler()
-    private var _6a = LayoutHandler()
+    private var _6a = XmlLayoutHandler()
     private var _7 = PropertyHandler()
     private var _8 = MemberHandler()
     private var _9 = HttpErrorHandler()
@@ -29,6 +31,9 @@ object ResponseHandler {
     private var last = DefaultHandler()
 
     init {
+        delegate = _0
+        _0.successor = _0a
+        _0a.successor = _1
         _1.successor = _2
         _2.successor = _3
         _3.successor = _4
@@ -45,9 +50,7 @@ object ResponseHandler {
         _11.successor = _12
         _12.successor = _13
         _13.successor = last
-
-        delegate = _1
-    }
+   }
 
     fun handle(logEntry: LogEntry) {
         delegate.handle(logEntry)

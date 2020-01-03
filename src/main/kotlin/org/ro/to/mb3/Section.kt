@@ -1,6 +1,6 @@
 package org.ro.to.mb3
 
-import org.ro.to.mb3.XmlHelper
+import org.ro.to.XmlHelper
 import org.w3c.dom.Node
 
 class Section(node: Node) {

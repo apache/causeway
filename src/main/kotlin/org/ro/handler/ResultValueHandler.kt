@@ -10,7 +10,6 @@ class ResultValueHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
         logEntry.addAggregator(DownloadAggregator(logEntry.title))
-        logEntry.isRoot = true
         update()
     }
 

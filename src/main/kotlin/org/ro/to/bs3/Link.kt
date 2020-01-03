@@ -6,4 +6,4 @@ data class Link(
         val rel: String,
         val method: String,
         val href: String,
-        val type: String)   : Bs3Object
+        val type: String)

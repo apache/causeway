@@ -1,6 +1,6 @@
 package org.ro.to.mb3
 
-import org.ro.to.mb3.XmlHelper
+import org.ro.to.XmlHelper
 import org.ro.to.bs3.Link
 import org.w3c.dom.Node
 
