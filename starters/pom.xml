@@ -48,6 +48,8 @@ under the License.
 
 		<spring-boot.version>2.2.2.RELEASE</spring-boot.version>
 		<approvaltests.version>4.0.2</approvaltests.version>
+
+		<resteasy.version>4.4.1.Final</resteasy.version>
 	</properties>
 
 	<build>
