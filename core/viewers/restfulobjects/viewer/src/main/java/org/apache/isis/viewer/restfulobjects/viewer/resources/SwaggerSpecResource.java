@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -42,8 +43,19 @@ import lombok.val;
 @Path("/swagger")
 public class SwaggerSpecResource {
 
+    private final SwaggerService swaggerService;
+    private final IsisSessionFactory isisSessionFactory;
+
     @Context HttpHeaders httpHeaders;
     @Context HttpServletRequest httpServletRequest;
+
+    @Inject
+    public SwaggerSpecResource(
+            final SwaggerService swaggerService,
+            final IsisSessionFactory isisSessionFactory) {
+        this.swaggerService = swaggerService;
+        this.isisSessionFactory = isisSessionFactory;
+    }
 
     @Path("/private")
     @GET
@@ -76,11 +88,6 @@ public class SwaggerSpecResource {
     }
 
     private String swagger(final SwaggerService.Visibility visibility) {
-        
-        val servletContext = httpServletRequest.getServletContext();
-        
-        val swaggerService = IsisWebAppUtils.getManagedBean(SwaggerService.class, servletContext);
-        val isisSessionFactory = IsisWebAppUtils.getManagedBean(IsisSessionFactory.class, servletContext);
         
         val format = deriveFrom(httpHeaders);
         val callable = new MyCallable(swaggerService, visibility, format);
