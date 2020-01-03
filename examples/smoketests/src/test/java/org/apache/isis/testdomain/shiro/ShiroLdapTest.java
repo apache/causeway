@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.shiro;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -36,6 +37,7 @@ import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -49,15 +51,12 @@ import lombok.extern.log4j.Log4j2;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class, 
-        }, 
-        properties = {
-                "logging.config=log4j2-test.xml",
-                //IsisPresets.DebugPersistence,
         })
 @Import({
     LdapServerService.class,
 })
-@Incubating("inconsitent state when run in a test batch")
+@TestPropertySource(IsisPresets.UseLog4j2Test)
+@Incubating("inconsistent state when run in a test batch")
 @Log4j2
 class ShiroLdapTest extends AbstractShiroTest {
 

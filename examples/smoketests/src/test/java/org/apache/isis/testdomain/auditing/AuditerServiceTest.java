@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -64,7 +65,8 @@ import lombok.extern.log4j.Log4j2;
                 "logging.config=log4j2-test.xml",
         })
 @TestPropertySource({
-    IsisPresets.SilenceWicket // just to have any config properties at all
+    IsisPresets.SilenceWicket
+    ,IsisPresets.UseLog4j2Test
 })
 @Incubating("inconsitent state when run in a test batch")
 //@Transactional //XXX this test is non transactional

@@ -64,7 +64,8 @@ import lombok.val;
 @TestPropertySource({
     //IsisPresets.DebugDiscovery
     IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel
+    IsisPresets.SilenceProgrammingModel,
+    IsisPresets.UseLog4j2Test,
 })
 //@Incubating("under construction, not tested with surefire yet")
 class AutoConfigurationTest {

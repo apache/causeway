@@ -25,11 +25,13 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.isis.config.presets.IsisPresets;
 import org.junit.jupiter.api.Test;
 import org.junit.runners.model.InitializationError;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.apache.isis.testdomain.Smoketest;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -38,9 +40,9 @@ import lombok.val;
 
 @Smoketest
 @SpringBootTest(
-        classes = {LdapServerService.class},
-        properties = {"logging.config=log4j2-test.xml" }
+        classes = {LdapServerService.class}
 )
+@TestPropertySource(IsisPresets.UseLog4j2Test)
 class LdapEmbeddedServerTest {
 
     @Inject LdapServerService ldapServerService;

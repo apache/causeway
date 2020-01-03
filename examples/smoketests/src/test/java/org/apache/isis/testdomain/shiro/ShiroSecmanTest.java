@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.shiro;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
@@ -39,6 +40,7 @@ import org.apache.isis.extensions.secman.shiro.IsisModuleSecmanRealmShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -51,9 +53,6 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class, 
-        }, 
-        properties = {
-                "logging.config=log4j2-test.xml",
         })
 @Import({
     // Security Manager Extension (secman)
@@ -62,6 +61,7 @@ import lombok.val;
     IsisModuleSecmanPersistenceJdo.class,
     IsisModuleSecmanEncryptionJbcrypt.class,
 })
+@TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("does not work with surefire")
 class ShiroSecmanTest extends AbstractShiroTest {
 

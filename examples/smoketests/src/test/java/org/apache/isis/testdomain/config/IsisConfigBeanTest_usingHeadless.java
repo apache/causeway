@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.config;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.presets.IsisPresets;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -35,12 +36,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class
-        }, 
-        properties = {
-                "logging.config=log4j2-test.xml",
-        })
+        }
+)
 @TestPropertySource({
-    "classpath:/application-config-test.properties"
+    "classpath:/application-config-test.properties",
+    IsisPresets.UseLog4j2Test
 })
 class IsisConfigBeanTest_usingHeadless {
 

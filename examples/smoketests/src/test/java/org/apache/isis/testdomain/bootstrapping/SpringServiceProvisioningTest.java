@@ -54,14 +54,14 @@ import lombok.val;
                 Configuration_usingJdo.class, 
         },
         properties = {
-                "logging.config=log4j2-test.xml",
                 // "isis.reflector.introspector.parallelize=false",
                 // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
     //IsisPresets.DebugDiscovery
     IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel
+    IsisPresets.SilenceProgrammingModel,
+    IsisPresets.UseLog4j2Test,
 })
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {

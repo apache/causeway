@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.transactions;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.presets.IsisPresets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +33,7 @@ import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,11 +42,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class,
-        }, 
-        properties = {
-                "logging.config=log4j2-test.xml",
-                //IsisPresets.DebugPersistence,
         })
+@TestPropertySource(IsisPresets.UseLog4j2Test)
 class TransactionRollbackTest {
     
     @Inject FixtureScripts fixtureScripts;

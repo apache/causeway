@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.config.presets.IsisPresets;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -32,6 +33,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.testdomain.Smoketest;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -43,13 +45,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
                 FooTest.Setup.class
         }, 
         properties = {
-                "logging.config=log4j2-test.xml",
-                
+
                 "foo.flag=true",
                 "foo.uuid=${random.uuid}",
                 "foo.random-schema=test_${random.uuid}",
                 "foo.ConnectionURL=jdbc:h2:mem:test"
         })
+@TestPropertySource(IsisPresets.UseLog4j2Test)
 @EnableConfigurationProperties(FooProperties.class)
 class FooTest {
     

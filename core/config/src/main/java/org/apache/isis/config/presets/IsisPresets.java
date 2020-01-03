@@ -46,6 +46,7 @@ public final class IsisPresets  {
     public static final String SilenceMetaModel = "classpath:/org/apache/isis/config/presets/SilenceMetaModel.properties";
     
     public static final String SilenceWicket = "classpath:/org/apache/isis/config/presets/SilenceWicket.properties";
+    public static final String UseLog4j2Test = "classpath:/org/apache/isis/config/presets/UseLog4j2Test.properties";
 
     /**
      * @deprecated seems no longer required anyway

@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.presets.IsisPresets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +44,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.InventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.Product;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -57,10 +59,9 @@ import lombok.extern.log4j.Log4j2;
         classes = { 
                 Configuration_usingJdo.class,
                 WrapperTest.ActionDomainEventListener.class
-        }, 
-        properties = {
-                "logging.config=log4j2-test.xml",
-        })
+        }
+)
+@TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("inconsitent state when run in a test batch")
 class WrapperTest {
 

@@ -17,9 +17,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(
-        classes = FakeDataModuleIntegTestAbstract.AppManifest.class,
-        properties = {"logging.config=log4j2-test.xml"}
+        classes = FakeDataModuleIntegTestAbstract.AppManifest.class
 )
+@TestPropertySource(IsisPresets.UseLog4j2Test)
 @ContextConfiguration
 @Transactional
 public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {

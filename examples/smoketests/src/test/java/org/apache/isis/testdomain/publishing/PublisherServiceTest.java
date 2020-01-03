@@ -65,13 +65,13 @@ import lombok.val;
                 PublisherServiceTest.PublisherServiceProbe.class
         }, 
         properties = {
-                "logging.config=log4j2-test.xml",
                 "logging.level.org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo=DEBUG",
                 // "isis.reflector.introspector.parallelize=false",
                 // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-    IsisPresets.SilenceWicket // just to have any config properties at all
+    IsisPresets.SilenceWicket, // just to have any config properties at all
+    IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Incubating("inconsitent state when run in a test batch")
