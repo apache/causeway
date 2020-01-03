@@ -62,7 +62,7 @@ application.version
 |  The version of the application, eg 1.0, 1.1, etc. If present, then this will be shown in the footer on every page as well as on the  about page.
 
 | isis.viewer.wicket.base-path
-|  /wicket
+|  /wicket/
 | 
 
 | isis.viewer.wicket. +

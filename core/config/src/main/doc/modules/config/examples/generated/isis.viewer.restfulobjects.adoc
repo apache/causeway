@@ -1,9 +1,4 @@
 | isis.viewer.restfulobjects. +
-base-path
-|  /restful
-| 
-
-| isis.viewer.restfulobjects. +
 gsoc2013.legacy-param-details
 | 
 | 
