@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,6 +37,7 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -68,6 +70,11 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         val natureOfService = facet.getNatureOfService();
         return natureOfService.isRestAlso();
     };
+
+    @Inject
+    public DomainServiceResourceServerside(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     @Override
     @GET

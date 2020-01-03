@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -31,6 +32,7 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -75,6 +77,11 @@ import org.springframework.stereotype.Component;
 @Component
 @Path("/domain-types")
 public class DomainTypeResourceServerside extends ResourceAbstract implements DomainTypeResource {
+
+    @Inject
+    public DomainTypeResourceServerside(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     @Override
     @GET

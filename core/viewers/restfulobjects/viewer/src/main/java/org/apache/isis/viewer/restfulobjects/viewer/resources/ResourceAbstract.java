@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
@@ -50,6 +51,8 @@ import lombok.val;
 
 public abstract class ResourceAbstract {
 
+    protected final MetaModelContext metaModelContext;
+
     @Context HttpHeaders httpHeaders;
     @Context UriInfo uriInfo;
     @Context Request request;
@@ -59,6 +62,11 @@ public abstract class ResourceAbstract {
     @Context Providers providers;
 
     private ResourceContext resourceContext;
+
+    @Inject
+    protected ResourceAbstract(MetaModelContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
+    }
 
     protected void init(
             final Where where,
@@ -106,7 +114,7 @@ public abstract class ResourceAbstract {
                 where, intent, urlUnencodedQueryString, 
                 httpServletRequest, httpServletResponse,
                 securityContext,
-                InteractionInitiatedBy.USER);
+                metaModelContext, InteractionInitiatedBy.USER);
     }
 
     protected ResourceContext getResourceContext() {

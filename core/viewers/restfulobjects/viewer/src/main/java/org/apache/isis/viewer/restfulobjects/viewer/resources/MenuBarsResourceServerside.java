@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
+import javax.inject.Inject;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -28,6 +29,7 @@ import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
@@ -41,6 +43,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {
+
+    @Inject
+    public MenuBarsResourceServerside(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     @Override
     @Produces({

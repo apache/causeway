@@ -115,7 +115,7 @@ public class ResourceContext_getArg_Test {
         resourceContext = new ResourceContext(null, null, null, null, null, null, null,
                 UrlDecoderUtil.urlDecodeNullSafe(queryString),
                 mockHttpServletRequest, null, null,
-                null) {
+                metaModelContext, null) {
             @Override
             void init(final RepresentationType representationType) {
                 //
@@ -134,7 +134,7 @@ public class ResourceContext_getArg_Test {
         resourceContext = new ResourceContext(null, null, null, null, null, null, null,
                 UrlDecoderUtil.urlDecodeNullSafe(queryString),
                 mockHttpServletRequest, null, null,
-                null) {
+                metaModelContext, null) {
             @Override
             void init(final RepresentationType representationType) {
                 //

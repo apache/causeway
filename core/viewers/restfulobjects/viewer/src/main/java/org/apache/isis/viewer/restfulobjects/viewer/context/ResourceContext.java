@@ -50,7 +50,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
-import org.apache.isis.webapp.util.IsisWebAppUtils;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -88,11 +87,9 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final MetaModelContext metaModelContext, final InteractionInitiatedBy interactionInitiatedBy) {
 
-        super(IsisWebAppUtils.getManagedBean(
-                MetaModelContext.class, 
-                httpServletRequest.getServletContext()));
+        super(metaModelContext);
 
         this.httpHeaders = httpHeaders;
         //not used ... this.providers = providers;

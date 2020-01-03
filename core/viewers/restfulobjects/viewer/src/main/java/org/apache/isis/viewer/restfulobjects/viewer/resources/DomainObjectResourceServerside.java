@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -48,6 +49,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
@@ -76,7 +78,9 @@ import lombok.extern.log4j.Log4j2;
 @Path("/objects") @Log4j2
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
 
-    public DomainObjectResourceServerside() {
+    @Inject
+    public DomainObjectResourceServerside(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
         log.debug("<init>");
     }
 

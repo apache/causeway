@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,11 +29,17 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.springframework.stereotype.Component;
 
 @Component
 @Path("/image")
 public class ImageResourceServerside extends ResourceAbstract {
+
+    @Inject
+    public ImageResourceServerside(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     @GET
     @Path("/")

@@ -211,7 +211,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
             final RepresentationType representationType) {
         return new ResourceContext(representationType, mockHttpHeaders, null, null, null, null, null, null,
                 mockHttpServletRequest, null, null,
-                null);
+                metaModelContext, null);
     }
 
 }

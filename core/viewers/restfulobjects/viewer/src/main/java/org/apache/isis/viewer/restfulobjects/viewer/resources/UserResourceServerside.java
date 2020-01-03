@@ -21,11 +21,13 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.inject.Inject;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsSessionFilter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -40,6 +42,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
+
+    @Inject
+    public UserResourceServerside(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
