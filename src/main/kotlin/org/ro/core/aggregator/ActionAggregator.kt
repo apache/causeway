@@ -27,6 +27,13 @@ class ActionAggregator(val at: Point = Point(100,100)) : BaseAggregator() {
         }
     }
 
+    /**
+     *  link.rel should neither be: (self | up | describedBy )
+     */
+    private fun Link.isInvokeAction(): Boolean {
+        return rel.contains("invoke") && rel.contains("action")
+    }
+
     private fun processGet(action: Action, link: Link) {
         if (link.hasArguments()) {
             ActionPrompt(action).open(at)
@@ -47,8 +54,5 @@ class ActionAggregator(val at: Point = Point(100,100)) : BaseAggregator() {
         throw Exception("[ActionAggregator.processDelete] notImplementedYet $action")
     }
 
-    private fun Link.isInvokeAction(): Boolean {
-        return rel.contains("invoke") && rel.contains("action")
-    }
 
 }

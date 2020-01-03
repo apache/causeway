@@ -3,7 +3,6 @@ package org.ro.ui
 import org.ro.core.event.LogEntry
 import org.ro.ui.kv.RoDialog
 import org.ro.to.HttpError
-import org.ro.ui.FormItem
 
 class ErrorAlert(val logEntry: LogEntry) : Command {
 

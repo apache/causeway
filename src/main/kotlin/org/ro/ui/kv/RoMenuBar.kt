@@ -1,7 +1,7 @@
 package org.ro.ui.kv
 
-import org.ro.core.Menu
-import org.ro.core.MenuEntry
+import org.ro.ui.Menu
+import org.ro.ui.MenuEntry
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
 import org.ro.ui.IconManager
@@ -68,7 +68,7 @@ object RoMenuBar : SimplePanel() {
         }
     }
 
-    // tr("Separator") to DD.SEPARATOR.option,
+    //IMPROVE tr("Separator") to DD.SEPARATOR.option,
     fun amendMenu() {
         for (title: String in Menu.filterUniqueMenuTitles()) {
             val dd = dropDown(

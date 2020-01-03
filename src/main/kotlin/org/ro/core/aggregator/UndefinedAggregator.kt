@@ -6,7 +6,7 @@ import org.ro.view.UndefinedAlert
 
 class UndefinedAggregator : BaseAggregator() {
 
-    lateinit override var dsp: BaseDisplayable
+    override lateinit var dsp: BaseDisplayable
 
     override fun update(logEntry: LogEntry) {
         UndefinedAlert(logEntry).open()
