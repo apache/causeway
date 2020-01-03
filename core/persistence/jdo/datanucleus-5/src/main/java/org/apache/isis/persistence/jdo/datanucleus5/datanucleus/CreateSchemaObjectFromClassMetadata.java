@@ -41,13 +41,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, DataNucleusPropertiesAware {
 
-    // -- persistenceManagerFactory, properties
-
-    private Map<String, String> properties;
-    protected Map<String, String> getProperties() {
-        return properties;
-    }
-
+    private Map<String, Object> properties;
 
     // -- loaded (API)
 
@@ -62,9 +56,9 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         Connection connection = null;
         Statement statement = null;
 
-        final String driverName = properties.get("javax.jdo.option.ConnectionDriverName");
-        final String url = properties.get("javax.jdo.option.ConnectionURL");
-        final String userName = properties.get("javax.jdo.option.ConnectionUserName");
+        final String driverName = getPropertyAsString("javax.jdo.option.ConnectionDriverName");
+        final String url = getPropertyAsString("javax.jdo.option.ConnectionURL");
+        final String userName = getPropertyAsString("javax.jdo.option.ConnectionUserName");
         final String password = getConnectionPassword();
 
         if(_Strings.isNullOrEmpty(driverName) || _Strings.isNullOrEmpty(url)) {
@@ -91,6 +85,8 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         }
 
     }
+
+
 
 
     // -- skip, exec, schemaNameFor
@@ -144,7 +140,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         // db vendors without requiring lots of complex configuration of DataNucleus
         //
 
-        String url = getProperties().get("javax.jdo.option.ConnectionURL");
+        String url = getPropertyAsString("javax.jdo.option.ConnectionURL");
 
         if(url.contains("postgres")) {
             // in DN 4.0, was forcing lower case:
@@ -184,10 +180,10 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
      * @return Password
      */
     private String getConnectionPassword() {
-        String password = properties.get("javax.jdo.option.ConnectionPassword");
+        String password = getPropertyAsString("javax.jdo.option.ConnectionPassword");
         if (password != null)
         {
-            String decrypterName = properties.get("datanucleus.ConnectionPasswordDecrypter");
+            String decrypterName = getPropertyAsString("datanucleus.ConnectionPasswordDecrypter");
             if (decrypterName != null)
             {
                 // Decrypt the password using the provided class
@@ -210,10 +206,14 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
 
     // -- injected dependencies
     @Override
-    public void setDataNucleusProperties(final Map<String, String> properties) {
+    public void setDataNucleusProperties(final Map<String, Object> properties) {
         this.properties = properties;
     }
 
+    
+    private String getPropertyAsString(String key) {
+        return (String) properties.get(key);
+    }
 
 
 }

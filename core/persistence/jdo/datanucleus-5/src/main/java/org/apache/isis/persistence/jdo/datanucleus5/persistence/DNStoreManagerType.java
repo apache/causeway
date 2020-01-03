@@ -42,7 +42,7 @@ enum DNStoreManagerType {
     Other
     ;
 
-    public static DNStoreManagerType typeOf(Map<String,String> datanucleusProps) {
+    public static DNStoreManagerType typeOf(Map<String, Object> datanucleusProps) {
 
         if(hasSecondaryDataStore(datanucleusProps)) {
             return Federated; 
@@ -85,18 +85,18 @@ enum DNStoreManagerType {
             "jdbc:db2:",
     };
 
-    private static boolean hasSecondaryDataStore(Map<String,String> datanucleusProps) {
+    private static boolean hasSecondaryDataStore(Map<String, Object> datanucleusProps) {
         final boolean hasSecondaryDataStore = datanucleusProps.keySet().stream()
                 .anyMatch(key->key.startsWith("datanucleus.datastore."));
         return hasSecondaryDataStore;
     }
 
-    private static boolean isKnownSchemaAwareStoreManagerIfNotFederated(Map<String,String> datanucleusProps) {
+    private static boolean isKnownSchemaAwareStoreManagerIfNotFederated(Map<String, Object> datanucleusProps) {
 
         // this saves some time, but also avoids the (still undiagnosed) issue that instantiating the
         // PMF can cause the ClassMetadata for the entity classes to be loaded in and cached prior to
         // registering the CreateSchemaObjectFromClassData (to invoke 'create schema' first)
-        final String connectionUrl = datanucleusProps.get("javax.jdo.option.ConnectionURL");
+        final String connectionUrl = (String) datanucleusProps.get("javax.jdo.option.ConnectionURL");
         if(connectionUrl != null) {
             for(String magic : knownSchemaAwareIfNotFederated) {
                 if (connectionUrl.startsWith(magic)) {
@@ -109,7 +109,7 @@ enum DNStoreManagerType {
     }
 
     private static DNStoreManagerType probe(
-            Map<String,String> datanucleusProps, 
+            Map<String, Object> datanucleusProps, 
             Function<StoreManager, DNStoreManagerType> categorizer) {
 
         // we create a throw-away instance of PMF so that we can probe whether DN has

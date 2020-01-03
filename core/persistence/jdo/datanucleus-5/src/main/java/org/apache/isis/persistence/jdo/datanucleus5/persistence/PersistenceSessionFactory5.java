@@ -38,9 +38,11 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledState;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSettings;
@@ -107,17 +109,21 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
 
         val dnSettings = metaModelContext.getServiceRegistry().lookupServiceElseFail(DataNucleusSettings.class);
-        val datanucleusProps = dnSettings.getAsMap(); 
+        val datanucleusProps = _Maps.<String, Object>newHashMap();
+        datanucleusProps.putAll(dnSettings.getAsMap());
+        datanucleusProps.put("isis.metamodelcontext", metaModelContext);
         
         addDataNucleusPropertiesIfRequired(datanucleusProps);
         
         val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
         val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(typeRegistry);
 
-        return new DataNucleusApplicationComponents5(
+        val dataNucleusApplicationComponents = new DataNucleusApplicationComponents5(
                 configuration,
                 datanucleusProps, 
                 classesToBePersisted);
+        
+        return dataNucleusApplicationComponents;
     }
 
     @Override
@@ -128,11 +134,11 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
                 metaModelContext.getSpecificationLoader());
     }
 
-    private static void addDataNucleusPropertiesIfRequired(Map<String, String> props) {
+    private static void addDataNucleusPropertiesIfRequired(Map<String, Object> props) {
 
         // new feature in DN 3.2.3; enables dependency injection into entities
         putIfNotPresent(props, PropertyNames.PROPERTY_OBJECT_PROVIDER_CLASS_NAME, JDOStateManagerForIsis.class.getName());
-
+        
         putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", JDOPersistenceManagerFactory.class.getName());
 
         // previously we defaulted this property to "true", but that could cause the target database to be modified
@@ -143,10 +149,10 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
 
         putIfNotPresent(props, PropertyNames.PROPERTY_PERSISTENCE_UNIT_LOAD_CLASSES, Boolean.TRUE.toString());
 
-        String connectionFactoryName = props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
+        String connectionFactoryName = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
         if(connectionFactoryName != null) {
-            String connectionFactory2Name = props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY2_NAME);
-            String transactionType = props.get("javax.jdo.option.TransactionType");
+            String connectionFactory2Name = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY2_NAME);
+            String transactionType = (String) props.get("javax.jdo.option.TransactionType");
             // extended logging
             if(transactionType == null) {
                 log.info("found config properties to use non-JTA JNDI datasource ({})", connectionFactoryName);
@@ -182,9 +188,10 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     }
 
     private static void putIfNotPresent(
-            final Map<String, String> props,
+            Map<String, Object> props,
             String key,
             String value) {
+        
         if(!props.containsKey(key)) {
             props.put(key, value);
         }

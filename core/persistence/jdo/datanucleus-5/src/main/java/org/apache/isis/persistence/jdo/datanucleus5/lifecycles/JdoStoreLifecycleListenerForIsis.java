@@ -45,8 +45,8 @@ javax.jdo.listener.StoreLifecycleListener {
 
         val persistableObject = instanceEvent.getPersistentInstance();
 
-        if(persistableObject!=null && 
-                JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
+        if(persistableObject!=null 
+                && JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
 
             val event = PreStoreEvent.of(persistableObject);
             persistenceEventService.firePreStoreEvent(event);

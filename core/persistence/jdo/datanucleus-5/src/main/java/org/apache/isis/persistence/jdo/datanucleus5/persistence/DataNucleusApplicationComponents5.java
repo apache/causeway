@@ -36,6 +36,7 @@ import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.IsisConfiguration;
@@ -59,22 +60,29 @@ public class DataNucleusApplicationComponents5 {
 
     private final Set<String> persistableClassNameSet;
     private final IsisConfiguration configuration;
-    private final Map<String, String> datanucleusProps;
+    private final Map<String, Object> datanucleusProps;
 
     @Getter private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents5(
             final IsisConfiguration configuration,
-            final Map<String, String> datanucleusProps,
+            final Map<String, Object> datanucleusProps,
             final Set<String> persistableClassNameSet) {
         
         this.configuration = configuration;
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
 
+        
+        val pmfClass = configuration.getPersistor().getDatanucleus().getImpl()
+                .getJavax().getJdo().getPersistenceManagerFactoryClass();
+        
+        if(_Strings.isNotEmpty(pmfClass)) {
+            datanucleusProps.put("javax.jdo.PersistenceManagerFactoryClass", pmfClass);    
+        }
+        
         persistenceManagerFactory = createPmfAndSchemaIfRequired(
                 this.persistableClassNameSet, this.datanucleusProps);
-
     }
 
     /**
@@ -90,7 +98,7 @@ public class DataNucleusApplicationComponents5 {
         }
     }
 
-    static PersistenceManagerFactory newPersistenceManagerFactory(Map<String, String> datanucleusProps) {
+    static PersistenceManagerFactory newPersistenceManagerFactory(Map<String, Object> datanucleusProps) {
         try {
             // this is where DN will throw an exception if we pass it any config props it doesn't like the look of.
             // we want to fail, but let's make sure that the error is visible to help the developer
@@ -104,7 +112,7 @@ public class DataNucleusApplicationComponents5 {
     // REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
     private PersistenceManagerFactory createPmfAndSchemaIfRequired(
             final Set<String> persistableClassNameSet, 
-            final Map<String, String> datanucleusProps) {
+            final Map<String, Object> datanucleusProps) {
 
         final DNStoreManagerType dnStoreManagerType = DNStoreManagerType.typeOf(datanucleusProps);
 
@@ -132,14 +140,14 @@ public class DataNucleusApplicationComponents5 {
             // otherwise NPEs occur later.
 
             configureAutoStart(persistableClassNameSet, datanucleusProps);
-            persistenceManagerFactory = newPersistenceManagerFactory(this.datanucleusProps);
+            persistenceManagerFactory = newPersistenceManagerFactory(datanucleusProps);
         }
 
         return persistenceManagerFactory;
 
     }
 
-    private void configureAutoCreateSchema(final Map<String, String> datanucleusProps) {
+    private void configureAutoCreateSchema(final Map<String, Object> datanucleusProps) {
         // unlike v1, we DO now use we DN's eager loading for schema (ie set to PROPERTY_SCHEMA_AUTOCREATE_ALL to true).
         //
         // the mechanism in v1 was to register a listener to create a schema just-in-time
@@ -155,7 +163,7 @@ public class DataNucleusApplicationComponents5 {
 
     private void configureAutoStart(
             final Set<String> persistableClassNameSet, 
-            final Map<String, String> datanucleusProps) {
+            final Map<String, Object> datanucleusProps) {
 
         final String persistableClassNames =
                 stream(persistableClassNameSet).collect(Collectors.joining(","));
@@ -169,7 +177,7 @@ public class DataNucleusApplicationComponents5 {
     private void createSchema(
             final PersistenceManagerFactory persistenceManagerFactory,
             final Set<String> persistableClassNameSet,
-            final Map<String, String> datanucleusProps) {
+            final Map<String, Object> datanucleusProps) {
 
         JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory) persistenceManagerFactory;
         final PersistenceNucleusContext nucleusContext = jdopmf.getNucleusContext();
@@ -187,13 +195,13 @@ public class DataNucleusApplicationComponents5 {
         schemaAwareStoreManager.createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
     }
 
-    private boolean isSet(final Map<String, String> props, final String key) {
-        return Boolean.parseBoolean( props.get(key) );
+    private boolean isSet(final Map<String, Object> props, final String key) {
+        return Boolean.parseBoolean( ""+props.get(key) );
     }
 
     private void registerMetadataListener(
             final MetaDataManager metaDataManager,
-            final Map<String, String> datanucleusProps) {
+            final Map<String, Object> datanucleusProps) {
         final MetaDataListener listener = createMetaDataListener();
         if(listener == null) {
             return;
@@ -217,7 +225,7 @@ public class DataNucleusApplicationComponents5 {
     }
 
 
-    private static Properties asProperties(final Map<String, String> props) {
+    private static Properties asProperties(final Map<String, Object> props) {
         final Properties properties = new Properties();
         properties.putAll(props);
         return properties;

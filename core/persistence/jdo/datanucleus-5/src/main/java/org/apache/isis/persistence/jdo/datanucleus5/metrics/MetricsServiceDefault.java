@@ -18,9 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metrics;
 
-import lombok.extern.log4j.Log4j2;
-
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -29,15 +27,15 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.InstanceLifecycleListener;
 import javax.jdo.listener.LoadLifecycleListener;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.WithTransactionScope;
-import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.applib.services.metrics.MetricsService;
+import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
 
 @Service
 @Named("isisJdoDn5.MetricsServiceDefault")
@@ -45,15 +43,16 @@ import org.springframework.stereotype.Service;
 @Primary
 @Qualifier("Default")
 @RequestScoped
-@Log4j2
-public class MetricsServiceDefault implements MetricsService, InstanceLifecycleListener,
-LoadLifecycleListener, WithTransactionScope {
+public class MetricsServiceDefault 
+implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, WithTransactionScope {
 
-    private AtomicInteger numberLoaded = new AtomicInteger(0);
+    @Inject private ChangedObjectsService changedObjectsServiceInternal;
+    
+    private LongAdder numberLoaded = new LongAdder();
 
     @Override
     public int numberObjectsLoaded() {
-        return numberLoaded.get();
+        return Math.toIntExact(numberLoaded.longValue());
     }
 
     @Override
@@ -63,7 +62,7 @@ LoadLifecycleListener, WithTransactionScope {
 
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
-        numberLoaded.incrementAndGet();
+        numberLoaded.increment();
     }
 
     /**
@@ -72,10 +71,8 @@ LoadLifecycleListener, WithTransactionScope {
      */
     @Override
     public void resetForNextTransaction() {
-        numberLoaded.set(0);
+        numberLoaded.reset();
     }
-
-    @Inject
-    ChangedObjectsService changedObjectsServiceInternal;
+    
 
 }

@@ -19,8 +19,6 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.datanucleus;
 
-import org.apache.isis.runtime.context.IsisContext;
-import org.apache.isis.runtime.session.IsisSession;
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.cache.CachedPC;
 import org.datanucleus.enhancement.Persistable;
@@ -30,31 +28,36 @@ import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.fieldmanager.FieldManager;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.eventbus.EventBusServiceJdo;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.Optional;
-
 /**
- * Although injection into domain objects is considered by some "unusual"
+ * DataNucleus extension point in support of injection into entities. 
+ * 
+ * @apiNote Although injection into domain objects is considered by some "unusual"
  * (see eg https://stackoverflow.com/a/11648163/9269480)
  * it has always been supported by the Apache Isis framework as one of the
- * main mechanisms in support of "behaviourally complete" objects.
+ * main mechanisms in support of "behaviorally complete" objects.
  */
 @Log4j2
 public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
 
+    public static enum Hint {
+        NONE,
+        REPLACE_FIELDS,
+        POST_COMMIT
+    }
+    
+    private ServiceInjector serviceInjector;
+    
     public JDOStateManagerForIsis(
             final ExecutionContext ec,
             final AbstractClassMetaData cmd) {
         super(ec, cmd);
-    }
-
-    public enum Hint {
-        NONE,
-        REPLACE_FIELDS,
-        POST_COMMIT
+        initServiceInjector(extractMetaModelContext(ec));
     }
 
     /**
@@ -228,12 +231,34 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
     }
 
     protected void injectServicesInto(Persistable pc) {
-        final Optional<IsisSession> isisSessionIfAny = IsisContext.getCurrentIsisSession();
-        if(isisSessionIfAny.isPresent()) {
-            isisSessionIfAny.get().getServiceInjector().injectServicesInto(pc);
+        if(serviceInjector!=null) {
+            serviceInjector.injectServicesInto(pc);
         } else {
-            log.warn("could not inject into PC, no isis session");
+            log.warn("could not inject into entity, no service injector");
         }
     }
+    
+    // -- HELPER
+    
+    private MetaModelContext extractMetaModelContext(ExecutionContext ec) {
+        
+        return (MetaModelContext) ec.getNucleusContext()
+                .getConfiguration()
+                .getPersistenceProperties()
+                .get("isis.metamodelcontext");
+    }
+    
+    private void initServiceInjector(MetaModelContext metaModelContext) {
+        
+        if(metaModelContext!=null) {
+            this.serviceInjector = metaModelContext.getServiceInjector();
+        }
+        
+        if(this.serviceInjector==null) {
+            log.warn("could not retrieve a ServiceInjector from the ExecutionContext");
+        }
+    }
+    
+    
     
 }

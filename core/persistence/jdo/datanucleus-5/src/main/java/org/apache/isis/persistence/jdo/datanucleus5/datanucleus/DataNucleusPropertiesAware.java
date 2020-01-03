@@ -22,5 +22,5 @@ import java.util.Map;
 
 public interface DataNucleusPropertiesAware {
 
-    public void setDataNucleusProperties(final Map<String, String> properties);
+    public void setDataNucleusProperties(final Map<String, Object> properties);
 }
