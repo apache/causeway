@@ -45,7 +45,7 @@ public class TaggerDefault implements Tagger {
     public String tagForObjectType(final String objType, final String fallback) {
 
         if (objType.startsWith("org.apache.isis.")) {
-            return "> apache isis internals";
+            return ". apache isis internals";
         }
         
         Matcher matcher;
@@ -55,7 +55,7 @@ public class TaggerDefault implements Tagger {
         }
         matcher = tagPatternIsisExtensions.matcher(objType);
         if (matcher.matches()) {
-            return "> apache isis extensions - " + matcher.group(1);
+            return ". apache isis extensions - " + matcher.group(1);
         }
         matcher = tagPatternForJaxbDto.matcher(objType);
         if (matcher.matches()) {
@@ -68,11 +68,11 @@ public class TaggerDefault implements Tagger {
         matcher = tagPatternForTwoParts.matcher(objType);
         if (matcher.matches()) {
             if (objType.startsWith("isisApplib")) {
-                return "> apache isis applib";
+                return ". apache isis applib";
             }
 
             if (objType.startsWith("isisExt")) {
-                return "> apache isis extensions - " + matcher.group(1);
+                return ". apache isis extensions - " + matcher.group(1);
             }
 
             return matcher.group(1);

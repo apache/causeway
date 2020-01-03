@@ -57,13 +57,13 @@ public class TaggerTest {
         @Test
         public void internals() throws Exception {
             String tag = new TaggerDefault().tagForObjectType("org.apache.isis.applib.fixturescripts.FixtureResult", null);
-            assertThat(tag, is(equalTo("> apache isis internals")));
+            assertThat(tag, is(equalTo(". apache isis internals")));
         }
 
         @Test
         public void applib() throws Exception {
             String tag = new TaggerDefault().tagForObjectType("isisApplib.ConfigurationServiceMenu", null);
-            assertThat(tag, is(equalTo("> apache isis applib")));
+            assertThat(tag, is(equalTo(". apache isis applib")));
         }
 
     }

@@ -234,7 +234,7 @@ class Generation {
 
     void appendRestfulObjectsSupportingPathsAndDefinitions() {
 
-        final String tag = "> restful objects supporting resources";
+        final String tag = ". restful objects supporting resources";
 
         swagger.path("/",
                 new Path()
