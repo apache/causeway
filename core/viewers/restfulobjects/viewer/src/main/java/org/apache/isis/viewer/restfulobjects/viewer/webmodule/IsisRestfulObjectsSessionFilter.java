@@ -46,7 +46,6 @@ import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.runtime.session.IsisSessionFactory;
-import org.apache.isis.webapp.util.IsisWebAppUtils;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyDefault;
 import org.apache.isis.webapp.modules.templresources.TemplateResourceCachingFilter;

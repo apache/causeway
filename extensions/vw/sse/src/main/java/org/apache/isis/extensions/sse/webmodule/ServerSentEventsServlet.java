@@ -36,7 +36,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.extensions.sse.api.SseChannel;
 import org.apache.isis.extensions.sse.api.SseService;
 import org.apache.isis.extensions.sse.markup.ListeningMarkup;
-import org.apache.isis.webapp.util.IsisWebAppUtils;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
