@@ -155,11 +155,6 @@
 
 		<quartz-scheduler.version>2.2.1</quartz-scheduler.version>
 
-<!--
-		<resteasy4-jaxrs.version>4.4.1.Final</resteasy4-jaxrs.version>
-		<resteasy4-jackson-provider.version>4.4.2.Final</resteasy4-jackson-provider.version>
--->
-
 		<resteasy4-spring-boot-starter.version>4.4.0.Final</resteasy4-spring-boot-starter.version>
 
 		<reflections.version>0.9.11</reflections.version>
@@ -1435,40 +1430,12 @@
 				<version>${jdom.version}</version>
 			</dependency>
 
-<!--
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-jaxrs-all</artifactId>
-				<version>${resteasy4-jaxrs.version}</version>
-			</dependency>
--->
-<!--
-
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-jaxb-provider</artifactId>
-				<version>${resteasy4-jaxrs.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-spring</artifactId>
-				<version>${resteasy4-jaxrs.version}</version>
-			</dependency>
--->
 
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-spring-boot-starter</artifactId>
 				<version>${resteasy4-spring-boot-starter.version}</version>
 			</dependency>
-<!--
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-jaxb-provider</artifactId>
-				<version>${resteasy4-jaxrs.version}</version>
-			</dependency>
--->
 
 			<dependency>
 				<groupId>org.jmock</groupId>
