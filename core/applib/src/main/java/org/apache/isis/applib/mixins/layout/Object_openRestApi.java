@@ -70,7 +70,7 @@ public class Object_openRestApi {
         val restfulPathIfAny = restfulPathProvider.getRestfulPath();
 
         final String format = restfulPathIfAny
-                .map(path -> String.format("/%s/objects/%s/%s", path, objType, objId))
+                .map(path -> String.format("%s/objects/%s/%s", path, objType, objId))
                 .orElseGet(() -> String.format("/objects/%s/%s", objType, objId));
         return new LocalResourcePath(format);
     }
