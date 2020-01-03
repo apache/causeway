@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.rest;
 
 import javax.inject.Inject;
+import javax.ws.rs.client.Invocation;
 import javax.xml.bind.JAXBException;
 
 import org.apache.isis.config.IsisConfiguration;
@@ -67,9 +68,16 @@ public class RestEndpointService {
 
     public RestfulClient newClient(boolean useRequestDebugLogging) {
 
-        val restRootPath = 
-                "http://localhost:" + getPort() + "/" + webAppContextPath.prependContextPath(
-                        this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/");
+        if(useRequestDebugLogging) {
+            final String msg = "RestfulLoggingFilter seems to fail in 4.4.1, consumes the response's entity (in order to log) so that subsequent attempts to read response fail.";
+            log.error(msg);
+            throw new UnsupportedOperationException(msg);
+        }
+        val restRootPath =
+                String.format("http://localhost:%d%s/",
+                        getPort(),
+                        webAppContextPath.prependContextPath(this.restEasyConfiguration.getJaxrs().getDefaultPath())
+                );
 
         log.info("new restful client created for {}", restRootPath);
 
@@ -90,8 +98,8 @@ public class RestEndpointService {
     // -- ENDPOINTS
 
     public ResponseDigest<Book> getRecommendedBookOfTheWeek(RestfulClient client) {
-        val request = client.request(
-                "services/testdomain.InventoryResource/actions/recommendedBookOfTheWeek/invoke", 
+        Invocation.Builder request = client.request(
+                "services/testdomain.InventoryResource/actions/recommendedBookOfTheWeek/invoke",
                 SuppressionType.ALL);
 
         val args = client.arguments()

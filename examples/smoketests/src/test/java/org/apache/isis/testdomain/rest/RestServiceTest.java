@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.rest;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 
+import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleRestfulObjectsJaxrsResteasy4;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -41,11 +42,12 @@ import lombok.val;
         classes = {RestEndpointService.class},
         properties = {
                 "logging.config=log4j2-test.xml",
+                ""
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
     Configuration_usingJdo.class,
-    IsisModuleRestfulObjectsViewer.class
+    IsisModuleRestfulObjectsJaxrsResteasy4.class
 })
 class RestServiceTest {
 
@@ -58,7 +60,7 @@ class RestServiceTest {
         assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = true;
+        val useRequestDebugLogging = false; // not used because seems to fail in 4.4.1, consumes the response's entity and so
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
         val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
@@ -80,7 +82,7 @@ class RestServiceTest {
         assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = true;
+        val useRequestDebugLogging = false; // not used because seems to fail in 4.4.1, consumes the response's entity and so
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
         val newBook = Book.of("REST Book", "A sample REST book for testing.", 77., 

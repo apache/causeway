@@ -49,5 +49,8 @@ isis:
       maxTitleLengthInStandaloneTables: 0
       maxTitleLengthInParentedTables: 0
 
-
-
+resteasy:
+  jaxrs:
+    app:
+      registration: beans
+    defaultPath: "/restful"

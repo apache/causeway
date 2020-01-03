@@ -105,3 +105,9 @@ isis:
 spring:
   banner:
     location: banner.txt
+
+resteasy:
+  jaxrs:
+    app:
+      registration: beans
+    defaultPath: "/restful"
