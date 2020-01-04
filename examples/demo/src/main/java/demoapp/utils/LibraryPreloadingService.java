@@ -28,11 +28,9 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.extensions.asciidoc.applib.value.AsciiDoc;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("demoapp.LibraryPreloadingService")
-@Log4j2
 public class LibraryPreloadingService {
 
     @PostConstruct

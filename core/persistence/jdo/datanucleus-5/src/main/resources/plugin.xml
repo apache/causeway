@@ -32,9 +32,12 @@
         <mapping
             java-type="org.apache.isis.applib.value.Clob"
             mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.IsisClobMapping"/>
+        
+        <!-- TODO[2249] deprecated
         <mapping
             java-type="org.apache.isis.applib.value.Money"
             mapping-class="org.apache.isis.persistence.jdo.datanucleus5.datanucleus.valuetypes.IsisMoneyMapping"/>
+            -->
     </extension>
 
 
