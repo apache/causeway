@@ -16,16 +16,25 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.google.common.collect.Ordering;
 
-import org.apache.isis.applib.annotation.*;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
-import org.joda.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -181,13 +190,13 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     private java.util.UUID someUuid;
 
 
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="true", columns = {
-            @javax.jdo.annotations.Column(name = "someMoneyOptional_amount"),
-            @javax.jdo.annotations.Column(name = "someMoneyOptional_currency")
-    })
-    @Property(optionality = Optionality.OPTIONAL)
-    @Getter @Setter
-    private Money someMoney;
+//    @javax.jdo.annotations.Persistent(defaultFetchGroup="true", columns = {
+//            @javax.jdo.annotations.Column(name = "someMoneyOptional_amount"),
+//            @javax.jdo.annotations.Column(name = "someMoneyOptional_currency")
+//    })
+//    @Property(optionality = Optionality.OPTIONAL)
+//    @Getter @Setter
+//    private Money someMoney;
 
     @Column(allowsNull = "true")
     @Getter @Setter
@@ -628,21 +637,21 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-
-    @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeMoney(@Nullable final Money i) {
-        setSomeMoney(i);
-        return this;
-    }
-    public Money default0UpdateSomeMoney() {
-        return getSomeMoney();
-    }
-
-    @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll resetSomeMoney() {
-        setSomeMoney(null);
-        return this;
-    }
+  //TODO[2249] deprecated
+//    @Action(semantics=SemanticsOf.IDEMPOTENT)
+//    public FakeDataDemoObjectWithAll updateSomeMoney(@Nullable final Money i) {
+//        setSomeMoney(i);
+//        return this;
+//    }
+//    public Money default0UpdateSomeMoney() {
+//        return getSomeMoney();
+//    }
+//
+//    @Action(semantics=SemanticsOf.IDEMPOTENT)
+//    public FakeDataDemoObjectWithAll resetSomeMoney() {
+//        setSomeMoney(null);
+//        return this;
+//    }
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)

@@ -7,24 +7,23 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import javax.inject.Inject;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
-
 import org.apache.isis.extensions.fakedata.dom.services.FakeDataService;
-import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.EnumOf3;
+import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.inject.Inject;
 
 public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript {
 
@@ -98,8 +97,8 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
     @Getter(onMethod = @__( @Programmatic )) @Setter
     private UUID someUuid;
 
-    @Getter(onMethod = @__( @Programmatic )) @Setter
-    private Money someMoney;
+//    @Getter(onMethod = @__( @Programmatic )) @Setter
+//    private Money someMoney;
 
     @Getter(onMethod = @__( @Programmatic )) @Setter
     private EnumOf3 someEnumOf3;
@@ -138,7 +137,8 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
 
         this.defaultParam("someUrl", executionContext, fakeDataService.urls().any());
         this.defaultParam("someUuid", executionContext, fakeDataService.uuids().any());
-        this.defaultParam("someMoney", executionContext, fakeDataService.isisMoneys().any());
+        //TODO[2249] deprecated
+        //this.defaultParam("someMoney", executionContext, fakeDataService.isisMoneys().any());
         this.defaultParam("someEnumOf3", executionContext, fakeDataService.enums().anyOf(EnumOf3.class));
 
         // updates
@@ -185,7 +185,7 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
 
         wrap(fakeDataDemoObject).updateSomeUrl(getSomeUrl());
         wrap(fakeDataDemoObject).updateSomeUuid(getSomeUuid());
-        wrap(fakeDataDemoObject).updateSomeMoney(getSomeMoney());
+        //wrap(fakeDataDemoObject).updateSomeMoney(getSomeMoney());
 
         wrap(fakeDataDemoObject).updateSomeEnumOf3(getSomeEnumOf3());
 

@@ -13,22 +13,20 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -212,12 +210,13 @@ public class FakeDataServiceTest {
         assertThat(pwd.getPassword().length()).isEqualTo(12);
     }
 
-    @Test
-    public void moneys_any() throws Exception {
-        final Money pwd = fakeDataService.isisMoneys().any();
-        assertThat(pwd.getAmount()).isNotNull();
-        assertThat(pwd.getCurrency()).isNotNull();
-    }
+  //TODO[2249] deprecated    
+//    @Test
+//    public void moneys_any() throws Exception {
+//        final Money pwd = fakeDataService.isisMoneys().any();
+//        assertThat(pwd.getAmount()).isNotNull();
+//        assertThat(pwd.getCurrency()).isNotNull();
+//    }
 
     @Test
     public void jodaDateTimes_any() throws Exception {

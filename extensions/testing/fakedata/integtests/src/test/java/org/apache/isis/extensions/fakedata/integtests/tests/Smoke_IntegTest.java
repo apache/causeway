@@ -9,25 +9,24 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.assertj.core.api.Assertions;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.extensions.fakedata.dom.services.FakeDataService;
+import org.apache.isis.extensions.fakedata.integtests.FakeDataModuleIntegTestAbstract;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 
-import org.apache.isis.extensions.fakedata.dom.FakeDataService;
+import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.EnumOf3;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAllMenu;
-import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.EnumOf3;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_create3;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_update_withFakeData;
-import org.apache.isis.extensions.fakedata.integtests.FakeDataModuleIntegTestAbstract;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 public class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
@@ -92,7 +91,7 @@ public class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeUuid()).isNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isNull();
+            //Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeEnumOf3()).isNull();
 
         }
@@ -169,7 +168,7 @@ public class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNotNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeUuid()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isNotNull();
+//            Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isNotNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeEnumOf3()).isNotNull();
 
         }
@@ -833,43 +832,43 @@ public class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             Assertions.assertThat(fakeDataDemoObject.getSomeUuid()).isEqualTo(theUuid);
 
-            Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isNotNull();
+            //Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isNotNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeEnumOf3()).isNotNull();
 
         }
 
-        @Test
-        public void when_money() throws Exception {
-
-            //
-            // given
-            //
-            Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isNull();
-
-            final Money theMoney = new Money(12345.67, "EUR");
-
-
-            //
-            // when
-            //
-            updateScript.setFakeDataDemoObject(fakeDataDemoObject);
-            updateScript.setSomeMoney(theMoney);
-
-            fixtureScripts.runFixtureScript( updateScript,  null);
-
-            transactionService.flushTransaction();
-
-
-            //
-            // then
-            //
-            fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
-
-            Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isEqualTo(theMoney);
-
-            Assertions.assertThat(fakeDataDemoObject.getSomeEnumOf3()).isNotNull();
-
-        }
+//        @Test
+//        public void when_money() throws Exception {
+//
+//            //
+//            // given
+//            //
+//            Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isNull();
+//
+//            final Money theMoney = new Money(12345.67, "EUR");
+//
+//
+//            //
+//            // when
+//            //
+//            updateScript.setFakeDataDemoObject(fakeDataDemoObject);
+//            updateScript.setSomeMoney(theMoney);
+//
+//            fixtureScripts.runFixtureScript( updateScript,  null);
+//
+//            transactionService.flushTransaction();
+//
+//
+//            //
+//            // then
+//            //
+//            fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
+//
+//            Assertions.assertThat(fakeDataDemoObject.getSomeMoney()).isEqualTo(theMoney);
+//
+//            Assertions.assertThat(fakeDataDemoObject.getSomeEnumOf3()).isNotNull();
+//
+//        }
 
         @Test
         public void when_enum() throws Exception {

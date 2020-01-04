@@ -1,9 +1,8 @@
 package org.apache.isis.extensions.fakedata.dom.services;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.Locale;
 import java.util.Random;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -12,20 +11,20 @@ import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.repository.RepositoryService;
 
 @Service
 @Named("isisExtFakeData.FakeDataService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class FakeDataService {
 
     private final Faker javaFaker;
@@ -264,9 +263,10 @@ public class FakeDataService {
         return isisPasswords;
     }
 
-    public IsisMoneys isisMoneys() {
-        return isisMoneys;
-    }
+  //TODO[2249] deprecated
+//    public IsisMoneys isisMoneys() {
+//        return isisMoneys;
+//    }
 
     public IsisBlobs isisBlobs() {
         return isisBlobs;
