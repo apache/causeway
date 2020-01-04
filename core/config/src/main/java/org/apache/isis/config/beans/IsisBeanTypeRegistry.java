@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import javax.enterprise.inject.Vetoed;
 
@@ -106,12 +107,31 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     }
 
     // -- FILTER
+    
+    public void ifToBeInspectedThen(Class<?> type, Consumer<BeanSort> onInspectionRequired) {
+        
+        val beanSort = quickClassify(type);
+        
+        val isManagedObjectToBeInspected = !beanSort.isManagedBean() 
+                && !beanSort.isUnknown();
+        
+        val isManagedBeanToBeInspected = beanSort.isManagedBean() 
+                && (findNearestAnnotation(type, DomainService.class).isPresent()
+                        // || findNearestAnnotation(type, Service.class).isPresent() 
+                        );
+
+        val isToBeInspected = isManagedBeanToBeInspected || isManagedObjectToBeInspected;
+        
+        if(isToBeInspected) {
+            onInspectionRequired.accept(beanSort);
+        }
+    }
+    
 
     @Override
     public void intercept(TypeMetaData typeMeta) {
         
         val type = typeMeta.getUnderlyingClass();
-        val beanSort = quickClassify(type);
 
         if(findNearestAnnotation(type, DomainObject.class).isPresent() ||
                 findNearestAnnotation(type, ViewModel.class).isPresent() ||
@@ -121,30 +141,23 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             typeMeta.setInjectable(false); // reject
             
         } else {
-            typeMeta.setBeanNameOverride(extractObjectType(typeMeta.getUnderlyingClass()).orElse(null));
+            typeMeta.setBeanNameOverride(extractObjectType(type).orElse(null));
         }
-        
-        val isManagedBeanToBeInspected = beanSort.isManagedBean() 
-                && (findNearestAnnotation(type, DomainService.class).isPresent()
-                        // || findNearestAnnotation(type, Service.class).isPresent() 
-                        );
-        
-        val isManagedObjectToBeInspected = !beanSort.isManagedBean() 
-                && !beanSort.isUnknown();
 
-        val isToBeInspected = isManagedBeanToBeInspected || isManagedObjectToBeInspected;
-        
-        if(isToBeInspected) {
+        ifToBeInspectedThen(type, beanSort->{
+
             addIntrospectableType(beanSort, typeMeta);
-        
+            
             if(log.isDebugEnabled()) {
                 log.debug("to-be-inspected: {} [{}]",                        
                                 type,
                                 beanSort.name());
             }
-        }
+            
+        });
         
     }
+    
     
     /**
      * If given type is part of the meta-model and is available for injection, 
