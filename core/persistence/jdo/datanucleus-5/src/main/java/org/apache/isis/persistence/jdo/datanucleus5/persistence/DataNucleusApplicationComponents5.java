@@ -36,7 +36,6 @@ import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.IsisConfiguration;
@@ -72,14 +71,6 @@ public class DataNucleusApplicationComponents5 {
         this.configuration = configuration;
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
-
-        
-        val pmfClass = configuration.getPersistor().getDatanucleus().getImpl()
-                .getJavax().getJdo().getPersistenceManagerFactoryClass();
-        
-        if(_Strings.isNotEmpty(pmfClass)) {
-            datanucleusProps.put("javax.jdo.PersistenceManagerFactoryClass", pmfClass);    
-        }
         
         persistenceManagerFactory = createPmfAndSchemaIfRequired(
                 this.persistableClassNameSet, this.datanucleusProps);

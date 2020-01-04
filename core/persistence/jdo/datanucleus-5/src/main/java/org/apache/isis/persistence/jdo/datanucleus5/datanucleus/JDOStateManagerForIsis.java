@@ -31,7 +31,6 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.eventbus.EventBusServiceJdo;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -57,7 +56,7 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
             final ExecutionContext ec,
             final AbstractClassMetaData cmd) {
         super(ec, cmd);
-        initServiceInjector(extractMetaModelContext(ec));
+        initServiceInjector(ec);
     }
 
     /**
@@ -240,19 +239,11 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
     
     // -- HELPER
     
-    private MetaModelContext extractMetaModelContext(ExecutionContext ec) {
+    private void initServiceInjector(ExecutionContext ec) {
         
-        return (MetaModelContext) ec.getNucleusContext()
-                .getConfiguration()
-                .getPersistenceProperties()
-                .get("isis.metamodelcontext");
-    }
-    
-    private void initServiceInjector(MetaModelContext metaModelContext) {
-        
-        if(metaModelContext!=null) {
-            this.serviceInjector = metaModelContext.getServiceInjector();
-        }
+        this.serviceInjector = DataNucleusContextUtil.extractMetaModelContext(ec)
+                .map(MetaModelContext::getServiceInjector)
+                .orElse(null);
         
         if(this.serviceInjector==null) {
             log.warn("could not retrieve a ServiceInjector from the ExecutionContext");

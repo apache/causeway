@@ -42,9 +42,9 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.metamodel.context.MetaModelContext;
-import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledState;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
+import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusContextUtil;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.persistence.jdo.datanucleus5.entities.JdoEntityTypeRegistry;
@@ -109,12 +109,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
 
         val dnSettings = metaModelContext.getServiceRegistry().lookupServiceElseFail(DataNucleusSettings.class);
-        val datanucleusProps = _Maps.<String, Object>newHashMap();
-        datanucleusProps.putAll(dnSettings.getAsMap());
-        datanucleusProps.put("isis.metamodelcontext", metaModelContext);
-        
-        addDataNucleusPropertiesIfRequired(datanucleusProps);
-        
+        val datanucleusProps = addDataNucleusPropertiesAsRequired(dnSettings);
         val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
         val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(typeRegistry);
 
@@ -134,7 +129,11 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
                 metaModelContext.getSpecificationLoader());
     }
 
-    private static void addDataNucleusPropertiesIfRequired(Map<String, Object> props) {
+    private Map<String, Object> addDataNucleusPropertiesAsRequired(DataNucleusSettings dnSettings) {
+        
+        val props = _Maps.<String, Object>newHashMap();
+        props.putAll(dnSettings.getAsMap());
+        DataNucleusContextUtil.putMetaModelContext(props, metaModelContext);
 
         // new feature in DN 3.2.3; enables dependency injection into entities
         putIfNotPresent(props, PropertyNames.PROPERTY_OBJECT_PROVIDER_CLASS_NAME, JDOStateManagerForIsis.class.getName());
@@ -169,7 +168,6 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
                 log.info("... and config properties for second '-nontx' JNDI datasource also found; {}", connectionFactory2Name);
             }
             // nothing further to do
-            return;
         } else {
             // use JDBC connection properties; put if not present
 
@@ -185,6 +183,8 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
 
 
         }
+        
+        return props;
     }
 
     private static void putIfNotPresent(
