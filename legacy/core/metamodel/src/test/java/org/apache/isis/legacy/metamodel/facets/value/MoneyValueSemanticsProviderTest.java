@@ -24,6 +24,9 @@ import java.util.Locale;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.isis.legacy.applib.value.Money;
 import org.apache.isis.legacy.metamodel.facets.value.money.MoneyValueSemanticsProvider;
 import org.apache.isis.metamodel.context.MetaModelContextAware;
@@ -31,9 +34,6 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

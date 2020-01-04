@@ -38,10 +38,11 @@ import org.apache.isis.extensions.sse.api.SseService;
 import org.apache.isis.extensions.sse.api.SseService.ExecutionBehavior;
 import org.apache.isis.extensions.sse.markup.ListeningMarkup;
 
-import demoapp.utils.DemoStub;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
 @XmlType

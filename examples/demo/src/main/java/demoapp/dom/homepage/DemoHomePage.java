@@ -36,9 +36,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.util.JaxbAdapters.MarkupAdapter;
 import org.apache.isis.applib.value.Markup;
 
-import demoapp.utils.DemoStub;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
 @XmlType

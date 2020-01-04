@@ -33,8 +33,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.value.Markup;
 
-import demoapp.utils.DemoStub;
 import lombok.Getter;
+
+import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
 @XmlType

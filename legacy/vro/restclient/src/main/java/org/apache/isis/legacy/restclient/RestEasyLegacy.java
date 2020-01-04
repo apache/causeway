@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 
 import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 
 /**
  * Compatibility layer, legacy of deprecated resteasy client API.

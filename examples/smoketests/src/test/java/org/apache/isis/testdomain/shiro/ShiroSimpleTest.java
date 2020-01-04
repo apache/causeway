@@ -29,12 +29,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.testdomain.Smoketest;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.testdomain.Smoketest;
 
 import lombok.val;
 

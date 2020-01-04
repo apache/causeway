@@ -42,10 +42,11 @@ import org.apache.isis.applib.util.JaxbAdapters.OffsetDateTimeAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.SqlDateAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.SqlTimestampAdapter;
 
-import demoapp.utils.DemoStub;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+
+import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
 @XmlType

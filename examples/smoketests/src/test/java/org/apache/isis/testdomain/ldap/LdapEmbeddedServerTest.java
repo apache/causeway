@@ -30,11 +30,11 @@ import org.junit.runners.model.InitializationError;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Smoketest;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.testdomain.Smoketest;
 
 import lombok.val;
 

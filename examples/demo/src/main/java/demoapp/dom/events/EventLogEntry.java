@@ -29,10 +29,11 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 
-import demoapp.dom.events.EventsDemo.UiButtonEvent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom.events.EventsDemo.UiButtonEvent;
 
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")

@@ -27,8 +27,9 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
-import demoapp.utils.DemoStub;
 import lombok.val;
+
+import demoapp.utils.DemoStub;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.TreeDemoMenu")
 @DomainObjectLayout(named="Tree Demo")

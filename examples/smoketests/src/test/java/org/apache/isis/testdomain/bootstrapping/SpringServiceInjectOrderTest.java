@@ -37,23 +37,24 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.config.presets.IsisPresets;
-import org.apache.isis.runtime.services.message.MessageServiceDefault;
-//import org.apache.isis.testdomain.Incubating;
-import org.apache.isis.testdomain.Smoketest;
-import org.apache.isis.testdomain.conf.Configuration_headless;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.runtime.services.message.MessageServiceDefault;
+import org.apache.isis.testdomain.Smoketest;
+import org.apache.isis.testdomain.conf.Configuration_headless;
+
 import lombok.Getter;
 import lombok.val;
+
+//import org.apache.isis.testdomain.Incubating;
 
 @Smoketest
 @SpringBootTest(

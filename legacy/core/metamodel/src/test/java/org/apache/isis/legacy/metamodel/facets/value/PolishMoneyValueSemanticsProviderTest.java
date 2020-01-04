@@ -25,6 +25,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.isis.legacy.applib.value.Money;
 import org.apache.isis.legacy.metamodel.facets.value.money.MoneyValueSemanticsProvider;
 import org.apache.isis.metamodel.context.MetaModelContextAware;
@@ -32,9 +35,6 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 @Ignore
 // TODO once the semantics provider has a way to reset the formatters for the new

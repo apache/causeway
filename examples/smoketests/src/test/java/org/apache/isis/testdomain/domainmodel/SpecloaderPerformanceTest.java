@@ -25,6 +25,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.config.IsisConfiguration;
@@ -34,8 +36,6 @@ import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

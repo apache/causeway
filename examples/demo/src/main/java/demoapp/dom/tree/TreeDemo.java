@@ -25,8 +25,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
 
-import demoapp.utils.DemoStub;
 import lombok.val;
+
+import demoapp.utils.DemoStub;
 
 @DomainObject(nature = Nature.VIEW_MODEL, objectType = "demo.Tree")
 public class TreeDemo extends DemoStub {

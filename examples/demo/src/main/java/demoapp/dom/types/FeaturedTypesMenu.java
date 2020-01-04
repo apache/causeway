@@ -27,11 +27,12 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
+import lombok.val;
+
 import demoapp.dom.types.blob.BlobDemo;
 import demoapp.dom.types.primitive.PrimitivesDemo;
 import demoapp.dom.types.text.TextDemo;
 import demoapp.dom.types.time.TemporalDemo;
-import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.FeaturedTypesMenu")
 @DomainObjectLayout(named="Featured Types")

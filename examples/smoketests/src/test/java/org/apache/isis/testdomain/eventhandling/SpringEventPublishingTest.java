@@ -29,9 +29,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.ioc.spring._Spring;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.isis.commons.internal.ioc.spring._Spring;
 
 import lombok.Getter;
 import lombok.Value;

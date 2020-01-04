@@ -27,10 +27,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.runtime.services.eventbus.EventBusServiceSpring;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.Getter;
 import lombok.Value;

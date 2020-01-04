@@ -44,10 +44,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
-import demoapp.dom.actions.assoc.DemoItem;
-import demoapp.utils.DemoStub;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.actions.assoc.DemoItem;
+import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
 @XmlType
