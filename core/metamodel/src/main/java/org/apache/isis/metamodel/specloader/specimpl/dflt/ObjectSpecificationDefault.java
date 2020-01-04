@@ -72,8 +72,8 @@ import org.apache.isis.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {

@@ -45,8 +45,8 @@ import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisMetaModel.LayoutServiceDefault")

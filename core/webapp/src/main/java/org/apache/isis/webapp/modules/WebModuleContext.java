@@ -37,8 +37,8 @@ import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer.ServletCont
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 

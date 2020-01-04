@@ -44,8 +44,9 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.Specification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
-import images.Images;
 import lombok.extern.log4j.Log4j2;
+
+import images.Images;
 
 /**
  * Caches images loaded either from the same package as the specified object, or from the <tt>images</tt> package (using the {@link Images} otherwise.

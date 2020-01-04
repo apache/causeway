@@ -23,8 +23,9 @@ import java.util.List;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.IsisConfiguration;
 
-import de.agilecoders.wicket.core.settings.ThemeProvider;
 import lombok.val;
+
+import de.agilecoders.wicket.core.settings.ThemeProvider;
 
 /**
  * @since 2.0

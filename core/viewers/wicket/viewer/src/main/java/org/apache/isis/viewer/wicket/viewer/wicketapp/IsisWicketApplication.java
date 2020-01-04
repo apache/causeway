@@ -97,6 +97,10 @@ import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.Getter;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
@@ -104,9 +108,6 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
 import net.ftlines.wicketsource.WicketSource;
 
 //import lombok.val;

@@ -41,8 +41,8 @@ import org.apache.isis.commons.internal.collections._Maps;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <h1>- internal use only -</h1>

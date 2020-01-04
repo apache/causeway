@@ -36,9 +36,10 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 
+import lombok.val;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.INotificationMessage;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
-import lombok.val;
 
 /**
  * A panel with a form for creation of new users

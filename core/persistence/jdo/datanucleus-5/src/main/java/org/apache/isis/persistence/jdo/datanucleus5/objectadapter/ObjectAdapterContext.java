@@ -43,8 +43,8 @@ import org.apache.isis.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Encapsulate ObjectAdpater life-cycling.  

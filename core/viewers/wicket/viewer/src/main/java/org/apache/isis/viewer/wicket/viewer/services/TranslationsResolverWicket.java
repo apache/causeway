@@ -41,8 +41,8 @@ import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 
 /**

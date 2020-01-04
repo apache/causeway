@@ -39,6 +39,8 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
 
+import lombok.extern.log4j.Log4j2;
+
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.ByteArrayProperty;
 import io.swagger.models.properties.DateProperty;
@@ -51,7 +53,6 @@ import io.swagger.models.properties.LongProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
-import lombok.extern.log4j.Log4j2;
 
 @Component
 @Named("isisMetaModel.ValuePropertyFactoryDefault")

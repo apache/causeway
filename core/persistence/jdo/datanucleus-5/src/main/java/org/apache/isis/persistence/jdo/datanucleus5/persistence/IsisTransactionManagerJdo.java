@@ -33,8 +33,8 @@ import org.apache.isis.runtime.persistence.transaction.IsisTransactionManagerExc
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionObject;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Vetoed @Log4j2
 class IsisTransactionManagerJdo {

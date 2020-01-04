@@ -50,8 +50,9 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 /**
  * Provides a list of links for selecting other views that support

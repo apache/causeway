@@ -32,8 +32,8 @@ import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel.Marker;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 

@@ -69,8 +69,8 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <p>

@@ -71,8 +71,8 @@ import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.OidsDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntimeServices.CommandExecutorServiceDefault")

@@ -25,8 +25,8 @@ import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.commons.internal.collections._Lists;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Intended to be used as a base class for executing queued up {@link Command background action}s.

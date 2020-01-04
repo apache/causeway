@@ -68,8 +68,8 @@ import org.apache.isis.runtime.services.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.runtime.services.wrapper.proxy.ProxyCreator;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * This service provides the ability to 'wrap' a domain object such that it can

@@ -31,8 +31,8 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.ViewModel;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * The framework's stereotypes {@link DomainService}, {@link DomainObject}, {@link ViewModel}, etc. 

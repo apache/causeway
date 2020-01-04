@@ -52,8 +52,8 @@ import org.apache.isis.webapp.modules.WebModuleContext;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule to enable support for Shiro.

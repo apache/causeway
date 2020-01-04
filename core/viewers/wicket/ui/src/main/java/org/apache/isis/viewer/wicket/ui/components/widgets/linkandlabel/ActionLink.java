@@ -40,9 +40,10 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import lombok.Getter;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAjaxIndicatorAware {
 

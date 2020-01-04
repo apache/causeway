@@ -41,8 +41,8 @@ import org.apache.isis.metamodel.commons.StringExtensions;
 import static org.apache.isis.commons.internal.base._Strings.pair;
 import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Handles HTML-templates, where template's placeholders get replaced by their values.

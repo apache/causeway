@@ -45,8 +45,8 @@ import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ServiceInjectorLegacy implements ServiceInjector {

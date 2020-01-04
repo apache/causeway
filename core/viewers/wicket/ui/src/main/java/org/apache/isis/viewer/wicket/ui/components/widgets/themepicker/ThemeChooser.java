@@ -34,6 +34,8 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 
+import lombok.Getter;
+
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
@@ -46,7 +48,6 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
 import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitTheme;
 import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
-import lombok.Getter;
 
 /**
  * A panel used as a Navbar item to change the application theme/skin

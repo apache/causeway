@@ -27,8 +27,8 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2MultiChoice</tt>;

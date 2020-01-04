@@ -36,8 +36,8 @@ import static org.apache.isis.commons.internal.functions._Predicates.not;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Converts serializable {@link Data} back to a {@link ManagedObject}. 

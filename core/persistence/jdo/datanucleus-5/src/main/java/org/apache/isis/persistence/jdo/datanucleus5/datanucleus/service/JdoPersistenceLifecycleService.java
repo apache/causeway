@@ -39,8 +39,8 @@ import org.apache.isis.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.runtime.persistence.session.PersistenceSessionFactory;
 import org.apache.isis.runtime.session.IsisSession;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisJdoDn5.JdoPersistenceLifecycleService")

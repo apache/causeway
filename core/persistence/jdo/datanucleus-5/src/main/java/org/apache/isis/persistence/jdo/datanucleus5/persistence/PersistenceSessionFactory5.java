@@ -55,8 +55,8 @@ import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  *

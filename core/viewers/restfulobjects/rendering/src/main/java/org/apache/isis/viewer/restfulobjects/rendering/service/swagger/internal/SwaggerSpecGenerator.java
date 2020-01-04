@@ -28,10 +28,11 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
+import lombok.extern.log4j.Log4j2;
+
 import io.swagger.models.Swagger;
 import io.swagger.util.Json;
 import io.swagger.util.Yaml;
-import lombok.extern.log4j.Log4j2;
 
 @Component
 @Named("isisMetaModel.SwaggerSpecGenerator")

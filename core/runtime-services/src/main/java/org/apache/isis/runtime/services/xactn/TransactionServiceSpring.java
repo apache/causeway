@@ -42,8 +42,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionObject;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntimeServices.TransactionServiceSpring")

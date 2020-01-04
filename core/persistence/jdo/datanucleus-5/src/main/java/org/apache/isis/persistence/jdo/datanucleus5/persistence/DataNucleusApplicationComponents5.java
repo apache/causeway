@@ -50,8 +50,8 @@ import org.apache.isis.runtime.context.IsisContext;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Vetoed
 @Log4j2

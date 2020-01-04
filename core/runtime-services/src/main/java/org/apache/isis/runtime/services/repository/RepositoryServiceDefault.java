@@ -47,8 +47,8 @@ import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Repository
 @Named("isisRuntimeServices.RepositoryServiceDefault")
