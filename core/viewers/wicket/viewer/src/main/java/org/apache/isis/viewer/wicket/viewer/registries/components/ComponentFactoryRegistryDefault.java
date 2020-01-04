@@ -50,8 +50,8 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.C
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Implementation of {@link ComponentFactoryRegistry} that delegates to a

@@ -40,8 +40,8 @@ import org.apache.isis.config.IsisConfiguration;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * @since 2.0

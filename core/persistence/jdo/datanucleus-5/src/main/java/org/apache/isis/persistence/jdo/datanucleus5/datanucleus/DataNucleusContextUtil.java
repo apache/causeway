@@ -25,8 +25,8 @@ import org.datanucleus.ExecutionContext;
 
 import org.apache.isis.metamodel.context.MetaModelContext;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.val;
 
 /**
  * 

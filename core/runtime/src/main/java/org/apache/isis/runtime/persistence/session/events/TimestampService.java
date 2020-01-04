@@ -33,8 +33,8 @@ import org.apache.isis.applib.mixins.timestamp.HoldsUpdatedBy;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isisRuntime.TimestampService")

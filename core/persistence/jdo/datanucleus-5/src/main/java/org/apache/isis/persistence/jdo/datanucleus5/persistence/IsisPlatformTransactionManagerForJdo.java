@@ -40,8 +40,8 @@ import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.runtime.session.init.InitialisationSession;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isisJdoDn5.IsisPlatformTransactionManagerForJdo")

@@ -30,8 +30,8 @@ import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer.ServletContextResource;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * 

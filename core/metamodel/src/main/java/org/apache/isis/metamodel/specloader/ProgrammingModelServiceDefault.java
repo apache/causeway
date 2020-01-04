@@ -37,8 +37,8 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilter;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isisMetaModel.ProgrammingModelServiceDefault")

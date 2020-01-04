@@ -97,8 +97,8 @@ import org.apache.isis.security.api.authentication.AuthenticationSession;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * A wrapper around the JDO {@link PersistenceManager}.

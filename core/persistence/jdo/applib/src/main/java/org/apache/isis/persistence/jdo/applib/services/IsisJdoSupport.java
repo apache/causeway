@@ -23,11 +23,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-//import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
-//import javax.jdo.query.BooleanExpression;
 
 import org.apache.isis.applib.annotation.Programmatic;
+
+//import javax.jdo.JDOQLTypedQuery;
+//import javax.jdo.query.BooleanExpression;
 
 
 /**

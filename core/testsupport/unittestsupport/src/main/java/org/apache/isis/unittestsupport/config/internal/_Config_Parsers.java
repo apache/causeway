@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Log4j2
 final class _Config_Parsers {

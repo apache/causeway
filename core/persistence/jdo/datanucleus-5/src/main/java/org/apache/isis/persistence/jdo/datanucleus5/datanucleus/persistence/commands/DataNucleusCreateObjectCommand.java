@@ -24,8 +24,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Log4j2
 public class DataNucleusCreateObjectCommand 

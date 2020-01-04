@@ -44,8 +44,8 @@ import org.apache.isis.runtime.persistence.transaction.IsisTransactionFlushExcep
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionManagerException;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Used by the {@link IsisTransactionManagerJdo} to captures a set of changes to be

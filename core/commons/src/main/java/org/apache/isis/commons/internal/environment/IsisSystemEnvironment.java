@@ -39,8 +39,8 @@ import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.commons.internal.ioc.spring.IocContainerSpring;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Represents configuration, that is required in an early bootstrapping phase. 

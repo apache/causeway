@@ -53,8 +53,8 @@ import org.apache.isis.security.api.authentication.manager.AuthenticationManager
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using

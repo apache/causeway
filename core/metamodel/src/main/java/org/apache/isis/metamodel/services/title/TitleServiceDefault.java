@@ -33,8 +33,8 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isisMetaModel.TitleServiceDefault")

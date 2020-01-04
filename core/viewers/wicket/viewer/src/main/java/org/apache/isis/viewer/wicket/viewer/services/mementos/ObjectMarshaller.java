@@ -35,8 +35,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * converts a {@link ManagedObject} to serializable {@link Data} 

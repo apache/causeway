@@ -44,8 +44,8 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.RestEasyConfiguration;
 import org.apache.isis.config.util.ConfigUtil;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * @since 2.0

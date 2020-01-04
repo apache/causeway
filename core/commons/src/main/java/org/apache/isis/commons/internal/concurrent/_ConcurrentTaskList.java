@@ -37,8 +37,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @RequiredArgsConstructor(staticName = "named") 
 @Log4j2

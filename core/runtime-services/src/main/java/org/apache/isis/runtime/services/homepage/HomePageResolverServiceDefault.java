@@ -50,8 +50,8 @@ import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isisRuntimeServices.HomePageResolverServiceDefault")

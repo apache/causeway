@@ -39,8 +39,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isisRuntimeServices.MenuBarsLoaderServiceDefault")

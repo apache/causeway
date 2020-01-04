@@ -49,8 +49,8 @@ import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Log4j2
 public final class ServiceActionUtil {

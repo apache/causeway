@@ -28,8 +28,8 @@ import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Log4j2
 public abstract class AuthorizationFacetAbstract extends FacetAbstract implements AuthorizationFacet {

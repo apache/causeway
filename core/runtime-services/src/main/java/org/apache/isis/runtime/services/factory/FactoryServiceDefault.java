@@ -45,8 +45,8 @@ import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isisRuntimeServices.FactoryServiceDefault")

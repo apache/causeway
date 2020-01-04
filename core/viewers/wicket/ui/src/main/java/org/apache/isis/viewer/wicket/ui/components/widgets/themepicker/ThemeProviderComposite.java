@@ -32,8 +32,8 @@ import org.apache.isis.commons.internal.collections._Maps;
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * 

@@ -21,8 +21,8 @@ package org.apache.isis.commons.internal.ioc.cdi;
 import org.apache.isis.commons.internal.functions._Functions.CheckedRunnable;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @RequiredArgsConstructor(staticName="of") @Log4j2
 final class _CDI_Lifecycle implements AutoCloseable {

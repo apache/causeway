@@ -35,8 +35,8 @@ import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.metamodel.JdoPro
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Log4j2
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {

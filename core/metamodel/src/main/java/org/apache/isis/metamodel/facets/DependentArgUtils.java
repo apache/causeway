@@ -34,9 +34,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * 
