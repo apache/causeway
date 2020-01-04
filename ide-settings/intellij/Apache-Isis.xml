@@ -35,6 +35,11 @@
         <emptyLine />
         <package name="org.incode" withSubpackages="true" static="true" />
         <emptyLine />
+        <package name="lombok" withSubpackages="true" static="false" />
+        <package name="lombok.experimental" withSubpackages="true" static="false" />
+        <package name="lombok.extern.log4j" withSubpackages="true" static="false" />
+        <package name="lombok.extern" withSubpackages="true" static="false" />
+        <emptyLine />
         <package name="" withSubpackages="true" static="false" />
         <emptyLine />
         <package name="" withSubpackages="true" static="true" />
