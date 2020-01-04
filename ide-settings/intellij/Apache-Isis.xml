@@ -1,0 +1,44 @@
+<code_scheme name="Apache-Isis" version="173">
+  <JavaCodeStyleSettings>
+    <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
+    <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
+    <option name="PACKAGES_TO_USE_IMPORT_ON_DEMAND">
+      <value />
+    </option>
+    <option name="IMPORT_LAYOUT_TABLE">
+      <value>
+        <package name="java" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="java" withSubpackages="true" static="true" />
+        <emptyLine />
+        <package name="javax" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="javax" withSubpackages="true" static="true" />
+        <emptyLine />
+        <package name="com" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="com" withSubpackages="true" static="true" />
+        <emptyLine />
+        <package name="org" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="org" withSubpackages="true" static="true" />
+        <emptyLine />
+        <package name="org.apache.isis" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="org.apache.isis" withSubpackages="true" static="true" />
+        <emptyLine />
+        <package name="org.isisaddons" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="org.isisaddons" withSubpackages="true" static="true" />
+        <emptyLine />
+        <package name="org.incode" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="org.incode" withSubpackages="true" static="true" />
+        <emptyLine />
+        <package name="" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="" withSubpackages="true" static="true" />
+      </value>
+    </option>
+  </JavaCodeStyleSettings>
+</code_scheme>
