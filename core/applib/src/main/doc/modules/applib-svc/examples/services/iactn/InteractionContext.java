@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.iactn;
 
-import lombok.Getter;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -30,6 +28,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+
+import lombok.Getter;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Interaction}.
