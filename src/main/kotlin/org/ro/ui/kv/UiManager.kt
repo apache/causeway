@@ -10,6 +10,7 @@ import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
 import org.ro.to.TObject
+import org.ro.to.mb.Menubars
 import org.ro.ui.Point
 import org.ro.ui.RoStatusBar
 import org.w3c.dom.events.KeyboardEvent
@@ -54,8 +55,8 @@ object UiManager {
         }
     }
 
-    fun amendMenu() {
-        RoMenuBar.amendMenu()
+    fun amendMenu(menuBars: Menubars) {
+        RoMenuBar.amendMenu(menuBars)
     }
 
     fun updateStatus(entry: LogEntry) {

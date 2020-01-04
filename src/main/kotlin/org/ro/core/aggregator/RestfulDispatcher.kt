@@ -5,24 +5,21 @@ import org.ro.core.event.RoXmlHttpRequest
 import org.ro.core.model.BaseDisplayable
 import org.ro.to.Restful
 
-/**
- * Rather a Dispatcher than an aggregator ...
- */
-class RestfulAggregator() : BaseAggregator() {
+class RestfulDispatcher() : BaseAggregator() {
 
     override lateinit var dsp: BaseDisplayable
 
     override fun update(logEntry: LogEntry) {
         val restful = logEntry.getTransferObject() as Restful
         restful.links.forEach {
-            when  {
+            when {
                 it.rel.endsWith("/menuBars") -> {
-                    console.log("[RestfulAggregator.update]")
-                    console.log(it.rel)
-                    RoXmlHttpRequest().invoke(it, XmlNavigationAggregator())
+                    RoXmlHttpRequest().invoke(it, NavigationDispatcher())
                 }
-                it.rel.equals("self") ->  {}
-//FIXME                it.rel.endsWith("/services") -> {}
+                it.rel.equals("self") -> {
+                }
+                it.rel.endsWith("/services") -> {
+                }
                 else -> invoke(it)
             }
         }

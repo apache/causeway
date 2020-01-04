@@ -1,7 +1,5 @@
 package org.ro.handler
 
-import org.ro.core.aggregator.UndefinedAggregator
-
 class DefaultHandler : BaseHandler(), IResponseHandler {
 
     override fun canHandle(response: String): Boolean {
@@ -9,8 +7,8 @@ class DefaultHandler : BaseHandler(), IResponseHandler {
     }
 
     override fun doHandle() {
-        console.log("[DefaultHandler.doHandle] -> adding UndefinedAggregator")
-        logEntry.addAggregator(UndefinedAggregator())
+        console.log("[DefaultHandler.doHandle]")
+        console.log(logEntry)
         update()
     }
 

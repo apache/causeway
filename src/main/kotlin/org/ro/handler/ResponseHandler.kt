@@ -11,8 +11,7 @@ object ResponseHandler {
 
     //IMPROVE sequence of handlers should follow frequency of invocation in order to minimize the time taken by unneeded calls to 'canHandle()'
     private var _0 = RestfulHandler()
-    private var _0a = XmlMenuBarsHandler()
-    private var _1 = ResultHandler()
+    private var _1 = MenuBarsHandler()
     private var _2 = ActionHandler()
     private var _3 = ServiceHandler()
     private var _4 = ResultListHandler()
@@ -32,8 +31,7 @@ object ResponseHandler {
 
     init {
         delegate = _0
-        _0.successor = _0a
-        _0a.successor = _1
+        _0.successor = _1
         _1.successor = _2
         _2.successor = _3
         _3.successor = _4

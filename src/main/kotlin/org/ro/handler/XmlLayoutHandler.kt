@@ -3,7 +3,7 @@ package org.ro.handler
 import org.ro.core.Utils
 import org.ro.layout.Layout
 import org.ro.to.TransferObject
-import org.ro.to.XmlHelper
+import org.ro.to.bs3.XmlHelper
 import org.ro.to.bs3.Grid
 
 class XmlLayoutHandler : BaseHandler(), IResponseHandler {

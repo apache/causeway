@@ -1,9 +1,8 @@
 package org.ro.ui.kv
 
-import org.ro.ui.Menu
-import org.ro.ui.MenuEntry
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
+import org.ro.to.mb.Menubars
 import org.ro.ui.IconManager
 import org.ro.ui.Point
 import pl.treksoft.kvision.core.CssSize
@@ -68,31 +67,38 @@ object RoMenuBar : SimplePanel() {
         }
     }
 
-    //IMPROVE tr("Separator") to DD.SEPARATOR.option,
-    fun amendMenu() {
-        for (title: String in Menu.filterUniqueMenuTitles()) {
-            val dd = dropDown(
-                    title,
-                    icon = IconManager.find(title),
-                    forNavbar = false,
-                    style = ButtonStyle.LIGHT)
-            for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
-                val label = me.action.id
-                var styles = setOf("text-normal")
-                if (IconManager.isDangerous(label)) {
-                    styles = setOf("text-danger")
-                }
-                dd.ddLink(
-                        label = label,
-                        icon = IconManager.find(label),
-                        classes = styles
-                ).onClick { e ->
-                    val l = me.action.getInvokeLink()!!
-                    ActionAggregator().invoke(l)
-                }
+    fun amendMenu(menuBars: Menubars) {
+        nav.add(buildFor(menuBars.primary))
+        //TODO handle all primaries seperately
+        nav.add(buildFor(menuBars.secondary))
+        nav.add(buildFor(menuBars.tertiary))
+    }
+
+    private fun buildFor(menuEntry: org.ro.to.mb.MenuEntry): DropDown {
+        val menu = menuEntry.menu.first()
+        val title = menu.named
+        val dd = dropDown(
+                title,
+                icon = IconManager.find(title),
+                forNavbar = false,
+                style = ButtonStyle.LIGHT)
+        //TODO tr("Separator") to DD.SEPARATOR.option for second, etc.
+        menu.section.first().serviceAction.forEach {
+            val label = it.id!!
+            var styles = setOf("text-normal")
+            if (IconManager.isDangerous(label)) {
+                styles = setOf("text-danger")
             }
-            nav.add(dd)
+            dd.ddLink(
+                    label = label,
+                    icon = IconManager.find(label),
+                    classes = styles
+            ).onClick { _ ->
+                val l = it.link!!
+                ActionAggregator().invoke(l)
+            }
         }
+        return dd
     }
 
 }

@@ -88,7 +88,7 @@ class ColumnFactory {
                 formatterComponentFunction = { _, _, data ->
                     Button(text = data["object"].title as String, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
                         console.log("[ColumnFactory.buildLink]")
-                        console.log(data as? Any)
+                        console.log(data)
                     }
                 })
     }
@@ -124,7 +124,7 @@ class ColumnFactory {
                 width = "60",
                 headerSort = false,
                 formatterComponentFunction = { _, _, data ->
-                    val tObject = (data as Exposer).delegate
+                    val tObject = data.delegate
                     MenuFactory.buildDdFor(
                             tObject,
                             false,
