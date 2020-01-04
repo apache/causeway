@@ -18,19 +18,21 @@
  */
 package org.apache.isis.extensions.spring.service;
 
-import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+
+import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Borrowed from BeansEndpoint.

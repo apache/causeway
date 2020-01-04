@@ -3,8 +3,6 @@ package org.apache.isis.extensions.excel.dom.util;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.extensions.excel.dom.util.AnnotationList;
-import org.apache.isis.extensions.excel.dom.util.AnnotationTriplet;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

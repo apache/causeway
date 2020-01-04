@@ -1,7 +1,5 @@
 package org.apache.isis.extensions.base.dom.with;
 
-import org.apache.isis.extensions.base.dom.with.WithIntervalMutable;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.joda.time.LocalDate;
@@ -11,6 +9,8 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public abstract class WithIntervalMutableContractTestAbstract_changeDates<T extends WithIntervalMutable<T>> {
     @Rule

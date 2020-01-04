@@ -7,7 +7,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.value.Blob;
-
 import org.apache.isis.extensions.excel.dom.ExcelService;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;

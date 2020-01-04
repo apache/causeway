@@ -1,8 +1,5 @@
 package org.apache.isis.extensions.spring.service;
 
-import lombok.Getter;
-import lombok.ToString;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +12,9 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.StringUtils;
+
+import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @ToString

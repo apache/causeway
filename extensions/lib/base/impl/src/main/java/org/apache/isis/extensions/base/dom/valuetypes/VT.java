@@ -3,8 +3,7 @@ package org.apache.isis.extensions.base.dom.valuetypes;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import org.apache.isis.extensions.base.dom.valuetypes.AbstractInterval;
-import org.apache.isis.extensions.base.dom.valuetypes.LocalDateInterval;
+
 import org.joda.time.LocalDate;
 
 /**

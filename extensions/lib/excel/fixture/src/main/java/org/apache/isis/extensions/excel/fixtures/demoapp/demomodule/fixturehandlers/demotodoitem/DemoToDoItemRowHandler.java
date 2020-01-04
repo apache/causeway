@@ -1,8 +1,5 @@
 package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -12,13 +9,16 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.excel.dom.ExcelFixture;
 import org.apache.isis.extensions.excel.dom.ExcelFixtureRowHandler;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
 

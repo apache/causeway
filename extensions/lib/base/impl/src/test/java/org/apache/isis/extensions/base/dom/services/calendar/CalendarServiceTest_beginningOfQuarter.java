@@ -10,12 +10,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import org.apache.isis.applib.services.clock.ClockService;
-
-import org.apache.isis.extensions.base.dom.services.calendar.CalendarService;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.services.clock.ClockService;
 
 @RunWith(Parameterized.class)
 public class CalendarServiceTest_beginningOfQuarter {

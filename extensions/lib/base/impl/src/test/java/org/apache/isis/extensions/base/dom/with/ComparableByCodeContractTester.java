@@ -2,14 +2,13 @@ package org.apache.isis.extensions.base.dom.with;
 
 import java.util.List;
 
-import org.apache.isis.extensions.base.dom.with.WithCodeComparable;
-import org.apache.isis.unittestsupport.comparable.ComparableContractTester;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.unittestsupport.comparable.ComparableContractTester;
 
 public class ComparableByCodeContractTester<T extends WithCodeComparable<T>> {
     protected final Class<T> cls;

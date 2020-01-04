@@ -3,7 +3,6 @@ package org.apache.isis.extensions.base.dom.with;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
-
 import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
 

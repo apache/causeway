@@ -1,12 +1,5 @@
 package org.apache.isis.extensions.excel.integtests;
 
-import org.apache.isis.config.IsisPresets;
-import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
-import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstractWithFixtures;
-import org.apache.isis.jdo.IsisBootDataNucleus;
-import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.bypass.IsisBootSecurityBypass;
-import org.apache.isis.extensions.excel.fixtures.ExcelFixturesModule;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -14,6 +7,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.isis.config.IsisPresets;
+import org.apache.isis.extensions.excel.fixtures.ExcelFixturesModule;
+import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
+import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstractWithFixtures;
+import org.apache.isis.jdo.IsisBootDataNucleus;
+import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.security.bypass.IsisBootSecurityBypass;
 
 @SpringBootTest(
         classes = ExcelModuleIntegTestAbstract.AppManifest.class

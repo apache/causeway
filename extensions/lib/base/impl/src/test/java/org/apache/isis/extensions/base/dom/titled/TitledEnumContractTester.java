@@ -2,11 +2,10 @@ package org.apache.isis.extensions.base.dom.titled;
 
 import org.hamcrest.CoreMatchers;
 
-import org.apache.isis.applib.util.Enums;
-
-import org.apache.isis.extensions.base.dom.TitledEnum;
-
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.util.Enums;
+import org.apache.isis.extensions.base.dom.TitledEnum;
 
 public class TitledEnumContractTester {
     protected Enum<?>[] enumValues;

@@ -11,18 +11,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-
 import org.apache.isis.extensions.excel.dom.ExcelFixture;
 import org.apache.isis.extensions.excel.dom.ExcelFixtureRowHandler;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 import lombok.Setter;

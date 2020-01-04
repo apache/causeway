@@ -31,8 +31,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.runtime.context.session.AppLifecycleEvent;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isisExtSecman.SeedSecurityModuleService")

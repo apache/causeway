@@ -6,7 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,23 +24,21 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.ObjectContracts;
-
 import org.apache.isis.extensions.excel.dom.AggregationType;
 import org.apache.isis.extensions.excel.dom.ExcelMetaDataEnabled;
 import org.apache.isis.extensions.excel.dom.ExcelService;
@@ -47,6 +50,14 @@ import org.apache.isis.extensions.excel.dom.PivotValue;
 import org.apache.isis.extensions.excel.dom.RowHandler;
 import org.apache.isis.extensions.excel.dom.WorksheetContent;
 import org.apache.isis.extensions.excel.dom.WorksheetSpec;
+import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.Contributed;
+import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 class ExcelConverter {
 

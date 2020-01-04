@@ -1,17 +1,11 @@
 package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
-import javax.xml.bind.annotation.*;
 
-import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
@@ -19,6 +13,10 @@ import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,

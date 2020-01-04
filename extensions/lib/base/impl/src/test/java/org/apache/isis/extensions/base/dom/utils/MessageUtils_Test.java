@@ -3,8 +3,6 @@ package org.apache.isis.extensions.base.dom.utils;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import org.apache.isis.extensions.base.dom.utils.MessageUtils;
-
 public class MessageUtils_Test {
 
     @Test

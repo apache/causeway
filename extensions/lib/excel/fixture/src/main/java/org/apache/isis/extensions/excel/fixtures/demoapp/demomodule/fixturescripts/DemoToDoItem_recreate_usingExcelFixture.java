@@ -5,8 +5,8 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 
 public class DemoToDoItem_recreate_usingExcelFixture extends FixtureScript {
 

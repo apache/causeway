@@ -1,8 +1,5 @@
 package org.apache.isis.extensions.zip.dom.impl;
 
-import lombok.Data;
-import lombok.var;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -11,11 +8,14 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.isis.applib.FatalException;
-import org.springframework.stereotype.Service;
-
 import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
+
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.FatalException;
+
+import lombok.Data;
 
 @Service
 public class ZipService {

@@ -2,7 +2,6 @@ package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupd
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;

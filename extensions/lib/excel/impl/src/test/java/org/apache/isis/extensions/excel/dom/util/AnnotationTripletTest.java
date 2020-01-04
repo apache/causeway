@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.extensions.excel.dom.util.AnnotationTriplet;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

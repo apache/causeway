@@ -1,6 +1,5 @@
 package org.apache.isis.extensions.base.dom.with;
 
-import org.apache.isis.extensions.base.dom.with.*;
 import org.junit.Test;
 
 import org.apache.isis.extensions.base.dom.testing.PrivateConstructorTester;

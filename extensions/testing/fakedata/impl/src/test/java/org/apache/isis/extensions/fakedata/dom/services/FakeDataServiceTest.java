@@ -19,6 +19,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
@@ -27,8 +29,6 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class FakeDataServiceTest {
 

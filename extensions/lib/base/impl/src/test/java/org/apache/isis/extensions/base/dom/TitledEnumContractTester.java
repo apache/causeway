@@ -1,7 +1,5 @@
 package org.apache.isis.extensions.base.dom;
 
-import org.apache.isis.extensions.base.dom.TitledEnum;
-
 /**
  * @deprecated - use superclass
  * @param <T>

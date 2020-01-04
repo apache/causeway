@@ -6,9 +6,10 @@ import java.util.Collection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.apache.isis.extensions.base.dom.testing.PrivateConstructorTester;
 
 import static org.junit.Assert.assertEquals;
+
+import org.apache.isis.extensions.base.dom.testing.PrivateConstructorTester;
 
 
 public class StringUtilsTest {

@@ -1,6 +1,5 @@
 package org.apache.isis.extensions.base.dom.with;
 
-import org.apache.isis.extensions.base.dom.with.WithStartDate;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.unittestsupport.bidir.Instantiator;

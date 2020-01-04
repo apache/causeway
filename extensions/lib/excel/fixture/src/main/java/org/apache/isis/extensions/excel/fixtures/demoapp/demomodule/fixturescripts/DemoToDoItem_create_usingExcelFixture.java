@@ -3,19 +3,19 @@ package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescri
 import java.net.URL;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.excel.dom.ExcelFixture;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 
 import lombok.Getter;
-
-import javax.inject.Inject;
 
 public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
 

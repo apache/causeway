@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.xml.bind.annotation.*;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -23,7 +22,6 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
-
 import org.apache.isis.extensions.excel.dom.ExcelService;
 import org.apache.isis.extensions.excel.dom.WorksheetContent;
 import org.apache.isis.extensions.excel.dom.WorksheetSpec;
@@ -31,11 +29,11 @@ import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
 
+import static org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.*;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-
-import static org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.*;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,

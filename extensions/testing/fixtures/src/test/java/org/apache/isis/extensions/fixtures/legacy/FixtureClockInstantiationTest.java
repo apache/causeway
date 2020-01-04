@@ -22,11 +22,11 @@ package org.apache.isis.extensions.fixtures.legacy;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.clock.Clock;
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.clock.Clock;
 
 public class FixtureClockInstantiationTest {
 

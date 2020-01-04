@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-
 import org.apache.isis.extensions.excel.dom.AggregationType;
 import org.apache.isis.extensions.excel.dom.PivotColumn;
 import org.apache.isis.extensions.excel.dom.PivotRow;

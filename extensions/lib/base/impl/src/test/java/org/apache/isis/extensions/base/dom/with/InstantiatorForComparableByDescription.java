@@ -1,7 +1,6 @@
 package org.apache.isis.extensions.base.dom.with;
 
 
-import org.apache.isis.extensions.base.dom.with.WithDescriptionComparable;
 import org.apache.isis.unittestsupport.bidir.Instantiator;
 
 public class InstantiatorForComparableByDescription implements Instantiator {

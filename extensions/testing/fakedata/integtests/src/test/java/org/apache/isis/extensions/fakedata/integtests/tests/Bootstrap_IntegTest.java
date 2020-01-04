@@ -18,9 +18,10 @@
  */
 package org.apache.isis.extensions.fakedata.integtests.tests;
 
-import org.apache.isis.extensions.fakedata.integtests.FakeDataModuleIntegTestAbstract;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.isis.extensions.fakedata.integtests.FakeDataModuleIntegTestAbstract;
 
 @Transactional
 public class Bootstrap_IntegTest extends FakeDataModuleIntegTestAbstract {

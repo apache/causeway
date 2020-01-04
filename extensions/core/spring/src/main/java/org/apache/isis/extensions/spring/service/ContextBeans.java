@@ -1,7 +1,5 @@
 package org.apache.isis.extensions.spring.service;
 
-import lombok.Data;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -11,6 +9,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import lombok.Data;
 
 @Data
 public final class ContextBeans {

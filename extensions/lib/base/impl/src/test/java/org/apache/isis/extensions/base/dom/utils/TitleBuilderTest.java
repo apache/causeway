@@ -2,10 +2,9 @@ package org.apache.isis.extensions.base.dom.utils;
 
 import org.junit.Test;
 
-import org.apache.isis.extensions.base.dom.utils.TitleBuilder;
-import org.apache.isis.extensions.base.dom.valuetypes.LocalDateInterval;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.apache.isis.extensions.base.dom.valuetypes.LocalDateInterval;
 
 public class TitleBuilderTest {
 

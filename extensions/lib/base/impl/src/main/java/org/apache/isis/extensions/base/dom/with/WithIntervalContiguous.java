@@ -6,9 +6,13 @@ import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
 
-import org.apache.isis.applib.annotation.*;
 import org.joda.time.LocalDate;
 
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.extensions.base.dom.Chained;
 
 public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>> 

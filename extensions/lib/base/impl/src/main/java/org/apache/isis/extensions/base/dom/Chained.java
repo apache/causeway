@@ -1,11 +1,9 @@
 package org.apache.isis.extensions.base.dom;
 
 import org.apache.isis.applib.annotation.Editing;
-
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
-
 import org.apache.isis.extensions.base.dom.with.WithInterval;
 import org.apache.isis.extensions.base.dom.with.WithIntervalContiguous;
 

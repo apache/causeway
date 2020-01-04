@@ -3,7 +3,6 @@ package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescri
 import com.google.common.io.Resources;
 
 import org.apache.isis.applib.annotation.DomainObject;
-
 import org.apache.isis.extensions.excel.dom.ExcelFixture2;
 import org.apache.isis.extensions.excel.dom.WorksheetSpec;
 import org.apache.isis.extensions.excel.dom.util.Mode;

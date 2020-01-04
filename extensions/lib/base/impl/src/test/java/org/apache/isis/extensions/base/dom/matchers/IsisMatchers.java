@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.metamodel.commons.StringExtensions;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -17,6 +16,8 @@ import org.hamcrest.core.StringEndsWith;
 import org.hamcrest.core.StringStartsWith;
 
 import static org.hamcrest.CoreMatchers.nullValue;
+
+import org.apache.isis.metamodel.commons.StringExtensions;
 
 /**
  * Hamcrest {@link org.hamcrest.Matcher} implementations.

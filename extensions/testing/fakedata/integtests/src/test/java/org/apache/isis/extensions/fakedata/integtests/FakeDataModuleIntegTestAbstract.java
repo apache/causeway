@@ -1,13 +1,6 @@
 package org.apache.isis.extensions.fakedata.integtests;
 
 
-import org.apache.isis.config.IsisPresets;
-import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
-import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstractWithFixtures;
-import org.apache.isis.jdo.IsisBootDataNucleus;
-import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.bypass.IsisBootSecurityBypass;
-import org.isisaddons.module.fakedata.fixture.FakeDataFixturesModule;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -15,6 +8,15 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.isis.config.IsisPresets;
+import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
+import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstractWithFixtures;
+import org.apache.isis.jdo.IsisBootDataNucleus;
+import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.security.bypass.IsisBootSecurityBypass;
+
+import org.isisaddons.module.fakedata.fixture.FakeDataFixturesModule;
 
 @SpringBootTest(
         classes = FakeDataModuleIntegTestAbstract.AppManifest.class

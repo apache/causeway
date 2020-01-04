@@ -6,7 +6,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.SemanticsOf;
-
 import org.apache.isis.extensions.base.dom.valuetypes.LocalDateInterval;
 
 public interface WithIntervalMutable<T extends WithIntervalMutable<T>> extends WithInterval<T> {

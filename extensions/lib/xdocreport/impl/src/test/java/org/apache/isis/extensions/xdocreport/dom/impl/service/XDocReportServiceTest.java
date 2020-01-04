@@ -1,7 +1,5 @@
 package org.apache.isis.extensions.xdocreport.dom.impl.service;
 
-import fr.opensagres.xdocreport.core.io.IOUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,16 +7,19 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import org.apache.isis.extensions.xdocreport.dom.impl.OutputType;
 import org.apache.isis.extensions.xdocreport.dom.impl.XDocReportService;
 import org.apache.isis.extensions.xdocreport.dom.impl.example.models.Developer;
 import org.apache.isis.extensions.xdocreport.dom.impl.example.models.Project;
 import org.apache.isis.extensions.xdocreport.dom.impl.example.models.ProjectDevelopersModel;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+
+import fr.opensagres.xdocreport.core.io.IOUtils;
 
 public class XDocReportServiceTest {
 

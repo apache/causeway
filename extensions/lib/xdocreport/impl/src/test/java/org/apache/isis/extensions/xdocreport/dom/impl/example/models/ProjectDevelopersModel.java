@@ -1,13 +1,13 @@
 package org.apache.isis.extensions.xdocreport.dom.impl.example.models;
 
-import lombok.Data;
-
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
+
 import org.apache.isis.extensions.xdocreport.dom.impl.XDocReportModel;
 
-import com.google.common.collect.ImmutableMap;
+import lombok.Data;
 
 @Data
 public class ProjectDevelopersModel implements XDocReportModel {

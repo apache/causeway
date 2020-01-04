@@ -1,5 +1,19 @@
 package org.apache.isis.extensions.xdocreport.dom.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+
+import org.apache.poi.xwpf.converter.core.IXWPFConverter;
+import org.apache.poi.xwpf.converter.pdf.PdfConverter;
+import org.apache.poi.xwpf.converter.pdf.PdfOptions;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.Programmatic;
+
 import fr.opensagres.xdocreport.core.XDocReportException;
 import fr.opensagres.xdocreport.core.io.internal.ByteArrayOutputStream;
 import fr.opensagres.xdocreport.document.IXDocReport;
@@ -7,19 +21,6 @@ import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.poi.xwpf.converter.core.IXWPFConverter;
-import org.apache.poi.xwpf.converter.pdf.PdfConverter;
-import org.apache.poi.xwpf.converter.pdf.PdfOptions;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.springframework.stereotype.Service;
 
 @Service
 public class XDocReportService {

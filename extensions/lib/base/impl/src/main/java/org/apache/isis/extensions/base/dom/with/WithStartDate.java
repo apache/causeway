@@ -1,8 +1,9 @@
 package org.apache.isis.extensions.base.dom.with;
 
+import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
-import org.joda.time.LocalDate;
 
 public interface WithStartDate {
 

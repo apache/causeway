@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.extensions.excel.dom.ExcelService;

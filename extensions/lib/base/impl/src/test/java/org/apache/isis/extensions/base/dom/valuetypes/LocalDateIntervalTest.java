@@ -3,10 +3,15 @@ package org.apache.isis.extensions.base.dom.valuetypes;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 import org.junit.Test;
-import org.apache.isis.extensions.base.dom.valuetypes.AbstractInterval.IntervalEnding;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import org.apache.isis.extensions.base.dom.valuetypes.AbstractInterval.IntervalEnding;
 
 public class LocalDateIntervalTest {
 

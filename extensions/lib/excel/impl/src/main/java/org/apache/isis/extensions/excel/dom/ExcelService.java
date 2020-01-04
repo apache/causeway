@@ -1,7 +1,5 @@
 package org.apache.isis.extensions.excel.dom;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,23 +9,23 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.excel.dom.util.ExcelServiceImpl;
 import org.apache.isis.extensions.excel.dom.util.Mode;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisExtExcel.ExcelService")

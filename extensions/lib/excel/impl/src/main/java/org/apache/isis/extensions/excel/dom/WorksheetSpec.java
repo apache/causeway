@@ -1,13 +1,13 @@
 package org.apache.isis.extensions.excel.dom;
 
-import lombok.Setter;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.extensions.excel.dom.util.Mode;
+
+import lombok.Setter;
 
 public class WorksheetSpec {
 

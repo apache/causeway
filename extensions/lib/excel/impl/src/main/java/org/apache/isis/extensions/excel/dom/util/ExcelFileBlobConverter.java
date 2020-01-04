@@ -11,7 +11,6 @@ import com.google.common.io.Resources;
 import org.apache.poi.util.IOUtils;
 
 import org.apache.isis.applib.value.Blob;
-
 import org.apache.isis.extensions.excel.dom.ExcelService;
 
 public class ExcelFileBlobConverter {

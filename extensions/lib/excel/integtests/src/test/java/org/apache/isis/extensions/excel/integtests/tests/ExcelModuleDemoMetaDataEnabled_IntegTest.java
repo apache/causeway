@@ -8,14 +8,14 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2;
 import org.apache.isis.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import lombok.val;
 

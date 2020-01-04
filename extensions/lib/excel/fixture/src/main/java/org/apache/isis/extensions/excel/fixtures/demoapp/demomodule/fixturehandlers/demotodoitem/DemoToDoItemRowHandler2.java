@@ -2,12 +2,12 @@ package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehand
 
 import java.math.BigDecimal;
 
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.excel.dom.ExcelFixture2;
 import org.apache.isis.extensions.excel.dom.ExcelMetaDataEnabled;
 import org.apache.isis.extensions.excel.dom.FixtureAwareRowHandler;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 import lombok.Setter;

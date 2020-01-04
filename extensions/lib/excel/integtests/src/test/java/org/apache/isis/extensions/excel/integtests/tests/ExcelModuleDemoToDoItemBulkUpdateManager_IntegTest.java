@@ -13,21 +13,18 @@ import org.assertj.core.api.Assertions;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.value.Blob;
-
 import org.apache.isis.extensions.excel.dom.ExcelService;
-import org.apache.isis.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import static org.hamcrest.CoreMatchers.is;
+import org.apache.isis.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 
 public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelModuleIntegTestAbstract {
 

@@ -41,8 +41,8 @@ import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isisExtH2Console.WebModuleH2Console")

@@ -11,20 +11,19 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResultList;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
-
 import org.apache.isis.extensions.excel.dom.util.ExcelServiceImpl;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResultList;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.Setter;
