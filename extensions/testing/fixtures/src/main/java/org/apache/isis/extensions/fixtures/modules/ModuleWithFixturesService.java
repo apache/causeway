@@ -46,8 +46,8 @@ import org.apache.isis.extensions.spring.service.SpringBeansService;
 import org.apache.isis.metamodel.facets.Annotations;
 
 import lombok.Data;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisExtFixtures.ModuleService")

@@ -51,8 +51,8 @@ import org.apache.isis.runtime.session.IsisSessionFactory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Server-sent events.
