@@ -17,7 +17,10 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<bs3:grid xsi:schemaLocation="http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd http://isis.apache.org/applib/layout/grid/bootstrap3 http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="http://isis.apache.org/applib/layout/component" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<bs3:grid
+        xsi:schemaLocation="http://isis.apache.org/applib/layout/grid/bootstrap3 http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+        xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <bs3:row>
     </bs3:row>
 </bs3:grid>

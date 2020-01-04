@@ -18,7 +18,6 @@
   under the License.
 -->
 <jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                jaxb:version="2.0"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
