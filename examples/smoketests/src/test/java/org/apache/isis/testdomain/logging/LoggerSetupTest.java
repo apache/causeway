@@ -37,9 +37,7 @@ import lombok.val;
         },
         properties = {
         })
-@TestPropertySource({
-    IsisPresets.SilenceWicket
-})
+@TestPropertySource(IsisPresets.SilenceWicket)
 public class LoggerSetupTest {
 
     @Configuration
