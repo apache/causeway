@@ -52,8 +52,7 @@
 			</exclusions>
 		</dependency>
 		
-		<!-- required because resteasy-jaxrs declares as a test dependency whereas
-			httpclient4 needs it as a compile dependency -->
+		<!-- seems to be required in order for eg DemoApp to launch from within an IDE -->
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>

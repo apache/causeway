@@ -54,7 +54,7 @@
 
 	<dependencies>
 
-		<!-- compile dependencies -->
+		<!-- COMPILE DEPENDENCIES -->
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
@@ -78,6 +78,13 @@
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<!-- don't bring in Spring's backlog, we use log4j-2 instead -->
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -117,7 +124,6 @@
 		<dependency>
 			<groupId>javax.jdo</groupId>
 			<artifactId>jdo-api</artifactId>
-			<version>${jdo-api.version}</version>
 			<scope>test</scope>
 		</dependency>
 
