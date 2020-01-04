@@ -20,10 +20,10 @@ package org.apache.isis.viewer.wicket.ui.pages;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public abstract class PageAbstractTest {
 

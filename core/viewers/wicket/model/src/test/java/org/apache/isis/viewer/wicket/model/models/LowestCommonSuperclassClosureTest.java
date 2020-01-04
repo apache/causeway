@@ -24,9 +24,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.apache.isis.metamodel.commons.matchers.IsisMatchers;
-
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.metamodel.commons.matchers.IsisMatchers;
 
 public class LowestCommonSuperclassClosureTest {
 

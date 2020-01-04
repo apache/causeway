@@ -27,15 +27,15 @@ import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
 import org.apache.isis.unittestsupport.config.internal._Config;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

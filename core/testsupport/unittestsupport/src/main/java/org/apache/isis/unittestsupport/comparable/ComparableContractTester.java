@@ -22,10 +22,10 @@ import java.util.List;
 
 import org.hamcrest.Matchers;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.commons.internal.collections._Lists;
 
 public class ComparableContractTester<T extends Comparable<T>> {
 

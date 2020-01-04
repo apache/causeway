@@ -30,6 +30,11 @@ import javax.jdo.annotations.Persistent;
 
 import org.hamcrest.Matchers;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.unittestsupport.AbstractApplyToAllContractTest;
 import org.apache.isis.unittestsupport.utils.CollectUtils;
 import org.apache.isis.unittestsupport.utils.ReflectUtils;
@@ -44,10 +49,6 @@ import static org.apache.isis.unittestsupport.utils.ReflectUtils.withEntityParam
 import static org.apache.isis.unittestsupport.utils.ReflectUtils.withParametersAssignableFrom;
 import static org.apache.isis.unittestsupport.utils.ReflectUtils.withReturnTypeAssignableFrom;
 import static org.apache.isis.unittestsupport.utils.ReflectUtils.withTypeAssignableFrom;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.assertThat;
 
 public abstract class BidirectionalRelationshipContractTestAbstract extends AbstractApplyToAllContractTest implements Instantiators {
 

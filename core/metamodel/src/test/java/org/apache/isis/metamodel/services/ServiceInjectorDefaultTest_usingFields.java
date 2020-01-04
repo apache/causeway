@@ -32,14 +32,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.hamcrest.Matchers.any;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.config.IsisModuleConfig;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
-
-import static org.hamcrest.Matchers.any;
-import static org.junit.Assert.assertThat;
 
 import lombok.Getter;
 

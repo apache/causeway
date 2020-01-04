@@ -20,9 +20,9 @@ package org.apache.isis.viewer.restfulobjects.viewer.util;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
 import static org.junit.Assert.assertEquals;
+
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class UrlParserUtils_Test {
 

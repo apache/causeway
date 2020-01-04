@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.apache.isis.commons.internal._Constants;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+
+import org.apache.isis.commons.internal._Constants;
 
 public class StringsTest {
 

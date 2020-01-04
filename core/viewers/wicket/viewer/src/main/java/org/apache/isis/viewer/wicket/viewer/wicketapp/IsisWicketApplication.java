@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 import javax.inject.Inject;
 
 import org.apache.wicket.Application;
@@ -93,7 +95,6 @@ import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 
-import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import de.agilecoders.wicket.core.Bootstrap;

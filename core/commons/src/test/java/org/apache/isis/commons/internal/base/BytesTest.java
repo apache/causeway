@@ -30,9 +30,9 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import org.apache.isis.commons.internal._Constants;
-
 import static org.hamcrest.Matchers.lessThan;
+
+import org.apache.isis.commons.internal._Constants;
 
 public class BytesTest {
 

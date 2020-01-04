@@ -24,13 +24,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
 public class InteractionEventTest {
 

@@ -26,6 +26,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
@@ -60,8 +63,6 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 import lombok.val;
 

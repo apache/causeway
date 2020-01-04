@@ -24,9 +24,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import static org.hamcrest.CoreMatchers.is;
+
+import org.apache.isis.commons.internal.collections._Lists;
 
 public class ReductionTest {
 

@@ -20,11 +20,11 @@ package org.apache.isis.viewer.restfulobjects.applib.util;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
 public abstract class Parser_forJaxRsMediaType_ContractTest {
 

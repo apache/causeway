@@ -26,6 +26,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
@@ -33,8 +35,6 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.junit.Assert.assertEquals;
 
 public class ImageValueSemanticsProviderAbstractTest {
 

@@ -19,11 +19,11 @@ package org.apache.isis.applib.util;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
-import org.apache.isis.applib.util.ObjectContracts.ToStringEvaluator;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
+import org.apache.isis.applib.util.ObjectContracts.ToStringEvaluator;
 
 public class ObjectContractsTest_toString {
 

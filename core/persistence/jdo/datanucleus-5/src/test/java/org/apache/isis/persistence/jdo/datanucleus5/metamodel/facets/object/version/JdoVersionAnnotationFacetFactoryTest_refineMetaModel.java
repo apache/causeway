@@ -26,6 +26,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.all.deficiencies.DeficiencyFacet;
@@ -36,9 +39,6 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 import lombok.val;
 

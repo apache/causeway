@@ -27,11 +27,11 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodParameters;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodParameters;
 
 public class TypeExtractorMethodsParametersTest {
 

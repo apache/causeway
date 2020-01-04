@@ -20,10 +20,10 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import org.junit.Test;
 
-import org.apache.isis.metamodel.commons.StringExtensions;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.metamodel.commons.StringExtensions;
 
 public class ObjectActionMixedInTest {
 

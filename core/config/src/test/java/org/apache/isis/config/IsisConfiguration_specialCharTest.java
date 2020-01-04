@@ -21,10 +21,10 @@ package org.apache.isis.config;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 import org.apache.isis.unittestsupport.config.internal._Config;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class IsisConfiguration_specialCharTest {
 

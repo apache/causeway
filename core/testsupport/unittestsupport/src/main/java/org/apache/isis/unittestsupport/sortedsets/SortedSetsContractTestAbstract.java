@@ -23,13 +23,14 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.SortedSet;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.unittestsupport.AbstractApplyToAllContractTest;
 
 import static org.apache.isis.commons.internal.collections._Collections.toHashSet;
 import static org.apache.isis.commons.internal.reflection._Reflect.withTypeAssignableTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllContractTest {
 

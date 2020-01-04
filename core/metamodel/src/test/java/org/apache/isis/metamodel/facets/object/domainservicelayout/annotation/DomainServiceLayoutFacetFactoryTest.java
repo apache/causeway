@@ -21,6 +21,8 @@ package org.apache.isis.metamodel.facets.object.domainservicelayout.annotation;
 
 import org.junit.Assert;
 
+import static org.hamcrest.Matchers.is;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -28,8 +30,6 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
-
-import static org.hamcrest.Matchers.is;
 
 public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTest {
 

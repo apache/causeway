@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -52,8 +54,6 @@ import org.apache.isis.security.api.authentication.manager.AuthenticationManager
 import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
 import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 import org.apache.isis.unittestsupport.config.internal._Config;
-
-import static java.util.Objects.requireNonNull;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -22,11 +22,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.commons.internal.collections._Lists;
 
 public class ListUtilsTest_insert {
 

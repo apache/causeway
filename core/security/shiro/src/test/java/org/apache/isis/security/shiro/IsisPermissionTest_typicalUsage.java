@@ -27,10 +27,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.security.shiro.authorization.IsisPermission;
-
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.security.shiro.authorization.IsisPermission;
 
 public class IsisPermissionTest_typicalUsage {
 

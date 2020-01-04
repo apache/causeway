@@ -21,10 +21,10 @@ package org.apache.isis.security.shiro;
 
 import org.junit.Test;
 
-import org.apache.isis.security.shiro.authorization.IsisPermission;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.security.shiro.authorization.IsisPermission;
 
 public class IsisPermissionTest_setParts {
 

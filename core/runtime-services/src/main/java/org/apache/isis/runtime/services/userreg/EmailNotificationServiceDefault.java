@@ -24,6 +24,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static java.util.regex.Pattern.compile;
+import static java.util.regex.Pattern.quote;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -40,9 +43,6 @@ import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.commons.internal.resources._Resources;
-
-import static java.util.regex.Pattern.compile;
-import static java.util.regex.Pattern.quote;
 
 import lombok.extern.log4j.Log4j2;
 

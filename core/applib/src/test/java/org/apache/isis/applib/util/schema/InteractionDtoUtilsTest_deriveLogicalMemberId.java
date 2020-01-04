@@ -18,11 +18,11 @@ package org.apache.isis.applib.util.schema;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 public class InteractionDtoUtilsTest_deriveLogicalMemberId {
 

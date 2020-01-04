@@ -21,11 +21,11 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import org.apache.isis.commons.internal.collections._Sets;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.commons.internal.collections._Sets;
 
 public class PermissionToRoleMapperFromStringTest {
 

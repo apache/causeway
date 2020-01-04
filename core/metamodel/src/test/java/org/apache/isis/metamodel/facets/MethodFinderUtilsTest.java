@@ -26,12 +26,12 @@ import javax.annotation.PostConstruct;
 
 import org.junit.Test;
 
-import org.apache.isis.commons.internal.collections._Maps;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.commons.internal.collections._Maps;
 
 public class MethodFinderUtilsTest {
 

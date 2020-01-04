@@ -20,9 +20,9 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
-
 import static org.junit.Assert.assertSame;
+
+import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
 /**
  * contract test.

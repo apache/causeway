@@ -21,12 +21,12 @@ package org.apache.isis.applib.util.schema;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.MapDto;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v1.MapDto;
 
 public class CommandDtoUtils_Test {
 

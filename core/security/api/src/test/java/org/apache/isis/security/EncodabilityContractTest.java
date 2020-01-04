@@ -28,16 +28,16 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataInputStreamExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputStreamExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
-
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 public abstract class EncodabilityContractTest {
 

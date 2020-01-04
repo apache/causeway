@@ -22,11 +22,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
 public class LinkFollowSpecsTest_follow {
 

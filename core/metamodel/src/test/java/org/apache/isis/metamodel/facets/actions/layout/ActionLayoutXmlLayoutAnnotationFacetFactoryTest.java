@@ -24,6 +24,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -34,12 +40,6 @@ import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 

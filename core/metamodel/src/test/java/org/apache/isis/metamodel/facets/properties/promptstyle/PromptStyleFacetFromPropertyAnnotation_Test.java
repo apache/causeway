@@ -29,6 +29,9 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.config.IsisConfiguration;
@@ -37,9 +40,6 @@ import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
 import org.apache.isis.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutAnnotation;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 public class PromptStyleFacetFromPropertyAnnotation_Test {
 

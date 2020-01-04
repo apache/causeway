@@ -20,14 +20,14 @@ package org.apache.isis.metamodel;
 
 import java.util.function.Consumer;
 
+import static java.util.Objects.requireNonNull;
+
 import org.springframework.beans.factory.InjectionPoint;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.services.ServiceInjectorLegacy;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
-
-import static java.util.Objects.requireNonNull;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

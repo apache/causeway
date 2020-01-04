@@ -21,13 +21,13 @@ package org.apache.isis.metamodel.facets.propparam.specification;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.applib.spec.SpecificationAnd;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.applib.spec.SpecificationAnd;
 
 public class SpecificationAndTests {
 

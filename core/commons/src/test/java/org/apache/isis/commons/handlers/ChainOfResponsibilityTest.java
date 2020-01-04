@@ -22,10 +22,10 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.commons.handler.ChainOfResponsibility;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.apache.isis.commons.handler.ChainOfResponsibility;
 
 import lombok.val;
 

@@ -24,6 +24,11 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -37,11 +42,6 @@ import org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFac
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
-
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetFactoryJUnit4TestCase {
 

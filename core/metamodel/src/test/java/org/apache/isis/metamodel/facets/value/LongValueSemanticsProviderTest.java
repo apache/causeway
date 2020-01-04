@@ -22,6 +22,9 @@ package org.apache.isis.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
@@ -29,9 +32,6 @@ import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException
 import org.apache.isis.metamodel.facets.value.longs.LongValueSemanticsProviderAbstract;
 import org.apache.isis.metamodel.facets.value.longs.LongWrapperValueSemanticsProvider;
 import org.apache.isis.unittestsupport.config.internal._Config;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

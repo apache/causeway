@@ -20,6 +20,8 @@ package org.apache.isis.viewer.wicket.viewer.webmodule;
 
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -37,8 +39,6 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
-
-import static java.util.Objects.requireNonNull;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;

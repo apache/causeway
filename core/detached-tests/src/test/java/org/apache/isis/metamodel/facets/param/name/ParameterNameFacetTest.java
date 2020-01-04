@@ -26,6 +26,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
@@ -35,9 +38,6 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 import lombok.val;
 

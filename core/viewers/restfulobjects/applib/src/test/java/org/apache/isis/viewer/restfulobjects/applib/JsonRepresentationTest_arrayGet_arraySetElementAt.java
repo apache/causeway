@@ -23,11 +23,12 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 
 public class JsonRepresentationTest_arrayGet_arraySetElementAt {
 

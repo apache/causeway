@@ -23,13 +23,13 @@ import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.ClassUnderTest;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.ClassUnderTest;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class JUnitRuleMockery2Test_autoWiring_setterInjection_happyCase {
 

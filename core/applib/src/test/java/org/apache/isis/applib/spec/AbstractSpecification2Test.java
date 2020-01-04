@@ -21,14 +21,14 @@ package org.apache.isis.applib.spec;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.applib.spec.AbstractSpecification2.Nullability;
-import org.apache.isis.applib.spec.AbstractSpecification2.TypeChecking;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.spec.AbstractSpecification2.Nullability;
+import org.apache.isis.applib.spec.AbstractSpecification2.TypeChecking;
 
 public class AbstractSpecification2Test {
 

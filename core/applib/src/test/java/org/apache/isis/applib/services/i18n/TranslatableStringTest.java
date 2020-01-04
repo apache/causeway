@@ -23,10 +23,10 @@ import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class TranslatableStringTest {
 

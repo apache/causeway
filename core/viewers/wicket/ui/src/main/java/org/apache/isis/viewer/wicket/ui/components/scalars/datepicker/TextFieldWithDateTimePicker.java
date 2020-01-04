@@ -34,9 +34,9 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-import static de.agilecoders.wicket.jquery.JQuery.$;
-
 import de.agilecoders.wicket.core.util.Attributes;
+
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 /**
  * A text input field that is used as a date or date/time picker.

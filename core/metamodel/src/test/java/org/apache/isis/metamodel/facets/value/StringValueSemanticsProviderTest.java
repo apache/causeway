@@ -22,11 +22,11 @@ package org.apache.isis.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.value.string.StringValueSemanticsProvider;
-
-import static org.junit.Assert.assertEquals;
 
 public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

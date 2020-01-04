@@ -22,12 +22,12 @@ import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.isis.commons.internal.environment.DeploymentType;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-
-import static org.junit.Assert.assertEquals;
 
 public class PrototypeFacetAbstractTest {
 

@@ -21,18 +21,18 @@ package org.apache.isis.metamodel.facets.param.layout.annotation;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation;
 import org.apache.isis.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 

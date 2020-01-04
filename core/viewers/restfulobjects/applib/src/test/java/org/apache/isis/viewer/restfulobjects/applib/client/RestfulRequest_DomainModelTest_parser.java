@@ -20,10 +20,10 @@ package org.apache.isis.viewer.restfulobjects.applib.client;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertSame;
+
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
-
-import static org.junit.Assert.assertSame;
 
 public class RestfulRequest_DomainModelTest_parser {
 

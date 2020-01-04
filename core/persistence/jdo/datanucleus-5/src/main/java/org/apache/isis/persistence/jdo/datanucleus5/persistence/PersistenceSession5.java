@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Objects.requireNonNull;
+
 import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.FetchGroup;
@@ -92,7 +94,6 @@ import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.Persistenc
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
-import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;

@@ -21,17 +21,17 @@ package org.apache.isis.metamodel.facets.object.ident.layout;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.metamodel.facets.object.layout.LayoutFacetFactory;
 import org.apache.isis.metamodel.facets.object.layout.LayoutFacetMethod;
-
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 public class LayoutFacetFactoryTest extends AbstractFacetFactoryTest {
 

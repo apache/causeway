@@ -23,11 +23,12 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import static org.apache.isis.metamodel.specloader.specimpl.IntrospectionState.MEMBERS_BEING_INTROSPECTED;
 import static org.apache.isis.metamodel.specloader.specimpl.IntrospectionState.NOT_INTROSPECTED;
 import static org.apache.isis.metamodel.specloader.specimpl.IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class IntrospectionState_comparable_Test {
 

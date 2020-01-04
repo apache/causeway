@@ -23,6 +23,8 @@ import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -31,7 +33,6 @@ import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGe
 import org.apache.isis.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 
 import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
-import static org.junit.Assert.assertThat;
 
 import lombok.val;
 

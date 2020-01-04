@@ -21,10 +21,10 @@ package org.apache.isis.applib.services.interaction;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.services.iactn.Interaction;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.services.iactn.Interaction;
 
 public class InteractionDefaultTest_next {
 

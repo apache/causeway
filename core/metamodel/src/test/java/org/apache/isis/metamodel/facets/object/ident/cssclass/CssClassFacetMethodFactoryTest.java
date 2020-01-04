@@ -21,17 +21,17 @@ package org.apache.isis.metamodel.facets.object.ident.cssclass;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
 import org.apache.isis.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
-
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 public class CssClassFacetMethodFactoryTest extends AbstractFacetFactoryTest {
 

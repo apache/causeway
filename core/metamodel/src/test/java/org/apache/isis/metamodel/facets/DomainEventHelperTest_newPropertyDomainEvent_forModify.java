@@ -21,11 +21,11 @@ package org.apache.isis.metamodel.facets;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 
 public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
 

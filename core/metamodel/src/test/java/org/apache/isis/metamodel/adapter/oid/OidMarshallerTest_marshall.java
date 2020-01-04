@@ -21,11 +21,11 @@ package org.apache.isis.metamodel.adapter.oid;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 public class OidMarshallerTest_marshall {
 

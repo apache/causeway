@@ -20,12 +20,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.services.jaxb.JaxbService;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 
 public class BS3MenuBars_roundtrip_Test {
 

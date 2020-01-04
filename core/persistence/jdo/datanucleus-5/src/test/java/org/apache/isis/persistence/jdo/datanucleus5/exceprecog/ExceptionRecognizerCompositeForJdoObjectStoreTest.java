@@ -21,11 +21,11 @@ package org.apache.isis.persistence.jdo.datanucleus5.exceprecog;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.unittestsupport.config.internal._Config;
-
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.unittestsupport.config.internal._Config;
 
 import lombok.val;
 

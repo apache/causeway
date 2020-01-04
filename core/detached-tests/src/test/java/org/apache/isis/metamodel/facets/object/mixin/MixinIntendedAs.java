@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
+import static org.mockito.Mockito.when;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationService.Mode;
@@ -40,8 +42,6 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.title.TitleServiceDefault;
-
-import static org.mockito.Mockito.when;
 
 import lombok.val;
 

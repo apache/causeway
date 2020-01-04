@@ -22,6 +22,12 @@ import java.lang.reflect.Method;
 
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
@@ -36,12 +42,6 @@ import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromC
 import org.apache.isis.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import lombok.val;
 

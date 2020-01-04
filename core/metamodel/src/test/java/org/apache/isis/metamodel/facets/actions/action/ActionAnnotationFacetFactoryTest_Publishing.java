@@ -22,6 +22,10 @@ import java.lang.reflect.Method;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._Blackhole;
@@ -32,10 +36,6 @@ import org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActio
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration;
 import org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import lombok.val;
 

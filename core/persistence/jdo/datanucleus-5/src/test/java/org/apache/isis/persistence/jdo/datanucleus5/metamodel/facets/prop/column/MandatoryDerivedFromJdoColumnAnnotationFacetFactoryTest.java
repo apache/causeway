@@ -20,13 +20,13 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.colum
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 import lombok.val;
 

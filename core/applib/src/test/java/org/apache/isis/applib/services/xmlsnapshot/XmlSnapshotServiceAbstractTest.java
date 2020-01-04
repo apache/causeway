@@ -27,10 +27,10 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import org.apache.isis.commons.internal.resources._Resources;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.commons.internal.resources._Resources;
 
 public class XmlSnapshotServiceAbstractTest {
 

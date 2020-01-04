@@ -20,10 +20,10 @@ package org.apache.isis.metamodel.specloader.validator;
 
 import java.util.Comparator;
 
-import org.apache.isis.applib.Identifier;
-
 import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
+
+import org.apache.isis.applib.Identifier;
 
 import lombok.NonNull;
 import lombok.Value;
