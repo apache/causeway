@@ -45,7 +45,6 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
 import org.apache.isis.testdomain.rest.RestEndpointService;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
-import org.springframework.test.context.TestPropertySource;
 
 import static java.time.Duration.ofMillis;
 import static org.junit.jupiter.api.Assertions.assertEquals;

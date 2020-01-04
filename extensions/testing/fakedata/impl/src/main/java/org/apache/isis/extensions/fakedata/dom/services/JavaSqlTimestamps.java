@@ -2,6 +2,7 @@ package org.apache.isis.extensions.fakedata.dom.services;
 
 import java.sql.Timestamp;
 import java.util.Date;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public class JavaSqlTimestamps extends AbstractRandomValueGenerator {

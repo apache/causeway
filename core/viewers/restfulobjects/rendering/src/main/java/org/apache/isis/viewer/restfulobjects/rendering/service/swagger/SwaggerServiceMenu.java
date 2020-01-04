@@ -37,7 +37,6 @@ import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.RestEasyConfiguration;
 
 

@@ -18,18 +18,14 @@
  */
 package org.apache.isis.security.shiro;
 
-import javax.inject.Singleton;
-
-import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
-import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
-import org.apache.isis.webapp.IsisModuleWebapp;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.security.api.authorization.standard.Authorizor;
+import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
+import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
+import org.apache.isis.webapp.IsisModuleWebapp;
 
 /**
  * Configuration Bean to support Isis Security using Shiro.

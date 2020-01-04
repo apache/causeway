@@ -18,15 +18,16 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.springframework.stereotype.Component;
+
+import org.apache.isis.applib.annotation.Programmatic;
+
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @Named("isisMetaModel.TaggerDefault")

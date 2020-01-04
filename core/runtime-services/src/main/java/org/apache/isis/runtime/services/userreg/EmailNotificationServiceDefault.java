@@ -18,8 +18,6 @@
  */
 package org.apache.isis.runtime.services.userreg;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
@@ -30,6 +28,11 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
@@ -37,13 +40,11 @@ import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
 import static java.util.regex.Pattern.compile;
 import static java.util.regex.Pattern.quote;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * A service that sends email notifications when specific events occur

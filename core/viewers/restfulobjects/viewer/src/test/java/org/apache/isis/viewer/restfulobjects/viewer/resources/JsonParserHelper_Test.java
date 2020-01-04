@@ -23,8 +23,6 @@ import org.junit.Test;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
-import static org.junit.Assert.assertEquals;
-
 public class JsonParserHelper_Test {
 
     @Test

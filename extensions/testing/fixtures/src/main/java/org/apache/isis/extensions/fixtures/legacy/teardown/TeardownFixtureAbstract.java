@@ -27,9 +27,9 @@ import javax.jdo.metadata.InheritanceMetadata;
 import javax.jdo.metadata.TypeMetadata;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 
 @Programmatic
 public abstract class TeardownFixtureAbstract extends FixtureScript {

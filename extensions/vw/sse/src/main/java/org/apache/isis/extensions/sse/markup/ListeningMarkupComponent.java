@@ -18,18 +18,17 @@
  */
 package org.apache.isis.extensions.sse.markup;
 
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.config.viewer.wicket.WebAppContextPath;
+import javax.inject.Inject;
+
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
 import lombok.val;
-
-import javax.inject.Inject;
 
 public class ListeningMarkupComponent extends MarkupComponent {
 

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.metamodel.services.metamodel;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,12 +27,12 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
@@ -58,6 +56,8 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisMetaModel.MetaModelServiceDefault")

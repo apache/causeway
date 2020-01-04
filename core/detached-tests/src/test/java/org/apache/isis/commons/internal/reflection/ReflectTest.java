@@ -30,9 +30,12 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
+import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.metamodel.services.user.UserServiceDefault;
 
-import static org.apache.isis.commons.internal.reflection._Reflect.*;
+import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamAllMethods;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamTypeHierarchy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.object.encodeable.encoder;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;

@@ -18,10 +18,17 @@
  */
 package demoapp.webapp;
 
-import demoapp.dom.DemoModule;
-import demoapp.utils.LibraryPreloadingService;
-
 import javax.inject.Singleton;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.fixtures.IsisModuleExtFixtures;
@@ -39,10 +46,9 @@ import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleWicketViewer;
 import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.*;
+
+import demoapp.dom.DemoModule;
+import demoapp.utils.LibraryPreloadingService;
 
 /**
  * Bootstrap the application.

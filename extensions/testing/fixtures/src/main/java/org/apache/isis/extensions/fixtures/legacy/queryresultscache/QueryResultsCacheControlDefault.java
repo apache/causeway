@@ -18,21 +18,21 @@
  */
 package org.apache.isis.extensions.fixtures.legacy.queryresultscache;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
 import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
+
+import lombok.extern.log4j.Log4j2;
 
 
 /**

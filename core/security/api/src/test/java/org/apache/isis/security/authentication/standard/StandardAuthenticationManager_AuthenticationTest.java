@@ -21,9 +21,6 @@ package org.apache.isis.security.authentication.standard;
 
 import java.util.Collections;
 
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
-import org.apache.isis.security.api.authentication.standard.RandomCodeGenerator;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -38,6 +35,9 @@ import org.junit.runner.RunWith;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.api.authentication.standard.Authenticator;
+import org.apache.isis.security.api.authentication.standard.RandomCodeGenerator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

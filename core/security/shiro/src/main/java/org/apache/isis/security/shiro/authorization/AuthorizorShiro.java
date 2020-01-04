@@ -18,23 +18,23 @@
  */
 package org.apache.isis.security.shiro.authorization;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
-
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
-import org.apache.isis.security.api.authorization.standard.Authorizor;
-import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.security.api.authentication.standard.Authenticator;
+import org.apache.isis.security.api.authorization.standard.Authorizor;
+import org.apache.isis.security.shiro.context.ShiroSecurityContext;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * If Shiro is configured for both authentication and authorization (as recommended), then this class is

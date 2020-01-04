@@ -38,8 +38,8 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
-import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
+import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
 
 @Configuration
 @Import({

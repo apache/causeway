@@ -18,9 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -34,9 +31,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.runtime.session.IsisSessionFactory;
-import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Component
 @Path("/swagger")

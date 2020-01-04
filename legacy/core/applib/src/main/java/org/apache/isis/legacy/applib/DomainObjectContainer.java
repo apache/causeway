@@ -24,16 +24,21 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.google.common.base.Predicate;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.legacy.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -43,12 +48,8 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import com.google.common.base.Predicate;
+import org.apache.isis.legacy.applib.filter.Filter;
+import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 
 @Service
 @Named("isisLegacyApplib.domainObjectContainer")

@@ -25,8 +25,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import org.apache.isis.legacy.commons.internal.threadpool.ThreadPoolExecutionMode;
-import org.apache.isis.legacy.commons.internal.threadpool.ThreadPoolSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

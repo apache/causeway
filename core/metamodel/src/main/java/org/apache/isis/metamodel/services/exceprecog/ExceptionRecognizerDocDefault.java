@@ -19,24 +19,24 @@
 
 package org.apache.isis.metamodel.services.exceprecog;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisMetaModel.ExceptionRecognizerDocDefault")

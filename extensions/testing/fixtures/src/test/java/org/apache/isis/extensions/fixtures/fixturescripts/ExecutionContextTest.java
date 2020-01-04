@@ -20,8 +20,6 @@ package org.apache.isis.extensions.fixtures.fixturescripts;
 
 import java.util.Map;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

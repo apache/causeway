@@ -24,13 +24,13 @@ import java.util.regex.Pattern;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
 import lombok.val;
 

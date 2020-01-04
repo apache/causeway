@@ -24,8 +24,6 @@ import java.util.stream.Stream;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -40,6 +38,8 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
 import lombok.val;
 

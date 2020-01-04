@@ -18,16 +18,17 @@
  */
 package org.apache.isis.extensions.secman.shiro.util;
 
-import lombok.experimental.UtilityClass;
-
 import java.util.Collection;
 
-import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.realm.Realm;
+
+import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm;
+
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ShiroUtils {

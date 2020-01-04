@@ -24,16 +24,16 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.config.presets.IsisPresets;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import org.apache.isis.testdomain.Smoketest;
 import org.springframework.test.context.TestPropertySource;
+
+import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.testdomain.Smoketest;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.util.schema;
 
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.junit.Before;
 import org.junit.Test;
 

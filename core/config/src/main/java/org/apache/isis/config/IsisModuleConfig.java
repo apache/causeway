@@ -21,7 +21,6 @@ package org.apache.isis.config;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +30,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.commons.IsisModuleCommons;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 
 @Configuration
 @Import({

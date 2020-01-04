@@ -34,8 +34,6 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer.ServletContextResource;
 
-import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

@@ -18,9 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.webmodule;
 
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +27,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.RestEasyConfiguration;
@@ -38,9 +39,9 @@ import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisTransactionFil
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
+
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.

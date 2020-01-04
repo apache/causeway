@@ -22,13 +22,12 @@ import javax.inject.Inject;
 import javax.ws.rs.client.Invocation;
 import javax.xml.bind.JAXBException;
 
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.RestEasyConfiguration;
-import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.client.SuppressionType;
+import org.apache.isis.config.RestEasyConfiguration;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.extensions.restclient.RestfulClient;
 import org.apache.isis.extensions.restclient.RestfulClientConfig;

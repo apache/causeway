@@ -18,10 +18,10 @@
  */
 package org.apache.isis.metamodel;
 
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 import org.apache.isis.unittestsupport.config.internal._Config;
 

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.exceprecog;
 
-import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerCompositeForJdoObjectStore;
 import org.junit.Before;
 import org.junit.Test;
 

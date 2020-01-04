@@ -20,12 +20,13 @@ package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4;
 
 import javax.ws.rs.core.UriBuilder;
 
+import org.jboss.resteasy.specimpl.ResteasyUriBuilderImpl;
+import org.jboss.resteasy.spi.Failure;
+
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.client.UriBuilderPlugin;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisJaxrsServerPlugin;
-import org.jboss.resteasy.specimpl.ResteasyUriBuilderImpl;
-import org.jboss.resteasy.spi.Failure;
 
 public class IsisResteasy4Plugin implements UriBuilderPlugin, IsisJaxrsServerPlugin {
 

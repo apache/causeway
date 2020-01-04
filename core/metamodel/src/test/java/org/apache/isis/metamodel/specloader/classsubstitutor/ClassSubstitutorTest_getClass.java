@@ -19,10 +19,11 @@
 
 package org.apache.isis.metamodel.specloader.classsubstitutor;
 
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 
 import static org.junit.Assert.assertEquals;
 

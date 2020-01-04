@@ -18,10 +18,15 @@
  */
 package org.apache.isis.webapp.modules;
 
-import java.util.EventListener;
 import java.util.Optional;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 

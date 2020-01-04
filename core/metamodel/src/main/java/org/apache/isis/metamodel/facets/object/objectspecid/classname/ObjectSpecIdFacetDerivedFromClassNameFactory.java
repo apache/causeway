@@ -34,15 +34,14 @@ import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
-import lombok.Setter;
 import lombok.val;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactory

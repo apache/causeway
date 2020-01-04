@@ -21,7 +21,6 @@ package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;

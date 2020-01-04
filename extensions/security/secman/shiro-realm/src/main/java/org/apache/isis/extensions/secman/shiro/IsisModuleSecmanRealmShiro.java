@@ -18,9 +18,10 @@
  */
 package org.apache.isis.extensions.secman.shiro;
 
-import org.apache.isis.extensions.secman.shiro.services.SecurityRealmServiceUsingShiro;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.secman.shiro.services.SecurityRealmServiceUsingShiro;
 
 @Configuration
 @Import({

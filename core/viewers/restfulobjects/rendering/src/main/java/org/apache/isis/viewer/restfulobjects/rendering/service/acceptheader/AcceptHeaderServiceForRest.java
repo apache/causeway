@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,16 +31,19 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
+import org.apache.isis.commons.internal.base._NullSafe;
+
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRoRendering.AcceptHeaderServiceForRest")

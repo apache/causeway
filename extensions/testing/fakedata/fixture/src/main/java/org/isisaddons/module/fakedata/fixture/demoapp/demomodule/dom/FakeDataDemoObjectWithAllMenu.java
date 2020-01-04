@@ -1,7 +1,5 @@
 package org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom;
 
-import lombok.val;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,6 +13,8 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
+
+import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,

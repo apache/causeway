@@ -26,8 +26,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import javax.inject.Named;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -38,16 +38,16 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.spring.service.BeanDescriptor;
 import org.apache.isis.extensions.spring.service.ContextBeans;
 import org.apache.isis.extensions.spring.service.SpringBeansService;
 import org.apache.isis.metamodel.facets.Annotations;
 
 import lombok.Data;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
-
-import javax.inject.Named;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisExtFixtures.ModuleService")

@@ -19,14 +19,14 @@
 
 package org.apache.isis.metamodel.commons;
 
-import lombok.val;
-
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import lombok.val;
 
 public class MethodUtil {
 

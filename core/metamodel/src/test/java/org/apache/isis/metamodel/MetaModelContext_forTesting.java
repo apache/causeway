@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -36,8 +35,9 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;

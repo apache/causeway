@@ -25,7 +25,6 @@ import java.lang.reflect.InvocationTargetException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -33,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Casts;
@@ -45,8 +45,8 @@ import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntimeServices.FactoryServiceDefault")

@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.ver
 
 import javax.jdo.annotations.Version;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
@@ -32,6 +31,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
 public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {

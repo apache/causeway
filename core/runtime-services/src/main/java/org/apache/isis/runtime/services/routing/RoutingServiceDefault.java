@@ -22,13 +22,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Controller
 @Named("isisRuntimeServices.RoutingServiceDefault")

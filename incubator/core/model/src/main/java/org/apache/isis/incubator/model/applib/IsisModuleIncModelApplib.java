@@ -18,9 +18,7 @@
  */
 package org.apache.isis.incubator.model.applib;
 
-import org.apache.isis.incubator.model.metamodel.services.IncubatorMetaModelPlugin;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 public class IsisModuleIncModelApplib {

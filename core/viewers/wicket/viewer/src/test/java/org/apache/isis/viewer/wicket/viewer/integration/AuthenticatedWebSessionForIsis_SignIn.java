@@ -23,15 +23,6 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.runtime.session.IsisSessionFactory;
-import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
-import org.apache.isis.security.api.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import org.apache.wicket.request.Request;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -39,7 +30,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
+import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
+import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.api.authentication.standard.Authenticator;
+import org.apache.isis.security.api.authentication.standard.RandomCodeGeneratorDefault;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

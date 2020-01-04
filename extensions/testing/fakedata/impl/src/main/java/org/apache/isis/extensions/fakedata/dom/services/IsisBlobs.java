@@ -6,11 +6,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.value.Blob;
-
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.value.Blob;
 
 public class IsisBlobs extends AbstractRandomValueGenerator {
 

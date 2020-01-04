@@ -21,21 +21,21 @@ package org.apache.isis.security.authentication.standard;
 
 import java.util.Collections;
 
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
-import org.apache.isis.security.api.authentication.standard.NoAuthenticatorException;
-import org.apache.isis.security.api.authentication.standard.RandomCodeGeneratorDefault;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
+import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.api.authentication.standard.Authenticator;
+import org.apache.isis.security.api.authentication.standard.NoAuthenticatorException;
+import org.apache.isis.security.api.authentication.standard.RandomCodeGeneratorDefault;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)

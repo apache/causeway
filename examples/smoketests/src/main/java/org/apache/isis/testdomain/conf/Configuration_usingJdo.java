@@ -27,9 +27,9 @@ import org.springframework.context.annotation.PropertySources;
 import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.fixtures.IsisModuleExtFixtures;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
-import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
+import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
 
 @Configuration
 @Import({

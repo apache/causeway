@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.util;
 
-import org.apache.isis.viewer.restfulobjects.viewer.util.UrlParserUtils;
 import org.junit.Test;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;

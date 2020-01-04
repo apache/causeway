@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.services.classsubstitutor;
 
-import lombok.val;
-
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -28,7 +26,8 @@ import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
-import org.springframework.stereotype.Component;
+
+import lombok.val;
 
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 

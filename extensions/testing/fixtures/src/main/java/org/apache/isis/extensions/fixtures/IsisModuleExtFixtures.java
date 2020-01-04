@@ -18,13 +18,14 @@
  */
 package org.apache.isis.extensions.fixtures;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlDefault;
 import org.apache.isis.extensions.fixtures.modules.ModuleWithFixturesService;
 import org.apache.isis.extensions.spring.IsisModuleExtSpring;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

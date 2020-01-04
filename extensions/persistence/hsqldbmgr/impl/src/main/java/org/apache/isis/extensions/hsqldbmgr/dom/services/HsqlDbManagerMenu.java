@@ -20,7 +20,6 @@ package org.apache.isis.extensions.hsqldbmgr.dom.services;
 
 import javax.inject.Inject;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.hsqldb.util.DatabaseManagerSwing;
 
 import org.apache.isis.applib.IsisModuleApplib;
@@ -34,6 +33,7 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.IsisConfiguration;
 
 @DomainService(
         nature = NatureOfService.VIEW,

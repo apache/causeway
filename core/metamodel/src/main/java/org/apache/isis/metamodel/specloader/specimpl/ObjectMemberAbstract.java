@@ -26,11 +26,12 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -55,7 +56,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
 
 import lombok.val;
 

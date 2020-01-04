@@ -28,10 +28,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.RegEx;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -39,6 +37,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesBindin
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -56,7 +55,6 @@ import org.apache.isis.config.metamodel.facets.PublishPropertiesConfiguration;
 import org.apache.isis.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.config.viewer.wicket.DialogMode;
-import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
 

@@ -18,20 +18,19 @@
  */
 package demoapp.dom.error.service;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.services.error.ErrorDetails;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.applib.services.error.Ticket.StackTracePolicy;
 import org.apache.isis.runtime.services.error.EmailTicket;
 import org.apache.isis.runtime.services.error.EmailTicket.MailTo;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import lombok.val;
-
-import javax.inject.Named;
 
 @Service
 @Named("demoapp.demoErrorReportingService")

@@ -18,9 +18,8 @@
  */
 package org.apache.isis.config;
 
-import lombok.Data;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,6 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
+
+import lombok.Data;
 
 
 /**

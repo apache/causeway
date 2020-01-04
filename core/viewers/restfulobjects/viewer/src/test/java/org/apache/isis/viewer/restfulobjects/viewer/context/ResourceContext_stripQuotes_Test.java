@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.context;
 
-import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;

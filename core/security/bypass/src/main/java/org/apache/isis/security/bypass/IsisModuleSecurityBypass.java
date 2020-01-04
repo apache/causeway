@@ -18,18 +18,12 @@
  */
 package org.apache.isis.security.bypass;
 
-import javax.inject.Singleton;
-
-import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
-import org.apache.isis.security.api.IsisModuleSecurityApi;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
 import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
 import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
-import org.apache.isis.security.api.authorization.standard.Authorizor;
 
 /**
  * Auth/bypass for eg. Integration Testing

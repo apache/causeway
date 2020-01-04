@@ -18,8 +18,6 @@
  */
 package org.apache.isis.config.viewer.wicket;
 
-import java.util.Optional;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;

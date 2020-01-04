@@ -20,7 +20,6 @@ package org.apache.isis.extensions.secman.shiro;
 
 import java.util.Collection;
 
-import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
@@ -28,6 +27,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -20,13 +20,14 @@ package org.apache.isis.metamodel.facets.param.name;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory;
@@ -34,7 +35,6 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

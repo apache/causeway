@@ -18,9 +18,10 @@
  */
 package org.apache.isis.extensions.cors;
 
-import org.apache.isis.extensions.cors.webmodule.WebModuleCors;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.cors.webmodule.WebModuleCors;
 
 @Configuration
 @Import({

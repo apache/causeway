@@ -18,10 +18,11 @@
  */
 package org.apache.isis.extensions.h2console.dom;
 
-import org.apache.isis.webapp.IsisModuleWebapp;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.webapp.IsisModuleWebapp;
 
 @Configuration
 @Import({

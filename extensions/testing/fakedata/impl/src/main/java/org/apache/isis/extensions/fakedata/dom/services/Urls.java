@@ -2,6 +2,7 @@ package org.apache.isis.extensions.fakedata.dom.services;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public class Urls extends AbstractRandomValueGenerator {

@@ -32,12 +32,11 @@ import java.util.stream.Collectors;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;

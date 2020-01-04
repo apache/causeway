@@ -23,6 +23,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.links.Link;
@@ -39,7 +41,6 @@ import org.apache.isis.viewer.restfulobjects.applib.menubars.MenuBarsResource;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
-import org.springframework.stereotype.Component;
 
 @Component
 public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {

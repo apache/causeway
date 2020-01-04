@@ -24,9 +24,9 @@ import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.DependentArgUtils;
+import org.apache.isis.metamodel.facets.DependentArgUtils.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.DependentArgUtils.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 
 import lombok.val;

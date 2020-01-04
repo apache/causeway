@@ -24,9 +24,6 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
-import org.apache.isis.runtime.session.IsisSessionFactory;
-import org.apache.isis.security.api.authorization.standard.Authorizor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -48,6 +45,9 @@ import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
+import org.apache.isis.runtime.session.IsisSessionFactory;
+import org.apache.isis.security.api.authorization.standard.Authorizor;
 
 import lombok.Getter;
 import lombok.Setter;

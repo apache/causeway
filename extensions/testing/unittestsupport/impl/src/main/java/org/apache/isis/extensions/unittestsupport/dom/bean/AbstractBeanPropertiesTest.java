@@ -1,9 +1,10 @@
 package org.apache.isis.extensions.unittestsupport.dom.bean;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
+
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public abstract class AbstractBeanPropertiesTest {
 

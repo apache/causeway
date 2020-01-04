@@ -18,7 +18,11 @@
  */
 package org.apache.isis.security.shiro.webmodule;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,8 +30,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
@@ -40,12 +42,17 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**

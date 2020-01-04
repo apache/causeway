@@ -22,11 +22,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault;
-import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.Generation;
-import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
-import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;

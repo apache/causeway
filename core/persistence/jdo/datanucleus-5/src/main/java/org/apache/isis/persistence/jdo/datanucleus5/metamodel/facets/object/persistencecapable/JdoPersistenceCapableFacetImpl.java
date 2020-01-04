@@ -26,12 +26,12 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.persistence.jdo.datanucleus5.metamodel.IsisJdoMetamodelPlugin;
 
 import lombok.val;
 

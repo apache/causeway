@@ -22,8 +22,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 
 public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 

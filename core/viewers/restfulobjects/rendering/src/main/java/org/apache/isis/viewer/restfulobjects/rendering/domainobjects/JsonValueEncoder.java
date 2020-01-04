@@ -30,12 +30,12 @@ import javax.inject.Singleton;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
@@ -48,8 +48,8 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 
 /**

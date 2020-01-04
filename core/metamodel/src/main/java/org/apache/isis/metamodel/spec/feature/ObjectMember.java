@@ -21,10 +21,8 @@ package org.apache.isis.metamodel.spec.feature;
 
 import java.util.Comparator;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
 import javax.annotation.meta.When;
 
 import org.apache.isis.applib.annotation.Where;

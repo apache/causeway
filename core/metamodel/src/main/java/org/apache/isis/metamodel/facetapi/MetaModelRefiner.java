@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facetapi;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
 

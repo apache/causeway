@@ -26,7 +26,6 @@ import java.util.Set;
 
 import org.junit.Rule;
 
-import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;

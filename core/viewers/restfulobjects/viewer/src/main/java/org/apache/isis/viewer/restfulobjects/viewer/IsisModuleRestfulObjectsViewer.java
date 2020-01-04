@@ -19,15 +19,24 @@
 
 package org.apache.isis.viewer.restfulobjects.viewer;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForObjectNotFound;
 import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication;
 import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRuntimeException;
-import org.apache.isis.viewer.restfulobjects.viewer.resources.*;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.DomainServiceResourceServerside;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.DomainTypeResourceServerside;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.HomePageResourceServerside;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.ImageResourceServerside;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.MenuBarsResourceServerside;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.SwaggerSpecResource;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.UserResourceServerside;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.VersionResourceServerside;
 import org.apache.isis.webapp.IsisModuleWebapp;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * 

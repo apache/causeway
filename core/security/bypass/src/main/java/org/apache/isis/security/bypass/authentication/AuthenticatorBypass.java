@@ -19,16 +19,17 @@
 
 package org.apache.isis.security.bypass.authentication;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.standard.AuthenticatorAbstract;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementation that bypasses authentication.

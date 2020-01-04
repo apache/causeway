@@ -1,6 +1,7 @@
 package org.apache.isis.extensions.fakedata.dom.services;
 
 import java.math.BigDecimal;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public class BigDecimals extends AbstractRandomValueGenerator {

@@ -28,6 +28,8 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -40,7 +42,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.springframework.stereotype.Component;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation

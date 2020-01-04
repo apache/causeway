@@ -18,19 +18,20 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.springframework.stereotype.Component;
 
 import io.swagger.models.Swagger;
 import io.swagger.util.Json;
 import io.swagger.util.Yaml;
 import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 @Component
 @Named("isisMetaModel.SwaggerSpecGenerator")

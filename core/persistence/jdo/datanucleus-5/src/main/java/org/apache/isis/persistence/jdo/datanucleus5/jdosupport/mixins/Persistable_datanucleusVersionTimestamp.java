@@ -20,7 +20,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins;
 
 import javax.jdo.JDOHelper;
 
-import org.apache.isis.applib.mixins.MixinConstants;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Action;
@@ -31,6 +30,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.mixins.MixinConstants;
 
 @Mixin(method = "prop")
 public class Persistable_datanucleusVersionTimestamp {

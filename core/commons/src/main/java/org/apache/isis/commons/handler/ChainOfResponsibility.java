@@ -21,8 +21,6 @@ package org.apache.isis.commons.handler;
 import java.util.List;
 import java.util.Optional;
 
-import lombok.val;
-
 /**
  * Building blocks for the <em>Chain of Responsibility</em> design pattern.
  * <p>

@@ -18,10 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
-import javax.inject.Inject;
-
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 

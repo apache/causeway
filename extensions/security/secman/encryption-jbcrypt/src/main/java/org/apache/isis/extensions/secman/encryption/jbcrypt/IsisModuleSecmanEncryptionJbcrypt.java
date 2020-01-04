@@ -18,9 +18,10 @@
  */
 package org.apache.isis.extensions.secman.encryption.jbcrypt;
 
-import org.apache.isis.extensions.secman.encryption.jbcrypt.services.PasswordEncryptionServiceUsingJBcrypt;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.secman.encryption.jbcrypt.services.PasswordEncryptionServiceUsingJBcrypt;
 
 @Configuration
 @Import({

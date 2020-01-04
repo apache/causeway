@@ -29,6 +29,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.commons.internal.base._Strings;
@@ -67,7 +69,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.util.UrlParserUtils;
-import org.springframework.stereotype.Component;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation

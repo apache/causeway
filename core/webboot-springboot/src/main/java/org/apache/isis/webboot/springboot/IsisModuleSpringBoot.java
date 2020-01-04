@@ -20,8 +20,6 @@ package org.apache.isis.webboot.springboot;
 
 import javax.inject.Singleton;
 
-import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -30,6 +28,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+
+import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
 
 @Configuration
 @Import({

@@ -19,9 +19,6 @@
 
 package org.apache.isis.security.api.authentication.standard;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
@@ -30,6 +27,9 @@ import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.security.api.authentication.AuthenticationSessionAbstract;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class SimpleSession extends AuthenticationSessionAbstract {
 

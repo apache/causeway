@@ -41,13 +41,15 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Arrays;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import lombok.val;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Arrays;
+
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>

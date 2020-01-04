@@ -27,16 +27,17 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import javax.inject.Named;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
-
-import org.springframework.stereotype.Component;
 
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.ByteArrayProperty;
@@ -51,8 +52,6 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Named;
 
 @Component
 @Named("isisMetaModel.ValuePropertyFactoryDefault")

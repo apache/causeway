@@ -18,10 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.viewer.webmodule;
 
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import lombok.var;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,20 +26,22 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.webapp.modules.WebModule;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
 import static java.util.Objects.requireNonNull;
+
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule that provides the Wicket Viewer.

@@ -18,22 +18,21 @@
  */
 package org.apache.isis.viewer.wicket.viewer.services;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.Locale;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
+
+import lombok.extern.log4j.Log4j2;
 
 
 /**

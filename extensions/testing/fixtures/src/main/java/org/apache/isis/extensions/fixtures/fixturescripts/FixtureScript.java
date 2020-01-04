@@ -33,6 +33,8 @@ import javax.inject.Inject;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -51,8 +53,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.api.WithPrereqs;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import lombok.Getter;
 import lombok.Setter;

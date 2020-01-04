@@ -18,9 +18,10 @@
  */
 package org.apache.isis.extensions.asciidoc.ui;
 
-import org.apache.isis.extensions.asciidoc.applib.IsisModuleExtAsciidocApplib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.asciidoc.applib.IsisModuleExtAsciidocApplib;
 
 @Configuration
 @Import({

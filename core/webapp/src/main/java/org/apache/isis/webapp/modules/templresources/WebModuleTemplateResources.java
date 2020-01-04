@@ -18,21 +18,23 @@
  */
 package org.apache.isis.webapp.modules.templresources;
 
-import lombok.Getter;
-
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.*;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
+
+import lombok.Getter;
 
 /**
  * WebModule to provide static resources utilizing an in-memory cache.

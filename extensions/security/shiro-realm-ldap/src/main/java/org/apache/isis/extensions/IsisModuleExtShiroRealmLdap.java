@@ -18,9 +18,10 @@
  */
 package org.apache.isis.extensions;
 
-import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 
 
 @Configuration

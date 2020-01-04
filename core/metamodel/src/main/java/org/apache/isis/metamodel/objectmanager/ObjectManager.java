@@ -20,8 +20,8 @@ package org.apache.isis.metamodel.objectmanager;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;

@@ -30,9 +30,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -44,6 +42,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
@@ -62,8 +61,8 @@ import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Repository
 @Named("isisMetaModel.ApplicationFeatureRepositoryDefault")

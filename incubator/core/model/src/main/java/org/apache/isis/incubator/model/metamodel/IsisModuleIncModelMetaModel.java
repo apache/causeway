@@ -18,10 +18,11 @@
  */
 package org.apache.isis.incubator.model.metamodel;
 
-import org.apache.isis.incubator.model.applib.IsisModuleIncModelApplib;
-import org.apache.isis.incubator.model.metamodel.services.IncubatorMetaModelPlugin;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.incubator.model.applib.IsisModuleIncModelApplib;
+import org.apache.isis.incubator.model.metamodel.services.IncubatorMetaModelPlugin;
 
 @Configuration
 @Import({

@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.apache.isis.commons.internal.resources._Resources;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationContext;
@@ -40,7 +39,6 @@ import org.apache.isis.commons.internal.ioc.IocContainer;
 import org.apache.isis.commons.internal.ioc.spring.IocContainerSpring;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 

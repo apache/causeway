@@ -20,15 +20,15 @@ package org.apache.isis.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationService.Mode;
-import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
+import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
@@ -41,9 +41,9 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.title.TitleServiceDefault;
 
-import lombok.val;
+import static org.mockito.Mockito.when;
 
-import static org.mockito.Mockito.*;
+import lombok.val;
 
 abstract class MixinIntendedAs {
     

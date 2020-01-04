@@ -18,32 +18,31 @@
  */
 package org.apache.isis.extensions.h2console.dom.webmodule;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.webapp.modules.WebModule;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
-
-import java.util.List;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisExtH2Console.WebModuleH2Console")

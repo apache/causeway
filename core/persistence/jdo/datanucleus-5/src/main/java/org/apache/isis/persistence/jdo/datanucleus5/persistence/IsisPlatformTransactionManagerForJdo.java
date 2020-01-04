@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -31,6 +30,7 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionAspectSupport;

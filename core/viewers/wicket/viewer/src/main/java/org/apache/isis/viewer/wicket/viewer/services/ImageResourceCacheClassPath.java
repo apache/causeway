@@ -26,7 +26,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import javax.inject.Named;
+
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,6 +35,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.commons.ClassUtil;
@@ -44,8 +46,6 @@ import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
 import images.Images;
 import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Named;
 
 /**
  * Caches images loaded either from the same package as the specified object, or from the <tt>images</tt> package (using the {@link Images} otherwise.

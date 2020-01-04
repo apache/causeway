@@ -18,23 +18,23 @@
  */
 package org.apache.isis.extensions.fixtures;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.runtime.session.IsisSessionFactory;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisExtFixtures.FixturesLifecycleService")

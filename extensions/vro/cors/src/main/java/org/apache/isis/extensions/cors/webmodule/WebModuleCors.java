@@ -18,28 +18,24 @@
  */
 package org.apache.isis.extensions.cors.webmodule;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.ebaysf.web.cors.CORSFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.webapp.modules.WebModule;
-import org.apache.isis.webapp.modules.WebModuleContext;
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import lombok.var;
-
-import java.util.List;
 
 /**
  * WebModule providing support for CORS
@@ -50,7 +46,6 @@ import java.util.List;
 @Named("isisExtCors.WebModuleServerCors")
 @Qualifier("CORS")
 @Order(OrderPrecedence.HIGH)
-@Log4j2
 public final class WebModuleCors extends WebModuleAbstract {
 
     private final static String CORS_FILTER_NAME = "CORS Filter";

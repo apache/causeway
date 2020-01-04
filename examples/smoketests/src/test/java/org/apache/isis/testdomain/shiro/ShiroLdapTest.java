@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.shiro;
 
 import javax.inject.Inject;
 
-import org.apache.isis.config.presets.IsisPresets;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -30,14 +29,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

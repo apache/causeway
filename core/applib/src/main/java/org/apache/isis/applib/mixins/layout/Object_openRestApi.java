@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.mixins.layout;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -31,12 +33,9 @@ import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-
-import java.util.Optional;
 
 @Mixin(method="act")
 @RequiredArgsConstructor

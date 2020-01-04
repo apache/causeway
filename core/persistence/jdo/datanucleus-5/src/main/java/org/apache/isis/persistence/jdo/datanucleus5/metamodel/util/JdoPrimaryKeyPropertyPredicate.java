@@ -23,11 +23,11 @@ import java.util.function.Predicate;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
 
 /**
  * Use to locate the property annotated with {@link PrimaryKey}.

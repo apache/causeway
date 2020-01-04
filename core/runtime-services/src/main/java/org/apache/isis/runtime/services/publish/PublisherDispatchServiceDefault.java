@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtime.services.publish;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +29,11 @@ import java.util.function.Predicate;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
@@ -49,10 +52,7 @@ import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFa
 import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.

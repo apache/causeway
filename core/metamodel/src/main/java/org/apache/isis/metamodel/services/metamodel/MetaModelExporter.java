@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -55,7 +56,6 @@ import org.apache.isis.schema.metamodel.v1.Param;
 import org.apache.isis.schema.metamodel.v1.Property;
 import org.apache.isis.schema.metamodel.v1.ScalarParam;
 import org.apache.isis.schema.metamodel.v1.VectorParam;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
 
 import lombok.val;
 

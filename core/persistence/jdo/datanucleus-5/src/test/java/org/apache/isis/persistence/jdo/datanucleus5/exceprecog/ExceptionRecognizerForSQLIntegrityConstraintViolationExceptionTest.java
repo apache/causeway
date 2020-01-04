@@ -20,7 +20,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.exceprecog;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
-import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 import org.junit.Before;
 import org.junit.Test;
 

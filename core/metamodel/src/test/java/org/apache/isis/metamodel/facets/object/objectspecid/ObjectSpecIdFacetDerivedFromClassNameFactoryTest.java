@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.object.objectspecid;
 
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.datanucleus.testing.dom.CustomerAsProxiedByDataNucleus;
 import org.junit.Before;
 import org.junit.Test;

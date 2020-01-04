@@ -2,9 +2,9 @@ package org.apache.isis.testdomain.model.good;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.incubator.model.applib.annotation.Model;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.Getter;
 import lombok.Setter;

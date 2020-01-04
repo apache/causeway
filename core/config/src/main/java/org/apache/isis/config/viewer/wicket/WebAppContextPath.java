@@ -18,8 +18,6 @@
  */
 package org.apache.isis.config.viewer.wicket;
 
-import lombok.Getter;
-
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,13 +25,16 @@ import java.util.regex.Pattern;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.resources._Resources;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Resources;
+
+import lombok.Getter;
 
 /**
  * This class is {@link Serializable} so that it can be injected into Wicket components.

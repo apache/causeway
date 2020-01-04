@@ -20,11 +20,11 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.notpe
 
 import javax.jdo.annotations.NotPersistent;
 
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
+import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
 
 public class JdoNotPersistentAnnotationFacetFactory extends FacetFactoryAbstract {

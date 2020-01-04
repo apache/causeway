@@ -24,16 +24,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
-import org.apache.isis.commons.internal.memento._Mementos;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceUsingBaseEncodingAbstract;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 

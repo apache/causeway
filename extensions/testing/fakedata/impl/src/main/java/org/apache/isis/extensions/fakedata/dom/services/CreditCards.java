@@ -1,6 +1,7 @@
 package org.apache.isis.extensions.fakedata.dom.services;
 
 import com.github.javafaker.service.FakeValuesService;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public class CreditCards extends AbstractRandomValueGenerator {

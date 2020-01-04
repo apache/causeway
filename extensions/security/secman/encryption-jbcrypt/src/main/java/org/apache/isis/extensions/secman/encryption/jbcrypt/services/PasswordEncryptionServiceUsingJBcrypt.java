@@ -18,17 +18,17 @@
  */
 package org.apache.isis.extensions.secman.encryption.jbcrypt.services;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisExtSecman.PasswordEncryptionServiceUsingJBcrypt")

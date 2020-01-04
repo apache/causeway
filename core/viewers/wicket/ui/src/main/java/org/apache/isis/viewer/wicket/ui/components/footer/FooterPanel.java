@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.ComponentTag;
@@ -35,7 +33,9 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration.Viewer.Wicket.Credit;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;

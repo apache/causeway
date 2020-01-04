@@ -18,22 +18,22 @@
  */
 package org.apache.isis.runtime.services.xmlsnapshot;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * This service allows an XML document to be generated capturing the data of a root entity and specified related

@@ -21,17 +21,16 @@ package org.apache.isis.testdomain.rest;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 
-import org.apache.isis.config.presets.IsisPresets;
-import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleRestfulObjectsJaxrsResteasy4;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
-import org.springframework.test.context.TestPropertySource;
+import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleRestfulObjectsJaxrsResteasy4;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

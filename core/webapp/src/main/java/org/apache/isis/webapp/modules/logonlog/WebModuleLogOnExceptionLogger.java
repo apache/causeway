@@ -18,9 +18,6 @@
  */
 package org.apache.isis.webapp.modules.logonlog;
 
-import lombok.Getter;
-import lombok.var;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,16 +26,16 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.webapp.diagnostics.IsisLogOnExceptionFilter;
-import org.apache.isis.webapp.modules.WebModule;
-import org.apache.isis.webapp.modules.WebModuleContext;
+import org.apache.isis.webapp.modules.WebModuleAbstract;
+
+import lombok.Getter;
 
 /**
  * WebModule to log log-on exceptions.

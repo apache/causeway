@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.facets.object.encodeable;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
