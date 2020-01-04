@@ -20,8 +20,6 @@
 
 package org.apache.isis.metamodel.examples.facets.jsr303;
 
-import static org.apache.isis.metamodel.commons.matchers.NofMatchers.anInstanceOf;
-
 import java.lang.reflect.Method;
 
 import org.jmock.Expectations;
@@ -33,10 +31,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
 import org.apache.isis.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.MethodRemover;
+
+import static org.apache.isis.metamodel.commons.matchers.NofMatchers.anInstanceOf;
 
 @RunWith(JMock.class)
 public class Jsr303FacetFactoryProcessProperty {

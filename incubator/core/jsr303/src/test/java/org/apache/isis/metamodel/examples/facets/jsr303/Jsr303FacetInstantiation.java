@@ -23,6 +23,7 @@ package org.apache.isis.metamodel.examples.facets.jsr303;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
 import org.apache.isis.metamodel.facets.FacetHolderImpl;
 

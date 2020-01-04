@@ -21,6 +21,7 @@
 package org.apache.isis.metamodel.examples.facets.jsr303;
 
 import org.junit.Test;
+
 import org.apache.isis.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
 
 
