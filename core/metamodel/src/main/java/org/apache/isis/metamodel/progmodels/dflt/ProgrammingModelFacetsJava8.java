@@ -114,7 +114,6 @@ import org.apache.isis.metamodel.facets.value.bytes.ByteWrapperValueFacetUsingSe
 import org.apache.isis.metamodel.facets.value.chars.CharPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.chars.CharWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.clobs.ClobValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.metamodel.facets.value.color.ColorValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.datejdk8local.Jdk8LocalDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.datejodalocal.JodaLocalDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.datesql.JavaSqlDateValueFacetUsingSemanticsProviderFactory;
@@ -134,9 +133,7 @@ import org.apache.isis.metamodel.facets.value.integer.IntWrapperValueFacetUsingS
 import org.apache.isis.metamodel.facets.value.localrespath.LocalResourcePathValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.longs.LongPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.longs.LongWrapperValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.metamodel.facets.value.money.MoneyValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.password.PasswordValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.metamodel.facets.value.percentage.PercentageValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.shortint.ShortPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.shortint.ShortWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.metamodel.facets.value.string.StringValueFacetUsingSemanticsProviderFactory;
@@ -319,10 +316,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // applib values
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BlobValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ClobValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ColorValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, MoneyValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, PasswordValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, PercentageValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ImageValueFacetUsingSemanticsProviderFactory.class);
 
         // jodatime values

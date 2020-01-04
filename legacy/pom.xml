@@ -86,6 +86,7 @@
 	<modules>
 		<module>core/applib</module>
 		<module>core/commons</module>
+		<module>core/metamodel</module>
 		<module>core/runtime</module>
 		<module>vro/restclient</module>
 	</modules>

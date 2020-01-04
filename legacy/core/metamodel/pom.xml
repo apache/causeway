@@ -21,15 +21,15 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-legacy-runtime</artifactId>
-    <name>Apache Isis Legacy - Runtime</name>
+    <artifactId>isis-legacy-metamodel</artifactId>
+    <name>Apache Isis Legacy - Metamodel</name>
     <description>
         To ease migration from Apache Isis versions 1.16+ to 2.0.0.
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.legacy.runtime</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/legacy/runtime</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.legacy.metamodel</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/legacy/metamodel</git-plugin.propertiesDir>
     </properties>
 
 	<dependencies>
@@ -71,24 +71,19 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-viewer-wicket-ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-runtime</artifactId>
+			<artifactId>isis-metamodel</artifactId>
 			<scope>compile</scope>
 		</dependency>
 
 
 		<!-- TEST DEPENDENCY -->
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-metamodel</artifactId>
+			<scope>test</scope>
+			<type>test-jar</type>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

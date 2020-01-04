@@ -19,18 +19,16 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.ServiceLoader;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -58,10 +56,7 @@ import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPane
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisClobPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisColorPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisMoneyPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisPasswordPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisPercentagePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8OffsetDateTimePanelFactory;
@@ -107,7 +102,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.Enti
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
     
     @Override
@@ -230,9 +224,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new JavaSqlDatePanelFactory());
         componentFactories.add(new JavaSqlTimePanelFactory());
 
-        componentFactories.add(new IsisMoneyPanelFactory());
-        componentFactories.add(new IsisColorPanelFactory());
-        componentFactories.add(new IsisPercentagePanelFactory());
         componentFactories.add(new IsisPasswordPanelFactory());
 
         componentFactories.add(new IsisBlobPanelFactory());
