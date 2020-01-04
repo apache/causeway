@@ -424,7 +424,7 @@ public interface ManagedObject {
         }
     
         public static Object invoke(Method method, ManagedObject adapter, Can<ManagedObject> args) {
-            return invoke(method, adapter, args.toList().toArray(new ManagedObject[]{}));
+            return invoke(method, adapter, args.toArray(ManagedObject.class));
         }
 
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject arg0Adapter) {

@@ -482,7 +482,7 @@ public interface Can<T> extends Iterable<T> {
     // -- CONVERSIONS
     
     /**
-     * @return an serializable and immutable List, containing the elements of this Can
+     * @return a serializable and immutable List, containing the elements of this Can
      */
     List<T> toList();
 
@@ -497,5 +497,22 @@ public interface Can<T> extends Iterable<T> {
      * @return a collection, containing the elements of this Can
      */
     <C extends Collection<T>> C toCollection(Supplier<C> collectionFactory);
+
+    /**
+     * @param a the array into which the elements of this Can are to
+     *          be stored, if it is big enough; otherwise, a new array of the
+     *          same runtime type is allocated for this purpose.
+     * @return a non-null array, containing the elements of this Can
+     */
+    default T[] toArray(T[] a) {
+        return toList().toArray(a);
+    }
+    
+    /**
+     * @param elementType the {@code Class} object representing the component
+     *          type of the new array
+     * @return a non-null array, containing the elements of this Can
+     */
+    T[] toArray(Class<T> elementType);
     
 }

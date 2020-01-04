@@ -21,28 +21,25 @@ package org.apache.isis.persistence.jdo.datanucleus5;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.metamodel.IsisModuleMetamodel;
-import org.apache.isis.persistence.jdo.applib.IsisModuleJdoApplib;
-import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerCompositeForJdoObjectStore;
-import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionLong;
-import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionTimestamp;
-import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_downloadJdoMetadata;
-import org.apache.isis.runtime.IsisModuleRuntime;
-import org.apache.isis.schema.IsisModuleSchema;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.persistence.jdo.applib.IsisModuleJdoApplib;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.JdoPersistenceLifecycleService;
+import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerCompositeForJdoObjectStore;
 import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusIdLong;
+import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionLong;
+import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionTimestamp;
+import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_downloadJdoMetadata;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingModelPlugin;
 import org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory5;
+import org.apache.isis.runtime.IsisModuleRuntime;
 
 @Configuration
 @Import({

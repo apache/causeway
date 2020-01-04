@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.collections;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -25,6 +26,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -130,6 +133,12 @@ final class Can_Singleton<T> implements Can<T> {
         return collection;
     }
     
-
+    @Override
+    public T[] toArray(@NonNull Class<T> elementType) {
+        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 1));
+        array[0] = element;
+        return array;
+    }
+    
     
 }

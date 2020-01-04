@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.collections;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -26,10 +27,13 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.base._Casts;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
 
 @Value @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class Can_Empty<T> implements Can<T> {
@@ -119,6 +123,11 @@ final class Can_Empty<T> implements Can<T> {
     public <C extends Collection<T>> C toCollection(@NonNull Supplier<C> collectionFactory) {
         return collectionFactory.get();
     }
-
+    
+    @Override
+    public T[] toArray(@NonNull Class<T> elementType) {
+        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));        
+        return array;
+    }
 
 }
