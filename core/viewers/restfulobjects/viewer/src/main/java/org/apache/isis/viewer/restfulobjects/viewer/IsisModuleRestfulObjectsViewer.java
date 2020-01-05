@@ -47,7 +47,7 @@ import org.apache.isis.webapp.IsisModuleWebapp;
         // modules
         IsisModuleWebapp.class,
         IsisModuleRestfulObjectsRendering.class,
-
+        
         // @Component's
         HomePageResourceServerside.class,
         DomainTypeResourceServerside.class,

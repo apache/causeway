@@ -13,6 +13,7 @@ import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsView
         IsisModuleRestfulObjectsViewer.class,
 
         // @Service's
+        IsisJaxrsUtilityServiceResteasy4.class,
         WebModuleJaxrsResteasy4.class,
 
         // @Component's

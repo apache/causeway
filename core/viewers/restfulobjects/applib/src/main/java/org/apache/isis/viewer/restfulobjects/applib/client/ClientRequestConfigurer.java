@@ -28,6 +28,8 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 
+import lombok.val;
+
 /**
  * Configures the body, query string etc of a {@link ClientRequest}.
  *
@@ -42,10 +44,10 @@ public class ClientRequestConfigurer {
 
     public static ClientRequestConfigurer create(
             final ClientExecutor executor,
-            final String uriTemplate)
-    {
-        final UriBuilder uriBuilder = UriBuilderPlugin.get().uriTemplate(uriTemplate);
-        final ClientRequest clientRequest = executor.createRequest(uriBuilder);
+            final String uriTemplate) {
+        
+        val uriBuilder = UriBuilder.fromUri(uriTemplate);
+        val clientRequest = executor.createRequest(uriBuilder);
         return new ClientRequestConfigurer(clientRequest, uriBuilder);
     }
 

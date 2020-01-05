@@ -36,6 +36,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.viewer.IsisJaxrsUtilityService;
 
 /**
  * contract test.
@@ -54,6 +55,12 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
     public void setUp() throws Exception {
         exceptionMapper = new ExceptionMapperForRestfulObjectsApplication();
         exceptionMapper.httpHeaders = mockHttpHeaders;
+        exceptionMapper.isisJaxrsUtilityService = new IsisJaxrsUtilityService() {
+            @Override
+            public HttpStatusCode getFailureStatusCodeIfAny(Throwable ex) {
+                return null;
+            }
+        };
     }
 
     @Test

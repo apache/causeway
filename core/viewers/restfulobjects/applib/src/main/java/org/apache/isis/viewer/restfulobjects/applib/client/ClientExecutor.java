@@ -39,6 +39,7 @@ public interface ClientExecutor {
     WebTarget webTarget(URI baseUri);
 
     static ClientExecutor of(final Client client) {
+        
         return new ClientExecutor() {
 
             @Override
@@ -55,7 +56,7 @@ public interface ClientExecutor {
 
                     // TODO [andi-huber] just a wild guess
                     private String method = "get";
-
+                    
                     @Override
                     public String getHttpMethod() {
                         return method;

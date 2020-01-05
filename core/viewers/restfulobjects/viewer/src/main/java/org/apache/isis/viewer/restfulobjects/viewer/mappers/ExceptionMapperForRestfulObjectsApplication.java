@@ -18,22 +18,30 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.viewer.IsisJaxrsUtilityService;
+
+import lombok.AccessLevel;
+import lombok.Getter;
 
 @Component
 @Provider
 public class ExceptionMapperForRestfulObjectsApplication extends ExceptionMapperAbstract<RestfulObjectsApplicationException> {
 
+    @Inject @Getter(onMethod = @__(@Override), value = AccessLevel.PROTECTED)
+    IsisJaxrsUtilityService isisJaxrsUtilityService;
+    
     @Override
     public Response toResponse(final RestfulObjectsApplicationException ex) {
-        final JsonRepresentation body = ex.getBody();
-        final String bodyStr = body != null ? body.toString() : null;
+        //XXX code not used, so commented out
+        //final JsonRepresentation body = ex.getBody();
+        //final String bodyStr = body != null ? body.toString() : null;
         return buildResponse(ex);
     }
 

@@ -16,28 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.applib.client;
+package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4;
 
-import javax.ws.rs.core.UriBuilder;
+import org.jboss.resteasy.spi.Failure;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.context._Plugin;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.viewer.IsisJaxrsUtilityService;
 
-public interface UriBuilderPlugin {
+/**
+ * @since 2.0
+ */
+@Service
+public class IsisJaxrsUtilityServiceResteasy4 implements IsisJaxrsUtilityService {
 
-    // -- INTERFACE
+    @Override
+    public HttpStatusCode getFailureStatusCodeIfAny(Throwable ex) {
 
-    public UriBuilder uriTemplate(String uriTemplate);
-
-    // -- LOOKUP
-
-    public static UriBuilderPlugin get() {
-        return _Plugin.getOrElse(UriBuilderPlugin.class,
-                ambiguousPlugins->{
-                    throw _Plugin.ambiguityNonRecoverable(UriBuilderPlugin.class, ambiguousPlugins);
-                },
-                ()->{
-                    throw _Plugin.absenceNonRecoverable(UriBuilderPlugin.class);
-                });
+        return (ex instanceof Failure)
+                ? RestfulResponse.HttpStatusCode.statusFor(((Failure)ex).getErrorCode())
+                        : null;
     }
 
 }

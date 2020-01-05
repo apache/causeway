@@ -43,6 +43,7 @@ import org.apache.isis.extensions.sse.IsisModuleExtSse;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
+import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleWicketViewer;
 import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
@@ -91,7 +92,10 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleJdoDataNucleus5.class,
         IsisModuleWicketViewer.class,
         IsisModuleExtSse.class, // server sent events
+        
+        // REST
         IsisModuleRestfulObjectsViewer.class,
+        IsisModuleRestfulObjectsJaxrsResteasy4.class,
 
         // Security Manager Extension (secman)
         IsisModuleSecmanModel.class,
