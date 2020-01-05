@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.actions.action;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
 import org.apache.isis.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -63,91 +64,97 @@ implements MetaModelRefiner {
             return;
         }
 
-        programmingModel.addValidator(
+        val vistingValidator = new MetaModelValidatorVisiting.Visitor() {
+            
+            @Override
+            public boolean visit(
+                    final ObjectSpecification objectSpec,
+                    final MetaModelValidator validator) {
                 
-                new MetaModelValidatorVisiting.Visitor() {
-                    @Override
-                    public boolean visit(
-                            final ObjectSpecification objectSpec,
-                            final MetaModelValidator validator) {
-                        validate(objectSpec, validator);
-                        return true;
+                validate(objectSpec, validator);
+                return true;
+            }
+
+            private void validate(
+                    final ObjectSpecification objectSpec,
+                    final MetaModelValidator validator) {
+                
+                objectSpec.streamObjectActions(Contributed.INCLUDED)
+                .forEach(objectAction->{
+                    if(objectAction instanceof ObjectActionMixedIn 
+                            || objectAction instanceof ObjectActionContributee) {
+                        // we'll report only the mixin or contributor
+                        return;
                     }
 
-                    private void validate(
-                            final ObjectSpecification objectSpec,
-                            final MetaModelValidator validator) {
-                        objectSpec.streamObjectActions(Contributed.INCLUDED)
-                        .forEach(objectAction->{
-                            if(objectAction instanceof ObjectActionMixedIn || objectAction instanceof ObjectActionContributee) {
-                                // we'll report only the mixin or contributor
-                                return;
-                            }
-
-                            int paramNum = 0;
-                            for (ObjectActionParameter parameter : objectAction.getParameters()) {
-                                if(parameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
-                                    validate(objectSpec, objectAction, parameter, paramNum, validator);
-                                }
-                                paramNum++;
-                            }
-                        });
+                    int paramNum = 0;
+                    for (ObjectActionParameter parameter : objectAction.getParameters()) {
+                        if(parameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
+                            validateActionParameter_whenCollection(
+                                    objectSpec, objectAction, parameter, paramNum, validator);
+                        }
+                        paramNum++;
                     }
+                });
+            }
 
-                    private void validate(
-                            final ObjectSpecification objectSpec,
-                            final ObjectAction objectAction,
-                            final ObjectActionParameter parameter,
-                            final int paramNum,
-                            final MetaModelValidator validator) {
+            private void validateActionParameter_whenCollection(
+                    final ObjectSpecification objectSpec,
+                    final ObjectAction objectAction,
+                    final ObjectActionParameter parameter,
+                    final int paramNum,
+                    final MetaModelValidator validator) {
 
 
-                        final CollectionSemanticsFacet collectionSemantics =
-                                parameter.getFacet(CollectionSemanticsFacet.class);
-                        if (collectionSemantics != null) {
-                            // Violation if there are action parameter types that are assignable
-                            // from java.util.Collection but are not of
-                            // exact type List, Set, SortedSet or Collection.
-                            if(!collectionSemantics.value().isSupportedInterfaceForActionParameters()) {
-                                validator.onFailure(
-                                        objectSpec,
-                                        objectSpec.getIdentifier(),
-                                        "Collection action parameter found that is not exactly one "
-                                                + "of the following supported types: "
-                                                + "List, Set, SortedSet, Collection or Array.  "
-                                                + "Class: %s action: %s parameter %d",
-                                        objectSpec.getFullIdentifier(), 
-                                        objectAction.getName(), 
-                                        paramNum);
-                                return;
-                            }
-                        }
-
-                        final ActionParameterChoicesFacet choicesFacet =
-                                parameter.getFacet(ActionParameterChoicesFacet.class);
-                        final ActionParameterAutoCompleteFacet autoCompleteFacet =
-                                parameter.getFacet(ActionParameterAutoCompleteFacet.class);
-                        if (choicesFacet != null || autoCompleteFacet != null) {
-                            return;
-                        }
-
-                        final ObjectSpecification parameterType = parameter.getSpecification();
-                        if(parameterType.containsNonFallbackFacet(AutoCompleteFacet.class)) {
-                            return;
-                        }
-
+                val collectionSemanticsFacet = parameter.getFacet(CollectionSemanticsFacet.class);
+                if (collectionSemanticsFacet != null) {
+                    // Violation if there are action parameter types that are assignable
+                    // from java.util.Collection but are not of
+                    // exact type List, Set, SortedSet or Collection.
+                    if(!collectionSemanticsFacet.value().isSupportedInterfaceForActionParameters()) {
                         validator.onFailure(
                                 objectSpec,
                                 objectSpec.getIdentifier(),
-                                "Collection action parameter found without supporting "
-                                        + "choices or autoComplete facet.  "
+                                "Collection action parameter found that is not exactly one "
+                                        + "of the following supported types: "
+                                        + "List, Set, SortedSet, Collection or Array.  "
                                         + "Class: %s action: %s parameter %d",
+                                        objectSpec.getFullIdentifier(), 
+                                        objectAction.getName(), 
+                                        paramNum);
+                        return;
+                    }
+                }
+
+                val actionParameterChoicesFacet = parameter.getFacet(ActionParameterChoicesFacet.class);
+                val actionParameterAutoCompleteFacet = parameter.getFacet(ActionParameterAutoCompleteFacet.class);
+                if (actionParameterChoicesFacet != null || actionParameterAutoCompleteFacet != null) {
+                    return;
+                }
+
+                val parameterSpec = parameter.getSpecification();
+                if(parameterSpec.containsNonFallbackFacet(AutoCompleteFacet.class)) {
+                    return;
+                }
+                
+                if(paramNum==0 && objectAction.containsNonFallbackFacet(AssociatedWithFacet.class)) {
+                    return; 
+                }
+
+                validator.onFailure(
+                        objectSpec,
+                        objectSpec.getIdentifier(),
+                        "Collection action parameter found without supporting "
+                                + "choices or autoComplete facet.  "
+                                + "Class: %s action: %s parameter %d",
                                 objectSpec.getFullIdentifier(), 
                                 objectAction.getName(), 
                                 paramNum);
-                    }
-                });
-        
+            }
+        };
+
+        programmingModel.addValidator(vistingValidator);
+
     }
 
 }
