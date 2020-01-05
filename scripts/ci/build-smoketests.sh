@@ -27,7 +27,7 @@ sh $SCRIPT_DIR/_print-environment.sh "build-smoketests"
 #
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/core-parent
-  mvn versions:set -DnewVersion=$REVISION -Ddemo-smoketests
+  mvn versions:set -DnewVersion=$REVISION -Dsmoketests-module
   cd $PROJECT_ROOT_PATH
 fi
 
@@ -50,6 +50,6 @@ done
 #
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/core-parent
-  mvn versions:revert -Dstarter-smoketests
+  mvn versions:revert -Dsmoketests-module
   cd $PROJECT_ROOT_PATH
 fi

@@ -1,5 +1,6 @@
 isis:
   reflector:
+
     validator:
       allowDeprecated: false
       noParamsOnly: true
@@ -24,6 +25,10 @@ isis:
 
     explicitAnnotations:
       action: true
+
+    introspector:
+      lock-after-full-introspection: false
+      validate-incrementally: false
 
   objects:
     editing: false
