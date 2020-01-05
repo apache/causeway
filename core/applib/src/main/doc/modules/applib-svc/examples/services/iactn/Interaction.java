@@ -27,10 +27,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -40,7 +37,6 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -53,6 +49,8 @@ import org.apache.isis.schema.ixn.v1.MetricsDto;
 import org.apache.isis.schema.ixn.v1.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
+
+import lombok.val;
 
 /**
  * Represents an action invocation or property modification, resulting in some state change of the system.  It captures
@@ -79,7 +77,6 @@ import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarA
  * </p>
  *
  */
-@Value
 public class Interaction implements HasUniqueId {
 
     // -- transactionId (property)
@@ -135,11 +132,13 @@ public class Interaction implements HasUniqueId {
     @Programmatic
     public Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
-            final ActionInvocation actionInvocation) {
+            final ActionInvocation actionInvocation,
+            final ClockService clockService,
+            final MetricsService metricsService) {
 
         push(actionInvocation);
 
-        return executeInternal(memberExecutor, actionInvocation);
+        return executeInternal(memberExecutor, actionInvocation, clockService, metricsService);
     }
 
     /**
@@ -153,16 +152,20 @@ public class Interaction implements HasUniqueId {
     @Programmatic
     public Object execute(
             final MemberExecutor<PropertyEdit> memberExecutor,
-            final PropertyEdit propertyEdit) {
+            final PropertyEdit propertyEdit,
+            final ClockService clockService,
+            final MetricsService metricsService) {
 
         push(propertyEdit);
 
-        return executeInternal(memberExecutor, propertyEdit);
+        return executeInternal(memberExecutor, propertyEdit, clockService, metricsService);
     }
 
     private <T extends Execution<?,?>> Object executeInternal(
             final MemberExecutor<T> memberExecutor,
-            final T execution) {
+            final T execution,
+            final ClockService clockService,
+            final MetricsService metricsService) {
 
         // as a convenience, since in all cases we want the command to start when the first 
         // interaction executes, we populate the command here.
@@ -190,7 +193,7 @@ public class Interaction implements HasUniqueId {
             }
         } finally {
             final Timestamp completedAt = clockService.nowAsJavaSqlTimestamp();
-            pop(completedAt);
+            pop(completedAt, metricsService);
         }
     }
 
@@ -238,12 +241,14 @@ public class Interaction implements HasUniqueId {
      * </p>
      */
     @Programmatic
-    private Execution<?,?> pop(final Timestamp completedAt) {
+    private Execution<?,?> pop(
+            final Timestamp completedAt,
+            final MetricsService metricsService) {
         if(currentExecution == null) {
             throw new IllegalStateException("No current execution to pop");
         }
         final Execution<?,?> popped = currentExecution;
-        popped.setCompletedAt(completedAt);
+        popped.setCompletedAt(completedAt, metricsService);
 
         moveCurrentTo(currentExecution.getParent());
         return popped;
@@ -301,7 +306,7 @@ public class Interaction implements HasUniqueId {
          */
         PUBLISHED_EVENT,
         /**
-         * There may be multiple transactions within a given interaction, as per {@link Transaction#getSequence()}.
+         * There may be multiple transactions within a given interaction.
          */
         TRANSACTION,
         ;
@@ -483,8 +488,12 @@ public class Interaction implements HasUniqueId {
         }
 
         @Programmatic
-        public void setStartedAt(final Timestamp startedAt) {
-            syncMetrics(When.BEFORE, startedAt);
+        public Timestamp start(
+                final ClockService clockService,
+                final MetricsService metricsService) {
+            val startedAt = clockService.nowAsJavaSqlTimestamp();
+            syncMetrics(When.BEFORE, startedAt, metricsService);
+            return startedAt;
         }
 
 
@@ -499,8 +508,10 @@ public class Interaction implements HasUniqueId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        void setCompletedAt(final Timestamp completedAt) {
-            syncMetrics(When.AFTER, completedAt);
+        void setCompletedAt(
+                final Timestamp completedAt,
+                final MetricsService metricsService) {
+            syncMetrics(When.AFTER, completedAt, metricsService);
         }
 
 
@@ -651,8 +662,10 @@ public class Interaction implements HasUniqueId {
                     final int numberObjectsLoaded,
                     final int numberObjectsDirtied);
         }
-        private void syncMetrics(final When when, final Timestamp timestamp) {
-            final MetricsService metricsService = interaction.metricsService;
+        private void syncMetrics(
+                final When when,
+                final Timestamp timestamp,
+                final MetricsService metricsService) {
 
             final int numberObjectsLoaded = metricsService.numberObjectsLoaded();
             final int numberObjectsDirtied = metricsService.numberObjectsDirtied();
@@ -705,8 +718,5 @@ public class Interaction implements HasUniqueId {
             return newValue;
         }
     }
-
-    @Inject MetricsService metricsService;
-    @Inject ClockService clockService;
 
 }
