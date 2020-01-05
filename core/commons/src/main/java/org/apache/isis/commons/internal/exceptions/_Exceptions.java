@@ -62,17 +62,16 @@ public final class _Exceptions {
     /**
      * Most likely to be used in switch statements to handle the default case.
      * @param _case the unmatched case to be reported
-     * @return
+     * @return new IllegalArgumentException
      */
     public static final IllegalArgumentException unmatchedCase(@Nullable Object _case) {
         return new IllegalArgumentException("internal error: unmatched case in switch statement: "+_case);
     }
 
     /**
-     * Most likely to be used in switch statements to handle the default case.
      * @param format like in {@link java.lang.String#format(String, Object...)}
-     * @param _case the unmatched case to be reported
-     * @return
+     * @param args
+     * @return new IllegalArgumentException
      */
     public static final IllegalArgumentException illegalArgument(
             final String format,
@@ -87,7 +86,6 @@ public final class _Exceptions {
         requires(format, "format");
         return new IllegalStateException(String.format(format, args));
     }
-
 
     public static final NoSuchElementException noSuchElement(String msg) {
         return new NoSuchElementException(msg);
