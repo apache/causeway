@@ -137,6 +137,7 @@ implements MetaModelRefiner {
                     return;
                 }
                 
+                //TODO[2253] remove this hotfix once ISIS-2253 is fixed
                 if(paramNum==0 && objectAction.containsNonFallbackFacet(AssociatedWithFacet.class)) {
                     return; 
                 }
