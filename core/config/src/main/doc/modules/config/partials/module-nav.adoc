@@ -5,5 +5,5 @@
 ** xref:refguide:config:specifying-components.adoc[Specifying Components]
 ** xref:refguide:config:configuring-core.adoc[Configuring Core]
 
-** xref:refguide:config:spring-configuration.adoc[Spring Configuration]
+** xref:refguide:config:configuration-properties.adoc[Configuration Properties]
 
