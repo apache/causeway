@@ -448,18 +448,23 @@ public interface ObjectAction extends ObjectMember {
 
             @Override
             public boolean test(final ObjectAction objectAction) {
-                final AssociatedWithFacet associatedWithFacet = objectAction.getFacet(AssociatedWithFacet.class);
+                val associatedWithFacet = objectAction.getFacet(AssociatedWithFacet.class);
                 if(associatedWithFacet == null) {
                     return false;
                 }
-                final String associatedMemberName = associatedWithFacet.value();
+                val associatedMemberName = associatedWithFacet.value();
                 if (associatedMemberName == null) {
                     return false;
                 }
-                final String memberOrderNameLowerCase = associatedMemberName.toLowerCase();
-                return memberName != null && Objects.equals(memberName.toLowerCase(), memberOrderNameLowerCase) ||
-                        memberId   != null && Objects.equals(memberId.toLowerCase(), memberOrderNameLowerCase);
+                val memberOrderNameLowerCase = associatedMemberName.toLowerCase();
+                return equalWhenLowerCase(memberName, memberOrderNameLowerCase) 
+                        || equalWhenLowerCase(memberId, memberOrderNameLowerCase);
             }
+            
+            private boolean equalWhenLowerCase(@Nullable String string, String lowerCaseString) {
+                return string != null && Objects.equals(string.toLowerCase(), lowerCaseString);
+            }
+            
         }
 
         public static class HasParameterMatching implements Predicate<ObjectAction> {

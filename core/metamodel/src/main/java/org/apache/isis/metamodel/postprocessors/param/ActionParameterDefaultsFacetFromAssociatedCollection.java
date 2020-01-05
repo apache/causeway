@@ -19,10 +19,7 @@
 
 package org.apache.isis.metamodel.postprocessors.param;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.commons.collections.Can;
@@ -32,22 +29,20 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class ActionParameterDefaultsFacetFromAssociatedCollection extends ActionParameterDefaultsFacetAbstract {
 
-    private static ThreadLocal<List<Object>> selectedPojos = new ThreadLocal<List<Object>>() {
-        @Override protected List<Object> initialValue() {
-            return Collections.emptyList();
-        }
-    };
+    private static ThreadLocal<Can<Object>> _selectedPojos = ThreadLocal.withInitial(Can::empty);
 
-    public interface SerializableRunnable<T> extends Callable<T>, Serializable {}
-
-    public static <T> T withSelected(final List<Object> objects, final SerializableRunnable<T> callable) {
+    public static <T, R> R applyWithSelected(
+            final Can<Object> selectedPojos, 
+            final Function<T, R> function,
+            final T argument) {
+        
         try {
-            selectedPojos.set(objects);
-            return callable.call();
+            _selectedPojos.set(selectedPojos);
+            return function.apply(argument);
         } catch (Exception e) {
             throw new ApplicationException(e);
         } finally {
-            selectedPojos.set(Collections.emptyList());
+            _selectedPojos.set(Can.empty());
         }
     }
 
@@ -61,7 +56,7 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
             final Can<ManagedObject> pendingArgs,
             final Integer paramNumUpdated) {
         
-        return selectedPojos.get();
+        return _selectedPojos.get();
     }
 
 

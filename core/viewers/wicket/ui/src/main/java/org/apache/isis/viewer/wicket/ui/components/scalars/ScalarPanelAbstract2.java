@@ -864,7 +864,7 @@ implements ScalarModelSubscriber2 {
                             .lookupServiceElseFail(MetaModelService.class);
                     final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
 
-                    final ActionPrompt prompt = ActionPromptProvider.Util
+                    final ActionPrompt prompt = ActionPromptProvider
                             .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle, sort);
 
                     PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(prompt.getTitleId(),

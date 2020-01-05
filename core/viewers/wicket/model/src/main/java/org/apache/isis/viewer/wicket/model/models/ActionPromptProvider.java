@@ -27,24 +27,21 @@ import org.apache.isis.commons.internal.ioc.BeanSort;
 
 public interface ActionPromptProvider {
 
-
-    public static class Util{
-
-        public static ActionPromptProvider getFrom(Component component) {
-            final Page page = component.getPage();
-            if(page == null) {
-                throw new IllegalArgumentException("Programming error: component must be added to a page in order to locate the ActionPromptProvider");
-            }
-            return getFrom(page);
+    public static ActionPromptProvider getFrom(Component component) {
+        final Page page = component.getPage();
+        if(page == null) {
+            throw new IllegalArgumentException("Programming error: component must be added to a page in order to locate the ActionPromptProvider");
         }
-        public static ActionPromptProvider getFrom(Page page) {
-            if(page instanceof ActionPromptProvider) {
-                final ActionPromptProvider provider = (ActionPromptProvider) page;
-                return provider;
-            }
-            // else
-            throw new IllegalArgumentException("Programming error: all pages should inherit from PageAbstract, which serves as the ActionPromptProvider");
+        return getFrom(page);
+    }
+    
+    public static ActionPromptProvider getFrom(Page page) {
+        if(page instanceof ActionPromptProvider) {
+            final ActionPromptProvider provider = (ActionPromptProvider) page;
+            return provider;
         }
+        // else
+        throw new IllegalArgumentException("Programming error: all pages should inherit from PageAbstract, which serves as the ActionPromptProvider");
     }
 
     public ActionPrompt getActionPrompt(

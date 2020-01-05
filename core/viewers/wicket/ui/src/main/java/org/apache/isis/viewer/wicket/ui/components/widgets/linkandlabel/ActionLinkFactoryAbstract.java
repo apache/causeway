@@ -17,8 +17,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.Serializable;
+import java.util.function.Function;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
@@ -29,12 +29,9 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -67,7 +64,6 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 
@@ -103,28 +99,18 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 if(toggledMementosProviderIfAny != null) {
 
-                    final Can<ObjectMemento> selectedMementos =
-                            toggledMementosProviderIfAny.getToggles();
-
-                    final List<Object> selectedPojos = selectedMementos.stream()
-                    .filter(_NullSafe::isPresent)
-                    .map(commonContext::reconstructObject)
-                    .filter(_NullSafe::isPresent)
-                    .map(ManagedObject::getPojo)
-                    .filter(_NullSafe::isPresent)
-                    .collect(Collectors.toList());
-
-                    final ActionPrompt actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection.withSelected(
-                            selectedPojos,
-                            new ActionParameterDefaultsFacetFromAssociatedCollection.SerializableRunnable<ActionPrompt>() {
-                                private static final long serialVersionUID = 1L;
-
-                                @Override
-                                public ActionPrompt call() {
-                                    return performOnClick(target);
-                                }
-                            }
-                            );
+                    val selectedMementos = toggledMementosProviderIfAny.getToggles();
+                    val selectedPojos = selectedMementos
+                            .map(commonContext::reconstructObject)
+                            .map(ManagedObject::getPojo);
+                    
+                    val actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection
+                            .applyWithSelected(
+                                    selectedPojos,
+                                    //TODO[2253] can we remove the Serializable cast? 
+                                    (Function<AjaxRequestTarget, ActionPrompt>&Serializable) this::performOnClick,
+                                    target);
+                    
                     if(actionPrompt != null) {
                         actionPrompt.setOnClose(new ActionPrompt.CloseHandler() {
                             private static final long serialVersionUID = 1L;
@@ -158,13 +144,13 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             final ActionLink actionLink,
             final AjaxRequestTarget target) {
 
-        final ActionModel actionModel = actionLink.getActionModel();
+        val actionModel = actionLink.getActionModel();
 
-        InlinePromptContext inlinePromptContext = determineInlinePromptContext();
-        PromptStyle promptStyle = actionModel.getPromptStyle();
+        val inlinePromptContext = determineInlinePromptContext();
+        val promptStyle = actionModel.getPromptStyle();
 
         if(inlinePromptContext == null || promptStyle.isDialog()) {
-            final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(actionLink.getPage());
+            final ActionPromptProvider promptProvider = ActionPromptProvider.getFrom(actionLink.getPage());
             val spec = actionModel.getTargetAdapter().getSpecification();
 
             final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle, spec.getBeanSort());

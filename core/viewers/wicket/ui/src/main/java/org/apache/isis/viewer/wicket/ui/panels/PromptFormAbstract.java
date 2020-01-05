@@ -195,7 +195,7 @@ implements ScalarModelSubscriber2 {
     protected void closePromptIfAny(final AjaxRequestTarget target) {
 
         try {
-            final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(parentPanel);
+            final ActionPromptProvider promptProvider = ActionPromptProvider.getFrom(parentPanel);
             if(promptProvider != null) {
                 promptProvider.closePrompt(target);
             }

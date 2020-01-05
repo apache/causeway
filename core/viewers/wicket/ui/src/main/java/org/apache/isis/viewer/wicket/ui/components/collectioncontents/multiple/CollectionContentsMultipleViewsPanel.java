@@ -93,7 +93,7 @@ implements CollectionCountProvider {
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         final CollectionSelectorPanel selectorDropdownPanelIfAny =
-                CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
+                CollectionSelectorProvider.getCollectionSelectorProvider(this);
         final String selected;
         if (selectorDropdownPanelIfAny != null) {
             selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny);
@@ -147,7 +147,7 @@ implements CollectionCountProvider {
         if(selectorEvent == null) {
             return;
         }
-        final CollectionSelectorPanel selectorDropdownPanel = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
+        final CollectionSelectorPanel selectorDropdownPanel = CollectionSelectorProvider.getCollectionSelectorProvider(this);
         if(selectorDropdownPanel == null) {
             // not expected, because this event shouldn't be called.
             // but no harm in simply returning...

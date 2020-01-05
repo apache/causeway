@@ -23,24 +23,21 @@ import org.apache.wicket.Component;
 public interface CollectionSelectorProvider {
     CollectionSelectorPanel getSelectorDropdownPanel();
 
-    public static class Util {
-
-        /**
-         * Searches up the component hierarchy looking for a parent that implements
-         * {@link org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider}.
-         *
-         * @return the panel, or null (if there are no alternative views)
-         */
-        public static CollectionSelectorPanel getCollectionSelectorProvider(Component component) {
-            while(component != null) {
-                if(component instanceof CollectionSelectorProvider) {
-                    final CollectionSelectorPanel selectorDropdownPanelIfAny = ((CollectionSelectorProvider) component).getSelectorDropdownPanel();
-                    return selectorDropdownPanelIfAny;
-                }
-                component = component.getParent();
+    /**
+     * Searches up the component hierarchy looking for a parent that implements
+     * {@link org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider}.
+     *
+     * @return the panel, or null (if there are no alternative views)
+     */
+    public static CollectionSelectorPanel getCollectionSelectorProvider(Component component) {
+        while(component != null) {
+            if(component instanceof CollectionSelectorProvider) {
+                final CollectionSelectorPanel selectorDropdownPanelIfAny = ((CollectionSelectorProvider) component).getSelectorDropdownPanel();
+                return selectorDropdownPanelIfAny;
             }
-            throw new IllegalStateException("Could not locate parent that implements CollectionSelectorProvider");
+            component = component.getParent();
         }
+        throw new IllegalStateException("Could not locate parent that implements CollectionSelectorProvider");
     }
 
 }
