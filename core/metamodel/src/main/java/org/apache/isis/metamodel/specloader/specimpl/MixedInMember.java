@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 
 /**
@@ -34,5 +35,6 @@ public interface MixedInMember extends ObjectMember {
 
     ObjectSpecification getMixinType();
 
+    boolean hasMixinAction(ObjectAction objectAction);
 }
 

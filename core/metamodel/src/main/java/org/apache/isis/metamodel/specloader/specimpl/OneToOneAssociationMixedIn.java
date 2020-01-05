@@ -40,6 +40,7 @@ import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.val;
@@ -195,6 +196,11 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     @Override
     public ObjectSpecification getMixinType() {
         return getSpecificationLoader().loadSpecification(mixinType);
+    }
+
+    @Override
+    public boolean hasMixinAction(final ObjectAction mixinAction) {
+        return this.mixinAction == mixinAction;
     }
 
     private PublisherDispatchService getPublishingServiceInternal() {

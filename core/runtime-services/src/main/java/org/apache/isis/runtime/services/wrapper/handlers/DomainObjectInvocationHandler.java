@@ -29,7 +29,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InteractionException;
@@ -45,6 +44,7 @@ import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.context.MetaModelContext;
@@ -63,6 +63,7 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
+import org.apache.isis.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -152,7 +153,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
 
-        final ObjectSpecification targetNoSpec = targetAdapter.getSpecification();
+        final ObjectSpecification targetSpec = targetAdapter.getSpecification();
+        final ObjectSpecification targetNoSpec = targetSpec;
 
         // save method, through the proxy
         if (isSaveMethod(method)) {
@@ -223,34 +225,44 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
             val objectAction = (ObjectAction) objectMember;
 
-            ObjectAction actualObjectAction;
-            ManagedObject actualTargetAdapter;
 
-            val mixinFacet = targetAdapter.getSpecification().getFacet(MixinFacet.class);
+            val mixinFacet = targetSpec.getFacet(MixinFacet.class);
             if(mixinFacet != null) {
 
                 // rather than invoke on a (transient) mixin, instead try to
-                // figure out the corresponding ObjectActionMixedIn
-                actualTargetAdapter = mixinFacet.mixedIn(targetAdapter, MixinFacet.Policy.IGNORE_FAILURES);
-                actualObjectAction = determineMixinAction(actualTargetAdapter, objectAction);
+                // figure out the corresponding contributed member on the contributee.
+                final ManagedObject contributeeAdapter =
+                        mixinFacet.mixedIn(targetAdapter, MixinFacet.Policy.IGNORE_FAILURES);
 
-                if(actualTargetAdapter == null || actualObjectAction == null) {
-                    // revert to original behaviour
-                    actualTargetAdapter = targetAdapter;
-                    actualObjectAction = objectAction;
+                if (contributeeAdapter == null) {
+                    throw _Exceptions.illegalState(String.format("Could not locate contributeeAdapter for action '%s'", objectAction.getId()));
                 }
-            } else {
-                actualTargetAdapter = targetAdapter;
-                actualObjectAction = objectAction;
+                final ObjectMember mixinMember = determineMixinMember(contributeeAdapter, objectAction);
+
+                if (mixinMember != null) {
+                    if(mixinMember instanceof ObjectAction) {
+                        return handleActionMethod(contributeeAdapter, args, (ObjectAction)mixinMember, contributeeMember);
+                    }
+                    if(mixinMember instanceof OneToOneAssociation) {
+                        return handleGetterMethodOnProperty(contributeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
+                    }
+                    if(mixinMember instanceof OneToManyAssociation) {
+                        return handleGetterMethodOnCollection(contributeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, method, memberName);
+                    }
+                } else {
+                    throw _Exceptions.illegalState(String.format(
+                            "Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetSpec));
+                }
             }
 
-            return handleActionMethod(actualTargetAdapter, args, actualObjectAction, contributeeMember);
+            // this is just a regular non-mixin action.
+            return handleActionMethod(targetAdapter, args, objectAction, contributeeMember);
         }
 
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
     }
 
-    private static ObjectAction determineMixinAction(
+    private static ObjectMember determineMixinMember(
             final ManagedObject domainObjectAdapter,
             final ObjectAction objectAction) {
         
@@ -259,11 +271,13 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
         val specification = domainObjectAdapter.getSpecification();
         val objectActions = specification.streamObjectActions(Contributed.INCLUDED);
+        val objectAssociations = specification.streamAssociations(Contributed.INCLUDED);
 
-        return objectActions
-                .filter(action->action instanceof ObjectActionMixedIn)
-                .map(action->(ObjectActionMixedIn) action)
-                .filter(mixedInAction->mixedInAction.hasMixinAction(objectAction))
+        final Stream<ObjectMember> objectMembers = Stream.concat(objectActions, objectAssociations);
+        return objectMembers
+                .filter(MixedInMember.class::isInstance)
+                .map(MixedInMember.class::cast)
+                .filter(mixedInMember->mixedInMember.hasMixinAction(objectAction))
                 .findFirst()
                 .orElse(null);
 
