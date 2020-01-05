@@ -77,9 +77,16 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
      * @param target
      */
     public void toggle(AjaxRequestTarget target) {
-        checkbox.setModelObject(!checkbox.getModelObject());
-        final boolean checkboxValue = checkbox.getModelObject();
+        setModel(!isChecked());
         onSubmit(target);
+    }
+    
+    public boolean isChecked() {
+        return checkbox.getModelObject();
+    }
+
+    public void setModel(boolean isChecked) {
+        checkbox.setModelObject(isChecked);
     }
 
 }

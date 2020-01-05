@@ -17,9 +17,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
-import java.io.Serializable;
-import java.util.function.Function;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -107,8 +104,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     val actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection
                             .applyWithSelected(
                                     selectedPojos,
-                                    //TODO[2253] can we remove the Serializable cast? 
-                                    (Function<AjaxRequestTarget, ActionPrompt>&Serializable) this::performOnClick,
+                                    // if this lambda still needs to be serializable uncomment the cast ... 
+                                    //(Function<AjaxRequestTarget, ActionPrompt>&Serializable) 
+                                    this::performOnClick,
                                     target);
                     
                     if(actionPrompt != null) {

@@ -44,6 +44,7 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 
@@ -157,7 +158,11 @@ implements CollectionSelectorProvider, BulkActionsProvider {
                         final Component context,
                         final ManagedObject selectedAdapter,
                         final AjaxRequestTarget ajaxRequestTarget) {
-                    getModel().toggleSelectionOn(selectedAdapter);
+                    
+                    ContainedToggleboxPanel togglePanel = (ContainedToggleboxPanel) context;
+                    
+                    boolean isSelected = getModel().toggleSelectionOn(selectedAdapter);
+                    togglePanel.setModel(isSelected); // sync the checkbox's model
                 }
 
             };

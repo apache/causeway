@@ -69,18 +69,26 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
     @Override
     public Component getHeader(String componentId) {
 
-        final ContainedToggleboxPanel toggle = new ContainedToggleboxPanel(componentId) {
+        final ContainedToggleboxPanel bulkToggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(AjaxRequestTarget target) {
-                for (ContainedToggleboxPanel toggle : rowToggles) {
-                    toggle.toggle(target);
-                    target.add(toggle);
+                final boolean setToChecked = !this.isChecked();
+                
+                for (ContainedToggleboxPanel rowToggle : rowToggles) {
+                    
+                    // smart update idiom: only toggle when needed
+                    if(setToChecked == rowToggle.isChecked()) {
+                        continue;
+                    }
+                    
+                    rowToggle.toggle(target);
+                    target.add(rowToggle);
                 }
             }
         };
-        toggle.add(new CssClassAppender("title-column"));
-        return toggle;
+        bulkToggle.add(new CssClassAppender("title-column"));
+        return bulkToggle;
     }
 
     private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
@@ -101,12 +109,9 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
             @Override
             public void onSubmit(AjaxRequestTarget target) {
                 val entityModel = (EntityModel) rowModel;
-                ManagedObject selectedAdapter = null;
-                {
-                    selectedAdapter = entityModel.load();
-                    if(onSelectionHandler != null) {
-                        onSelectionHandler.onSelected(this, selectedAdapter, target);
-                    }
+                val selectedAdapter = entityModel.load();
+                if(onSelectionHandler != null) {
+                    onSelectionHandler.onSelected(this, selectedAdapter, target);
                 }
             }
         };

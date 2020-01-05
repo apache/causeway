@@ -60,7 +60,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         // previously we computed visibility and enablement here, but
         // this is now done at the point of rendereing
 
-        final AbstractLink link = newLink(linkId, objectAction, toggledMementosProviderIfAny);
+        final AbstractLink link = super.newLink(linkId, objectAction, toggledMementosProviderIfAny);
 
         return newLinkAndLabel(objectAdapter, objectAction, link);
     }

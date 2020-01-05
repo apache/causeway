@@ -45,7 +45,7 @@ class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
 
         val objectAdapter = this.targetEntityModel.load();
 
-        final AbstractLink link = newLink(linkId, objectAction, toggledMementosProviderIfAny);
+        final AbstractLink link = super.newLink(linkId, objectAction, toggledMementosProviderIfAny);
 
         return newLinkAndLabel(objectAdapter, objectAction, link);
     }

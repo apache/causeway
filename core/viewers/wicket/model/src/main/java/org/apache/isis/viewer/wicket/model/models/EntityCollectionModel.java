@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,6 +34,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -345,7 +347,7 @@ implements LinksProvider, UiHintContainer {
     /**
      * Populated only if {@link Type#STANDALONE}.
      */
-    private List<ObjectMemento> toggledMementosList;
+    private Map<String, ObjectMemento> toggledMementos;
 
     /**
      * Populated only if {@link Type#PARENTED}.
@@ -387,7 +389,7 @@ implements LinksProvider, UiHintContainer {
         this.entityModel = entityModel;
         this.typeOf = typeOf;
         this.pageSize = pageSize;
-        this.toggledMementosList = _Lists.<ObjectMemento>newArrayList();
+        this.toggledMementos = _Maps.<String, ObjectMemento>newLinkedHashMap();
     }
 
 
@@ -511,23 +513,24 @@ implements LinksProvider, UiHintContainer {
     }
 
 
-    public void toggleSelectionOn(ManagedObject selectedAdapter) {
+    public boolean toggleSelectionOn(ManagedObject selectedAdapter) {
         //XXX lombok issue, cannot use val here
         final ObjectMemento selectedAsMemento = super.getMementoService().mementoForObject(selectedAdapter);
-
-        // try to remove; if couldn't, then mustn't have been in there, in which case add.
-        boolean removed = toggledMementosList.remove(selectedAsMemento);
-        if(!removed) {
-            toggledMementosList.add(selectedAsMemento);
-        }
+        final String selectedKey = selectedAsMemento.asString(); 
+        final ObjectMemento newValue = 
+                toggledMementos.compute(selectedKey, (k, v) -> (v==null) ? selectedAsMemento : null);
+        
+        final boolean isSelected = newValue!=null;
+        return isSelected;
+        
     }
 
     public Can<ObjectMemento> getToggleMementosList() {
-        return Can.ofCollection(this.toggledMementosList);
+        return Can.ofCollection(this.toggledMementos.values());
     }
 
     public void clearToggleMementosList() {
-        this.toggledMementosList.clear();
+        this.toggledMementos.clear();
     }
 
     public void addLinkAndLabels(List<LinkAndLabel> linkAndLabels) {
