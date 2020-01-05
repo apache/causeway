@@ -1,12 +1,13 @@
 package org.ro.ui.kv
 
 import org.ro.core.aggregator.ActionAggregator
+import org.ro.to.Link
 import org.ro.to.TObject
 import org.ro.ui.IconManager
-import pl.treksoft.kvision.core.onEvent
 import pl.treksoft.kvision.dropdown.Direction
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.dropdown.ddLink
+import pl.treksoft.kvision.dropdown.separator
 import pl.treksoft.kvision.html.ButtonStyle
 
 object MenuFactory {
@@ -26,23 +27,37 @@ object MenuFactory {
         val actions = tObject.getActions()
         actions.forEach {
             val title = it.id
-            val iconName = IconManager.find(title)
             val link = it.getInvokeLink()!!
-            var styles = setOf("text-normal")
-            if (IconManager.isDangerous(title)) {
-                styles = setOf("text-danger")
-            }
-            val ddl = dd.ddLink(title, icon = iconName, classes = styles)
-            ddl.onEvent {
-                click = { e ->
-                    e.stopPropagation()
-                    ActionAggregator().invoke(link)
-                }
-            }
-            dd.add(ddl)
+            action(dd, title, link)
         }
         return dd
     }
 
-}
+    fun buildFor(menuEntry: org.ro.to.mb.MenuEntry): DropDown {
+        val menu = menuEntry.menu.first()
+        val title = menu.named
+        val dd = DropDown(text = title, style = ButtonStyle.LIGHT, forNavbar = false)
+        dd.icon = IconManager.find(title)
+        menu.section.forEachIndexed { index, section ->
+            section.serviceAction.forEach { sa ->
+                action(dd, sa.id!!, sa.link!!)
+            }
+            if (index < menu.section.size - 1) {
+                dd.separator()
+            }
+        }
+        return dd
+    }
 
+    private fun action(dd: DropDown, label: String, link: Link) {
+        val icon = IconManager.find(label)
+        var classes = setOf("text-normal")
+        if (IconManager.isDangerous(label)) {
+            classes = setOf("text-danger")
+        }
+        dd.ddLink(label, icon = icon, classes = classes).onClick { _ ->
+            ActionAggregator().invoke(link)
+        }
+    }
+
+}

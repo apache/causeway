@@ -1,6 +1,5 @@
 package org.ro.ui.kv
 
-import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
 import org.ro.to.mb.Menubars
 import org.ro.ui.IconManager
@@ -10,7 +9,6 @@ import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.dropdown.ddLink
 import pl.treksoft.kvision.dropdown.dropDown
-import pl.treksoft.kvision.dropdown.separator
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.navbar.*
 import pl.treksoft.kvision.panel.SimplePanel
@@ -69,41 +67,10 @@ object RoMenuBar : SimplePanel() {
     }
 
     fun amendMenu(menuBars: Menubars) {
-        nav.add(buildFor(menuBars.primary))
+        nav.add(MenuFactory.buildFor(menuBars.primary))
         //TODO handle all primaries seperately
-        nav.add(buildFor(menuBars.secondary))
-        nav.add(buildFor(menuBars.tertiary))
-    }
-
-    private fun buildFor(menuEntry: org.ro.to.mb.MenuEntry): DropDown {
-        val menu = menuEntry.menu.first()
-        val title = menu.named
-        val dd = dropDown(
-                title,
-                icon = IconManager.find(title),
-                forNavbar = false,
-                style = ButtonStyle.LIGHT)
-        menu.section.forEachIndexed { index, section ->
-            section.serviceAction.forEach { sa ->
-                val label = sa.id!!
-                var styles = setOf("text-normal")
-                if (IconManager.isDangerous(label)) {
-                    styles = setOf("text-danger")
-                }
-                dd.ddLink(
-                        label = label,
-                        icon = IconManager.find(label),
-                        classes = styles
-                ).onClick { _ ->
-                    val l = sa.link!!
-                    ActionAggregator().invoke(l)
-                }
-            }
-            if (index < menu.section.size - 1) {
-                dd.separator()
-            }
-        }
-        return dd
+        nav.add(MenuFactory.buildFor(menuBars.secondary))
+        nav.add(MenuFactory.buildFor(menuBars.tertiary))
     }
 
 }
