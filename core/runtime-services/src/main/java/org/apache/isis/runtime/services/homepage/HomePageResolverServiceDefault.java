@@ -28,9 +28,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -51,14 +52,12 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntimeServices.HomePageResolverServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     @Inject private FactoryService factoryService;
@@ -124,7 +123,10 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         return homePageAction;
     }
 
-    @Vetoed @ViewModel
+    @Vetoed
+    @DomainObject(
+            nature = Nature.INMEMORY_ENTITY, 
+            objectType = "isisRuntimeServices.HomePageResolverServiceDefault.HomePageActionContainer")
     public static class HomePageActionContainer {
 
         @Inject private FactoryService factoryService;

@@ -20,13 +20,13 @@
 package org.apache.isis.metamodel.facets.actions.homepage.annotation;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
@@ -75,7 +75,7 @@ implements MetaModelRefiner {
     private Visitor newValidatorVisitor() {
         return new MetaModelValidatorVisiting.SummarizingVisitor() {
 
-            private final List<ObjectAction> actionsHavingHomePageFacet = _Lists.newArrayList();
+            private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 
             @Override
             public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
@@ -87,7 +87,7 @@ implements MetaModelRefiner {
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
                 .forEach(objectAction->{
                     
-                    actionsHavingHomePageFacet.add(objectAction);
+                    actionsHavingHomePageFacet.put(objectAction.getId(), objectAction);
 
                     // TODO: it would be good to flag if the facet is found on any non-services, however
                     // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession 
@@ -105,12 +105,12 @@ implements MetaModelRefiner {
             public void summarize(MetaModelValidator validator) {
                 if(actionsHavingHomePageFacet.size()>1) {
                     
-                    final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.stream()
+                    final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.values().stream()
                             .map(ObjectAction::getIdentifier)
                             .map(Identifier::toClassAndNameIdentityString)
                             .collect(Collectors.toCollection(HashSet::new));
                     
-                    for (val objectAction : actionsHavingHomePageFacet) {
+                    for (val objectAction : actionsHavingHomePageFacet.values()) {
                         val actionIdentifier = objectAction.getIdentifier(); 
                         val actionId = actionIdentifier.toClassAndNameIdentityString();
                         val colission = homepageActionIdSet.stream()
