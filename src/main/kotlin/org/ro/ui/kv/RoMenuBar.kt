@@ -10,6 +10,7 @@ import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.dropdown.ddLink
 import pl.treksoft.kvision.dropdown.dropDown
+import pl.treksoft.kvision.dropdown.separator
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.navbar.*
 import pl.treksoft.kvision.panel.SimplePanel
@@ -82,20 +83,24 @@ object RoMenuBar : SimplePanel() {
                 icon = IconManager.find(title),
                 forNavbar = false,
                 style = ButtonStyle.LIGHT)
-        //TODO tr("Separator") to DD.SEPARATOR.option for second, etc.
-        menu.section.first().serviceAction.forEach {
-            val label = it.id!!
-            var styles = setOf("text-normal")
-            if (IconManager.isDangerous(label)) {
-                styles = setOf("text-danger")
+        menu.section.forEachIndexed { index, section ->
+            section.serviceAction.forEach { sa ->
+                val label = sa.id!!
+                var styles = setOf("text-normal")
+                if (IconManager.isDangerous(label)) {
+                    styles = setOf("text-danger")
+                }
+                dd.ddLink(
+                        label = label,
+                        icon = IconManager.find(label),
+                        classes = styles
+                ).onClick { _ ->
+                    val l = sa.link!!
+                    ActionAggregator().invoke(l)
+                }
             }
-            dd.ddLink(
-                    label = label,
-                    icon = IconManager.find(label),
-                    classes = styles
-            ).onClick { _ ->
-                val l = it.link!!
-                ActionAggregator().invoke(l)
+            if (index < menu.section.size - 1) {
+                dd.separator()
             }
         }
         return dd
