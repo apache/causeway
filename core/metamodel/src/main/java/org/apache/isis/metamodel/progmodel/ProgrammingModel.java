@@ -19,13 +19,17 @@
 
 package org.apache.isis.metamodel.progmodel;
 
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.metamodel.facets.FacetFactory;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+
+import lombok.NonNull;
 
 public interface ProgrammingModel {
 
@@ -155,6 +159,12 @@ public interface ProgrammingModel {
         addValidator(MetaModelValidatorVisiting.of(visitor), markers);
     }
     
+    default void addValidator(final MetaModelValidatorVisiting.Visitor visitor,
+                              final @NonNull Predicate<ObjectSpecification> specPredicate,
+                              final Marker ... markers) {
+        addValidator(MetaModelValidatorVisiting.of(visitor, specPredicate), markers);
+    }
+
     /** shortcut for see {@link #addPostProcessor(PostProcessingOrder, Class, Supplier, Marker...)}*/
     default <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
             PostProcessingOrder order, 

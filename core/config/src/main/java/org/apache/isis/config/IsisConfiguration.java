@@ -501,8 +501,52 @@ public class IsisConfiguration {
         private final Introspector introspector = new Introspector();
         @Data
         public static class Introspector {
+            /**
+             * Whether to perform introspection and metamodel validation in parallel.
+             */
             private boolean parallelize = true;
+            /**
+             * Whether all known types should be fully introspected as part of the bootstrapping, or should only be
+             * partially introspected initially.
+             *
+             * <p>
+             * Leaving this as lazy means that there's a chance that metamodel validation errors will not be
+             * discovered during bootstrap.  That said, metamodel validation is still run incrementally for any
+             * classes introspected lazily after initial bootstrapping (unless {@link #isValidateIncrementally()} is
+             * disabled.
+             * </p>
+             */
             private IntrospectionMode mode = IntrospectionMode.LAZY_UNLESS_PRODUCTION;
+            /**
+             * If true, then no new specifications will be allowed to be loaded once introspection has been complete.
+             *
+             * <p>
+             * Only applies if the introspector is configured to perform full introspection up-front (either because of
+             * {@link IntrospectionMode#FULL} or {@link IntrospectionMode#LAZY_UNLESS_PRODUCTION} when in production);
+             * otherwise is ignored.
+             * </p>
+             */
+            private boolean lockAfterFullIntrospection = true;
+            /**
+             * If true, then metamodel validation is performed after any new specification has been loaded (after the
+             * initial bootstrapping).
+             *
+             * <p>
+             * This does <i>not</i> apply if the introspector is configured to perform full introspection up-front
+             * AND when the metamodel is {@link #isLockAfterFullIntrospection() locked} after initial bootstrapping
+             * (because in that case the lock check will simply prevent any new specs from being loaded).
+             * But it will apply otherwise.
+             * </p>
+             *
+             * <p>In particular, this setting <i>can</i> still apply even if the {@link #getMode() introspection mode}
+             * is set to {@link IntrospectionMode#FULL full}, because that in itself does not preclude some code
+             * from attempting to load some previously unknown type.  For example, a fixture script could attempt to
+             * invoke an action on some new type using the
+             * {@link org.apache.isis.applib.services.wrapper.WrapperFactory} - this will cause introspection of that
+             * new type to be performed.
+             * </p>
+             */
+            private boolean validateIncrementally = true;
         }
 
         private final Validator validator = new Validator();
@@ -1122,7 +1166,7 @@ public class IsisConfiguration {
              * eg: {@code isis.value.format.datetime=iso}
              * <p>
              * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
-             * {@link org.apache.isis.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeValueSemanticsProvider.NAMED_TITLE_FORMATTERS}).  
+             * <code>org.apache.isis.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeValueSemanticsProvider#NAMED_TITLE_FORMATTERS</code>).
              * Alternatively, can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
              */
             DATETIME,
@@ -1132,7 +1176,7 @@ public class IsisConfiguration {
              * eg: {@code isis.value.format.date=iso}
              * <p>
              * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
-             * {@link org.apache.isis.metamodel.facets.value.datejdk8local.Jdk8LocalDateValueSemanticsProvider.NAMED_TITLE_FORMATTERS}).  
+             * <code>org.apache.isis.metamodel.facets.value.datejdk8local.Jdk8LocalDateValueSemanticsProvider.NAMED_TITLE_FORMATTERS</code>).
              * Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
              */
             DATE, 

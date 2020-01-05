@@ -33,6 +33,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.context.MetaModelContext;

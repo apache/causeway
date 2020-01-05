@@ -172,7 +172,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
 
         final Command command = createCommand();
-        final Interaction interaction = factoryService.instantiate(Interaction.class);
+        final Interaction interaction = new Interaction();
 
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
         final String userName = userService.getUser().getName();

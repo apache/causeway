@@ -133,8 +133,5 @@ public interface SpecificationLoader {
     }
 
 
-
-
-
-
+    void revalidateIfNecessary();
 }

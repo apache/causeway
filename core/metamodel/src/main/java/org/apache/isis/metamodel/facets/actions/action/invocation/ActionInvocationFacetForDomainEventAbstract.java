@@ -44,6 +44,7 @@ import org.apache.isis.applib.services.iactn.Interaction.ActionInvocation;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.metamodel.MetaModelService.Mode;
+import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
@@ -205,7 +206,7 @@ implements ImperativeFacet {
                             mixinElseRegularAdapter, mixedInAdapter, execution);
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
-            interaction.execute(callable, execution);
+            interaction.execute(callable, execution, getClockService(), getMetricsService());
 
             // handle any exceptions
             final Interaction.Execution<ActionInvocationDto, ?> priorExecution =
@@ -407,6 +408,9 @@ implements ImperativeFacet {
     private ClockService getClockService() {
         return serviceRegistry.lookupServiceElseFail(ClockService.class);
     }
+    private MetricsService getMetricsService() {
+        return serviceRegistry.lookupServiceElseFail(MetricsService.class);
+    }
 
     private PublisherDispatchService getPublishingServiceInternal() {
         return serviceRegistry.lookupServiceElseFail(PublisherDispatchService.class);
@@ -444,8 +448,7 @@ implements ImperativeFacet {
                 // set the startedAt (and update command if this is the top-most member execution)
                 // (this isn't done within Interaction#execute(...) because it requires the DTO
                 // to have been set on the current execution).
-                val startedAt = getClockService().nowAsJavaSqlTimestamp();
-                execution.setStartedAt(startedAt);
+                val startedAt = execution.start(getClockService(), getMetricsService());
                 if(command.getStartedAt() == null) {
                     command.internal().setStartedAt(startedAt);
                 }

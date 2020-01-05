@@ -205,6 +205,8 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
                         
                     }
                 }
+                // so can be revalidated again if necessary.
+                collidingSpecsById.clear();
             }
 
             private String asCsv(final List<ObjectSpecification> specList) {

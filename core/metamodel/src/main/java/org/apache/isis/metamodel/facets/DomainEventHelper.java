@@ -132,7 +132,7 @@ public class DomainEventHelper {
                             .map(ObjectActionParameter::getName)
                             .collect(_Lists.toUnmodifiable());
 
-                    val parameterTypes = parameters.stream()
+                    final List<Class<?>> parameterTypes = parameters.stream()
                             .map(ObjectActionParameter::getSpecification)
                             .map(ObjectSpecification::getCorrespondingClass)
                             .collect(_Lists.toUnmodifiable());

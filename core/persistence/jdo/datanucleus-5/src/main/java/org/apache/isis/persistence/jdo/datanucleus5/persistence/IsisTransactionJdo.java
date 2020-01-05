@@ -44,6 +44,7 @@ import org.apache.isis.runtime.persistence.transaction.IsisTransactionFlushExcep
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionManagerException;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -183,12 +184,8 @@ public class IsisTransactionJdo implements Transaction {
 
     // -- state
 
+    @Getter
     private State state;
-
-    public State getState() {
-        return state;
-    }
-
     private void setState(final State state) {
         this.state = state;
         if(state.isComplete()) {

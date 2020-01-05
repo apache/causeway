@@ -43,6 +43,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
@@ -109,6 +110,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     
     private final SpecificationCacheDefault<ObjectSpecification> cache = 
             new SpecificationCacheDefault<>();
+
+    /**
+     * We only ever mark the metamodel as fully introspected if in {@link #isFullIntrospect() full} introspection mode.
+     */
+    @Getter
+    private boolean metamodelFullyIntrospected = false;
 
     /** JUnit Test Support */
     public static SpecificationLoaderDefault getInstance (
@@ -235,6 +242,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         stopWatch.stop();
         log.info("Metamodel created in " + (long)stopWatch.getMillis() + " ms.");
 
+        if(isFullIntrospect()) {
+            metamodelFullyIntrospected = true;
+        }
     }
     
     @Override
@@ -322,9 +332,25 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         synchronized (cache) {
             cachedSpec = cache.computeIfAbsent(typeName, __->createSpecification(substitutedType));
         }
-        
+
         cachedSpec.introspectUpTo(upTo);
-        return cachedSpec; 
+
+        return cachedSpec;
+    }
+
+    public void revalidateIfNecessary() {
+        if(!this.isisConfiguration.getReflector().getIntrospector().isValidateIncrementally()) {
+            return;
+        }
+
+        if (this.validationResult.isMemoized()) {
+            this.validationResult.clear();
+        }
+        final ValidationFailures validationFailures = this.getValidationResult();
+
+        if(validationFailures.hasFailures()) {
+            throw _Exceptions.illegalState(String.join("\n", validationFailures.getMessages("[%d] %s")));
+        }
     }
 
     // -- LOOKUP
@@ -368,8 +394,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
     private ObjectSpecification createSpecification(final Class<?> cls) {
-        
-         // ... and create the specs
+
+        if(isMetamodelFullyIntrospected() && isisConfiguration.getReflector().getIntrospector().isLockAfterFullIntrospection()) {
+            throw _Exceptions.illegalState(
+                    "Cannot introspect class '%s' because the metamodel has been fully introspected and is now locked. " +
+                    "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
+                    "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
+                    "@DomainService.",
+                    cls.getName());
+        }
+
+        // ... and create the specs
         final ObjectSpecificationAbstract objectSpec;
         if (FreeStandingList.class.isAssignableFrom(cls)) {
 
@@ -381,14 +416,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
 
             val managedBeanNameIfAny = typeRegistry.getManagedBeanNameForType(cls);
-
             objectSpec = new ObjectSpecificationDefault(
-                    cls,
-                    metaModelContext,
-                    facetProcessor, 
-                    managedBeanNameIfAny, 
-                    postProcessor, 
-                    classSubstitutor);
+                            cls,
+                            metaModelContext,
+                            facetProcessor,
+                            managedBeanNameIfAny.orElse(null),
+                            postProcessor,
+                            classSubstitutor);
         }
 
         return objectSpec;

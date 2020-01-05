@@ -19,14 +19,14 @@
 
 package org.apache.isis.metamodel.specloader.validator;
 
+import java.util.function.Predicate;
+
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@RequiredArgsConstructor(staticName = "of")
 public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
     // -- INTERFACES
@@ -44,9 +44,37 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
     }
     
     // -- IMPLEMENTATION
-    
+
+    public static MetaModelValidatorVisiting of(
+            final @NonNull Visitor visitor) {
+        return new MetaModelValidatorVisiting(visitor);
+    }
+
+    public static MetaModelValidatorVisiting of(
+            final @NonNull Visitor visitor,
+            final @NonNull Predicate<ObjectSpecification> includeIf) {
+        return new MetaModelValidatorVisiting(visitor, includeIf);
+    }
+
+
     @NonNull private final Visitor visitor;
-    
+    @NonNull private final Predicate<ObjectSpecification> includeIf;
+
+    private MetaModelValidatorVisiting(
+            final @NonNull Visitor visitor,
+            final @NonNull Predicate<ObjectSpecification> includeIf) {
+        this.visitor = visitor;
+        this.includeIf = includeIf;
+    }
+
+    private MetaModelValidatorVisiting(
+            final @NonNull Visitor visitor) {
+        this(visitor,
+                // by default, exclude managed beans from validation
+                spec -> !spec.isManagedBean() && !spec.getBeanSort().isUnknown()
+        );
+    }
+
     @Override
     public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
         validateAll();
@@ -59,14 +87,18 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
         val specLoader = (SpecificationLoaderDefault)super.getMetaModelContext().getSpecificationLoader();
         
         specLoader.forEach(spec->{
-            
-            if(spec.isManagedBean() || spec.getBeanSort().isUnknown()) {
-                return; // exclude managed beans from validation
+
+            if(! includeIf.test(spec)) {
+                return;
             }
             
             visitor.visit(spec, this);            
         });
         
+    }
+
+    private static boolean filter(ObjectSpecification spec) {
+        return spec.isManagedBean() || spec.getBeanSort().isUnknown();
     }
 
     private void summarize() {

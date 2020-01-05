@@ -390,7 +390,7 @@ public interface Command extends HasUniqueId {
          * </p>
          *
          * See also {@link Interaction#getCurrentExecution()} and
-         * {@link Interaction.Execution#setStartedAt(Timestamp)}.
+         * {@link #setStartedAt(org.apache.isis.applib.services.clock.ClockService, org.apache.isis.applib.services.metrics.MetricsService)}.
          */
         void setStartedAt(Timestamp startedAt);
 

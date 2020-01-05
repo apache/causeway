@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.properties.property.modify;
 
-import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,6 +30,7 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -49,6 +49,8 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
+import lombok.val;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
@@ -222,8 +224,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                         // set the startedAt (and update command if this is the top-most member execution)
                         // (this isn't done within Interaction#execute(...) because it requires the DTO
                         // to have been set on the current execution).
-                        final Timestamp startedAt = getClockService().nowAsJavaSqlTimestamp();
-                        execution.setStartedAt(startedAt);
+                        val startedAt = execution.start(getClockService(), getMetricsService());
                         if(command.getStartedAt() == null) {
                             command.internal().setStartedAt(startedAt);
                         }
@@ -274,7 +275,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             };
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
-            interaction.execute(executor, execution);
+            interaction.execute(executor, execution, getClockService(), getMetricsService());
 
             // handle any exceptions
             final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
@@ -320,6 +321,10 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
     private ClockService getClockService() {
         return getServiceRegistry().lookupServiceElseFail(ClockService.class);
+    }
+
+    private MetricsService getMetricsService() {
+        return getServiceRegistry().lookupServiceElseFail(MetricsService.class);
     }
 
     private PublisherDispatchService getPublishingServiceInternal() {

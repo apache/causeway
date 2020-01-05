@@ -275,7 +275,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(log.isDebugEnabled()) {
             log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
         }
-        
+
+        boolean revalidate = false;
+
         switch (introspectionState) {
         case NOT_INTROSPECTED:
             if(isLessThan(upTo)) {
@@ -289,6 +291,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
                 introspectMembers();
                 this.introspectionState = IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
+                revalidate = true;
             }
             // set to avoid infinite loops
             break;
@@ -301,6 +304,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
                 introspectMembers();
                 this.introspectionState = IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
+                revalidate = true;
             }
             break;
         case MEMBERS_BEING_INTROSPECTED:
@@ -308,6 +312,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         case TYPE_AND_MEMBERS_INTROSPECTED:
             // nothing to do
             break;
+
+        default:
+            throw _Exceptions.unexpectedCodeReach();
+        }
+
+        if(revalidate) {
+            getSpecificationLoader().revalidateIfNecessary();
         }
     }
 

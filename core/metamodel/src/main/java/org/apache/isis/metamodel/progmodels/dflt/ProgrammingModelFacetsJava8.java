@@ -17,8 +17,13 @@
 
 package org.apache.isis.metamodel.progmodels.dflt;
 
+import java.util.function.Predicate;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.authorization.standard.AuthorizationFacetFactory;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.OrphanedSupportingMethodValidator;
 import org.apache.isis.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
@@ -145,6 +150,12 @@ import org.apache.isis.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsP
 import org.apache.isis.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.services.title.TitlesAndTranslationsValidator;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.Contributed;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+
+import lombok.NonNull;
 
 public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
 
@@ -355,6 +366,17 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
         addValidator(new TitlesAndTranslationsValidator());
+
+        addValidator((objectSpec, validator) -> {
+            final long numActions = objectSpec.streamObjectActions(Contributed.INCLUDED).count();
+            if (numActions > 0) {
+                validator.onFailure(objectSpec, objectSpec.getIdentifier(),
+                        "%s: is a (concrete) but UNKNOWN sort, yet has %d actions",
+                        objectSpec.getCorrespondingClass().getName(),
+                        numActions);
+            }
+            return false;
+        }, objectSpec -> objectSpec.getBeanSort() == BeanSort.UNKNOWN && ! objectSpec.isAbstract());
 
     }
 

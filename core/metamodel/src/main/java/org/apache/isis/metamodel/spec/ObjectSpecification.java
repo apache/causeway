@@ -434,6 +434,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
     /**
      * Introspecting up to the level required.
      * @since 2.0
+     * @return whether it's necessary to re-run validations.
      */
     void introspectUpTo(IntrospectionState upTo);
 
