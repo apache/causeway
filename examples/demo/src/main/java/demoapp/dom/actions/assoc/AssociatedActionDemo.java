@@ -18,6 +18,7 @@
  */
 package demoapp.dom.actions.assoc;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.Getter;
 
@@ -69,4 +71,9 @@ public class AssociatedActionDemo extends DemoStub {
         items.add(DemoItem.of("last"));
     }
 
+    @Model //FIXME just a workaround, remove this supporting method!
+    public Set<DemoItem> choices0DoSomethingWithItems() {
+        return Collections.emptySet();
+    }
+    
 }
