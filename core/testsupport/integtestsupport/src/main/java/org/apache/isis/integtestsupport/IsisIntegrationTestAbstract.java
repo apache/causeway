@@ -20,6 +20,13 @@ package org.apache.isis.integtestsupport;
 
 import javax.inject.Inject;
 
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -28,6 +35,7 @@ import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.runtime.persistence.transaction.events.TransactionAfterBeginEvent;
 
 /**
  * Convenient base class to extend for integration tests. 
@@ -35,6 +43,32 @@ import org.apache.isis.applib.services.xactn.TransactionService;
  * @since 2.0
  */
 public abstract class IsisIntegrationTestAbstract {
+
+    @Service
+    @Order(OrderPrecedence.MIDPOINT)
+    public static class CommandSupport {
+
+        private final CommandContext commandContext;
+
+        @Inject
+        public CommandSupport(final CommandContext commandContext) {
+            this.commandContext = commandContext;
+        }
+
+        @EventListener
+        public void on(final TransactionAfterBeginEvent event) {
+            final Command command = commandContext.getCommand();
+            if(command == null) {
+                return;
+            }
+            final Command.Executor executor = command.getExecutor();
+            if(executor != Command.Executor.OTHER) {
+                return;
+            }
+
+            command.internal().setExecutor(Command.Executor.USER);
+        }
+    }
 
     /**
      * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object)}

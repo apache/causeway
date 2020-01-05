@@ -31,6 +31,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal._Constants;
@@ -613,6 +614,13 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     public void setupCommand(
             final ManagedObject targetAdapter,
             final Can<ManagedObject> argumentAdapters) {
+
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+        if (command.getExecutor() != Command.Executor.USER) {
+            return;
+        }
 
         setupCommandTarget(targetAdapter, argumentAdapters);
         setupCommandMemberIdentifier();

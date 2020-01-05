@@ -31,10 +31,17 @@ import org.springframework.transaction.support.AbstractPlatformTransactionManage
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionObject;
+import org.apache.isis.runtime.persistence.transaction.events.TransactionAfterBeginEvent;
+import org.apache.isis.runtime.persistence.transaction.events.TransactionAfterCommitEvent;
+import org.apache.isis.runtime.persistence.transaction.events.TransactionAfterRollbackEvent;
+import org.apache.isis.runtime.persistence.transaction.events.TransactionBeforeBeginEvent;
+import org.apache.isis.runtime.persistence.transaction.events.TransactionBeforeCommitEvent;
+import org.apache.isis.runtime.persistence.transaction.events.TransactionBeforeRollbackEvent;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.runtime.session.init.InitialisationSession;
@@ -51,15 +58,21 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransactionManager {
 
+
     private static final long serialVersionUID = 1L;
 
     private final IsisSessionFactory isisSessionFactory;
     private final ServiceRegistry serviceRegistry;
+    private final EventBusService eventBusService;
 
     @Inject
-    public IsisPlatformTransactionManagerForJdo(IsisSessionFactory isisSessionFactory, ServiceRegistry serviceRegistry) {
+    public IsisPlatformTransactionManagerForJdo(
+            final IsisSessionFactory isisSessionFactory,
+            final ServiceRegistry serviceRegistry,
+            final EventBusService eventBusService) {
         this.isisSessionFactory = isisSessionFactory;
         this.serviceRegistry = serviceRegistry;
+        this.eventBusService = eventBusService;
     }
 
     @Override
@@ -95,10 +108,13 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         IsisTransactionObject txObject = (IsisTransactionObject) transaction;
 
         log.debug("doBegin {}", definition);
+        eventBusService.post(new TransactionBeforeBeginEvent(txObject));
 
         val tx = transactionManagerJdo().beginTransaction();
         txObject.setCurrentTransaction(tx);
         IsisTransactionAspectSupport.putTransactionObject(txObject);
+
+        eventBusService.post(new TransactionAfterBeginEvent(txObject));
     }
 
     @Override
@@ -106,8 +122,12 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         IsisTransactionObject txObject = (IsisTransactionObject) status.getTransaction();
 
         log.debug("doCommit {}", status);
+        eventBusService.post(new TransactionBeforeCommitEvent(txObject));
 
         transactionManagerJdo().commitTransaction(txObject);
+
+        eventBusService.post(new TransactionAfterCommitEvent(txObject));
+
         txObject.getCountDownLatch().countDown();
         txObject.setCurrentTransaction(null);
         IsisTransactionAspectSupport.clearTransactionObject();
@@ -118,8 +138,12 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         IsisTransactionObject txObject = (IsisTransactionObject) status.getTransaction();
 
         log.debug("doRollback {}", status);
+        eventBusService.post(new TransactionBeforeRollbackEvent(txObject));
 
         transactionManagerJdo().abortTransaction(txObject);
+
+        eventBusService.post(new TransactionAfterRollbackEvent(txObject));
+
         txObject.getCountDownLatch().countDown();
         txObject.setCurrentTransaction(null);
         IsisTransactionAspectSupport.clearTransactionObject();

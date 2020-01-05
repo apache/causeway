@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.context;
 
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -53,8 +54,7 @@ public interface MetaModelContext {
      * Configuration 'beans' with meta-data (IDE-support).
      * 
      * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html">spring.io</a>
-     * @apiNote should ultimately replace {@link #getConfigurationLegacy()}
-     * 
+     *
      */
     IsisConfiguration getConfiguration();
 

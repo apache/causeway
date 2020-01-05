@@ -23,6 +23,7 @@ import java.util.Collections;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.commons.ToString;
@@ -310,6 +311,13 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     public void setupCommand(
             final ManagedObject targetAdapter,
             final ManagedObject valueAdapterOrNull) {
+
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+        if (command.getExecutor() != Command.Executor.USER) {
+            return;
+        }
 
         setupCommandTarget(targetAdapter, valueAdapterOrNull);
         setupCommandMemberIdentifier();

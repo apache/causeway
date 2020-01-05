@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -77,7 +78,7 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     private final SpecificationLoader specificationLoader = 
     getSingletonElseFail(SpecificationLoader.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final AuthenticationSessionProvider authenticationSessionProvider =
     getSingletonElseFail(AuthenticationSessionProvider.class);
 

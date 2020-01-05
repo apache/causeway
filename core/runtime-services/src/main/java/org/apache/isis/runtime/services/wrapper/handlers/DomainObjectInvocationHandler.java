@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InteractionException;
@@ -244,7 +245,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             }
 
             return handleActionMethod(actualTargetAdapter, args, actualObjectAction, contributeeMember);
-            
         }
 
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
