@@ -18,7 +18,13 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel;
 
+import java.lang.reflect.Method;
+import java.util.Set;
+
 import javax.annotation.Nullable;
+
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Sets;
 
 public class JdoMetamodelUtil {
     
@@ -26,9 +32,32 @@ public class JdoMetamodelUtil {
         if(cls==null) {
             return false;
         }
-        return IsisJdoMetamodelPlugin.get().isPersistenceEnhanced(cls);
+        return org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls);
+    }
+
+    public static boolean isMethodProvidedByEnhancement(@Nullable Method method) {
+        if(method==null) {
+            return false;
+        }
+        ensureInit();
+        return /*methodStartsWith(method, "jdo") || */ 
+                jdoMethodsProvidedByEnhancement.contains(method.toString());
     }
     
+    // -- HELPER
+
+    private final static Set<String> jdoMethodsProvidedByEnhancement = _Sets.newHashSet();
     
+    private static Method[] getMethodsProvidedByEnhancement() {
+        return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();
+    }
+
+    private static void ensureInit() {
+        if(jdoMethodsProvidedByEnhancement.isEmpty()) {
+            _NullSafe.stream(getMethodsProvidedByEnhancement())
+            .map(Method::toString)
+            .forEach(jdoMethodsProvidedByEnhancement::add);
+        }
+    }
 
 }

@@ -31,7 +31,7 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.spec.EntityState;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.persistence.jdo.datanucleus5.metamodel.IsisJdoMetamodelPlugin;
+import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
 import lombok.val;
 
@@ -128,10 +128,8 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
 
     @Override
     public boolean isProxyEnhancement(Method method) {
-        return IsisJdoMetamodelPlugin.get().isMethodProvidedByEnhancement(method);
+        return JdoMetamodelUtil.isMethodProvidedByEnhancement(method);
     }
-
-
 
 
 }
