@@ -26,14 +26,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
@@ -57,7 +58,7 @@ public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 
     private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();
 
-    @Inject private List<ValuePropertyPlugin> valuePropertyPlugins;
+    @Autowired(required = false) private List<ValuePropertyPlugin> valuePropertyPlugins;
     
     public static interface Factory extends Supplier<Property> {};
 
@@ -138,7 +139,7 @@ public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
     private ValuePropertyCollector discoverValueProperties() {
         
         final ValuePropertyCollector collector = ValuePropertyPlugin.collector();
-        valuePropertyPlugins.forEach(plugin->{
+        _NullSafe.stream(valuePropertyPlugins).forEach(plugin->{
             plugin.plugin(collector);
         });
         return collector;
