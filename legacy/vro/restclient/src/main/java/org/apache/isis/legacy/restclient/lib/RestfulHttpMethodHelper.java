@@ -18,17 +18,13 @@
  */
 package org.apache.isis.legacy.restclient.lib;
 
-import org.apache.isis.legacy.restclient.lib.ClientRequest;
-import org.apache.isis.legacy.restclient.lib.ClientRequestConfigurer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
-import lombok.Getter;
-
-public enum RestfulHttpMethod2 {
-    GET(javax.ws.rs.HttpMethod.GET, ArgStrategy.QUERY_STRING),
-    PUT(javax.ws.rs.HttpMethod.PUT, ArgStrategy.BODY),
-    DELETE(javax.ws.rs.HttpMethod.DELETE, ArgStrategy.QUERY_STRING),
-    POST(javax.ws.rs.HttpMethod.POST, ArgStrategy.BODY);
+enum RestfulHttpMethodHelper {
+    GET(ArgStrategy.QUERY_STRING),
+    PUT(ArgStrategy.BODY),
+    DELETE(ArgStrategy.QUERY_STRING),
+    POST(ArgStrategy.BODY);
 
     private enum ArgStrategy {
         /**
@@ -58,11 +54,9 @@ public enum RestfulHttpMethod2 {
         abstract void setUpArgs(ClientRequestConfigurer clientRequestConfigurer, JsonRepresentation requestArgs);
     }
 
-    @Getter private final String javaxRsMethod;
     private final ArgStrategy argStrategy;
 
-    private RestfulHttpMethod2(final String javaxRsMethod, final ArgStrategy argStrategy) {
-        this.javaxRsMethod = javaxRsMethod;
+    private RestfulHttpMethodHelper(final ArgStrategy argStrategy) {
         this.argStrategy = argStrategy;
     }
 

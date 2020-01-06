@@ -18,16 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum RestfulHttpMethod {
-    GET(javax.ws.rs.HttpMethod.GET),
-    PUT(javax.ws.rs.HttpMethod.PUT),
-    DELETE(javax.ws.rs.HttpMethod.DELETE),
-    POST(javax.ws.rs.HttpMethod.POST);
-
-    @Getter private final String javaxRsMethod;
+    GET,
+    PUT,
+    DELETE,
+    POST,
 
 }

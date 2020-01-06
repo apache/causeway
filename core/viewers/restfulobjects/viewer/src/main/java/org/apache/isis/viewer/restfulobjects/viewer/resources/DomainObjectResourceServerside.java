@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -61,7 +62,6 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
@@ -336,7 +336,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
                 Link link = new Link(
                         Rel.ELEMENT.getName(),
-                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        HttpMethod.GET,
                         getResourceContext().urlFor(
                                 "objects/" + domainType + "/" + instanceId
                                 ),
@@ -348,7 +348,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             public void visit(final ActionLayoutData actionLayoutData) {
                 Link link = new Link(
                         Rel.ACTION.getName(),
-                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        HttpMethod.GET,
                         getResourceContext().urlFor(
                                 "objects/" + domainType + "/" + instanceId + "/actions/" + actionLayoutData.getId()
                                 ),
@@ -360,7 +360,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             public void visit(final PropertyLayoutData propertyLayoutData) {
                 Link link = new Link(
                         Rel.PROPERTY.getName(),
-                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        HttpMethod.GET,
                         getResourceContext().urlFor(
                                 "objects/" + domainType + "/" + instanceId + "/properties/" + propertyLayoutData.getId()
                                 ),
@@ -372,7 +372,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             public void visit(final CollectionLayoutData collectionLayoutData) {
                 Link link = new Link(
                         Rel.COLLECTION.getName(),
-                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        HttpMethod.GET,
                         getResourceContext().urlFor(
                                 "objects/" + domainType + "/" + instanceId + "/collections/" + collectionLayoutData.getId()
                                 ),

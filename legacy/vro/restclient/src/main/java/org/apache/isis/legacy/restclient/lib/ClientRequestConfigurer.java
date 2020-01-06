@@ -76,12 +76,12 @@ public class ClientRequestConfigurer {
      * {@link #configureArgs(Map)}.
      */
     public ClientRequestConfigurer setHttpMethod(final RestfulHttpMethod httpMethod) {
-        clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
+        clientRequest.setHttpMethod(httpMethod.name());
         return this;
     }
     
-    public ClientRequestConfigurer setHttpMethod(final RestfulHttpMethod2 httpMethod) {
-        clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
+    public ClientRequestConfigurer setHttpMethod(final RestfulHttpMethodHelper httpMethod) {
+        clientRequest.setHttpMethod(httpMethod.name());
         return this;
     }
 
@@ -167,9 +167,9 @@ public class ClientRequestConfigurer {
         return this;
     }
 
-    RestfulHttpMethod2 getHttpMethod() {
+    RestfulHttpMethodHelper getHttpMethod() {
         final String httpMethod = clientRequest.getHttpMethod();
-        return RestfulHttpMethod2.valueOf(httpMethod);
+        return RestfulHttpMethodHelper.valueOf(httpMethod);
     }
 
 }

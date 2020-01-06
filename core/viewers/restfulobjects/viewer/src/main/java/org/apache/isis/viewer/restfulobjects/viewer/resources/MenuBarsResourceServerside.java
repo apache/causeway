@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import javax.inject.Inject;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -34,7 +35,6 @@ import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.menubars.MenuBarsResource;
@@ -86,7 +86,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
                         objectType, ConfigurationConstants.SERVICE_IDENTIFIER, actionLayoutData.getId());
                 Link link = new Link(
                         Rel.ACTION.getName(),
-                        RestfulHttpMethod.GET.getJavaxRsMethod(),
+                        HttpMethod.GET,
                         getResourceContext().urlFor(relativeUrl),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                 actionLayoutData.setLink(link);

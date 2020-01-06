@@ -27,7 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.legacy.restclient.lib.ClientRequestConfigurer;
-import org.apache.isis.legacy.restclient.lib.RestfulHttpMethod2;
+import org.apache.isis.legacy.restclient.lib.RestfulHttpMethodHelper;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -54,25 +54,25 @@ public class RestfulHttpMethodTest_setUp {
 
     @Test
     public void get() throws Exception {
-        setsUpQueryString(RestfulHttpMethod2.GET);
+        setsUpQueryString(RestfulHttpMethodHelper.GET);
     }
 
     @Test
     public void delete() throws Exception {
-        setsUpQueryString(RestfulHttpMethod2.DELETE);
+        setsUpQueryString(RestfulHttpMethodHelper.DELETE);
     }
 
     @Test
     public void post() throws Exception {
-        setsUpBody(RestfulHttpMethod2.POST);
+        setsUpBody(RestfulHttpMethodHelper.POST);
     }
 
     @Test
     public void put() throws Exception {
-        setsUpBody(RestfulHttpMethod2.PUT);
+        setsUpBody(RestfulHttpMethodHelper.PUT);
     }
 
-    private void setsUpQueryString(final RestfulHttpMethod2 httpMethod) throws UnsupportedEncodingException {
+    private void setsUpQueryString(final RestfulHttpMethodHelper httpMethod) throws UnsupportedEncodingException {
         context.checking(new Expectations() {
             {
                 oneOf(requestConfigurer).setHttpMethod(httpMethod);
@@ -83,7 +83,7 @@ public class RestfulHttpMethodTest_setUp {
         httpMethod.setUpArgs(requestConfigurer, repr);
     }
 
-    private void setsUpBody(final RestfulHttpMethod2 httpMethod) throws UnsupportedEncodingException {
+    private void setsUpBody(final RestfulHttpMethodHelper httpMethod) throws UnsupportedEncodingException {
         context.checking(new Expectations() {
             {
                 oneOf(requestConfigurer).setHttpMethod(httpMethod);
