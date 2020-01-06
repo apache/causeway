@@ -92,6 +92,8 @@ import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFac
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
  * hardcoded set of built-in {@link ComponentFactory}s, along with any
@@ -102,6 +104,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.Enti
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
+@Log4j2
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
     
     @Autowired(required = false) private List<ComponentFactory> componentFactoriesPluggedIn;
@@ -133,7 +136,9 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     protected void addComponentFactoriesFromPlugins(final ComponentFactoryList componentFactories) {
         
-        System.out.println("!!!! " + componentFactoriesPluggedIn);
+        log.info("adding {} ComponentFactories from plugins: {}", 
+                _NullSafe.size(componentFactoriesPluggedIn),
+                componentFactoriesPluggedIn);
         
         _NullSafe.stream(componentFactoriesPluggedIn)
             .forEach(componentFactories::add);
