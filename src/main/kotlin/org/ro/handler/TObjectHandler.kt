@@ -5,8 +5,7 @@ import kotlinx.serialization.json.Json
 import org.ro.to.TObject
 import org.ro.to.TransferObject
 
-
-class TObjectHandler : BaseHandler(), IResponseHandler {
+class TObjectHandler : BaseHandler() {
 
     @UnstableDefault
     override fun parse(response: String): TransferObject? {

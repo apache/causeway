@@ -6,7 +6,7 @@ import org.ro.core.aggregator.ObjectAggregator
 import org.ro.to.ResultObject
 import org.ro.to.TransferObject
 
-class ResultObjectHandler : BaseHandler(), IResponseHandler {
+class ResultObjectHandler : BaseHandler() {
 
     override fun doHandle() {
         logEntry.addAggregator(ObjectAggregator(logEntry.title))

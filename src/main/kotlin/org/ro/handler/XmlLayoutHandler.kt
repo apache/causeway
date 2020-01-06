@@ -3,10 +3,10 @@ package org.ro.handler
 import org.ro.core.Utils
 import org.ro.layout.Layout
 import org.ro.to.TransferObject
-import org.ro.to.bs3.XmlHelper
 import org.ro.to.bs3.Grid
+import org.ro.to.bs3.XmlHelper
 
-class XmlLayoutHandler : BaseHandler(), IResponseHandler {
+class XmlLayoutHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
         return Utils.isXml(response) && !response.contains("svg")

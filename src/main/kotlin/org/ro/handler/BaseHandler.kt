@@ -4,18 +4,25 @@ import org.ro.core.event.LogEntry
 import org.ro.to.TransferObject
 
 /**
- *  Common 'abstract' superclass of Response Handlers.
- *  Constructor should not be called.
+ * Superclass of Response Handlers which have to handle asynchronous XHR responses.
+ * Due to the fact that XMLHttpRequests are called asynchronously, responses may arrive in random order.
+ * @see: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
+ * COR simplifies implementation of Dispatcher.
+ *
+ * Implementing classes are responsible for:
+ * @item creating Objects from JSON responses,
+ * @item creating/finding Aggregators (eg. ListAggregator, ObjectAggregator), and
+ * @item setting Objects and Aggregators into LogEntry.
  */
-abstract class BaseHandler : IResponseHandler {
-    var successor: IResponseHandler? = null
+abstract class BaseHandler {
+    var successor: BaseHandler? = null
     protected var logEntry = LogEntry("")
 
     /**
      * @see https://en.wikipedia.org/wiki/Template_method_pattern
      * @param logEntry
      */
-    override fun handle(logEntry: LogEntry) {
+    open fun handle(logEntry: LogEntry) {
         this.logEntry = logEntry
         val response: String? = logEntry.getResponse()
         if (null !== response) {
@@ -32,7 +39,7 @@ abstract class BaseHandler : IResponseHandler {
      * @param jsonObj
      * @return
      */
-    override fun canHandle(response: String): Boolean {
+    open fun canHandle(response: String): Boolean {
         try {
             val obj = parse(response)
             logEntry.setTransferObject(obj)
@@ -46,7 +53,7 @@ abstract class BaseHandler : IResponseHandler {
      * May be overridden in subclasses
      * @return
      */
-    override fun doHandle() {
+    open fun doHandle() {
         update()
     }
 
@@ -54,12 +61,11 @@ abstract class BaseHandler : IResponseHandler {
      * Must be overridden in subclasses
      * @return
      */
-    override fun parse(response: String): TransferObject? {
+    open fun parse(response: String): TransferObject? {
         throw Exception("Subclass Responsibility")
     }
 
     protected fun update() {
-        //TODO is the first agg the right one?
         logEntry.getAggregator()!!.update(logEntry)
     }
 

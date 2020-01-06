@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 import org.ro.to.TransferObject
 import org.ro.to.mb.Menubars
 
-class MenuBarsHandler : BaseHandler(), IResponseHandler {
+class MenuBarsHandler : BaseHandler() {
 
     @UnstableDefault
     override fun parse(response: String): TransferObject? {

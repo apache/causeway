@@ -6,7 +6,7 @@ import org.ro.core.aggregator.RestfulDispatcher
 import org.ro.to.Restful
 import org.ro.to.TransferObject
 
-class RestfulHandler : BaseHandler(), IResponseHandler {
+class RestfulHandler : BaseHandler() {
 
     override fun doHandle() {
         logEntry.addAggregator(RestfulDispatcher())

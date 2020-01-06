@@ -1,6 +1,6 @@
 package org.ro.handler
 
-class DefaultHandler : BaseHandler(), IResponseHandler {
+class DefaultHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
         return true

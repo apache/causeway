@@ -6,7 +6,7 @@ import org.ro.core.aggregator.ErrorAggregator
 import org.ro.to.HttpError
 import org.ro.to.TransferObject
 
-class HttpErrorHandler : BaseHandler(), IResponseHandler {
+class HttpErrorHandler : BaseHandler() {
 
     override fun doHandle() {
         logEntry.addAggregator(ErrorAggregator())

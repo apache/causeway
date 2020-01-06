@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 import org.ro.to.DomainTypes
 import org.ro.to.TransferObject
 
-class DomainTypesHandler : BaseHandler(), IResponseHandler {
+class DomainTypesHandler : BaseHandler() {
 
     @UnstableDefault
     override fun parse(response: String): TransferObject? {

@@ -7,7 +7,7 @@ import org.ro.core.event.LogEntry
  * @See: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
  */
 object ResponseHandler {
-    private var delegate: IResponseHandler
+    private var delegate: BaseHandler
 
     //IMPROVE sequence of handlers should follow frequency of invocation in order to minimize the time taken by unneeded calls to 'canHandle()'
     private var _0 = RestfulHandler()

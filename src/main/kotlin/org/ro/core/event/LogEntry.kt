@@ -148,6 +148,7 @@ data class LogEntry(
         return fault != null
     }
 
+    //TODO is the last agg always the right one?
     fun getAggregator(): IAggregator? {
         return aggregators.last()
     }
