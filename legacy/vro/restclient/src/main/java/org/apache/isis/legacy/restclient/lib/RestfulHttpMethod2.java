@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.applib.client;
+package org.apache.isis.legacy.restclient.lib;
 
+import org.apache.isis.legacy.restclient.lib.ClientRequest;
+import org.apache.isis.legacy.restclient.lib.ClientRequestConfigurer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequest;
-import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
 
 import lombok.Getter;
 

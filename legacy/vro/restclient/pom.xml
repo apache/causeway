@@ -38,6 +38,14 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-viewer-restfulobjects-applib</artifactId>
 		</dependency>
+		
+		<!-- TESTING -->
+		<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+		
 	</dependencies>
 
 </project>
