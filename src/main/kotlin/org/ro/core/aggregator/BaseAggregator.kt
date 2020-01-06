@@ -6,12 +6,26 @@ import org.ro.core.model.BaseDisplayable
 import org.ro.to.Link
 import org.ro.to.TObject
 
-abstract class BaseAggregator : IAggregator {
+/**
+ * An Aggregator:
+ * @item is initially created in a ResponseHandler, (//TODO except it is called from a menu ???)
+ * @item is assigned to at least one LogEntry,
+ * @item is passed on to related LogEntries (eg. sibblings in a list, Layout),
+ * @item is notified about changes to related LogEntries,
+ * @item invokes subsequent links, and
+ * @item triggers creation a view for an object or a list.
+ *
+ * @see: https://www.enterpriseintegrationpatterns.com/patterns/messaging/IAggregator.html
+ *
+ * Could be named collector or assembler as well.
+ */
+abstract class BaseAggregator {
 
-//    open var isRendered = false
-    open lateinit var dsp:BaseDisplayable
+    open lateinit var dsp: BaseDisplayable
 
-    override fun reset() : BaseAggregator{
+    open fun update(logEntry: LogEntry) {}
+
+    open fun reset(): BaseAggregator {
         //do nothing and
         return this
     }

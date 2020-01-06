@@ -1,7 +1,7 @@
 package org.ro.core.event
 
 import org.ro.core.Utils
-import org.ro.core.aggregator.IAggregator
+import org.ro.core.aggregator.BaseAggregator
 import org.ro.handler.ResponseHandler
 import org.ro.to.Link
 import org.ro.to.Method
@@ -13,7 +13,7 @@ import org.w3c.xhr.XMLHttpRequest
  */
 class RoXmlHttpRequest {
 
-    fun invoke(link: Link, aggregator: IAggregator?) {
+    fun invoke(link: Link, aggregator: BaseAggregator?) {
         val url = link.href
         if (EventStore.isCached(url)) {
             processCached(url)
@@ -29,7 +29,7 @@ class RoXmlHttpRequest {
         EventStore.cached(url)
     }
 
-    private fun process(link: Link, aggregator: IAggregator?) {
+    private fun process(link: Link, aggregator: BaseAggregator?) {
         val method = link.method
         var url = link.href
         if (method != Method.POST.operation) {
@@ -57,7 +57,7 @@ class RoXmlHttpRequest {
         EventStore.start(url, method, body, aggregator)
     }
 
-    fun processAnonymous(link: Link, aggregator: IAggregator?) {
+    fun processAnonymous(link: Link, aggregator: BaseAggregator?) {
         val method = link.method
         val url = link.href
 

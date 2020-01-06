@@ -4,13 +4,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.UnstableDefault
-import org.ro.core.aggregator.IAggregator
+import org.ro.core.aggregator.BaseAggregator
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.handler.ResponseHandler
+import org.ro.snapshots.ai1_16_0.Response
 import org.ro.to.Method
 import org.ro.ui.kv.UiManager
-import org.ro.snapshots.ai1_16_0.Response
 import org.w3c.xhr.XMLHttpRequest
 
 // subclasses expect a running backend, here SimpleApp localhost:8080/restful*
@@ -39,7 +39,7 @@ open class IntegrationTest {
         return answer
     }
 
-    fun mockResponse(response: Response, aggregator: IAggregator?): LogEntry {
+    fun mockResponse(response: Response, aggregator: BaseAggregator?): LogEntry {
         val str = response.str
         val url = response.url
         val method = Method.GET.operation

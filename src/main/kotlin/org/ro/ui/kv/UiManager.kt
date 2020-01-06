@@ -2,7 +2,6 @@ package org.ro.ui.kv
 
 import org.ro.core.Session
 import org.ro.core.aggregator.BaseAggregator
-import org.ro.core.aggregator.IAggregator
 import org.ro.core.aggregator.ObjectAggregator
 import org.ro.core.aggregator.UndefinedAggregator
 import org.ro.core.event.EventStore
@@ -43,7 +42,7 @@ object UiManager {
         })
     }
 
-    fun add(title: String, panel: SimplePanel, aggregator: IAggregator = UndefinedAggregator()) {
+    fun add(title: String, panel: SimplePanel, aggregator: BaseAggregator = UndefinedAggregator()) {
         RoView.addTab(title, panel)
         EventStore.addView(title, aggregator, panel)
     }

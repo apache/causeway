@@ -1,7 +1,7 @@
 package org.ro.core.event
 
 import org.ro.core.Utils
-import org.ro.core.aggregator.IAggregator
+import org.ro.core.aggregator.BaseAggregator
 import org.ro.to.TransferObject
 import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.panel.SimplePanel
@@ -26,7 +26,7 @@ object EventStore {
         }
     }
 
-    fun start(url: String, method: String, body: String = "", aggregator: IAggregator? = null): LogEntry {
+    fun start(url: String, method: String, body: String = "", aggregator: BaseAggregator? = null): LogEntry {
         val entry = LogEntry(url, method, body)
         if (aggregator != null) {
             entry.addAggregator(aggregator)
@@ -42,7 +42,7 @@ object EventStore {
         updateStatus(entry)
     }
 
-    fun addView(title: String, aggregator: IAggregator, panel: SimplePanel) {
+    fun addView(title: String, aggregator: BaseAggregator, panel: SimplePanel) {
         val entry = LogEntry(title = title, aggregator = aggregator)
         entry.obj = panel
         log(entry)
@@ -53,7 +53,6 @@ object EventStore {
         val logEntry = findView(title)
         if (null != logEntry) {
             logEntry.setClose()
-            //FIXME is the first agg the right one to reset?
             logEntry.getAggregator()!!.reset()
             updateStatus(logEntry)
         }
