@@ -5,7 +5,7 @@ import org.ro.ui.Point
 import org.w3c.dom.parsing.DOMParser
 import kotlin.browser.document
 
-class DiagramAggregator(val at: Point = Point(100,100)) : BaseAggregator() {
+class DiagramDispatcher(val at: Point = Point(100,100)) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry) {
         val response = logEntry.response

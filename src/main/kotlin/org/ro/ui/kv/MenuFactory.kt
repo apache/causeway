@@ -1,6 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.core.aggregator.ActionAggregator
+import org.ro.core.aggregator.ActionDispatcher
 import org.ro.to.Link
 import org.ro.to.TObject
 import org.ro.ui.IconManager
@@ -56,7 +56,7 @@ object MenuFactory {
             classes = setOf("text-danger")
         }
         dd.ddLink(label, icon = icon, classes = classes).onClick { _ ->
-            ActionAggregator().invoke(link)
+            ActionDispatcher().invoke(link)
         }
     }
 

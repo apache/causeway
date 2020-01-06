@@ -3,7 +3,7 @@ package org.ro.to
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.ro.IntegrationTest
-import org.ro.core.aggregator.ActionAggregator
+import org.ro.core.aggregator.ActionDispatcher
 import org.ro.core.event.EventStore
 import org.ro.handler.ActionHandler
 import org.ro.snapshots.ai1_16_0.ACTIONS_RUN_FIXTURE_SCRIPT
@@ -56,7 +56,7 @@ class LinkTest : IntegrationTest() {
             val arguments = link.arguments as MutableMap
             val arg = Argument(href)
             arguments.put("script", arg)
-            ActionAggregator().invoke(link)
+            ActionDispatcher().invoke(link)
             val le = EventStore.find(url)!!
             assertTrue(!le.isError())
         }

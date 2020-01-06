@@ -1,6 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.core.aggregator.DiagramAggregator
+import org.ro.core.aggregator.DiagramDispatcher
 import org.ro.core.event.RoXmlHttpRequest
 import org.ro.to.Argument
 import org.ro.to.Link
@@ -53,7 +53,7 @@ object PlantumlPanel : VPanel() {
         args.put("output_format", Argument("\"output_format\"", "\"svg\""))
 
         val link = Link(href = url, method = Method.POST.operation, args = args)
-        val agr = DiagramAggregator()
+        val agr = DiagramDispatcher()
         RoXmlHttpRequest().processAnonymous(link, agr)
     }
 

@@ -2,7 +2,7 @@ package org.ro.snapshots.ai1_16_0
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
-import org.ro.core.aggregator.ActionAggregator
+import org.ro.core.aggregator.ActionDispatcher
 import org.ro.core.event.EventStore
 import org.ro.to.Link
 import org.ro.to.Method
@@ -40,7 +40,7 @@ class UrlsTest : IntegrationTest() {
             for (entry in urls) {
                 val href = entry.key
                 val link = Link(method = Method.GET.operation, href = href)
-                ActionAggregator().invoke(link)
+                ActionDispatcher().invoke(link)
             }
 
             // then
