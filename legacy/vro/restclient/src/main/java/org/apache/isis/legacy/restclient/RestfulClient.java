@@ -129,8 +129,20 @@ public class RestfulClient {
         return followT(link, requestArgs);
     }
 
-    public <T extends JsonRepresentation> RestfulResponse<T> followT(final LinkRepresentation link, final JsonRepresentation requestArgs) throws Exception {
-        return link.<T> follow(executor, requestArgs);
+    public <T extends JsonRepresentation> RestfulResponse<T> followT(
+            final LinkRepresentation link, 
+            final JsonRepresentation requestArgs) throws Exception {
+        
+        final ClientRequestConfigurer clientRequestConfigurer = 
+                ClientRequestConfigurer.create(executor, link.getHref());
+
+        clientRequestConfigurer.accept(MediaType.APPLICATION_JSON_TYPE);
+        clientRequestConfigurer.setHttpMethod(link.getHttpMethod());
+
+        clientRequestConfigurer.configureArgs(requestArgs);
+
+        final RestfulRequest restfulRequest = new RestfulRequest(clientRequestConfigurer);
+        return restfulRequest.executeT();
     }
 
     public RestfulRequest createRequest(final RestfulHttpMethod httpMethod, final String uriTemplate) {

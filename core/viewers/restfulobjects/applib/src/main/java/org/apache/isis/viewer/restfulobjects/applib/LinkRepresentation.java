@@ -24,11 +24,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import org.apache.isis.viewer.restfulobjects.applib.client.ClientExecutor;
-import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-
 public final class LinkRepresentation extends JsonRepresentation {
 
     public LinkRepresentation() {
@@ -109,23 +104,6 @@ public final class LinkRepresentation extends JsonRepresentation {
             return JsonRepresentation.newMap();
         }
         return new JsonRepresentation(arguments);
-    }
-
-    public <T> RestfulResponse<JsonRepresentation> follow(final ClientExecutor executor) throws Exception {
-        return follow(executor, null);
-    }
-
-    public <T extends JsonRepresentation> RestfulResponse<T> follow(final ClientExecutor executor, final JsonRepresentation requestArgs) throws Exception {
-
-        final ClientRequestConfigurer clientRequestConfigurer = ClientRequestConfigurer.create(executor, getHref());
-
-        clientRequestConfigurer.accept(MediaType.APPLICATION_JSON_TYPE);
-        clientRequestConfigurer.setHttpMethod(getHttpMethod());
-
-        clientRequestConfigurer.configureArgs(requestArgs);
-
-        final RestfulRequest restfulRequest = new RestfulRequest(clientRequestConfigurer);
-        return restfulRequest.executeT();
     }
 
     @Override
