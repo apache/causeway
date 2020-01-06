@@ -517,10 +517,8 @@ implements LinksProvider, UiHintContainer {
         //XXX lombok issue, cannot use val here
         final ObjectMemento selectedAsMemento = super.getMementoService().mementoForObject(selectedAdapter);
         final String selectedKey = selectedAsMemento.asString(); 
-        final ObjectMemento newValue = 
-                toggledMementos.compute(selectedKey, (k, v) -> (v==null) ? selectedAsMemento : null);
         
-        final boolean isSelected = newValue!=null;
+        final boolean isSelected = _Maps.toggleElement(toggledMementos, selectedKey, selectedAsMemento); 
         return isSelected;
         
     }

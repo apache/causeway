@@ -42,6 +42,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
@@ -142,8 +143,30 @@ public final class _Maps {
         return new AbstractMap.SimpleEntry<K, V>(k, v);
     }
 
-    // -- TRANSFORMATIONS
+    // -- MODIFICATIONS
 
+    /**
+     * For a given {@code map} either adds or removes the specified {@code key} based on whether 
+     * the map contains the {@code key}.
+     * If this is an add operation, then given {@code value} is associated with the {@code key}. 
+     * @param <K>
+     * @param <V>
+     * @param input
+     * @param key
+     * @param value
+     * @return whether given map contains the {@code key} after the operation
+     */
+    public static <K, V> boolean toggleElement(
+            @NonNull Map<K, V> map, 
+            @NonNull K key, 
+            @NonNull V value) {
+        
+        val newValue = map.compute(key, (k, v) -> (v==null) ? value : null);
+        return newValue!=null;
+    }
+    
+    // -- TRANSFORMATIONS
+    
     public static <K, V> Map<K, V> filterKeys(
             @Nullable Map<K, V> input,
             Predicate<K> keyFilter, 
