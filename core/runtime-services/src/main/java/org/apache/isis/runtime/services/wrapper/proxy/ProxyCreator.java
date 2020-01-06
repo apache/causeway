@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.runtime.services.wrapper.handlers.DelegatingInvocationHandler;
 
@@ -39,9 +40,10 @@ import lombok.RequiredArgsConstructor;
 public class ProxyCreator {
 
     @NonNull private final Map<Class<?>, ProxyFactory<?>> proxyFactoryByClass;
+    @NonNull private final ProxyFactoryService proxyFactoryService;
 
-    public ProxyCreator() {
-        this(Collections.synchronizedMap(new WeakHashMap<>()));
+    public ProxyCreator(final ProxyFactoryService proxyFactoryService) {
+        this(Collections.synchronizedMap(new WeakHashMap<>()), proxyFactoryService);
     }
 
     public <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
@@ -77,7 +79,7 @@ public class ProxyCreator {
 
         final ProxyFactory<T> proxyFactory = ProxyFactory.builder(toProxyClass)
                 .interfaces(interfaces)
-                .build();
+                .build(proxyFactoryService);
 
         return proxyFactory;
     }

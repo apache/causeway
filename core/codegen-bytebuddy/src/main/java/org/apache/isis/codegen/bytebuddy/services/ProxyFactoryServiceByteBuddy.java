@@ -26,13 +26,14 @@ import javax.annotation.Nullable;
 
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryPlugin;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
@@ -40,7 +41,8 @@ import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.Implementation
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
 
-public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
+@Service
+public class ProxyFactoryServiceByteBuddy implements ProxyFactoryService {
 
     private final ClassLoadingStrategyAdvisor strategyAdvisor = new ClassLoadingStrategyAdvisor();
 

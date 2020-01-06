@@ -21,7 +21,6 @@ package org.apache.isis.unittestsupport.jmocking;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Date;
@@ -44,7 +43,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryPlugin;
 
 class ImposteriserTestUsingCodegenPlugin {
 
@@ -71,15 +69,6 @@ class ImposteriserTestUsingCodegenPlugin {
         invokable = null;
         invocation = null;
     }
-
-    // //////////////////////////////////////
-
-    @Test
-    void canLoadCodegenPlugin() throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        assertNotNull(ProxyFactoryPlugin.get());
-    }
-
-    // //////////////////////////////////////
 
     @Test
     void happyCaseWhenJdkInterface() {

@@ -42,6 +42,8 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -74,6 +76,8 @@ import org.apache.isis.security.api.authentication.standard.SimpleSession;
 import org.apache.isis.unittestsupport.config.internal._Config;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import lombok.val;
 
 public class WrapperFactoryDefault_wrappedObject_Test {
 
@@ -121,13 +125,16 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     public void setUp() {
 
         // PRODUCTION
+        
+        val proxyFactoryService = (ProxyFactoryService) new ProxyFactoryServiceByteBuddy();
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectManager(mockObjectManager)
 //                .singleton(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
-                .singleton(wrapperFactory = createWrapperFactory())
+                .singleton(proxyFactoryService)
+                .singleton(wrapperFactory = createWrapperFactory(proxyFactoryService))
                 .singleton(mockCommandContext)
                 .singleton(mockCommandDtoServiceInternal)
                 .singleton(mockFactoryService)
@@ -249,8 +256,11 @@ public class WrapperFactoryDefault_wrappedObject_Test {
         employeeWO = wrapperFactory.wrap(employeeDO);
     }
 
-    protected WrapperFactoryDefault createWrapperFactory() {
-        return new WrapperFactoryDefault();
+    protected WrapperFactoryDefault createWrapperFactory(ProxyFactoryService proxyFactoryService) {
+        val wrapperFactory = new WrapperFactoryDefault();
+        wrapperFactory.proxyFactoryService = proxyFactoryService;
+        wrapperFactory.init();
+        return wrapperFactory;
     }
 
     @Test

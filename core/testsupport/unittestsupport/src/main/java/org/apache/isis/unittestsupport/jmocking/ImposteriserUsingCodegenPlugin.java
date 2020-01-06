@@ -26,6 +26,7 @@ import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;
 import org.jmock.lib.JavaReflectionImposteriser;
 
+import org.apache.isis.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 
 class ImposteriserUsingCodegenPlugin implements Imposteriser {
@@ -63,7 +64,7 @@ class ImposteriserUsingCodegenPlugin implements Imposteriser {
 
         final ProxyFactory<T> factory = ProxyFactory.builder(mockedType)
                 .interfaces(ancilliaryTypes)
-                .build();
+                .build(new ProxyFactoryServiceByteBuddy());
 
         final boolean initialize = false;
 

@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.BiConsumer;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -61,6 +62,7 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.runtime.services.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.runtime.services.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -88,19 +90,18 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private MetaModelContext metaModelContext;
     @Inject private IsisSessionFactory isisSessionFactory;
     @Inject private TransactionService transactionService;
+    @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
-    private final ProxyContextHandler proxyContextHandler;
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> 
         dispatchersByEventClass = 
             new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
-
-    public WrapperFactoryDefault() {
-        this(new ProxyCreator());
-    }
+    private ProxyContextHandler proxyContextHandler;
     
-    WrapperFactoryDefault(ProxyCreator proxyCreator) {
+    @PostConstruct
+    public void init() {
 
+        val proxyCreator = new ProxyCreator(proxyFactoryService);
         proxyContextHandler = new ProxyContextHandler(proxyCreator);
         
         putDispatcher(ObjectTitleEvent.class, (listener, event)->listener.objectTitleRead(event));

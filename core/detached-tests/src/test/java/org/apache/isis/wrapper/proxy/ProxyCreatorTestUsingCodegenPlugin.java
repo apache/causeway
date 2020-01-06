@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.runtime.services.wrapper.handlers.DelegatingInvocationHandler;
 import org.apache.isis.runtime.services.wrapper.proxy.ProxyCreator;
 
@@ -35,7 +36,7 @@ public class ProxyCreatorTestUsingCodegenPlugin {
 
     @Before
     public void setUp() throws Exception {
-        proxyCreator = new ProxyCreator();
+        proxyCreator = new ProxyCreator(new ProxyFactoryServiceByteBuddy());
     }
 
     public static class Employee {

@@ -32,7 +32,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
-import org.apache.isis.runtime.services.wrapper.proxy.ProxyCreator;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import lombok.RequiredArgsConstructor;
@@ -66,8 +66,7 @@ public class WrapperFactoryDefaultTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    private ProxyCreator mockProxyCreator;
+    @Mock private ProxyFactoryService mockProxyFactoryService;
     private WrapperFactoryDefault wrapperFactory;
 
     private DomainObject createProxyCalledWithDomainObject;
@@ -75,8 +74,14 @@ public class WrapperFactoryDefaultTest {
 
     @Before
     public void setUp() throws Exception {
-        wrapperFactory = new WrapperFactoryDefault(mockProxyCreator) {
+        wrapperFactory = new WrapperFactoryDefault() {
 
+            @Override
+            public void init() {
+                this.proxyFactoryService = mockProxyFactoryService; 
+                super.init();
+            }
+            
             @Override
             protected <T> T createProxy(T domainObject, EnumSet<WrapperFactory.ExecutionMode> mode) {
                 WrapperFactoryDefaultTest.this.createProxyCalledWithMode = mode;
@@ -84,6 +89,8 @@ public class WrapperFactoryDefaultTest {
                 return domainObject;
             }
         };
+        
+        
     }
 
     @Test

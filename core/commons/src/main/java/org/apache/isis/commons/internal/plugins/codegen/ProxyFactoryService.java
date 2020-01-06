@@ -20,27 +20,15 @@ package org.apache.isis.commons.internal.plugins.codegen;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.context._Plugin;
-
-public interface ProxyFactoryPlugin {
-
-    // -- INTERFACE
+/**
+ * Replaces the former ProxyFactoryPlugin
+ * @since 2.0
+ */
+public interface ProxyFactoryService {
 
     public <T> ProxyFactory<T> factory(
             Class<T> base,
             @Nullable Class<?>[] interfaces,
             @Nullable Class<?>[] constructorArgTypes);
 
-
-    // -- LOOKUP
-
-    public static ProxyFactoryPlugin get() {
-        return _Plugin.getOrElse(ProxyFactoryPlugin.class,
-                ambiguousPlugins->{
-                    return _Plugin.pickAnyAndWarn(ProxyFactoryPlugin.class, ambiguousPlugins);
-                },
-                ()->{
-                    throw _Plugin.absenceNonRecoverable(ProxyFactoryPlugin.class);
-                });
-    }
 }

@@ -65,8 +65,8 @@ public interface ProxyFactory<T> {
             this.constructorArgTypes = constructorArgTypes;
             return this;
         }
-        public ProxyFactory<T> build() {
-            return ProxyFactoryPlugin.get().factory(base, interfaces, constructorArgTypes);
+        public ProxyFactory<T> build(ProxyFactoryService proxyFactoryService) {
+            return proxyFactoryService.factory(base, interfaces, constructorArgTypes);
         }
     }
 
