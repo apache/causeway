@@ -31,6 +31,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsExcel}.
  */
+@org.springframework.stereotype.Component
 public class CollectionContentsAsExcelFactory 
 extends ComponentFactoryAbstract 
 implements CollectionContentsAsFactory {

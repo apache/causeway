@@ -31,6 +31,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.extensions.asciidoc.ui.IsisModuleExtAsciidocUi;
 import org.apache.isis.extensions.fixtures.IsisModuleExtFixtures;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
@@ -92,6 +93,7 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleJdoDataNucleus5.class,
         IsisModuleWicketViewer.class,
         IsisModuleExtSse.class, // server sent events
+        IsisModuleExtAsciidocUi.class, // ascii-doc rendering support
         
         // REST
         IsisModuleRestfulObjectsViewer.class,

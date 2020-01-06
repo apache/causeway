@@ -21,6 +21,7 @@ package org.apache.isis.extensions.sse;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.sse.markup.ListeningMarkupPanelFactoriesForWicket;
 import org.apache.isis.extensions.sse.services.SseServiceDefault;
 import org.apache.isis.extensions.sse.webmodule.WebModuleServerSentEvents;
 
@@ -28,7 +29,9 @@ import org.apache.isis.extensions.sse.webmodule.WebModuleServerSentEvents;
 @Import({
         // @Component's
         SseMetaModelPlugin.class,
-
+        ListeningMarkupPanelFactoriesForWicket.Parented.class,
+        ListeningMarkupPanelFactoriesForWicket.Standalone.class,
+        
         // @Service's
         SseServiceDefault.class,
         WebModuleServerSentEvents.class

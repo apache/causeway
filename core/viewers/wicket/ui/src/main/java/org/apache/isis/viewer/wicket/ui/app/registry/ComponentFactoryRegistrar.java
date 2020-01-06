@@ -40,6 +40,9 @@ public interface ComponentFactoryRegistrar {
         private final List<ComponentFactory> componentFactories = _Lists.newArrayList();
 
         public void add(ComponentFactory componentFactory) {
+            if(componentFactories.contains(componentFactory)) {
+                return;
+            }
             componentFactories.add(componentFactory);
         }
 

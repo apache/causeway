@@ -19,17 +19,18 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
-import java.util.ServiceLoader;
+import java.util.List;
 
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.context._Plugin;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
@@ -94,8 +95,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.Enti
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
  * hardcoded set of built-in {@link ComponentFactory}s, along with any
- * implementations loaded using {@link ServiceLoader} (ie from
- * <tt>META-INF/services</tt>).
+ * implementations discovered by the IoC container.
  */
 @Service
 @Named("isisWicketViewer.ComponentFactoryRegistrarDefault")
@@ -104,12 +104,14 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.Enti
 @Qualifier("Default")
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
     
+    @Autowired(required = false) private List<ComponentFactory> componentFactoriesPluggedIn;
+    
     @Override
     public void addComponentFactories(final ComponentFactoryList componentFactories) {
 
         addComponentFactoriesActingAsSelectors(componentFactories);
 
-        addComponentFactoriesUsingServiceLoader(componentFactories);
+        addComponentFactoriesFromPlugins(componentFactories);
 
         addBuiltInComponentFactories(componentFactories);
     }
@@ -129,10 +131,12 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new CollectionContentsMultipleViewsPanelFactory());
     }
 
-    protected void addComponentFactoriesUsingServiceLoader(final ComponentFactoryList componentFactories) {
-
-        _Plugin.loadAll(ComponentFactory.class).forEach(componentFactories::add);
-
+    protected void addComponentFactoriesFromPlugins(final ComponentFactoryList componentFactories) {
+        
+        System.out.println("!!!! " + componentFactoriesPluggedIn);
+        
+        _NullSafe.stream(componentFactoriesPluggedIn)
+            .forEach(componentFactories::add);
     }
 
     private void addBuiltInComponentFactories(final ComponentFactoryList componentFactories) {

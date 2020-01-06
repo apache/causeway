@@ -22,10 +22,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.asciidoc.applib.IsisModuleExtAsciidocApplib;
+import org.apache.isis.extensions.asciidoc.ui.components.AsciiDocPanelFactoriesForWicket;
 
 @Configuration
 @Import({
-        IsisModuleExtAsciidocApplib.class
+    IsisModuleExtAsciidocApplib.class,
+    AsciiDocPanelFactoriesForWicket.Parented.class,
+    AsciiDocPanelFactoriesForWicket.Standalone.class
 })
 public class IsisModuleExtAsciidocUi {
 }

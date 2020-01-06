@@ -51,7 +51,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementation of {@link ComponentFactoryRegistry} that delegates to a
@@ -62,7 +61,6 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry {
 
     @Inject private ComponentFactoryRegistrar componentFactoryRegistrar;

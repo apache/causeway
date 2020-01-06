@@ -31,7 +31,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
  * Creates {@link Component}s of a specified {@link ComponentType}, optionally
  * {@link #appliesTo(ComponentType, IModel) dependent on} the provided
  * {@link IModel model}.
- *
  * <p>
  * This interface is at the very heart of the Wicket Objects' model, being an
  * usage of the chain-of-responsibility design pattern. The available
@@ -39,6 +38,10 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
  * {@link ComponentFactoryRegistry} (bootstrapped from the
  * <tt>IsisWicketApplication</tt>); various adapters make it easy to lookup
  * {@link Component}s from this registry.
+ * 
+ * @apiNote any implementing class (when used as a plugin) must also be 
+ * discovered/managed by Spring, that is, 
+ * it needs a direct- or meta-annotation of type {@link Component}
  */
 public interface ComponentFactory extends Serializable {
 

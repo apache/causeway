@@ -19,6 +19,8 @@
 
 package org.apache.isis.extensions.asciidoc.ui.components;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.extensions.asciidoc.applib.value.AsciiDoc;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
@@ -35,6 +37,7 @@ public class AsciiDocPanelFactoriesForWicket {
 
     // -- PARENTED
 
+    @Component
     public static class Parented extends MarkupPanelFactories.ParentedAbstract {
         private static final long serialVersionUID = 1L;
 
@@ -56,6 +59,7 @@ public class AsciiDocPanelFactoriesForWicket {
 
     // -- STANDALONE
 
+    @Component
     public static class Standalone extends MarkupPanelFactories.StandaloneAbstract {
         private static final long serialVersionUID = 1L;
 

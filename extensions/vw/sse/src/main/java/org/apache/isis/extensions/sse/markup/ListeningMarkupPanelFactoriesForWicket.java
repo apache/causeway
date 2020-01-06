@@ -19,6 +19,8 @@
 
 package org.apache.isis.extensions.sse.markup;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.extensions.sse.facets.SseObserveFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -37,6 +39,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
     // -- PARENTED
 
+    @Component
     public static class Parented extends MarkupPanelFactories.ParentedAbstract {
         private static final long serialVersionUID = 1L;
 
@@ -70,6 +73,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
     // -- STANDALONE
 
+    @Component
     public static class Standalone extends MarkupPanelFactories.StandaloneAbstract {
         private static final long serialVersionUID = 1L;
 
