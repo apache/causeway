@@ -18,16 +18,11 @@ import org.ro.ui.kv.UiManager
  */
 class ListAggregator(val actionTitle: String) : BaseAggregator() {
 
-    lateinit override var dsp: BaseDisplayable
-
-    init {
-        dsp = DisplayList(actionTitle)
-    }
+    override var dsp: BaseDisplayable = DisplayList(actionTitle)
 
     override fun update(logEntry: LogEntry) {
-        val obj = logEntry.getTransferObject()
 
-        when (obj) {
+        when (val obj = logEntry.getTransferObject()) {
             is ResultList -> handleList(obj)
             is TObject -> handleObject(obj)
             is Layout -> handleLayout(obj)

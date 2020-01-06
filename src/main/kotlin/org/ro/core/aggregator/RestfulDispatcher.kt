@@ -2,12 +2,9 @@ package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
 import org.ro.core.event.RoXmlHttpRequest
-import org.ro.core.model.BaseDisplayable
 import org.ro.to.Restful
 
 class RestfulDispatcher() : BaseAggregator() {
-
-    override lateinit var dsp: BaseDisplayable
 
     override fun update(logEntry: LogEntry) {
         val restful = logEntry.getTransferObject() as Restful

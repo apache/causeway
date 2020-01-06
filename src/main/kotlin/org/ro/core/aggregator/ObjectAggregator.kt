@@ -14,9 +14,8 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     override var dsp: BaseDisplayable = DisplayObject(actionTitle)
 
     override fun update(logEntry: LogEntry) {
-        val obj = logEntry.getTransferObject()
 
-        when (obj) {
+        when (val obj = logEntry.getTransferObject()) {
             is TObject -> handleObject(obj)
             is Layout -> handleLayout(obj)
             is HttpError -> ErrorAlert(logEntry).open()
