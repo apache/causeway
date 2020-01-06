@@ -25,11 +25,9 @@ import org.apache.wicket.util.convert.converter.BigIntegerConverter;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlTimestamp;
@@ -38,6 +36,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.BigDecimalCon
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaDateTime;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDateTime;
+
+import lombok.val;
 
 /**
  * A locator for IConverters for ObjectAdapters
@@ -55,7 +55,7 @@ public class IsisConverterLocator {
             final ManagedObject objectAdapter,
             final WicketViewerSettings wicketViewerSettings) {
 
-        final ObjectSpecification objectSpecification = objectAdapter.getSpecification();
+        val objectSpecification = objectAdapter.getSpecification();
 
         // only use Wicket IConverter for value types, not for domain objects.
         if (!objectSpecification.isValue()) {
@@ -91,9 +91,9 @@ public class IsisConverterLocator {
             return _Casts.uncheckedCast(new DateConverterForJavaSqlTimestamp(wicketViewerSettings, adjustBy));
         }
         {
-            // data converter plugins (if any)
-
-            DateConverter<?> converter = _Plugin.loadAll(DateConverterPlugin.class).stream()
+            // date converter plugins (if any)
+            val serviceRegistry = objectSpecification.getMetaModelContext().getServiceRegistry();
+            DateConverter<?> converter = serviceRegistry.select(DateConverterPlugin.class).stream()
                     .map(plugin->plugin.converterForClassIfAny(correspondingClass, wicketViewerSettings, adjustBy))
                     .filter(_NullSafe::isPresent)
                     .findAny()
