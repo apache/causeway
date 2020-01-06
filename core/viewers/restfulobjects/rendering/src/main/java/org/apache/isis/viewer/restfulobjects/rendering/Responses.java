@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.rendering.util.JsonWriterUtil;
 

@@ -22,7 +22,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
 
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
 public class RestfulRequest_DomainModelTest_parser {

@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.rendering;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 
 public class RestfulObjectsApplicationException
 extends RuntimeException

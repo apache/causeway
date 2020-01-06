@@ -16,19 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.applib.client;
+package org.apache.isis.viewer.restfulobjects.applib;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
+
+import lombok.Getter;
 
 public final class RestfulRequest {
 
@@ -127,9 +126,9 @@ public final class RestfulRequest {
             return parser;
         }
 
-        void setHeader(final ClientRequestConfigurer clientRequestConfigurer, final X t) {
-            clientRequestConfigurer.header(getName(), parser.asString(t));
-        }
+//        void setHeader(final ClientRequestConfigurer clientRequestConfigurer, final X t) {
+//            clientRequestConfigurer.header(getName(), parser.asString(t));
+//        }
 
         @Override
         public String toString() {
@@ -137,23 +136,18 @@ public final class RestfulRequest {
         }
     }
 
-    private final ClientRequestConfigurer clientRequestConfigurer;
-    private final Map<RequestParameter<?>, Object> args = new LinkedHashMap<>();
+    @Getter private final Map<RequestParameter<?>, Object> args = new LinkedHashMap<>();
 
-    public RestfulRequest(final ClientRequestConfigurer clientRequestConfigurer) {
-        this.clientRequestConfigurer = clientRequestConfigurer;
-    }
-
-    public <T> RestfulRequest withHeader(final Header<T> header, final T t) {
-        header.setHeader(clientRequestConfigurer, t);
-        return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> RestfulRequest withHeader(final Header<List<T>> header, final T... ts) {
-        header.setHeader(clientRequestConfigurer, Arrays.asList(ts));
-        return this;
-    }
+//    public <T> RestfulRequest withHeader(final Header<T> header, final T t) {
+//        header.setHeader(clientRequestConfigurer, t);
+//        return this;
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    public <T> RestfulRequest withHeader(final Header<List<T>> header, final T... ts) {
+//        header.setHeader(clientRequestConfigurer, Arrays.asList(ts));
+//        return this;
+//    }
 
     public <Q> RestfulRequest withArg(final RestfulRequest.RequestParameter<Q> queryParam, final String argStrFormat, final Object... args) {
         final String argStr = String.format(argStrFormat, args);
@@ -164,33 +158,6 @@ public final class RestfulRequest {
     public <Q> RestfulRequest withArg(final RestfulRequest.RequestParameter<Q> queryParam, final Q arg) {
         args.put(queryParam, arg);
         return this;
-    }
-
-    public RestfulResponse<JsonRepresentation> execute() {
-        try {
-            if (!args.isEmpty()) {
-                clientRequestConfigurer.configureArgs(args);
-            }
-            final ClientRequest clientRequest = clientRequestConfigurer.getClientRequest();
-            final Response response = clientRequest.execute();
-
-            return RestfulResponse.ofT(response);
-        } catch (final Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends JsonRepresentation> RestfulResponse<T> executeT() {
-        final RestfulResponse<JsonRepresentation> restfulResponse = execute();
-        return (RestfulResponse<T>) restfulResponse;
-    }
-
-    /**
-     * For testing only.
-     */
-    ClientRequestConfigurer getClientRequestConfigurer() {
-        return clientRequestConfigurer;
     }
 
 }

@@ -25,19 +25,23 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.ClientExecutor;
 import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
+
+import lombok.Getter;
+import lombok.val;
 
 public class RestfulClient {
 
@@ -49,7 +53,7 @@ public class RestfulClient {
     private final DomainTypeResource domainTypeResource;
 
     private final ClientExecutor executor;
-    private final ClientRequestFactory clientRequestFactory;
+    @Getter private final ClientRequestFactory clientRequestFactory; // exposed for testing purposes only
 
 
     /**
@@ -141,8 +145,8 @@ public class RestfulClient {
 
         clientRequestConfigurer.configureArgs(requestArgs);
 
-        final RestfulRequest restfulRequest = new RestfulRequest(clientRequestConfigurer);
-        return restfulRequest.executeT();
+        final RestfulRequest restfulRequest = new RestfulRequest();
+        return execute(restfulRequest, clientRequestConfigurer);
     }
 
     public RestfulRequest createRequest(final RestfulHttpMethod httpMethod, final String uriTemplate) {
@@ -156,14 +160,30 @@ public class RestfulClient {
         clientRequestConfigurer.accept(MediaType.APPLICATION_JSON_TYPE);
         clientRequestConfigurer.setHttpMethod(httpMethod);
 
-        return new RestfulRequest(clientRequestConfigurer);
+        return new RestfulRequest();
+    }
+    
+    // -- HELPER
+    
+    private <T extends JsonRepresentation> RestfulResponse<T> execute(
+            final RestfulRequest restfulRequest,
+            final ClientRequestConfigurer clientRequestConfigurer) {
+        
+        val args = restfulRequest.getArgs();
+        
+        try {
+            if (!args.isEmpty()) {
+                clientRequestConfigurer.configureArgs(args);
+            }
+            val clientRequest = clientRequestConfigurer.getClientRequest();
+            val response = clientRequest.execute();
+
+            return _Casts.<RestfulResponse<T>>uncheckedCast(RestfulResponse.ofT(response));
+        } catch (final Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
-    /**
-     * exposed for testing purposes only.
-     */
-    public ClientRequestFactory getClientRequestFactory() {
-        return clientRequestFactory;
-    }
+
 
 }

@@ -25,10 +25,11 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulHttpMethod2;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 
+import lombok.Getter;
 import lombok.val;
 
 /**
@@ -52,7 +53,7 @@ public class ClientRequestConfigurer {
         return new ClientRequestConfigurer(clientRequest, uriBuilder);
     }
 
-    private final ClientRequest clientRequest;
+    @Getter private final ClientRequest clientRequest;
     private final UriBuilder uriBuilder;
 
     ClientRequestConfigurer(final ClientRequest clientRequest, final UriBuilder uriBuilder) {
@@ -164,13 +165,6 @@ public class ClientRequestConfigurer {
         });
 
         return this;
-    }
-
-    /**
-     * For testing.
-     */
-    ClientRequest getClientRequest() {
-        return clientRequest;
     }
 
     RestfulHttpMethod2 getHttpMethod() {

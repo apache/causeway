@@ -32,7 +32,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.ExceptionWithBody;
 import org.apache.isis.viewer.restfulobjects.rendering.ExceptionWithHttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisJaxrsUtilityService;

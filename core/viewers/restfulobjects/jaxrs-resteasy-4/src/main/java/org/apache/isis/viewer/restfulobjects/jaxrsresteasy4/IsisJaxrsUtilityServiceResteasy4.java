@@ -21,8 +21,8 @@ package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4;
 import org.jboss.resteasy.spi.Failure;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisJaxrsUtilityService;
 
 /**
