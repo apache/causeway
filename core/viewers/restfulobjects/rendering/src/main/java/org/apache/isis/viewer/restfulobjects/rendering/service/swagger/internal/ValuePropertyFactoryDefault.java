@@ -23,10 +23,10 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.joda.time.DateTime;
@@ -36,10 +36,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
-
-import lombok.extern.log4j.Log4j2;
 
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.ByteArrayProperty;
@@ -56,11 +53,12 @@ import io.swagger.models.properties.UUIDProperty;
 
 @Component
 @Named("isisMetaModel.ValuePropertyFactoryDefault")
-@Log4j2
 public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 
     private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();
 
+    @Inject private List<ValuePropertyPlugin> valuePropertyPlugins;
+    
     public static interface Factory extends Supplier<Property> {};
 
     public ValuePropertyFactoryDefault() {
@@ -137,10 +135,10 @@ public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 
     // -- HELPER
 
-    private static ValuePropertyCollector discoverValueProperties() {
-        final Set<ValuePropertyPlugin> plugins = _Plugin.loadAll(ValuePropertyPlugin.class);
+    private ValuePropertyCollector discoverValueProperties() {
+        
         final ValuePropertyCollector collector = ValuePropertyPlugin.collector();
-        plugins.forEach(plugin->{
+        valuePropertyPlugins.forEach(plugin->{
             plugin.plugin(collector);
         });
         return collector;
