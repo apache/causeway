@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import java.util.Collections;
-import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -110,8 +109,6 @@ import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import net.ftlines.wicketsource.WicketSource;
 
-//import lombok.val;
-
 /**
  * Main application, subclassing the Wicket {@link Application} and
  * bootstrapping Isis.
@@ -125,11 +122,8 @@ import net.ftlines.wicketsource.WicketSource;
  *
  * <p>
  * New {@link ComponentFactory}s can be specified in two ways. The preferred
- * approach is to use the {@link ServiceLoader} mechanism, whereby the
- * {@link ComponentFactory} implementation class is specified in a file under
- * <tt>META-INF/services</tt>. See <tt>views-gmaps2</tt> for an example of this.
- * Including a jar that uses this mechanism on the classpath will automatically
- * make the {@link ComponentFactory} defined within it available.
+ * approach is to use the have the IoC container discover the ComponentFactory.
+ * See <tt>asciidoc</tt> extension for an example of this.
  *
  * <p>
  * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule()}.
