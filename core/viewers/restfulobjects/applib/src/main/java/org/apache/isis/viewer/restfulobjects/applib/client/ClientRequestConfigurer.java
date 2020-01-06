@@ -25,6 +25,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulHttpMethod2;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 
@@ -74,6 +75,11 @@ public class ClientRequestConfigurer {
      * {@link #configureArgs(Map)}.
      */
     public ClientRequestConfigurer setHttpMethod(final RestfulHttpMethod httpMethod) {
+        clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
+        return this;
+    }
+    
+    public ClientRequestConfigurer setHttpMethod(final RestfulHttpMethod2 httpMethod) {
         clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
         return this;
     }
@@ -167,9 +173,9 @@ public class ClientRequestConfigurer {
         return clientRequest;
     }
 
-    RestfulHttpMethod getHttpMethod() {
+    RestfulHttpMethod2 getHttpMethod() {
         final String httpMethod = clientRequest.getHttpMethod();
-        return RestfulHttpMethod.valueOf(httpMethod);
+        return RestfulHttpMethod2.valueOf(httpMethod);
     }
 
 }

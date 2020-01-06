@@ -18,73 +18,16 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
-import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequest;
-import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public enum RestfulHttpMethod {
-    GET(javax.ws.rs.HttpMethod.GET, ArgStrategy.QUERY_STRING),
-    PUT(javax.ws.rs.HttpMethod.PUT, ArgStrategy.BODY),
-    DELETE(javax.ws.rs.HttpMethod.DELETE, ArgStrategy.QUERY_STRING),
-    POST(javax.ws.rs.HttpMethod.POST, ArgStrategy.BODY);
+    GET(javax.ws.rs.HttpMethod.GET),
+    PUT(javax.ws.rs.HttpMethod.PUT),
+    DELETE(javax.ws.rs.HttpMethod.DELETE),
+    POST(javax.ws.rs.HttpMethod.POST);
 
-    private enum ArgStrategy {
-        /**
-         * Individually encodes each query arg.
-         */
-        QUERY_ARGS {
-            @Override
-            void setUpArgs(final ClientRequestConfigurer clientRequestConfigurer, final JsonRepresentation requestArgs) {
-                clientRequestConfigurer.queryArgs(requestArgs);
-            }
-        },
-        /**
-         * Sends entire request args as a URL encoded map
-         */
-        QUERY_STRING {
-            @Override
-            void setUpArgs(final ClientRequestConfigurer clientRequestConfigurer, final JsonRepresentation requestArgs) {
-                clientRequestConfigurer.queryString(requestArgs);
-            }
-        },
-        BODY {
-            @Override
-            void setUpArgs(final ClientRequestConfigurer clientRequestConfigurer, final JsonRepresentation requestArgs) {
-                clientRequestConfigurer.body(requestArgs);
-            }
-        };
-        abstract void setUpArgs(ClientRequestConfigurer clientRequestConfigurer, JsonRepresentation requestArgs);
-    }
-
-    private final String javaxRsMethod;
-    private final ArgStrategy argStrategy;
-
-    private RestfulHttpMethod(final String javaxRsMethod, final ArgStrategy argStrategy) {
-        this.javaxRsMethod = javaxRsMethod;
-        this.argStrategy = argStrategy;
-    }
-
-    public String getJavaxRsMethod() {
-        return javaxRsMethod;
-    }
-
-    /**
-     * It's a bit nasty that we need to ask for the {@link org.jboss.resteasy.specimpl.ResteasyUriBuilder} as
-     * well as the {@link ClientRequest}, but that's because the
-     * {@link ClientRequest} does not allow us to setup raw query strings (only
-     * query name/arg pairs)
-     *
-     * @param clientRequestConfigurer
-     * @param requestArgs
-     */
-    public void setUpArgs(final ClientRequestConfigurer clientRequestConfigurer, final JsonRepresentation requestArgs) {
-        clientRequestConfigurer.setHttpMethod(this);
-        if (requestArgs == null) {
-            return;
-        }
-        if (!requestArgs.isMap()) {
-            throw new IllegalArgumentException("requestArgs must be a map; instead got: " + requestArgs);
-        }
-        argStrategy.setUpArgs(clientRequestConfigurer, requestArgs);
-    }
+    @Getter private final String javaxRsMethod;
 
 }

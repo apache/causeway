@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulHttpMethod2;
 
 public class RestfulHttpMethodTest_setUp {
 
@@ -52,25 +53,25 @@ public class RestfulHttpMethodTest_setUp {
 
     @Test
     public void get() throws Exception {
-        setsUpQueryString(RestfulHttpMethod.GET);
+        setsUpQueryString(RestfulHttpMethod2.GET);
     }
 
     @Test
     public void delete() throws Exception {
-        setsUpQueryString(RestfulHttpMethod.DELETE);
+        setsUpQueryString(RestfulHttpMethod2.DELETE);
     }
 
     @Test
     public void post() throws Exception {
-        setsUpBody(RestfulHttpMethod.POST);
+        setsUpBody(RestfulHttpMethod2.POST);
     }
 
     @Test
     public void put() throws Exception {
-        setsUpBody(RestfulHttpMethod.PUT);
+        setsUpBody(RestfulHttpMethod2.PUT);
     }
 
-    private void setsUpQueryString(final RestfulHttpMethod httpMethod) throws UnsupportedEncodingException {
+    private void setsUpQueryString(final RestfulHttpMethod2 httpMethod) throws UnsupportedEncodingException {
         context.checking(new Expectations() {
             {
                 oneOf(requestConfigurer).setHttpMethod(httpMethod);
@@ -81,7 +82,7 @@ public class RestfulHttpMethodTest_setUp {
         httpMethod.setUpArgs(requestConfigurer, repr);
     }
 
-    private void setsUpBody(final RestfulHttpMethod httpMethod) throws UnsupportedEncodingException {
+    private void setsUpBody(final RestfulHttpMethod2 httpMethod) throws UnsupportedEncodingException {
         context.checking(new Expectations() {
             {
                 oneOf(requestConfigurer).setHttpMethod(httpMethod);
