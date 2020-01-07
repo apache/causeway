@@ -298,16 +298,15 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     }
 
-    private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
+    private List<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
         
         val paramDtos = paramDtosFrom(actionDto);
-        
-        val argStream = paramDtos
+
+        return paramDtos
                 .stream()
                 .map(CommonDtoUtils::getValue)
-                .map(this::adapterFor);
-                
-        return Can.ofStream(argStream);
+                .map(this::adapterFor)
+                .collect(Collectors.toList());
     }
 
     private static List<ParamDto> paramDtosFrom(final ActionDto actionDto) {

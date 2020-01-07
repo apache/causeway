@@ -242,10 +242,10 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     /**
      * The Validates all arguments individually (by calling same helper that
-     * {@link #isEachIndividualArgumentValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)} delegates to)
+     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy)} delegates to)
      * and if there are no validation errors, then validates the entire argument
      * set (by calling same helper that
-     * {@link #isArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)} delegates to).
+     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)} delegates to).
      *
      * <p>
      * The two other validation methods mentioned above are separated out to allow viewers (such as the RO viewer) to
@@ -255,7 +255,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public Consent isProposedArgumentSetValid(
             final ManagedObject targetObject,
-            final Can<ManagedObject> proposedArguments,
+            final List<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
@@ -271,10 +271,10 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     /**
      * Normally action validation is all performed by
-     * {@link #isProposedArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)}, which calls
-     * {@link #isEachIndividualArgumentValid(ManagedObject, ManagedObject[], InteractionInitiatedBy) this method} to
+     * {@link #isProposedArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
+     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy) this method} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy) validate argument set}
+     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy) validate argument set}
      * afterwards.
      *
      * <p>
@@ -285,7 +285,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public Consent isEachIndividualArgumentValid(
             final ManagedObject objectAdapter,
-            final Can<ManagedObject> proposedArguments,
+            final List<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
@@ -297,7 +297,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     private void validateArgumentsIndividually(
             final ManagedObject objectAdapter,
-            final Can<ManagedObject> proposedArguments,
+            final List<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
@@ -315,10 +315,10 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     /**
      * Normally action validation is all performed by
-     * {@link #isProposedArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)}, which calls
-     * {@link #isEachIndividualArgumentValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)} to
+     * {@link #isProposedArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
+     * {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy)} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy) this method} to
+     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy) this method} to
      * validate the entire argument set afterwards.
      *
      * <p>
@@ -329,7 +329,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public Consent isArgumentSetValid(
             final ManagedObject objectAdapter,
-            final Can<ManagedObject> proposedArguments,
+            final List<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
@@ -340,7 +340,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     protected void validateArgumentSet(
             final ManagedObject objectAdapter,
-            final Can<ManagedObject> proposedArguments,
+            final List<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
@@ -351,7 +351,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     ActionValidityContext createActionInvocationInteractionContext(
             final ManagedObject targetObject,
-            final Can<ManagedObject> proposedArguments,
+            final List<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return new ActionValidityContext(targetObject, this, getIdentifier(), proposedArguments,
@@ -366,7 +366,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     public ManagedObject executeWithRuleChecking(
             final ManagedObject target,
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> arguments,
+            final List<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
@@ -393,7 +393,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     /**
      * Sets up the {@link Command}, then delegates off to
-     * {@link #executeInternal(ManagedObject, ManagedObject, ManagedObject[], InteractionInitiatedBy) executeInternal}
+     * {@link #executeInternal(ManagedObject, ManagedObject, List, InteractionInitiatedBy) executeInternal}
      * to invoke the {@link ActionInvocationFacet invocation facet}.
      *
      * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
@@ -402,7 +402,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     public ManagedObject execute(
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> argumentAdapters,
+            final List<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setupCommand(targetAdapter, argumentAdapters);
@@ -416,7 +416,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     public ManagedObject executeInternal(
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> argumentAdapters, 
+            final List<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
@@ -469,8 +469,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                     parameterDefaultPojos[i] = paramFacet
                             .getDefault(
                                     target, 
-                                    /*parameters*/ Can.empty(), 
-                                    /*paramNumUpdated*/null);
+                                    Collections.emptyList(),
+                                    null);
                 } else {
                     parameterDefaultPojos[i] = null;
                 }
@@ -613,7 +613,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      */
     public void setupCommand(
             final ManagedObject targetAdapter,
-            final Can<ManagedObject> argumentAdapters) {
+            final List<ManagedObject> argumentAdapters) {
 
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
@@ -629,7 +629,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     private void setupCommandTarget(
             final ManagedObject targetAdapter,
-            final Can<ManagedObject> argumentAdapters) {
+            final List<ManagedObject> argumentAdapters) {
 
         final String arguments = CommandUtil.argDescriptionFor(this, argumentAdapters);
         super.setupCommandTarget(targetAdapter, arguments);
@@ -637,7 +637,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     private void setupCommandMementoAndExecutionContext(
             final ManagedObject targetAdapter,
-            final Can<ManagedObject> argumentAdapters) {
+            final List<ManagedObject> argumentAdapters) {
 
         val commandDtoServiceInternal = getCommandDtoService();
         final List<ManagedObject> commandTargetAdapters =

@@ -68,7 +68,7 @@ public class DomainEventHelper {
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> argumentAdapters,
+            final List<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null, objectAction, identified, 
@@ -83,7 +83,7 @@ public class DomainEventHelper {
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> argumentAdapters,
+            final List<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         return postEventForAction(phase, 
@@ -99,7 +99,7 @@ public class DomainEventHelper {
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> argumentAdapters,
+            final List<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);

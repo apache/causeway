@@ -247,7 +247,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
                 
                 val paramIndex = i;
                 val param = parameters.getOrThrow(paramIndex);
-                val argAdapter = argAdapters.getOrThrow(paramIndex);
+                val argAdapter = argAdapters.get(paramIndex);
 
                 if(buf.length() > 0) {
                     buf.append(",");

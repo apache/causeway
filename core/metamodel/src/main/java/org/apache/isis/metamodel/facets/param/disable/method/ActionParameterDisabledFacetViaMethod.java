@@ -69,7 +69,7 @@ implements ImperativeFacet {
     @Override
     public String disabledReason(
             final ManagedObject owningAdapter, 
-            final Can<ManagedObject> argumentAdapters) {
+            final List<ManagedObject> argumentAdapters) {
         
         final Object returnValue = ManagedObject.InvokeUtil
                 .invokeAutofit(method, owningAdapter, argumentAdapters);

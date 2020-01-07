@@ -71,7 +71,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     @Override
     public Object getDefault(
             final ManagedObject target,
-            final Can<ManagedObject> pendingArgs,
+            final List<ManagedObject> pendingArgs,
             final Integer paramNumUpdated) {
 
         // this isn't a dependent defaults situation, so just evaluate the default.

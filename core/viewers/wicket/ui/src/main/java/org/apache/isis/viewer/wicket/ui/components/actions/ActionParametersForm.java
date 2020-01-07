@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -90,7 +91,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             val realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
                     .realTargetAdapter(targetAdapter);
             final Consent consent = apm.getActionParameter(getSpecificationLoader())
-                    .isVisible(realTargetAdapter, Can.empty(), InteractionInitiatedBy.USER);
+                    .isVisible(realTargetAdapter, Collections.emptyList(), InteractionInitiatedBy.USER);
             final boolean allowed = consent.isAllowed();
             paramPanel.setVisible(allowed);
         }

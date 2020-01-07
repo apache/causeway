@@ -109,7 +109,7 @@ public interface ObjectAction extends ObjectMember {
     ManagedObject executeWithRuleChecking(
             final ManagedObject target,
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> parameters,
+            final List<ManagedObject> parameters,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) throws AuthorizationException;
 
@@ -124,7 +124,7 @@ public interface ObjectAction extends ObjectMember {
     ManagedObject execute(
             ManagedObject targetAdapter,
             ManagedObject mixedInAdapter,
-            Can<ManagedObject> parameters,
+            List<ManagedObject> parameters,
             final InteractionInitiatedBy interactionInitiatedBy);
 
 
@@ -135,26 +135,26 @@ public interface ObjectAction extends ObjectMember {
      *
      * <p>
      *     Basically just calls (the helper methods also called by) first
-     *     {@link #isEachIndividualArgumentValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)} 
+     *     {@link #isEachIndividualArgumentValid(ManagedObject, List, InteractionInitiatedBy)}
      *     and then
-     *     {@link #isArgumentSetValid(ManagedObject, ManagedObject[], InteractionInitiatedBy)}.  
+     *     {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}
      *     Those methods are
      *     separated out so that viewers have more fine-grained control.
      * </p>
      */
     Consent isProposedArgumentSetValid(
             ManagedObject object,
-            Can<ManagedObject> proposedArguments,
+            List<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isEachIndividualArgumentValid(
             ManagedObject objectAdapter,
-            Can<ManagedObject> proposedArguments,
+            List<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isArgumentSetValid(
             ManagedObject objectAdapter,
-            Can<ManagedObject> proposedArguments,
+            List<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
 

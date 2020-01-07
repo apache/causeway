@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facets.actions.action.invocation;
 
+import java.util.List;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -40,7 +42,7 @@ public interface ActionInvocationFacet extends Facet {
             ObjectAction owningAction,
             ManagedObject targetAdapter,
             ManagedObject mixedInAdapter,  // null for regular or contributed (not mixin) actions
-            Can<ManagedObject> argumentAdapters,
+            List<ManagedObject> argumentAdapters,
             InteractionInitiatedBy interactionInitiatedBy);
     
     ObjectSpecification getReturnType();

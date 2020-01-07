@@ -19,6 +19,9 @@
 
 package org.apache.isis.metamodel.facets.actions.action.invocation;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -27,7 +30,6 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.DomainEventHelper;
@@ -142,7 +144,7 @@ implements ActionDomainEventFacet {
         return ((ActionInteractionContext) ic).getObjectAction();
     }
 
-    private static Can<ManagedObject> argumentAdaptersFrom(
+    private static List<ManagedObject> argumentAdaptersFrom(
             final InteractionContext<? extends InteractionEvent> ic) {
         
         val contributee = ic.getContributeeWithParamIndex();
@@ -153,11 +155,11 @@ implements ActionDomainEventFacet {
                     ? contributee.getValue()
                             : ManagedObject.empty();
             
-            return Can.ofSingleton(adapter);    
+            return Collections.singletonList(adapter);
                 
         }
 
-        return Can.empty();
+        return Collections.emptyList();
     }
 
 }

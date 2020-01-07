@@ -242,7 +242,7 @@ public interface ManagedObject {
         return adapter != null ? adapter.getPojo() : null;
     }
 
-    public static Object[] unwrapPojoArray(final Can<ManagedObject> adapters) {
+    public static Object[] unwrapPojoArray(final List<ManagedObject> adapters) {
         if (adapters == null) {
             return null;
         }
@@ -254,6 +254,10 @@ public interface ManagedObject {
         return unwrappedObjects;
     }
     
+    public static Object[] unwrapPojoArray(final Can<ManagedObject> adapters) {
+        return unwrapPojoArray(adapters.toList());
+    }
+
     public static Object[] unwrapPojoArray(final ManagedObject[] adapters) {
         if (adapters == null) {
             return null;
@@ -423,8 +427,8 @@ public interface ManagedObject {
             return MethodExtensions.invoke(method, unwrapPojo(adapter), new Object[] {arg0});
         }
     
-        public static Object invoke(Method method, ManagedObject adapter, Can<ManagedObject> args) {
-            return invoke(method, adapter, args.toArray(ManagedObject.class));
+        public static Object invoke(Method method, ManagedObject adapter, List<ManagedObject> args) {
+            return invoke(method, adapter, args.toArray(new ManagedObject[0]));
         }
 
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject arg0Adapter) {
@@ -469,8 +473,8 @@ public interface ManagedObject {
         public static Object invokeAutofit(
                 final Method method, 
                 final ManagedObject target, 
-                final Can<? extends ManagedObject> pendingArgs,
-                final Can<Optional<Object>> additionalArgValues) {
+                final List<? extends ManagedObject> pendingArgs,
+                final List<Optional<Object>> additionalArgValues) {
     
             val argArray = adjust(method, pendingArgs, additionalArgValues);
             
@@ -478,20 +482,20 @@ public interface ManagedObject {
         }
 
         /**
-         * same as {@link #invokeAutofit(Method, ManagedObject, Can, Can)} w/o additionalArgValues 
+         * same as {@link #invokeAutofit(Method, ManagedObject, List, List)} w/o additionalArgValues
          */
         public static Object invokeAutofit(
                 final Method method, 
                 final ManagedObject target, 
-                final Can<? extends ManagedObject> pendingArgs) {
+                final List<? extends ManagedObject> pendingArgs) {
             
-            return invokeAutofit(method, target, pendingArgs, Can.empty());
+            return invokeAutofit(method, target, pendingArgs, Collections.emptyList());
         }
     
         private static Object[] adjust(
                 final Method method, 
-                final Can<? extends ManagedObject> pendingArgs,
-                final Can<Optional<Object>> additionalArgValues) {
+                final List<? extends ManagedObject> pendingArgs,
+                final List<Optional<Object>> additionalArgValues) {
             
             val parameterTypes = method.getParameterTypes();
             val paramCount = parameterTypes.length;

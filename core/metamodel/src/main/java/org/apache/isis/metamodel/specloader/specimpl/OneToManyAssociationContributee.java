@@ -18,6 +18,7 @@
  */
 package org.apache.isis.metamodel.specloader.specimpl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
@@ -67,7 +68,7 @@ extends OneToManyAssociationDefault implements ContributeeMember {
         val specLoader = objectAction.getMetaModelContext().getSpecificationLoader();
         // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault which ensures that there is always
         // a TypeOfFacet for any contributee associations created from contributed actions.
-        val type = actionTypeOfFacet != null? actionTypeOfFacet.value(): Object.class;
+        val type = actionTypeOfFacet != null? actionTypeOfFacet.value(): (Class)Object.class;
         return specLoader.loadSpecification(type);
     }
 
@@ -125,7 +126,7 @@ extends OneToManyAssociationDefault implements ContributeeMember {
             final ManagedObject ownerAdapter, 
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val params = Can.ofSingleton(ownerAdapter);
+        val params = Collections.singletonList(ownerAdapter);
         
         return serviceAction.execute(getServiceAdapter(), /*mixin*/null, params, interactionInitiatedBy);
     }

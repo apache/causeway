@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.AttributeModifier;
@@ -340,7 +341,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs) {
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(List<ManagedObject> pendingArgs) {
         
         val commonContext = super.getCommonContext();
         

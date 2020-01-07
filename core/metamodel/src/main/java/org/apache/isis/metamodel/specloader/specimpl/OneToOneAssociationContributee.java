@@ -18,6 +18,7 @@
  */
 package org.apache.isis.metamodel.specloader.specimpl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
@@ -112,7 +113,7 @@ implements ContributeeMember {
             final ManagedObject ownerAdapter, 
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val params = Can.ofSingleton(ownerAdapter);
+        val params = Collections.singletonList(ownerAdapter);
         
         return serviceAction.execute(getServiceAdapter(), /*mixin*/null, params, interactionInitiatedBy);
     }

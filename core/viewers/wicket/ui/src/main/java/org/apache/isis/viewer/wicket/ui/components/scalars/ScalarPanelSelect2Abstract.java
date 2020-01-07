@@ -113,7 +113,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.
      */
-    private void setProviderAndCurrAndPending(Select2 select2, Can<ManagedObject> pendingArgs) {
+    private void setProviderAndCurrAndPending(Select2 select2, List<ManagedObject> pendingArgs) {
 
         final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(pendingArgs);
 
@@ -130,12 +130,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, Can<ManagedObject>)})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
      */
-    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs);
+    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(List<ManagedObject> pendingArgs);
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, Can<ManagedObject>)})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
      */
     protected abstract void syncIfNull(Select2 select2);
 
@@ -181,7 +181,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             final int paramNumToPossiblyUpdate,
             final AjaxRequestTarget target) {
 
-        val arguments = actionModel.getArgumentsAsImmutable();
+        final List<ManagedObject> arguments = actionModel.getArgumentsAsImmutable();
 
         val repaint = super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate, target);
 
@@ -198,7 +198,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         }
     }
 
-    private boolean updateChoices(Can<ManagedObject> pendingArgs) {
+    private boolean updateChoices(List<ManagedObject> pendingArgs) {
         if (select2 == null) {
             return false;
         }

@@ -39,6 +39,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
@@ -134,7 +135,7 @@ implements ScalarModelSubscriber2 {
             final AjaxRequestTarget target) {
 
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-        val pendingArguments = actionModel.getArgumentsAsImmutable();
+        final List<ManagedObject> pendingArguments = actionModel.getArgumentsAsImmutable();
 
         // could almost certainly simplify this... (used by visibility and usability checks)
         final ObjectActionParameter actionParameter = action.getParameters().getOrThrow(paramNumToPossiblyUpdate);
@@ -174,7 +175,7 @@ implements ScalarModelSubscriber2 {
         val actionParameterMemento = new ActionParameterMemento(actionParameter);
         val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);
 
-        val pendingArg = pendingArguments.getOrThrow(paramNumToPossiblyUpdate);
+        val pendingArg = pendingArguments.get(paramNumToPossiblyUpdate);
         
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);

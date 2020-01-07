@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.specloader.specimpl;
 
+import java.util.List;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -45,7 +47,7 @@ implements ObjectActionParameterMixedIn {
     @Override
     public Can<ManagedObject> getAutoComplete(
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> pendingArgs,
+            final List<ManagedObject> pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -68,7 +70,7 @@ implements ObjectActionParameterMixedIn {
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> proposedArguments,
+            final List<ManagedObject> proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
 

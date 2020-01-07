@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.interactions;
 
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionArgumentVisibilityEvent;
@@ -43,14 +45,14 @@ extends VisibilityContext<ActionArgumentVisibilityEvent>
 implements ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
-    @Getter private final Can<ManagedObject> args;
+    @Getter private final List<ManagedObject> args;
     @Getter private final int position;
     
     public ActionArgVisibilityContext(
             final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final Can<ManagedObject> args,
+            final List<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         

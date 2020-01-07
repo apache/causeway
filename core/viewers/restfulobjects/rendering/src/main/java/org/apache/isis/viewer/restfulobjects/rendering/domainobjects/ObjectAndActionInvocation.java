@@ -18,7 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.commons.collections.Can;
+import java.util.List;
+
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -32,7 +33,7 @@ public class ObjectAndActionInvocation {
     private final ManagedObject objectAdapter;
     private final ObjectAction action;
     private final JsonRepresentation arguments;
-    private final Can<ManagedObject> argAdapters;
+    private final List<ManagedObject> argAdapters;
     private final ManagedObject returnedAdapter;
     private final ActionResultReprRenderer.SelfLink selfLink;
 
@@ -40,7 +41,7 @@ public class ObjectAndActionInvocation {
             final ManagedObject objectAdapter,
             final ObjectAction action,
             final JsonRepresentation arguments,
-            final Can<ManagedObject> argAdapters,
+            final List<ManagedObject> argAdapters,
             final ManagedObject returnedAdapter,
             final ActionResultReprRenderer.SelfLink selfLink) {
         
@@ -64,7 +65,7 @@ public class ObjectAndActionInvocation {
         return arguments;
     }
 
-    public Can<ManagedObject> getArgAdapters() {
+    public List<ManagedObject> getArgAdapters() {
         return argAdapters;
     }
 

@@ -60,7 +60,7 @@ public class ActionValidationFacetViaMethod extends ActionValidationFacetAbstrac
     }
 
     @Override
-    public String invalidReason(final ManagedObject owningAdapter, final Can<ManagedObject> proposedArgumentAdapters) {
+    public String invalidReason(final ManagedObject owningAdapter, final List<ManagedObject> proposedArgumentAdapters) {
         final Object returnValue = ManagedObject.InvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapters);
         if(returnValue instanceof String) {
             return (String) returnValue;

@@ -122,7 +122,7 @@ implements ImperativeFacet {
             final ObjectAction owningAction,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> argumentAdapters,
+            final List<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ManagedObject executionResult = 
@@ -155,7 +155,7 @@ implements ImperativeFacet {
             final ObjectAction owningAction,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> argumentAdapters,
+            final List<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         // similar code in PropertySetterOrClearFacetFDEA
 
@@ -260,7 +260,7 @@ implements ImperativeFacet {
 
     private Object invokeMethodElseFromCache(
             final ManagedObject targetAdapter, 
-            final Can<ManagedObject> arguments)
+            final List<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
         final Object[] executionParameters = ManagedObject.unwrapPojoArray(arguments);
@@ -424,9 +424,9 @@ implements ImperativeFacet {
     private final class DomainEventMemberExecutor 
     implements Interaction.MemberExecutor<Interaction.ActionInvocation> {
         
-        private final Can<ManagedObject> argumentAdapters;
+        private final List<ManagedObject> argumentAdapters;
         private final ManagedObject targetAdapter;
-        private final Can<ManagedObject> argumentAdapterList;
+        private final List<ManagedObject> argumentAdapterList;
         private final Command command;
         private final ObjectAction owningAction;
         private final ManagedObject mixinElseRegularAdapter;

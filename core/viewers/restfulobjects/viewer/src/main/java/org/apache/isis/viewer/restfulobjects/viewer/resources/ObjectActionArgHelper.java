@@ -55,7 +55,7 @@ public class ObjectActionArgHelper {
         this.action = action;
     }
 
-    public Can<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
+    public List<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 
         final List<ManagedObject> argAdapters = _Lists.newArrayList();
@@ -83,9 +83,8 @@ public class ObjectActionArgHelper {
         }
 
         // validate entire argument set
-        val args = Can.ofCollection(argAdapters);
         final Consent consent = action.isArgumentSetValid(
-                objectAdapter, args, InteractionInitiatedBy.USER);
+                objectAdapter, argAdapters, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());
             valid = false;
@@ -98,7 +97,7 @@ public class ObjectActionArgHelper {
                     "Validation failed, see body for details");
         }
 
-        return args;
+        return argAdapters;
     }
 
     private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {

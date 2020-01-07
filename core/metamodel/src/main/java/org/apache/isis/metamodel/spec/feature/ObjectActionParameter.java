@@ -19,6 +19,7 @@
 
 package org.apache.isis.metamodel.spec.feature;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -75,7 +76,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(
             ManagedObject targetObject,
-            Can<ManagedObject> args,
+            List<ManagedObject> args,
             int position,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -92,7 +93,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     Can<ManagedObject> getAutoComplete(
             ManagedObject adapter,
-            Can<ManagedObject> pendingArgs,
+            List<ManagedObject> pendingArgs,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -111,13 +112,13 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     Can<ManagedObject> getChoices(
             ManagedObject adapter,
-            Can<ManagedObject> pendingArgs,
+            List<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
 
     ManagedObject getDefault(
             ManagedObject adapter,
-            Can<ManagedObject> pendingArgs,
+            List<ManagedObject> pendingArgs,
             Integer paramNumUpdated);
 
 
@@ -130,7 +131,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     Consent isVisible(
             ManagedObject targetAdapter,
-            Can<ManagedObject> pendingArgs,
+            List<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
     /**
@@ -142,7 +143,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     Consent isUsable(
             ManagedObject targetAdapter,
-            Can<ManagedObject> pendingArgs,
+            List<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
     /**

@@ -45,7 +45,7 @@ public interface CommandDtoServiceInternal {
     CommandDto asCommandDto(
             final List<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
-            final Can<ManagedObject> argAdapters);
+            final List<ManagedObject> argAdapters);
 
     /**
      * Returns a JAXB DTO (hence convertible to XML) that represents the intention to edit (set or clear) a property on
@@ -61,7 +61,7 @@ public interface CommandDtoServiceInternal {
     void addActionArgs(
             final ObjectAction objectAction,
             final ActionDto actionDto,
-            final Can<ManagedObject> argAdapters);
+            final List<ManagedObject> argAdapters);
 
     @Programmatic
     void addPropertyValue(

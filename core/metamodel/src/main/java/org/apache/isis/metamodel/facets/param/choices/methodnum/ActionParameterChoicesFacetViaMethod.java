@@ -70,7 +70,7 @@ implements ImperativeFacet {
     @Override
     public Object[] getChoices(
             final ManagedObject owningAdapter,
-            final Can<ManagedObject> pendingArgs, 
+            final List<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final Object choices =

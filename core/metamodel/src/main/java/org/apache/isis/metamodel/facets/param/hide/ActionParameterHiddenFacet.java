@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facets.param.hide;
 
+import java.util.List;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.interactions.HidingInteractionAdvisor;
@@ -37,5 +39,5 @@ public interface ActionParameterHiddenFacet extends Facet, HidingInteractionAdvi
     /**
      * Whether the parameter is hidden.
      */
-    public boolean isHidden(ManagedObject target, Can<ManagedObject> arguments);
+    public boolean isHidden(ManagedObject target, List<ManagedObject> arguments);
 }

@@ -67,7 +67,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
     public ActionInvocationDto asActionInvocationDto(
             final ObjectAction objectAction,
             final ManagedObject targetAdapter,
-            final Can<ManagedObject> argumentAdapters) {
+            final List<ManagedObject> argumentAdapters) {
 
         final Interaction interaction = interactionContext.getInteraction();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());

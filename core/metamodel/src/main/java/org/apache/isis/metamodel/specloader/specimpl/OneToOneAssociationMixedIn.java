@@ -18,6 +18,7 @@
  */
 package org.apache.isis.metamodel.specloader.specimpl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
@@ -137,14 +138,9 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
 
         return getPublishingServiceInternal().withPublishingSuppressed(
-                new PublisherDispatchService.Block<ManagedObject>(){
-                    @Override
-                    public ManagedObject exec() {
-                        return mixinAction.executeInternal(
-                                mixinAdapter, mixedInAdapter, Can.empty(), interactionInitiatedBy);
-                    }
-                }
-                );
+                () -> mixinAction.executeInternal(
+                        mixinAdapter, mixedInAdapter, Collections.emptyList(), interactionInitiatedBy)
+        );
     }
 
     @Override

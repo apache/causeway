@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.interactions;
 
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.isis.commons.collections.Can;
@@ -40,13 +42,13 @@ extends ValidityContext<ActionInvocationEvent>
 implements ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
-    @Getter private final Can<ManagedObject> args;
+    @Getter private final List<ManagedObject> args;
 
     public ActionValidityContext(
             final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final Can<ManagedObject> args,
+            final List<ManagedObject> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         super(InteractionContextType.ACTION_INVOKE, targetAdapter, id, interactionInitiatedBy);

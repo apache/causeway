@@ -23,9 +23,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
@@ -667,7 +669,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private void checkValidity(
             final ManagedObject targetAdapter, 
             final ObjectAction objectAction, 
-            final Can<ManagedObject> argAdapters) {
+            final List<ManagedObject> argAdapters) {
         
         val interactionResult = objectAction
                 .isProposedArgumentSetValid(targetAdapter, argAdapters,getInteractionInitiatedBy())
@@ -675,10 +677,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
-    private Can<ManagedObject> asObjectAdaptersUnderlying(final Object[] args) {
+    private List<ManagedObject> asObjectAdaptersUnderlying(final Object[] args) {
         val argAdapters = _NullSafe.stream(args)
         .map(getObjectManager()::adapt)
-        .collect(Can.toCan());
+        .collect(Collectors.toList());
         
         return argAdapters;
     }

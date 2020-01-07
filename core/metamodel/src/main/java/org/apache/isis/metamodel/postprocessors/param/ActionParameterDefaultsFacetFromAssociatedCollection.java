@@ -19,6 +19,7 @@
 
 package org.apache.isis.metamodel.postprocessors.param;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.apache.isis.applib.ApplicationException;
@@ -53,7 +54,7 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
     @Override
     public Object getDefault(
             final ManagedObject target,
-            final Can<ManagedObject> pendingArgs,
+            final List<ManagedObject> pendingArgs,
             final Integer paramNumUpdated) {
         
         return _selectedPojos.get();

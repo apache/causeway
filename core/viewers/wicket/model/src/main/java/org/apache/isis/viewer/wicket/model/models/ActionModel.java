@@ -23,6 +23,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -116,8 +118,6 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     /**
      * Factory method for creating {@link PageParameters}.
-     *
-     * see {@link #ActionModel(PageParameters, SpecificationLoader)}
      */
     public static PageParameters createPageParameters(ManagedObject adapter, ObjectAction objectAction) {
 
@@ -303,7 +303,6 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     /**
      * Copy constructor, as called by {@link #copy()}.
-     * @param commonContext 
      */
     private ActionModel(ActionModel actionModel) {
         super(actionModel.getCommonContext());
@@ -450,7 +449,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     private ManagedObject executeAction() {
 
         val targetAdapter = getTargetAdapter();
-        val arguments = getArgumentsAsImmutable();
+        final List<ManagedObject> arguments = getArgumentsAsImmutable();
         final ObjectAction action = getAction();
 
         // if this action is a mixin, then it will fill in the details automatically.
@@ -509,7 +508,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     public String getReasonInvalidIfAny() {
         val targetAdapter = getTargetAdapter();
-        val proposedArguments = getArgumentsAsImmutable();
+        final List<ManagedObject> proposedArguments = getArgumentsAsImmutable();
         final ObjectAction objectAction = getAction();
         final Consent validity = objectAction
                 .isProposedArgumentSetValid(targetAdapter, proposedArguments, InteractionInitiatedBy.USER);
@@ -521,7 +520,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
     }
 
-    public Can<ManagedObject> getArgumentsAsImmutable() {
+    public List<ManagedObject> getArgumentsAsImmutable() {
         if(this.arguments.size() < getAction().getParameterCount()) {
             primeArgumentModels();
         }
@@ -532,7 +531,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
             final ActionArgumentModel actionArgumentModel = this.arguments.get(i);
             arguments[i] = actionArgumentModel.getObject();
         }
-        return Can.ofArray(arguments);
+        return Collections.unmodifiableList(Arrays.asList(arguments));
     }
 
     @Override

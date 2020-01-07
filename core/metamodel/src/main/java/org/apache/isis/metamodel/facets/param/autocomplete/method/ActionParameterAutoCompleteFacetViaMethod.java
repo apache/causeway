@@ -79,14 +79,14 @@ implements ImperativeFacet {
     @Override
     public Object[] autoComplete(
             final ManagedObject owningAdapter,
-            final Can<ManagedObject> pendingArgs,
+            final List<ManagedObject> pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final Object collectionOrArray = 
                 ManagedObject.InvokeUtil.invokeAutofit(
                         method, owningAdapter, pendingArgs, 
-                        Can.ofSingleton(Optional.ofNullable(searchArg)));
+                        Collections.singletonList(Optional.ofNullable(searchArg)));
         
         if (collectionOrArray == null) {
             return _Constants.emptyObjects;

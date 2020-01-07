@@ -70,7 +70,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     public CommandDto asCommandDto(
             final List<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
-            final Can<ManagedObject> argAdapters) {
+            final List<ManagedObject> argAdapters) {
 
         final CommandDto dto = asCommandDto(targetAdapters);
 
@@ -130,7 +130,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     public void addActionArgs(
             final ObjectAction objectAction,
             final ActionDto actionDto,
-            final Can<ManagedObject> argAdapters) {
+            final List<ManagedObject> argAdapters) {
         
         final String actionId = CommandUtil.memberIdentifierFor(objectAction);
         final ObjectSpecification onType = objectAction.getOnType();
@@ -144,7 +144,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             final ObjectActionParameter actionParameter = actionParameters.getOrThrow(paramNum);
             final String parameterName = actionParameter.getName();
             final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
-            final ManagedObject argAdapter = argAdapters.getOrThrow(paramNum);
+            final ManagedObject argAdapter = argAdapters.get(paramNum);
             final Object arg = argAdapter != null? argAdapter.getPojo(): null;
             final ParamsDto parameters = CommandDtoUtils.parametersFor(actionDto);
             final List<ParamDto> parameterList = parameters.getParameter();

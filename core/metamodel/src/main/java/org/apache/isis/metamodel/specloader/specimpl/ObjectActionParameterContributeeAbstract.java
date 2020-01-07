@@ -59,7 +59,7 @@ implements ObjectActionParameterContributee {
     @Override
     public Can<ManagedObject> getAutoComplete(
             final ManagedObject adapter,
-            final Can<ManagedObject> pendingArgs,
+            final List<ManagedObject> pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -81,15 +81,14 @@ implements ObjectActionParameterContributee {
 
     
     @Override
-    protected Can<ManagedObject> argsForDefaultOrChoices(
+    protected List<ManagedObject> argsForDefaultOrChoices(
             final ManagedObject contributee,
-            final Can<ManagedObject> pendingArgs) {
+            final List<ManagedObject> pendingArgs) {
 
-        final List<ManagedObject> suppliedArgs = pendingArgs.stream()
-                .collect(Collectors.toCollection(ArrayList::new));
+        final List<ManagedObject> suppliedArgs = new ArrayList<>(pendingArgs);
         final int contributeeParam = contributeeAction.getContributeeParamIndex();
         ListExtensions.insert(suppliedArgs, contributeeParam, contributee);
-        return Can.ofCollection(suppliedArgs);
+        return suppliedArgs;
     }
 
 }

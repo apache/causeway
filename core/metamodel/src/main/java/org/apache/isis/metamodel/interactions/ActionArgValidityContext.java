@@ -19,9 +19,10 @@
 
 package org.apache.isis.metamodel.interactions;
 
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -39,14 +40,14 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
     @Getter(onMethod = @__(@Override)) private final ManagedObject proposed;
-    @Getter private final Can<ManagedObject> args;
+    @Getter private final List<ManagedObject> args;
     @Getter private final int position;
 
     public ActionArgValidityContext(
             final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final Can<ManagedObject> args,
+            final List<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, targetAdapter, id, interactionInitiatedBy);
@@ -54,7 +55,7 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
 
         this.args = args;
         this.position = position;
-        this.proposed = args.getOrThrow(position);
+        this.proposed = args.get(position);
     }
 
     @Override

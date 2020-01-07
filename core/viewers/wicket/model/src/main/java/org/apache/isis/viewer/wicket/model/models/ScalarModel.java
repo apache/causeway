@@ -187,7 +187,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> pendingArgs,
+                    final List<ManagedObject> pendingArgs,
                     final int paramNumUpdated,
                     final AuthenticationSession authenticationSession) {
 
@@ -208,7 +208,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> pendingArgs,
+                    final List<ManagedObject> pendingArgs,
                     final AuthenticationSession authenticationSession) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
@@ -232,7 +232,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> pendingArgs, // ignored for properties
+                    final List<ManagedObject> pendingArgs, // ignored for properties
                     final String searchArg,
                     final AuthenticationSession authenticationSession) {
 
@@ -423,7 +423,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> pendingArgs,
+                    final List<ManagedObject> pendingArgs,
                     final int paramNumUpdated,
                     final AuthenticationSession authenticationSession) {
 
@@ -444,7 +444,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> pendingArgs,
+                    final List<ManagedObject> pendingArgs,
                     final AuthenticationSession authenticationSession) {
                 
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
@@ -470,7 +470,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> pendingArgs,
+                    final List<ManagedObject> pendingArgs,
                     final String searchArg,
                     final AuthenticationSession authenticationSession) {
                 
@@ -549,7 +549,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                         scalarModel.getSpecificationLoader());
                 final ManagedObject parentAdapter =
                         scalarModel.getParentEntityModel().load();
-                final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter, Can.empty(), null);
+                final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter, Collections.emptyList(), null);
                 scalarModel.setObject(defaultAdapter);
             }
 
@@ -625,20 +625,20 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
         public abstract ManagedObject getDefault(
                 ScalarModel scalarModel,
-                Can<ManagedObject> pendingArgs,
+                List<ManagedObject> pendingArgs,
                 int paramNumUpdated,
                 AuthenticationSession authenticationSession);
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
         public abstract List<ManagedObject> getChoices(
                 ScalarModel scalarModel,
-                Can<ManagedObject> pendingArgs,
+                List<ManagedObject> pendingArgs,
                 AuthenticationSession authenticationSession);
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
         public abstract List<ManagedObject> getAutoComplete(
                 ScalarModel scalarModel,
-                Can<ManagedObject> pendingArgs,
+                List<ManagedObject> pendingArgs,
                 String searchArg,
                 AuthenticationSession authenticationSession);
 
@@ -917,7 +917,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     }
 
     public List<ManagedObject> getChoices(
-            final Can<ManagedObject> pendingArgs,
+            final List<ManagedObject> pendingArgs,
             final AuthenticationSession authenticationSession) {
         
         return kind.getChoices(this, pendingArgs, authenticationSession);
@@ -928,7 +928,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     }
 
     public List<ManagedObject> getAutoComplete(
-            final Can<ManagedObject> pendingArgs,
+            final List<ManagedObject> pendingArgs,
             final String searchTerm,
             final AuthenticationSession authenticationSession) {
         
@@ -1214,7 +1214,6 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
      * edit mode (eg for a parameter), or can be switched into edit mode, eg for an editable property or an
      * associated action of a property with 'inline_as_if_edit'
      *
-     * @param deploymentCategory - used to determine the actions to discover (can vary, eg if prototyping).
      * @return <tt>true</tt> if the widget for this model must be editable.
      */
     public boolean mustBeEditable() {
@@ -1224,11 +1223,10 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     }
 
     /**
-     * Similar to {@link #mustBeEditable(DeploymentCategory)}, though not called from the same locations.
+     * Similar to {@link #mustBeEditable()}, though not called from the same locations.
      *
      * My suspicion is that it amounts to more or less the same set of conditions.
      *
-     * @param deploymentCategory
      * @return
      */
     @Override
@@ -1243,7 +1241,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
      * @implNote transient because only temporary hint.
      */
     @Getter @Setter
-    private transient Can<ManagedObject> actionArgsHint;
+    private transient List<ManagedObject> actionArgsHint;
 
 
     @Override
