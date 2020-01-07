@@ -340,7 +340,7 @@ Probably the most important shortcut on them is for `Find Action`:
 
 This will let you search for any action just by typing its name.
 
-### Switch between Tools & Editors
+=== Switch between Tools & Editors
 
 The Tool Windows are the views around the editor (to left, bottom and right).  It's possible to move these around to your preferred locations.
 
@@ -387,7 +387,7 @@ Viewing the structure (ie outline) of a class
 * `ctrl-shift-J` can be handy for joining lines together
 ** just hit enter to split them apart (even in string quotes; IntelliJ will "do the right thing")
 
-### Intentions and Code Completion
+=== Intentions and Code Completion
 
 Massively useful is the "Intentions" popup; IntelliJ tries to guess what you might want to do.  You can activate this using`alt-enter`, whenever you see a lightbulb/tooltip in the margin of the current line.
 
