@@ -91,11 +91,10 @@ object EventStore {
      */
     fun find(url: String): LogEntry? {
         val isRedundant = urlContains(url, "object-layout") || urlContains(url, "/properties/")
-        if (isRedundant) {
-//            cached(url)
-            return findEquivalent(url)
+        return if (isRedundant) {
+            findEquivalent(url)
         } else {
-            return findExact(url)
+            findExact(url)
         }
     }
 
@@ -105,8 +104,7 @@ object EventStore {
 
     private fun urlContains(url: String, search: String): Boolean {
         val index = url.indexOf(search)
-        val answer = index >= 0
-        return answer
+        return index >= 0
     }
 
     internal fun findExact(url: String): LogEntry? {
@@ -132,7 +130,7 @@ object EventStore {
 
         var diffCnt = 0
         for ((i, s) in searchList.withIndex()) {
-            val c = compareList[i];
+            val c = compareList[i]
             if (!s.equals(c)) {
                 diffCnt++
                 val n = s.toIntOrNull()

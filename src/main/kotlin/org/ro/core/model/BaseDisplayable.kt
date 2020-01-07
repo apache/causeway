@@ -3,7 +3,7 @@ package org.ro.core.model
 import org.ro.layout.Layout
 import org.ro.to.TObject
 
-abstract class BaseDisplayable() {
+abstract class BaseDisplayable {
 
     var isRendered = false
 
@@ -20,10 +20,10 @@ abstract class BaseDisplayable() {
     fun extractTitle(): String {
         val strList = this.title.split("/")
         val len = strList.size
-        if (len > 2) {
-            return strList.get(len - 2)
+        return if (len > 2) {
+            strList[len - 2]
         } else {
-            return ""
+            ""
         }
     }
 

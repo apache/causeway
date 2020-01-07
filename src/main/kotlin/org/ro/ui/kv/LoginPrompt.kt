@@ -7,9 +7,9 @@ import org.ro.ui.Point
 import pl.treksoft.kvision.form.text.Password
 import pl.treksoft.kvision.form.text.Text
 
-class LoginPrompt() : Command {
+class LoginPrompt : Command {
 
-    lateinit var form: RoDialog
+    private lateinit var form: RoDialog
 
     //Default values
     private var url = "http://localhost:8080/"
@@ -33,7 +33,7 @@ class LoginPrompt() : Command {
         UiManager.closeDialog(form)
     }
 
-    fun extractUserInput() {
+    private fun extractUserInput() {
         //TODO function has a side effect, ie. changes variable values
         var key: String?
         val formPanel = form.panel
@@ -43,9 +43,9 @@ class LoginPrompt() : Command {
             when (i) {
                 is Text -> {
                     key = i.label!!
-                    if (key.equals("Url"))
+                    if (key == "Url")
                         url = i.getValue()!!
-                    if (key.equals("User"))
+                    if (key == "User")
                         username = i.getValue()!!
                 }
                 is Password -> {

@@ -12,13 +12,10 @@ class RoTabPanel : TabPanel() {
         return super.removeTab(index)
     }
 
-    fun findTab(title: String) : Int? {
-        val kids = getChildren()
-        kids.forEachIndexed { index, component ->
-            when (component) {
-                is VPanel -> if (component.title == title) {
-                    return index
-                }
+    fun findTab(title: String): Int? {
+        getChildren().forEachIndexed { index, component ->
+            if ((component is VPanel) && (component.title == title)) {
+                return index
             }
         }
         return null

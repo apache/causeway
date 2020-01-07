@@ -10,11 +10,8 @@ import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
 import org.ro.to.TObject
 import org.ro.to.mb.Menubars
-import org.ro.ui.Point
 import org.ro.ui.RoStatusBar
 import org.w3c.dom.events.KeyboardEvent
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.panel.SimplePanel
@@ -104,10 +101,8 @@ object UiManager {
         logEntry!!.addAggregator(aggregator)
     }
 
-    fun openDialog(panel: RoDialog, at: Point = Point(100, 100)) {
+    fun openDialog(panel: RoDialog) {
         RoApp.add(panel)
-        panel.left = CssSize(at.x, UNIT.px)
-        panel.top = CssSize(at.x, UNIT.px)
         push(panel)
     }
 

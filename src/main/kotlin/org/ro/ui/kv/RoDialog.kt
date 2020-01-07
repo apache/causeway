@@ -1,9 +1,11 @@
 package org.ro.ui.kv
 
 import org.ro.ui.Command
+import org.ro.ui.FormItem
 import org.ro.ui.IconManager
 import org.ro.ui.Point
-import org.ro.ui.FormItem
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.VerticalAlign
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.form.FormPanel
@@ -20,12 +22,21 @@ class RoDialog(
         val command: Command) :
         Window(caption, 600.px, 300.px, closeButton = true) {
 
-    private val okButton = Button(caption, "fas fa-check", ButtonStyle.SUCCESS).onClick {
-        execute()
-    }
-    private val cancelButton = Button("Cancel", "fas fa-times", ButtonStyle.OUTLINEINFO).onClick {
-        close()
-    }
+    private val okButton = Button(
+            caption,
+            "fas fa-check",
+            ButtonStyle.SUCCESS)
+            .onClick {
+                execute()
+            }
+
+    private val cancelButton = Button(
+            "Cancel",
+            "fas fa-times",
+            ButtonStyle.OUTLINEINFO)
+            .onClick {
+                close()
+            }
 
     var panel: FormPanel<String>?
 
@@ -53,7 +64,9 @@ class RoDialog(
     }
 
     fun show(at: Point): Widget {
-        UiManager.openDialog(this, at)
+        left = CssSize(at.x, UNIT.px)
+        top = CssSize(at.x, UNIT.px)
+        UiManager.openDialog(this)
         super.show()
         okButton.focus()
         return this
