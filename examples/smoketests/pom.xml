@@ -75,12 +75,12 @@
 			<artifactId>isis-incubator-model</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-fixtures</artifactId>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-fixtures</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-restclient</artifactId>
+			<groupId>org.apache.isis.mappings</groupId>
+			<artifactId>isis-mappings-restclient</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>

@@ -807,7 +807,10 @@ under the License.
 			<modules>
 				<module>../core</module>
 				<module>../mavendeps</module>
+				<module>../testing</module>
 				<module>../extensions</module>
+				<module>../subdomains</module>
+				<module>../mappings</module>
 				<module>../incubator</module>
 				<module>../legacy</module>
 				<module>../starters</module>

@@ -45,7 +45,7 @@ import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
 @Import({
     IsisModuleSpringBoot.class,
     IsisModuleSecurityBypass.class,
-    IsisModuleIncModelMetaModel.class // @Supporting support
+    IsisModuleIncModelMetaModel.class // @Model support
 })
 @PropertySources({
     @PropertySource(IsisPresets.NoTranslations),

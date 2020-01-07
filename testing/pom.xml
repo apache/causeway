@@ -21,20 +21,19 @@
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.extensions</groupId>
-	<artifactId>isis-extensions</artifactId>
+	<groupId>org.apache.isis.testing</groupId>
+	<artifactId>isis-testing</artifactId>
 
-	<name>Apache Isis Extensions</name>
+	<name>Apache Isis Testing</name>
 	<description>
-        Extensions to the Apache Isis framework itself.
-		These are _not_ intended to be called by the domain logic of an Apache Isis application (see instead org.apache.isis.platform).
+        A library of utilities, mini-frameworks and tools for prototyping and testing Apache Isis applications.
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.testing</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/testing</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -63,96 +62,58 @@
 		<dependencies>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-asciidoc</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-markdown</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-model</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-shiro-realm</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-shiro-realm-ldap</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-h2console-dom</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-hsqldbmgr-dom</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-cors</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sse</artifactId>
+				<groupId>org.apache.isis.subdomains</groupId>
+				<artifactId>isis-subdomains-spring</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
-			<!-- testing -->
+
 			<dependency>
 				<groupId>org.apache.isis.testing</groupId>
 				<artifactId>isis-testing-fixtures</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.apache.isis.testing</groupId>
+				<artifactId>isis-testing-specsupport</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.testing</groupId>
+				<artifactId>isis-testing-fakedata-dom</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.testing</groupId>
+				<artifactId>isis-testing-fakedata-fixtures</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.testing</groupId>
+				<artifactId>isis-testing-fakedata-integtests</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.testing</groupId>
+				<artifactId>isis-testing-unittestsupport-dom</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
 
 	<modules>
-		<module>persistence/h2console/impl</module>
-		<module>persistence/hsqldbmgr/impl</module>
-
-		<module>security/secman</module>
-		<module>security/shiro-realm-ldap</module>
-
-		<module>vro/cors</module>
-
-		<module>vw/asciidoc</module>
-		<module>vw/exceldownload</module>
-		<module>vw/markdown</module>
-		<module>vw/sse</module>
-
+		<module>fakedata/impl</module>
+		<module>fakedata/fixture</module>
+		<!--
+                <module>fakedata/integtests</module>
+        -->
+		<module>fixtures</module>
+		<module>specsupport</module>
+		<module>unittestsupport/impl</module>
 	</modules>
 
 	<profiles>
@@ -229,6 +190,7 @@
 		</profile>
 
 	</profiles>
+
 </project>
 
 

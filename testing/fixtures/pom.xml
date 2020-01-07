@@ -15,35 +15,26 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
+		<groupId>org.apache.isis.testing</groupId>
+		<artifactId>isis-testing</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../core/pom.xml</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.incubator</groupId>
-	<artifactId>isis-incubator</artifactId>
-
-	<name>Apache Isis Incubator</name>
-	<description>
-        Collection of Apache Isis extensions, subdomains or BC mappings, currently incubating.
-    </description>
-
-	<packaging>pom</packaging>
+	<artifactId>isis-testing-fixtures</artifactId>
+	<name>Apache Isis Testing - Fixtures</name>
+	<description></description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.incubator</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/incubator</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.testing.fixtures</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/testing/fixtures</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
 		<resources>
 			<resource>
-				<filtering>true</filtering>
+				<filtering>false</filtering>
 				<directory>src/main/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
 			</resource>
 			<resource>
 				<filtering>false</filtering>
@@ -58,34 +49,45 @@
 		</resources>
 	</build>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.isis.incubator</groupId>
-				<artifactId>isis-incubator-model</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.incubator</groupId>
-				<artifactId>isis-incubator-microprofile</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
+	<dependencies>
 
-			<!-- testing -->
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fixtures</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
 
-		</dependencies>
-	</dependencyManagement>
+		<dependency>
+			<groupId>org.apache.isis.subdomains</groupId>
+			<artifactId>isis-subdomains-spring</artifactId>
+		</dependency>
 
-	<modules>
-		<module>extensions/core/model</module>
-		<module>extensions/core/microprofile</module>
-	</modules>
+		<!-- JDO API (non transient, provided by plugin) -->
+		<dependency>
+			<groupId>javax.jdo</groupId>
+			<artifactId>jdo-api</artifactId>
+			<version>${jdo-api.version}</version>
+			<!-- provided by plugins -->
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-persistence-jdo-applib</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-integtestsupport</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
 
 </project>
-
-

@@ -80,15 +80,23 @@
 				<artifactId>isis-legacy-restclient</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
+
+			<!-- testing -->
+			<dependency>
+				<groupId>org.apache.isis.testing</groupId>
+				<artifactId>isis-testing-fixtures</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
 	<modules>
-		<module>core/applib</module>
-		<module>core/commons</module>
-		<module>core/metamodel</module>
-		<module>core/runtime</module>
-		<module>vro/restclient</module>
+		<module>extensions/core/applib</module>
+		<module>extensions/core/commons</module>
+		<module>extensions/core/metamodel</module>
+		<module>extensions/core/runtime</module>
+		<module>mappings/restclient</module>
 	</modules>
 
 </project>
