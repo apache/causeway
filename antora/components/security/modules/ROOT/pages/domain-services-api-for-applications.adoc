@@ -43,8 +43,8 @@ If using the Wicket viewer, then note there will also be another role which is u
 
 == Servlet API
 
-On occasion you may find it necessary to reach below Apache Isis and to the underlying servlet API.
-For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s togglz module (non-ASF) has a requirement to do this in order to expose its embedded togglz web console.  (
+On occasion, you may find it necessary to reach below Apache Isis and to the underlying servlet API.
+For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s togglz module (non-ASF) has a requirement to do this in order to expose its embedded togglz web console.
 
 [TIP]
 ====

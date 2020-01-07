@@ -683,7 +683,7 @@ and
 [source,xml]
 ----
 <a>
-    <b c="foo">     \<!--1-->
+    <b c="foo"/>     \<!--1-->
 </a>
 ----
 <1> some comment
@@ -694,7 +694,7 @@ renders as:
 [source,xml]
 ----
 <a>
-    <b c="foo">     <!--1-->
+    <b c="foo"/>     <!--1-->
 </a>
 ----
 <1> some comment

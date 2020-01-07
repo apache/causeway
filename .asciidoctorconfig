@@ -1,0 +1,7 @@
+// Common settings for Asciidoctor.
+// Used for rendering the preview when using the AsciiDoc IntelliJ plugin
+// for more information see:
+// https://github.com/asciidoctor/asciidoctor-intellij-plugin/wiki/Support-project-specific-configurations
+:experimental:
+:idprefix:
+:idseparator: -
