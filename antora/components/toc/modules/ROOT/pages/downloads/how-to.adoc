@@ -54,7 +54,7 @@ or
 
 [source,bash,subs="attributes+"]
 ----
-gpg –import KEYS
+gpg --import KEYS
 gpg -verify isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
 ----
 

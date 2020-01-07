@@ -134,7 +134,7 @@ Irrespective of whether you are using a github fork, the upstream for your local
 Alternatively, you can combine the `git fetch` and `git merge` and just use `git pull`:
 <pre>
 git checkout master
-git pull –ff-only
+git pull --ff-only
 </pre>
 
 If the `merge` or `pull` fails, it means that you must have made commits and there have been changes meanwhile on the remote `master`'s branch. You can use `gitk --all` to confirm. If this fails, see our xref:_dg_git-cookbook.adoc#[git cookbook] page for a procedure to retrospectively sort out this situation.
@@ -232,7 +232,7 @@ You'll probably also want to remove the remote branch on github:
 
 [source,bash]
 ----
-git push origin –delete ISIS-123-blobs
+git push origin --delete ISIS-123-blobs
 ----
 
 
