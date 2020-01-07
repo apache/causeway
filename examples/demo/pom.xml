@@ -78,16 +78,16 @@
 		<!-- EXTENSIONS -->
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-asciidoc</artifactId>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.incubator</groupId>
 			<artifactId>isis-incubator-model</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-sse</artifactId>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-sse</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
