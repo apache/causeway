@@ -806,14 +806,15 @@ under the License.
 			</activation>
 			<modules>
 				<module>../core</module>
-				<module>../mavendeps</module>
-				<module>../testing</module>
 				<module>../extensions</module>
-				<module>../subdomains</module>
-				<module>../mappings</module>
 				<module>../incubator</module>
 				<module>../legacy</module>
+				<module>../mappings</module>
+				<module>../mavendeps</module>
 				<module>../starters</module>
+				<module>../subdomains</module>
+				<module>../testing</module>
+				<module>../valuetypes</module>
 			</modules>
 		</profile>
 

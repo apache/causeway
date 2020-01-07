@@ -118,8 +118,24 @@ under the License.
 			</dependency>
 
 			<dependency>
+				<groupId>org.apache.isis.subdomains</groupId>
+				<artifactId>isis-subdomains</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+
+			<dependency>
 				<groupId>org.apache.isis.testing</groupId>
 				<artifactId>isis-testing</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
