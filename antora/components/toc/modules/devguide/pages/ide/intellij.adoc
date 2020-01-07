@@ -460,6 +460,7 @@ When a Maven module is imported, IntelliJ generates its own project files (suffi
 Occasionally these don't keep in sync (even if auto-import of Maven modules has been enabled).
 
 To fix the issue, try:
+
 * reimport module
 * rebuild selected modules/entire project
 * remove and then re-add the project
