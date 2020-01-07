@@ -132,10 +132,12 @@ The first thing to do is to make sure your local clone is up-to-date. We do this
 Irrespective of whether you are using a github fork, the upstream for your local `master` branch will be tracking the appropriate remote's `master` branch. So n either case, the same commands work:
 
 Alternatively, you can combine the `git fetch` and `git merge` and just use `git pull`:
-<pre>
+
+[source,bash]
+----
 git checkout master
 git pull --ff-only
-</pre>
+----
 
 If the `merge` or `pull` fails, it means that you must have made commits and there have been changes meanwhile on the remote `master`'s branch. You can use `gitk --all` to confirm. If this fails, see our xref:_dg_git-cookbook.adoc#[git cookbook] page for a procedure to retrospectively sort out this situation.
 
@@ -182,10 +184,12 @@ The first thing to do is to pull down any changes made in upstream remote's `mas
 These are the same commands that you would have run before you created your topic branch. If you use `gitk --all`, there's a good chance that new commits have come in.
 
 Next, we reintegrate our topic branch by rebasing onto `master`:
-<pre>
+
+[source,bash]
+----
 git checkout ISIS-123-blobs
 git rebase master
-</pre>
+----
 
 This takes all of the commits in your branch, and applies them on top of the new `master` branch. When your change is eventually integrated back in, it will result in a nice clear linear history on the public repo.
 
