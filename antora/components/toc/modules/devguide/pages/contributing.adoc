@@ -83,7 +83,7 @@ For more info on tracking branches http://git-scm.com/book/en/Git-Branching-Remo
 
 Although with git your commits are always performed on your local repo, those commit messages become public when the patch is applied by an Apache Isis committer. You should take time to write a meaningful commit message that helps explain what the patch refers to; if you don't then there's a chance that your patch may be rejected and not applied. No-one likes hard work to go to waste!
 
-We therefore recommend that your commit messages are as follows [1]:
+We therefore recommend that your commit messages are as follows:footnote:[Inspiration for the recommended commit format comes from the https://github.com/puppetlabs/puppet[puppet] project's https://github.com/puppetlabs/puppet/blob/master/CONTRIBUTING.md[contributing] page.]
 
 [source,other]
 ----
@@ -237,5 +237,3 @@ git push origin –delete ISIS-123-blobs
 
 
 … and continue as before until you are ready to resubmit your change.
-
-[1] inspiration for the recommended commit format comes from the https://github.com/puppetlabs/puppet[puppet] project's https://github.com/puppetlabs/puppet/blob/master/CONTRIBUTING.md[contributing] page.
