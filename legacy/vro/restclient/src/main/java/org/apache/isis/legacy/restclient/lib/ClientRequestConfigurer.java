@@ -105,7 +105,7 @@ public class ClientRequestConfigurer {
         for (final RequestParameter<?> requestParam : args.keySet()) {
             put(args, requestParam, argsAsMap);
         }
-        getHttpMethod().setUpArgs(this, argsAsMap);
+        setUpArgs(argsAsMap);
         return this;
     }
 
@@ -124,7 +124,7 @@ public class ClientRequestConfigurer {
             throw new IllegalStateException("Must set up http method first");
         }
 
-        getHttpMethod().setUpArgs(this, requestArgs);
+        setUpArgs(requestArgs);
         return this;
     }
 
@@ -167,9 +167,9 @@ public class ClientRequestConfigurer {
         return this;
     }
 
-    RestfulHttpMethodHelper getHttpMethod() {
-        final String httpMethod = clientRequest.getHttpMethod();
-        return RestfulHttpMethodHelper.valueOf(httpMethod);
+    private void setUpArgs(JsonRepresentation requestArgs) {
+        val httpMethodHelper = RestfulHttpMethodHelper.valueOf(clientRequest.getHttpMethod());
+        httpMethodHelper.setUpArgs(this, requestArgs);
     }
 
 }
