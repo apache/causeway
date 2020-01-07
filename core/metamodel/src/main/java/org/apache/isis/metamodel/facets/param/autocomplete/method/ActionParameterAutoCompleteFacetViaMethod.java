@@ -23,9 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -86,7 +84,7 @@ implements ImperativeFacet {
         final Object collectionOrArray = 
                 ManagedObject.InvokeUtil.invokeAutofit(
                         method, owningAdapter, pendingArgs, 
-                        Collections.singletonList(Optional.ofNullable(searchArg)));
+                        Collections.singletonList(searchArg));
         
         if (collectionOrArray == null) {
             return _Constants.emptyObjects;

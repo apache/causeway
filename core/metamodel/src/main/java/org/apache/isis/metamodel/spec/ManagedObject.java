@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -474,7 +473,7 @@ public interface ManagedObject {
                 final Method method, 
                 final ManagedObject target, 
                 final List<? extends ManagedObject> pendingArgs,
-                final List<Optional<Object>> additionalArgValues) {
+                final List<Object> additionalArgValues) {
     
             val argArray = adjust(method, pendingArgs, additionalArgValues);
             
@@ -495,7 +494,7 @@ public interface ManagedObject {
         private static Object[] adjust(
                 final Method method, 
                 final List<? extends ManagedObject> pendingArgs,
-                final List<Optional<Object>> additionalArgValues) {
+                final List<Object> additionalArgValues) {
             
             val parameterTypes = method.getParameterTypes();
             val paramCount = parameterTypes.length;
@@ -516,7 +515,7 @@ public interface ManagedObject {
             int paramIndex = pendingArgsToConsiderCount;
             for(val additionalArg : additionalArgValues) {
                 val paramType = parameterTypes[paramIndex];
-                adjusted[paramIndex] = honorPrimitiveDefaults(paramType, additionalArg.orElse(null));
+                adjusted[paramIndex] = honorPrimitiveDefaults(paramType, additionalArg);
                 ++paramIndex;
             }
             
