@@ -1,0 +1,6 @@
+name: valuetypes
+title: "Value Types Catalog"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

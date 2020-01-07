@@ -1,3 +1,3 @@
-* xref:extensions:ognl:about.adoc[OGNL Library]
+* xref:subdomains:ognl:about.adoc[OGNL Library]
 
 

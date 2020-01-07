@@ -62,7 +62,13 @@ _Persistence_
 [discrete]
 == Catalogs
 
-*  xref:extensions:ROOT:about.adoc[Extensions Catalog]
+*  xref:subdomains:ROOT:about.adoc[Subdomains]
+*  xref:valuetypes:ROOT:about.adoc[Value Types]
+*  xref:extensions:ROOT:about.adoc[Extensions]
+*  xref:mappings:ROOT:about.adoc[Mappings between Bounded Contexts]
+
+_Also:_
+
 *  xref:incubator:ROOT:about.adoc[Incubator Catalog]
 *  xref:legacy:ROOT:about.adoc[Legacy Catalog]
 

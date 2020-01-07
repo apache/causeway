@@ -1,3 +1,3 @@
-* xref:extensions:minio:about.adoc[Minio Library]
+* xref:mappings:minio:about.adoc[Minio Library]
 
 

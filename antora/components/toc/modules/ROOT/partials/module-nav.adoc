@@ -33,9 +33,12 @@
 
 * Catalogs
 
-**  xref:extensions:ROOT:about.adoc[Extensions Catalog]
-**  xref:incubator:ROOT:about.adoc[Incubator Catalog]
-**  xref:legacy:ROOT:about.adoc[Legacy Catalog]
+**  xref:extensions:ROOT:about.adoc[Extensions]
+**  xref:subdomains:ROOT:about.adoc[Subdomains]
+**  xref:mappings:ROOT:about.adoc[Mappings for Bounded Contexts]
+**  xref:valuetypes:ROOT:about.adoc[Value Types]
+**  xref:incubator:ROOT:about.adoc[Incubator]
+**  xref:legacy:ROOT:about.adoc[Legacy]
 
 
 * Support

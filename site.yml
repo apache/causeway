@@ -24,16 +24,25 @@ content:
       start_path: antora/components/legacy # legacy
       branches: HEAD
     - url: .
+      start_path: antora/components/mappings # mappings
+      branches: HEAD
+    - url: .
       start_path: antora/components/refguide # refguide
       branches: HEAD
     - url: .
       start_path: antora/components/security # security
       branches: HEAD
     - url: .
+      start_path: antora/components/subdomains # subdomains
+      branches: HEAD
+    - url: .
       start_path: antora/components/testing # testing
       branches: HEAD
     - url: .
       start_path: antora/components/userguide # userguide
+      branches: HEAD
+    - url: .
+      start_path: antora/components/valuetypes # valuetypes
       branches: HEAD
 
 # core
@@ -109,72 +118,7 @@ content:
       start_path: examples/smoketests/src/main/doc # core
       branches: HEAD
 
-# starters
-    - url: .
-      start_path: starters/src/main/doc # toc
-      branches: HEAD
-
-# incubator
-    - url: .
-      start_path: incubator/core/model/src/main/doc # incubator
-      branches: HEAD
-    - url: .
-      start_path: incubator/core/microprofile/src/main/doc # incubator
-      branches: HEAD
-
-# legacy
-    - url: .
-      start_path: legacy/core/applib/src/main/doc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/core/commons/src/main/doc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/core/runtime/src/main/doc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/vro/restclient/src/main/doc # legacy
-      branches: HEAD
-
 # extensions
-    - url: .
-      start_path: extensions/core/spring/src/main/doc # extensions
-      branches: HEAD
-
-    - url: .
-      start_path: extensions/lib/base/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/docx/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/excel/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/freemarker/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/jaxrsclient/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/minio/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/ognl/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/pdfbox/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/slack/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/xdocreport/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/lib/zip/impl/src/main/doc # extensions
-      branches: HEAD
-
     - url: .
       start_path: extensions/persistence/flywayjdo/impl/src/main/doc # extensions
       branches: HEAD
@@ -208,36 +152,49 @@ content:
       branches: HEAD
 
     - url: .
-      start_path: extensions/testing/fakedata/impl/src/main/doc # testing
-      branches: HEAD
-    - url: .
-      start_path: extensions/testing/fixtures/src/main/doc # testing
-      branches: HEAD
-    - url: .
-      start_path: extensions/testing/specsupport/src/main/doc # testing
-      branches: HEAD
-    - url: .
-      start_path: extensions/testing/unittestsupport/impl/src/main/doc # testing
-      branches: HEAD
-
-# extensions
-    - url: .
       start_path: extensions/vro/cors/src/main/doc # vro
-      branches: HEAD
-    - url: .
-      start_path: extensions/vro/restclient/src/main/doc # vro
-      branches: HEAD
-    - url: .
-      start_path: extensions/vw/asciidoc/src/main/doc # vw
       branches: HEAD
     - url: .
       start_path: extensions/vw/exceldownload/src/main/doc # vw
       branches: HEAD
+
+# incubator
     - url: .
-      start_path: extensions/vw/markdown/src/main/doc # vw
+      start_path: incubator/extensions/core/model/src/main/doc # incubator
       branches: HEAD
     - url: .
-      start_path: extensions/vw/sse/src/main/doc # vw
+      start_path: incubator/extensions/core/microprofile/src/main/doc # incubator
+      branches: HEAD
+
+# legacy
+    - url: .
+      start_path: legacy/extensions/core/applib/src/main/doc # legacy
+      branches: HEAD
+    - url: .
+      start_path: legacy/extensions/core/commons/src/main/doc # legacy
+      branches: HEAD
+    - url: .
+      start_path: legacy/extensions/core/runtime/src/main/doc # legacy
+      branches: HEAD
+    - url: .
+      start_path: legacy/mappings/restclient/src/main/doc # legacy
+      branches: HEAD
+    - url: .
+      start_path: legacy/subdomains/servletapi/impl/src/main/doc # legacy
+      branches: HEAD
+
+# mappings
+    - url: .
+      start_path: mappings/jaxrsclient/impl/src/main/doc # mappings
+      branches: HEAD
+    - url: .
+      start_path: mappings/minio/impl/src/main/doc # mappings
+      branches: HEAD
+    - url: .
+      start_path: mappings/restclient/impl/src/main/doc # mappings
+      branches: HEAD
+    - url: .
+      start_path: mappings/slack/impl/src/main/doc # mappings
       branches: HEAD
 
 # mavendeps
@@ -245,6 +202,64 @@ content:
       start_path: mavendeps/src/main/doc # toc
       branches: HEAD
 
+# starters
+    - url: .
+      start_path: starters/src/main/doc # toc
+      branches: HEAD
+
+# subdomains
+    - url: .
+      start_path: subdomains/base/impl/src/main/doc # subdomains
+      branches: HEAD
+    - url: .
+      start_path: subdomains/docx/impl/src/main/doc # subdomains
+      branches: HEAD
+    - url: .
+      start_path: subdomains/excel/impl/src/main/doc # subdomains
+      branches: HEAD
+    - url: .
+      start_path: subdomains/freemarker/impl/src/main/doc # subdomains
+      branches: HEAD
+    - url: .
+      start_path: subdomains/ognl/impl/src/main/doc # subdomains
+      branches: HEAD
+    - url: .
+      start_path: subdomains/pdfbox/impl/src/main/doc # subdomains
+      branches: HEAD
+    - url: .
+      start_path: subdomains/spring/impl/src/main/doc # subdomains
+      branches: HEAD
+    - url: .
+      start_path: subdomains/xdocreport/impl/src/main/doc # subdomains
+      branches: HEAD
+    - url: .
+      start_path: subdomains/zip/impl/src/main/doc # subdomains
+      branches: HEAD
+
+# testing
+    - url: .
+      start_path: testing/fakedata/impl/src/main/doc # testing
+      branches: HEAD
+    - url: .
+      start_path: testing/fixtures/src/main/doc # testing
+      branches: HEAD
+    - url: .
+      start_path: testing/specsupport/src/main/doc # testing
+      branches: HEAD
+    - url: .
+      start_path: testing/unittestsupport/impl/src/main/doc # testing
+      branches: HEAD
+
+    # valuetypes
+    - url: .
+      start_path: valuetypes/asciidoc/src/main/doc # vw
+      branches: HEAD
+    - url: .
+      start_path: valuetypes/markdown/src/main/doc # vw
+      branches: HEAD
+    - url: .
+      start_path: valuetypes/sse/src/main/doc # vw
+      branches: HEAD
 
 ui:
   bundle:

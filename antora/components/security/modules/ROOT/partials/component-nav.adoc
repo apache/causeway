@@ -2,9 +2,6 @@ include::security:ROOT:partial$module-nav.adoc[]
 include::security:api:partial$module-nav.adoc[]
 include::security:bypass:partial$module-nav.adoc[]
 include::security:shiro:partial$module-nav.adoc[]
-include::security:shiro-realm-ldap:partial$module-nav.adoc[]
 include::security:keycloak:partial$module-nav.adoc[]
 include::security:ROOT:partial$module-nav2.adoc[]
 
-* Extensions
-** xref:secman:ROOT:about.adoc[SecMan]

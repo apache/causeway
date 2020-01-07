@@ -1,3 +1,3 @@
-* xref:extensions:docx:about.adoc[Docx Library]
+* xref:subdomains:docx:about.adoc[Docx Library]
 
 

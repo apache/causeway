@@ -1,0 +1,6 @@
+name: subdomains
+title: "Subdomains Catalog"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

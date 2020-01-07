@@ -1,3 +1,3 @@
-* xref:extensions:hsqldbmgr:about.adoc[HSQLDB Manager]
+** xref:extensions:hsqldbmgr:about.adoc[HSQLDB Manager]
 
 
