@@ -1,5 +1,4 @@
 = Testing
-include::_attributes.adoc[]
 
 If you are going to use Apache Isis for developing complex business-critical applications, then being able to write automated tests for those applications becomes massively important.
 As such Apache Isis treats the topic of testing very seriously.

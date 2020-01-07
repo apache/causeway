@@ -1,7 +1,6 @@
 [[git-cookbook]]
 = Appendix: Git Cookbook
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-include::_attributes.adoc[]
 :page-partial:
 
 
@@ -28,7 +27,7 @@ git commit -m "ISIS-nnn: yada yada"
 ----
 
 The `git add` command adds the changes to the file(s) to the git index (aka staging area).  If you were to make subsequent changes to the file these would not be committed.
- 
+
 The `git commit` takes all the staged changes and commits them locally.  Note that these changes are not shared public with Apache Isis' central git repo.
 
 You can combine these two commands using `-am` flag to git commit:
@@ -213,7 +212,7 @@ If this doesn't work, it may be that the remote repo has disabled this feature. 
 
 If at any time the `git pull` from your upstream fails, it most likely means that you must have made commits on the `master` branch.  You can use `gitk --all` to confirm; at some point in time both `master` and `origin\master` will have a common ancestor.
 
-You can retrospectively create a topic branch for the work you've accidentally done on `master`.  
+You can retrospectively create a topic branch for the work you've accidentally done on `master`.
 
 First, create a branch for your current commit:
 
@@ -246,7 +245,7 @@ git reset --hard <i>shaId</i>      # move master branch shaId of common ancestor
 == If you've forgotten to prefix your commits (but not pushed)
 
 One of our committers, Alexander Krasnukhin, has put together some git scripts to help his workflow.  Using one of these, `git prefix`, you can just commit with proper message without bothering about prefix and add prefix only in the end *before* the final push.
- 
+
 For example, to prefix all not yet prefixed commits `master..isis/666` with `ISIS-666` prefix, use:
 
 [source,bash]

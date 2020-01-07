@@ -1,7 +1,6 @@
 [[key-generation]]
 = Key Generation
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-include::_attributes.adoc[]
 :page-partial:
 
 
@@ -9,7 +8,7 @@ include::_attributes.adoc[]
 
 
 
-In order that a contributor can make a release it is necessary for them to have generated a key and had that key recognized by other members of the Apache Software Foundation. 
+In order that a contributor can make a release it is necessary for them to have generated a key and had that key recognized by other members of the Apache Software Foundation.
 
 For further background information on this topic, see the http://www.apache.org/dev/release-signing.html[release signing page] and the http://www.apache.org/dev/openpgp.html#generate-key[openpgp page] on the Apache wiki.
 
@@ -88,7 +87,7 @@ You need a user ID to identify your key; the software constructs the user ID
 from the Real Name, Comment and Email Address in this form:
     "Heinrich Heine (Der Dichter) <heinrichh@duesseldorf.de>"
 
-Real name: 
+Real name:
 ----
 
 Enter your name, email and comment:

@@ -1,5 +1,4 @@
 = Reference Guides
-include::_attributes.adoc[]
 :page-role: -toc
 
 The reference guides cover:

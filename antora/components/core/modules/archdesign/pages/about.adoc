@@ -1,5 +1,4 @@
 = Architecture & Design
-include::_attributes.adoc[]
 
 This guide describes the internal architecture and design of the framework.
 
