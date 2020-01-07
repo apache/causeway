@@ -7,7 +7,7 @@ if [[ $# -gt 0 ]]; then
   if [ -f $1 ]; then
     PLAYBOOK_FILE=$1
   else
-    PLAYBOOK_FILE=antora/playbooks/site-$1.yml
+    echo "no such file $PLAYBOOK_FILE - using site.yml" >&2
   fi
   shift
 fi
