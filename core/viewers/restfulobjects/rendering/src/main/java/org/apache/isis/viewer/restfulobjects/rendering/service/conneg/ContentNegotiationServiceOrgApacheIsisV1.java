@@ -38,7 +38,6 @@ import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
@@ -230,7 +229,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         }
 
         final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
-        final ObjectSpecification returnType = objectAndActionInvocation.getAction().getReturnType();
+        //final ObjectSpecification returnType = objectAndActionInvocation.getAction().getReturnType();
 
         if (returnedAdapter == null) {
             return null;
@@ -249,7 +248,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
             rootRepresentation = JsonRepresentation.newArray();
 
-            final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
+            //final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
 
             final Stream<ManagedObject> collectionAdapters = 
                     CollectionFacet.Utils.streamAdapters(returnedAdapter);

@@ -22,8 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.GlobalTenancy;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisExtFixturesFixtureResultsRoleAndPermissions;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
@@ -41,8 +39,6 @@ import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityRegu
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
     @Inject private SecurityModuleConfig configBean;
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository applicationUserRepository;
 
     @Override
     protected void execute(ExecutionContext executionContext) {

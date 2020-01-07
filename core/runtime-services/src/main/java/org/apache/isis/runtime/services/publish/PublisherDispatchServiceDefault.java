@@ -52,8 +52,6 @@ import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFa
 import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
  */
@@ -63,9 +61,15 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @RequestScoped
 @Qualifier("Default")
-@Log4j2
 public class PublisherDispatchServiceDefault implements PublisherDispatchService {
 
+    @Inject private List<PublisherService> publisherServices;
+    @Inject private ChangedObjectsService changedObjectsServiceInternal;
+    @Inject private CommandContext commandContext;
+    @Inject private InteractionContext interactionContext;
+    @Inject private ClockService clockService;
+    @Inject private UserService userService;
+    @Inject private MetricsService metricsService;
 
     @Override
     public void publishObjects() {
@@ -175,15 +179,6 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
         };
     }
 
-    // -- injected services
-    @Inject List<PublisherService> publisherServices;
-    @Inject
-    ChangedObjectsService changedObjectsServiceInternal;
-    @Inject CommandContext commandContext;
-    @Inject InteractionContext interactionContext;
-    @Inject ClockService clockService;
-    @Inject UserService userService;
-    @Inject MetricsService metricsService;
 
 
 

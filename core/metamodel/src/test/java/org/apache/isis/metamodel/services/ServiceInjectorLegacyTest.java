@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -126,7 +125,7 @@ class ServiceInjectorLegacyTest {
 
     @Inject private ServiceInjector injector;
     @Inject private ServiceRegistry registry;
-    @Inject private ApplicationContext applicationContext;
+    //@Inject private ApplicationContext applicationContext;
     @Inject private IsisConfiguration isisConfiguration;
 
     @BeforeEach

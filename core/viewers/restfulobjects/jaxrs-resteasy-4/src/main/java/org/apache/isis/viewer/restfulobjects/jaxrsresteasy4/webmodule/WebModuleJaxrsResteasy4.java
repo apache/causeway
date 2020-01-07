@@ -41,7 +41,6 @@ import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
@@ -52,7 +51,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisRoViewer.WebModuleJaxrsRestEasy4")
 @Order(OrderPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
-@Log4j2
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     private static final String ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS = "IsisSessionFilterForRestfulObjects";

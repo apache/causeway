@@ -43,15 +43,12 @@ import org.apache.isis.commons.internal.base._NullSafe;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisRoRendering.AcceptHeaderServiceForRest")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ForRest")
 @RequestScoped
-@Log4j2
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 
     private static ThreadLocal<List<MediaType>> mediaTypesByThread = new ThreadLocal<>();

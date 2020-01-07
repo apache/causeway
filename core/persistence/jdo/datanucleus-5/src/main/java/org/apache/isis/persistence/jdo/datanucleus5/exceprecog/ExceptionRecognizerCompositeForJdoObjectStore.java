@@ -32,8 +32,6 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.config.IsisConfiguration;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * Convenience implementation of the {@link ExceptionRecognizer} domain service that
  * recognizes a number of common and non-fatal exceptions (such as unique constraint
@@ -50,14 +48,16 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 
+    @Inject IsisConfiguration configuration; // for testing not private
+    
     @Override
     @PostConstruct
     public void init() {
 
-        final boolean disabled = configuration.getServices().getExceptionRecognizerCompositeForJdoObjectStore().isDisable();
+        final boolean disabled = configuration.getServices()
+                .getExceptionRecognizerCompositeForJdoObjectStore().isDisable();
         if(disabled) {
             return;
         }
@@ -74,8 +74,5 @@ public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionReco
         add(new ExceptionRecognizerForJDOObjectNotFoundException());
         add(new ExceptionRecognizerForJDODataStoreException());
     }
-
-    @Inject
-    IsisConfiguration configuration;
 
 }

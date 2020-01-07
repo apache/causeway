@@ -27,26 +27,22 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.userprof.UserProfileService;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
-
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntimeServices.UserProfileServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class UserProfileServiceDefault implements UserProfileService {
 
-    @Programmatic
+    @Inject private AuthenticationSessionProvider authenticationSessionProvider;
+    
     @Override
     public String userProfileName() {
         return authenticationSessionProvider.getAuthenticationSession().getUserName();
     }
 
-    @Inject
-    AuthenticationSessionProvider authenticationSessionProvider;
+    
 }

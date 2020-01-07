@@ -46,7 +46,6 @@ import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntime.ChangedObjectsService")
@@ -54,7 +53,6 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @RequestScoped
-@Log4j2
 public class ChangedObjectsService implements WithTransactionScope {
 
     /**

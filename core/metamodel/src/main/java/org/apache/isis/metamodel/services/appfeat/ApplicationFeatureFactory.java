@@ -29,14 +29,11 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisMetaModel.ApplicationFeatureFactory")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class ApplicationFeatureFactory {
 
     public ApplicationFeature newApplicationFeature() {

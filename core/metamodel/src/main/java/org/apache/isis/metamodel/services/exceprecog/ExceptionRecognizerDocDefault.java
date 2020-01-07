@@ -36,14 +36,11 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisMetaModel.ExceptionRecognizerDocDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class ExceptionRecognizerDocDefault implements ExceptionRecognizer {
     
     @Inject private ServiceInjector serviceInjector;

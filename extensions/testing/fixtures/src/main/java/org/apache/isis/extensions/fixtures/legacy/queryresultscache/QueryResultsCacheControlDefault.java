@@ -32,8 +32,6 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
 import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
 
-import lombok.extern.log4j.Log4j2;
-
 
 /**
  * In separate class because {@link QueryResultsCache} itself is request-scoped
@@ -43,7 +41,6 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class QueryResultsCacheControlDefault implements QueryResultCacheControl {
 
     @EventListener(FixturesInstallingEvent.class)

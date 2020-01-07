@@ -34,14 +34,12 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisMetaModel.TitleServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class TitleServiceDefault implements TitleService {
 
     @Inject private WrapperFactory wrapperFactory;

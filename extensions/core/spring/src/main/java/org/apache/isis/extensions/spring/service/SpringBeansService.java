@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Borrowed from BeansEndpoint.
@@ -41,7 +40,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisExtSpring.SpringBeansService")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
 public class SpringBeansService {
 
     private final ConfigurableApplicationContext context;

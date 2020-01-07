@@ -33,14 +33,12 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisWicketViewer.WicketViewerSettingsDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     private static final long serialVersionUID = 1L;

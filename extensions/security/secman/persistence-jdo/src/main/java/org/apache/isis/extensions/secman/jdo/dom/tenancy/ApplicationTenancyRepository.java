@@ -34,11 +34,8 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 
-import lombok.extern.log4j.Log4j2;
-
 @Repository
 @Named("isisExtSecman.applicationTenancyRepository")
-@Log4j2
 public class ApplicationTenancyRepository 
 implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository {
 

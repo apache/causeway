@@ -30,14 +30,11 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDefault;
 import org.apache.isis.applib.services.command.spi.CommandService;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisRuntimeServices.CommandServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class CommandServiceDefault implements CommandService {
 
     @Override

@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.value.LocalResourcePath;
 
 import lombok.RequiredArgsConstructor;
@@ -42,7 +41,7 @@ import lombok.val;
 public class Object_openRestApi {
 
     @Inject private BookmarkService bookmarkService;
-    @Inject private ConfigurationViewService configurationViewService;
+    //@Inject private ConfigurationViewService configurationViewService;
     @Inject private RestfulPathProvider restfulPathProvider;
 
     private final Object holder;

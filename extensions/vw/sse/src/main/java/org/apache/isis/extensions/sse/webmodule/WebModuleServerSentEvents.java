@@ -35,7 +35,6 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule providing support for Server Sent Events.
@@ -46,7 +45,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisExtSse.WebModuleServerSentEvents")
 @Qualifier("ServerSentEvents")
 @Order(OrderPrecedence.MIDPOINT)
-@Log4j2
 public final class WebModuleServerSentEvents extends WebModuleAbstract {
 
     private final static String SERVLET_NAME = "ServerSentEventsServlet";

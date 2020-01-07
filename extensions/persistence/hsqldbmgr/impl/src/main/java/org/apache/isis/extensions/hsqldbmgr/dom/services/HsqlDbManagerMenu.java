@@ -45,16 +45,13 @@ import org.apache.isis.config.IsisConfiguration;
         )
 public class HsqlDbManagerMenu {
 
-    private final IsisConfiguration isisConfiguration;
     private final String url;
 
     @Inject
     public HsqlDbManagerMenu(IsisConfiguration isisConfiguration) {
-        this.isisConfiguration = isisConfiguration;
-        this.url = isisConfiguration.getPersistor().getDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
+        this.url = isisConfiguration
+                .getPersistor().getDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
     }
-
-
 
     public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<HsqlDbManagerMenu> { }
 

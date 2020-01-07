@@ -26,11 +26,8 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethod;
 import org.apache.isis.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest {
-
-    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private ValidateObjectFacetMethodFactory facetFactory;
 

@@ -63,9 +63,6 @@ public class ObjectAdapterAccessHelper {
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final Intent intent) {
 
-        //[ahuber] unused, any side-effects?
-        final Where where = resourceContext.getWhere();
-
         final ObjectAssociation association;
         try {
             final ObjectSpecification specification = objectAdapter.getSpecification();
@@ -86,9 +83,6 @@ public class ObjectAdapterAccessHelper {
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final Intent intent) {
 
-        //[ahuber] unused, any side-effects?
-        final Where where = resourceContext.getWhere();
-
         final ObjectAssociation association;
         try {
             final ObjectSpecification specification = objectAdapter.getSpecification();
@@ -106,9 +100,6 @@ public class ObjectAdapterAccessHelper {
 
     public ObjectAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final Intent intent) {
-
-        //[ahuber] unused, any side-effects?
-        final Where where = resourceContext.getWhere();
 
         final ObjectAction action;
         try {

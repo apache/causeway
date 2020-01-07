@@ -38,14 +38,11 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisMetaModel.GridServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class GridServiceDefault implements GridService {
 
     public static final String COMPONENT_TNS = "http://isis.apache.org/applib/layout/component";
@@ -53,6 +50,9 @@ public class GridServiceDefault implements GridService {
 
     public static final String LINKS_TNS = "http://isis.apache.org/applib/layout/links";
     public static final String LINKS_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/links/links.xsd";
+    
+    @Inject private GridLoaderService gridLoaderService;
+    @Inject private List<GridSystemService<?>> gridSystemServices;
 
     // //////////////////////////////////////
 
@@ -204,12 +204,6 @@ public class GridServiceDefault implements GridService {
                 ? gridSystemServices
                         : gridSystemServicesForTest;
     }
-
-    // -- DEPENDENCIES
-
-    @Inject GridLoaderService gridLoaderService;
-    @Inject private List<GridSystemService<?>> gridSystemServices;
-
 
 
 }

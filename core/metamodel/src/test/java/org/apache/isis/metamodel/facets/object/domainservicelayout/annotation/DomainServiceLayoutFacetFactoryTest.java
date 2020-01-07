@@ -67,8 +67,8 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
 
-    public void testDomainServiceMenuOrderAnnotationPickedUpOnClass() {
-        @DomainService//(menuOrder = "123")
+    public void testDomainServiceAnnotationPickedUpOnClass() {
+        @DomainService
         class Customers {
         }
 
@@ -78,7 +78,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
         DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        //Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
+        Assert.assertNotNull(domainServiceLayoutFacet);
 
         assertNoMethodsRemoved();
     }

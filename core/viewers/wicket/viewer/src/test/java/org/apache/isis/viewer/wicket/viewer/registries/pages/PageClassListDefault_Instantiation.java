@@ -67,8 +67,7 @@ public class PageClassListDefault_Instantiation {
     // -- HELPER
 
     public static PageClassRegistryDefault newPageClassRegistryDefault(PageClassList pageClassList) {
-        PageClassRegistryDefault pageClassRegistry = new PageClassRegistryDefault();
-        pageClassRegistry.pageClassList = pageClassList;
+        PageClassRegistryDefault pageClassRegistry = new PageClassRegistryDefault(pageClassList);
         pageClassRegistry.init();
         return pageClassRegistry;
     }

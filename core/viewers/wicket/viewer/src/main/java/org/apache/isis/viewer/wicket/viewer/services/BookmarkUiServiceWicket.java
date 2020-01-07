@@ -28,13 +28,10 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmarkui.BookmarkUiService;
 import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisWicketViewer.BookmarkUiServiceWicket")
 @Order(OrderPrecedence.HIGH)
 @Qualifier("Wicket")
-@Log4j2
 public class BookmarkUiServiceWicket implements BookmarkUiService {
 
     @Override

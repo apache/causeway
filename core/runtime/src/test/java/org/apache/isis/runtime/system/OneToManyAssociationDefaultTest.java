@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.Identifier;
@@ -115,6 +116,7 @@ public class OneToManyAssociationDefaultTest {
     @Test
     public void delegatesToUnderlying() {
         final ObjectSpecification spec = association.getSpecification();
+        assertNotNull(spec); // looks like an incomplete testcase
     }
 
     @Test

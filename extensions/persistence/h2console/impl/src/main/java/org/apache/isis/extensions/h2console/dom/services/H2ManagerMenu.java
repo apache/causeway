@@ -29,7 +29,6 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.extensions.h2console.dom.webmodule.WebModuleH2Console;
 
@@ -43,18 +42,14 @@ import org.apache.isis.extensions.h2console.dom.webmodule.WebModuleH2Console;
         )
 public class H2ManagerMenu {
 
-    private final ServiceRegistry serviceRegistry;
     private final WebModuleH2Console webModule;
 
     @Inject
-    public H2ManagerMenu(final ServiceRegistry serviceRegistry, final WebModuleH2Console webModule) {
-        this.serviceRegistry = serviceRegistry;
+    public H2ManagerMenu(final WebModuleH2Console webModule) {
         this.webModule = webModule;
     }
 
-
-    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<H2ManagerMenu>{
-        private static final long serialVersionUID = 1L; }
+    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<H2ManagerMenu>{}
 
     @Action(
             semantics = SemanticsOf.SAFE,

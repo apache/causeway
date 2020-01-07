@@ -39,7 +39,6 @@ import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.facets.actions.command.CommandFacet;
@@ -57,16 +56,16 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisMetaModel.MetaModelServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class MetaModelServiceDefault implements MetaModelService {
 
+    @Inject private SpecificationLoader specificationLoader;
+    @Inject private GridService gridService;
+    
     private MetaModelExporter metaModelExporter;
 
     @PostConstruct
@@ -269,21 +268,5 @@ public class MetaModelServiceDefault implements MetaModelService {
         return metaModelExporter.exportMetaModel(config);
     }
 
-    @Inject ServiceRegistry serviceRegistry;
-
-    //-------------
-    //TODO[2112] workaround circular dependency issues when bootstrapping ...
-    @Inject SpecificationLoader specificationLoader;
-    @Inject GridService gridService;
-    //
-    //    private _Lazy<SpecificationLoader> specificationLoader = _Lazy.threadSafe(()->
-    //        serviceRegistry.lookupServiceElseFail(SpecificationLoader.class));
-    //    //
-    //    private _Lazy<GridService> gridService = _Lazy.threadSafe(()->
-    //        serviceRegistry.lookupServiceElseFail(GridService.class));
-    //    //
-    //    private _Lazy<MetaModelExporter> metaModelExporter = _Lazy.threadSafe(()->
-    //        new MetaModelExporter(specificationLoader.get()));
-    //-------------
 
 }

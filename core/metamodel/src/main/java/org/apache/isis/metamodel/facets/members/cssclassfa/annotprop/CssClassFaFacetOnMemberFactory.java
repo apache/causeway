@@ -29,7 +29,9 @@ import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
-public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class CssClassFaFacetOnMemberFactory 
+extends FacetFactoryAbstract 
+implements ContributeeMemberFacetFactory {
 
     public CssClassFaFacetOnMemberFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -48,16 +50,14 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     }
 
 
-    // region > faIconFromPattern
-
-    /**
-     * The pattern matches definitions like:
-     * <ul>
-     * <li>methodNameRegex:cssClassFa - will render the Font Awesome icon on the left of the title</li>
-     *     <li>methodNameRegex:cssClassFa:(left|right) - will render the Font Awesome icon on the specified position of the title</li>
-     * </ul>
-     */
-    private final static Pattern FA_ICON_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
+//    /*
+//     * The pattern matches definitions like:
+//     * <ul>
+//     * <li>methodNameRegex:cssClassFa - will render the Font Awesome icon on the left of the title</li>
+//     *     <li>methodNameRegex:cssClassFa:(left|right) - will render the Font Awesome icon on the specified position of the title</li>
+//     * </ul>
+//     */
+//    private final static Pattern FA_ICON_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
 
     private CssClassFaFacet createFromConfiguredRegexIfPossible(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
@@ -98,8 +98,6 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
         }
         return faIconByPattern;
     }
-
-    // endregion
 
 
 }

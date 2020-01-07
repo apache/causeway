@@ -50,7 +50,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * This service enables a serializable 'bookmark' to be created for an entity.
@@ -61,7 +60,6 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 
     @Inject private SpecificationLoader specificationLoader;

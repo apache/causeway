@@ -37,7 +37,6 @@ import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
 
 import lombok.Builder;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 
@@ -49,18 +48,17 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 @Builder //for JUnit Test support
 public class MetamodelEventService {
 
-    @Inject Event<CssClassUiEvent<Object>> cssClassUiEvents;
-    @Inject Event<IconUiEvent<Object>> iconUiEvents;
-    @Inject Event<LayoutUiEvent<Object>> layoutUiEvents;
-    @Inject Event<TitleUiEvent<Object>> titleUiEvents;
+    @Inject private Event<CssClassUiEvent<Object>> cssClassUiEvents;
+    @Inject private Event<IconUiEvent<Object>> iconUiEvents;
+    @Inject private Event<LayoutUiEvent<Object>> layoutUiEvents;
+    @Inject private Event<TitleUiEvent<Object>> titleUiEvents;
 
-    @Inject Event<ActionDomainEvent<?>> actionDomainEvents;
-    @Inject Event<PropertyDomainEvent<?, ?>> propertyDomainEvents;
-    @Inject Event<CollectionDomainEvent<?, ?>> collectionDomainEvents;
+    @Inject private Event<ActionDomainEvent<?>> actionDomainEvents;
+    @Inject private Event<PropertyDomainEvent<?, ?>> propertyDomainEvents;
+    @Inject private Event<CollectionDomainEvent<?, ?>> collectionDomainEvents;
 
     // -- METAMODEL UI EVENTS
 

@@ -34,18 +34,16 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisExtFixtures.FixturesLifecycleService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class FixturesLifecycleService {
 
-    @Inject IsisSessionFactory isisSessionFactory; // depends on  
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    @SuppressWarnings("unused")
+    @Inject private IsisSessionFactory isisSessionFactory; // depends on relationship  
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
 
     @PostConstruct
     public void postConstruct() {

@@ -52,11 +52,9 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDe
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Repository
 @Named("isisExtSecman.applicationPermissionRepository")
-@Log4j2
 public class ApplicationPermissionRepository 
 implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository {
 

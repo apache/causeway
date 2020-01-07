@@ -44,8 +44,7 @@ import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class ObjectActionLayoutXmlDefaultTest {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    @Rule public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
 
     private ObjectActionDefault action;
@@ -54,7 +53,7 @@ public class ObjectActionLayoutXmlDefaultTest {
     @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock private SpecificationLoader mockSpecificationLoader;
 
-    private MetaModelContext metaModelContext;
+    protected MetaModelContext metaModelContext;
 
     @Before
     public void setUp() throws Exception {

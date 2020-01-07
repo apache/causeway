@@ -33,8 +33,6 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * This service allows an XML document to be generated capturing the data of a root entity and specified related
  * entities.  This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
@@ -49,7 +47,6 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     
     @Inject private SpecificationLoader specificationLoader;

@@ -63,17 +63,12 @@ import org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFa
 import org.apache.isis.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import lombok.val;
 
 public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
-    @Mock
-    private ObjectSpecification mockSpecification;
-
+    @Mock private ObjectSpecification mockSpecification;
 
     @Override
     public void setUp() throws Exception {

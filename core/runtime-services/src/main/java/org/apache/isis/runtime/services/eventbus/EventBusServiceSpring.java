@@ -30,14 +30,11 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisRuntimeServices.EventBusServiceSpring")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Spring")
-@Log4j2
 public class EventBusServiceSpring implements EventBusService {
 
     @Inject private ApplicationEventPublisher applicationEventPublisher;

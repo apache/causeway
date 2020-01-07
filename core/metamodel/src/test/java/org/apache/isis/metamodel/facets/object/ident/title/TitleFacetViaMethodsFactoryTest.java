@@ -29,12 +29,8 @@ import org.apache.isis.metamodel.facets.object.title.methods.TitleFacetViaMethod
 import org.apache.isis.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.metamodel.facets.object.title.methods.TitleFacetViaToStringMethod;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
-
-    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
 
     private TitleFacetViaMethodsFactory facetFactory;
 

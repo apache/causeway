@@ -44,8 +44,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.Specification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
-import lombok.extern.log4j.Log4j2;
-
 import images.Images;
 
 /**
@@ -60,7 +58,6 @@ import images.Images;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ClassPath")
-@Log4j2
 public class ImageResourceCacheClassPath implements ImageResourceCache {
 
     private static final long serialVersionUID = 1L;

@@ -33,16 +33,16 @@ import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntimeServices.SessionManagementServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class SessionManagementServiceDefault implements SessionManagementService {
 
+    @Inject private IsisSessionFactory isisSessionFactory;
+    
     @Override
     public void nextSession() {
 
@@ -56,6 +56,6 @@ public class SessionManagementServiceDefault implements SessionManagementService
 
     }
 
-    @Inject IsisSessionFactory isisSessionFactory;
+    
 
 }

@@ -13,7 +13,6 @@ public class J8DateTimes extends AbstractRandomValueGenerator {
 
     @Programmatic
     public OffsetDateTime around(final Period period) {
-        final OffsetDateTime now = fake.clockService.nowAsOffsetDateTime();
         return fake.booleans().coinFlip() ? before(period) : after(period);
     }
 

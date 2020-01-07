@@ -42,13 +42,11 @@ import org.apache.isis.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisExtH2Console.WebModuleH2Console")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("H2Console")
-@Log4j2
 public class WebModuleH2Console extends WebModuleAbstract {
 
     private final static String SERVLET_NAME = "H2Console";

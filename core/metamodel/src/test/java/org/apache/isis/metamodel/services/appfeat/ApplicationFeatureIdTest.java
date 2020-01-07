@@ -603,6 +603,7 @@ public class ApplicationFeatureIdTest {
 
         public static class IsClassContaining extends PredicatesTest {
 
+            @SuppressWarnings("unused")
             private ApplicationMemberType memberType;
 
             @Mock

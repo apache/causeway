@@ -92,9 +92,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
         addOrReplace(header);
 
-        ManagedObject targetAdapter = null;
         {
-            targetAdapter = actionModel.getTargetAdapter();
 
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
             getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel

@@ -34,16 +34,17 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntime.TimestampService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class TimestampService {
 
+    @Inject private UserService userService;
+    @Inject private ClockService clockService;
+    
     @EventListener(PreStoreEvent.class)
     public void onPreStore(PreStoreEvent event) {
 
@@ -58,8 +59,5 @@ public class TimestampService {
         }
         
     }
-
-    @Inject UserService userService;
-    @Inject ClockService clockService;
 
 }

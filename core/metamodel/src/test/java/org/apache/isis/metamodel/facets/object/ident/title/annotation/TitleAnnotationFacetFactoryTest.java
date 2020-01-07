@@ -149,7 +149,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         final List<Method> titleMethods = Arrays.asList(Customer2.class.getMethod("titleElement1"), Customer2.class.getMethod("titleElement3"), Customer2.class.getMethod("titleElement2"));
 
-        final List<TitleComponent> components = titleFacetViaTitleAnnotation.getComponents();
+        //final List<TitleComponent> components = titleFacetViaTitleAnnotation.getComponents();
         for (int i = 0; i < titleMethods.size(); i++) {
             final Annotations.MethodEvaluator<Title> titleEvaluator = (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().get(i)
                     .getTitleEvaluator();

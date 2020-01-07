@@ -47,14 +47,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
 
-    /**
-     * Normally recognized exceptions are not logged (because they are expected and handled).
-     *
-     * <p>
-     * This key is primarily for diagnostic purposes, to log the exception regardless.
-     */
-    private static final String KEY_LOG_RECOGNIZED_EXCEPTIONS = 
-            "isis.services.exceprecog.logRecognizedExceptions";
+//    /**
+//     * Normally recognized exceptions are not logged (because they are expected and handled).
+//     *
+//     * <p>
+//     * This key is primarily for diagnostic purposes, to log the exception regardless.
+//     */
+//    private static final String KEY_LOG_RECOGNIZED_EXCEPTIONS = 
+//            "isis.services.exceprecog.logRecognizedExceptions";
 
 
     /**

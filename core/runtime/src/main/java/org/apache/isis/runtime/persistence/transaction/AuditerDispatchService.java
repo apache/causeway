@@ -42,7 +42,6 @@ import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.metamodel.facets.object.audit.AuditableFacet;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
@@ -52,7 +51,6 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.HIGH)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class AuditerDispatchService {
     
     @Inject private List<AuditerService> auditerServices;

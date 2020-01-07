@@ -34,7 +34,9 @@ import org.apache.isis.commons.internal.collections._Maps;
  * Instantiate using {@link FixtureScripts#newExecutionContext(String)}
  */
 public class FixtureResultList {
-
+    
+    private final FixtureScripts fixtureScripts;
+    private final FixtureScript.ExecutionContext executionContext;
 
     // -- constructor
 
@@ -44,8 +46,6 @@ public class FixtureResultList {
         this.fixtureScripts = fixtureScripts;
         this.executionContext = executionContext;
     }
-
-
 
     // -- list of FixtureResults
 
@@ -136,18 +136,6 @@ public class FixtureResultList {
         }
         return _Casts.uncheckedCast(object);
     }
-
-
-
-    // -- injected services
-
-    /**
-     * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext) constructor}.
-     */
-    private final FixtureScripts fixtureScripts;
-    /**
-     * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext) constructor}.
-     */
-    private final FixtureScript.ExecutionContext executionContext;
+ 
 
 }

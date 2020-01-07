@@ -44,8 +44,6 @@ import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.commons.internal.resources._Resources;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * A service that sends email notifications when specific events occur
  */
@@ -54,10 +52,11 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 
     private static final long serialVersionUID = 1L;
+    
+    @Inject private EmailService emailService;
 
     // -- CONSTANTS
 
@@ -163,10 +162,6 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(emailEvent.getApplicationName());
         return message;
     }
-
-    // -- DEPENDENCIES
-
-    @Inject private EmailService emailService;
 
 
 }

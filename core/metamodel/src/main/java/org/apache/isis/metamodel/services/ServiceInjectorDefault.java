@@ -33,8 +33,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * 
  * @since 2.0
@@ -45,7 +43,6 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.HIGH)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class ServiceInjectorDefault implements ServiceInjector {
 
     @Inject private AutowireCapableBeanFactory autowireCapableBeanFactory;

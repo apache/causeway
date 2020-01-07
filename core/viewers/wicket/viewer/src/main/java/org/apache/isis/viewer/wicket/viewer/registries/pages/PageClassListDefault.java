@@ -43,8 +43,6 @@ import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCol
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * Default implementation of {@link PageClassList}, specifying the default pages
  * for each of the {@link PageType}s.
@@ -54,7 +52,6 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class PageClassListDefault implements PageClassList {
 
     private static final long serialVersionUID = 1L;

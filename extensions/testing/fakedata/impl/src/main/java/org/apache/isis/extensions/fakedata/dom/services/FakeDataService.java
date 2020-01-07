@@ -101,7 +101,7 @@ public class FakeDataService {
         this.uuids = new Uuids(this);
 
         this.isisPasswords = new IsisPasswords(this);
-        this.isisMoneys = new IsisMoneys(this);
+        //this.isisMoneys = new IsisMoneys(this);
         this.isisBlobs = new IsisBlobs(this);
         this.isisClobs = new IsisClobs(this);
     }
@@ -140,7 +140,7 @@ public class FakeDataService {
     private Uuids uuids;
 
     private IsisPasswords isisPasswords;
-    private IsisMoneys isisMoneys;
+    //private IsisMoneys isisMoneys;
     private IsisBlobs isisBlobs;
     private IsisClobs isisClobs;
 

@@ -53,7 +53,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule to enable support for Shiro.
@@ -65,7 +64,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisSecurityKeycloak.WebModuleKeycloak")
 @Order(OrderPrecedence.HIGHEST + 200)
 @Qualifier("Shiro")
-@Log4j2
 public class WebModuleShiro extends WebModuleAbstract {
     
 

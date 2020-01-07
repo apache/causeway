@@ -32,8 +32,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 
-import lombok.extern.log4j.Log4j2;
-
 
 /**
  * An implementation that provides the locale of the current session.
@@ -42,7 +40,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisWicketViewer.LocaleProviderWicket")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Wicket")
-@Log4j2
 public class LocaleProviderWicket implements LocaleProvider {
 
     @Override

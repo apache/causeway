@@ -35,7 +35,6 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule to enable support for Keycloak.
@@ -44,7 +43,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisSecurityKeycloak.WebModuleKeycloak")
 @Order(OrderPrecedence.HIGHEST + 100)
 @Qualifier("Keycloak")
-@Log4j2
 public final class WebModuleKeycloak extends WebModuleAbstract {
 
     private final static String KEYCLOAK_FILTER_NAME = "KeycloakFilter";

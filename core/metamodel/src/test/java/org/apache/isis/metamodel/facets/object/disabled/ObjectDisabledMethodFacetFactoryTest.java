@@ -28,11 +28,8 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod;
 import org.apache.isis.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethodFactory;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTest {
-
-    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private DisabledObjectFacetViaMethodFactory facetFactory;
 

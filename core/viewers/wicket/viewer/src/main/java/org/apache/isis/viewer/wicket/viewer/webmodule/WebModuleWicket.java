@@ -41,7 +41,6 @@ import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * WebModule that provides the Wicket Viewer.
@@ -51,7 +50,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisWicketViewer.WebModuleWicket")
 @Order(OrderPrecedence.MIDPOINT - 80)
 @Qualifier("Wicket")
-@Log4j2
 public final class WebModuleWicket extends WebModuleAbstract {
 
     private final static String WICKET_FILTER_NAME = "WicketFilter";

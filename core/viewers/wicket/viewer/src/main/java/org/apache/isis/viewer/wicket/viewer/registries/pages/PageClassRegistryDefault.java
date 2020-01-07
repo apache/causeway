@@ -38,8 +38,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * Default implementation of {@link PageClassRegistry}; just delegates to an
  * underlying {@link PageClassList}.
@@ -49,14 +47,17 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {
 
     private static final long serialVersionUID = 1L;
 
+    private final PageClassList pageClassList; // serializable
     private final Map<PageType, Class<? extends Page>> pagesByType = _Maps.newHashMap();
-
-    @Inject PageClassList pageClassList;
+    
+    @Inject
+    public PageClassRegistryDefault(PageClassList pageClassList) {
+        this.pageClassList = pageClassList;
+    }
 
     @PostConstruct
     public void init() {

@@ -129,7 +129,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
             final ResultType resultType,
             final JsonRepresentation representation) {
 
-        final ObjectSpecification returnType = this.action.getReturnType();
+        //final ObjectSpecification returnType = this.action.getReturnType();
 
         switch (resultType) {
         case VOID:

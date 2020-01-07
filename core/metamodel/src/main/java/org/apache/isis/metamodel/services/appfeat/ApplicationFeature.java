@@ -48,19 +48,13 @@ import org.apache.isis.commons.internal.collections._Sets;
 public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     public static abstract class PropertyDomainEvent<T> 
-    extends IsisModuleApplib.PropertyDomainEvent<ApplicationFeature, T> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends IsisModuleApplib.PropertyDomainEvent<ApplicationFeature, T> {}
 
     public static abstract class CollectionDomainEvent<T> 
-    extends IsisModuleApplib.CollectionDomainEvent<ApplicationFeature, T> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends IsisModuleApplib.CollectionDomainEvent<ApplicationFeature, T> {}
 
     public static abstract class ActionDomainEvent 
-    extends IsisModuleApplib.ActionDomainEvent<ApplicationFeature> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends IsisModuleApplib.ActionDomainEvent<ApplicationFeature> {}
 
     // -- constants
 

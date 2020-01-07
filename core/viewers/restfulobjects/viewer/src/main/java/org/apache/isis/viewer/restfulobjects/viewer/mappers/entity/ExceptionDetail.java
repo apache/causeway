@@ -30,6 +30,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.commons.internal.collections._Lists;
 
+import lombok.Getter;
+
 @XmlRootElement(
         name = "exceptionDetail"
         )
@@ -49,16 +51,18 @@ public class ExceptionDetail {
         return stackTraceElement.toString();
     }
 
-    private String className;
-    private String message;
+    @Getter private String className;
+    @Getter private String message;
 
     @XmlElementWrapper()
     @XmlElement(name="element")
     private List<String> stackTrace = _Lists.newArrayList();
-    private ExceptionDetail causedBy;
+    
+    @Getter private ExceptionDetail causedBy;
 
     public ExceptionDetail() {
     }
+    
     public ExceptionDetail(final Throwable ex) {
         this.className = ex.getClass().getName();
         this.message = ex.getMessage();

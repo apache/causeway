@@ -23,11 +23,8 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import lombok.extern.log4j.Log4j2;
-
 @Component
 @Named("isisMetaModel.ClassSubstitutorDefault")
-@Log4j2
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
     public ClassSubstitutorDefault() {

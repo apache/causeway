@@ -38,8 +38,6 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * 
  * @since 2.0
@@ -50,9 +48,11 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class GridReaderUsingJaxb {
 
+    @Inject private JaxbService jaxbService;
+    @Inject private List<GridSystemService<?>> gridSystemServices;
+    
     private JAXBContext jaxbContext;
 
     @PostConstruct
@@ -71,8 +71,6 @@ public class GridReaderUsingJaxb {
     public Grid loadGrid(String xml) {
         return (Grid) jaxbService.fromXml(jaxbContext, xml);
     }
-
-    @Inject JaxbService jaxbService;
-    @Inject List<GridSystemService<?>> gridSystemServices;
+    
 
 }

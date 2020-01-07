@@ -40,8 +40,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * An implementation of {@link org.apache.isis.applib.services.linking.DeepLinkService}
  * for Wicket Viewer
@@ -50,7 +48,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisWicketViewer.DeepLinkServiceWicket")
 @Order(OrderPrecedence.HIGH)
 @Qualifier("Wicket")
-@Log4j2
 public class DeepLinkServiceWicket implements DeepLinkService {
 
     @Inject private PageClassRegistry pageClassRegistry;

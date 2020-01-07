@@ -30,8 +30,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * Optional hook for alternative implementations of {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission}.
  *
@@ -66,7 +64,6 @@ public interface ApplicationPermissionFactory {
     @Order(OrderPrecedence.MIDPOINT)
     @Primary
     @Qualifier("Default")
-    @Log4j2
     public static class Default implements ApplicationPermissionFactory {
 
         @Override

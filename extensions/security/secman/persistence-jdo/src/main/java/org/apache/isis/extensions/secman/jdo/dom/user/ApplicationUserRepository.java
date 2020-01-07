@@ -29,25 +29,23 @@ import org.springframework.stereotype.Repository;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
-
-import lombok.extern.log4j.Log4j2;
 
 @Repository
 @Named("isisExtSecman.applicationUserRepository")
-@Log4j2
 public class ApplicationUserRepository
 implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository {
 
+    @Inject private QueryResultsCache queryResultsCache;
+    @Inject private ApplicationUserFactory applicationUserFactory;
+    @Inject private RepositoryService repository;
+    
     // -- findOrCreateUserByUsername (programmatic)
 
     /**
@@ -232,16 +230,6 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
             ((ApplicationUser) user).lock();
         }
     }
-
-    // -- DEPENDENCIES
-
-    @Inject QueryResultsCache queryResultsCache;
-    @Inject PasswordEncryptionService passwordEncryptionService;
-    @Inject ApplicationRoleRepository applicationRoleRepository;
-    @Inject ApplicationUserFactory applicationUserFactory;
-    @Inject RepositoryService repository;
-    @Inject FactoryService factory;
-
 
 
 

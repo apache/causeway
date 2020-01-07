@@ -48,8 +48,8 @@ public class CalendarServiceTest_beginningOfMonth {
             }
         };
 
-        calendarService = new CalendarService();
-        calendarService.clockService = stubClockService;
+        calendarService = new CalendarService(stubClockService);
+        
     }
     
     @Test

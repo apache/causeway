@@ -29,8 +29,6 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.standard.AuthenticatorAbstract;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * Implementation that bypasses authentication.
  */
@@ -38,7 +36,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisSecurityBypass.AuthenticatorBypass")
 @Order(OrderPrecedence.LOW)
 @Qualifier("Bypass")
-@Log4j2
 public class AuthenticatorBypass extends AuthenticatorAbstract {
 
     @Override

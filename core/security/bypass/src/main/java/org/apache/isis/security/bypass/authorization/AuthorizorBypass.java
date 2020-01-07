@@ -29,13 +29,10 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.security.api.authorization.standard.Authorizor;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisSecurityBypass.AuthorizorBypass")
 @Order(OrderPrecedence.LOW)
 @Qualifier("Bypass")
-@Log4j2
 public class AuthorizorBypass implements Authorizor {
 
     @Override

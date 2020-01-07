@@ -29,8 +29,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * Optional hook so that alternative implementations of {@link org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser}.
  *
@@ -65,15 +63,14 @@ public interface ApplicationUserFactory {
     @Order(OrderPrecedence.MIDPOINT)
     @Primary
     @Qualifier("Default")
-    @Log4j2
     public static class Default implements ApplicationUserFactory {
 
+        @Inject private FactoryService factory;
+        
         @Override
         public ApplicationUser newApplicationUser() {
             return factory.instantiate(ApplicationUser.class);
         }
-
-        @Inject FactoryService factory;
 
     }
 

@@ -38,14 +38,11 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisRuntimeServices.TranslationServicePo")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Po")
-@Log4j2
 public class TranslationServicePo implements TranslationService {
 
     private PoAbstract po;

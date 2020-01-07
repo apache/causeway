@@ -27,8 +27,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
-import lombok.extern.log4j.Log4j2;
-
 
 /**
  * Acts as a factory by the {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts} when
@@ -45,7 +43,6 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class ExecutionParametersService {
 
     public ExecutionParameters newExecutionParameters(final String parameters) {

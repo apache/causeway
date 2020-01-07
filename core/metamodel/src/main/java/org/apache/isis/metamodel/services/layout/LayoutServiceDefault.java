@@ -46,15 +46,18 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisMetaModel.LayoutServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class LayoutServiceDefault implements LayoutService {
+    
+    @Inject private SpecificationLoader specificationLoader;
+    @Inject private JaxbService jaxbService;
+    @Inject private GridService gridService;
+    @Inject private MenuBarsService menuBarsService;
 
     @Override
     public String toXml(final Class<?> domainClass, final Style style) {
@@ -139,9 +142,6 @@ public class LayoutServiceDefault implements LayoutService {
                 ));
     }
 
-    @Inject SpecificationLoader specificationLoader;
-    @Inject JaxbService jaxbService;
-    @Inject GridService gridService;
-    @Inject MenuBarsService menuBarsService;
+
 
 }

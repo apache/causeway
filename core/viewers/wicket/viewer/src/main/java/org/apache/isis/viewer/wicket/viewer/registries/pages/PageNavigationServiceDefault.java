@@ -37,8 +37,6 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * Default implementation of {@link org.apache.isis.viewer.wicket.ui.pages.PageNavigationService}
  */
@@ -47,13 +45,11 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class PageNavigationServiceDefault implements PageNavigationService {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject
-    private PageClassRegistry pageClassRegistry;
+    @Inject private PageClassRegistry pageClassRegistry; // serializable
 
     @Override
     public void navigateTo(PageType pageType) {

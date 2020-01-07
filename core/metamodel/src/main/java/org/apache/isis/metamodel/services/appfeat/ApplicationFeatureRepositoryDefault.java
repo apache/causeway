@@ -62,11 +62,9 @@ import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Repository
 @Named("isisMetaModel.ApplicationFeatureRepositoryDefault")
-@Log4j2
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
     // -- caches

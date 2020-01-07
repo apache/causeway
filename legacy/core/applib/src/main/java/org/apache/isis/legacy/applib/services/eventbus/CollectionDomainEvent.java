@@ -25,9 +25,6 @@ import org.apache.isis.applib.util.ToString;
 @Deprecated
 public abstract class CollectionDomainEvent<S, T> extends AbstractDomainEvent<S> {
 
-    private static final long serialVersionUID = 1L;
-    
-
     // -- Default class
     /**
      * This class is the default for the
@@ -35,9 +32,7 @@ public abstract class CollectionDomainEvent<S, T> extends AbstractDomainEvent<S>
      * raises an event or not depends upon the <tt>isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault</tt>
      * configuration property.
      */
-    public static class Default extends CollectionDomainEvent<Object, Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Default extends CollectionDomainEvent<Object, Object> {}
     
 
     // -- Noop class
@@ -46,9 +41,7 @@ public abstract class CollectionDomainEvent<S, T> extends AbstractDomainEvent<S>
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends CollectionDomainEvent<Object, Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Noop extends CollectionDomainEvent<Object, Object> {}
     
 
     // -- Doop class
@@ -57,9 +50,7 @@ public abstract class CollectionDomainEvent<S, T> extends AbstractDomainEvent<S>
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends CollectionDomainEvent<Object, Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Doop extends CollectionDomainEvent<Object, Object> {}
     
 
 

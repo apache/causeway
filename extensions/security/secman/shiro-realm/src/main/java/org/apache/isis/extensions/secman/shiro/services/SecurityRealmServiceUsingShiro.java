@@ -32,13 +32,11 @@ import org.apache.isis.extensions.secman.api.SecurityRealmService;
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisExtSecman.SecurityRealmServiceUsingShiro")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Shiro")
-@Log4j2
 public class SecurityRealmServiceUsingShiro implements SecurityRealmService {
     
     @Inject private ServiceInjector serviceInjector;

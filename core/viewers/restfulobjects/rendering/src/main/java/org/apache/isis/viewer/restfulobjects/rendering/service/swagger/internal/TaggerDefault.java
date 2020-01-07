@@ -27,11 +27,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-import lombok.extern.log4j.Log4j2;
-
 @Component
 @Named("isisMetaModel.TaggerDefault")
-@Log4j2
 public class TaggerDefault implements Tagger {
 
     static Pattern tagSpringFramework = Pattern.compile("^org\\.springframework\\.([^\\.]+)\\.(.+)$");

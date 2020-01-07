@@ -34,15 +34,15 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.MessageBroker;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisRuntimeServices.MessageServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class MessageServiceDefault implements MessageService {
+    
+    @Inject private IsisSessionFactory isisSessionFactory;
+    @Inject private TranslationService translationService;
 
     @Override
     public void informUser(final String message) {
@@ -118,7 +118,6 @@ public class MessageServiceDefault implements MessageService {
         return isisSessionFactory.getCurrentSession().getAuthenticationSession().getMessageBroker();
     }
 
-    @Inject IsisSessionFactory isisSessionFactory;
-    @Inject TranslationService translationService;
+    
 
 }

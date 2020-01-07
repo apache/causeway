@@ -61,8 +61,7 @@ public class CalendarServiceTest_beginningOfQuarter {
                 return now;
             }
         };
-        calendarService = new CalendarService();
-        calendarService.clockService = stubClockService;
+        calendarService = new CalendarService(stubClockService);
     }
     
     @Test

@@ -7,7 +7,7 @@ public class Comms extends AbstractRandomValueGenerator {
 
     Comms(final FakeDataService fakeDataService) {
         super(fakeDataService);
-        final com.github.javafaker.Name name = fakeDataService.name().javaFakerName;
+        //final com.github.javafaker.Name name = fakeDataService.name().javaFakerName;
         javaFakerInternet =  fakeDataService.javaFaker().internet();
         javaFakerPhoneNumber = fakeDataService.javaFaker().phoneNumber();
     }

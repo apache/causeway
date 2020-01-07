@@ -49,7 +49,6 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisSecurityShiro.AuthorizorShiro")
 @Order(OrderPrecedence.HIGH)
 @Qualifier("Shiro")
-@Log4j2
 public class AuthorizorShiro implements Authorizor {
 
     @Override

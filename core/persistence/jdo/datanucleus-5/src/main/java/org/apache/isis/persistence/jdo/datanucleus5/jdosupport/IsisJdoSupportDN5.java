@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jdo.Extent;
 import javax.jdo.JDOQLTypedQuery;
@@ -43,7 +42,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -51,11 +49,8 @@ import org.apache.isis.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
-import lombok.extern.log4j.Log4j2;
 
 
 /**
@@ -67,9 +62,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("DN5")
-@Log4j2
 public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
-
 
     @Override
     public <T> T refresh(final T domainObject) {
@@ -216,9 +209,6 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     }
 
     // //////////////////////////////////////
-
-    @Inject IsisSessionFactory isisSessionFactory;
-    @Inject ServiceInjector serviceInjector;
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {
         return PersistenceSession.current(IsisPersistenceSessionJdo.class)
