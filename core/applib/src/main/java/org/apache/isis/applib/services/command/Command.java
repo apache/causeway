@@ -36,9 +36,16 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
 /**
- * Represents the <i>intention to</i> invoke either an action or modify a property.  This intention is reified as a
- * {@link Command#getMemento() memento} by way of the (internal) <tt>CommandDtoServiceInternal</tt> domain service;
- * typically corresponding to the XML equivalent of a {@link CommandDto}.
+ * Represents the <i>intention to</i> invoke either an action or modify a property.  There can be only one such
+ * intention per (web) request, so a command is in effect request-scoped.  Note that {@link CommandContext} domain
+ * service - from which the current {@link Command} can be obtained - is indeed annotated with
+ * {@link javax.enterprise.context.RequestScoped @RequestScoped}.
+ *
+ * <p>
+ * Each Command can be reified into a {@link Command#getMemento() memento} by way of the (internal)
+ * <tt>CommandDtoServiceInternal</tt> domain service; typically corresponding to the XML equivalent of a
+ * {@link CommandDto} and conforming to the Apache Isis <a href="http://isis.apache.org/schema/cmd/">cmd</a> schema.
+ * </p>
  *
  * <p>
  *     The {@link Command} interface also captures details of the corresponding action invocation (or property edit),
@@ -54,12 +61,37 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
  * </p>
  *
  * <p>
- *     TODO[2158], no longer true!
- *     One of the responsibilities of the command is to generate unique sequence numbers for a given transactionId.
- *     This is done by {@link #next(String)}.  There are three possible sequences that might be generated:
- *     the sequence of changed domain objects being published by the {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution)}; the
- *     sequence of wrapped action invocations (each being published), and finally one or more background commands
- *     that might be scheduled via the {@link BackgroundService}.
+ *     <b>NOTE</b>: in Isis v1.x, one of the responsibilities of {@link Command} was to generate unique sequence numbers for
+ *     a given transactionId, where there were three possible sequences that might be generated.
+ *     <ul>
+ *         <li>
+ *         <p>the sequence of changed domain objects being published by the
+ *         {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution)}
+ *         </p>
+ *         <p>
+ *         In v2 ... TODO[2158] - what replaces this?
+ *         </p>
+ *         </li>
+ *
+ *         <li>
+ *         <p>
+ *         The sequence of wrapped action invocations (each being published)
+ *         </p>
+ *         <p>
+ *         In v2 this is now done by {@link Interaction#next(String) Interaction} itself.
+ *         </p>
+ *         </li>
+ *
+ *         <li>
+ *         <p>
+ *         and finally, one or more background commands that might be scheduled via the <code>BackgroundService</code>.
+ *         </p>
+ *         <p>
+ *         In v2 ... TODO[2158] - what replaces this?
+ *         </p>
+ *         </li>
+ *     </ul>
+ *
  * </p>
  *
  */

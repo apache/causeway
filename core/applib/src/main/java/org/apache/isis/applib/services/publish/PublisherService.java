@@ -22,11 +22,9 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 
 /**
- * Replaces {@link PublishingService}.
- *
- * <p>
- *     Note that re-publishing is not part of this SPI.
- * </p>
+ * SPI that allows individual interactions (action invocations or property edits) to be
+ * {@link #publish(Interaction.Execution) published}.
+ * Note that re-publishing is not part of this SPI.
  */
 public interface PublisherService {
 
