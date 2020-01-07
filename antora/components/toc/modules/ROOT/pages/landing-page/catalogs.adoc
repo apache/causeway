@@ -4,33 +4,33 @@ include::_attributes.adoc[]
 
 Included with the framework are a number of catalogs:
 
-* xref:extensions:ROOT:about.adoc[Extensions Catalog]
+* xref:extensions:ROOT:about.adoc[Extensions]
 +
 Extends the functionality of particular components of the framework itself.
 For example, the "Excel Download" allows collections to be downloaded as an Excel `.xlsx` spreadsheet.
 
-* xref:subdomains:ROOT:about.adoc[Subdomains Catalog]
+* xref:subdomains:ROOT:about.adoc[Subdomains]
 +
 Libraries and utilities to be called by the domain logic of the Apache Isis application itself.
 
-* xref:valuetypes:ROOT:about.adoc[Value Types Catalog]
+* xref:valuetypes:ROOT:about.adoc[Value Types]
 +
 Implementations of various value types, eg Markdown.
 Each will have an applib submodule (for use within the domain logic) as well as various extension modules to be made available to the framework itself (to teach it how to persist or render the value type).
 
-* xref:mappings:ROOT:about.adoc[Mappings Catalog]
+* xref:mappings:ROOT:about.adoc[BC Mappings]
 +
-Libraries and utilities for bounded context mappings.
+Libraries and utilities for bounded context (BC) mappings.
 In other words, tools to help integrating system together.
 
 
 There are two further catalogs:
 
-* xref:incubator:ROOT:about.adoc[Incubator Catalog]
+* xref:incubator:ROOT:about.adoc[Incubator]
 +
 Functionality that is experimental or unstable, but which may end up graduating to the extensions catalog
 
-* xref:legacy:ROOT:about.adoc[Legacy Catalog]
+* xref:legacy:ROOT:about.adoc[Legacy]
 +
 Functionality that has been deprecated or has become defunct, and which is likely to be removed in future versions.
 

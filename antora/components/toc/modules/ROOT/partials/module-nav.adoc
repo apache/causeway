@@ -35,8 +35,8 @@
 
 **  xref:extensions:ROOT:about.adoc[Extensions]
 **  xref:subdomains:ROOT:about.adoc[Subdomains]
-**  xref:mappings:ROOT:about.adoc[Mappings for Bounded Contexts]
 **  xref:valuetypes:ROOT:about.adoc[Value Types]
+**  xref:mappings:ROOT:about.adoc[BC Mappings]
 **  xref:incubator:ROOT:about.adoc[Incubator]
 **  xref:legacy:ROOT:about.adoc[Legacy]
 
