@@ -17,13 +17,42 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/core/spring/src/main/doc # extensions
+      start_path: extensions/persistence/flywayjdo/impl/src/main/doc # extensions
       branches: HEAD
     - url: .
-      start_path: extensions/persistence/h2console/src/main/doc # extensions
+      start_path: extensions/persistence/h2console/impl/src/main/doc # extensions
       branches: HEAD
     - url: .
-      start_path: extensions/persistence/hsqldbmgr/src/main/doc # extensions
+      start_path: extensions/persistence/hsqldbmgr/impl/src/main/doc # extensions
+      branches: HEAD
+
+    - url: .
+      start_path: extensions/security/secman/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/api/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/encryption-jbcrypt/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/model/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/persistence-jdo/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/secman/shiro-realm/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/shiro-realm-ldap/src/main/doc # security
+      branches: HEAD
+
+    - url: .
+      start_path: extensions/vro/cors/src/main/doc # vro
+      branches: HEAD
+    - url: .
+      start_path: extensions/vw/exceldownload/src/main/doc # vw
       branches: HEAD
 
 

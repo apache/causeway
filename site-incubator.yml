@@ -17,10 +17,10 @@ content:
 
 # incubator
     - url: .
-      start_path: incubator/core/model/src/main/doc # incubator
+      start_path: incubator/extensions/core/model/src/main/doc # incubator
       branches: HEAD
     - url: .
-      start_path: incubator/core/microprofile/src/main/doc # incubator
+      start_path: incubator/extensions/core/microprofile/src/main/doc # incubator
       branches: HEAD
 
 

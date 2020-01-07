@@ -17,16 +17,19 @@ content:
 
 # legacy
     - url: .
-      start_path: legacy/core/applib/src/main/doc # legacy
+      start_path: legacy/extensions/core/applib/src/main/doc # legacy
       branches: HEAD
     - url: .
-      start_path: legacy/core/commons/src/main/doc # legacy
+      start_path: legacy/extensions/core/commons/src/main/doc # legacy
       branches: HEAD
     - url: .
-      start_path: legacy/core/runtime/src/main/doc # legacy
+      start_path: legacy/extensions/core/runtime/src/main/doc # legacy
       branches: HEAD
     - url: .
-      start_path: legacy/vro/restclient/src/main/doc # legacy
+      start_path: legacy/mappings/restclient/src/main/doc # legacy
+      branches: HEAD
+    - url: .
+      start_path: legacy/subdomains/servletapi/impl/src/main/doc # legacy
       branches: HEAD
 
 

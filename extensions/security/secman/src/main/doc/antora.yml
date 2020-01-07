@@ -1,4 +1,4 @@
-name: extensions
+name: secman
 title: "SecMan"
 version: master
 start_page: ROOT:about.adoc

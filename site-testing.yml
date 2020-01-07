@@ -23,13 +23,20 @@ content:
       start_path: core/testsupport/integtestsupport/src/main/doc # testing
       branches: HEAD
 
-# extensions
+# testing
     - url: .
-      start_path: extensions/testing/fixtures/src/main/doc # testing
+      start_path: testing/fakedata/impl/src/main/doc # testing
       branches: HEAD
     - url: .
-      start_path: extensions/testing/specsupport/src/main/doc # testing
+      start_path: testing/fixtures/src/main/doc # testing
       branches: HEAD
+    - url: .
+      start_path: testing/specsupport/src/main/doc # testing
+      branches: HEAD
+    - url: .
+      start_path: testing/unittestsupport/impl/src/main/doc # testing
+      branches: HEAD
+
 
 
 ui:

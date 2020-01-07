@@ -6,10 +6,10 @@ TODO
 
 see `shiro.ini` (example)
 
-[source,properties]
-----
-include::security:shiro-realm-ldap:example$shiro.ini[]
-----
+//[source,properties]
+//----
+//include::security:shiro-realm-ldap:example$shiro.ini[]
+//----
 
 == Setting up Users/Groups in Apache Directory Studio
 

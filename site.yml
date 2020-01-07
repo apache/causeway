@@ -250,7 +250,7 @@ content:
       start_path: testing/unittestsupport/impl/src/main/doc # testing
       branches: HEAD
 
-    # valuetypes
+# valuetypes
     - url: .
       start_path: valuetypes/asciidoc/src/main/doc # vw
       branches: HEAD
