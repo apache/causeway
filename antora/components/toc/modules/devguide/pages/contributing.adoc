@@ -236,4 +236,4 @@ git push origin –delete ISIS-123-blobs
 ----
 
 
-… and continue as before until you are ready to resubmit your change.
+\... and continue as before until you are ready to resubmit your change.
