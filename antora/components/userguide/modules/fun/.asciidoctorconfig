@@ -1,4 +1,3 @@
-:experimental:
 :attachmentsdir: {asciidoctorconfigdir}/assets/attachments
 :examplesdir: {asciidoctorconfigdir}/examples
 :imagesdir: {asciidoctorconfigdir}/assets/images
