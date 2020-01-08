@@ -28,6 +28,7 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -60,10 +61,14 @@ public class ThemeProviderComposite implements ThemeProvider {
                 return theme;
             }
         }
+        
+        _Exceptions.dumpStackTrace();
+        
+        
         log.warn("'{}' theme not found amoung providers {} provinding {}, "
                 + "using default '{}' instead", 
                 name, 
-                themeProviders, 
+                themeProviders.toList(), 
                 available().stream().map(ITheme::name).collect(Collectors.joining(", ")),
                 defaultTheme().name());
         

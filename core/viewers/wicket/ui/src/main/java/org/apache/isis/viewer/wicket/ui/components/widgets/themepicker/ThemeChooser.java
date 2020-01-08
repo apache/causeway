@@ -35,6 +35,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import lombok.Getter;
+import lombok.val;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
@@ -111,7 +112,13 @@ public class ThemeChooser extends Panel {
         CookieUtils cookieUtils = new CookieUtils();
         String activeTheme = cookieUtils.load(ISIS_THEME_COOKIE_NAME);
         if (!Strings.isEmpty(activeTheme)) {
-            setActiveTheme(activeTheme);
+            
+            val isAvailable = getThemeSupport().getThemeProvider().available().stream()
+                    .anyMatch(theme->activeTheme.equals(theme.name()));
+            
+            if(isAvailable) {
+                setActiveTheme(activeTheme);
+            }
         }
     }
 

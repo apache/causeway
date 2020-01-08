@@ -69,11 +69,6 @@ public class DemoApp extends SpringBootServletInitializer {
      */
     public static void main(String[] args) {
         //IsisPresets.prototyping();
-        //IsisPresets.logging(IsisBeanScanInterceptorForSpring.class, "DEBUG");
-        //IsisPresets.logging(IsisBeanTypeRegistry.class, "DEBUG");
-        //IsisPresets.logging(org.apache.shiro.realm.AuthorizingRealm.class, "TRACE");
-        //IsisPresets.logging(org.apache.isis.metamodel.authorization.standard.AuthorizationFacetAbstract.class, "DEBUG");
-        //IsisPresets.logging(org.apache.isis.webapp.modules.templresources.TemplateResourceServlet.class, "DEBUG");
         SpringApplication.run(new Class[] { DemoApp.class }, args);
     }
 
@@ -107,7 +102,7 @@ public class DemoApp extends SpringBootServletInitializer {
 
         IsisModuleExtFixtures.class,
 
-        IsisModuleIncModelMetaModel.class, // @Supporting support (incubator)
+        IsisModuleIncModelMetaModel.class, // @Model support (incubator)
         
         LibraryPreloadingService.class // just a performance enhancement
 
