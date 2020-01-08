@@ -28,19 +28,9 @@ Shiro
 |Y
 |N
 |Y +
-`/*
+`/*`
 |HIGHEST + 200
 |Either this or keycloak
-
-|WebModule +
-TemplateResources
-|N
-|Y +
-`*.thtml`
-|Y +
-`*.thtml`
-|MIDPOINT - 100
-|
 
 |WebModule +
 LogOnExceptionLogger
@@ -63,14 +53,24 @@ Cors
 
 
 |WebModule +
-RestfulObjects
+JaxrsResteasy4
 |Y
 |Y +
 `/restful`
-|Yx2 +
+|Y (x2) +
 `/restful`
 |MIDPOINT - 80
 |Filters mapped to servlet
+
+|WebModule +
+TemplateResources
+|N
+|Y +
+`*.thtml`
+|Y +
+`*.thtml`
+|MIDPOINT - 100
+|
 
 |WebModule +
 Wicket
@@ -96,7 +96,7 @@ H2Console
 |Y +
 `/db/*`
 |N
-||MIDPOINT
+|MIDPOINT
 |servlet only, so order doesn't really matter.
 
 |===
