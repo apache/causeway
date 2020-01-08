@@ -75,7 +75,7 @@ implements CollectionRemoveFromFacet {
         }
 
 
-        final Object referencedObject = ManagedObject.unwrapPojo(referencedObjectAdapter);
+        final Object referencedObject = ManagedObject.unwrapSingle(referencedObjectAdapter);
 
         // get hold of underlying collection
         // passing null through for authenticationSession/deploymentType means to avoid any visibility filtering.

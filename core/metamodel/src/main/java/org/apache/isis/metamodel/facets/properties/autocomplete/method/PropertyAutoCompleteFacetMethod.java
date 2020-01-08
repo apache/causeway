@@ -93,7 +93,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> filteredObjects =
-                _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
+                _Lists.map(visibleAdapters, ManagedObject::unwrapSingle);
 
         final ObjectSpecification propertySpec = getSpecification(propertyType);
         return CollectionUtils.getCollectionAsObjectArray(filteredObjects, propertySpec, getObjectManager());

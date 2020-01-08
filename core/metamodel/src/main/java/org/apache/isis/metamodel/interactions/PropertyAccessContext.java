@@ -25,7 +25,7 @@ import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
+import static org.apache.isis.metamodel.spec.ManagedObject.unwrapSingle;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -54,7 +54,7 @@ public class PropertyAccessContext extends AccessContext<PropertyAccessEvent> {
 
     @Override
     public PropertyAccessEvent createInteractionEvent() {
-        return new PropertyAccessEvent(unwrapPojo(getTarget()), getIdentifier(), unwrapPojo(getValue()));
+        return new PropertyAccessEvent(unwrapSingle(getTarget()), getIdentifier(), unwrapSingle(getValue()));
     }
 
 }

@@ -47,7 +47,6 @@ import org.apache.isis.applib.services.metamodel.MetaModelService.Mode;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
@@ -187,10 +186,10 @@ implements ImperativeFacet {
             // otherwise, go ahead and execute action in the 'foreground'
             final ManagedObject mixinElseRegularAdapter = mixedInAdapter != null ? mixedInAdapter : targetAdapter;
 
-            final Object mixinElseRegularPojo = ManagedObject.unwrapPojo(mixinElseRegularAdapter);
+            final Object mixinElseRegularPojo = ManagedObject.unwrapSingle(mixinElseRegularAdapter);
 
             final List<Object> argumentPojos = argumentAdapters.stream()
-                    .map(ManagedObject::unwrapPojo)
+                    .map(ManagedObject::unwrapSingle)
                     .collect(_Lists.toUnmodifiable());
 
             final String targetMember = targetNameFor(owningAction, mixedInAdapter);
@@ -263,8 +262,8 @@ implements ImperativeFacet {
             final List<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
-        final Object[] executionParameters = ManagedObject.unwrapPojoArray(arguments);
-        final Object targetPojo = ManagedObject.unwrapPojo(targetAdapter);
+        final Object[] executionParameters = ManagedObject.unwrapMultipleAsArray(arguments);
+        final Object targetPojo = ManagedObject.unwrapSingle(targetAdapter);
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
@@ -370,7 +369,7 @@ implements ImperativeFacet {
                     CollectionUtils.copyOf(
                             adapters
                             .filter(ManagedObject.VisibilityUtil.filterOn(interactionInitiatedBy))
-                            .map(ManagedObject::unwrapPojo)
+                            .map(ManagedObject::unwrapSingle)
                             .collect(Collectors.toList()),
                             method.getReturnType());
 
@@ -483,7 +482,7 @@ implements ImperativeFacet {
                     resultAdapterPossiblyCloned = 
                             cloneIfViewModelCloneable(returnValue, mixinElseRegularAdapter);
                 }
-                return ManagedObject.unwrapPojo(resultAdapterPossiblyCloned);
+                return ManagedObject.unwrapSingle(resultAdapterPossiblyCloned);
 
             } catch (Exception e) {
 

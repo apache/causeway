@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -88,7 +87,7 @@ implements ImperativeFacet {
                         objectAdapter,
                         interactionInitiatedBy);
         final List<Object> visibleObjects =
-                _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
+                _Lists.map(visibleAdapters, ManagedObject::unwrapSingle);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectManager());

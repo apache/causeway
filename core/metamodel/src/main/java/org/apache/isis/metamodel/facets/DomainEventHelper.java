@@ -32,7 +32,6 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
@@ -112,8 +111,8 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(ManagedObject.unwrapPojo(targetAdapter));
-                final Object[] arguments = ManagedObject.unwrapPojoArray(argumentAdapters);
+                final S source = uncheckedCast(ManagedObject.unwrapSingle(targetAdapter));
+                final Object[] arguments = ManagedObject.unwrapMultipleAsArray(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
@@ -145,7 +144,7 @@ public class DomainEventHelper {
             event.setEventPhase(phase);
 
             if(phase.isExecuted()) {
-                event.setReturnValue(ManagedObject.unwrapPojo(resultAdapter));
+                event.setReturnValue(ManagedObject.unwrapSingle(resultAdapter));
             }
 
             metamodelEventService.fireActionDomainEvent(event);
@@ -222,7 +221,7 @@ public class DomainEventHelper {
 
         try {
             final PropertyDomainEvent<S, T> event;
-            final S source = uncheckedCast(ManagedObject.unwrapPojo(targetAdapter));
+            final S source = uncheckedCast(ManagedObject.unwrapSingle(targetAdapter));
             final Identifier identifier = identified.getIdentifier();
 
             if(existingEvent != null && phase.isExecuted()) {
@@ -324,7 +323,7 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(ManagedObject.unwrapPojo(targetAdapter));
+                final S source = uncheckedCast(ManagedObject.unwrapSingle(targetAdapter));
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
 

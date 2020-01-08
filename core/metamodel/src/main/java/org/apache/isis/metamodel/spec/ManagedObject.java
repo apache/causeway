@@ -33,8 +33,10 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Tuples.Indexed;
+import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.ClassExtensions;
@@ -237,40 +239,26 @@ public interface ManagedObject {
 
     // -- UNWRAPPING
 
-    public static Object unwrapPojo(final ManagedObject adapter) {
+    @Nullable
+    public static Object unwrapSingle(@Nullable final ManagedObject adapter) {
         return adapter != null ? adapter.getPojo() : null;
     }
-
-    public static Object[] unwrapPojoArray(final List<ManagedObject> adapters) {
-        if (adapters == null) {
-            return null;
-        }
-        final Object[] unwrappedObjects = new Object[adapters.size()];
-        int i = 0;
-        for (final ManagedObject adapter : adapters) {
-            unwrappedObjects[i++] = unwrapPojo(adapter);
-        }
-        return unwrappedObjects;
-    }
     
-    public static Object[] unwrapPojoArray(final Can<ManagedObject> adapters) {
-        return unwrapPojoArray(adapters.toList());
-    }
-
-    public static Object[] unwrapPojoArray(final ManagedObject[] adapters) {
-        if (adapters == null) {
-            return null;
-        }
-        final Object[] unwrappedObjects = new Object[adapters.length];
-        int i = 0;
-        for (final ManagedObject adapter : adapters) {
-            unwrappedObjects[i++] = unwrapPojo(adapter);
-        }
+    @Nullable
+    public static Object[] unwrapMultipleAsArray(@Nullable final Collection<ManagedObject> adapters) {
+        val unwrappedObjects = _Arrays.mapCollection(adapters, ManagedObject::unwrapSingle);
         return unwrappedObjects;
     }
 
-    public static String unwrapPojoStringElse(final ManagedObject adapter, String orElse) {
-        final Object obj = ManagedObject.unwrapPojo(adapter);
+    @Nullable
+    public static Object[] unwrapMultipleAsArray(@Nullable final ManagedObject[] adapters) {
+        val unwrappedObjects = _Arrays.map(adapters, ManagedObject::unwrapSingle);
+        return unwrappedObjects;
+    }
+
+    @Nullable
+    public static String unwrapSingleAsStringOrElse(@Nullable final ManagedObject adapter, @Nullable String orElse) {
+        final Object obj = ManagedObject.unwrapSingle(adapter);
         if (obj == null) {
             return null;
         }
@@ -280,22 +268,32 @@ public interface ManagedObject {
         return (String) obj;
     }
 
-    public static List<Object> unwrapPojoListElseEmpty(Collection<? extends ManagedObject> adapters) {
+    /**
+     * 
+     * @param adapters
+     * @return non-null, unmodifiable
+     */
+    public static List<Object> unwrapMultipleAsList(@Nullable final Collection<? extends ManagedObject> adapters) {
         if (adapters == null) {
             return Collections.emptyList();
         }
         return adapters.stream()
-                .map(ManagedObject::unwrapPojo)
-                .collect(Collectors.toList());
+                .map(ManagedObject::unwrapSingle)
+                .collect(_Lists.toUnmodifiable());
     }
-    
-    public static Set<Object> unwrapPojoSetElseEmpty(Collection<? extends ManagedObject> adapters) {
+
+    /**
+     * 
+     * @param adapters
+     * @return non-null, unmodifiable
+     */
+    public static Set<Object> unwrapMultipleAsSet(@Nullable final Collection<? extends ManagedObject> adapters) {
         if (adapters == null) {
             return Collections.emptySet();
         }
         return adapters.stream()
-                .map(ManagedObject::unwrapPojo)
-                .collect(Collectors.toSet());
+                .map(ManagedObject::unwrapSingle)
+                .collect(_Sets.toUnmodifiable());
     }
 
     // -- SHORTCUTS
@@ -415,27 +413,27 @@ public interface ManagedObject {
     static final class InvokeUtil {
     
         public static void invokeAll(Collection<Method> methods, final ManagedObject adapter) {
-            MethodUtil.invoke(methods, unwrapPojo(adapter));
+            MethodUtil.invoke(methods, unwrapSingle(adapter));
         }
     
         public static Object invoke(Method method, ManagedObject adapter) {
-            return MethodExtensions.invoke(method, unwrapPojo(adapter));
+            return MethodExtensions.invoke(method, unwrapSingle(adapter));
         }
     
         public static Object invoke(Method method, ManagedObject adapter, Object arg0) {
-            return MethodExtensions.invoke(method, unwrapPojo(adapter), new Object[] {arg0});
+            return MethodExtensions.invoke(method, unwrapSingle(adapter), new Object[] {arg0});
         }
     
-        public static Object invoke(Method method, ManagedObject adapter, List<ManagedObject> args) {
-            return invoke(method, adapter, args.toArray(new ManagedObject[0]));
+        public static Object invoke(Method method, ManagedObject adapter, List<ManagedObject> argumentAdapters) {
+            return MethodExtensions.invoke(method, unwrapSingle(adapter), unwrapMultipleAsArray(argumentAdapters));
         }
 
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject arg0Adapter) {
-            return invoke(method, adapter, unwrapPojo(arg0Adapter));
+            return invoke(method, adapter, unwrapSingle(arg0Adapter));
         }
     
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject[] argumentAdapters) {
-            return MethodExtensions.invoke(method, unwrapPojo(adapter), unwrapPojoArray(argumentAdapters));
+            return MethodExtensions.invoke(method, unwrapSingle(adapter), unwrapMultipleAsArray(argumentAdapters));
         }
     
         public static Object invokeC(
@@ -477,7 +475,7 @@ public interface ManagedObject {
     
             val argArray = adjust(method, pendingArgs, additionalArgValues);
             
-            return MethodExtensions.invoke(method, unwrapPojo(target), argArray);
+            return MethodExtensions.invoke(method, unwrapSingle(target), argArray);
         }
 
         /**
@@ -506,7 +504,7 @@ public interface ManagedObject {
             for(int i=0; i<pendingArgsToConsiderCount; i++) {
                 
                 val paramType = parameterTypes[i];
-                val arg = argIterator.hasNext() ? unwrapPojo(argIterator.next()) : null;
+                val arg = argIterator.hasNext() ? unwrapSingle(argIterator.next()) : null;
                 
                 adjusted[i] = honorPrimitiveDefaults(paramType, arg);
             }

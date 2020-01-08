@@ -26,7 +26,7 @@ import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
+import static org.apache.isis.metamodel.spec.ManagedObject.unwrapSingle;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -44,7 +44,7 @@ public class PropertyVisibilityContext extends VisibilityContext<PropertyVisibil
 
     @Override
     public PropertyVisibilityEvent createInteractionEvent() {
-        return new PropertyVisibilityEvent(unwrapPojo(getTarget()), getIdentifier());
+        return new PropertyVisibilityEvent(unwrapSingle(getTarget()), getIdentifier());
     }
 
 }

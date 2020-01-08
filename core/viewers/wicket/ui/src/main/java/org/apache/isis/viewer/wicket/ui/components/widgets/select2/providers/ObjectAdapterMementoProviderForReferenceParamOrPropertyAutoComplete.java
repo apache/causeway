@@ -20,9 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -68,7 +66,8 @@ extends ObjectAdapterMementoProviderAbstract {
         val commonContext = super.getCommonContext();
         val pendingArgsList = _NullSafe.stream(dependentArgMementos)
             .map(commonContext::reconstructObject)
-            .map(ManagedObject.class::cast).collect(Collectors.toList());
+            .map(ManagedObject.class::cast)
+            .collect(_Lists.toUnmodifiable());
         
         return pendingArgsList;
     }

@@ -25,7 +25,7 @@ import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
+import static org.apache.isis.metamodel.spec.ManagedObject.unwrapSingle;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -52,8 +52,8 @@ public class ParseValueContext extends ValidityContext<ParseValueEvent> implemen
 
     @Override
     public ParseValueEvent createInteractionEvent() {
-        final String proposedPojo = (String) unwrapPojo(getProposed());
-        return new ParseValueEvent(unwrapPojo(getTarget()), getIdentifier(), proposedPojo);
+        final String proposedPojo = (String) unwrapSingle(getProposed());
+        return new ParseValueEvent(unwrapSingle(getTarget()), getIdentifier(), proposedPojo);
     }
 
 }

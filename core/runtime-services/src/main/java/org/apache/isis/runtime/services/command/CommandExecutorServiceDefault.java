@@ -46,7 +46,7 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -306,7 +306,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 .stream()
                 .map(CommonDtoUtils::getValue)
                 .map(this::adapterFor)
-                .collect(Collectors.toList());
+                .collect(_Lists.toUnmodifiable());
     }
 
     private static List<ParamDto> paramDtosFrom(final ActionDto actionDto) {

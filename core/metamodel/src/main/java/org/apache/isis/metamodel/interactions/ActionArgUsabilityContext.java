@@ -25,14 +25,10 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionArgumentUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
-
-import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
-import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojoArray;
 
 import lombok.Getter;
 
@@ -71,9 +67,9 @@ implements ActionInteractionContext {
     @Override
     public ActionArgumentUsabilityEvent createInteractionEvent() {
         return new ActionArgumentUsabilityEvent(
-                unwrapPojo(getTarget()), 
+                ManagedObject.unwrapSingle(getTarget()), 
                 getIdentifier(), 
-                unwrapPojoArray(getArgs()), 
+                ManagedObject.unwrapMultipleAsArray(getArgs()), 
                 getPosition());
     }
 

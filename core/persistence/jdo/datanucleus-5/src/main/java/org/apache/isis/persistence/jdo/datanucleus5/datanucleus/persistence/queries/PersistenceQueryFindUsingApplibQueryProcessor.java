@@ -149,7 +149,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final Map<String, Object> argumentsByParameterName = _Maps.newHashMap();
         for (final String parameterName : argumentAdaptersByParameterName.keySet()) {
             final ObjectAdapter argumentAdapter = argumentAdaptersByParameterName.get(parameterName);
-            final Object argument = ManagedObject.unwrapPojo(argumentAdapter);
+            final Object argument = ManagedObject.unwrapSingle(argumentAdapter);
             argumentsByParameterName.put(parameterName, argument);
         }
         return argumentsByParameterName;

@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.postprocessors.param;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
@@ -53,7 +52,7 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
         final ManagedObject parentAdapter = determineParentAdapter(target);
         final ManagedObject objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
         final List<ManagedObject> objectAdapters = CollectionFacet.Utils.toAdapterList(objectAdapter);
-        return ManagedObject.unwrapPojoArray(objectAdapters.toArray(new ManagedObject[0]));
+        return ManagedObject.unwrapMultipleAsArray(objectAdapters);
     }
 
     /**

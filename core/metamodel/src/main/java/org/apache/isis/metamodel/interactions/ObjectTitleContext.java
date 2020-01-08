@@ -25,7 +25,7 @@ import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
+import static org.apache.isis.metamodel.spec.ManagedObject.unwrapSingle;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -46,7 +46,7 @@ public class ObjectTitleContext extends AccessContext<ObjectTitleEvent> {
 
     @Override
     public ObjectTitleEvent createInteractionEvent() {
-        return new ObjectTitleEvent(unwrapPojo(getTarget()), getIdentifier(), getTitle());
+        return new ObjectTitleEvent(unwrapSingle(getTarget()), getIdentifier(), getTitle());
     }
 
     private String getTitle() {

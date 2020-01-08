@@ -102,7 +102,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> filteredObjects =
-                _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
+                _Lists.map(visibleAdapters, ManagedObject::unwrapSingle);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getObjectManager());

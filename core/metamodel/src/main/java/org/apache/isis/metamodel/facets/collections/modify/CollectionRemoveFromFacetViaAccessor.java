@@ -63,7 +63,7 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
         
         @SuppressWarnings("unchecked")
         final Collection<? super Object> collection = (Collection<? super Object>) ManagedObject.InvokeUtil.invoke(method, owningAdapter);
-        collection.remove(ManagedObject.unwrapPojo(elementAdapter));
+        collection.remove(ManagedObject.unwrapSingle(elementAdapter));
     }
 
     @Override

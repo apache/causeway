@@ -27,7 +27,7 @@ import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
-import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
+import static org.apache.isis.metamodel.spec.ManagedObject.unwrapSingle;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -54,7 +54,7 @@ public class ActionUsabilityContext extends UsabilityContext<ActionUsabilityEven
 
     @Override
     public ActionUsabilityEvent createInteractionEvent() {
-        return new ActionUsabilityEvent(unwrapPojo(getTarget()), getIdentifier());
+        return new ActionUsabilityEvent(unwrapSingle(getTarget()), getIdentifier());
     }
 
 }

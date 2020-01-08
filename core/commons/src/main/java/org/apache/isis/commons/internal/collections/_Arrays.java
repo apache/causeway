@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.stream.Collector;
 
 import javax.annotation.Nullable;
@@ -34,6 +35,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -318,6 +320,122 @@ public final class _Arrays {
         }
         return Optional.ofNullable(array[index]);
     }
+
+    // -- TRANSFORMATION
+    
+    /**
+     * Transforms given {@code array} into a new array of {@code resultElementType} and same size, 
+     * applying the {@code mapper} function 
+     * to each element of {@code array}. 
+     * Returns {@code null} if {@code array} is {@code null};  
+     * @param <T>
+     * @param <R>
+     * @param array
+     * @param resultElementType
+     * @param mapper
+     * @return nullable
+     */
+    @Nullable
+    public static <T, R> R[] map(
+            @Nullable T[] array, 
+            @NonNull Class<R> resultElementType, 
+            @NonNull Function<T, R> mapper) {
+        
+        if (array == null) {
+            return null;
+        }
+        val mappedArray = _Casts.<R[]>uncheckedCast(
+                Array.newInstance(resultElementType, array.length));
+        int i = 0;
+        for (val element : array) {
+            mappedArray[i++] = mapper.apply(element);
+        }
+        return mappedArray;
+    }
+    
+    /**
+     * Transforms given {@code array} into a new object array of same size, 
+     * applying the {@code mapper} function 
+     * to each element of {@code array}. 
+     * Returns {@code null} if {@code array} is {@code null};  
+     * @param <T>
+     * @param array
+     * @param mapper
+     * @return nullable
+     */
+    @Nullable
+    public static <T> Object[] map(
+            @Nullable T[] array, 
+            @NonNull Function<T, ?> mapper) {
+        
+        if (array == null) {
+            return null;
+        }
+        val mappedArray = new Object[array.length];
+        int i = 0;
+        for (val element : array) {
+            mappedArray[i++] = mapper.apply(element);
+        }
+        return mappedArray;
+    }
+    
+    /**
+     * Transforms given {@code collection} into an array of {@code resultElementType} and same size, 
+     * applying the {@code mapper} function 
+     * to each element of {@code collection}. 
+     * Returns {@code null} if {@code collection} is {@code null};  
+     * @param <T>
+     * @param <R>
+     * @param collection
+     * @param resultElementType
+     * @param mapper
+     * @return nullable
+     */
+    @Nullable
+    public static <T, R> R[] mapCollection(
+            @Nullable Collection<T> collection, 
+            @NonNull Class<R> resultElementType, 
+            @NonNull Function<T, R> mapper) {
+        
+        if (collection == null) {
+            return null;
+        }
+        val mappedArray = _Casts.<R[]>uncheckedCast(
+                Array.newInstance(resultElementType, collection.size()));
+        int i = 0;
+        for (val element : collection) {
+            mappedArray[i++] = mapper.apply(element);
+        }
+        return mappedArray;
+    }
+    
+    /**
+     * Transforms given {@code collection} into an object array of same size, 
+     * applying the {@code mapper} function 
+     * to each element of {@code collection}. 
+     * Returns {@code null} if {@code collection} is {@code null};  
+     * @param <T>
+     * @param <R>
+     * @param collection
+     * @param mapper
+     * @return nullable
+     */
+    @Nullable
+    public static <T> Object[] mapCollection(
+            @Nullable Collection<T> collection, 
+            @NonNull Function<T, ?> mapper) {
+        
+        if (collection == null) {
+            return null;
+        }
+        val mappedArray = new Object[collection.size()];
+        int i = 0;
+        for (val element : collection) {
+            mappedArray[i++] = mapper.apply(element);
+        }
+        return mappedArray;
+    }
+    
 
     // --
 

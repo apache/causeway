@@ -23,7 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +69,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -521,17 +519,20 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     }
 
     public List<ManagedObject> getArgumentsAsImmutable() {
-        if(this.arguments.size() < getAction().getParameterCount()) {
+        
+        val objectAction = getAction();
+        val paramCount = objectAction.getParameterCount();
+        
+        if(this.arguments.size() < paramCount) {
             primeArgumentModels();
         }
-
-        final ObjectAction objectAction = getAction();
-        final ManagedObject[] arguments = new ManagedObject[objectAction.getParameterCount()];
-        for (int i = 0; i < arguments.length; i++) {
-            final ActionArgumentModel actionArgumentModel = this.arguments.get(i);
-            arguments[i] = actionArgumentModel.getObject();
+        
+        val arguments = new ArrayList<ManagedObject>(paramCount);
+        for (int i = 0; i < paramCount; i++) {
+            val actionArgumentModel = this.arguments.get(i);
+            arguments.add(actionArgumentModel.getObject());
         }
-        return Collections.unmodifiableList(Arrays.asList(arguments));
+        return Collections.unmodifiableList(arguments);
     }
 
     @Override
@@ -632,8 +633,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     // //////////////////////////////////////
 
     public List<ActionParameterMemento> primeArgumentModels() {
-        final ObjectAction objectAction = getAction();
-
+        val objectAction = getAction();
         val parameters = objectAction.getParameters();
         val actionParameterMementos = buildParameterMementos(parameters);
         for (val actionParameterMemento : actionParameterMementos) {

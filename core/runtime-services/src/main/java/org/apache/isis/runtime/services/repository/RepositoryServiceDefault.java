@@ -183,7 +183,7 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     <T> List<T> submitQuery(final Query<T> query) {
         val allMatching = getPersistenceSession().allMatchingQuery(query);
-        return _Casts.uncheckedCast(ManagedObject.unwrapPojoListElseEmpty(allMatching));
+        return _Casts.uncheckedCast(ManagedObject.unwrapMultipleAsList(allMatching));
     }
 
 

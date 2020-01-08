@@ -23,13 +23,12 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
-import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
+import static org.apache.isis.metamodel.spec.ManagedObject.unwrapSingle;
 
 import lombok.Getter;
 
@@ -59,7 +58,7 @@ implements ActionInteractionContext {
     @Override
     public ActionInvocationEvent createInteractionEvent() {
         return new ActionInvocationEvent(
-                unwrapPojo(getTarget()), getIdentifier(), ManagedObject.unwrapPojoArray(getArgs()));
+                unwrapSingle(getTarget()), getIdentifier(), ManagedObject.unwrapMultipleAsArray(getArgs()));
     }
 
 }

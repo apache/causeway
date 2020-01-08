@@ -71,7 +71,7 @@ implements CollectionAddToFacet {
             return;
         }
 
-        final Object referencedObject = ManagedObject.unwrapPojo(referencedObjectAdapter);
+        final Object referencedObject = ManagedObject.unwrapSingle(referencedObjectAdapter);
 
         // get hold of underlying collection
         final Object collection = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);

@@ -42,33 +42,33 @@ public class ObjectAdapterUtilsTest {
 
     @Test
     public void testUnwrapObjectWhenNull() {
-        assertNull(ManagedObject.unwrapPojo((ManagedObject)null));
+        assertNull(ManagedObject.unwrapSingle((ManagedObject)null));
     }
 
     @Test
     public void testUnwrapObjectWhenNotNull() {
         underlyingDomainObject = new Object(); 
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals(underlyingDomainObject, ManagedObject.unwrapPojo(mockObjectAdapter));
+        assertEquals(underlyingDomainObject, ManagedObject.unwrapSingle(mockObjectAdapter));
     }
 
     @Test
     public void testUnwrapStringWhenNull() {
-        assertNull(ManagedObject.unwrapPojoStringElse(null, null));
+        assertNull(ManagedObject.unwrapSingleAsStringOrElse(null, null));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullButNotString() {
         underlyingDomainObject = new Object(); 
         expectAdapterWillReturn(underlyingDomainObject);
-        assertNull(ManagedObject.unwrapPojoStringElse(mockObjectAdapter, null));
+        assertNull(ManagedObject.unwrapSingleAsStringOrElse(mockObjectAdapter, null));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullAndString() {
         underlyingDomainObject = "huzzah";
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals("huzzah", ManagedObject.unwrapPojoStringElse(mockObjectAdapter, null));
+        assertEquals("huzzah", ManagedObject.unwrapSingleAsStringOrElse(mockObjectAdapter, null));
     }
 
     private void expectAdapterWillReturn(final Object domainObject) {

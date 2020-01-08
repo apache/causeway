@@ -39,7 +39,6 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
@@ -231,7 +230,7 @@ implements ScalarModelSubscriber2 {
             ManagedObject pendingArg, 
             List<ManagedObject> choices) {
         
-        val choiceValues = ManagedObject.unwrapPojoSetElseEmpty(choices);
+        val choiceValues = ManagedObject.unwrapMultipleAsSet(choices);
         val pendingValue = pendingArg.getPojo();
         return choiceValues.contains(pendingValue);
     }

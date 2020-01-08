@@ -99,7 +99,7 @@ implements ImperativeFacet {
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> visibleObjects =
-                _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
+                _Lists.map(visibleAdapters, ManagedObject::unwrapSingle);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectManager());

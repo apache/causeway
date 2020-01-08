@@ -19,7 +19,8 @@
 
 package org.apache.isis.metamodel.specloader.specimpl;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
@@ -467,13 +468,13 @@ implements ObjectActionParameter, FacetHolder.Delegating {
      * unit, and then validate each in turn.
      */
     private List<ManagedObject> arguments(final ManagedObject proposedValue) {
-        final int parameterCount = getAction().getParameterCount();
-        final ManagedObject[] arguments = new ManagedObject[parameterCount];
-        for(int i=0; i< parameterCount; ++i) {
-            arguments[i] = ManagedObject.empty();
+        final int paramCount = getAction().getParameterCount();
+        final int paramIndex = getNumber();
+        val arguments = new ArrayList<ManagedObject>(paramCount);
+        for(int i=0; i<paramCount; ++i) {
+            arguments.add(i==paramIndex ? proposedValue : ManagedObject.empty());
         }
-        arguments[getNumber()] = proposedValue;
-        return Arrays.asList(arguments);
+        return Collections.unmodifiableList(arguments);
     }
 
 

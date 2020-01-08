@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
@@ -43,9 +42,9 @@ import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
@@ -67,7 +66,6 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionContributee;
-import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
@@ -425,7 +423,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = ManagedObject.unwrapPojo(currentReferencedAdapter);
+            val currentReferencedObj = ManagedObject.unwrapSingle(currentReferencedAdapter);
 
             val propertyAccessEvent = new PropertyAccessEvent(
                     getDelegate(), property.getIdentifier(), currentReferencedObj);
@@ -498,7 +496,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = ManagedObject.unwrapPojo(currentReferencedAdapter);
+            val currentReferencedObj = ManagedObject.unwrapSingle(currentReferencedAdapter);
 
             val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getIdentifier());
 
@@ -660,7 +658,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val returnedAdapter = objectAction.execute(
                     targetAdapter, mixedInAdapter, argAdapters,
                     interactionInitiatedBy);
-            return ManagedObject.unwrapPojo(returnedAdapter);
+            return ManagedObject.unwrapSingle(returnedAdapter);
             
         });
         
@@ -680,7 +678,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private List<ManagedObject> asObjectAdaptersUnderlying(final Object[] args) {
         val argAdapters = _NullSafe.stream(args)
         .map(getObjectManager()::adapt)
-        .collect(Collectors.toList());
+        .collect(_Lists.toUnmodifiable());
         
         return argAdapters;
     }

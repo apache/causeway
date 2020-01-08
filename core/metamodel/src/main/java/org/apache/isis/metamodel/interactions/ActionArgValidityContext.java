@@ -28,7 +28,7 @@ import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
-import static org.apache.isis.metamodel.spec.ManagedObject.unwrapPojo;
+import static org.apache.isis.metamodel.spec.ManagedObject.unwrapSingle;
 
 import lombok.Getter;
 
@@ -50,6 +50,7 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
             final List<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, targetAdapter, id, interactionInitiatedBy);
         this.objectAction = objectAction;
 
@@ -60,7 +61,8 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
 
     @Override
     public ActionArgumentEvent createInteractionEvent() {
-        return new ActionArgumentEvent(unwrapPojo(getTarget()), getIdentifier(), ManagedObject.unwrapPojoArray(getArgs()), getPosition());
+        return new ActionArgumentEvent(
+                unwrapSingle(getTarget()), getIdentifier(), ManagedObject.unwrapMultipleAsArray(getArgs()), getPosition());
     }
 
 }

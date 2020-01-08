@@ -82,7 +82,7 @@ implements ParseableFacet {
             validate(parseValueContext);
         }
 
-        final Object context = ManagedObject.unwrapPojo(contextAdapter);
+        final Object context = ManagedObject.unwrapSingle(contextAdapter);
 
         getServiceInjector().injectServicesInto(parser);
 
@@ -123,7 +123,7 @@ implements ParseableFacet {
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public String parseableTitle(final ManagedObject contextAdapter) {
-        final Object pojo = ManagedObject.unwrapPojo(contextAdapter);
+        final Object pojo = ManagedObject.unwrapSingle(contextAdapter);
 
         getServiceInjector().injectServicesInto(parser);
         return ((Parser)parser).parseableTitleOf(pojo);
