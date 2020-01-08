@@ -1,4 +1,4 @@
-package org.isisaddons.wicket.pdfjs.cpt.ui;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.ui.components;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,8 +41,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 
-import org.isisaddons.wicket.pdfjs.cpt.applib.PdfJsViewerAdvisor;
-import org.isisaddons.wicket.pdfjs.cpt.applib.PdfJsViewerFacet;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.spi.PdfJsViewerAdvisor;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.metamodel.facet.PdfJsViewerFacet;
 
 import lombok.val;
 

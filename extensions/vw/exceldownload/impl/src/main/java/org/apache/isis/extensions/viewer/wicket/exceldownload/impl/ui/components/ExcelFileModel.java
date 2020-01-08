@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.viewer.wicket.excel.components;
+package org.apache.isis.extensions.viewer.wicket.exceldownload.impl.ui.components;
 
 import java.io.File;
 import java.io.FileNotFoundException;

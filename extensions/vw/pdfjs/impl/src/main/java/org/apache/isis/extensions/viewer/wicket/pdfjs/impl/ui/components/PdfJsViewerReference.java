@@ -1,4 +1,4 @@
-package org.isisaddons.wicket.pdfjs.cpt.ui;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.ui.components;
 
 import java.util.List;
 import org.apache.wicket.markup.head.HeaderItem;
@@ -6,7 +6,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.wicketstuff.pdfjs.WicketStuffPdfJsReference;
 
-public class PdfJsViewerReference extends JQueryPluginResourceReference {
+class PdfJsViewerReference extends JQueryPluginResourceReference {
 
     public PdfJsViewerReference() {
         super(PdfJsViewerPanel.class, "PdfJsViewerPanel.js");

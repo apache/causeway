@@ -1,4 +1,4 @@
-package org.isisaddons.wicket.pdfjs.cpt.applib;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.spi;
 
 import java.io.Serializable;
 

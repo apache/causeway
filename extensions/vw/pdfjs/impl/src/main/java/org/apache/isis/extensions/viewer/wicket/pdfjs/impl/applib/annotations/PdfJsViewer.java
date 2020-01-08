@@ -1,4 +1,4 @@
-package org.isisaddons.wicket.pdfjs.cpt.applib;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

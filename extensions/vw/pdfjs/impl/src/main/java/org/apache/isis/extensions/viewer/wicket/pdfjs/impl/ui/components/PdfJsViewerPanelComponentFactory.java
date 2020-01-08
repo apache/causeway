@@ -1,4 +1,4 @@
-package org.isisaddons.wicket.pdfjs.cpt.ui;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.ui.components;
 
 import java.util.Objects;
 
@@ -13,16 +13,16 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
-import org.isisaddons.wicket.pdfjs.cpt.applib.PdfJsViewerFacet;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.metamodel.facet.PdfJsViewerFacet;
 
 import lombok.val;
 
 @org.springframework.stereotype.Component
-public class PdfViewerPanelComponentFactory extends ComponentFactoryAbstract {
+public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public PdfViewerPanelComponentFactory() {
+    public PdfJsViewerPanelComponentFactory() {
         super(ComponentType.SCALAR_NAME_AND_VALUE, PdfJsViewerPanel.class);
     }
 

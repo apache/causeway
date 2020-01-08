@@ -1,4 +1,4 @@
-package org.isisaddons.wicket.pdfjs.cpt.applib;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.metamodel.facet;
 
 import java.util.List;
 
@@ -9,6 +9,9 @@ import org.wicketstuff.pdfjs.Scale;
 
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+
+import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.annotations.PdfJsViewer;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.spi.PdfJsViewerAdvisor;
 
 public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
 

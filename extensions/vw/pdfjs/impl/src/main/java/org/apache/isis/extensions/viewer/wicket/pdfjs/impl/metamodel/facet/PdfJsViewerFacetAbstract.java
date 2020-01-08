@@ -1,10 +1,12 @@
-package org.isisaddons.wicket.pdfjs.cpt.applib;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.metamodel.facet;
 
 import org.wicketstuff.pdfjs.PdfJsConfig;
 
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+
+import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.spi.PdfJsViewerAdvisor;
 
 
 public abstract class PdfJsViewerFacetAbstract extends FacetAbstract implements PdfJsViewerFacet {

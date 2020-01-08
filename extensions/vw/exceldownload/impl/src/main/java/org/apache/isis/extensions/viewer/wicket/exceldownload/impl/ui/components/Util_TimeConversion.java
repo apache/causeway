@@ -16,23 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.isisaddons.wicket.pdfjs.cpt;
+package org.apache.isis.extensions.viewer.wicket.exceldownload.impl.ui.components;
 
-import org.springframework.stereotype.Component;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
-import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+final class Util_TimeConversion {
 
-import org.isisaddons.wicket.pdfjs.cpt.applib.PdfJsViewerFacetFromAnnotationFactory;
+    public static Date toDate(LocalDate value) {
+        return toDate(value.atStartOfDay());
+    }
 
-@Component
-public class PdfJsMetaModelPlugin implements MetaModelRefiner {
+    public static Date toDate(LocalDateTime value) {
+        return new Date(toEpochMilli(value));
+    }
 
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addFactory(
-                ProgrammingModel.FacetProcessingOrder.Z2_AFTER_FINALLY,
-                PdfJsViewerFacetFromAnnotationFactory.class);
+    public static Date toDate(OffsetDateTime value) {
+        return toDate(value.toLocalDateTime());
+    }
+
+    // -- HELPER
+
+    private final static ZoneId zId = ZoneId.systemDefault();
+
+    private static long toEpochMilli(LocalDateTime localDateTime){
+        return localDateTime.atZone(zId).toInstant().toEpochMilli();
     }
 
 }

@@ -16,34 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.viewer.wicket.excel.components;
+package org.apache.isis.extensions.viewer.wicket.exceldownload.impl.ui;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-final class Util_TimeConversion {
+import org.apache.isis.extensions.viewer.wicket.exceldownload.impl.ui.components.CollectionContentsAsExcelFactory;
 
-    public static Date toDate(LocalDate value) {
-        return toDate(value.atStartOfDay());
-    }
-
-    public static Date toDate(LocalDateTime value) {
-        return new Date(toEpochMilli(value));
-    }
-
-    public static Date toDate(OffsetDateTime value) {
-        return toDate(value.toLocalDateTime());
-    }
-
-    // -- HELPER
-
-    private final static ZoneId zId = ZoneId.systemDefault();
-
-    private static long toEpochMilli(LocalDateTime localDateTime){
-        return localDateTime.atZone(zId).toInstant().toEpochMilli();
-    }
-
+@Configuration
+@Import({
+        // @Component's
+        CollectionContentsAsExcelFactory.class
+})
+public class IsisModuleExtExcelDownloadUi {
 }
