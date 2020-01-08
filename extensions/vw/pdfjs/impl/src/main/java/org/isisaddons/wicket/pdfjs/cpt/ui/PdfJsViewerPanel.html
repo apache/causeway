@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="pdfViewerPanel scalarNameAndValueComponentType">
+                <div class="form-group" wicket:id="scalarIfRegular">
+                    <div class="row">
+                        <div class="scalarValue col-sm-12">
+                            <div>
+                                <span>Page: <input wicket:id="currentPage"  class="pdf-js-page-current" title="Select Page" size="1"></input> / <span wicket:id="totalPages"  class="pdf-js-page-total"></span></span>
+
+                                <button wicket:id="prevPage" disabled type="button" class="fa fa-backward btn btn-xs btn-default pdf-js-page-prev" title="Previous"></button>
+                                <button wicket:id="nextPage" disabled type="button" class="fa fa-forward btn btn-xs btn-default pdf-js-page-next" title="Next"></button>
+
+                                <select wicket:id="currentZoom" title="Current Zoom Level" class="pdf-js-zoom-current">
+                                    <option id="pageAutoOption" value="auto" >Automatic Zoom</option>
+                                    <option id="pageActualOption"  value="page-actual" >Actual Size</option>
+                                    <option id="pageFitOption"  value="page-fit" >Page Fit</option>
+                                    <option id="pageWidthOption"  value="page-width">Page Width</option>
+                                    <option class="pdf-js-zoom" value="0.50">50%</option>
+                                    <option class="pdf-js-zoom" value="0.75">75%</option>
+                                    <option class="pdf-js-zoom" value="1.00">100%</option>
+                                    <option class="pdf-js-zoom" value="1.25">125%</option>
+                                    <option class="pdf-js-zoom" value="1.50">150%</option>
+                                    <option class="pdf-js-zoom" value="2.00">200%</option>
+                                    <option class="pdf-js-zoom" value="3.00">300%</option>
+                                    <option class="pdf-js-zoom" value="4.00">400%</option>
+                                </select>
+
+                                <select wicket:id="currentHeight" title="Height" class="pdf-js-height-current">
+                                    <option class="pdf-js-height" value="300">300px</option>
+                                    <option class="pdf-js-height" value="400">400px</option>
+                                    <option class="pdf-js-height" value="500">500px</option>
+                                    <option class="pdf-js-height" value="600">600px</option>
+                                    <option class="pdf-js-height" value="700">700px</option>
+                                    <option class="pdf-js-height" value="800">800px</option>
+                                    <option class="pdf-js-height" value="900">900px</option>
+                                    <option class="pdf-js-height" value="1000">1000px</option>
+                                    <option class="pdf-js-height" value="1100">1100px</option>
+                                    <option class="pdf-js-height" value="1200">1200px</option>
+                                    <option class="pdf-js-height" value="1300">1300px</option>
+                                    <option class="pdf-js-height" value="1400">1400px</option>
+                                    <option class="pdf-js-height" value="1500">1500px</option>
+                                    <option class="pdf-js-height" value="1750">1750px</option>
+                                    <option class="pdf-js-height" value="2000">2000px</option>
+                                </select>
+
+                                <button wicket:id="download" type="button" class="fa fa-download btn btn-xs btn-default pdf-js-download" title="Download"></button>
+                                <button wicket:id="print" type="button" class="fa fa-print btn btn-xs btn-default pdf-js-print" title="Print Current Page"></button>
+
+                                <div class="progress" style="display: none;">
+                                    <div class="progress-bar"></div>
+                                </div>
+                            </div>
+                            <div wicket:id="scalarValue" class="pdfPanel" ></div>
+                        </div>
+                    </div>
+                    <span wicket:id="feedback"></span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <span wicket:id="scalarIfCompact">
+                <a wicket:id="scalarIfCompactDownload"><span class="fileName" wicket:id="fileNameIfCompact"></span></a>
+            </span>
+
+
+        </wicket:panel>
+    </body>
+</html>

@@ -129,11 +129,12 @@
 		<module>persistence/hsqldbmgr/impl</module>
 
 		<module>security/secman</module>
-		<module>security/shiro-realm-ldap</module>
+		<module>security/shiro-realm-ldap/impl</module>
 
-		<module>vro/cors</module>
+		<module>vro/cors/impl</module>
 
-		<module>vw/exceldownload</module>
+		<module>vw/exceldownload/impl</module>
+		<module>vw/pdfjs/impl</module>
 
 	</modules>
 

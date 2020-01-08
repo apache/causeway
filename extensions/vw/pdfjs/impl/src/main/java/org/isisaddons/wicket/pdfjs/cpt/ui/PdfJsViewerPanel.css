@@ -1,0 +1,34 @@
+.pdfPanel {
+    width : 100%;
+    height : 100%;
+    border: 1px solid lightgrey;
+    position : relative;
+}
+
+body[pdf-js-printing] > :not(#pdf-js-print-container) {
+    display: none;
+}
+
+body:not([pdf-js-printing]) > #pdf-js-print-container {
+    display: none;
+}
+
+body[pdf-js-printing] > #pdf-js-print-container {
+    display: block;
+}
+
+
+.pdfViewerPanel .pdf-js-zoom-current,
+.pdfViewerPanel .pdf-js-height-current,
+.pdfViewerPanel .pdf-js-download {
+    margin-left: 20px;
+}
+
+.pdfViewerPanel button {
+    padding: 4px 4px 3px 4px;
+    margin-bottom: 5px;
+}
+
+.pdfJsPanel {
+    overflow: scroll;
+}

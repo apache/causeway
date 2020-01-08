@@ -388,7 +388,7 @@
 
 
 <!--
-commented out Johan's, cos he's sice come on board as a committer.
+commented out Johan's, cos he's since come on board as a committer.
         <div class="testimonial-item">
           <p>
             <img src="_/img/home/quote-sign-left.png" class="quote-sign-left" alt="">
@@ -479,62 +479,6 @@ commented out Johan's, cos he's sice come on board as a committer.
 
 
 
-        <!--
-                    <div class="testimonial-item">
-                      <p>
-                        <img src="_/img/home/quote-sign-left.png" class="quote-sign-left" alt="">
-                        Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-                        <img src="_/img/home/quote-sign-right.png" class="quote-sign-right" alt="">
-                      </p>
-                      <img src="_/img/home/testimonial/testimonial-1.jpg" class="testimonial-img" alt="">
-                      <h3>Saul Goodman</h3>
-                      <h4>Ceo &amp; Founder</h4>
-                    </div>
-
-                    <div class="testimonial-item">
-                      <p>
-                        <img src="_/img/home/quote-sign-left.png" class="quote-sign-left" alt="">
-                        Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
-                        <img src="_/img/home/quote-sign-right.png" class="quote-sign-right" alt="">
-                      </p>
-                      <img src="_/img/home/testimonial/testimonial-2.jpg" class="testimonial-img" alt="">
-                      <h3>Sara Wilsson</h3>
-                      <h4>Designer</h4>
-                    </div>
-
-                    <div class="testimonial-item">
-                      <p>
-                        <img src="_/img/home/quote-sign-left.png" class="quote-sign-left" alt="">
-                        Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
-                        <img src="_/img/home/quote-sign-right.png" class="quote-sign-right" alt="">
-                      </p>
-                      <img src="_/img/home/testimonial/testimonial-3.jpg" class="testimonial-img" alt="">
-                      <h3>Jena Karlis</h3>
-                      <h4>Store Owner</h4>
-                    </div>
-
-                    <div class="testimonial-item">
-                      <p>
-                        <img src="_/img/home/quote-sign-left.png" class="quote-sign-left" alt="">
-                        Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
-                        <img src="_/img/home/quote-sign-right.png" class="quote-sign-right" alt="">
-                      </p>
-                      <img src="_/img/home/testimonial/testimonial-4.jpg" class="testimonial-img" alt="">
-                      <h3>Matt Brandon</h3>
-                      <h4>Freelancer</h4>
-                    </div>
-
-                    <div class="testimonial-item">
-                      <p>
-                        <img src="_/img/home/quote-sign-left.png" class="quote-sign-left" alt="">
-                        Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
-                        <img src="_/img/home/quote-sign-right.png" class="quote-sign-right" alt="">
-                      </p>
-                      <img src="_/img/home/testimonial/testimonial-5.jpg" class="testimonial-img" alt="">
-                      <h3>John Larson</h3>
-                      <h4>Entrepreneur</h4>
-                    </div>
-        -->
 
       </div>
 
@@ -650,12 +594,13 @@ commented out Johan's, cos he's sice come on board as a committer.
           <h3 class="cta-title">Quick Start</h3>
           <p class="cta-text">Start developing your own Apache Isis application from either the minimal <a href="https://github.com/apache/isis-app-helloworld">helloworld</a> starter app or with the more structured <a href="https://github.com/apache/isis-app-simpleapp">simpleapp</a> starter app.</p>
           <div class="row">
-            <div class="col-lg-6 text-center text-lg-left">
+            <div class="col-lg-6 text-left text-lg-left">
               <p>
                 <pre>
-REPO=isis-app-helloworld
+APP=helloworld
 BRANCH=master
 
+REPO=isis-app-$APP
 curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
 mv $REPO-$BRANCH $REPO
 cd $REPO
@@ -664,18 +609,60 @@ mvn clean install
 mvn spring-boot:run</pre>
               </p>
             </div>
-            <div class="col-lg-6 text-center text-lg-left">
+            <div class="col-lg-6 text-left text-lg-left">
               <p>
                 <pre>
-REPO=isis-app-simpleapp
+APP=simpleapp
 BRANCH=master
 
+REPO=isis-app-$APP
 curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
 mv $REPO-$BRANCH $REPO
 cd $REPO
 
 mvn clean install
 mvn -pl webapp spring-boot:run</pre>
+              </p>
+            </div>
+          </div>
+          <p class="cta-text">If you want to use the previous 1.x version, you can use these Maven archetypes.</p>
+          <div class="row">
+            <div class="col-lg-6 text-left text-lg-left">
+              <p>
+                <pre>
+APP=helloworld
+VERSION=1.17.0
+
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=helloworld-archetype \
+    -D archetypeVersion=$VERSION \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D version=1.0-SNAPSHOT \
+    -B
+
+mvn clean install
+mvn jetty:run</pre>
+              </p>
+            </div>
+            <div class="col-lg-6 text-center text-lg-left">
+              <p>
+                <pre>
+APP=simpleapp
+VERSION=1.17.0
+
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=$APP-archetype \
+    -D archetypeVersion=$VERSION \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D version=1.0-SNAPSHOT \
+    -B
+
+mvn clean install
+mvn -pl webapp jetty:run</pre>
               </p>
             </div>
         </div>

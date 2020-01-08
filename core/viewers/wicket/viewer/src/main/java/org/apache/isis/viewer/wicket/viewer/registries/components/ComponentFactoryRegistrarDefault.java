@@ -107,8 +107,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
     
-    @Autowired(required = false) private List<ComponentFactory> componentFactoriesPluggedIn;
-    
+    private final List<ComponentFactory> componentFactoriesPluggedIn;
+    public ComponentFactoryRegistrarDefault(final List<ComponentFactory> componentFactoriesPluggedIn) {
+        this.componentFactoriesPluggedIn = componentFactoriesPluggedIn;
+    }
+
     @Override
     public void addComponentFactories(final ComponentFactoryList componentFactories) {
 

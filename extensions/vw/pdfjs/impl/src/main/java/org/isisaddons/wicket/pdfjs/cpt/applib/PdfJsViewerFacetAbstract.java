@@ -1,0 +1,30 @@
+package org.isisaddons.wicket.pdfjs.cpt.applib;
+
+import org.wicketstuff.pdfjs.PdfJsConfig;
+
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
+
+
+public abstract class PdfJsViewerFacetAbstract extends FacetAbstract implements PdfJsViewerFacet {
+
+    private final PdfJsConfig config;
+
+    public PdfJsViewerFacetAbstract(
+            final PdfJsConfig config,
+            final FacetHolder holder) {
+        super(type(), holder);
+
+        this.config = config;
+    }
+
+    public PdfJsConfig configFor(final PdfJsViewerAdvisor.InstanceKey instanceKey) {
+        return config;
+    }
+
+    public static Class<? extends Facet> type() {
+        return PdfJsViewerFacet.class;
+    }
+
+}

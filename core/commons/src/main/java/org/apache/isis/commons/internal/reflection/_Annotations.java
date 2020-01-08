@@ -93,7 +93,6 @@ public final class _Annotations {
      * @param <A>
      * @param annotatedElement
      * @param annotationType
-     * @param attributeAcceptStrategy
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> synthesizeInherited(
