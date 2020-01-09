@@ -27,7 +27,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-exceldownload</artifactId>
+    <artifactId>isis-extensions-exceldownload-impl</artifactId>
     <name>Apache Isis Ext - Excel Download</name>
     <description></description>
 
