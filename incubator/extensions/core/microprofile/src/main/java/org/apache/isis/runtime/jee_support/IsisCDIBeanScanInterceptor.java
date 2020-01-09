@@ -18,7 +18,6 @@
  */
 package org.apache.isis.runtime.jee_support;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -28,9 +27,11 @@ import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 
-import org.apache.isis.applib.annotation.DomainService;
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.metrics.MetricsService;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -38,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  *
  * A CDI inject extension @see <a href="https://docs.jboss.org/weld/reference/latest/en-US/html/extend.html">weld</a>,
- * that lets CDI ignore certain Beans we declare tabu.
+ * that lets CDI ignore certain Beans we declare vetoed.
  * <p>
  * This extension is registered as a service provider by creating a file named
  * {@code META-INF/services/javax.enterprise.inject.spi.Extension},
@@ -46,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  * <p>
- * Beans declared tabu are managed (meaning instantiation and dependency injection)
+ * Beans declared vetoed are managed (meaning instantiation and dependency injection)
  * by Isis itself. All other Beans are allowed to be managed by CDI.
  * </p>
  *
@@ -59,13 +60,11 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
      * Declaration of Beans that are managed by Isis and should be ignored by CDI.
      * (in addition to those that have the @DomainService annotation)
      */
-    private static final List<Predicate<Class<?>>> vetos = new ArrayList<>();
-    {
-        vetos.add(MetricsService.class::equals);
-        vetos.add(ExceptionRecognizer.class::isAssignableFrom);
-        vetos.add(type->type.getName().startsWith("org.springframework."));
-        vetos.add(type->type.getName().startsWith("org.apache.isis."));
-    }
+    private static final List<Predicate<Class<?>>> vetoTests = _Lists.of(
+        ExceptionRecognizer.class::isAssignableFrom,
+        type->type.getName().startsWith("org.springframework."),
+        type->type.getName().startsWith("org.apache.isis."), 
+        type->_Annotations.isPresent(type, Component.class));
 
     void beforeBeanDiscovery(@Observes BeforeBeanDiscovery event) {
         log.info("beginning the scanning process");
@@ -73,26 +72,19 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
 
     <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> event) {
 
-        final Class<?> clazz = event.getAnnotatedType().getJavaClass();
-        final String className = clazz.getName();
+        final Class<?> type = event.getAnnotatedType().getJavaClass();
+        final String className = type.getName();
 
-        val isTabu = isVetoed(clazz, event);
-        if(isTabu) {
+        val isVetoed = isVetoed(type);
+        if(isVetoed) {
             event.veto();
         }
 
         if(log.isDebugEnabled()) {
-            val logScope = className.startsWith("org.apache.isis.") ||
-                    className.startsWith("domainapp.");
-            if(logScope) {
-                log.debug("processing annotated type %s", className);
-            }	
-
-            if(isTabu) {
-                log.debug("veto type: " + className);
-                event.veto();
+            if(isVetoed) {
+                log.debug("vetoing type: {}", className);
             } else {
-                log.debug("allowing type: " + className);
+                log.debug("allowing type: {}", className);
             }
         }
 
@@ -104,14 +96,12 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
 
     // -- HELPER
 
-    private boolean isVetoed(Class<?> clazz, ProcessAnnotatedType<?> event) {
-
-        if(event.getAnnotatedType().isAnnotationPresent(DomainService.class)) {
-            return true;
-        }
-        for(Predicate<Class<?>> isVetoed : vetos) {
-            if(isVetoed.test(clazz))
+    private boolean isVetoed(Class<?> type) {
+        
+        for(val vetoTest : vetoTests) {
+            if(vetoTest.test(type)) {
                 return true;
+            }
         }
         return false;
     }
