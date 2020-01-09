@@ -4,7 +4,7 @@ SECONDS=0
 PLAYBOOK_FILE=site.yml
 if [[ $# -gt 0 ]]; then
 
-  if [ -f $1 ]; then
+  if [ -f antora/playbooks/$1 ]; then
     PLAYBOOK_FILE=$1
   else
     echo "no such file $PLAYBOOK_FILE - using site.yml" >&2

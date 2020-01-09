@@ -16,19 +16,6 @@ content:
       start_path: core/viewers/wicket/src/main/doc # vw
       branches: HEAD
 
-# extensions
-    - url: .
-      start_path: extensions/vw/asciidoc/src/main/doc # vw
-      branches: HEAD
-    - url: .
-      start_path: extensions/vw/exceldownload/src/main/doc # vw
-      branches: HEAD
-    - url: .
-      start_path: extensions/vw/markdown/src/main/doc # vw
-      branches: HEAD
-    - url: .
-      start_path: extensions/vw/sse/src/main/doc # vw
-      branches: HEAD
 
 
 ui:

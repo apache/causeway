@@ -54,6 +54,9 @@ content:
     - url: .
       start_path: extensions/vw/exceldownload/src/main/doc # vw
       branches: HEAD
+    - url: .
+      start_path: extensions/vw/pdfjs/src/main/doc # vw
+      branches: HEAD
 
 
 ui:
