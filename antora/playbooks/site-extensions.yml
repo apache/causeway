@@ -19,12 +19,6 @@ content:
     - url: .
       start_path: extensions/persistence/flywayjdo/impl/src/main/doc # extensions
       branches: HEAD
-    - url: .
-      start_path: extensions/persistence/h2console/impl/src/main/doc # extensions
-      branches: HEAD
-    - url: .
-      start_path: extensions/persistence/hsqldbmgr/impl/src/main/doc # extensions
-      branches: HEAD
 
     - url: .
       start_path: extensions/security/secman/src/main/doc # security

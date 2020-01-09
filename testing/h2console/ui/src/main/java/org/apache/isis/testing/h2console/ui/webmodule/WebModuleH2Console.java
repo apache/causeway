@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.h2console.dom.webmodule;
+package org.apache.isis.testing.h2console.ui.webmodule;
 
 import java.util.List;
 

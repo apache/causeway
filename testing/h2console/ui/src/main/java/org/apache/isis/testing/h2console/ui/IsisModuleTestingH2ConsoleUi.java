@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.h2console.dom;
+package org.apache.isis.testing.h2console.ui;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +29,6 @@ import org.apache.isis.webapp.IsisModuleWebapp;
         IsisModuleWebapp.class
 })
 @ComponentScan
-public class IsisModuleExtH2Console {
+public class IsisModuleTestingH2ConsoleUi {
 
 }

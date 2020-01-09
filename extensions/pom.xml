@@ -119,16 +119,7 @@
 				<artifactId>isis-extensions-shiro-realm-ldap</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-h2console-dom</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-hsqldbmgr-dom</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
+
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-cors</artifactId>
@@ -147,9 +138,6 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>persistence/h2console/impl</module>
-		<module>persistence/hsqldbmgr/impl</module>
-
 		<module>security/secman</module>
 		<module>security/shiro-realm-ldap/impl</module>
 

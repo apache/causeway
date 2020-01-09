@@ -31,6 +31,12 @@ content:
       start_path: testing/fixtures/src/main/doc # testing
       branches: HEAD
     - url: .
+      start_path: testing/h2console/src/main/doc # testing
+      branches: HEAD
+    - url: .
+      start_path: testing/hsqldbmgr/impl/src/main/doc # testing
+      branches: HEAD
+    - url: .
       start_path: testing/specsupport/src/main/doc # testing
       branches: HEAD
     - url: .

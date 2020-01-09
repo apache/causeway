@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.h2console.dom.services;
+package org.apache.isis.testing.h2console.ui.services;
 
 import javax.inject.Inject;
 
@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.extensions.h2console.dom.webmodule.WebModuleH2Console;
+import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
 
 @DomainService(
         nature = NatureOfService.VIEW,
