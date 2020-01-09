@@ -50,13 +50,14 @@ extends FacetFactoryAbstract
 implements MetaModelRefiner, ObjectSpecIdFacetFactory {
 
     @Inject
-    private ClassSubstitutorRegistry classSubstitutorRegistry;
+    private ClassSubstitutorRegistry classSubstitutorRegistry =
+            // default for testing purposes only, overwritten in prod
+            new ClassSubstitutorRegistry(Collections.singletonList( new ClassSubstitutorDefault()));
 
 
     public ObjectSpecIdFacetDerivedFromClassNameFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
-    // default for testing purposes only, overwritten in prod
     public ObjectSpecIdFacetDerivedFromClassNameFactory(ClassSubstitutorRegistry classSubstitutorRegistry) {
         this();
         this.classSubstitutorRegistry = classSubstitutorRegistry;

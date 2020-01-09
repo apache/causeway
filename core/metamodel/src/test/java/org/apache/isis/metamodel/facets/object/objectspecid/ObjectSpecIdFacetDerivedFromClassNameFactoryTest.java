@@ -44,7 +44,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new ObjectSpecIdFacetDerivedFromClassNameFactory(new ClassSubstitutorRegistry(Collections.singletonList( new ClassSubstitutorDefault())));
+        facetFactory = new ObjectSpecIdFacetDerivedFromClassNameFactory();
     }
 
     public static class Customer {

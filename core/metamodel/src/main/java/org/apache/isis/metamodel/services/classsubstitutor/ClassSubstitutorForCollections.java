@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.Vector;
 
 import javax.inject.Named;
 
@@ -43,6 +44,10 @@ public class ClassSubstitutorForCollections implements ClassSubstitutor {
     public Class<?> getClass(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls) {
         if(FreeStandingList.class.isAssignableFrom(cls)) {
             return FreeStandingList.class;
+        }
+        // legacy
+        if(Vector.class.isAssignableFrom(cls)) {
+            return Vector.class;
         }
         if(List.class.isAssignableFrom(cls)) {
             return List.class;
