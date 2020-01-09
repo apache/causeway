@@ -345,11 +345,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         if (this.validationResult.isMemoized()) {
             this.validationResult.clear();
-        }
-        final ValidationFailures validationFailures = this.getValidationResult();
+            final ValidationFailures validationFailures = this.getValidationResult();
 
-        if(validationFailures.hasFailures()) {
-            throw _Exceptions.illegalState(String.join("\n", validationFailures.getMessages("[%d] %s")));
+            if(validationFailures.hasFailures()) {
+                throw _Exceptions.illegalState(String.join("\n", validationFailures.getMessages("[%d] %s")));
+            }
         }
     }
 
@@ -447,7 +447,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         specs.parallelStream()
         .forEach(spec -> spec.introspectUpTo(upTo)); // TODO swallows exceptions that happen inside (makes debugging hard)
-        
+
     }
 
     private void invalidateCache(final Class<?> cls) {
