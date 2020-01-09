@@ -30,6 +30,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.metamodel.spec.FreeStandingList;
 
 import lombok.NonNull;
 
@@ -40,6 +41,9 @@ public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override
     public Class<?> getClass(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls) {
+        if(FreeStandingList.class.isAssignableFrom(cls)) {
+            return FreeStandingList.class;
+        }
         if(List.class.isAssignableFrom(cls)) {
             return List.class;
         }
