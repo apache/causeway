@@ -64,12 +64,38 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload-impl</artifactId>
+				<artifactId>isis-extensions-exceldownload-applib</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-pdfjs-impl</artifactId>
+				<artifactId>isis-extensions-exceldownload-metamodel</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-exceldownload-impl</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-pdfjs-applib</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-pdfjs-fixture</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-pdfjs-metamodel</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-pdfjs-ui</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
@@ -140,7 +166,7 @@
 		<module>vro/cors/impl</module>
 
 		<module>vw/exceldownload/impl</module>
-		<module>vw/pdfjs/impl</module>
+		<module>vw/pdfjs</module>
 
 	</modules>
 
