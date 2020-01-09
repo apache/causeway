@@ -19,11 +19,16 @@
 package org.apache.isis.metamodel.facets;
 
 import java.util.EnumSet;
+import java.util.function.Consumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -63,47 +68,56 @@ implements MethodPrefixBasedFacetFactory {
         
         val noParamsOnly = getConfiguration().getReflector().getValidator().isNoParamsOnly();
 
-        programmingModel.addValidator((objectSpec, metaModelValidator) -> {
-            
-            // ensure accepted actions do not have any of the reserved prefixes
-            objectSpec.streamObjectActions(Contributed.EXCLUDED)
-            .forEach(objectAction->{
-                
-                val actionId = objectAction.getId();
-                
-                for (val prefix : prefixes) {
-                    
-                    if (isPrefixed(actionId, prefix)) {
+        programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
 
-                        val explanation =
-                                objectAction.getParameterCount() > 0 
-                                && noParamsOnly 
-                                && (MethodLiteralConstants.HIDE_PREFIX.equals(prefix) 
-                                        || MethodLiteralConstants.DISABLE_PREFIX.equals(prefix))
-                                ? " (such methods must have no parameters, '"
-                                    + "isis.reflector.validator.no-params-only"
-                                    + "' config property)"
-                                        : "";
+            @Override
+            public String toString() {
+                return "MetaModelValidatorVisiting.Visitor : MethodPrefixBasedFacetFactoryAbstract : " + prefixes.toList().toString();
+            }
 
-                        val message = "%s#%s: has prefix %s, is probably intended as a supporting method "
-                                + "for a property, collection or action%s.  If the method is intended to "
-                                + "be an action, then rename and use @ActionLayout(named=\"...\") or ignore "
-                                + "completely using @Programmatic";
-                        
-                        metaModelValidator.onFailure(
-                                objectSpec,
-                                objectSpec.getIdentifier(),
-                                message,
-                                objectSpec.getIdentifier().getClassName(),
-                                actionId,
-                                prefix,
-                                explanation);
-                    }
-                }
-            });
+            @Override
+            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator metaModelValidator) {
 
-            return true;
+                // ensure accepted actions do not have any of the reserved prefixes
+                objectSpec.streamObjectActions(Contributed.EXCLUDED)
+                        .forEach(objectAction -> {
 
+                            val actionId = objectAction.getId();
+
+                            for (val prefix : prefixes) {
+
+                                if (isPrefixed(actionId, prefix)) {
+
+                                    val explanation =
+                                            objectAction.getParameterCount() > 0
+                                                    && noParamsOnly
+                                                    && (MethodLiteralConstants.HIDE_PREFIX.equals(prefix)
+                                                    || MethodLiteralConstants.DISABLE_PREFIX.equals(prefix))
+                                                    ? " (such methods must have no parameters, '"
+                                                    + "isis.reflector.validator.no-params-only"
+                                                    + "' config property)"
+                                                    : "";
+
+                                    val message = "%s#%s: has prefix %s, is probably intended as a supporting method "
+                                            + "for a property, collection or action%s.  If the method is intended to "
+                                            + "be an action, then rename and use @ActionLayout(named=\"...\") or ignore "
+                                            + "completely using @Programmatic";
+
+                                    metaModelValidator.onFailure(
+                                            objectSpec,
+                                            objectSpec.getIdentifier(),
+                                            message,
+                                            objectSpec.getIdentifier().getClassName(),
+                                            actionId,
+                                            prefix,
+                                            explanation);
+                                }
+                            }
+                        });
+
+                return true;
+
+            }
         });
     }
 

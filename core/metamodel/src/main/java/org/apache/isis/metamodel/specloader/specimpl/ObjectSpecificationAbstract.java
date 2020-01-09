@@ -326,10 +326,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return this.introspectionState.compareTo(upTo) < 0;
     }
     
-    
     protected abstract void introspectTypeHierarchy();
     protected abstract void introspectMembers();
-
 
     protected void loadSpecOfSuperclass(final Class<?> superclass) {
         if (superclass == null) {

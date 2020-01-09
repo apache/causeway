@@ -60,5 +60,10 @@ implements MetaModelValidator, MetaModelContextAware {
     protected IsisConfiguration getConfiguration() {
         return metaModelContext.getConfiguration();
     }
-    
+
+    @Override
+    public String toString() {
+        return getClass().getName();
+    }
+
 }

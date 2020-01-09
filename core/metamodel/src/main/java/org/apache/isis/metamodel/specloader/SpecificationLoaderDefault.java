@@ -73,6 +73,7 @@ import org.apache.isis.metamodel.valuetypes.ValueTypeRegistry;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -118,7 +119,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     /**
      * We only ever mark the metamodel as fully introspected if in {@link #isFullIntrospect() full} introspection mode.
      */
-    @Getter
+    @Getter @Setter
     private boolean metamodelFullyIntrospected = false;
 
     @Inject
@@ -275,7 +276,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info("Metamodel created in " + (long)stopWatch.getMillis() + " ms.");
 
         if(isFullIntrospect()) {
-            metamodelFullyIntrospected = true;
+            setMetamodelFullyIntrospected(true);
         }
     }
     
@@ -291,7 +292,18 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val failures = new ValidationFailures();
         programmingModel.streamValidators()
         .map(MetaModelValidatorAbstract.class::cast)
-        .forEach(validator->validator.collectFailuresInto(failures));
+        .forEach(validator -> {
+            log.debug("Running validator: {}", validator);
+            try {
+                validator.collectFailuresInto(failures);
+            } catch (Throwable t) {
+                log.error(t);
+                throw t;
+            } finally {
+                log.debug("Done validator: {}", validator);
+            }
+        });
+        log.debug("Done");
         return failures;
     }
 
@@ -370,6 +382,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     public void revalidateIfNecessary() {
+        if(!isMetamodelFullyIntrospected()) {
+            return;
+        }
         if(!this.isisConfiguration.getReflector().getIntrospector().isValidateIncrementally()) {
             return;
         }
@@ -393,7 +408,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     
     @Override
     public void forEach(Consumer<ObjectSpecification> onSpec) {
-        val shouldRunConcurrent = isisConfiguration.getReflector().getIntrospector().isParallelize();
+        val shouldRunConcurrent = isisConfiguration.getReflector().getValidator().isParallelize();
         val vList = cache.getVList(); // vList is thread-safe
         if(shouldRunConcurrent) {
             vList.forEachParallel(onSpec);    

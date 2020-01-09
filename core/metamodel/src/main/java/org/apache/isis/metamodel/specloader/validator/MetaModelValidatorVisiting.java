@@ -29,6 +29,13 @@ import lombok.val;
 
 public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
+    @Override
+    public String toString() {
+        return "MetaModelValidatorVisiting{" +
+                "visitor=" + visitor +
+                '}';
+    }
+
     // -- INTERFACES
     
     @FunctionalInterface
@@ -87,18 +94,11 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
         val specLoader = (SpecificationLoaderDefault)super.getMetaModelContext().getSpecificationLoader();
         
         specLoader.forEach(spec->{
-
             if(! includeIf.test(spec)) {
                 return;
             }
-            
-            visitor.visit(spec, this);            
+            visitor.visit(spec, this);
         });
-        
-    }
-
-    private static boolean filter(ObjectSpecification spec) {
-        return spec.isManagedBean() || spec.getBeanSort().isUnknown();
     }
 
     private void summarize() {
