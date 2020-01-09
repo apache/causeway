@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.viewer.wicket.exceldownload.impl.ui.components;
+package org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

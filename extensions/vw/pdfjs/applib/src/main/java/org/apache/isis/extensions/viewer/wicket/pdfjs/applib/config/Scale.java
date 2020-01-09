@@ -1,4 +1,4 @@
-package org.wicketstuff.pdfjs;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config;
 
 import org.apache.wicket.util.lang.Objects;
 

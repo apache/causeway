@@ -15,7 +15,7 @@ import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.annotations.PdfJsViewer;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
 
 import lombok.val;
 

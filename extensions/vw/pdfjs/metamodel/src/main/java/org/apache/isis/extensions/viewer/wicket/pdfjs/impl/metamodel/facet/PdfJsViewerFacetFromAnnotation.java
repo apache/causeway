@@ -4,14 +4,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.wicketstuff.pdfjs.PdfJsConfig;
-import org.wicketstuff.pdfjs.Scale;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.annotations.PdfJsViewer;
-import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.spi.PdfJsViewerAdvisor;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
 
 public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
 

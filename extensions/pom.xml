@@ -64,17 +64,7 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload-applib</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload-metamodel</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload-impl</artifactId>
+				<artifactId>isis-extensions-exceldownload-ui</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
@@ -165,7 +155,7 @@
 
 		<module>vro/cors/impl</module>
 
-		<module>vw/exceldownload/impl</module>
+		<module>vw/exceldownload</module>
 		<module>vw/pdfjs</module>
 
 	</modules>

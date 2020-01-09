@@ -8,6 +8,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.util.lang.Args;
 
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
+
 /**
  * A panel for rendering PDF documents inline in the page
  */

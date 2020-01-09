@@ -91,7 +91,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-exceldownload-impl</artifactId>
+			<artifactId>isis-extensions-exceldownload-ui</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>

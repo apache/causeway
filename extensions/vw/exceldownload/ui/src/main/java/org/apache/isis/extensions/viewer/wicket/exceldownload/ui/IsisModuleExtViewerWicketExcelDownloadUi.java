@@ -16,17 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.viewer.wicket.exceldownload.impl.ui;
+package org.apache.isis.extensions.viewer.wicket.exceldownload.ui;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.viewer.wicket.exceldownload.impl.ui.components.CollectionContentsAsExcelFactory;
+import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory;
 
 @Configuration
 @Import({
         // @Component's
         CollectionContentsAsExcelFactory.class
 })
-public class IsisModuleExtExcelDownloadUi {
+public class IsisModuleExtViewerWicketExcelDownloadUi {
 }

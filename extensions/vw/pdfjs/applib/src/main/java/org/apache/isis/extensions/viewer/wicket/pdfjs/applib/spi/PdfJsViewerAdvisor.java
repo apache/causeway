@@ -1,8 +1,8 @@
-package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.spi;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi;
 
 import java.io.Serializable;
 
-import org.wicketstuff.pdfjs.Scale;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;

@@ -1,11 +1,11 @@
-package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.applib.annotations;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.wicketstuff.pdfjs.Scale;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 
 /**
  * An annotation that could be applied on a property or parameter
