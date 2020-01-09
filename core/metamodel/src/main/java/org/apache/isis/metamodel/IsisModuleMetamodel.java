@@ -45,6 +45,7 @@ import org.apache.isis.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.metamodel.specloader.ProgrammingModelServiceDefault;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
+import org.apache.isis.metamodel.valuetypes.ValueTypeProviderBuiltIn;
 import org.apache.isis.security.api.IsisModuleSecurityApi;
 
 @Configuration
@@ -61,6 +62,7 @@ import org.apache.isis.security.api.IsisModuleSecurityApi;
         // @Component's
         ProgrammingModelInitFilterDefault.class,
         ClassSubstitutorDefault.class,
+        ValueTypeProviderBuiltIn.class,
 
         // @Service's
         ObjectManagerDefault.class,
