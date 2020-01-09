@@ -36,7 +36,7 @@ import org.apache.isis.metamodel.spec.FreeStandingList;
 import lombok.NonNull;
 
 @Component
-@Named("isisMetaModel.ClassSubstitutorUnmodifiableCollections")
+@Named("isisMetaModel.ClassSubstitutorForCollections")
 @Order(OrderPrecedence.MIDPOINT + 1)
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
