@@ -3,7 +3,7 @@ base-uri
 | 
 |  If left unset (the default), then the RO viewer will use the {@link javax.ws.rs.core.UriInfo} injected using  @link javax.ws.rs.core.Context}) to figure out the base Uri (used to render `href</code>s).  +
  This will be correct much of the time, but will almost certainly be wrong if there is a reverse proxy.   +
- If set, eg `https://dev.myapp.com</code>, then this value will be used instead. 
+ If set, eg `https://dev.myapp.com/</code>, then this value will be used instead. 
 
 | isis.viewer.restfulobjects. +
 gsoc2013.legacy-param-details

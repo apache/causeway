@@ -69,6 +69,11 @@ no-params-only
 | 
 
 | isis.reflector.validator. +
+parallelize
+|  true
+|  Whether to perform metamodel validation in parallel.
+
+| isis.reflector.validator. +
 mixins-only
 |  true
 | 

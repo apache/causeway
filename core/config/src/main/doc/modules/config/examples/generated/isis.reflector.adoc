@@ -18,7 +18,7 @@ mode
 | isis.reflector.introspector. +
 parallelize
 |  true
-|  Whether to perform introspection and metamodel validation in parallel.
+|  Whether to perform introspection in parallel.
 
 | isis.reflector.introspector. +
 validate-incrementally

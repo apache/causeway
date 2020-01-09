@@ -8,8 +8,7 @@
 
 | isis.locale
 | 
-|  Optional: set to override {@link Locale#getDefault()}  +
-{@code null} is allowed
+|  Set to override {@link Locale#getDefault()}
 
 | isis.objects.editing
 | 

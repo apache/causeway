@@ -67,7 +67,7 @@ public final class CommonDtoUtils {
     public static final Function<ParamDto, ValueType> PARAM_DTO_TO_TYPE = ParamDto::getType;
 
     // -- asValueType
-    private final static Map<Class<?>, ValueType> valueTypeByClass =
+    public final static Map<Class<?>, ValueType> valueTypeByClass =
             _Maps.unmodifiableEntries(
                     entry(String.class, ValueType.STRING),
                     entry(byte.class, ValueType.BYTE),
