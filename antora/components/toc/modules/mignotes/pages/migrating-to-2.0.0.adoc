@@ -1,5 +1,7 @@
 = Migration Notes
 
+WARNING: this is work-in-progress.
+
 //dummy edit
 
 Search also for: "TODO: v2: " in the .adoc documentation.
@@ -26,7 +28,7 @@ To make this work we introduce following components:
 
 A first prototypical implementation of this mechanism also introduces a programming model extension, which for now only works for 'Markup' properties.
 
-==== The Subscribing ViewModel 
+==== The Subscribing ViewModel
 
 [source,java]
 ----
@@ -72,9 +74,9 @@ class Submitter {
 
 	@Action
 	public void startBackgroundTask() {
-	    
+
 		eventStreamService.submit(new BackgroundTask());
-				
+
 	}
 }
 ----
@@ -91,7 +93,7 @@ The number of required type-parameters for 'BuilderScripts' has been reduced:
 [source,java]
 ----
 @Accessors(chain = true)
-public class SimpleObjectBuilder 
+public class SimpleObjectBuilder
 extends BuilderScriptAbstract<SimpleObject> { // <= only 1 type param
 
     @Getter
@@ -101,12 +103,12 @@ extends BuilderScriptAbstract<SimpleObject> { // <= only 1 type param
 }
 
 @AllArgsConstructor
-public enum SimpleObject_persona 
+public enum SimpleObject_persona
 implements PersonaWithBuilderScript<SimpleObjectBuilder> /* <= only 1 type param */ ... {
 
     FOO("Foo"),
     BAR("Bar"),
-	
+
 	...
 
     public SimpleObjectBuilder builder() {
@@ -183,7 +185,7 @@ Note: Currently does not implement a Table Tree View but just a Tree View.
 
 public API is:
 
-* `TreeAdapter` (provides the parent/child relationship information between pojos to derive a tree-structure) 
+* `TreeAdapter` (provides the parent/child relationship information between pojos to derive a tree-structure)
 * `TreeNode` (with `LazyTreeNode` as the default implementation)
 * `TreePath` (represents a coordinate-system to navigate any tree-structure)
 
@@ -192,7 +194,7 @@ public API is:
 public interface TreeAdapter<T> {
 
     Optional<T> parentOf(T value); // parent tree-node (pojo) of given value tree-node
-    
+
     int childCountOf(T value); // number of child tree-nodes of given value tree-node
 
     Stream<T> childrenOf(T value); // stream of child tree-nodes of given value tree-node
@@ -322,9 +324,9 @@ And finally the ViewModel that provides the tree for rendering:
 ----
 @ViewModel
 public class TreeDemo extends DemoStub {
-	
+
 	/**
-	 * @return the demo tree view model as a property  
+	 * @return the demo tree view model as a property
 	 */
 	public TreeNode<FileNode> getFileSystemTree() {
     		val root = FileNodeFactory.defaultRoot();
@@ -332,9 +334,9 @@ public class TreeDemo extends DemoStub {
     		tree.expand(TreePath.of(0)); // expand the root node
     		return tree;
 	}
-        
+
     }
-	
+
 }
 ----
 
@@ -388,7 +390,7 @@ We also introduced a SPI to customize this behavior. This issue is tracked by ht
  ** IsisSessionFilter is now part of the RestEasy WebModule, no longer needs to be declared in web.xml
  ** LogOnExceptionLogger, no longer needs to be declared in web.xml
  * web.xml apart from the new WebContextListener we introduce new web-specific (optional) config values, nothing else needs to configured here:
- 
+
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
@@ -418,7 +420,7 @@ We also introduced a SPI to customize this behavior. This issue is tracked by ht
 		<param-name>isis.viewer.wicket.app</param-name>
 		<param-value>domainapp.webapp.MyDomainApplication</param-value>
 	</context-param>
-	
+
 	<!-- optional for overriding default 'restful' -->
 	<context-param>
 		<param-name>isis.viewer.restfulobjects.basePath</param-name>
@@ -431,7 +433,7 @@ We also introduced a SPI to customize this behavior. This issue is tracked by ht
 === Module Shiro
 
 module 'shiro' moved from `/core` to `/core/plugins` and its maven artifactId changed, to be in line with the other core-plugins:
- 
+
 [source,xml]
 ----
 <dependency>
@@ -440,14 +442,14 @@ module 'shiro' moved from `/core` to `/core/plugins` and its maven artifactId ch
 </dependency>
 ----
 
-=== ObjectAdapter 
+=== ObjectAdapter
 
 ObjectAdapter is no longer holding a reference to an ObjectSpecification for the element type of collections. ObjectAdapter#getElementSpecification() moved to ObjectSpecification#getElementSpecification().
- 
+
 === JAXB XmlAdapters (ISIS-1972)
 
 We do now provide JAXB XmlAdapters for Java built-in temporal types in 'applib': org.apache.isis.applib.adapters.JaxbAdapters
- 
+
 === Wicket-Viewer
 
 Instead of browser built-in tooltip rendering, the framework now provides tooltips using Javascript and CSS, currently with following stylesheet defaults:
@@ -462,14 +464,14 @@ Instead of browser built-in tooltip rendering, the framework now provides toolti
     border-radius: 4px;
     font-size: 12px;
     box-shadow: 0 0 7px black;
- 
+
     position: absolute;
     z-index: 9999;
 }
 
-span.isis-component-with-tooltip, 
-label.isis-component-with-tooltip, 
-.isis-component-with-tooltip label, 
+span.isis-component-with-tooltip,
+label.isis-component-with-tooltip,
+.isis-component-with-tooltip label,
 strong.isis-component-with-tooltip  {
    text-decoration: underline dashed;
 }
@@ -480,25 +482,25 @@ strong.isis-component-with-tooltip  {
 === REST Viewer
 
 The content negotiation parameter 'suppress' does now allow more control on which '$$..' properties one wants to suppress. New options are
- 
+
 [source,java]
 ----
 public static enum SuppressionType {
     /** suppress '$$RO', RO Spec representation*/
     RO,
-    
+
     /** suppress '$$href', hyperlink to the representation*/
     HREF,
-    
+
     /** suppress '$$instanceId', instance id of the domain object*/
     ID,
 
     /** suppress '$$domainType', object spec of the domain object */
-    DOMAIN_TYPE,    
+    DOMAIN_TYPE,
 
     /** suppress '$$title', title of the domain object*/
     TITLE,
-    
+
     /** suppress all '$$...' entries*/
     ALL
 }
@@ -554,7 +556,7 @@ clientConfig.setRestfulAuthPassword("pass");
 RestfulClient client = RestfulClient.ofConfig(clientConfig);
 
 Builder request = client.request(
-				"services/myService/actions/lookupMyObjectById/invoke", 
+				"services/myService/actions/lookupMyObjectById/invoke",
 				SuppressionType.setOf(SuppressionType.RO));
 
 Entity<String> args = client.arguments()
@@ -586,7 +588,7 @@ clientConfig.setRestfulAuthPassword("pass");
 RestfulClient client = RestfulClient.ofConfig(clientConfig);
 
 Builder request = client.request(
-                "services/myService/actions/lookupMyObjectById/invoke", 
+                "services/myService/actions/lookupMyObjectById/invoke",
                 SuppressionType.setOf(SuppressionType.RO));
 
 Entity<String> args = client.arguments()
@@ -597,9 +599,9 @@ Future<Response> asyncResponse = request
         .async()
         .post(args);
 
-CompletableFuture<ResponseDigest<MyObject>> digestFuture = 
+CompletableFuture<ResponseDigest<MyObject>> digestFuture =
                 client.digest(asyncResponse, MyObject.class);
-        
+
 ResponseDigest<MyObject> digest = digestFuture.get(); // blocking
 
 if(digest.isSuccess()) {
@@ -615,7 +617,7 @@ Support for concurrent computation within an open session utilizing a ForkJoinPo
 
 [source,java]
 ----
-Supplier<T> computation = ()->doSomeComputation(); 
+Supplier<T> computation = ()->doSomeComputation();
 CompletableFuture<T> completableFuture = IsisContext.compute(computation);
 
 T result = completableFuture.get(); // blocking call
@@ -711,44 +713,44 @@ If used with JAXB View Models, you need to specify specific XmlAdapters as provi
 public class TemporalDemo {
 
     // -- DATE ONLY (LOCAL TIME)
-    
+
     @XmlElement @XmlJavaTypeAdapter(SqlDateAdapter.class)
     @Getter @Setter private java.sql.Date javaSqlDate;
-    
+
     @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
     @Getter @Setter private LocalDate javaLocalDate;
-    
+
     // -- DATE AND TIME (LOCAL TIME)
-    
+
     @XmlElement @XmlJavaTypeAdapter(DateAdapter.class)
     @Getter @Setter private Date javaUtilDate;
-    
+
     @XmlElement @XmlJavaTypeAdapter(SqlTimestampAdapter.class)
     @Getter @Setter private java.sql.Timestamp javaSqlTimestamp;
-        
+
     @XmlElement @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @Getter @Setter private LocalDateTime javaLocalDateTime;
-    
+
     // -- DATE AND TIME (WITH TIMEZONE OFFSET)
 
     @XmlElement @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
     @Getter @Setter private OffsetDateTime javaOffsetDateTime;
-    
+
     // --
-    
+
     public void initDefaults() {
-        
+
         log.info("TemporalDemo::initDefaults");
-        
+
         javaUtilDate = new Date();
         javaSqlDate = new java.sql.Date(System.currentTimeMillis());
         javaSqlTimestamp = new java.sql.Timestamp(System.currentTimeMillis());
-        
+
         javaLocalDate = LocalDate.now();
         javaLocalDateTime = LocalDateTime.now();
         javaOffsetDateTime = OffsetDateTime.now();
     }
-    
+
 }
 ----
 

@@ -7,7 +7,7 @@ Consult these notes when migrating to new versions of the framework.
 
 
 
-
+include::migrating-to-2.0.0.adoc[leveloffset=+1]
 include::mn-1.16.0-to-2.0.0-M1.adoc[leveloffset=+1]
 include::mn-1.16.0-to-1.17.0.adoc[leveloffset=+1]
 include::mn-1.15.0-to-1.16.0.adoc[leveloffset=+1]
