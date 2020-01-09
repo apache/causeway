@@ -16,30 +16,18 @@
 
 	<parent>
 		<groupId>org.apache.isis.testing</groupId>
-		<artifactId>isis-testing-hsqldbmgr</artifactId>
+		<artifactId>isis-testing</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-testing-hsqldbmgr-ui</artifactId>
-	<name>Apache Isis Testing - HSQLDB Manager</name>
+	<groupId>isis-testing</groupId>
+	<artifactId>isis-testing-hsqldbmgr</artifactId>
+	<name>Apache Isis Testing - HSQLDB Manager (parent)</name>
+	<description>Menu and configuration to open up HSQLDB Manager</description>
+	<packaging>pom</packaging>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.testing.hsqldbmgr.ui</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/testing/hsqldbmgr/ui</git-plugin.propertiesDir>
-	</properties>
-
-	<dependencies>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-webapp</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-		</dependency>
-
-	</dependencies>
+	<modules>
+		<module>ui</module>
+	</modules>
 
 </project>

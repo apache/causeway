@@ -75,7 +75,7 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-hsqldbmgr-dom</artifactId>
+				<artifactId>isis-testing-hsqldbmgr-ui</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
@@ -123,7 +123,7 @@
                 <module>fakedata/integtests</module>
         -->
 		<module>h2console</module>
-		<module>hsqldbmgr/ui</module>
+		<module>hsqldbmgr</module>
 		<module>fixtures</module>
 		<module>specsupport</module>
 		<module>unittestsupport/impl</module>
