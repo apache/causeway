@@ -83,6 +83,18 @@
         	<artifactId>isis-applib</artifactId>
         	<type>test-jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.1.0.Final</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.1.0.Final</version>
+            <scope>compile</scope>
+        </dependency>
 
 
     </dependencies>
