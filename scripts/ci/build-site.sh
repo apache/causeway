@@ -23,7 +23,7 @@ if [ "$CHECK_FOR_STALE_EXAMPLES" != "skip" ]; then
   fi
 fi
 
-bash $SCRIPT_DIR/_adoc-antora.sh ${PROJECT_ROOT_PATH}/antora/playbooks/$*
+bash $SCRIPT_DIR/_adoc-antora.sh $*
 
 # add a marker, that tells github not to use jekyll on the github pages folder
 touch ${PROJECT_ROOT_PATH}/antora/target/site/.nojekyll

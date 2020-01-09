@@ -49,3 +49,4 @@ rebel.xml
 
 .flattened-pom.xml
 
+/site*.yml

@@ -1,24 +1,26 @@
 #!/bin/bash
 
-PLAYBOOK=$1
+PLAYBOOK_FILE=$1
 
-SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
-  PROJECT_ROOT_PATH=$(cd $SCRIPT_DIR/../.. ; pwd)
+  echo "\$PROJECT_ROOT_PATH must be set" >&2
+  exit 1
 fi
 
-if [ -z "$PLAYBOOK" ]; then
-  PLAYBOOK=site.yml
+if [ -z "$PLAYBOOK_FILE" ]; then
+  PLAYBOOK_FILE=antora/playbooks/site.yml
 fi
 
-if [ ! -f "$PLAYBOOK" ]; then
-  PLAYBOOK=antora/playbooks/site-$PLAYBOOK.yml
-fi
-if [ ! -f "$PLAYBOOK" ]; then
-  PLAYBOOK=site.yml
+if [ ! -f "$PLAYBOOK_FILE" ]; then
+  echo "Playbook file '$PLAYBOOK_FILE' does not exist" >&2
+  exit 1
 fi
 
-echo "\$PLAYBOOK = $PLAYBOOK"
+echo "\$PLAYBOOK_FILE = $PLAYBOOK_FILE"
+
+# temporarily copy the file down to the root.
+cp $PLAYBOOK_FILE $PROJECT_ROOT_PATH
+PLAYBOOK=$(basename $PLAYBOOK_FILE)
 
 if [ -z "$REVISION" ]; then
   if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
@@ -41,3 +43,5 @@ echo "running antora ..."
 echo "$ANTORA_CMD --stacktrace $PLAYBOOK"
 $ANTORA_CMD --stacktrace $PLAYBOOK
 
+# clean up
+rm $PLAYBOOK
