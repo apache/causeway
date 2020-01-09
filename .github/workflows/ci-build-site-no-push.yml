@@ -17,6 +17,7 @@ jobs:
       BASELINE: 2.0.0-M2
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
+      ANTORA_PLAYBOOKS_PATH: ${{ github.workspace }}/antora/playbooks
       
       # used for printing
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
@@ -40,11 +41,12 @@ jobs:
       run: |
         echo REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $GITHUB_SHA | cut -c1-8) > $SHARED_VARS_FILE
         echo ==============  ENV  =================
-        echo BASELINE         \: $BASELINE
-        echo TIMESTAMP        \: $TIMESTAMP
-        echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
-        echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
-        echo REVISION         \: $REVISION
+        echo BASELINE               \: $BASELINE
+        echo TIMESTAMP              \: $TIMESTAMP
+        echo PROJECT_ROOT_PATH      \: $PROJECT_ROOT_PATH
+        echo CI_SCRIPTS_PATH        \: $CI_SCRIPTS_PATH
+        echo ANTORA_PLAYBOOKS_PATH  \: $ANTORA_PLAYBOOKS_PATH
+        echo REVISION               \: $REVISION
         cat $SHARED_VARS_FILE
         echo ======================================
     
@@ -80,6 +82,6 @@ jobs:
     - name: Build Apache Isis Site
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
-      run: bash -x $CI_SCRIPTS_PATH/build-site.sh site.yml
+      run: bash -x $CI_SCRIPTS_PATH/build-site.sh $ANTORA_PLAYBOOKS_PATH/site.yml
       env:
         REVISION: ${{ steps.revision.outputs.revision }}
