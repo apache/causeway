@@ -19,6 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.objectspecid.classname;
 
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -34,8 +35,8 @@ import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -49,10 +50,16 @@ extends FacetFactoryAbstract
 implements MetaModelRefiner, ObjectSpecIdFacetFactory {
 
     @Inject
-    private ClassSubstitutor classSubstitutor = new ClassSubstitutorDefault(); // default for testing purposes only, overwritten in prod
+    private ClassSubstitutorRegistry classSubstitutorRegistry;
+
 
     public ObjectSpecIdFacetDerivedFromClassNameFactory() {
         super(FeatureType.OBJECTS_ONLY);
+    }
+    // default for testing purposes only, overwritten in prod
+    public ObjectSpecIdFacetDerivedFromClassNameFactory(ClassSubstitutorRegistry classSubstitutorRegistry) {
+        this();
+        this.classSubstitutorRegistry = classSubstitutorRegistry;
     }
 
     @Override
@@ -63,7 +70,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             return;
         }
         final Class<?> cls = processClassContext.getCls();
-        final Class<?> substitutedClass = classSubstitutor.getClass(cls);
+        final Class<?> substitutedClass = classSubstitutorRegistry.getClass(cls);
         if(substitutedClass == null) {
             return;
         }

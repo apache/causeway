@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.specloader;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -36,7 +37,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Timing;
@@ -54,6 +54,8 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -65,6 +67,8 @@ import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDef
 import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.valuetypes.ValueTypeProviderDefault;
+import org.apache.isis.metamodel.valuetypes.ValueTypeRegistry;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -99,7 +103,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final ServiceRegistry serviceRegistry;
     private final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
-    private final ClassSubstitutor classSubstitutor = new ClassSubstitutorDefault();
+    private final ClassSubstitutorRegistry classSubstitutorRegistry;
+    private final ValueTypeRegistry valueTypeRegistry;
 
     private final ProgrammingModel programmingModel;
     private final PostProcessor postProcessor;
@@ -108,8 +113,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private FacetProcessor facetProcessor;
 
-    private final SpecificationCacheDefault<ObjectSpecification> cache = 
-            new SpecificationCacheDefault<>();
+    private final SpecificationCacheDefault<ObjectSpecification> cache = new SpecificationCacheDefault<>();
 
     /**
      * We only ever mark the metamodel as fully introspected if in {@link #isFullIntrospect() full} introspection mode.
@@ -123,13 +127,15 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final IsisConfiguration isisConfiguration,
             final IsisSystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
-            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
+            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder,
+            final ValueTypeRegistry valueTypeRegistry,
+            final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this(
                 programmingModelService.getProgrammingModel(),
                 isisConfiguration,
                 isisSystemEnvironment,
                 serviceRegistry,
-                isisBeanTypeRegistryHolder);
+                isisBeanTypeRegistryHolder, valueTypeRegistry, classSubstitutorRegistry);
     }
 
     SpecificationLoaderDefault(
@@ -137,13 +143,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final IsisConfiguration isisConfiguration,
             final IsisSystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
-            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
+            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder,
+            final ValueTypeRegistry valueTypeRegistry,
+            final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this.programmingModel = programmingModel;
         this.postProcessor = new PostProcessor(programmingModel);
         this.isisConfiguration = isisConfiguration;
         this.isisSystemEnvironment = isisSystemEnvironment;
         this.serviceRegistry = serviceRegistry;
         this.isisBeanTypeRegistryHolder = isisBeanTypeRegistryHolder;
+        this.valueTypeRegistry = valueTypeRegistry;
+        this.classSubstitutorRegistry = classSubstitutorRegistry;
     }
 
     /** JUnit Test Support */
@@ -154,7 +164,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final ProgrammingModel programmingModel,
             final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
 
-        val instance = new SpecificationLoaderDefault(programmingModel, isisConfiguration, isisSystemEnvironment, serviceRegistry, isisBeanTypeRegistryHolder);
+        val instance = new SpecificationLoaderDefault(
+                programmingModel, isisConfiguration, isisSystemEnvironment,
+                serviceRegistry, isisBeanTypeRegistryHolder,
+                new ValueTypeRegistry(Collections.singletonList(new ValueTypeProviderDefault())),
+                new ClassSubstitutorRegistry(Collections.unmodifiableList(Arrays.asList(new ClassSubstitutorDefault(), new ClassSubstitutorForCollections()))));
 
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         instance.facetProcessor = new FacetProcessor(programmingModel, instance.metaModelContext);
@@ -192,9 +206,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val domainServiceSpecs = _Lists.<ObjectSpecification>newArrayList();
         val domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
 
-        CommonDtoUtils.VALUE_TYPES.forEach(type->{
-            val spec = loadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
-            if(spec!=null) scannedSpecs.add(spec);
+        valueTypeRegistry.classes().forEach(clazz -> {
+            val spec = loadSpecification(clazz, IntrospectionState.NOT_INTROSPECTED);
+            if(spec!=null) {
+                scannedSpecs.add(spec);
+            }
         });
 
         log.info(" - categorizing types from class-path scan");
@@ -315,7 +331,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     public boolean loadSpecifications(Class<?>... domainTypes) {
         // ensure that all types are loadable
         if (Arrays.stream(domainTypes)
-                .map(classSubstitutor::getClass)
+                .map(classSubstitutorRegistry::getClass)
                 .anyMatch(Objects::isNull)) {
             return false;
         }
@@ -334,7 +350,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         requires(upTo, "upTo");
 
-        val substitutedType = classSubstitutor.getClass(type);
+        val substitutedType = classSubstitutorRegistry.getClass(type);
         if (substitutedType == null) {
             return null;
         }
@@ -437,7 +453,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                             facetProcessor,
                             managedBeanNameIfAny.orElse(null),
                             postProcessor,
-                            classSubstitutor);
+                            classSubstitutorRegistry);
         }
 
         return objectSpec;
@@ -474,7 +490,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private void invalidateCache(final Class<?> cls) {
 
-        val substitutedType = classSubstitutor.getClass(cls);
+        val substitutedType = classSubstitutorRegistry.getClass(cls);
 
         ObjectSpecification spec = 
                 loadSpecification(substitutedType, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);

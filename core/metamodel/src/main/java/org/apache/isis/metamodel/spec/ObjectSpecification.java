@@ -113,7 +113,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * <p>
      * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
      * If none has been specified then will default to the fully qualified class name (with
-     * {@link ClassSubstitutor class name substituted} if necessary to allow for runtime bytecode enhancement.
+     * {@link org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime bytecode enhancement.
      *
      * <p>
      * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecIdO(ObjectSpecId)}.

@@ -30,6 +30,8 @@ import org.apache.isis.metamodel.services.ServiceInjectorDefault;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureFactory;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.services.events.MetamodelEventSupport_Spring;
 import org.apache.isis.metamodel.services.exceprecog.ExceptionRecognizerDocDefault;
@@ -45,7 +47,9 @@ import org.apache.isis.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.metamodel.specloader.ProgrammingModelServiceDefault;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.metamodel.valuetypes.ValueTypeProviderBuiltIn;
+import org.apache.isis.metamodel.valuetypes.ValueTypeProviderDefault;
+import org.apache.isis.metamodel.valuetypes.ValueTypeProviderForCollections;
+import org.apache.isis.metamodel.valuetypes.ValueTypeRegistry;
 import org.apache.isis.security.api.IsisModuleSecurityApi;
 
 @Configuration
@@ -62,7 +66,11 @@ import org.apache.isis.security.api.IsisModuleSecurityApi;
         // @Component's
         ProgrammingModelInitFilterDefault.class,
         ClassSubstitutorDefault.class,
-        ValueTypeProviderBuiltIn.class,
+        ClassSubstitutorForCollections.class,
+        ClassSubstitutorRegistry.class,
+        ValueTypeProviderDefault.class,
+        ValueTypeProviderForCollections.class,
+        ValueTypeRegistry.class,
 
         // @Service's
         ObjectManagerDefault.class,

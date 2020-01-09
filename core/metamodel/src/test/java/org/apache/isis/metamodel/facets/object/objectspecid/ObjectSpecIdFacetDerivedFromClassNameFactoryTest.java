@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facets.object.objectspecid;
 
+import java.util.Collections;
+
 import org.datanucleus.testing.dom.CustomerAsProxiedByDataNucleus;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +34,8 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
 import org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -40,7 +44,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new ObjectSpecIdFacetDerivedFromClassNameFactory();
+        facetFactory = new ObjectSpecIdFacetDerivedFromClassNameFactory(new ClassSubstitutorRegistry(Collections.singletonList( new ClassSubstitutorDefault())));
     }
 
     public static class Customer {

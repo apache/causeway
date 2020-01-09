@@ -31,7 +31,7 @@ import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
 public class JdoDiscriminatorAnnotationFacetFactory
@@ -39,7 +39,7 @@ extends FacetFactoryAbstract
 implements ObjectSpecIdFacetFactory {
 
     @Inject
-    private ClassSubstitutor classSubstitutor;
+    private ClassSubstitutorRegistry classSubstitutorRegistry;
 
     public JdoDiscriminatorAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -66,7 +66,7 @@ implements ObjectSpecIdFacetFactory {
             facet = new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(
                     annotationValue, facetHolder);
         } else {
-            final Class<?> substitutedClass = classSubstitutor.getClass(cls);
+            final Class<?> substitutedClass = classSubstitutorRegistry.getClass(cls);
             facet = substitutedClass != null
                         ? new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder)
                         : null;

@@ -94,7 +94,7 @@ public interface SpecificationLoader {
      *
      * <p>
      * It is possible for this method to return <tt>null</tt>, for example if
-     * the configured {@link ClassSubstitutor} has filtered out the class.
+     * any of the configured {@link ClassSubstitutor}s has filtered out the class.
      * 
      * @return {@code null} if {@code domainType==null}, or if the type should be ignored.
      */

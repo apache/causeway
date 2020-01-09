@@ -24,5 +24,5 @@ package org.apache.isis.metamodel.services.classsubstitutor;
  */
 public interface ClassSubstitutor {
 
-    Class<?> getClass(Class<?> type);
+    Class<?> getClass(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls);
 }

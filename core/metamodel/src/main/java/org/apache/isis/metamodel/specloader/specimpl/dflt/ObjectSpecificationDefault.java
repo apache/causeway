@@ -33,8 +33,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.context.MetaModelContext;
@@ -53,7 +51,7 @@ import org.apache.isis.metamodel.facets.object.plural.inferred.PluralFacetInferr
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.facets.object.wizard.WizardFacet;
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.metamodel.spec.ActionType;
 import org.apache.isis.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -93,7 +91,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private Map<Method, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
-    private final ClassSubstitutor classSubstitutor;
+    private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
 
     /**
@@ -107,15 +105,15 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final FacetProcessor facetProcessor,
             final String nameIfIsManagedBean,
             final PostProcessor postProcessor,
-            final ClassSubstitutor classSubstitutor) {
+            final ClassSubstitutorRegistry classSubstitutorRegistry) {
         
         super(correspondingClass, determineShortName(correspondingClass), facetProcessor, postProcessor);
 
         setMetaModelContext(metaModelContext);
 
         this.nameIfIsManagedBean = nameIfIsManagedBean;
-        this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutor);
-        this.classSubstitutor = classSubstitutor;
+        this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
+        this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         facetProcessor.processObjectSpecId(correspondingClass, this);
         
@@ -165,7 +163,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
         final List<ObjectSpecification> interfaceSpecList = _Lists.newArrayList();
         for (val interfaceType : interfaceTypes) {
-            val substitutedInterfaceType = classSubstitutor.getClass(interfaceType);
+            val substitutedInterfaceType = classSubstitutorRegistry.getClass(interfaceType);
             if (substitutedInterfaceType != null) {
                 val interfaceSpec = getSpecificationLoader().loadSpecification(substitutedInterfaceType);
                 interfaceSpecList.add(interfaceSpec);

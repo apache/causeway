@@ -34,7 +34,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
     @Override
     public Class<?> getClass(final Class<?> cls) {
 
-        if (cls == null) {
+        if(cls == null) {
             return null;
         }
 
@@ -59,6 +59,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
             return superclass;
         }
         if (ClassUtil.directlyImplements(cls, ProxyEnhanced.class)) {
+            // REVIEW: arguably this should now go back to the ClassSubstitorRegistry
             return getClass(cls.getSuperclass());
         }
 

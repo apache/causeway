@@ -52,7 +52,7 @@ import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodReturn;
@@ -139,7 +139,7 @@ public class FacetedMethodsBuilder {
 
     private final FacetProcessor facetProcessor;
 
-    private final ClassSubstitutor classSubstitutor;
+    private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
     private final SpecificationLoader specificationLoader;
 
@@ -153,14 +153,14 @@ public class FacetedMethodsBuilder {
     public FacetedMethodsBuilder(
             final ObjectSpecificationAbstract inspectedTypeSpec,
             final FacetProcessor facetProcessor,
-            final ClassSubstitutor classSubstitutor) {
+            final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         if (log.isDebugEnabled()) {
             log.debug("creating JavaIntrospector for {}", inspectedTypeSpec.getFullIdentifier());
         }
 
         this.facetProcessor = facetProcessor;
-        this.classSubstitutor = classSubstitutor;
+        this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         val mmContext = inspectedTypeSpec.getMetaModelContext();
 
@@ -315,7 +315,7 @@ public class FacetedMethodsBuilder {
             facetedMethod.setType(elementType);
 
             // skip if class substitutor says so.
-            if (classSubstitutor.getClass(elementType) == null) {
+            if (classSubstitutorRegistry.getClass(elementType) == null) {
                 continue;
             }
 
@@ -333,7 +333,7 @@ public class FacetedMethodsBuilder {
             final Class<?> returnType = accessorMethod.getReturnType();
 
             // skip if class strategy says so.
-            if (classSubstitutor.getClass(returnType) == null) {
+            if (classSubstitutorRegistry.getClass(returnType) == null) {
                 continue;
             }
 
