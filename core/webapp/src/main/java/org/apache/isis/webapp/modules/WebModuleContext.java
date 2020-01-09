@@ -32,7 +32,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer.ServletContextResource;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -52,7 +51,7 @@ public class WebModuleContext {
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
 
-    @NonNull @Getter private final ServletContextResource servletContextResource;
+    @NonNull @Getter private final ServletContext servletContext;
     @NonNull @Getter private final IsisConfiguration configuration;
     @NonNull @Getter private final ServiceRegistry serviceRegistry;
     
@@ -115,7 +114,7 @@ public class WebModuleContext {
 
     public void init() {
 
-        val event = new ServletContextEvent(servletContextResource.getServletContextOneShot());
+        val event = new ServletContextEvent(servletContext);
 
         webModules.stream()
         .filter(module->module.isApplicable(this)) // filter those WebModules that are applicable

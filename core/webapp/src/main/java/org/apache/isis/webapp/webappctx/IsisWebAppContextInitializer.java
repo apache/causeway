@@ -18,41 +18,89 @@
  */
 package org.apache.isis.webapp.webappctx;
 
-import javax.inject.Singleton;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.webapp.modules.WebModule;
+import org.apache.isis.webapp.modules.WebModuleContext;
+
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Configuration @Log4j2
+/**
+ * 
+ * Introduced to render web.xml Filter/Listener/Servlet configurations obsolete.
+ * <p> 
+ * Acts as the single application entry-point for setting up the 
+ * ServletContext programmatically.
+ * </p><p> 
+ * Installs {@link WebModule}s on the ServletContext. 
+ * </p>   
+ *  
+ * @since 2.0
+ *
+ */
+@Log4j2
 public class IsisWebAppContextInitializer implements ServletContextInitializer {
+    
+    @Autowired private ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
+    @Autowired private IsisConfiguration isisConfiguration;
+    @Autowired private WebAppContextPath webAppContextPath;
 
-    // holder of ServletContext with one-shot access 
-    public static class ServletContextResource {
-        private ServletContext servletContext;
-        public ServletContext getServletContextOneShot() {
-            try {
-                return servletContext;    
-            } finally {
-                servletContext = null;
-            }
-        }
-    }
-    
-    @Bean @Singleton
-    public ServletContextResource getServletContextResource() {
-        return servletContextResource;
-    }
-    
-    private final ServletContextResource servletContextResource = new ServletContextResource(); 
+    // -- INTERFACE IMPLEMENTATION
     
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        log.info("Memoizing the ServletContext.");
-        servletContextResource.servletContext = servletContext;
+
+        if(!isIsisProvisioned()) {
+            log.error("skipping initialization, Spring should already have provisioned all configured Beans");
+            return;
+        }
+        
+        //[ahuber] set the ServletContext initializing thread as preliminary default until overridden by
+        // IsisWicketApplication#init() or others that better know what ClassLoader to use as application default.
+        _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
+
+        val contextPath = servletContext.getContextPath();
+
+        log.info("=== PHASE 1 === Setting up ServletContext parameters, contextPath = " + contextPath);
+
+        webAppContextPath.setContextPath(contextPath);
+
+        val webModuleContext = new WebModuleContext(servletContext, isisConfiguration, serviceRegistry);
+        webModuleContext.prepare();
+
+        _Context.putSingleton(WebModuleContext.class, webModuleContext);
+
+        log.info("=== PHASE 2 === Initializing the ServletContext");
+
+        webModuleContext.init();	
+        log.info("=== DONE === ServletContext initialized.");
+
     }
+
+    //@Override
+    public void contextDestroyed(ServletContextEvent event) {
+        val webModuleContext = _Context.getIfAny(WebModuleContext.class);
+        if(webModuleContext!=null) {
+            webModuleContext.shutdown(event);
+        }
+    }
+
+    // -- HELPER
+
+    private boolean isIsisProvisioned() {
+        return serviceRegistry!=null;
+    }
+
+
+
 }

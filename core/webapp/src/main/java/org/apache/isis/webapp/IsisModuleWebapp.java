@@ -26,15 +26,11 @@ import org.apache.isis.webapp.health.HealthIndicatorUsingHealthCheckService;
 import org.apache.isis.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.isis.webapp.modules.templresources.WebModuleTemplateResources;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer;
-import org.apache.isis.webapp.webappctx.IsisWebAppContextListener;
 
 @Configuration
 @Import({
         // modules
         IsisModuleRuntime.class,
-
-        // @Configuration's
-        IsisWebAppContextInitializer.class,
 
         // @Service's
         WebModuleLogOnExceptionLogger.class,
@@ -44,7 +40,7 @@ import org.apache.isis.webapp.webappctx.IsisWebAppContextListener;
         HealthIndicatorUsingHealthCheckService.class,
 
         // (not annotated)
-        IsisWebAppContextListener.class,
+        IsisWebAppContextInitializer.class,
 
 })
 public class IsisModuleWebapp {

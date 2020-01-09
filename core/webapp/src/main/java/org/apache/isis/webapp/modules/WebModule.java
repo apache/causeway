@@ -32,14 +32,14 @@ import javax.servlet.annotation.WebListener;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.webapp.webappctx.IsisWebAppContextListener;
+import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer;
 
 import lombok.val;
 
 /**
  * Introduced to render web.xml Filter/Listener/Servlet configurations obsolete.
  * <p>
- * WebModule instances are used by the {@link IsisWebAppContextListener} to setup 
+ * WebModule instances are used by the {@link IsisWebAppContextInitializer} to setup 
  * the ServletContext programmatically.
  * </p>
  * <p>
