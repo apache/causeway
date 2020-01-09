@@ -35,7 +35,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.internal.base._Blackhole;
@@ -96,18 +95,19 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
 
-    @Inject private ProgrammingModelService programmingModelService;
-    @Inject private IsisConfiguration isisConfiguration;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
-    @Inject private ServiceRegistry serviceRegistry;
-    @Inject private IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
-    @Inject private ClassSubstitutor classSubstitutor = new ClassSubstitutorDefault();  // default for testing purposes only, overwritten in prod
+    private final IsisConfiguration isisConfiguration;
+    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final ServiceRegistry serviceRegistry;
+    private final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
+    private final ClassSubstitutor classSubstitutor = new ClassSubstitutorDefault();
 
-    private ProgrammingModel programmingModel;
-    private FacetProcessor facetProcessor;
-    private PostProcessor postProcessor;
+    private final ProgrammingModel programmingModel;
+    private final PostProcessor postProcessor;
+
     @Getter private MetaModelContext metaModelContext; // cannot inject, would cause circular dependency
-    
+
+    private FacetProcessor facetProcessor;
+
     private final SpecificationCacheDefault<ObjectSpecification> cache = 
             new SpecificationCacheDefault<>();
 
@@ -117,30 +117,48 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Getter
     private boolean metamodelFullyIntrospected = false;
 
-    /** JUnit Test Support */
-    public static SpecificationLoaderDefault getInstance (
-            IsisConfiguration isisConfiguration,
-            IsisSystemEnvironment isisSystemEnvironment,
-            ServiceRegistry serviceRegistry,
-            ServiceInjector serviceInjector,
-            ProgrammingModel programmingModel,
-            IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
+    @Inject
+    public SpecificationLoaderDefault(
+            final ProgrammingModelService programmingModelService,
+            final IsisConfiguration isisConfiguration,
+            final IsisSystemEnvironment isisSystemEnvironment,
+            final ServiceRegistry serviceRegistry,
+            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
+        this(
+                programmingModelService.getProgrammingModel(),
+                isisConfiguration,
+                isisSystemEnvironment,
+                serviceRegistry,
+                isisBeanTypeRegistryHolder);
+    }
 
-        val instance = new SpecificationLoaderDefault(); 
+    SpecificationLoaderDefault(
+            final ProgrammingModel programmingModel,
+            final IsisConfiguration isisConfiguration,
+            final IsisSystemEnvironment isisSystemEnvironment,
+            final ServiceRegistry serviceRegistry,
+            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
+        this.programmingModel = programmingModel;
+        this.postProcessor = new PostProcessor(programmingModel);
+        this.isisConfiguration = isisConfiguration;
+        this.isisSystemEnvironment = isisSystemEnvironment;
+        this.serviceRegistry = serviceRegistry;
+        this.isisBeanTypeRegistryHolder = isisBeanTypeRegistryHolder;
+    }
+
+    /** JUnit Test Support */
+    public static SpecificationLoaderDefault getInstance(
+            final IsisConfiguration isisConfiguration,
+            final IsisSystemEnvironment isisSystemEnvironment,
+            final ServiceRegistry serviceRegistry,
+            final ProgrammingModel programmingModel,
+            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
+
+        val instance = new SpecificationLoaderDefault(programmingModel, isisConfiguration, isisSystemEnvironment, serviceRegistry, isisBeanTypeRegistryHolder);
 
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
-        
-        instance.isisConfiguration = isisConfiguration;
-        instance.isisSystemEnvironment = isisSystemEnvironment;
-        instance.serviceRegistry = serviceRegistry;
-        instance.programmingModel = programmingModel;
-
         instance.facetProcessor = new FacetProcessor(programmingModel, instance.metaModelContext);
-        instance.postProcessor = new PostProcessor(programmingModel);
-        
-        instance.isisBeanTypeRegistryHolder = isisBeanTypeRegistryHolder;
-        
-        
+
         return instance;
     }
 
@@ -152,9 +170,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             log.debug("initialising {}", this);
         }
         this.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
-        this.programmingModel = programmingModelService.getProgrammingModel();
         this.facetProcessor = new FacetProcessor(programmingModel, metaModelContext);
-        this.postProcessor = new PostProcessor(programmingModel);
     }
     
     /**
@@ -276,7 +292,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         disposeMetaModel();
         facetProcessor.shutdown();
         postProcessor.shutdown();
-        postProcessor = null;
         facetProcessor = null;
     }
 
@@ -300,7 +315,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     public boolean loadSpecifications(Class<?>... domainTypes) {
         // ensure that all types are loadable
         if (Arrays.stream(domainTypes)
-                .map(domainType -> classSubstitutor.getClass(domainType))
+                .map(classSubstitutor::getClass)
                 .anyMatch(Objects::isNull)) {
             return false;
         }

@@ -236,8 +236,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             specificationLoader = SpecificationLoaderDefault.getInstance(
                     configuration, 
                     environment, 
-                    serviceRegistry, 
-                    serviceInjector, 
+                    serviceRegistry,
                     programmingModel,
                     isisBeanTypeRegistryHolder);
             
