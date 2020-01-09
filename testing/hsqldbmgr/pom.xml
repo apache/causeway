@@ -20,7 +20,6 @@
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<groupId>isis-testing</groupId>
 	<artifactId>isis-testing-hsqldbmgr</artifactId>
 	<name>Apache Isis Testing - HSQLDB Manager (parent)</name>
 	<description>Menu and configuration to open up HSQLDB Manager</description>
