@@ -58,12 +58,12 @@ import lombok.extern.log4j.Log4j2;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class,
-                WrapperTest.ActionDomainEventListener.class
+                WrapperAsyncTest.ActionDomainEventListener.class
         }
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("inconsitent state when run in a test batch")
-class WrapperTest {
+class WrapperAsyncTest {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
