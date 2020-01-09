@@ -18,13 +18,9 @@
  */
 package org.apache.isis.applib.services.metrics;
 
-import javax.enterprise.context.RequestScoped;
-
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
 
-@RequestScoped
 public interface MetricsService {
 
     /**
@@ -38,7 +34,6 @@ public interface MetricsService {
      *     Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
      * </p>
      */
-    @Programmatic
     int numberObjectsLoaded();
 
     /**
@@ -53,7 +48,6 @@ public interface MetricsService {
      *     Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
      * </p>
      */
-    @Programmatic
     int numberObjectsDirtied();
 
 
