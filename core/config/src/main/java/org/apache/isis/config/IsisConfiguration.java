@@ -88,10 +88,9 @@ public class IsisConfiguration {
     }
     
     /**
-     * Optional: set to override {@link Locale#getDefault()}
-     * <p>{@code null} is allowed
+     * Set to override {@link Locale#getDefault()}
      */
-    private String locale = null; //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
+    private Optional<String> locale = Optional.empty();
 
     private final Objects objects = new Objects();
     @Data
@@ -1217,10 +1216,10 @@ public class IsisConfiguration {
         @Data
         public static class Money {
             
-            private String currency = null;
+            private Optional<String> currency = Optional.empty();
 
             public String getCurrencyOrElse(String fallback) { 
-                return _Strings.isNotEmpty(getCurrency()) ? getCurrency() : fallback;
+                return getCurrency().filter(_Strings::isNotEmpty).orElse(fallback);
             }
         }
         

@@ -283,19 +283,15 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
 
     protected NumberFormat determineNumberFormat(FormatIdentifier formatIdentifier) {
         final String formatRequired = getConfiguration()
-                .getValue().getFormatOrElse(formatIdentifier, null);  
-                
-        if (formatRequired != null) {
-            return new DecimalFormat(formatRequired);
-        } else {
-            return NumberFormat.getNumberInstance(findLocale());
-        }
+                .getValue().getFormatOrElse(formatIdentifier, null);
+
+        return formatRequired != null
+                ? new DecimalFormat(formatRequired)
+                : NumberFormat.getNumberInstance(findLocale());
     }
 
     private Locale findLocale() {
-        final String localeStr = getConfiguration().getLocale();
-        final Locale findLocale = LocaleUtil.findLocale(localeStr);
-        return findLocale != null ? findLocale : Locale.getDefault();
+        return getConfiguration().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault());
     }
 
     // //////////////////////////////////////////////////////////

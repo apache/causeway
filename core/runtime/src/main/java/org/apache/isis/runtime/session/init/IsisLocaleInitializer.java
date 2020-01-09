@@ -20,6 +20,7 @@
 package org.apache.isis.runtime.session.init;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.isis.config.IsisConfiguration;
 
@@ -29,21 +30,27 @@ import lombok.extern.log4j.Log4j2;
 public class IsisLocaleInitializer {
 
     public void initLocale(final IsisConfiguration configuration) {
-        final String localeSpec = configuration.getLocale();
-        if (localeSpec != null) {
-            final int pos = localeSpec.indexOf('_');
-            Locale locale;
-            if (pos == -1) {
-                locale = new Locale(localeSpec, "");
-            } else {
-                final String language = localeSpec.substring(0, pos);
-                final String country = localeSpec.substring(pos + 1);
-                locale = new Locale(language, country);
-            }
-            Locale.setDefault(locale);
-            log.info("locale set to {}", locale);
-        }
+        final Optional<String> localeSpecOpt = configuration.getLocale();
+        localeSpecOpt.map(IsisLocaleInitializer::toLocale).ifPresent(IsisLocaleInitializer::setLocaleDefault);
         log.debug("locale is {}", Locale.getDefault());
+    }
+
+    private static Locale toLocale(String localeSpec) {
+        final int pos = localeSpec.indexOf('_');
+        Locale locale;
+        if (pos == -1) {
+            locale = new Locale(localeSpec, "");
+        } else {
+            final String language = localeSpec.substring(0, pos);
+            final String country = localeSpec.substring(pos + 1);
+            locale = new Locale(language, country);
+        }
+        return locale;
+    }
+
+    private static void setLocaleDefault(Locale locale) {
+        Locale.setDefault(locale);
+        log.info("locale set to {}", locale);
     }
 
 }
