@@ -57,11 +57,11 @@ import lombok.Setter;
 public class ResourceContext extends RuntimeContextBase implements IResourceContext {
 
     @Getter private final HttpHeaders httpHeaders;
-    @Getter private final UriInfo uriInfo;
     @Getter private final Request request;
     @Getter private final HttpServletRequest httpServletRequest;
     @Getter private final HttpServletResponse httpServletResponse;
     @Getter private final SecurityContext securityContext;
+    private final String baseUri;
 
     @Getter private List<List<String>> followLinks;
     @Getter private boolean validateOnly;
@@ -79,7 +79,7 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
             final RepresentationType representationType,
             final HttpHeaders httpHeaders,
             final Providers providers,
-            final UriInfo uriInfo,
+            final String baseUri,
             final Request request,
             final Where where,
             final RepresentationService.Intent intent,
@@ -87,13 +87,13 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
-            final MetaModelContext metaModelContext, final InteractionInitiatedBy interactionInitiatedBy) {
+            final MetaModelContext metaModelContext,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
         super(metaModelContext);
 
         this.httpHeaders = httpHeaders;
         //not used ... this.providers = providers;
-        this.uriInfo = uriInfo;
         this.request = request;
         this.where = where;
         this.intent = intent;
@@ -102,6 +102,8 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
         this.httpServletResponse = httpServletResponse;
         this.securityContext = securityContext;
         this.interactionInitiatedBy = interactionInitiatedBy;
+
+        this.baseUri = baseUri;
 
         init(representationType);
     }
@@ -262,7 +264,7 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
 
     @Override
     public String urlFor(final String url) {
-        return getUriInfo().getBaseUri().toString() + url;
+        return baseUri.toString() + url;
     }
 
     @Override

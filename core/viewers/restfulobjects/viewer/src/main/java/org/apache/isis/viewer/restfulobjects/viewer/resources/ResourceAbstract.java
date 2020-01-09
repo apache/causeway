@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -52,6 +53,7 @@ import lombok.val;
 public abstract class ResourceAbstract {
 
     protected final MetaModelContext metaModelContext;
+    protected final IsisConfiguration isisConfiguration;
 
     @Context HttpHeaders httpHeaders;
     @Context UriInfo uriInfo;
@@ -64,8 +66,11 @@ public abstract class ResourceAbstract {
     private ResourceContext resourceContext;
 
     @Inject
-    protected ResourceAbstract(MetaModelContext metaModelContext) {
+    protected ResourceAbstract(
+            final MetaModelContext metaModelContext,
+            final IsisConfiguration isisConfiguration) {
         this.metaModelContext = metaModelContext;
+        this.isisConfiguration = isisConfiguration;
     }
 
     protected void init(
@@ -108,9 +113,12 @@ public abstract class ResourceAbstract {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
+        final String baseUri = isisConfiguration.getViewer().getRestfulobjects().getBaseUri()
+                                    .orElse(uriInfo.getBaseUri().toString());
+
         this.resourceContext = new ResourceContext(
                 representationType, 
-                httpHeaders, providers, uriInfo, request, 
+                httpHeaders, providers, baseUri, request,
                 where, intent, urlUnencodedQueryString, 
                 httpServletRequest, httpServletResponse,
                 securityContext,

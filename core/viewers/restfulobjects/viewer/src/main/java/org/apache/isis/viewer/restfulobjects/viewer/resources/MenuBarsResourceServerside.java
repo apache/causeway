@@ -32,6 +32,7 @@ import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -46,8 +47,10 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.Seri
 public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {
 
     @Inject
-    public MenuBarsResourceServerside(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+    public MenuBarsResourceServerside(
+            final MetaModelContext metaModelContext,
+            final IsisConfiguration isisConfiguration) {
+        super(metaModelContext, isisConfiguration);
     }
 
     @Override

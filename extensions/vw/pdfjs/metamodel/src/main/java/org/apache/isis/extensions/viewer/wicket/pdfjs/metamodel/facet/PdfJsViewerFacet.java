@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.metamodel.facet;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 

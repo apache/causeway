@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.metamodel.facet;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet;
 
 import java.lang.reflect.Method;
 import java.util.Optional;

@@ -17,7 +17,7 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/persistence/flywayjdo/impl/src/main/doc # extensions
+      start_path: extensions/persistence/flywayjdo/src/main/doc # extensions
       branches: HEAD
 
     - url: .

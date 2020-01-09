@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
@@ -80,8 +81,10 @@ import org.apache.isis.viewer.restfulobjects.viewer.util.UrlParserUtils;
 public class DomainTypeResourceServerside extends ResourceAbstract implements DomainTypeResource {
 
     @Inject
-    public DomainTypeResourceServerside(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+    public DomainTypeResourceServerside(
+            final MetaModelContext metaModelContext,
+            final IsisConfiguration isisConfiguration) {
+        super(metaModelContext, isisConfiguration);
     }
 
     @Override

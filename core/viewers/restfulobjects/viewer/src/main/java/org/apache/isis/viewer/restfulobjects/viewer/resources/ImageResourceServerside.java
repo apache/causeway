@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 
 @Component
@@ -38,8 +39,10 @@ import org.apache.isis.metamodel.context.MetaModelContext;
 public class ImageResourceServerside extends ResourceAbstract {
 
     @Inject
-    public ImageResourceServerside(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+    public ImageResourceServerside(
+            final MetaModelContext metaModelContext,
+            final IsisConfiguration isisConfiguration) {
+        super(metaModelContext, isisConfiguration);
     }
 
     @GET

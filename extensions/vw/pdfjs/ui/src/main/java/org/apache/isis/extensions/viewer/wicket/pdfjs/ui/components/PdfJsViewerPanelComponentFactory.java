@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.ui.components;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
 
 import java.util.Objects;
 
@@ -13,7 +13,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.impl.metamodel.facet.PdfJsViewerFacet;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacet;
 
 import lombok.val;
 

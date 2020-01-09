@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -706,6 +707,21 @@ public class IsisConfiguration {
             private boolean suppressMemberId = false;
             private boolean suppressMemberLinks = false;
             private boolean suppressUpdateLink = false;
+
+            /**
+             * If left unset (the default), then the RO viewer will use the {@link javax.ws.rs.core.UriInfo}
+             * injected using  @link javax.ws.rs.core.Context}) to figure out the base Uri (used to render
+             * <code>href</code>s).
+             *
+             * <p>
+             * This will be correct much of the time, but will almost certainly be wrong if there is a reverse proxy.
+             * </p>
+             *
+             * <p>
+             * If set, eg <code>https://dev.myapp.com</code>, then this value will be used instead.
+             * </p>
+             */
+            private Optional<String> baseUri = Optional.empty();
             private final Gsoc2013 gsoc2013 = new Gsoc2013();
             @Data
             public static class Gsoc2013 {

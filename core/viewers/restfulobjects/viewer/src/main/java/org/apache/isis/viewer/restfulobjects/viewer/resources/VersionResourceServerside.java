@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -53,8 +54,10 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 public class VersionResourceServerside extends ResourceAbstract implements VersionResource {
 
     @Inject
-    public VersionResourceServerside(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+    public VersionResourceServerside(
+            final MetaModelContext metaModelContext,
+            final IsisConfiguration isisConfiguration) {
+        super(metaModelContext, isisConfiguration);
     }
 
     @Override

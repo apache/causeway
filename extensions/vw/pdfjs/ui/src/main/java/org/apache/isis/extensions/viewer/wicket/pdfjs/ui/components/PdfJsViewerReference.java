@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.viewer.wicket.pdfjs.impl.ui.components;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
 
 import java.util.List;
 import org.apache.wicket.markup.head.HeaderItem;

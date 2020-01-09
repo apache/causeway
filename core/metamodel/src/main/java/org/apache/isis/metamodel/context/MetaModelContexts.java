@@ -23,6 +23,7 @@ import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 
@@ -35,8 +36,8 @@ import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 @Named("isisMetaModel.MetaModelContexts")
 public class MetaModelContexts {
 
-    @Bean @Singleton
-    public MetaModelContext metaModelContext(IsisSystemEnvironment systemEnvironment) {
+    @Bean @Singleton @Primary
+    public MetaModelContext metaModelContext(final IsisSystemEnvironment systemEnvironment) {
         return new MetaModelContext_usingIoc(systemEnvironment.getIocContainer());
     }
 

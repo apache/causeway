@@ -50,6 +50,7 @@ import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.context.MetaModelContext;
@@ -80,8 +81,10 @@ import lombok.extern.log4j.Log4j2;
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
 
     @Inject
-    public DomainObjectResourceServerside(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+    public DomainObjectResourceServerside(
+            final MetaModelContext metaModelContext,
+            final IsisConfiguration isisConfiguration) {
+        super(metaModelContext, isisConfiguration);
         log.debug("<init>");
     }
 
