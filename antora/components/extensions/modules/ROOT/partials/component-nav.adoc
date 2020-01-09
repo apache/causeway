@@ -8,3 +8,8 @@ include::extensions:hsqldbmgr:partial$module-nav.adoc[]
 * Security
 include::extensions:shiro-realm-ldap:partial$module-nav.adoc[]
 ** xref:secman:ROOT:about.adoc[SecMan]
+
+* Wicket Viewer
+
+include::extensions:exceldownload:partial$module-nav.adoc[]
+include::extensions:pdfjs:partial$module-nav.adoc[]

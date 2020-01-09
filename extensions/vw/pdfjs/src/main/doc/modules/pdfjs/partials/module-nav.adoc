@@ -1,0 +1,2 @@
+** xref:extensions:pdfjs:about.adoc[pdf.js]
+

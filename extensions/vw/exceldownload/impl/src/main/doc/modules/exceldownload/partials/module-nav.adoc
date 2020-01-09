@@ -1,2 +1,0 @@
-* xref:vw:excel-download:about.adoc[Excel Download (extension)]
-
