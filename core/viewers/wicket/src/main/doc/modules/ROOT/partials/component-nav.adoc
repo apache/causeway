@@ -1,8 +1,2 @@
 include::vw:ROOT:partial$module-nav.adoc[]
 
-* Extensions
-** xref:vw:asciidoc:about.adoc[Asciidoc]
-** xref:vw:markdown:about.adoc[Markdown]
-** xref:vw:excel-download:about.adoc[Excel Download]
-** xref:vw:servletapi:about.adoc[Servlet API]
-** xref:vw:sse:about.adoc[Server-side Events]

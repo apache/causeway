@@ -1,5 +1,4 @@
 = Maven Plugin
-include::_attributes.adoc[]
 
 
 This reference guide describes the goals provided by Apache Isis' Maven plugin.

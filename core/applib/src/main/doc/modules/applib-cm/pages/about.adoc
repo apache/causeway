@@ -1,5 +1,4 @@
 = Classes & Methods
-include::_attributes.adoc[]
 
 
 This reference guide lists and describes various elements of the the Apache Isis Programming Model, specifically reserved and prefix xref:refguide:applib-cm:methods.adoc[methods] (such as `title()` and `validate...()`) and various utility and supporting xref:refguide:applib-cm:classes.adoc[classes].

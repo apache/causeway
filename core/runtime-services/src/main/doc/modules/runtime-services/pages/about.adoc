@@ -1,5 +1,4 @@
 = Framework Internal Services
-include::_attributes.adoc[]
 
 This guide documents a number of domain services that are not part of the framework's formal API, they use classes that are outside of the applib.  They should be
 thought of as part of the internal design of the framework, and are liable to change from release to release.

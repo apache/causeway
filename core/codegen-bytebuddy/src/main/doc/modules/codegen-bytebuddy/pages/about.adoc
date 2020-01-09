@@ -1,4 +1,3 @@
 = Byte Buddy Proxy Factory
-include::_attributes.adoc[]
 
 

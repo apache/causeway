@@ -1,4 +1,3 @@
 = SmokeTests
-include::_attributes.adoc[]
 
 WARNING: TODO: v2

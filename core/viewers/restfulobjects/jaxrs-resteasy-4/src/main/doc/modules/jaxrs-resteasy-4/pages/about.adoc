@@ -1,4 +1,3 @@
 = JAX-RS: RestEasy v4
-include::_attributes.adoc[]
 
 

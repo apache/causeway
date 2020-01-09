@@ -1,5 +1,4 @@
 = Annotations
-include::_attributes.adoc[]
 :page-partial:
 
 

@@ -1,5 +1,4 @@
 = Configuration Properties
-include::_attributes.adoc[]
 
 
 Apache Isis' is a Spring Boot application, and so is typically configured using an `application.properties` or `application.yaml` file.

@@ -1,5 +1,4 @@
 = Wicket Viewer
-include::_attributes.adoc[]
 
 The Wicket Viewer automatically exposes an Apache Isis domain object model for use by end-users.  The viewer is
 implemented using link:http://wicket.apache.org[Apache Wicket].
