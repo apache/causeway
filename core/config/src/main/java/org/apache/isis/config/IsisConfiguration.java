@@ -723,9 +723,10 @@ public class IsisConfiguration {
              * </p>
              *
              * <p>
-             * If set, eg <code>https://dev.myapp.com</code>, then this value will be used instead.
+             * If set, eg <code>https://dev.myapp.com/</code>, then this value will be used instead.
              * </p>
              */
+            @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/$")
             private Optional<String> baseUri = Optional.empty();
             private final Gsoc2013 gsoc2013 = new Gsoc2013();
             @Data
