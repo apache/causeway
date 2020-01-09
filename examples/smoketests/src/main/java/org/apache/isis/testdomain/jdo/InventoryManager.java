@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.jdo;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -28,6 +30,8 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @ViewModel
 public class InventoryManager {
 
+    @Inject private RepositoryService repository;
+    
     // -- UPDATE PRODUCT PRICE
 
     public static class UpdateProductPriceEvent extends ActionDomainEvent {}
@@ -42,11 +46,14 @@ public class InventoryManager {
 
     @Action
     public int countProducts() {
-        return repository.allInstances(Product.class).size();
+        return listAllProducts().size();
+    }
+    
+    @Action
+    public List<Product> listAllProducts() {
+        return repository.allInstances(Product.class);
     }
 
-    // -- DEPENDENCIES
-
-    @Inject RepositoryService repository;
+    
 
 }

@@ -35,7 +35,6 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.ExceptionWithBody;
 import org.apache.isis.viewer.restfulobjects.rendering.ExceptionWithHttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.viewer.IsisJaxrsUtilityService;
 import org.apache.isis.viewer.restfulobjects.viewer.mappers.entity.ExceptionDetail;
 import org.apache.isis.viewer.restfulobjects.viewer.mappers.entity.ExceptionPojo;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
@@ -86,13 +85,11 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         return builder.build();
     }
 
-    protected abstract IsisJaxrsUtilityService getIsisJaxrsUtilityService();
-    
     private RestfulResponse.HttpStatusCode determineStatusCode(final T ex) {
 
         RestfulResponse.HttpStatusCode statusCode;
 
-        statusCode = getIsisJaxrsUtilityService().getFailureStatusCodeIfAny(ex);
+        statusCode = FailureUtil.getFailureStatusCodeIfAny(ex);
         if(statusCode!=null) {
             return statusCode;
         }

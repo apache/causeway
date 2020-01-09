@@ -53,10 +53,6 @@ public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
                 hasXRoDomainTypeParameter(mediaType);
     }
 
-    protected boolean hasXRoDomainTypeParameter(final MediaType mediaType) {
-        return Util.hasXRoDomainTypeParameter(mediaType);
-    }
-
     @Override
     protected Marshaller getMarshaller(
             final Class<?> type, 
@@ -69,6 +65,12 @@ public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
         marshaller.setAdapter(PersistentEntityAdapter.class, adapter);
         return marshaller;
     }
-
+    
+    // HELPER
+    
+    private static boolean hasXRoDomainTypeParameter(final MediaType mediaType) {
+        final boolean retval = mediaType.getParameters().containsKey("x-ro-domain-type");
+        return retval;
+    }
 
 }

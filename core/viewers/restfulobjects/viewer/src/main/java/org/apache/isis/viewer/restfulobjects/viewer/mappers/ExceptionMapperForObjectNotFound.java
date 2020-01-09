@@ -18,25 +18,17 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.metamodel.exceptions.persistence.ObjectNotFoundException;
-import org.apache.isis.viewer.restfulobjects.viewer.IsisJaxrsUtilityService;
-
-import lombok.AccessLevel;
-import lombok.Getter;
 
 @Component
 @Provider
 public class ExceptionMapperForObjectNotFound extends ExceptionMapperAbstract<ObjectNotFoundException> {
 
-    @Inject @Getter(onMethod = @__(@Override), value = AccessLevel.PROTECTED)
-    IsisJaxrsUtilityService isisJaxrsUtilityService;
-    
     @Override
     public Response toResponse(final ObjectNotFoundException ex) {
         return buildResponse(ex);
