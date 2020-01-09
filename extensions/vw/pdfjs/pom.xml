@@ -29,6 +29,7 @@
 
     <artifactId>isis-extensions-pdfjs</artifactId>
     <name>Apache Isis Ext - Wicket Viewer - pdf.js (parent)</name>
+    <packaging>pom</packaging>
 
     <description>
         A component for Apache Isis' Wicket viewer, allowing BLOBs containing PDFs to be rendered in a panel using pdf.js.
