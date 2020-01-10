@@ -26,7 +26,7 @@
         <version>2.0.0-M3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-webboot-springboot</artifactId>
+    <artifactId>isis-core-webboot-springboot</artifactId>
     <name>Apache Isis Core - Web Boot using Spring Boot</name>
     <description>
         Defines the main Spring @Configuration, which transitively depends on the rest of core.

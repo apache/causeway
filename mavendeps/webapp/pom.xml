@@ -134,7 +134,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-webboot-springboot</artifactId>
+			<artifactId>isis-core-webboot-springboot</artifactId>
 		</dependency>
 
 	</dependencies>
