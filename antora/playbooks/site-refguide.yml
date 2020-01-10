@@ -15,15 +15,17 @@ content:
       start_path: antora/components/refguide # refguide
       branches: HEAD
 
+# api
+    - url: .
+      start_path: api/applib/src/main/doc # refguide
+      branches: HEAD
+    - url: .
+      start_path: api/schema/src/main/doc # refguide
+      branches: HEAD
+
 # core
     - url: .
-      start_path: core/applib/src/main/doc # refguide
-      branches: HEAD
-    - url: .
       start_path: core/config/src/main/doc # refguide
-      branches: HEAD
-    - url: .
-      start_path: core/schema/src/main/doc # refguide
       branches: HEAD
 
 

@@ -1863,18 +1863,9 @@
 		<module>security/keycloak</module>
 
 		<module>viewers/restfulobjects</module>
-		<module>viewers/restfulobjects/applib</module>
-		<module>viewers/restfulobjects/rendering</module>
-		<module>viewers/restfulobjects/jaxrs-resteasy-4</module>
-		<module>viewers/restfulobjects/viewer</module>
+		<module>viewers/wicket</module>
 
-		<module>viewers/wicket/model</module>
-		<module>viewers/wicket/ui</module>
-		<module>viewers/wicket/viewer</module>
-
-		<module>persistence/jdo/applib</module>
-		<module>persistence/jdo/datanucleus-5</module>
-		
+		<module>persistence/jdo</module>
 
 		<!-- to break cyclic dependencies some tests needed to be moved to their 
 			own modules -->

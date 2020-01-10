@@ -45,10 +45,15 @@ content:
       start_path: antora/components/valuetypes # valuetypes
       branches: HEAD
 
-# core
+# api
     - url: .
-      start_path: core/applib/src/main/doc # refguide
+      start_path: api/applib/src/main/doc # refguide
       branches: HEAD
+    - url: .
+      start_path: api/schema/src/main/doc # refguide
+      branches: HEAD
+
+# core
     - url: .
       start_path: core/codegen-bytebuddy/src/main/doc # core
       branches: HEAD
@@ -74,13 +79,10 @@ content:
       start_path: core/webboot-springboot/src/main/doc # core
       branches: HEAD
     - url: .
-      start_path: core/runtime-services/src/main/doc # core
+      start_path: core/runtimeservices/src/main/doc # core
       branches: HEAD
     - url: .
       start_path: core/webapp/src/main/doc # core
-      branches: HEAD
-    - url: .
-      start_path: core/schema/src/main/doc # refguide
       branches: HEAD
     - url: .
       start_path: core/security/api/src/main/doc # security
