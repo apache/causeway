@@ -60,7 +60,7 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.unittestsupport.config.internal._Config;
+import org.apache.isis.core.unittestsupport.config.internal._Config;
 
 import lombok.val;
 

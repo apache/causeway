@@ -30,7 +30,7 @@ import org.junit.Rule;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;

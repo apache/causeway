@@ -23,7 +23,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 public class BidirectionalRelationshipContractTestAll extends BidirectionalRelationshipContractTestAbstract {
 
     public BidirectionalRelationshipContractTestAll() {
-        super("org.apache.isis.unittestsupport.bidir",
+        super("org.apache.isis.core.unittestsupport.bidir",
                 _Maps.<Class<?>,Instantiator>unmodifiable(
                         // no instantiator need be registered for ParentDomainObject.class;
                         // will default to using new InstantiatorSimple(AgreementForTesting.class),

@@ -1188,7 +1188,7 @@ public class IsisConfiguration {
              * eg: {@code isis.value.format.datetime=iso}
              * <p>
              * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
-             * <code>org.apache.isis.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeValueSemanticsProvider#NAMED_TITLE_FORMATTERS</code>).
+             * <code>org.apache.isis.core.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeValueSemanticsProvider#NAMED_TITLE_FORMATTERS</code>).
              * Alternatively, can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
              */
             DATETIME,
@@ -1198,7 +1198,7 @@ public class IsisConfiguration {
              * eg: {@code isis.value.format.date=iso}
              * <p>
              * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
-             * <code>org.apache.isis.metamodel.facets.value.datejdk8local.Jdk8LocalDateValueSemanticsProvider.NAMED_TITLE_FORMATTERS</code>).
+             * <code>org.apache.isis.core.metamodel.facets.value.datejdk8local.Jdk8LocalDateValueSemanticsProvider.NAMED_TITLE_FORMATTERS</code>).
              * Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
              */
             DATE, 

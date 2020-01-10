@@ -49,12 +49,12 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.security.api.authentication.AuthenticationRequest;
-import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
-import org.apache.isis.security.api.authentication.standard.SimpleSession;
-import org.apache.isis.security.api.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
+import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
 import lombok.extern.log4j.Log4j2;

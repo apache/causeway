@@ -43,7 +43,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
 import org.apache.isis.subdomains.spring.applib.service.ContextBeans;
 import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
-import org.apache.isis.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.Annotations;
 
 import lombok.Data;
 import lombok.val;

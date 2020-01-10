@@ -109,13 +109,16 @@
             </exclusions>
         </dependency>
 
-<!--
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-commons</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
--->
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -129,6 +132,12 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

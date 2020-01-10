@@ -45,7 +45,7 @@ import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBe
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 import org.apache.isis.core.commons.internal.environment.DeploymentType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class PrototypeFacetAbstractTest {
 

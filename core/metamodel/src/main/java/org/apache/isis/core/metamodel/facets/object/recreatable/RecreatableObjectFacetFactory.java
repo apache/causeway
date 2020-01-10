@@ -50,7 +50,7 @@ implements MetaModelRefiner, PostConstructMethodCache {
     }
 
     /**
-     * We simply attach all facets we can find; the {@link #refineMetaModelValidator(org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite, IsisConfiguration) meta-model validation} will detect if multiple interfaces/annotations have
+     * We simply attach all facets we can find; the {@link #refineMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite, IsisConfiguration) meta-model validation} will detect if multiple interfaces/annotations have
      * been attached.
      */
     @Override

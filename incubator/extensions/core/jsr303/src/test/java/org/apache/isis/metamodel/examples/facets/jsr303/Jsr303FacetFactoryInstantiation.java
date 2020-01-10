@@ -18,11 +18,11 @@
  */
 
 
-package org.apache.isis.metamodel.examples.facets.jsr303;
+package org.apache.isis.core.metamodel.examples.facets.jsr303;
 
 import org.junit.Test;
 
-import org.apache.isis.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
+import org.apache.isis.core.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
 
 
 public class Jsr303FacetFactoryInstantiation {

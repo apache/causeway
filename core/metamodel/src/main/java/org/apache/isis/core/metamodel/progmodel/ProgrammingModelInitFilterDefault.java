@@ -31,6 +31,8 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
+import static org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilter.*;
+
 import lombok.val;
 
 /**

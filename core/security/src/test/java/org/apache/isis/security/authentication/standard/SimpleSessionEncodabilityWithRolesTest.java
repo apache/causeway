@@ -25,7 +25,7 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.internal.encoding.Encodable;
-import org.apache.isis.security.api.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 @RunWith(JMock.class)
 public class SimpleSessionEncodabilityWithRolesTest extends SimpleSessionEncodabilityTestAbstract {

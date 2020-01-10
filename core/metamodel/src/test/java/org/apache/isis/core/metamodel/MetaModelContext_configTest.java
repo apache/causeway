@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
-import org.apache.isis.unittestsupport.config.internal._Config;
+import org.apache.isis.core.unittestsupport.config.IsisConfigurationLegacy;
+import org.apache.isis.core.unittestsupport.config.internal._Config;
 
 import lombok.val;
 

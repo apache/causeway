@@ -22,7 +22,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

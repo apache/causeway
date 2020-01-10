@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.val;
 

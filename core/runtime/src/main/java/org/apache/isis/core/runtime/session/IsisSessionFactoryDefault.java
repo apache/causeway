@@ -48,8 +48,8 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 

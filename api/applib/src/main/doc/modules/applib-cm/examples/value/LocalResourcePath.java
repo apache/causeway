@@ -31,7 +31,7 @@ import lombok.NonNull;
 /**
  * Represents a local resource path, typically a relative path originating at this web-app's root or context-root.
  */
-@Value(semanticsProviderName = "org.apache.isis.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
 public final class LocalResourcePath implements Serializable {
     private static final long serialVersionUID = 1L;
     @NonNull private final String path;

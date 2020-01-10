@@ -30,8 +30,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
-import org.apache.isis.security.api.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
 import lombok.extern.log4j.Log4j2;

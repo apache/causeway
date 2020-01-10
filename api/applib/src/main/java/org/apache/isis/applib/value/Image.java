@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Value;
 /**
  * Represents an image.
  */
-@Value(semanticsProviderName = "org.apache.isis.metamodel.facets.value.image.ImageValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProvider")
 public class Image implements Serializable {
     private static final long serialVersionUID = 1L;
     private final int[][] image;

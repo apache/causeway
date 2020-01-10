@@ -71,8 +71,8 @@ import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeReposi
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepositoryImpl;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
-import org.apache.isis.security.api.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.core.unittestsupport.config.internal._Config;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;

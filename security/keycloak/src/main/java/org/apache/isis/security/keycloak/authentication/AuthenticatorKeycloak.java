@@ -26,9 +26,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.security.api.authentication.AuthenticationRequest;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 @Service

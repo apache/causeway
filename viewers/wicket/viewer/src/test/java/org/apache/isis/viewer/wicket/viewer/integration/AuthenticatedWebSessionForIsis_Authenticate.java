@@ -38,12 +38,12 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.security.api.authentication.AuthenticationRequest;
-import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
-import org.apache.isis.security.api.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.isis.security.api.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
+import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 

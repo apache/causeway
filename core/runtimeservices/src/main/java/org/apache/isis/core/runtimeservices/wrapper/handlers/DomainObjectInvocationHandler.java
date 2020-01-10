@@ -67,7 +67,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.val;
 

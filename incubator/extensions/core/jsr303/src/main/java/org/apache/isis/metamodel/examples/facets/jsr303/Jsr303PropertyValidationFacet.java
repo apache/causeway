@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.metamodel.examples.facets.jsr303;
+package org.apache.isis.core.metamodel.examples.facets.jsr303;
 
 import java.util.Set;
 
@@ -27,14 +27,14 @@ import javax.validation.ValidationProviderFactory;
 import javax.validation.Validator;
 
 import org.apache.isis.applib.events.ValidityEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.interactions.ProposedHolder;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.metamodel.interactions.ValidityContext;
-import org.apache.isis.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
 
 public class Jsr303PropertyValidationFacet extends FacetAbstract implements ValidatingInteractionAdvisor {

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.webapp.wormhole;
 
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.experimental.UtilityClass;
 

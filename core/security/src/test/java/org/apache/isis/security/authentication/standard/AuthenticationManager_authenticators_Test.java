@@ -32,11 +32,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.api.authentication.standard.Authenticator;
-import org.apache.isis.security.api.authentication.standard.NoAuthenticatorException;
-import org.apache.isis.security.api.authentication.standard.RandomCodeGeneratorDefault;
+import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.standard.NoAuthenticatorException;
+import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 
 @RunWith(JMock.class)
 public class AuthenticationManager_authenticators_Test {

@@ -44,7 +44,7 @@ import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStat
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFactory;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.val;

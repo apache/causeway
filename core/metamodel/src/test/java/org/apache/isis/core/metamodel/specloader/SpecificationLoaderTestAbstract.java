@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 import lombok.val;
 

@@ -25,6 +25,7 @@ import java.util.Objects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
+import static org.apache.isis.core.metamodel.adapter.oid.Oid.*;
 
 final class Oid_Parented implements ParentedOid {
 

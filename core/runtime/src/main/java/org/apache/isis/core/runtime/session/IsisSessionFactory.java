@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using

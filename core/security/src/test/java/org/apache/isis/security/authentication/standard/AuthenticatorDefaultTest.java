@@ -26,8 +26,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.security.api.authentication.AuthenticationRequest;
-import org.apache.isis.security.api.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
+import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstract;
 
 @RunWith(JMock.class)
 public class AuthenticatorDefaultTest {

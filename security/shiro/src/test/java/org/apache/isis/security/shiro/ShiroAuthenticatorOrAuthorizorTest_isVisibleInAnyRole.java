@@ -35,8 +35,8 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.security.api.authentication.AuthenticationRequest;
-import org.apache.isis.security.api.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
+import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
 import org.apache.isis.core.unittestsupport.config.IsisConfigurationLegacy;

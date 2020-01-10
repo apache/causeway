@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.longs.LongValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueSemanticsProvider;
-import org.apache.isis.unittestsupport.config.internal._Config;
+import org.apache.isis.core.unittestsupport.config.internal._Config;
 
 public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

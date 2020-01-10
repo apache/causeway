@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 import org.apache.isis.applib.annotation.Value;
 
-@Value(semanticsProviderName = "org.apache.isis.metamodel.facets.value.password.PasswordValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider")
 public class Password implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String STARS = "********************";

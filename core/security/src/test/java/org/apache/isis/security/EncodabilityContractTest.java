@@ -37,7 +37,7 @@ import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.core.commons.internal.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.internal.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.internal.encoding.Encodable;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 public abstract class EncodabilityContractTest {
 

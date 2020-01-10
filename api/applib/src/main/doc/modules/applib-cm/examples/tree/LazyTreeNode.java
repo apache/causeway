@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-@Value(semanticsProviderName="org.apache.isis.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider")
+@Value(semanticsProviderName="org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider")
 public class LazyTreeNode<T> implements TreeNode<T> {
 
     private final TreeState sharedState;

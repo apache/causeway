@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.viewer.integration;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Request;
 
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;
 

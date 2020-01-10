@@ -37,4 +37,24 @@
 		<module>ui</module>
 	</modules>
 
+	<profiles>
+		<profile>
+			<id>resolving-conflicts</id>
+			<activation>
+				<property>
+					<name>!skip.resolving-conflicts</name>
+				</property>
+			</activation>
+			<dependencyManagement>
+				<dependencies>
+					<dependency>
+						<groupId>org.jsoup</groupId>
+						<artifactId>jsoup</artifactId>
+						<version>1.10.2</version>
+					</dependency>
+				</dependencies>
+			</dependencyManagement>
+		</profile>
+	</profiles>
+
 </project>

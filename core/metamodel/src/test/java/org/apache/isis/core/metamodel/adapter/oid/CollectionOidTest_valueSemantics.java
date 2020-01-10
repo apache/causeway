@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.unittestsupport.value.ValueTypeContractTestAbstract;
+import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
 public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstract<ParentedOid> {
 

@@ -59,7 +59,7 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.val;
 
@@ -206,7 +206,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the CSS class name to use for the specified object.
      *
      * <p>
-     * Corresponds to the {@link CssClassFacet#cssClass(org.apache.isis.metamodel.spec.Instance)} value}
+     * Corresponds to the {@link CssClassFacet#cssClass(org.apache.isis.core.metamodel.spec.Instance)} value}
      * returned by the {@link CssClassFacet}.
      *
      * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).

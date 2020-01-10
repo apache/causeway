@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.security.api.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 @Service
 @Named("isisSecurityBypass.AuthorizorBypass")

@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
- * This implements {@link org.apache.isis.metamodel.facetapi.MultiTypedFacet} so that each concrete implementation
+ * This implements {@link org.apache.isis.core.metamodel.facetapi.MultiTypedFacet} so that each concrete implementation
  * is added to the eventual {@link FacetHolder} twice: once under
  * <tt>HiddeFacet.class</tt> and once under its own concrete type class (eg <tt>HiddenFacetForActionAnnotation</tt>).
  * This satisfies a couple of (independent) requirements:
@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  *     <li>that we don't have the concept of a single (blessed?) HiddenFacet; rather there are simply facets some of
  *     which implement {@link HidingInteractionAdvisor}</li>
  *     <li>that there is nevertheless always at least one facet that is registered under <tt>HiddenFacet.class</tt>;
- *     this is used by the {@link org.apache.isis.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson} exporter</li>
+ *     this is used by the {@link org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson} exporter</li>
  * </ul>
  * <p>
  *     Note that the {@link FacetUtil#getFacets(java.util.Map, Predicate)}

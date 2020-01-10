@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 
 import org.apache.isis.applib.annotation.Value;
 
-@Value(semanticsProviderName = "org.apache.isis.metamodel.facets.value.money.MoneyValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.money.MoneyValueSemanticsProvider")
 public class Money extends Magnitude<Money> {
 
     private static final long serialVersionUID = 1L;

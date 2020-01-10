@@ -22,8 +22,8 @@ package org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.security.api.authentication.AuthenticationSession;
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 /**
  * Decouples the <code>IsisSessionFilter</code> from the mechanism of obtaining the

@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.security.api.authentication.MessageBroker;
+import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;

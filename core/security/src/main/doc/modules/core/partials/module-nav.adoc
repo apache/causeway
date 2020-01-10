@@ -1,0 +1,2 @@
+* xref:security:core:about.adoc[API]
+

@@ -66,7 +66,7 @@
 			<version>${jdo-api.version}</version>
 			<!-- provided by plugins -->
 			<scope>provided</scope>
-		</dependency>p
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
@@ -75,7 +75,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
+			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-integtestsupport-applib</artifactId>
 			<scope>provided</scope>
 		</dependency>

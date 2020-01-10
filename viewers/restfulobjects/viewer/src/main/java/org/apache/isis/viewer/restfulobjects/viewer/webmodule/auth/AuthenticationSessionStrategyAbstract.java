@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.val;
 

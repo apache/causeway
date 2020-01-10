@@ -18,14 +18,14 @@
  */
 
 
-package org.apache.isis.metamodel.examples.facets.jsr303;
+package org.apache.isis.core.metamodel.examples.facets.jsr303;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
-import org.apache.isis.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
+import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 
 
 public class Jsr303FacetInstantiation {

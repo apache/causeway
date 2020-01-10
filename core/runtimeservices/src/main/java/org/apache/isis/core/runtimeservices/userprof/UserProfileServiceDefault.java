@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.userprof.UserProfileService;
-import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 @Service
 @Named("isisRuntimeServices.UserProfileServiceDefault")

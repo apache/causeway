@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.security.api.authentication.MessageBroker;
+import org.apache.isis.core.security.authentication.MessageBroker;
 
 @Service
 @Named("isisRuntimeServices.MessageServiceDefault")

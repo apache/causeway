@@ -57,7 +57,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
+			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-integtestsupport-applib</artifactId>
 		</dependency>
 		<dependency>

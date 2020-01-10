@@ -48,12 +48,12 @@ import org.apache.isis.core.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
-import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
-import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
-import org.apache.isis.unittestsupport.config.internal._Config;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.core.unittestsupport.config.IsisConfigurationLegacy;
+import org.apache.isis.core.unittestsupport.config.internal._Config;
 
 import lombok.Builder;
 import lombok.Getter;

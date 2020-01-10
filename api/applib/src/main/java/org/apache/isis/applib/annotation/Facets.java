@@ -39,7 +39,7 @@ import java.lang.annotation.Target;
 public @interface Facets {
     /**
      * Array of fully qualified names of classes each implementing
-     * <tt>org.apache.isis.metamodel.facets.FacetFactory</tt>.
+     * <tt>org.apache.isis.core.metamodel.facets.FacetFactory</tt>.
      *
      * <p>
      * Either the array provided by this method or by
@@ -49,7 +49,7 @@ public @interface Facets {
 
     /**
      * Array of {@link Class}s, each indicating a class implementing
-     * <tt>org.apache.isis.metamodel.facets.FacetFactory</tt>.
+     * <tt>org.apache.isis.core.metamodel.facets.FacetFactory</tt>.
      *
      * <p>
      * Either the array provided by this method or by

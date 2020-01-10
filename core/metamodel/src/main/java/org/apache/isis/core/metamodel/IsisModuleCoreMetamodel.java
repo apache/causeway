@@ -50,14 +50,14 @@ import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
-import org.apache.isis.security.api.IsisModuleSecurityApi;
+import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
 @Configuration
 @Import({
         // modules
         IsisModuleApplib.class,
         IsisModuleCoreConfig.class,
-        IsisModuleSecurityApi.class,
+        IsisModuleCoreSecurity.class,
 
         // @Configuration's
         MetaModelContexts.class,

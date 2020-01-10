@@ -42,9 +42,9 @@ import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.core.metamodel.services.homepage.HomePageResolverService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
-import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
-import org.apache.isis.security.api.authorization.manager.AuthorizationManager;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.Getter;
 import lombok.val;

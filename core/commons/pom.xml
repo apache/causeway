@@ -28,8 +28,8 @@
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.commons</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/commons</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.commons</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/commons</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -67,6 +67,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>

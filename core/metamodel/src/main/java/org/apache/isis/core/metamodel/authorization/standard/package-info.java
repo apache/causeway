@@ -23,10 +23,10 @@
  * <p>
  * Used in two different ways:
  * <ul>
- * <li>in prototyping or single user, used by the {@link org.apache.isis.runtimes.dflt.runtime.authorization.standard.AuthorizationFacetFactoryImpl facet factory}
+ * <li>in prototyping or single user, used by the {@link org.apache.isis.core.runtimes.dflt.runtime.authorization.standard.AuthorizationFacetFactoryImpl facet factory}
  *     implementations, that is, enforcing authorization on the "client-side".
  *     </li>
- * <li>In client/server mode, used by a {@link org.apache.isis.metamodel.facetdecorator.FacetDecorator} for proxy authorization,
+ * <li>In client/server mode, used by a {@link org.apache.isis.core.metamodel.facetdecorator.FacetDecorator} for proxy authorization,
  *     that is, enforcing authorization by delegating to the "server-side".</li>
  * </ul>
  */

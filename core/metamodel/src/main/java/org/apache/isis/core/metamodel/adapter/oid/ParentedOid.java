@@ -23,6 +23,8 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
+import static org.apache.isis.core.metamodel.adapter.oid.Oid.unmarshaller;
+
 /**
  * Used as the {@link Oid} for {@link OneToManyAssociation} (collections).
  */

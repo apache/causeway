@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.metamodel.examples.facets.jsr303;
+package org.apache.isis.core.metamodel.examples.facets.jsr303;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

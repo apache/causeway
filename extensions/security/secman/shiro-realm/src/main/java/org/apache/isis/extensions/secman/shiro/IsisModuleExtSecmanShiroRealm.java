@@ -47,7 +47,7 @@ import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.security.api.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.errors;
 
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.security.api.authentication.MessageBroker;
+import org.apache.isis.core.security.authentication.MessageBroker;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

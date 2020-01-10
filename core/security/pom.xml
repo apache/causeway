@@ -24,7 +24,6 @@
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
         <version>2.0.0-M3-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>isis-core-security</artifactId>
@@ -76,6 +75,12 @@
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

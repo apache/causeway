@@ -26,7 +26,7 @@ import org.apache.isis.applib.value.Markup;
  *
  */
 @Value(semanticsProviderName = 
-        "org.apache.isis.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
+        "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
 public class Markdown extends Markup {
 
     private static final long serialVersionUID = 1L;

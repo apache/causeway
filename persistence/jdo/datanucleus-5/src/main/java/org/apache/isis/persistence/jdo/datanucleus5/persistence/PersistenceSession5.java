@@ -92,7 +92,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.Persiste
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQuery;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.security.api.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
