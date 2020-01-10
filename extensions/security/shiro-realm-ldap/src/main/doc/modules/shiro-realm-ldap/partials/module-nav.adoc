@@ -1,1 +1,1 @@
-** xref:extensions:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro]
+** xref:security:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro]

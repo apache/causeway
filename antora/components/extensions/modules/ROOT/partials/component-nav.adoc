@@ -3,10 +3,6 @@ include::extensions:ROOT:partial$module-nav.adoc[]
 * JDO Persistence
 include::extensions:flywayjdo:partial$module-nav.adoc[]
 
-* Security
-include::extensions:shiro-realm-ldap:partial$module-nav.adoc[]
-** xref:security:ROOT:about.adoc[SecMan]
-
 * Wicket Viewer
 
 include::extensions:exceldownload:partial$module-nav.adoc[]
