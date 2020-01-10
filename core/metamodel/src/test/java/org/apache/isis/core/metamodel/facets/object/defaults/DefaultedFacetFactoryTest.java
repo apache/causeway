@@ -74,7 +74,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     }
 
-    @Defaulted(defaultsProviderName = "DefaultedFacetFactoryTest$MyDefaultedUsingDefaultsProvider")
+    @Defaulted(defaultsProviderName = "org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedUsingDefaultsProvider")
     public static class MyDefaultedUsingDefaultsProvider extends DefaultsProviderNoop<MyDefaultedUsingDefaultsProvider> {
 
         /**
@@ -185,7 +185,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDefaultedProviderNameCanBePickedUpFromConfiguration() {
 
-        final String className = "DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
+        final String className = "org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
 
         _Config.clear();
         _Config.put(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
@@ -211,7 +211,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testNonAnnotatedDefaultedCanBePickedUpFromConfiguration() {
 
-        final String className = "DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
+        final String className = "org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
 
         _Config.clear();
         _Config.put(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);

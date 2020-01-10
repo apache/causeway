@@ -55,7 +55,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         super.tearDown();
     }
 
-    @Value(semanticsProviderName = "ValueFacetAnnotationOrConfigurationFactoryTest$MyParseableUsingParserName2")
+    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyParseableUsingParserName2")
     public static class MyParseableUsingParserName2 extends AbstractValueSemanticsProvider<MyValueSemanticsProviderUsingSemanticsProviderName> {
 
         /**
@@ -90,7 +90,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         assertNoMethodsRemoved();
     }
 
-    @Value(semanticsProviderName = "ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderUsingSemanticsProviderName")
+    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderUsingSemanticsProviderName")
     public static class MyValueSemanticsProviderUsingSemanticsProviderName extends AbstractValueSemanticsProvider<MyValueSemanticsProviderUsingSemanticsProviderName> {
 
         /**
@@ -176,7 +176,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         assertNull(facetedMethod.getFacet(ParseableFacet.class));
     }
 
-    @Value(semanticsProviderName = "ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatIsAParser")
+    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatIsAParser")
     public static class MyValueSemanticsProviderThatIsAParser extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatIsAParser> implements Parser<MyValueSemanticsProviderThatIsAParser> {
 
         /**
@@ -233,7 +233,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         assertNull(facetedMethod.getFacet(DefaultedFacet.class));
     }
 
-    @Value(semanticsProviderName = "ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatIsADefaultsProvider")
+    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatIsADefaultsProvider")
     public static class MyValueSemanticsProviderThatIsADefaultsProvider extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatIsADefaultsProvider> implements DefaultsProvider<MyValueSemanticsProviderThatIsADefaultsProvider> {
 
         /**
@@ -260,7 +260,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         assertNull(facetedMethod.getFacet(EncodableFacet.class));
     }
 
-    @Value(semanticsProviderName = "ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatIsAnEncoderDecoder")
+    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatIsAnEncoderDecoder")
     public static class MyValueSemanticsProviderThatIsAnEncoderDecoder extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatIsAnEncoderDecoder> implements EncoderDecoder<MyValueSemanticsProviderThatIsAnEncoderDecoder> {
 
         /**
@@ -299,7 +299,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         assertNotNull(facet);
     }
 
-    @Value(semanticsProviderName = "ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesImmutableSemantic")
+    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesImmutableSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesImmutableSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesImmutableSemantic> {
 
         /**
@@ -318,7 +318,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         assertNotNull(facet);
     }
 
-    @Value(semanticsProviderName = "ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic")
+    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic> {
 
         /**
@@ -349,7 +349,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         assertNotNull(facet);
     }
 
-    @Value(semanticsProviderName = "ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic")
+    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic> {
 
         /**
@@ -368,7 +368,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         assertNotNull(facet);
     }
 
-    @Value(semanticsProviderName = "ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic")
+    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic> {
 
         /**
@@ -427,7 +427,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
     public void testSemanticsProviderNameCanBePickedUpFromConfiguration() {
 
         // given
-        final String className = "ValueFacetAnnotationOrConfigurationFactoryTest$MyValueWithSemanticsProviderSpecifiedUsingConfiguration";
+        final String className = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueWithSemanticsProviderSpecifiedUsingConfiguration";
 
         _Config.clear();
         _Config.put(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
@@ -481,7 +481,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
     public void testNonAnnotatedValueCanPickUpSemanticsProviderFromConfiguration() {
 
         // given
-        final String className = "ValueFacetAnnotationOrConfigurationFactoryTest$NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration";
+        final String className = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration";
         _Config.clear();
         _Config.put(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
 
