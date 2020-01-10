@@ -94,7 +94,7 @@ TODO: to reinstate, think that FixturesManifest needs some attention.
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
+            <artifactId>isis-applib</artifactId>
         </dependency>
 
         <dependency>
