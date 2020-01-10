@@ -33,10 +33,10 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.util.JaxbAdapters;
-import org.apache.isis.extensions.sse.applib.annotations.ServerSentEvents;
-import org.apache.isis.extensions.sse.applib.service.SseService;
-import org.apache.isis.extensions.sse.applib.service.SseService.ExecutionBehavior;
-import org.apache.isis.extensions.sse.applib.value.ListeningMarkup;
+import org.apache.isis.valuetypes.sse.applib.annotations.ServerSentEvents;
+import org.apache.isis.valuetypes.sse.applib.service.SseService;
+import org.apache.isis.valuetypes.sse.applib.service.SseService.ExecutionBehavior;
+import org.apache.isis.valuetypes.sse.applib.value.ListeningMarkup;
 
 import lombok.Getter;
 import lombok.Setter;

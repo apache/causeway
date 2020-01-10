@@ -39,7 +39,7 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleSecmanEncr
 import org.apache.isis.extensions.secman.jdo.IsisModuleSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleSecmanRealmShiro;
-import org.apache.isis.extensions.sse.applib.IsisModuleValSseApplib;
+import org.apache.isis.valuetypes.sse.applib.IsisModuleValSseApplib;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
