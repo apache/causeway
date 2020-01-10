@@ -7,7 +7,7 @@ import org.ro.to.Method
 import org.ro.ui.Point
 import org.ro.ui.kv.ActionPrompt
 
-class ActionDispatcher(val at: Point = Point(100,100)) : BaseAggregator() {
+class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry) {
         val action = logEntry.getTransferObject() as Action
@@ -40,7 +40,7 @@ class ActionDispatcher(val at: Point = Point(100,100)) : BaseAggregator() {
     }
 
     private fun processPost(action: Action) {
-        ActionPrompt(action).open(this.at)
+        ActionPrompt(action).open(at)
     }
 
     private fun processPut(action: Action) {

@@ -4,6 +4,9 @@ import kotlinx.serialization.Serializable
 import org.ro.to.TObject
 import org.ro.to.TransferObject
 import org.ro.to.bs3.Grid
+import org.ro.ui.kv.RoDisplay
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.panel.VPanel
 
 /**
@@ -45,16 +48,17 @@ data class Layout(val cssClass: String? = null,
         properties = fsLyt.property
     }
 
-    fun build(tObject: TObject): VPanel {
+    fun build(tObject: TObject, dsp: RoDisplay): VPanel {
         val result = VPanel()
 
         val rlt = row[0]
         // row[0] (head) contains the object title and actions
-        val oCpt = rlt.build(tObject)
+        val oCpt = rlt.buildMenu(tObject, dsp)
+        oCpt.width = CssSize(100, UNIT.perc)
         result.add(oCpt)
 
         for (rl in row) {
-            val cpt = rl.build(tObject.members)
+            val cpt = rl.build(tObject, dsp)
             result.add(cpt)
         }
         return result

@@ -1,8 +1,9 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
-import org.ro.to.Member
+import org.ro.to.TObject
 import org.ro.to.bs3.Tab
+import org.ro.ui.kv.RoDisplay
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
@@ -19,13 +20,13 @@ data class TabLayout(val cssClass: String? = null,
         }
     }
 
-    fun build(members : Map<String, Member>): Component {
+    fun build(tObject: TObject, tab: RoDisplay): Component {
         val result = VPanel()
         result.width = CssSize(100, UNIT.perc)
         result.height = CssSize(100, UNIT.perc)
         var b: VPanel
         for (rl in row) {
-            b = rl.build(members)
+            b = rl.build(tObject, tab)
             b.title = rl.id
             result.add(b)
         }

@@ -2,6 +2,8 @@ package org.ro.ui.kv
 
 import org.ro.core.model.DisplayList
 import org.ro.core.model.Exposer
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.table.TableType
 import pl.treksoft.kvision.tabulator.Layout
@@ -19,12 +21,13 @@ class RoTable(displayList: DisplayList) : SimplePanel() {
 
     init {
         title = displayList.extractTitle()
+        width = CssSize(100, UNIT.perc)
         val model = displayList.data
         val columns = ColumnFactory().buildColumns(displayList, true)
         val options = TabulatorOptions(
                 movableColumns = true,
                 height = "calc(100vh - 128px)",
-                layout = Layout.FITDATAFILL,
+                layout = Layout.FITCOLUMNS,
                 columns = columns,
                 persistenceMode = false//,
                 //selectable = true

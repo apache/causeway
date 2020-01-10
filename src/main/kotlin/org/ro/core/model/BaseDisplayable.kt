@@ -1,7 +1,7 @@
 package org.ro.core.model
 
 import org.ro.layout.Layout
-import org.ro.to.TObject
+import org.ro.to.TransferObject
 
 abstract class BaseDisplayable {
 
@@ -13,9 +13,11 @@ abstract class BaseDisplayable {
 
     abstract fun canBeDisplayed(): Boolean
 
-    abstract fun addData(obj: TObject)
+    abstract fun addData(obj: TransferObject)
 
-    abstract fun reset()
+    open fun reset() {
+        // subclass responsibility
+    }
 
     fun extractTitle(): String {
         val strList = this.title.split("/")

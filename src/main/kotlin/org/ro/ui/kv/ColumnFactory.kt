@@ -125,7 +125,7 @@ class ColumnFactory {
                 headerSort = false,
                 formatterComponentFunction = { _, _, data ->
                     val tObject = data.delegate
-                    MenuFactory.buildDdFor(
+                    MenuFactory.buildFor(
                             tObject,
                             false,
                             ButtonStyle.LINK)

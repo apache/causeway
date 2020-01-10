@@ -4,6 +4,7 @@ import org.ro.layout.Layout
 import org.ro.to.Extensions
 import org.ro.to.Property
 import org.ro.to.TObject
+import org.ro.to.TransferObject
 import pl.treksoft.kvision.state.observableListOf
 
 class DisplayList(override val title: String) : BaseDisplayable() {
@@ -23,8 +24,8 @@ class DisplayList(override val title: String) : BaseDisplayable() {
         }
     }
 
-    override fun addData(obj: TObject) {
-        val exo = Exposer(obj)
+    override fun addData(obj: TransferObject) {
+        val exo = Exposer(obj as TObject)
         data.add(exo.dynamise())  //if exposer is not dynamised, data access in tables won't work
     }
 

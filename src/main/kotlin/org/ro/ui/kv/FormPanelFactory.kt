@@ -2,6 +2,7 @@ package org.ro.ui.kv
 
 import org.ro.ui.FormItem
 import pl.treksoft.kvision.core.StringPair
+import pl.treksoft.kvision.core.onEvent
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.formPanel
 import pl.treksoft.kvision.form.select.SimpleSelect
@@ -39,20 +40,27 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createText(fi: FormItem): Text {
         val item = Text(label = fi.label, value = fi.content as String)
+        item.onEvent {
+            change = {
+                fi.changed()
+                it.stopPropagation()
+            }
+        }
+        item.enableTooltip()
         item.name = fi.description
         return item
     }
 
     private fun createPassword(fi: FormItem): Password {
         val item = Password(label = fi.label, value = fi.content as String)
-        item.name = fi.description
+        item.title = fi.description
         return item
     }
 
     private fun createTextArea(fi: FormItem): TextArea {
         val rowCnt = maxOf(3, fi.size)
         val item = TextArea(label = fi.label, value = fi.content as String, rows = rowCnt)
-        item.name = fi.description
+        item.title = fi.description
         return item
     }
 
@@ -64,7 +72,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             preSelectedValue = list.first().first
         }
         val item = SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
-        item.name = fi.description
+        item.title = fi.description
         return item
     }
 

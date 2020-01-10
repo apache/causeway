@@ -27,7 +27,9 @@ object IconManager {
             "Log" to "history",
             "Connect" to "plug",
             "Close" to "times",
-            "Burger" to "bars")
+            "Burger" to "bars",
+            "Save" to "file",
+            "Undo" to "undo")
 
     fun find(query: String): String {
         val actionTitle = Utils.deCamel(query)
@@ -41,7 +43,13 @@ object IconManager {
         return DEFAULT_ICON
     }
 
-    fun isDangerous(actionName: String): Boolean {
-        return (actionName.equals("delete"))
+    fun findStyleFor(actionName: String): Set<String> {
+        when {
+            actionName == "delete" -> return setOf("text-danger")
+            actionName == "undo" -> return setOf("text-warn")
+            actionName == "save" -> return setOf("text-ok")
+            else -> return setOf("text-normal")
+        }
     }
+
 }

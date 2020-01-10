@@ -21,7 +21,7 @@ class ActionPrompt(val action: Action) : Command {
                 caption = buildLabel(),
                 items = formItems,
                 command = this)
-        form.show(at)
+        form.open(at)
     }
 
     override fun execute() {

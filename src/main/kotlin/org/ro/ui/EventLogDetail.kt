@@ -1,8 +1,6 @@
-package org.ro.ui.table.el
+package org.ro.ui
 
 import org.ro.core.event.LogEntry
-import org.ro.ui.Command
-import org.ro.ui.FormItem
 import org.ro.ui.kv.RoDialog
 
 class EventLogDetail(val logEntry: LogEntry) : Command {
@@ -16,11 +14,8 @@ class EventLogDetail(val logEntry: LogEntry) : Command {
         }
         formItems.add(FormItem("Text", "TextArea", jsonStr, 20))
         val label = logEntry.title
-        RoDialog(caption = label, items = formItems, command = this).show()
-    }
-
-    override fun execute() {
-        //do nothing
+        val rd = RoDialog(caption = label, items = formItems, command = this)
+        rd.open()
     }
 
     private fun stringify(jsonStr: String): String {

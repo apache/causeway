@@ -22,7 +22,7 @@ class LoginPrompt : Command {
         formItems.add(FormItem("User", "Text", username))
         formItems.add(FormItem("Password", "Password", password))
         form = RoDialog(caption = "Connect", items = formItems, command = this)
-        form.show(at)
+        form.open(at)
     }
 
     override fun execute() {

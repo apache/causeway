@@ -1,8 +1,9 @@
 package org.ro.ui.kv
 
-import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
-import org.ro.ui.table.el.EventLogDetail
+import org.ro.ui.EventLogDetail
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.FlexAlignItems
@@ -15,37 +16,30 @@ import pl.treksoft.kvision.utils.px
 
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
-    private val faFormatterParams = obj {
-        allowEmpty = true
-        allowTruthy = true
-        tickElement = "<i class='fa fa-ellipsis-v'></i>"
-        crossElement = "<i class='fa fa-ellipsis-v'></i>"
-    }
-
     private val columns = listOf(
-            ColumnDefinition("",
-                    field = "title", // any existing field can be used
-                    formatter = Formatter.TICKCROSS,
-                    formatterParams = faFormatterParams,
-                    align = Align.CENTER,
+            ColumnDefinition(title = "",
+                    field = "state",
                     width = "50",
-                    headerSort = false,
-                    cellClick = { evt, cell ->
-                        evt.stopPropagation()
-                        showDetails(cell)
+                    align = Align.CENTER,
+                    formatterComponentFunction = { _, _, data ->
+                        Button("", icon = "fa fa-ellipsis-v", style = data.state.style).onClick {
+                            EventLogDetail(data).open()
+                        }.apply { margin = CssSize(-10, UNIT.px) }
                     }),
             ColumnDefinition<LogEntry>("Title", "title",
-            headerFilter = Editor.INPUT,
-            width = "350",
-            formatterComponentFunction = { _, _, data ->
-                Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
-                    console.log(data)
-                }
-            }),
+                    headerFilter = Editor.INPUT,
+                    width = "350",
+                    formatterComponentFunction = { _, _, data ->
+                        Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
+                            console.log(data)
+                        }
+                    }),
             ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT),
-            ColumnDefinition("Method", "method", width = "100"),
+            ColumnDefinition("Method", "method", width = "100", headerFilter = Editor.INPUT),
             ColumnDefinition("req.len", field = "requestLength", width = "100", align = Align.RIGHT),
             ColumnDefinition("resp.len", field = "responseLength", width = "100", align = Align.RIGHT),
+            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", align = Align.RIGHT),
+            ColumnDefinition("duration", field = "duration", width = "100", align = Align.RIGHT),
             ColumnDefinition(
                     title = "Created",
                     field = "createdAt",
@@ -59,9 +53,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     sorter = Sorter.DATETIME,
                     formatter = Formatter.DATETIME,
                     formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
-                    width = "100"),
-            ColumnDefinition("duration", field = "duration", width = "100", align = Align.RIGHT),
-            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", align = Align.RIGHT)
+                    width = "100")
     )
 
     init {
@@ -74,7 +66,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
         val options = TabulatorOptions(
                 height = "calc(100vh - 128px)",
-                layout = Layout.FITCOLUMNS,
+                layout = Layout.FITDATAFILL,
                 columns = columns,
                 persistenceMode = false
         )
@@ -87,14 +79,6 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 }
             }
         }
-    }
-
-    private fun showDetails(cell: pl.treksoft.kvision.tabulator.js.Tabulator.CellComponent) {
-        val row = cell.getRow()
-        val data = row.getData() as LogEntry
-        val url: String = data.url
-        val logEntry = EventStore.find(url)!!
-        EventLogDetail(logEntry).open()
     }
 
 }

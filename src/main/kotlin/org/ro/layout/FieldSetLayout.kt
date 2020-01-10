@@ -1,10 +1,11 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
-import org.ro.to.Member
+import org.ro.to.TObject
 import org.ro.to.bs3.FieldSet
 import org.ro.ui.FormItem
 import org.ro.ui.kv.FormPanelFactory
+import org.ro.ui.kv.RoDisplay
 import pl.treksoft.kvision.form.FormPanel
 
 @Serializable
@@ -26,7 +27,8 @@ data class FieldSetLayout(val name: String? = null,
         }
     }
 
-    fun build(members: Map<String, Member>): FormPanel<String>? {
+    fun build(tObject: TObject, tab: RoDisplay): FormPanel<String>? {
+        val members = tObject.members
         val items = mutableListOf<FormItem>()
         for (p in property) {
             val label = p.id ?: "label not set"
@@ -44,7 +46,7 @@ data class FieldSetLayout(val name: String? = null,
                 }
             }
             val description = p.describedAs
-            val fi = FormItem(label, type, content, description = description)
+            val fi = FormItem(label, type, content, description = description, tab = tab)
             items.add(fi)
         }
         return FormPanelFactory(items).panel

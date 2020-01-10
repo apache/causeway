@@ -16,13 +16,14 @@ import org.ro.ui.kv.UiManager
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
-class ListAggregator(val actionTitle: String) : BaseAggregator() {
+class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     override var dsp: BaseDisplayable = DisplayList(actionTitle)
 
     override fun update(logEntry: LogEntry) {
 
         when (val obj = logEntry.getTransferObject()) {
+            null -> log(logEntry)
             is ResultList -> handleList(obj)
             is TObject -> handleObject(obj)
             is Layout -> handleLayout(obj)

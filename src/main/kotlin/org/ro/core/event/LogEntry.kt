@@ -6,20 +6,20 @@ import org.ro.core.Utils.removeHexCode
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.to.TransferObject
 import org.ro.ui.kv.UiManager
-import pl.treksoft.kvision.core.Col
+import pl.treksoft.kvision.html.ButtonStyle
 import kotlin.js.Date
 
-//Eventually color codes from css instead
-enum class EventState(val id: String, val iconName: String, val color: Col) {
-    INITIAL("INITIAL", "fa-power-off", Col.GRAY),
-    RUNNING("RUNNING", "fa-play-circle", Col.YELLOW),
-    ERROR("ERROR", "fa-exclamation-circle", Col.RED),
-    SUCCESS("SUCCESS", "fa-check-circle", Col.GREEN),
-    VIEW("VIEW", "fa-info-circle", Col.BLUE),
-    CACHE_USED("CACHE_USED", "fa-caret-circle-left", Col.VIOLET),
-    CLOSED("CLOSED", "fa-times-circle", Col.LIGHTBLUE),
-    OBSOLETE("OBSOLETE", "fa-times-circle", Col.LIGHTBLUE)
-    //TODO list* need to be skipped, are never cached
+// use color codes from css instead?
+enum class EventState(val id: String, val iconName: String, val style: ButtonStyle) {
+    INITIAL("INITIAL", "fas fa-power-off", ButtonStyle.LIGHT),
+    RUNNING("RUNNING", "fas fa-play-circle", ButtonStyle.WARNING),
+    ERROR("ERROR", "fas fa-exclamation-circle", ButtonStyle.DANGER),
+    SUCCESS("SUCCESS", "fas fa-check-circle", ButtonStyle.SUCCESS),
+    VIEW("VIEW", "fas fa-info-circle", ButtonStyle.INFO),
+    CACHE_USED("CACHE_USED", "fas fa-caret-circle-left", ButtonStyle.OUTLINESUCCESS),
+    CLOSED("CLOSED", "fas fa-times-circle", ButtonStyle.OUTLINEINFO)
+    //,OBSOLETE("OBSOLETE", "fa-times-circle", Col.LIGHTBLUE)
+    // IMPROVE list* need to be skipped, are never cached
     // here are multiple aspects intermangled: req/resp, view, as well as cache
 }
 
@@ -31,9 +31,9 @@ data class LogEntry(
         @ContextualSerialization val createdAt: Date = Date()) {
     var state = EventState.INITIAL
     var title: String = ""
-    var requestLength: Int = 0
+    private var requestLength: Int = 0
     var response = ""
-    var responseLength: Int = 0
+    private var responseLength: Int = 0
 
     init {
         state = EventState.RUNNING
@@ -93,7 +93,11 @@ data class LogEntry(
     }
 
     fun getTransferObject(): TransferObject? {
-        return obj as TransferObject
+        return if (obj is TransferObject) {
+            obj as TransferObject
+        } else {
+            null
+        }
     }
 
     fun setTransferObject(to: TransferObject?) {
@@ -148,8 +152,8 @@ data class LogEntry(
         return fault != null
     }
 
-    //TODO is the last agg always the right one?
     fun getAggregator(): BaseAggregator? {
+        // is the last agg always the right one?
         return aggregators.last()
     }
 

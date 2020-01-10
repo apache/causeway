@@ -47,4 +47,13 @@ object RoView {
         UiManager.closeView(tab)
     }
 
+    fun findActive() : SimplePanel? {
+        val index = tabPanel.activeIndex
+        if (index != null) {
+            val tab = tabPanel.getChildComponent(index) as SimplePanel
+            return(tab)
+        }
+        return null
+    }
+
 }

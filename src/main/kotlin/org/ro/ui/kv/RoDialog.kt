@@ -17,7 +17,6 @@ import pl.treksoft.kvision.window.Window
 
 class RoDialog(
         caption: String,
-        init: (RoDialog.() -> Unit)? = null,
         val items: List<FormItem>,
         val command: Command) :
         Window(caption, 600.px, 300.px, closeButton = true) {
@@ -41,7 +40,6 @@ class RoDialog(
     var panel: FormPanel<String>?
 
     init {
-        init?.invoke(this)
         icon = IconManager.find(caption)
         isDraggable = true
         isResizable = true
@@ -63,7 +61,7 @@ class RoDialog(
         close()
     }
 
-    fun show(at: Point): Widget {
+    fun open(at: Point = Point(100, 100)): Widget {
         left = CssSize(at.x, UNIT.px)
         top = CssSize(at.x, UNIT.px)
         UiManager.openDialog(this)

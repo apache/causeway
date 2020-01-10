@@ -2,31 +2,33 @@ package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
 import org.ro.core.event.RoXmlHttpRequest
+import org.ro.to.Link
 import org.ro.to.Restful
 
 class RestfulDispatcher() : BaseAggregator() {
 
     override fun update(logEntry: LogEntry) {
-        var restful: Restful
-        try {
-            restful = logEntry.getTransferObject() as Restful
-            restful.links.forEach {
-                when {
-                    it.rel.endsWith("/menuBars") -> {
-                        RoXmlHttpRequest().invoke(it, NavigationDispatcher())
-                    }
-                    it.rel.equals("self") -> {
-                    }
-                    it.rel.endsWith("/services") -> {
-                    }
-                    else -> invoke(it)
-                }
+        val restful = logEntry.getTransferObject() as Restful
+        restful.links.forEach {
+            when {
+                it.rel.endsWith("/menuBars") -> invokeNavigation(it)
+                it.rel == "self" -> noop()
+                it.rel.endsWith("/services") -> noop()
+                else -> invokeSystem(it)
             }
-        } catch (cce: ClassCastException) {
-            //FIXME user, version, domain-object have RestfulDispatcher - need to use their own
-            console.log("[RestfulDispatcher.update]")
-            console.log(logEntry)
         }
+    }
+
+    private fun invokeNavigation(it: Link) {
+        RoXmlHttpRequest().invoke(it, NavigationDispatcher())
+    }
+
+    private fun invokeSystem(it: Link) {
+        RoXmlHttpRequest().invoke(it, SystemAggregator())
+    }
+
+    private fun noop() {
+        //do nothing
     }
 
 }

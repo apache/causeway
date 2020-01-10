@@ -45,8 +45,20 @@ div.tabulator-header {
     color: red !important;
 }
 
+.text-warn {
+    color: orange !important;
+}
+
+.text-ok {
+    color: green !important;
+}
+
 .text-normal {
     color: black;
+}
+
+.text-disabled {
+    color: lightgrey !important;
 }
 
 .nav-link {
