@@ -22,7 +22,7 @@ import javax.jdo.PersistenceManagerFactory;
 
 import org.datanucleus.enhancer.EnhancementHelper;
 
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 
 /**
  *

@@ -22,7 +22,7 @@ import java.util.Locale;
 
 import org.apache.isis.core.commons.internal.base._Timing;
 import org.apache.isis.core.commons.internal.base._Timing.StopWatch;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 
 /**
  * Responsibility: produce additional info when in prototyping mode 

@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFactory;
-import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
+import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 import lombok.Getter;

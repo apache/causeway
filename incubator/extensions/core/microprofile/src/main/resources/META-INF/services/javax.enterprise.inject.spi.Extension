@@ -1,1 +1,1 @@
-org.apache.isis.runtime.jee_support.IsisCDIBeanScanInterceptor
+org.apache.isis.core.runtime.jee_support.IsisCDIBeanScanInterceptor

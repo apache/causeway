@@ -68,7 +68,7 @@ import org.apache.isis.runtimeservices.wrapper.dispatchers.InteractionEventDispa
 import org.apache.isis.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.runtimeservices.wrapper.proxy.ProxyCreator;
-import org.apache.isis.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

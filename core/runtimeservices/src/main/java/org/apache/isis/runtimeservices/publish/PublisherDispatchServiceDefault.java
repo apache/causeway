@@ -50,7 +50,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
-import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
+import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.

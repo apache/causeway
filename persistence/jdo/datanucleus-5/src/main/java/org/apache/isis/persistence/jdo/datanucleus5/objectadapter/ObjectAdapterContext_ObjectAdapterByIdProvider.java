@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.context.session.RuntimeContext;
-import org.apache.isis.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.core.runtime.context.session.RuntimeContext;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 
 import lombok.val;
 

@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.runtime.persistence.transaction.events.TransactionAfterBeginEvent;
+import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAfterBeginEvent;
 
 /**
  * Convenient base class to extend for integration tests. 

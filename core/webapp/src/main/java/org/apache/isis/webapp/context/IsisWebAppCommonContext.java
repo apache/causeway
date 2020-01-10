@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 import org.apache.isis.webapp.context.memento.ObjectMementoService;
 

@@ -45,8 +45,8 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
 import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
-import org.apache.isis.runtime.persistence.transaction.IsisTransactionAspectSupport;
-import org.apache.isis.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

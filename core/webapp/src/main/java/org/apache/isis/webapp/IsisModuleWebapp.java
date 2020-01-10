@@ -21,7 +21,7 @@ package org.apache.isis.webapp;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.runtime.IsisModuleRuntime;
+import org.apache.isis.core.runtime.IsisModuleRuntime;
 import org.apache.isis.webapp.health.HealthIndicatorUsingHealthCheckService;
 import org.apache.isis.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.isis.webapp.modules.templresources.WebModuleTemplateResources;

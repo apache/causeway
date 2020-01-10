@@ -3,7 +3,7 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.runtime.IsisModuleRuntime;
+import org.apache.isis.core.runtime.IsisModuleRuntime;
 import org.apache.isis.viewer.restfulobjects.applib.IsisModuleRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator;

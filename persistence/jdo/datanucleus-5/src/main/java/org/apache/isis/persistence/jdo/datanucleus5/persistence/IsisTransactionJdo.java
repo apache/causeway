@@ -38,10 +38,10 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.DestroyObjectCommand;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
-import org.apache.isis.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.runtime.persistence.transaction.AuditerDispatchService;
-import org.apache.isis.runtime.persistence.transaction.IsisTransactionFlushException;
-import org.apache.isis.runtime.persistence.transaction.IsisTransactionManagerException;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
+import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionFlushException;
+import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionManagerException;
 
 import lombok.Getter;
 import lombok.val;

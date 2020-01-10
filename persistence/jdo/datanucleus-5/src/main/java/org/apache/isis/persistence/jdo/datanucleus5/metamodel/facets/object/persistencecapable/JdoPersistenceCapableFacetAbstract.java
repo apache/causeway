@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
-import org.apache.isis.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 
 
 public abstract class JdoPersistenceCapableFacetAbstract 

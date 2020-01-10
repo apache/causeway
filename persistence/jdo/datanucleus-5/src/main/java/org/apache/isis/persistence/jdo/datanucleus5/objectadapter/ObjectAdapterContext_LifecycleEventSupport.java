@@ -23,7 +23,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.commons.internal.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.context.session.RuntimeContext;
+import org.apache.isis.core.runtime.context.session.RuntimeContext;
 
 import lombok.val;
 

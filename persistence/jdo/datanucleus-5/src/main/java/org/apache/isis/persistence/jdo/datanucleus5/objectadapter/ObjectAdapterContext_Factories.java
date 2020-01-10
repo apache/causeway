@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext.ObjectAdapterFactories;
-import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
+import org.apache.isis.core.runtime.session.IsisSession;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 

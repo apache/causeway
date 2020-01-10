@@ -29,8 +29,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
+import org.apache.isis.core.runtime.session.IsisSession;
 
 import static org.apache.isis.core.commons.internal.functions._Predicates.not;
 

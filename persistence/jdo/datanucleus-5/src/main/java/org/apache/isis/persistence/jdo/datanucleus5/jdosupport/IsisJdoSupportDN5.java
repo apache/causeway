@@ -48,7 +48,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
-import org.apache.isis.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 

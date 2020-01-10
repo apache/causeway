@@ -45,7 +45,7 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 
 import lombok.val;
 

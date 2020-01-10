@@ -22,9 +22,9 @@ import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
-import org.apache.isis.runtime.persistence.session.events.PersistenceEventService;
-import org.apache.isis.runtime.persistence.session.events.PostStoreEvent;
-import org.apache.isis.runtime.persistence.session.events.PreStoreEvent;
+import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventService;
+import org.apache.isis.core.runtime.persistence.session.events.PostStoreEvent;
+import org.apache.isis.core.runtime.persistence.session.events.PreStoreEvent;
 
 import lombok.val;
 

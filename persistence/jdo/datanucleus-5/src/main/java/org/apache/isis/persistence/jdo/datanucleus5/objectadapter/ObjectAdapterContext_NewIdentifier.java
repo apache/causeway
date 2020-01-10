@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 
 import lombok.RequiredArgsConstructor;
 

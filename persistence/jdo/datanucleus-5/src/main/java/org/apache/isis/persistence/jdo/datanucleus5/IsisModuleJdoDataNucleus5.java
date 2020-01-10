@@ -39,7 +39,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingMode
 import org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory5;
-import org.apache.isis.runtime.IsisModuleRuntime;
+import org.apache.isis.core.runtime.IsisModuleRuntime;
 
 @Configuration
 @Import({

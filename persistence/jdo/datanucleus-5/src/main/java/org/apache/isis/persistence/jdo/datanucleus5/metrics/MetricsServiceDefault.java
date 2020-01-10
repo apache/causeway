@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.runtime.persistence.transaction.ChangedObjectsService;
+import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 
 @Service
 @Named("isisJdoDn5.MetricsServiceDefault")

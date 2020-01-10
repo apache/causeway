@@ -33,11 +33,11 @@ import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.runtime.context.session.AppLifecycleEvent;
-import org.apache.isis.runtime.context.session.SessionLifecycleEvent;
-import org.apache.isis.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.runtime.persistence.session.PersistenceSessionFactory;
-import org.apache.isis.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
+import org.apache.isis.core.runtime.context.session.SessionLifecycleEvent;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSession;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
