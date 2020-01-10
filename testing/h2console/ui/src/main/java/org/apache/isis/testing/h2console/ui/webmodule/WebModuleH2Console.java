@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testing.h2console.ui.webmodule;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -34,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
@@ -78,7 +77,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
 
     @Override
-    public List<ServletContextListener> init(final ServletContext ctx) throws ServletException {
+    public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
         registerServlet(ctx, SERVLET_NAME, WebServlet.class)
             .ifPresent(servletReg -> {
@@ -86,7 +85,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
                 servletReg.setInitParameter("webAllowOthers", "true");
             });
 
-        return null; // does not provide a listener
+        return Can.empty(); // registers no listeners
     }
 
     @Override
