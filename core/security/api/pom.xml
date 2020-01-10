@@ -42,7 +42,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-config</artifactId>
+            <artifactId>isis-core-config</artifactId>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->
