@@ -24,8 +24,8 @@
 	<name>Apache Isis Core - Detached Tests</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.detachedtests</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/detachedtests</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.detachedtests</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/detachedtests</git-plugin.propertiesDir>
 		
         <!-- to support the ParameterNameFacet Test -->
 		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
@@ -86,27 +86,12 @@
             <scope>test</scope>
         </dependency>
 
-<!--
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-unittestsupport</artifactId>
+			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit-legacy.version}</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
--->
+
 
 		<dependency>
 			<groupId>org.picocontainer</groupId>

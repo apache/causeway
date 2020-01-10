@@ -55,7 +55,7 @@ class ReflectTest {
                 .collect(Collectors.joining(",\n"));
 
         assertEquals(""
-                + "UserServiceDefault$SudoServiceSpi,\n"
+                + "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
                 + "java.lang.Object", 
                 typeListLiteral);
 
@@ -71,7 +71,7 @@ class ReflectTest {
                 .collect(Collectors.joining(",\n"));
 
         assertEquals(
-                "UserServiceDefault$SudoServiceSpi,\n"
+                "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
                         + "org.apache.isis.applib.services.sudo.SudoService$Spi,\n"
                         + "java.lang.Object", 
                         typeListLiteral);
@@ -91,8 +91,8 @@ class ReflectTest {
         assertEquals(""
                 + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.releaseRunAs(),\n"
                 + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.runAs(java.lang.String,java.util.List),\n"
-                + "public void UserServiceDefault$SudoServiceSpi.releaseRunAs(),\n"
-                + "public void UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"
+                + "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.releaseRunAs(),\n"
+                + "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"
                 ,
                 typeListLiteral);
 
