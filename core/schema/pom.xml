@@ -20,7 +20,7 @@
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-core-schema</artifactId>
+	<artifactId>isis-schema</artifactId>
 
 	<packaging>jar</packaging>
 	<name>Apache Isis Core - Schemas</name>
