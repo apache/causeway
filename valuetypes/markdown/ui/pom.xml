@@ -16,29 +16,51 @@
 
 	<parent>
 		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes-asciidoc</artifactId>
+		<artifactId>isis-valuetypes-markdown</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-asciidoc-applib</artifactId>
-	<name>Apache Isis Val - Asciidoctor (applib)</name>
+	<artifactId>isis-valuetypes-markdown-ui</artifactId>
+	<name>Apache Isis Val - Markdown (ui)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/applib</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.markdown.ui</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/markdown/ui</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-applib</artifactId>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-applib</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.asciidoctor</groupId>
-			<artifactId>asciidoctorj-api</artifactId>
-			<version>${asciidoctorj.version}</version>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-metamodel</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-viewer-wicket-ui</artifactId>
+		</dependency>
+
+		<!-- provides a markdown parser -->
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-all</artifactId>
+			<version>${flexmark.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jsoup</groupId>
+					<artifactId>jsoup</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.10.2</version>
 		</dependency>
 
 	</dependencies>

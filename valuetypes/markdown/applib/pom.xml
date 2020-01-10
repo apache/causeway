@@ -16,25 +16,33 @@
 
 	<parent>
 		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes</artifactId>
+		<artifactId>isis-valuetypes-markdown</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-asciidoc</artifactId>
-	<name>Apache Isis Val - Asciidoctor (parent)</name>
-	<description>
-		Asciidoc value type.
-	</description>
-
-	<packaging>pom</packaging>
+	<artifactId>isis-valuetypes-markdown-applib</artifactId>
+	<name>Apache Isis Val - Markdown (applib)</name>
 
 	<properties>
-		<asciidoctorj.version>2.1.0</asciidoctorj.version>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.markdown.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/markdown/applib</git-plugin.propertiesDir>
 	</properties>
 
-	<modules>
-		<module>applib</module>
-		<module>ui</module>
-	</modules>
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-all</artifactId>
+			<version>${flexmark.version}</version>
+			<!-- avoid polluting the classpath -->
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
 
 </project>

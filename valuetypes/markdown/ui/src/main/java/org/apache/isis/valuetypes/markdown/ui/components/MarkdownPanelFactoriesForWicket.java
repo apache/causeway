@@ -17,9 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.extensions.markdown.ui.components;
+package org.apache.isis.valuetypes.markdown.ui.components;
 
-import org.apache.isis.extensions.markdown.applib.value.Markdown;
+import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 

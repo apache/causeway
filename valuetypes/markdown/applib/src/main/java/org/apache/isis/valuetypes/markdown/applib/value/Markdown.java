@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.markdown.applib.value;
+package org.apache.isis.valuetypes.markdown.applib.value;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.extensions.markdown.ui.converter.MarkdownConverter;
 
 /**
  * Immutable value type holding pre-rendered HTML.
@@ -33,7 +32,7 @@ public class Markdown extends Markup {
     private static final long serialVersionUID = 1L;
 
     public static Markdown valueOfMarkdown(String asciiDoc) {
-        return valueOfHtml(MarkdownConverter.mdToHtml(asciiDoc));
+        return valueOfHtml(Converter.mdToHtml(asciiDoc));
     }
 
     public static Markdown valueOfHtml(String html) {

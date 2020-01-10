@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.markdown.ui.converter;
+package org.apache.isis.valuetypes.markdown.applib.value;
 
 import java.util.Arrays;
 
@@ -26,7 +26,7 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 
-public final class MarkdownConverter {
+public final class Converter {
 
     /**
      * For syntax highlighting to work, the client/browser needs to load specific 
