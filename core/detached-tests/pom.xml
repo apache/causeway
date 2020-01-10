@@ -83,7 +83,7 @@
         <!-- core plugins required to run this module's own tests -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-codegen-bytebuddy</artifactId>
+            <artifactId>isis-core-codegen-bytebuddy</artifactId>
             <scope>runtime</scope>
         </dependency>
 		<dependency>

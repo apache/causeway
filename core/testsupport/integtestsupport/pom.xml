@@ -72,7 +72,7 @@
 		<!-- framework default codegen for tests -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-codegen-bytebuddy</artifactId>
+			<artifactId>isis-core-codegen-bytebuddy</artifactId>
 		</dependency>
 
 		<dependency>
