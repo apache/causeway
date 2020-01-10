@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -38,6 +37,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -153,10 +154,8 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         return Pattern.compile(".*\\." + input);
     };
 
-    @Inject
-    private IsisSessionFactory isisSessionFactory;
-    @Inject
-    private SpecificationLoader specificationLoader;
+    @Autowired private IsisSessionFactory isisSessionFactory;
+    @Autowired private SpecificationLoader specificationLoader;
     
     private List<String> passThruList = Collections.emptyList();
 

@@ -24,6 +24,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -74,6 +76,9 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     @Override
     public void prepare(WebModuleContext ctx) {
+        
+        ResteasyProviderFactory.setInstance(new ResteasyProviderFactoryImpl());
+        
         super.prepare(ctx);
 
         if(!isApplicable(ctx)) {
@@ -87,6 +92,8 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
+        ResteasyProviderFactory.setInstance(new ResteasyProviderFactoryImpl());
+        
         registerFilter(ctx, ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class)
                 .ifPresent(filterReg -> {
                     // this is mapped to the entire application;

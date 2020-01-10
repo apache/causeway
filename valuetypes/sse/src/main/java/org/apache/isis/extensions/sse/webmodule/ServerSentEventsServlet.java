@@ -23,12 +23,13 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
-import javax.inject.Inject;
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.commons.internal.base._Strings;
@@ -54,8 +55,7 @@ public class ServerSentEventsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ExecutorService threadPool;
 
-    @Inject
-    private SseService sseService;
+    @Autowired private SseService sseService;
 
     @Override
     public void init() throws ServletException {

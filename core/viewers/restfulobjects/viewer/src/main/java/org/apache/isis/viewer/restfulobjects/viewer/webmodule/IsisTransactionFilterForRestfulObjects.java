@@ -20,13 +20,14 @@ package org.apache.isis.viewer.restfulobjects.viewer.webmodule;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.transaction.TransactionalException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.services.xactn.TransactionService;
 
@@ -35,8 +36,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 //with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class IsisTransactionFilterForRestfulObjects implements Filter {
 
-    @Inject
-    private TransactionService transactionService;
+    @Autowired private TransactionService transactionService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
