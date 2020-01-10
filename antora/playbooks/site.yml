@@ -191,7 +191,7 @@ content:
 
 # subdomains
     - url: .
-      start_path: subdomains/base/impl/src/main/doc # subdomains
+      start_path: subdomains/base/src/main/doc # subdomains
       branches: HEAD
     - url: .
       start_path: subdomains/docx/impl/src/main/doc # subdomains
