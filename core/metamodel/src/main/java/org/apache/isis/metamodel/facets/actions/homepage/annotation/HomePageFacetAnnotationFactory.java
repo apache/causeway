@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
@@ -41,7 +41,7 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 
-import static org.apache.isis.commons.internal.functions._Predicates.not;
+import static org.apache.isis.core.commons.internal.functions._Predicates.not;
 
 import lombok.val;
 

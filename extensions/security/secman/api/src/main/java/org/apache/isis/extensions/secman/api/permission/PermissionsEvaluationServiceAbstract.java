@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.api.permission;
 
 import java.util.Collection;
 
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 public abstract class PermissionsEvaluationServiceAbstract implements PermissionsEvaluationService {

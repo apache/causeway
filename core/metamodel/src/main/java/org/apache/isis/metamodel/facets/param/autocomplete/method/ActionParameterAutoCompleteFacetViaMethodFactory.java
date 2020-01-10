@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.param.autocomplete.method;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.FeatureType;

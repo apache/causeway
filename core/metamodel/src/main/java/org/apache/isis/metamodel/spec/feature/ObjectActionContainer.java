@@ -23,11 +23,11 @@ import java.util.Collection;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.metamodel.spec.ActionType;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 public interface ObjectActionContainer {
 

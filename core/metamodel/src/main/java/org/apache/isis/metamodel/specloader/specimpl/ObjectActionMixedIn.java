@@ -22,9 +22,9 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResultSet;

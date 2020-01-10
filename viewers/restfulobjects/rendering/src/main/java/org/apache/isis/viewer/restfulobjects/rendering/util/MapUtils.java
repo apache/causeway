@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Maps;
 
 public final class MapUtils {
 

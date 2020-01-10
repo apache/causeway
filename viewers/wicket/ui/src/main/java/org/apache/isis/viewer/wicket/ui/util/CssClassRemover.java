@@ -25,7 +25,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 
 /**
  * Implementation of {@link AttributeAppender} that appends the provided CSS

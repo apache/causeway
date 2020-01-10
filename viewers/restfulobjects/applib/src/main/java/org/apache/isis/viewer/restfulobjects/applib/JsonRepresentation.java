@@ -47,8 +47,8 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;

@@ -21,10 +21,10 @@ package org.apache.isis.unittestsupport.config.internal;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

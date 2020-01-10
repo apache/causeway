@@ -28,7 +28,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;

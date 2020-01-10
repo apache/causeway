@@ -28,7 +28,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.config.presets.IsisPresets;

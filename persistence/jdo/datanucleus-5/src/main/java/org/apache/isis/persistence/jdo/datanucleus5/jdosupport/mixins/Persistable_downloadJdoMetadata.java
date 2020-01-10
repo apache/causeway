@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 
 @Mixin(method = "act")

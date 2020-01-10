@@ -21,10 +21,10 @@ package org.apache.isis.viewer.wicket.viewer.services.mementos;
 
 import java.util.Set;
 
-import org.apache.isis.commons.exceptions.UnknownTypeException;
-import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;

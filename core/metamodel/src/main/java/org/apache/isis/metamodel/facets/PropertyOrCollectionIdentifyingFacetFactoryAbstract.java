@@ -21,8 +21,8 @@ package org.apache.isis.metamodel.facets;
 
 import java.util.EnumSet;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract

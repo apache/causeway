@@ -30,8 +30,8 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.internal.collections._Inbox;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal.collections._Inbox;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -44,7 +44,6 @@ import org.apache.isis.runtime.persistence.transaction.IsisTransactionFlushExcep
 import org.apache.isis.runtime.persistence.transaction.IsisTransactionManagerException;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 

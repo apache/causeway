@@ -30,12 +30,12 @@ import java.util.stream.Stream;
 import org.apache.wicket.Component;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.factory.InstanceUtil;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.ClassUtil;
@@ -58,7 +58,7 @@ import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 import org.apache.isis.webapp.context.memento.ObjectMementoService;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE

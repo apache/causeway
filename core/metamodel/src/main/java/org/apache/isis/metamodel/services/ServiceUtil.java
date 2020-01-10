@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.services;
 
-import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 

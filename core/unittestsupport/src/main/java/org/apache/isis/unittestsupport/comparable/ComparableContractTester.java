@@ -25,7 +25,7 @@ import org.hamcrest.Matchers;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 public class ComparableContractTester<T extends Comparable<T>> {
 

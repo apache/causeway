@@ -23,8 +23,8 @@ import java.awt.Font;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Arrays;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

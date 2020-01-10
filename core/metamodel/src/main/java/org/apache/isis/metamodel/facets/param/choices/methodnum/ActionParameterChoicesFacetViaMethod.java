@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal._Constants;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.CollectionUtils;

@@ -21,8 +21,8 @@ package org.apache.isis.unittestsupport.soap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.collections._Maps;
 
 /**
  * Collection of SOAP endpoints that have been published; will automatically assign a unique address to any

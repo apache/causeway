@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -32,7 +32,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.runtime.session.IsisSession;
 
-import static org.apache.isis.commons.internal.functions._Predicates.not;
+import static org.apache.isis.core.commons.internal.functions._Predicates.not;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

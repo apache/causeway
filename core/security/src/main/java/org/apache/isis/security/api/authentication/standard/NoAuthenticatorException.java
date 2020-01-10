@@ -19,7 +19,7 @@
 
 package org.apache.isis.security.api.authentication.standard;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 /**
  * Indicates that there is no Authenticator available to authenticate a user

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.commons.internal.resources._Resources;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

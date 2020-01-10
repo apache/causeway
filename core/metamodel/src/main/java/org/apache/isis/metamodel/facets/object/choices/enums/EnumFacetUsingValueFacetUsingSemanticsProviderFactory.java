@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.choices.enums;
 
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 

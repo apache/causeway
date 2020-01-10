@@ -27,7 +27,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;

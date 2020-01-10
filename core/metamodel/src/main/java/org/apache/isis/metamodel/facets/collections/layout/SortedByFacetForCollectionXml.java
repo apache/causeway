@@ -27,7 +27,7 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.metamodel.facets.collections.sortedby.SortedByFacetAbstract;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 public class SortedByFacetForCollectionXml extends SortedByFacetAbstract {
 

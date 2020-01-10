@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Optional;
 
-import org.apache.isis.commons.internal.base._Reduction;
+import org.apache.isis.core.commons.internal.base._Reduction;
 
 class Util {
 

@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.consent;
 
 import org.apache.isis.metamodel.facetapi.Facet;
 
-import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
+import static org.apache.isis.core.commons.internal.base._With.requiresNotEmpty;
 
 public class Veto extends ConsentAbstract {
 

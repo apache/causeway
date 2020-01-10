@@ -32,7 +32,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

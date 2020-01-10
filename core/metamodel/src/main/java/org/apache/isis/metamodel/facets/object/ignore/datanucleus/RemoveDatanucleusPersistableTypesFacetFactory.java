@@ -21,8 +21,8 @@ package org.apache.isis.metamodel.facets.object.ignore.datanucleus;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.factory.InstanceUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;

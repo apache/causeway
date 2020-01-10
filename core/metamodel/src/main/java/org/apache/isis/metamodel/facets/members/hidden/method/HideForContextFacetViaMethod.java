@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.interactions.VisibilityContext;

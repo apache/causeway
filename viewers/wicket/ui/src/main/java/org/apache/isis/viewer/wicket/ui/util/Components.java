@@ -26,7 +26,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 public final class Components {

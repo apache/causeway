@@ -25,14 +25,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 
-import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
+import static org.apache.isis.core.commons.internal.base._Strings.splitThenStream;
 
 /**
  * Factory for subtypes of {@link Oid}, based on their oid str.

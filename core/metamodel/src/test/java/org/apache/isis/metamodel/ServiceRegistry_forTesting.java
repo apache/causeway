@@ -24,15 +24,15 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.IocContainer;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.ioc.IocContainer;
+import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.core.commons.internal.ioc.spring._Spring;
 import org.apache.isis.metamodel.context.MetaModelContext;
 
 import lombok.Builder;

@@ -24,7 +24,7 @@ import java.util.Arrays;
 import org.jmock.integration.junit4.JMock;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.commons.internal.encoding.Encodable;
+import org.apache.isis.core.commons.internal.encoding.Encodable;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
 
 @RunWith(JMock.class)

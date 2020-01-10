@@ -30,7 +30,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;

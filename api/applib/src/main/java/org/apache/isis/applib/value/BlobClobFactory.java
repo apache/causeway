@@ -21,7 +21,7 @@ package org.apache.isis.applib.value;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import static org.apache.isis.commons.internal.base._Strings.asFileNameWithExtension;
+import static org.apache.isis.core.commons.internal.base._Strings.asFileNameWithExtension;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

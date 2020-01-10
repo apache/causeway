@@ -19,7 +19,7 @@
 
 package org.apache.isis.extensions.sse.metamodel.facets;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.sse.applib.annotations.SseSource;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

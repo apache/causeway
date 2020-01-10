@@ -30,8 +30,8 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;

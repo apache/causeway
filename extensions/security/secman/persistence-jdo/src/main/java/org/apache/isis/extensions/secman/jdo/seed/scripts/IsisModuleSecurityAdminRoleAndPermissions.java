@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
-import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;

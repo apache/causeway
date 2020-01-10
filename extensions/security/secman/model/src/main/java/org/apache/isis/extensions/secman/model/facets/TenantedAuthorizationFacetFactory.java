@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

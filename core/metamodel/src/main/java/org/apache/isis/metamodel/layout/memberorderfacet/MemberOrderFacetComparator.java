@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.layout.memberorderfacet;
 
 import java.util.Comparator;
 
-import org.apache.isis.commons.internal.compare._Comparators;
+import org.apache.isis.core.commons.internal.compare._Comparators;
 import org.apache.isis.metamodel.facets.members.order.MemberOrderFacet;
 
 public class MemberOrderFacetComparator implements Comparator<MemberOrderFacet> {

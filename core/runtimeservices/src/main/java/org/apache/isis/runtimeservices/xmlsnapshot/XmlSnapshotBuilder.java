@@ -20,7 +20,7 @@ package org.apache.isis.runtimeservices.xmlsnapshot;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.util.snapshot.XmlSchema;

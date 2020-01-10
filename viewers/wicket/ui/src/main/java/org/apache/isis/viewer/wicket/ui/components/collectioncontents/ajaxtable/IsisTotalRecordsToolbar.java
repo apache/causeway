@@ -29,7 +29,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 
 /**
  * Responsibility: Display 'Showing all of 123' at the bottom of data tables.

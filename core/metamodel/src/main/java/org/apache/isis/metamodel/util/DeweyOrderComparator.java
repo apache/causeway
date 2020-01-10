@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.util;
 
 import java.util.Comparator;
 
-import org.apache.isis.commons.internal.compare._Comparators;
+import org.apache.isis.core.commons.internal.compare._Comparators;
 
 public class DeweyOrderComparator implements Comparator<String> {
 

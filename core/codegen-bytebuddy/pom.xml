@@ -30,8 +30,8 @@
 	<properties>
 		<objenesis.version>2.6</objenesis.version>
 
-		<jar-plugin.automaticModuleName>org.apache.isis.codegen.bytebuddy</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/codegen/bytebuddy</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.codegen.bytebuddy</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/codegen/bytebuddy</git-plugin.propertiesDir>
 	</properties>
 
 	<build>

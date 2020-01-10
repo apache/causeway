@@ -23,7 +23,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public final class ArrayExtensions {
 

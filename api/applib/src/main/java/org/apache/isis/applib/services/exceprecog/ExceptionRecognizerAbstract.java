@@ -29,8 +29,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import lombok.extern.log4j.Log4j2;
 

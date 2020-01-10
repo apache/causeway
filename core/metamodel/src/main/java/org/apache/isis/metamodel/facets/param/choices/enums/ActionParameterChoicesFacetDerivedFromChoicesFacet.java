@@ -21,8 +21,7 @@ package org.apache.isis.metamodel.facets.param.choices.enums;
 
 import java.util.List;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.TypedHolder;

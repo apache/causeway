@@ -21,8 +21,8 @@ package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;

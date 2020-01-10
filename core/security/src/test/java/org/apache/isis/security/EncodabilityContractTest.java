@@ -33,10 +33,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.apache.isis.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.commons.internal.encoding.DataInputStreamExtended;
-import org.apache.isis.commons.internal.encoding.DataOutputStreamExtended;
-import org.apache.isis.commons.internal.encoding.Encodable;
+import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.core.commons.internal.encoding.DataInputStreamExtended;
+import org.apache.isis.core.commons.internal.encoding.DataOutputStreamExtended;
+import org.apache.isis.core.commons.internal.encoding.Encodable;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
 public abstract class EncodabilityContractTest {

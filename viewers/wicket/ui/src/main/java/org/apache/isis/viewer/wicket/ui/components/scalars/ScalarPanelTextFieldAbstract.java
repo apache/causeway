@@ -37,7 +37,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;

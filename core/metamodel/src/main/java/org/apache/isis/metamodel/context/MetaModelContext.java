@@ -20,7 +20,6 @@ package org.apache.isis.metamodel.context;
 
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -28,7 +27,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;

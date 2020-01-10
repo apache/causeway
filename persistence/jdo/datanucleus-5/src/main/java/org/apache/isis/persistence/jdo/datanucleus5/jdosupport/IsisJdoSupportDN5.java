@@ -42,15 +42,15 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 
 /**

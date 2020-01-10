@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.adapter.oid;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 /**

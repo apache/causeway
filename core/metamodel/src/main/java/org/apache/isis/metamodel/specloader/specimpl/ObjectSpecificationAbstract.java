@@ -32,17 +32,17 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.collections._Streams;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Multimaps;
+import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.collections._Streams;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.ioc.BeanSort;
+import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.metamodel.commons.ClassExtensions;
@@ -90,7 +90,7 @@ import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

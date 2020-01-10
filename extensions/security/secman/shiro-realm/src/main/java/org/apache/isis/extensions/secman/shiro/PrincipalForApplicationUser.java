@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
 
-import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.user.AccountType;

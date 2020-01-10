@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.objectmanager.load;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;

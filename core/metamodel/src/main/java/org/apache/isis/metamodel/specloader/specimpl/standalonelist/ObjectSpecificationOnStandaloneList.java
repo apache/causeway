@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.specloader.specimpl.standalonelist;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
@@ -38,7 +38,7 @@ import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import static org.apache.isis.core.commons.internal.base._With.mapIfPresentElse;
 
 /**
  * A custom {@link ObjectSpecification} that is designed to treat the

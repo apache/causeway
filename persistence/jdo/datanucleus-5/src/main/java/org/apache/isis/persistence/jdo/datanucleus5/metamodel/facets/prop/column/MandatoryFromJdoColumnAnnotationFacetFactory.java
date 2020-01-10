@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;

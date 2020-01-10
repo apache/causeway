@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.viewer.services.mementos;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 
 final class CollectionData extends Data {

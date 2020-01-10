@@ -21,7 +21,7 @@ package org.apache.isis.applib.util;
 
 import java.util.stream.Collectors;
 
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 
 public final class Enums {
 

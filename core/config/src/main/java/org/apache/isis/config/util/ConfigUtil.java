@@ -21,7 +21,7 @@ package org.apache.isis.config.util;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.config.ConfigurationConstants;
 
 import lombok.experimental.UtilityClass;

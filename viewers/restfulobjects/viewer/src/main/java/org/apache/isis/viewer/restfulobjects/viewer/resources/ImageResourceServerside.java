@@ -29,8 +29,8 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 

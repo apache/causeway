@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.objectmanager.refresh;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;

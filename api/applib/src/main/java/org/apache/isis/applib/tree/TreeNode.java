@@ -28,7 +28,7 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 
 public interface TreeNode<T> {
 

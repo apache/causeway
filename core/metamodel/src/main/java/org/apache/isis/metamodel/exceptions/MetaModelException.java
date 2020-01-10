@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class MetaModelException extends IsisException {
     private static final long serialVersionUID = 1L;

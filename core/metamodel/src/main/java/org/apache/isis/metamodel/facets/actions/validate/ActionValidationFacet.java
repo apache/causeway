@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.actions.validate;
 
 import java.util.List;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;

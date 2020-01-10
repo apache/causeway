@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.callbacks;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;

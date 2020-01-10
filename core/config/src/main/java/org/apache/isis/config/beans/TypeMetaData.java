@@ -18,9 +18,9 @@
  */
 package org.apache.isis.config.beans;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

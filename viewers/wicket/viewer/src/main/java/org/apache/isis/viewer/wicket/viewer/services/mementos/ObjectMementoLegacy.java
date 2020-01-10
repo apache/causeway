@@ -27,9 +27,9 @@ import java.util.function.Function;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.memento._Mementos.Memento;
+import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -39,7 +39,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

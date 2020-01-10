@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -48,7 +48,7 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.val;
 

@@ -30,7 +30,7 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.metamodel.commons.LocaleUtil;
 import org.apache.isis.metamodel.facetapi.Facet;

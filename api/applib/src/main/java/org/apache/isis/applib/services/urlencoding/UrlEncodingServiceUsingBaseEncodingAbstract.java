@@ -20,8 +20,8 @@ package org.apache.isis.applib.services.urlencoding;
 
 import java.nio.charset.StandardCharsets;
 
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.base._Strings;
 
 /**
  * to use, subclass and annotated with:

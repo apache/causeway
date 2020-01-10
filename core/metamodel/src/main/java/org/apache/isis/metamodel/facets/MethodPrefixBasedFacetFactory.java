@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 

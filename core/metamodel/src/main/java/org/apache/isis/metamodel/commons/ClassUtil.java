@@ -24,13 +24,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
+import static org.apache.isis.core.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requiresNotEmpty;
 
 import lombok.val;
 

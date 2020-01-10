@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.runtime.session.IsisSession;

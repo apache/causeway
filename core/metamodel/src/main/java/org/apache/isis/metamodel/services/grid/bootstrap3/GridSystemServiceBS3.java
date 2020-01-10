@@ -50,12 +50,12 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap3.Size;
 import org.apache.isis.applib.mixins.MixinConstants;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.resources._Resources;
 import org.apache.isis.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
@@ -69,7 +69,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 

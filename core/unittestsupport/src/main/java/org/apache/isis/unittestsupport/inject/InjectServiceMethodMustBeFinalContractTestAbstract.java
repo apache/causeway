@@ -25,11 +25,11 @@ import java.util.Set;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.unittestsupport.AbstractApplyToAllContractTest;
 
-import static org.apache.isis.commons.internal.collections._Collections.toHashSet;
-import static org.apache.isis.commons.internal.reflection._Reflect.withPrefix;
+import static org.apache.isis.core.commons.internal.collections._Collections.toHashSet;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.withPrefix;
 
 /**
  * Ensure that subclasses do not inadvertently override an <tt>injectXxx()</tt> method that

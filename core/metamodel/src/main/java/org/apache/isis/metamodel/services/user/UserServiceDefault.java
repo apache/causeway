@@ -36,7 +36,7 @@ import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 
 import lombok.val;

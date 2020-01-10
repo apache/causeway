@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets.object.callbacks;
 
 import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleClassValueFacetAbstract;
 

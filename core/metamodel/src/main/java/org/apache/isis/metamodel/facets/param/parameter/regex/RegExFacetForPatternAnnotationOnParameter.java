@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.param.parameter.regex;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.objectvalue.regex.RegExFacet;

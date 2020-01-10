@@ -32,8 +32,8 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -41,7 +41,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

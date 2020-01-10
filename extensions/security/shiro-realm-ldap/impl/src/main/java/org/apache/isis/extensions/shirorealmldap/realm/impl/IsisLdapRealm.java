@@ -41,13 +41,13 @@ import org.apache.shiro.realm.ldap.LdapUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.StringUtils;
 
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapper;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromIni;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromString;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 /**
  * Implementation of {@link org.apache.shiro.realm.ldap.JndiLdapRealm} that also

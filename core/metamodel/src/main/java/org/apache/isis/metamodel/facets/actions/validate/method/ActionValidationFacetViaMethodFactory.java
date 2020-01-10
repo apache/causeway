@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.actions.validate.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;

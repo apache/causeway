@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.actions.prototype;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.commons.internal.environment.DeploymentType;
+import org.apache.isis.core.commons.internal.environment.DeploymentType;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.StringExtensions;
 

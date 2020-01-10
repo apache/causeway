@@ -25,11 +25,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
-import static org.apache.isis.commons.internal.base._With.computeIfAbsent;
+import static org.apache.isis.core.commons.internal.base._With.computeIfAbsent;
 
 import lombok.Getter;
 import lombok.NonNull;

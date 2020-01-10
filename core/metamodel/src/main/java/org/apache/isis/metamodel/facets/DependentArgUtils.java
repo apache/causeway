@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 
 import lombok.Builder;

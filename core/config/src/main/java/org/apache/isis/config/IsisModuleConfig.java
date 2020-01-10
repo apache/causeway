@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.commons.IsisModuleCommons;
+import org.apache.isis.core.commons.IsisModuleCommons;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.isis.config.viewer.wicket.WebAppConfiguration;

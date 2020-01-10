@@ -23,8 +23,8 @@ import java.lang.reflect.Type;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.collections._Collections;
 
 /**
  * Defines the types which are considered to be collections.

@@ -25,7 +25,7 @@ import java.util.Map;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -35,7 +35,7 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionRemoveFromF
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 
 public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract

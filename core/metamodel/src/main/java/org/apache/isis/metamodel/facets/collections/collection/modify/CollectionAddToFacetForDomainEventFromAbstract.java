@@ -34,7 +34,7 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 public abstract class CollectionAddToFacetForDomainEventFromAbstract
 extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>

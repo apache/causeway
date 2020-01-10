@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.isis.commons.internal.base._Strings.KeyValuePair;
+import org.apache.isis.core.commons.internal.base._Strings.KeyValuePair;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 /**
  * Package private mixin for ResourceServlet

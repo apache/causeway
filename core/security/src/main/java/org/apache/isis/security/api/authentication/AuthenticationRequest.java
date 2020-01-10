@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 public interface AuthenticationRequest {
 

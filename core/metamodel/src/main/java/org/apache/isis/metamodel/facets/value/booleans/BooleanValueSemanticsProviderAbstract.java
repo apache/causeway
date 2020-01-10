@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.value.booleans;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;

@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.services.homepage;
 import java.util.Collections;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;

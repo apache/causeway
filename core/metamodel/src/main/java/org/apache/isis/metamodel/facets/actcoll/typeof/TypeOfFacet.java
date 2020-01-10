@@ -26,8 +26,8 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleClassValueFacet;
 

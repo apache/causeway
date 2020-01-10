@@ -23,8 +23,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.ToString;
@@ -33,7 +33,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.session.IsisSession;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.val;

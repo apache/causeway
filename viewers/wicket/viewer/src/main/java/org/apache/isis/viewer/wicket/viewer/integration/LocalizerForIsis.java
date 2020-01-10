@@ -33,7 +33,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;

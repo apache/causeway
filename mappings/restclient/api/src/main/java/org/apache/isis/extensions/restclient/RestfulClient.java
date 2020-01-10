@@ -29,13 +29,13 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.client.SuppressionType;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.extensions.restclient.auth.BasicAuthFilter;
 import org.apache.isis.extensions.restclient.auth.BasicAuthFilter.Credentials;
 import org.apache.isis.extensions.restclient.log.RestfulLoggingFilter;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.extern.log4j.Log4j2;
 

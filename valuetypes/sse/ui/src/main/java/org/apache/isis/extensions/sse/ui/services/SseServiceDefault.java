@@ -41,7 +41,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.extensions.sse.applib.service.SseChannel;
 import org.apache.isis.extensions.sse.applib.service.SseService;
 import org.apache.isis.extensions.sse.applib.annotations.SseSource;

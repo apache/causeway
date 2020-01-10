@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.members.cssclassfa.annotprop;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.commons.internal.reflection._Annotations;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import lombok.val;

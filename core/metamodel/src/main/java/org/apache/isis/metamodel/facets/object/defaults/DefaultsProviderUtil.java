@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

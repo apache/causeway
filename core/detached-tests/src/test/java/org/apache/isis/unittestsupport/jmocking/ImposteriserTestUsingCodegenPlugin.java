@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.context._Context;
 
 class ImposteriserTestUsingCodegenPlugin {
 

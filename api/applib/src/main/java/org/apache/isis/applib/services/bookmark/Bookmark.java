@@ -23,8 +23,8 @@ import java.util.Iterator;
 import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 

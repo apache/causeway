@@ -26,7 +26,7 @@ import java.util.StringTokenizer;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormatter;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.value.JodaFunctions;
 

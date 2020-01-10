@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal.factory.InstanceUtil;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

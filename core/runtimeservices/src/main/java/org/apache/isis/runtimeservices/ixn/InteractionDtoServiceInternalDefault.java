@@ -37,7 +37,6 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;

@@ -19,7 +19,7 @@
 
 package org.apache.isis.persistence.jdo.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class NotPersistableException extends IsisException {
     private static final long serialVersionUID = 1L;

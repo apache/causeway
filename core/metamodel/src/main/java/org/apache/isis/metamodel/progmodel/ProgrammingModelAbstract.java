@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.commons.internal.collections._Multimaps.SetMultimap;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Multimaps;
+import org.apache.isis.core.commons.internal.collections._Multimaps.SetMultimap;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;

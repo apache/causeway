@@ -21,8 +21,8 @@ package org.apache.isis.metamodel.facets.properties.update;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;

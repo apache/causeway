@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.param.disable;
 
 import java.util.List;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.metamodel.spec.ManagedObject;

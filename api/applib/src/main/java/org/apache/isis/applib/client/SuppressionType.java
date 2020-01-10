@@ -21,9 +21,9 @@ package org.apache.isis.applib.client;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 /**
  * 

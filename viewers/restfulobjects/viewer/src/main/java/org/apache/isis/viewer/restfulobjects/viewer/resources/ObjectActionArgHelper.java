@@ -21,8 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;

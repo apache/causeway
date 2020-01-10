@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;

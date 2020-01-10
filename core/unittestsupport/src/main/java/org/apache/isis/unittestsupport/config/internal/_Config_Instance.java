@@ -25,12 +25,12 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal._Constants;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 
-import static org.apache.isis.commons.internal.base._With.computeIfAbsent;
+import static org.apache.isis.core.commons.internal.base._With.computeIfAbsent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

@@ -38,7 +38,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;

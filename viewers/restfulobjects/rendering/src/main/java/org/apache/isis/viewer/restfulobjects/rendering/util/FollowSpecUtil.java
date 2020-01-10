@@ -20,7 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
 
 public final class FollowSpecUtil {

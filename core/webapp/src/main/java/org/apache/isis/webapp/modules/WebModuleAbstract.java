@@ -29,7 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.core.commons.internal.factory.InstanceUtil;
 
 public abstract class WebModuleAbstract implements WebModule {
 

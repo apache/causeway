@@ -31,8 +31,8 @@ import javax.servlet.ServletContextListener;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.reflection._Annotations;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

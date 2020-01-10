@@ -43,12 +43,12 @@ import static java.util.stream.Collectors.toList;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.extern.log4j.Log4j2;
 

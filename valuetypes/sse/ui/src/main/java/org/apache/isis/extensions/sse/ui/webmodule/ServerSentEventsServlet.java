@@ -31,13 +31,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.applib.util.JaxbAdapters;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.extensions.sse.applib.service.SseChannel;
 import org.apache.isis.extensions.sse.applib.service.SseService;
 import org.apache.isis.extensions.sse.applib.value.ListeningMarkup;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.val;
 

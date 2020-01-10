@@ -23,7 +23,7 @@ import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 public class ThrowableMatchers {
 

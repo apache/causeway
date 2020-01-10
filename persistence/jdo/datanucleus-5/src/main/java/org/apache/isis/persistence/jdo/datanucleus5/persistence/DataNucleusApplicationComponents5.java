@@ -35,9 +35,9 @@ import org.datanucleus.metadata.MetaDataListener;
 import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -47,7 +47,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.quer
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.query.JdoQueryFacet;
 import org.apache.isis.runtime.context.IsisContext;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
 import lombok.val;

@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.context.session.RuntimeContext;
 

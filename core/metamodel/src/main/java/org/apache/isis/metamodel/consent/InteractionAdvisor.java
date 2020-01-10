@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.consent;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.interactions.InteractionAdvisorFacet;

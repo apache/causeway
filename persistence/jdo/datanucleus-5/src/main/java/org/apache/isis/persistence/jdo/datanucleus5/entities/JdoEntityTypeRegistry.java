@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.NoArgsConstructor;
 import lombok.Synchronized;

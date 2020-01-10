@@ -26,7 +26,7 @@ import java.util.Set;
 
 import org.apache.shiro.subject.PrincipalCollection;
 
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._Casts;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

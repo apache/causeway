@@ -35,7 +35,7 @@ import javax.jdo.identity.StringIdentity;
 
 import org.datanucleus.identity.DatastoreId;
 
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;

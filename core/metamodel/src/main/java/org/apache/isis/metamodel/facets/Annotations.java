@@ -44,16 +44,16 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.reflection._Annotations;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 public final class Annotations  {
 

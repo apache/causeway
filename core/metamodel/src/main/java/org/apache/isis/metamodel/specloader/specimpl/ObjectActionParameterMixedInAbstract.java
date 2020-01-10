@@ -20,7 +20,7 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.List;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.interactions.ActionArgValidityContext;

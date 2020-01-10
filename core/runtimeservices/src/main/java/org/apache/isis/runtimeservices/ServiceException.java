@@ -19,7 +19,7 @@
 
 package org.apache.isis.runtimeservices;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class ServiceException extends IsisException {
     private static final long serialVersionUID = 1L;

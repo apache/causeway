@@ -30,8 +30,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.base._Strings;
 
 /**
  * Provides JAXB XmlAdapters for Java built-in temporal types. 

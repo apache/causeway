@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.apache.isis.applib.ApplicationException;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;

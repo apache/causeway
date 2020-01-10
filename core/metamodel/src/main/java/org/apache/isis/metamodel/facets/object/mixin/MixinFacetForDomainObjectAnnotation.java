@@ -25,7 +25,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 

@@ -31,7 +31,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

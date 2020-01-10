@@ -20,8 +20,8 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.List;
 
-import org.apache.isis.commons.exceptions.UnknownTypeException;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;

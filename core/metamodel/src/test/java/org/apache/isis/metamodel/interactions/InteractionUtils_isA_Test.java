@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.interactions;
 
-import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.core.commons.internal.functions._Predicates;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

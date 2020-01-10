@@ -23,8 +23,8 @@ import java.util.Map;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.EntityState;

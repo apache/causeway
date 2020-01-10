@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.wrapper.AsyncWrap;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 

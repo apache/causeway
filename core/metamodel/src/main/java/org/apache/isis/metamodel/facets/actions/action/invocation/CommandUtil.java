@@ -22,9 +22,8 @@ package org.apache.isis.metamodel.facets.actions.action.invocation;
 import java.util.List;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.spec.ManagedObject;

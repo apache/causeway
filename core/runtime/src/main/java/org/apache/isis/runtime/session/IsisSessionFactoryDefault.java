@@ -38,10 +38,10 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
-import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.concurrent._ConcurrentContext;
+import org.apache.isis.core.commons.internal.concurrent._ConcurrentTaskList;
+import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -51,7 +51,7 @@ import org.apache.isis.runtime.session.init.IsisTimeZoneInitializer;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

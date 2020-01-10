@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.core.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.IsisConfiguration;
 
 import lombok.val;

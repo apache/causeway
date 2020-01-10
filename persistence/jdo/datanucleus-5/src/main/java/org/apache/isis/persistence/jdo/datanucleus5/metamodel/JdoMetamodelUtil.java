@@ -23,8 +23,8 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Sets;
 
 public class JdoMetamodelUtil {
     

@@ -61,7 +61,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.core.commons.internal.ioc.BeanSort;
 import org.apache.isis.config.viewer.wicket.DialogMode;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;

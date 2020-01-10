@@ -22,7 +22,7 @@ import java.lang.reflect.Constructor;
 import java.util.Map;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Maps;
 
 import lombok.RequiredArgsConstructor;
 

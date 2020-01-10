@@ -25,7 +25,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.core.commons.internal.ioc.spring._Spring;
 
 /**
  * 

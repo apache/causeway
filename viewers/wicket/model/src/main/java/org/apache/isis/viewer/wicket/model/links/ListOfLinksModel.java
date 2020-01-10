@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 
 public class ListOfLinksModel extends LoadableDetachableModel<List<LinkAndLabel>> {

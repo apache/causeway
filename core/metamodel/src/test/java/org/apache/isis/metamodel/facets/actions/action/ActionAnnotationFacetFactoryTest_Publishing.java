@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.commons.internal.base._Blackhole;
+import org.apache.isis.core.commons.internal.base._Blackhole;
 import org.apache.isis.config.metamodel.facets.PublishActionsConfiguration;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;

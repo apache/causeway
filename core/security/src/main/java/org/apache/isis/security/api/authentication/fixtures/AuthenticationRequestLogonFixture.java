@@ -22,7 +22,7 @@ package org.apache.isis.security.api.authentication.fixtures;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.security.api.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 

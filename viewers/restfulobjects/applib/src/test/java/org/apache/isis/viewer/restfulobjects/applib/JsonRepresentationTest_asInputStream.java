@@ -30,8 +30,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.base._Strings;
 
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 

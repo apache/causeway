@@ -23,8 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

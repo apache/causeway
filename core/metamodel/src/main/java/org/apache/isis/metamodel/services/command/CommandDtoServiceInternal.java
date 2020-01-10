@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.services.command;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;

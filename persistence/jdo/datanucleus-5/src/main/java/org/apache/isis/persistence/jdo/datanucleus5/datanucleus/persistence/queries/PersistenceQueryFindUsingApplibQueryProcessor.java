@@ -24,8 +24,8 @@ import java.util.Map;
 
 import javax.jdo.Query;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.metamodel.spec.ManagedObject;

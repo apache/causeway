@@ -20,7 +20,7 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.function.Function;
 
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 

@@ -21,9 +21,9 @@ package org.apache.isis.security.api.authentication.singleuser;
 
 import java.io.IOException;
 
-import org.apache.isis.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.commons.internal.encoding.Encodable;
+import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.core.commons.internal.encoding.DataOutputExtended;
+import org.apache.isis.core.commons.internal.encoding.Encodable;
 import org.apache.isis.security.api.authentication.AuthenticationSessionAbstract;
 
 public final class SingleUserSession extends AuthenticationSessionAbstract implements Encodable {

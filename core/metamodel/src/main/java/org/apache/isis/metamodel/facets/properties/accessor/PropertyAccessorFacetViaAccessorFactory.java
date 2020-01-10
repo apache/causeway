@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.facets.properties.accessor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.commons.CanBeVoid;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;

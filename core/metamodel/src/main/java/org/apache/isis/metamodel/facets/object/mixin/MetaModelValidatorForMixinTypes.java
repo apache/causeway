@@ -19,7 +19,7 @@
 package org.apache.isis.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 

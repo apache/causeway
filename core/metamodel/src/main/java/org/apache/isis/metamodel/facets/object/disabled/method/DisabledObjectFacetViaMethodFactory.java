@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets.object.disabled.method;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;

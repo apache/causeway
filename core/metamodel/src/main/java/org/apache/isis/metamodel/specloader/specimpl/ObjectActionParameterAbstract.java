@@ -24,9 +24,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.consent.Allow;
@@ -60,7 +60,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.val;
 

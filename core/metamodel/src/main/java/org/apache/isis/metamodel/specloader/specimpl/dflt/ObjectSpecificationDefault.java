@@ -29,10 +29,10 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.context.MetaModelContext;
@@ -70,7 +70,7 @@ import org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract
 import org.apache.isis.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import static org.apache.isis.core.commons.internal.base._With.mapIfPresentElse;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

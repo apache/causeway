@@ -20,8 +20,8 @@ package org.apache.isis.unittestsupport.config.internal;
 
 import java.util.Map;
 
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.unittestsupport.config.IsisConfigurationLegacy;
 
 import lombok.val;

@@ -37,10 +37,10 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -59,7 +59,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 

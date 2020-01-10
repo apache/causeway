@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.api.permission;
 
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 
 /**

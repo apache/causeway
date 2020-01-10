@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.facets.param.defaults.methodnum;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.Facet;

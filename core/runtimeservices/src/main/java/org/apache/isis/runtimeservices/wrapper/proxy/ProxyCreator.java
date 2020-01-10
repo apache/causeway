@@ -26,10 +26,10 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.apache.isis.applib.services.wrapper.WrappingObject;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactory;
+import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
 

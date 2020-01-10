@@ -48,9 +48,9 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -94,7 +94,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.Persistenc
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
 import lombok.val;

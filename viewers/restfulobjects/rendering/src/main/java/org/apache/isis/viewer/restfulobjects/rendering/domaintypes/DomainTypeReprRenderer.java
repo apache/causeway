@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;

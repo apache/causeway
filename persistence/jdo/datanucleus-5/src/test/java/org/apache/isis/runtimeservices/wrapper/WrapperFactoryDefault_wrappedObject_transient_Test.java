@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.consent.Allow;
 import org.apache.isis.metamodel.consent.Consent;

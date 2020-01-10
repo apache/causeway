@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.commons.internal.reflection._MethodCache;
+import org.apache.isis.core.commons.internal.reflection._MethodCache;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 

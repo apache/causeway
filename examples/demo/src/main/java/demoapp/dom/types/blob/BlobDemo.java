@@ -31,8 +31,8 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.resources._Resources;
 
 import lombok.Getter;
 import lombok.Setter;

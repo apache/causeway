@@ -34,7 +34,7 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.collections._Sets;
 
 /**
  * Canonical application feature, identified by {@link ApplicationFeatureId},

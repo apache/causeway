@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Auditing;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

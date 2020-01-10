@@ -22,8 +22,8 @@ package org.apache.isis.security.api.authentication;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Sets;
 
 public abstract class AuthenticationRequestAbstract implements AuthenticationRequest {
 

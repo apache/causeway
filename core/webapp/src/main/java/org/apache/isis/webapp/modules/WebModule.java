@@ -29,7 +29,7 @@ import javax.servlet.annotation.WebListener;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer;
 
 import lombok.val;

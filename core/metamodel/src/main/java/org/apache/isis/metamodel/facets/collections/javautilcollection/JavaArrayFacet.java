@@ -22,14 +22,14 @@ package org.apache.isis.metamodel.facets.collections.javautilcollection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
-import static org.apache.isis.commons.internal.collections._Arrays.toArray;
+import static org.apache.isis.core.commons.internal.base._NullSafe.isEmpty;
+import static org.apache.isis.core.commons.internal.collections._Arrays.toArray;
 
 import lombok.val;
 

@@ -19,7 +19,7 @@
 
 package org.apache.isis.runtime.persistence.transaction;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class IsisTransactionManagerException extends IsisException {
 

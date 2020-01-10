@@ -41,7 +41,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;

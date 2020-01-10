@@ -20,7 +20,7 @@
 package org.apache.isis.runtimeservices.wrapper.dispatchers;
 
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._Casts;
 
 public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent> 
 implements InteractionEventDispatcher {

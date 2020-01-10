@@ -44,8 +44,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.tree.TreeAdapter;
 import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.functions._Functions;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.functions._Functions;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -56,7 +56,7 @@ import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.val;
 

@@ -23,10 +23,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.security.api.authentication.AuthenticationSessionAbstract;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
 import lombok.Setter;

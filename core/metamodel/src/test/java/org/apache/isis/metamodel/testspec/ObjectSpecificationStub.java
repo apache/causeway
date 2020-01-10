@@ -25,10 +25,10 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;

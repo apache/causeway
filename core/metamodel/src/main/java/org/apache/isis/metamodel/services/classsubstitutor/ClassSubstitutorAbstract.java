@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.services.classsubstitutor;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.base._Blackhole;
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.base._Blackhole;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 

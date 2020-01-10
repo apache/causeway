@@ -36,8 +36,8 @@ import javax.xml.bind.Unmarshaller;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.resources._Resources;
 
 /**
  * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a> (non-ASF)

@@ -37,12 +37,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.base._Blackhole;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.base._Timing;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.base._Blackhole;
+import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.base._Timing;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
@@ -70,7 +70,7 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.metamodel.valuetypes.ValueTypeProviderDefault;
 import org.apache.isis.metamodel.valuetypes.ValueTypeRegistry;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -32,8 +32,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration.Viewer.Wicket.Credit;
 import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;

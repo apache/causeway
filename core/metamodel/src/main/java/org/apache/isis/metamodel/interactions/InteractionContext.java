@@ -23,8 +23,8 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-import org.apache.isis.commons.internal.base._Tuples;
-import org.apache.isis.commons.internal.base._Tuples.Indexed;
+import org.apache.isis.core.commons.internal.base._Tuples;
+import org.apache.isis.core.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;

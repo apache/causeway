@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 
-import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 
 class Utils {

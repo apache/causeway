@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.commons.internal.resources._Resources;
 
 public class XmlSnapshotServiceAbstractTest {
 

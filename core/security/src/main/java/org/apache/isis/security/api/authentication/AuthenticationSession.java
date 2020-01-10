@@ -22,8 +22,8 @@ package org.apache.isis.security.api.authentication;
 import java.io.Serializable;
 
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.encoding.Encodable;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.encoding.Encodable;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 
 /**
