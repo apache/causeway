@@ -689,7 +689,7 @@
 			<!-- for benefit of application developers, using scope=import, type=pom -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-commons</artifactId>
+				<artifactId>isis-core-commons</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>

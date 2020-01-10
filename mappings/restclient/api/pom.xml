@@ -38,7 +38,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-commons</artifactId>
+			<artifactId>isis-core-commons</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

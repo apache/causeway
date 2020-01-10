@@ -20,7 +20,7 @@
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-commons</artifactId>
+	<artifactId>isis-core-commons</artifactId>
 
 	<name>Apache Isis Core - Commons</name>
 	<description>
