@@ -30,8 +30,8 @@
     <name>Apache Isis Core - Runtime</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.runtime</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/runtime</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/runtime</git-plugin.propertiesDir>
     </properties>
 
     <build>

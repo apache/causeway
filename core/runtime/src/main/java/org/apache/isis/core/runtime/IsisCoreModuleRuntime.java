@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.metamodel.IsisModuleMetamodel;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.runtime.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.context.session.RuntimeEventSupport_Spring;
 import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventService;
@@ -34,7 +34,7 @@ import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
 @Configuration
 @Import({
         // modules
-        IsisModuleMetamodel.class,
+        IsisModuleCoreMetamodel.class,
 
         // @Service's
         RuntimeEventService.class,
@@ -49,6 +49,6 @@ import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
         PersistenceEventService_Spring.class,
 
 })
-public class IsisModuleRuntime {
+public class IsisCoreModuleRuntime {
 
 }

@@ -96,6 +96,6 @@ import org.apache.isis.security.api.IsisModuleSecurityApi;
         ApplicationFeatureRepositoryDefault.class,
 
 })
-public class IsisModuleMetamodel {
+public class IsisModuleCoreMetamodel {
 
 }
