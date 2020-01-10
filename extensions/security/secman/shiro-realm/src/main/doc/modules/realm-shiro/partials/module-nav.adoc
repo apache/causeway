@@ -1,1 +1,0 @@
-* xref:secman:realm-shiro:about.adoc[Realm (for Shiro)]
