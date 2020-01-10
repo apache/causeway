@@ -26,33 +26,33 @@ package org.apache.isis.core.config.presets;
  */
 public final class IsisPresets  {
 
-    public static final String NoTranslations = "classpath:/org/apache/isis/config/presets/NoTranslations.properties";
+    public static final String NoTranslations = "classpath:/org/apache/isis/core/config/presets/NoTranslations.properties";
 
-    public static final String H2InMemory = "classpath:/org/apache/isis/config/presets/H2InMemory.properties";
+    public static final String H2InMemory = "classpath:/org/apache/isis/core/config/presets/H2InMemory.properties";
 
     /** randomized (unique) database name, eg. to allow for concurrent testing */
-    public static final String H2InMemory_withUniqueSchema = "classpath:/org/apache/isis/config/presets/H2InMemory_withUniqueSchema.properties";
+    public static final String H2InMemory_withUniqueSchema = "classpath:/org/apache/isis/core/config/presets/H2InMemory_withUniqueSchema.properties";
     
-    public static final String HsqlDbInMemory = "classpath:/org/apache/isis/config/presets/HsqlDbInMemory.properties";
-    public static final String DataNucleusAutoCreate = "classpath:/org/apache/isis/config/presets/DataNucleusAutoCreate.properties";
+    public static final String HsqlDbInMemory = "classpath:/org/apache/isis/core/config/presets/HsqlDbInMemory.properties";
+    public static final String DataNucleusAutoCreate = "classpath:/org/apache/isis/core/config/presets/DataNucleusAutoCreate.properties";
     
-    public static final String DebugPersistence = "classpath:/org/apache/isis/config/presets/DebugPersistence.properties";
-    public static final String DebugDiscovery = "classpath:/org/apache/isis/config/presets/DebugDiscovery.properties";
+    public static final String DebugPersistence = "classpath:/org/apache/isis/core/config/presets/DebugPersistence.properties";
+    public static final String DebugDiscovery = "classpath:/org/apache/isis/core/config/presets/DebugDiscovery.properties";
     
-    public static final String DebugProgrammingModel = "classpath:/org/apache/isis/config/presets/DebugProgrammingModel.properties";
-    public static final String SilenceProgrammingModel = "classpath:/org/apache/isis/config/presets/SilenceProgrammingModel.properties";
+    public static final String DebugProgrammingModel = "classpath:/org/apache/isis/core/config/presets/DebugProgrammingModel.properties";
+    public static final String SilenceProgrammingModel = "classpath:/org/apache/isis/core/config/presets/SilenceProgrammingModel.properties";
     
-    public static final String DebugMetaModel = "classpath:/org/apache/isis/config/presets/DebugMetaModel.properties";
-    public static final String SilenceMetaModel = "classpath:/org/apache/isis/config/presets/SilenceMetaModel.properties";
+    public static final String DebugMetaModel = "classpath:/org/apache/isis/core/config/presets/DebugMetaModel.properties";
+    public static final String SilenceMetaModel = "classpath:/org/apache/isis/core/config/presets/SilenceMetaModel.properties";
     
-    public static final String SilenceWicket = "classpath:/org/apache/isis/config/presets/SilenceWicket.properties";
-    public static final String UseLog4j2Test = "classpath:/org/apache/isis/config/presets/UseLog4j2Test.properties";
+    public static final String SilenceWicket = "classpath:/org/apache/isis/core/config/presets/SilenceWicket.properties";
+    public static final String UseLog4j2Test = "classpath:/org/apache/isis/core/config/presets/UseLog4j2Test.properties";
 
     /**
      * @deprecated seems no longer required anyway
      */
     @Deprecated
-    public static final String IsisIntegTest = "classpath:/org/apache/isis/config/presets/IsisIntegTest.properties";
+    public static final String IsisIntegTest = "classpath:/org/apache/isis/core/config/presets/IsisIntegTest.properties";
     
     /**
      * Use PROTOTYPING mode as the default. Does not override if the system-property 
