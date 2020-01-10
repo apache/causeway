@@ -26,7 +26,7 @@
         <version>2.0.0-M3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-webapp</artifactId>
+    <artifactId>isis-core-webapp</artifactId>
     <name>Apache Isis Core - WebApp</name>
     <description>
         Bundles all the web specific classes a srequired by viewers.

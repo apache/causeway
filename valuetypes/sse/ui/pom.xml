@@ -42,7 +42,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-webapp</artifactId>
+			<artifactId>isis-core-webapp</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
