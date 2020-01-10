@@ -55,7 +55,7 @@
     
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime-services</artifactId>
+            <artifactId>isis-core-runtimeservices</artifactId>
         </dependency>
 
         <dependency>

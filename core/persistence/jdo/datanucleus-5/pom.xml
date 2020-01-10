@@ -119,7 +119,7 @@
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime-services</artifactId>
+            <artifactId>isis-core-runtimeservices</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
