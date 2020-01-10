@@ -26,8 +26,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.client.SuppressionType;
-import org.apache.isis.config.RestEasyConfiguration;
-import org.apache.isis.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.config.RestEasyConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.extensions.restclient.RestfulClient;
 import org.apache.isis.extensions.restclient.RestfulClientConfig;

@@ -37,8 +37,8 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.config.IsisModuleConfig;
-import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.isis.core.config.IsisModuleConfig;
+import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 
 import lombok.Getter;

@@ -40,9 +40,9 @@ import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.RestEasyConfiguration;
-import org.apache.isis.config.util.ConfigUtil;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.RestEasyConfiguration;
+import org.apache.isis.core.config.util.ConfigUtil;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

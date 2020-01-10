@@ -27,7 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.core.config.presets.IsisPresets;
 
 import lombok.val;
 

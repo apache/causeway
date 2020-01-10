@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;

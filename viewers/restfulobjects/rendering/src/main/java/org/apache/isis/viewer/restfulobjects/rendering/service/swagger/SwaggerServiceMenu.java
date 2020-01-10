@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.config.RestEasyConfiguration;
+import org.apache.isis.core.config.RestEasyConfiguration;
 
 
 @Named("isisApplib.SwaggerServiceMenu")

@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

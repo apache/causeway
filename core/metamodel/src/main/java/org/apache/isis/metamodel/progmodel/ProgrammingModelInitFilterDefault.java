@@ -27,7 +27,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel.Marker;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;

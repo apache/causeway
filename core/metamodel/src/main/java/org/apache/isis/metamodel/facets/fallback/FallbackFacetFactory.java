@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

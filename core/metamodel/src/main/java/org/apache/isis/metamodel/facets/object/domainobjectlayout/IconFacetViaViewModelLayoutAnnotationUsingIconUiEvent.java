@@ -26,7 +26,7 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.icon.IconFacet;

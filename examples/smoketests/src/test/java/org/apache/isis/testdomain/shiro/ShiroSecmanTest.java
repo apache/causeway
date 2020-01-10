@@ -37,7 +37,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleSecmanPersistenceJdo;

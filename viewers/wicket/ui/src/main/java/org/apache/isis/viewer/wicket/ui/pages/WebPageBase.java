@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;

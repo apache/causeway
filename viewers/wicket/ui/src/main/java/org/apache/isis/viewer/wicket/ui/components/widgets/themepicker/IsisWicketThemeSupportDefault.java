@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

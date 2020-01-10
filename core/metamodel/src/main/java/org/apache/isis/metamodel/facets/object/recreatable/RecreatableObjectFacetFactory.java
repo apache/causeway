@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -49,7 +50,7 @@ implements MetaModelRefiner, PostConstructMethodCache {
     }
 
     /**
-     * We simply attach all facets we can find; the {@link #refineMetaModelValidator(org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite, org.apache.isis.config.IsisConfiguration) meta-model validation} will detect if multiple interfaces/annotations have
+     * We simply attach all facets we can find; the {@link #refineMetaModelValidator(org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite, IsisConfiguration) meta-model validation} will detect if multiple interfaces/annotations have
      * been attached.
      */
     @Override

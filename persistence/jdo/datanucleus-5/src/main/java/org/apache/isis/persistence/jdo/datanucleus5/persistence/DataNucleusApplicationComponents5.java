@@ -38,7 +38,7 @@ import org.datanucleus.store.schema.SchemaAwareStoreManager;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.factory.InstanceUtil;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusLifeCycleHelper;

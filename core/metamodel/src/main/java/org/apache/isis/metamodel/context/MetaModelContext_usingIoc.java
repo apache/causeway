@@ -35,7 +35,7 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.ioc.IocContainer;
 import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.metamodel.services.ServiceUtil;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;

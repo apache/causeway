@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.facets.object.value.annotcfg;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;

@@ -1,1 +1,1 @@
-org.apache.isis.config.validators.PatternOptionalStringConstraintValidator
+org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator

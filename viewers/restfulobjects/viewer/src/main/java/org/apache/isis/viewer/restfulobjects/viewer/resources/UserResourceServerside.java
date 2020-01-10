@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

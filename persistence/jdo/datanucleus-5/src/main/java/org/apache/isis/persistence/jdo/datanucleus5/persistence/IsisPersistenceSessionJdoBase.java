@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.context.MetaModelContext;

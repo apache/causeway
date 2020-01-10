@@ -19,7 +19,7 @@
 
 package org.apache.isis.security.api.authorization.standard;
 
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.core.config.ConfigurationConstants;
 
 public final class AuthorizationConstants {
 

@@ -29,9 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.metamodel.specloader.IntrospectionMode;
-import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;

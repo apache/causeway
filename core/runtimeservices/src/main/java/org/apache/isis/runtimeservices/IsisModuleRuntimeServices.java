@@ -21,7 +21,7 @@ package org.apache.isis.runtimeservices;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.codegen.bytebuddy.IsisModuleCodegenByteBuddy;
+import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
 import org.apache.isis.runtime.IsisModuleRuntime;
 import org.apache.isis.runtimeservices.auth.AuthenticationSessionProviderDefault;
 import org.apache.isis.runtimeservices.bookmarks.BookmarkServiceInternalDefault;
@@ -54,7 +54,7 @@ import org.apache.isis.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
 @Import({
         // modules
         IsisModuleRuntime.class,
-        IsisModuleCodegenByteBuddy.class,
+        IsisModuleCoreCodegenByteBuddy.class,
 
         // @Service's
         AuthenticationSessionProviderDefault.class,

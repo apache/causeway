@@ -39,7 +39,7 @@ import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.actions.homepage.HomePageFacet;

@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.config.IsisModuleConfig;
+import org.apache.isis.core.config.IsisModuleConfig;
 import org.apache.isis.metamodel.context.MetaModelContexts;
 import org.apache.isis.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;

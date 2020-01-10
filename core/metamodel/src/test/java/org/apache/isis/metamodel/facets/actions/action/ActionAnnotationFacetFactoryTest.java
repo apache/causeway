@@ -28,8 +28,8 @@ import org.junit.After;
 import org.junit.Before;
 
 import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.config.metamodel.facets.CommandActionsConfiguration;
-import org.apache.isis.config.metamodel.facets.PublishActionsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

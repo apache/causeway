@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.specloader.validator;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.context.MetaModelContextAware;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

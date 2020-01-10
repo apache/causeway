@@ -10,5 +10,5 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
     // @Service's
     IsisSystemEnvironment.class
 })
-public class IsisModuleCommons {
+public class IsisModuleCoreCommons {
 }

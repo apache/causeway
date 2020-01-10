@@ -32,8 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.config.RestEasyConfiguration;
-import org.apache.isis.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.config.RestEasyConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.metamodel.commons.InputStreamExtensions;
 import org.apache.isis.metamodel.commons.ResourceUtil;
 import org.apache.isis.metamodel.commons.StringExtensions;

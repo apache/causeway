@@ -21,7 +21,7 @@ package org.apache.isis.runtime.session.init;
 
 import java.util.TimeZone;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.extern.log4j.Log4j2;
 

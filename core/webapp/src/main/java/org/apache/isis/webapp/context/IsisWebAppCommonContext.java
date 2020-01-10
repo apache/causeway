@@ -27,7 +27,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.metamodel.spec.ManagedObject;

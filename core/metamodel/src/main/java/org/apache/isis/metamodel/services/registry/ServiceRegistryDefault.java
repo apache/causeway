@@ -41,7 +41,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.commons.internal.ioc.spring._Spring;
-import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 
 import lombok.val;
 

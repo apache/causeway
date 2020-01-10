@@ -47,7 +47,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.legacy.applib.filter.Filter;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 

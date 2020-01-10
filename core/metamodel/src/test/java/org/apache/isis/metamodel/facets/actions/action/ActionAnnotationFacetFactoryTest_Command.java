@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.config.metamodel.facets.CommandActionsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;

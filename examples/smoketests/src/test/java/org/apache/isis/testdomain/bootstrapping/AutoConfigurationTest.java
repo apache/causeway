@@ -34,9 +34,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.isis.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.config.presets.IsisPresets;
+import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.metamodel.context.MetaModelContexts;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingStereotypes;
