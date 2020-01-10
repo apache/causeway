@@ -31,7 +31,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.presets.IsisPresets;
-import org.apache.isis.extensions.asciidoc.ui.IsisModuleExtAsciidocUi;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTstFixturesApplib;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
@@ -44,6 +43,7 @@ import org.apache.isis.extensions.sse.applib.IsisModuleValSseApplib;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
+import org.apache.isis.valuetypes.asciidoc.ui.IsisModuleValAsciidocUi;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleWicketViewer;
