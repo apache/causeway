@@ -21,7 +21,7 @@ package org.apache.isis.security.bypass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
 import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
 
@@ -33,7 +33,7 @@ import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
 @Configuration
 @Import({
         // modules
-        IsisModuleRuntimeServices.class,
+        IsisModuleCoreRuntimeServices.class,
 
         // @Service's
         AuthenticatorBypass.class,

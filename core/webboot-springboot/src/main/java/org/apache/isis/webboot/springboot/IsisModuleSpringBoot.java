@@ -29,12 +29,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 @Configuration
 @Import({
         // modules
-        IsisModuleRuntimeServices.class,
+        IsisModuleCoreRuntimeServices.class,
 })
 public class IsisModuleSpringBoot implements ApplicationContextAware {
 

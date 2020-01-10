@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.runtimeservices.eventbus.EventBusServiceSpring;
+import org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring;
 
 import lombok.Getter;
 import lombok.Value;

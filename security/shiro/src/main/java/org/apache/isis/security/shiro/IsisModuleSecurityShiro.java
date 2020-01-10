@@ -21,7 +21,7 @@ package org.apache.isis.security.shiro;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
 import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
@@ -35,7 +35,7 @@ import org.apache.isis.webapp.IsisModuleWebapp;
 @Configuration
 @Import({
         // modules
-        IsisModuleRuntimeServices.class,
+        IsisModuleCoreRuntimeServices.class,
         IsisModuleWebapp.class,
 
         // @Service's

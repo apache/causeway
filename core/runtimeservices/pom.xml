@@ -31,8 +31,8 @@
     <description>Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.runtime.services</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/runtime/services</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.runtimeservices</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core.runtimeservices</git-plugin.propertiesDir>
     </properties>
 
     <build>

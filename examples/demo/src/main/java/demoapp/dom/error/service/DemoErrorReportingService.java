@@ -27,8 +27,8 @@ import org.apache.isis.applib.services.error.ErrorDetails;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.applib.services.error.Ticket.StackTracePolicy;
-import org.apache.isis.runtimeservices.error.EmailTicket;
-import org.apache.isis.runtimeservices.error.EmailTicket.MailTo;
+import org.apache.isis.core.runtimeservices.error.EmailTicket;
+import org.apache.isis.core.runtimeservices.error.EmailTicket.MailTo;
 
 import lombok.val;
 
