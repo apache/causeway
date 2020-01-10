@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.layout.grid;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -33,8 +34,6 @@ import org.apache.isis.applib.layout.component.FieldSetOwner;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.layout.LayoutService;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.collections._Maps;
 
 /**
  * All top-level page layout classes should implement this interface.
@@ -103,7 +102,7 @@ public abstract class GridAbstract implements Grid {
         if(actionLayoutDatas == null) {
             return;
         }
-        for (final ActionLayoutData actionLayoutData : _Lists.newArrayList(actionLayoutDatas)) {
+        for (final ActionLayoutData actionLayoutData : new ArrayList<>(actionLayoutDatas)) {
             actionLayoutData.setOwner(actionLayoutDataOwner);
             visitor.visit(actionLayoutData);
         }
@@ -115,12 +114,12 @@ public abstract class GridAbstract implements Grid {
      */
     protected void traverseFieldSets(final FieldSetOwner fieldSetOwner, final GridAbstract.Visitor visitor) {
         final List<FieldSet> fieldSets = fieldSetOwner.getFieldSets();
-        for (FieldSet fieldSet : _Lists.newArrayList(fieldSets)) {
+        for (FieldSet fieldSet : new ArrayList<>(fieldSets)) {
             fieldSet.setOwner(fieldSetOwner);
             visitor.visit(fieldSet);
             traverseActions(fieldSet, visitor);
             final List<PropertyLayoutData> properties = fieldSet.getProperties();
-            for (final PropertyLayoutData property : _Lists.newArrayList(properties)) {
+            for (final PropertyLayoutData property : new ArrayList<>(properties)) {
                 property.setOwner(fieldSet);
                 visitor.visit(property);
                 traverseActions(property, visitor);
@@ -135,7 +134,7 @@ public abstract class GridAbstract implements Grid {
     protected void traverseCollections(
             final CollectionLayoutDataOwner owner, final GridAbstract.Visitor visitor) {
         final List<CollectionLayoutData> collections = owner.getCollections();
-        for (CollectionLayoutData collection : _Lists.newArrayList(collections)) {
+        for (CollectionLayoutData collection : new ArrayList<>(collections)) {
             collection.setOwner(owner);
             visitor.visit(collection);
             traverseActions(collection, visitor);
@@ -147,7 +146,7 @@ public abstract class GridAbstract implements Grid {
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById() {
-        final LinkedHashMap<String, PropertyLayoutData> propertiesById = _Maps.newLinkedHashMap();
+        final LinkedHashMap<String, PropertyLayoutData> propertiesById = new LinkedHashMap<>();
         visit(new BS3Grid.VisitorAdapter() {
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
@@ -162,7 +161,7 @@ public abstract class GridAbstract implements Grid {
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById() {
-        final LinkedHashMap<String, CollectionLayoutData> collectionsById = _Maps.newLinkedHashMap();
+        final LinkedHashMap<String, CollectionLayoutData> collectionsById = new LinkedHashMap<>();
 
         visit(new BS3Grid.VisitorAdapter() {
             @Override
@@ -178,7 +177,7 @@ public abstract class GridAbstract implements Grid {
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, ActionLayoutData> getAllActionsById() {
-        final LinkedHashMap<String, ActionLayoutData> actionsById = _Maps.newLinkedHashMap();
+        final LinkedHashMap<String, ActionLayoutData> actionsById = new LinkedHashMap<>();
 
         visit(new BS3Grid.VisitorAdapter() {
             @Override
@@ -193,7 +192,7 @@ public abstract class GridAbstract implements Grid {
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, FieldSet> getAllFieldSetsByName() {
-        final LinkedHashMap<String, FieldSet> fieldSetsByName = _Maps.newLinkedHashMap();
+        final LinkedHashMap<String, FieldSet> fieldSetsByName = new LinkedHashMap<>();
 
         visit(new BS3Grid.VisitorAdapter() {
             @Override

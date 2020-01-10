@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -36,8 +37,6 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.GridAbstract;
 import org.apache.isis.applib.mixins.dto.Dto;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.collections._Maps;
 
 /**
  * This is the top-level for rendering the domain object's properties, collections and actions.  It simply consists
@@ -79,7 +78,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
 
-    private List<BS3Row> rows = _Lists.newArrayList();
+    private List<BS3Row> rows = new ArrayList<>();
 
     // no wrapper
     @Override
@@ -94,7 +93,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
 
-    private List<String> metadataErrors = _Lists.newArrayList();
+    private List<String> metadataErrors = new ArrayList<>();
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
@@ -170,7 +169,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     protected void traverseRows(final BS3RowOwner rowOwner, final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3Row> rows = rowOwner.getRows();
-        for (BS3Row bs3Row : _Lists.newArrayList(rows)) {
+        for (BS3Row bs3Row : new ArrayList<>(rows)) {
             bs3Row.setOwner(this);
             bs3Visitor.preVisit(bs3Row);
             bs3Visitor.visit(bs3Row);
@@ -182,7 +181,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     private void traverseCols(final Grid.Visitor visitor, final BS3Row bs3Row) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3RowContent> cols = bs3Row.getCols();
-        for (BS3RowContent rowContent : _Lists.newArrayList(cols)) {
+        for (BS3RowContent rowContent : new ArrayList<>(cols)) {
             rowContent.setOwner(bs3Row);
             if(rowContent instanceof BS3Col) {
                 final BS3Col bs3Col = (BS3Col) rowContent;
@@ -219,7 +218,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
             final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3TabGroup> tabGroups = bs3TabGroupOwner.getTabGroups();
-        for (BS3TabGroup bs3TabGroup : _Lists.newArrayList(tabGroups)) {
+        for (BS3TabGroup bs3TabGroup : new ArrayList<>(tabGroups)) {
             bs3TabGroup.setOwner(bs3TabGroupOwner);
             bs3Visitor.preVisit(bs3TabGroup);
             bs3Visitor.visit(bs3TabGroup);
@@ -233,7 +232,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
             final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3Tab> tabs = bs3TabOwner.getTabs();
-        for (BS3Tab tab : _Lists.newArrayList(tabs)) {
+        for (BS3Tab tab : new ArrayList<>(tabs)) {
             tab.setOwner(bs3TabOwner);
             bs3Visitor.preVisit(tab);
             bs3Visitor.visit(tab);
@@ -270,7 +269,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, BS3Tab> getAllTabsByName() {
-        final LinkedHashMap<String, BS3Tab> tabsByName = _Maps.newLinkedHashMap();
+        final LinkedHashMap<String, BS3Tab> tabsByName = new LinkedHashMap<>();
 
         visit(new BS3Grid.VisitorAdapter() {
             @Override
@@ -285,7 +284,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, HasCssId> getAllCssId() {
-        final LinkedHashMap<String, HasCssId> divsByCssId = _Maps.newLinkedHashMap();
+        final LinkedHashMap<String, HasCssId> divsByCssId = new LinkedHashMap<>();
 
         visit(new BS3Grid.VisitorAdapter() {
             @Override

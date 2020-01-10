@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
@@ -32,7 +33,6 @@ import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
-import org.apache.isis.core.commons.internal.collections._Lists;
 
 /**
  * Represents a tab within a {@link BS3TabGroup tab group}.
@@ -63,7 +63,7 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
     }
 
 
-    private List<BS3Row> rows = _Lists.newArrayList();
+    private List<BS3Row> rows = new ArrayList<>();
 
     // no wrapper
     @Override

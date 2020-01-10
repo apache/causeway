@@ -33,8 +33,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.applib.value.BlobClobFactory;
-import org.apache.isis.core.commons.compression.ZipWriter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

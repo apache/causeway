@@ -18,14 +18,15 @@
  */
 package org.apache.isis.applib.events.domain;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
@@ -99,8 +100,8 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         }
 
         /**
-         * When the {@link org.apache.isis.applib.services.command.Command} is made available on the {@link org.apache.isis.applib.events.domain.ActionDomainEvent}
-         * via {@link org.apache.isis.applib.events.domain.ActionDomainEvent#getCommand()}.
+         * When the {@link org.apache.isis.applib.services.command.Command} is made available on the
+         * {@link org.apache.isis.applib.events.domain.ActionDomainEvent} via {@link CommandContext#getCommand()}.
          */
         public boolean isExecutingOrLater() {
             return isExecuting() || isExecuted();
@@ -315,7 +316,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * Provides a mechanism to pass data to the next {@link #getEventPhase() phase}.
      */
-    private final Map<Object, Object> userData = _Maps.newHashMap();
+    private final Map<Object, Object> userData = new HashMap<>();
 
     /**
      * Obtain user-data, as set by a previous {@link #getEventPhase() phase}.

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -34,7 +35,6 @@ import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.FieldSetOwner;
-import org.apache.isis.core.commons.internal.collections._Lists;
 
 /**
  * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.
@@ -158,7 +158,7 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     }
 
 
-    private List<SizeSpan> sizeSpans = _Lists.newArrayList();
+    private List<SizeSpan> sizeSpans = new ArrayList<>();
 
     // no wrapper
     @XmlElement(name = "sizeSpan", required = false)
@@ -172,7 +172,7 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
 
 
-    private List<ActionLayoutData> actions = _Lists.newArrayList();
+    private List<ActionLayoutData> actions = new ArrayList<>();
 
     // no wrapper
     @Override
@@ -188,7 +188,7 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
 
 
-    private List<BS3Row> rows = _Lists.newArrayList();
+    private List<BS3Row> rows = new ArrayList<>();
 
     // no wrapper
     @Override
@@ -203,7 +203,7 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
 
 
-    private List<BS3TabGroup> tabGroups = _Lists.newArrayList();
+    private List<BS3TabGroup> tabGroups = new ArrayList<>();
 
     // no wrapper
     @Override
@@ -218,7 +218,7 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
 
 
-    private List<FieldSet> fieldSets = _Lists.newArrayList();
+    private List<FieldSet> fieldSets = new ArrayList<>();
 
     // no wrapper
     @Override
@@ -233,7 +233,7 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
 
 
-    private List<CollectionLayoutData> collections = _Lists.newArrayList();
+    private List<CollectionLayoutData> collections = new ArrayList<>();
 
     // no wrapper
     @Override

@@ -19,6 +19,7 @@
 package org.apache.isis.applib.layout.menubars.bootstrap3;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.MenuBar;
-import org.apache.isis.core.commons.internal.collections._Lists;
+
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.isis.applib.annotation.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
@@ -45,7 +46,7 @@ public class BS3MenuBar implements MenuBar, Serializable {
     }
 
 
-    private List<BS3Menu> menus = _Lists.newArrayList();
+    private List<BS3Menu> menus = new ArrayList<>();
 
     // no wrapper
     @XmlElement(name = "menu", required = true)

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -28,7 +29,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.internal.collections._Lists;
 
 /**
  * Contains a row of content, either on the top-level {@link BS3Grid page} or at any other lower-level element that can
@@ -67,7 +67,7 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
 
 
 
-    private List<BS3RowContent> cols = _Lists.newArrayList();
+    private List<BS3RowContent> cols = new ArrayList<>();
 
     // no wrapper
     @XmlElementRefs({

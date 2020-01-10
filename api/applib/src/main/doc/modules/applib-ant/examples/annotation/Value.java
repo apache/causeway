@@ -27,33 +27,27 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.core.commons.internal.encoding.Encodable;
 
 /**
  * Indicates that the class has value semantics.
  *
  * <p>
  * By &quot;value semantics&quot; all we actually mean that the class is
- * {@link Aggregated} and so therefore (conceptually) is not shared between
+ * aggregated (or embedded) and so therefore (conceptually) is not shared between
  * instances of classes. However, values very often have other semantics, and so
  * this annotation allows these to also be specified:
- * <li>it may be parseable (as per {@link Parseable})</li>
- * <li>it may be encodeable (as per {@link Encodable})</li>
- * <li>it may be immutable (as per {@link Immutable}), and by default is
- * presumed that it is</li>
+ * <li>it may be parseable</li>
+ * <li>it may be encodeable</li>
+ * <li>it may be immutable, and by default is presumed that it is</li>
  * <li>it may follow the equal-by-content contract (as per
  * {@link EqualByContent}), and by default is presumed that it does.</i> </ul>
  *
  * <p>
  * Note also that though a value is conceptually not shared, if it is also
- * {@link Immutable immutable} then it is in fact safe to share objects (as in
+ * immutable then it is in fact safe to share objects (as in
  * the flyweight pattern). In addition, the {@link EqualByContent} semantic
  * means that we needn't care whether value types are being shared or not.
  *
- * @see Aggregated
- * @see Parseable
- * @see Encodable
- * @see Immutable
  * @see EqualByContent
  *
  * <p>
