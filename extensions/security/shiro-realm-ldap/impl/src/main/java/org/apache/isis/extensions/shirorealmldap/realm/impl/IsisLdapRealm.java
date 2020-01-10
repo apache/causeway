@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.shirorealmldap.realm;
+package org.apache.isis.extensions.shirorealmldap.realm.impl;
 
 import java.util.Collection;
 import java.util.Collections;

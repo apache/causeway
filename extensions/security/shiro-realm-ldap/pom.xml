@@ -22,32 +22,21 @@
 
     <parent>
         <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-shiro-realm-ldap</artifactId>
+        <artifactId>isis-extensions</artifactId>
         <version>2.0.0-M3-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-shiro-realm-ldap-impl</artifactId>
-    <name>Apache Isis Ext - Security - Shiro LDAP Realm (impl)</name>
+    <artifactId>isis-extensions-shiro-realm-ldap</artifactId>
 
-    <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.shirorealmldap.impl</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/shirorealmldap/impl</git-plugin.propertiesDir>
-    </properties>
+    <name>Apache Isis Ext - Security - Shiro LDAP Realm (parent)</name>
+	<description>
+        Implementation of Shiro Realm using LDAP.
+    </description>
+    <packaging>pom</packaging>
 
-
-    <dependencies>
-    
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-security-shiro</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
+    <modules>
+        <module>impl</module>
+    </modules>
 
 </project>

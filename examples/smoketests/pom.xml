@@ -100,7 +100,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-shiro-realm-ldap</artifactId>
+			<artifactId>isis-extensions-shiro-realm-ldap-impl</artifactId>
 		</dependency>
 
 		<!-- TEST DEPENDENCIES -->

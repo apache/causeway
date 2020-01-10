@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions;
+package org.apache.isis.extensions.shirorealmldap.realm.impl;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -30,6 +30,6 @@ import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
         IsisModuleSecurityShiro.class
 
 })
-public class IsisModuleExtShiroRealmLdap {
+public class IsisModuleExtShiroRealmLdapImpl {
 
 }
