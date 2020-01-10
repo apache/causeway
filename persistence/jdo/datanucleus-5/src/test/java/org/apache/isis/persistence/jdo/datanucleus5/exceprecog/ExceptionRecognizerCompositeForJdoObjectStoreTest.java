@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.unittestsupport.config.internal._Config;
+import org.apache.isis.core.unittestsupport.config.internal._Config;
 
 import lombok.val;
 

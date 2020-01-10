@@ -67,10 +67,10 @@ import org.apache.isis.core.runtimeservices.wrapper.dom.employees.Employee;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
-import static org.apache.isis.unittestsupport.jmocking.PostponedAction.returnValuePostponed;
+import static org.apache.isis.core.unittestsupport.jmocking.PostponedAction.returnValuePostponed;
 
 import lombok.val;
 

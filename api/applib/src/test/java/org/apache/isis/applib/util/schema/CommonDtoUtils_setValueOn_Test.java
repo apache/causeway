@@ -35,7 +35,7 @@ import org.apache.isis.schema.common.v1.BlobDto;
 import org.apache.isis.schema.common.v1.ClobDto;
 import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.common.v1.ValueType;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class CommonDtoUtils_setValueOn_Test {
 

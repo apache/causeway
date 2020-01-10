@@ -29,7 +29,7 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ExceptionRecognizerCompositeTest {
 

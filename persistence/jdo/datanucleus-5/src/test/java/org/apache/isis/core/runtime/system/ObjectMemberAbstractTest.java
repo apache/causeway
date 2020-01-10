@@ -64,8 +64,8 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdap
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.AuthenticationSessionProvider;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class ObjectMemberAbstractTest {
 

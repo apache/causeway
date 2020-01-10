@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import lombok.val;
 

@@ -17,16 +17,18 @@ content:
 
 # core
     - url: .
-      start_path: core/security/api/src/main/doc # security
+      start_path: core/security/src/main/doc # security
+      branches: HEAD
+
+# security
+    - url: .
+      start_path: security/bypass/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: core/security/bypass/src/main/doc # security
+      start_path: security/shiro/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: core/security/shiro/src/main/doc # security
-      branches: HEAD
-    - url: .
-      start_path: core/security/keycloak/src/main/doc # security
+      start_path: security/keycloak/src/main/doc # security
       branches: HEAD
 
 # extensions

@@ -1,7 +1,7 @@
 package org.apache.isis.subdomains.base.applib.with;
 
 
-import org.apache.isis.unittestsupport.bidir.Instantiator;
+import org.apache.isis.core.unittestsupport.bidir.Instantiator;
 
 public class InstantiatorForComparableByReference implements Instantiator {
     public final Class<? extends WithReferenceComparable<?>> cls;

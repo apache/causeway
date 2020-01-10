@@ -64,7 +64,7 @@ public ExceptionRecognizerTranslate exceptionRecognizerTranslations =    // <4>
     ExceptionRecognizerTranslate.create();
 ----
 <1> ensures an Apache Isis session/transaction running for each test
-<2> sets up a JMock context (using Apache Isis' extension to JMock as described in xref:testing:unit-test-support:about.adoc#jmock-extensions[JMock Extensions].
+<2> sets up a JMock context (using Apache Isis' extension to JMock as described in xref:testing:unittestsupport:about.adoc#jmock-extensions[JMock Extensions].
 <3> standard JUnit rule for writing tests that throw exceptions
 <4> to capture messages that require translation, as described in xref:userguide:btb:i18n.adoc[i18 support].
 

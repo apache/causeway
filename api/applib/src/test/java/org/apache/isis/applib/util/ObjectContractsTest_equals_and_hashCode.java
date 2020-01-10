@@ -21,7 +21,7 @@ import java.util.List;
 import org.junit.Before;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.unittestsupport.value.ValueTypeContractTestAbstract;
+import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
 public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTestAbstract<InvoiceItem3> {
 

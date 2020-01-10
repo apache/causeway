@@ -88,15 +88,6 @@ content:
       start_path: core/security/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: security/bypass/src/main/doc # security
-      branches: HEAD
-    - url: .
-      start_path: security/shiro/src/main/doc # security
-      branches: HEAD
-    - url: .
-      start_path: security/keycloak/src/main/doc # security
-      branches: HEAD
-    - url: .
       start_path: core/testsupport/unittestsupport/src/main/doc # testing
       branches: HEAD
     - url: .
@@ -181,6 +172,17 @@ content:
 # mavendeps
     - url: .
       start_path: mavendeps/src/main/doc # toc
+      branches: HEAD
+
+# security
+    - url: .
+      start_path: security/bypass/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: security/shiro/src/main/doc # security
+      branches: HEAD
+    - url: .
+      start_path: security/keycloak/src/main/doc # security
       branches: HEAD
 
 # starters

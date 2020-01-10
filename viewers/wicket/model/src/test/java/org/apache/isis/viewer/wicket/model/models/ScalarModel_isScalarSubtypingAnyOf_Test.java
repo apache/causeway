@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.webapp.context.memento.ObjectMementoService;
 

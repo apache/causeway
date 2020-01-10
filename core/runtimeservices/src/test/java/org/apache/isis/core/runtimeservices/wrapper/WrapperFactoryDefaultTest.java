@@ -33,7 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import lombok.RequiredArgsConstructor;
 
