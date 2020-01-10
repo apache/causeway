@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.jaxrsclient.impl;
+package org.apache.isis.extensions.jaxrsclient.api;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan
-public class IsisModuleExtJaxRsClientImpl {
+public class IsisModuleExtJaxRsClientApi {
 
 }

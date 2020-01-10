@@ -16,23 +16,19 @@
 
 	<parent>
 		<groupId>org.apache.isis.mappings</groupId>
-		<artifactId>isis-mappings</artifactId>
+		<artifactId>isis-mappings-jaxrsclient</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-mappings-jaxrsclient-impl</artifactId>
-	<name>Apache Isis Map - JaxRS Client</name>
-
-	<description>Integrates JaxRS Client Library</description>
+	<artifactId>isis-mappings-jaxrsclient-api</artifactId>
+	<name>Apache Isis Map - JaxRS Client (api)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.mappings.jaxrsclient.impl</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/mappings/jaxrsclient/impl</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.mappings.jaxrsclient.api</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/mappings/jaxrsclient/api</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>

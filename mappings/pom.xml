@@ -64,13 +64,13 @@
 
 			<dependency>
 				<groupId>org.apache.isis.mappings</groupId>
-				<artifactId>isis-mappings-restclient</artifactId>
+				<artifactId>isis-mappings-restclient-api</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.mappings</groupId>
-				<artifactId>isis-mappings-jaxrsclient-impl</artifactId>
+				<artifactId>isis-mappings-jaxrsclient-api</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
@@ -86,10 +86,8 @@
 	</dependencyManagement>
 
 	<modules>
-<!--
-		<module>jaxrsclient/impl</module>
--->
-		<module>restclient/impl</module>
+		<module>jaxrsclient/api</module>
+		<module>restclient</module>
 	</modules>
 
 	<profiles>
