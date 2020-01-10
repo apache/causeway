@@ -1842,11 +1842,12 @@
 	
 		<module>../supplemental-model</module>
 
-		<module>schema</module>
+		<module>../api/schema</module>
+		<module>../api/applib</module>
+
 		<module>codegen-bytebuddy</module>
 		<module>commons</module>
 		<module>config</module>
-		<module>applib</module>
 		<module>metamodel</module>
 		<module>runtime</module>
 		<module>runtimeservices</module>
