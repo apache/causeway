@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.asciidoc.ui.converter;
+package org.apache.isis.valuetypes.asciidoc.applib.value;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
@@ -24,7 +24,7 @@ import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 
-public final class AsciiDocConverter {
+final class Converter {
 
     /**
      * For syntax highlighting to work, the client/browser needs to load specific 

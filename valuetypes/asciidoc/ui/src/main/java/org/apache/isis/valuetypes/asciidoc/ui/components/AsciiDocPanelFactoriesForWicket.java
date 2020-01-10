@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.extensions.asciidoc.ui.components;
+package org.apache.isis.valuetypes.asciidoc.ui.components;
 
 import org.springframework.stereotype.Component;
 

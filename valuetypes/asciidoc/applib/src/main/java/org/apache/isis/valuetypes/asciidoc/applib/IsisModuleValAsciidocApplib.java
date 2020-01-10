@@ -16,33 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.asciidoc.applib.value;
+package org.apache.isis.valuetypes.asciidoc.applib;
 
-import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.value.Markup;
-import org.apache.isis.extensions.asciidoc.ui.converter.AsciiDocConverter;
+import org.springframework.context.annotation.Configuration;
 
-/**
- * Immutable value type holding pre-rendered HTML.
- *
- */
-@Value(semanticsProviderName = 
-        "org.apache.isis.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
-public class AsciiDoc extends Markup {
-
-    private static final long serialVersionUID = 1L;
-
-    public static AsciiDoc valueOfAdoc(String asciiDoc) {
-        return valueOfHtml(AsciiDocConverter.adocToHtml(asciiDoc));
-    }
-
-    public static AsciiDoc valueOfHtml(String html) {
-        return new AsciiDoc(html);
-    }
-
-    private AsciiDoc(String html) {
-        super(html);
-    }
-
-
+@Configuration
+public class IsisModuleValAsciidocApplib {
 }

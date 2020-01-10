@@ -16,21 +16,31 @@
 
 	<parent>
 		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes</artifactId>
+		<artifactId>isis-valuetypes-asciidoc</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-asciidoc</artifactId>
-	<name>Apache Isis Val - Asciidoctor (parent)</name>
-	<description>
-		Asciidoc value type.
-	</description>
+	<artifactId>isis-valuetypes-asciidoc-applib</artifactId>
+	<name>Apache Isis Val - Asciidoctor</name>
 
-	<packaging>pom</packaging>
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/applib</git-plugin.propertiesDir>
+	</properties>
 
-	<modules>
-		<module>applib</module>
-		<module>ui</module>
-	</modules>
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.asciidoctor</groupId>
+			<artifactId>asciidoctorj-api</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+	</dependencies>
 
 </project>
