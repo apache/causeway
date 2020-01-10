@@ -17,7 +17,7 @@ content:
 
 # core
     - url: .
-      start_path: core/testsupport/unittestsupport/src/main/doc # testing
+      start_path: core/unittestsupport/src/main/doc # testing
       branches: HEAD
 
 # testing

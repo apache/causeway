@@ -88,7 +88,7 @@ content:
       start_path: core/security/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: core/testsupport/unittestsupport/src/main/doc # testing
+      start_path: core/unittestsupport/src/main/doc # testing
       branches: HEAD
     - url: .
       start_path: core/viewers/restfulobjects/jaxrs-resteasy-4/src/main/doc # vro
