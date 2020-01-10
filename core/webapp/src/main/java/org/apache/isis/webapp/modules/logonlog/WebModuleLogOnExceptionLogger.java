@@ -68,7 +68,7 @@ public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
                 filterReg.addMappingForUrlPatterns(
                         null,
                         true, // filterReg is forced last
-                        webModuleContext.getProtectedPaths());
+                        webModuleContext.getProtectedPaths().toArray(String.class));
             });
 
         return null; // does not provide a listener

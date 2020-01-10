@@ -20,8 +20,6 @@ package org.apache.isis.webapp.modules;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -29,8 +27,8 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.config.IsisConfiguration;
 
 import lombok.Getter;
@@ -55,7 +53,7 @@ public class WebModuleContext {
     @NonNull @Getter private final IsisConfiguration configuration;
     @NonNull @Getter private final ServiceRegistry serviceRegistry;
     
-    private List<WebModule> webModules;
+    private Can<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
 
     /**
@@ -95,21 +93,16 @@ public class WebModuleContext {
     }
 
     /**
-     * Streams the protected path names (<tt>isis.protected</tt> context param)
+     * immutable list of protected path names (<tt>isis.protected</tt> context param)
      */
-    public Stream<String> streamProtectedPaths() {
-        final String list = protectedPath.toString();
-        return _Strings.splitThenStream(list, ",");
-    }
-    public String[] getProtectedPaths() {
-        return streamProtectedPaths().collect(_Arrays.toArray(String.class));
+    public Can<String> getProtectedPaths() {
+        final String listLiteral = protectedPath.toString();
+        return Can.<String>ofStream(_Strings.splitThenStream(listLiteral, ","));
     }
 
     public void prepare() {
-        webModules =
-                WebModule.discoverWebModules(serviceRegistry)
-                .peek(module->module.prepare(this)) // prepare context
-                .collect(Collectors.toList());
+        webModules = WebModule.discoverWebModules(serviceRegistry);
+        webModules.forEach(module->module.prepare(this));
     }
 
     public void init() {
@@ -130,15 +123,15 @@ public class WebModuleContext {
 
     // -- HELPER
 
-    private void addListener(ServletContext context, WebModule module) {
-        log.info(String.format("Setup ServletContext, adding WebModule '%s'", module.getName()));
+    private void addListener(ServletContext servletContext, WebModule webModule) {
+        log.info(String.format("Setup ServletContext, adding WebModule '%s'", webModule.getName()));
         try {
-            final List<ServletContextListener> listeners = module.init(context);
+            final List<ServletContextListener> listeners = webModule.init(servletContext);
             if(listeners != null) {
                 activeListeners.addAll(listeners);
             }
         } catch (ServletException e) {
-            log.error(String.format("Failed to add WebModule '%s' to the ServletContext.", module.getName()), e);
+            log.error(String.format("Failed to add WebModule '%s' to the ServletContext.", webModule.getName()), e);
         }  
     }
 
