@@ -1865,7 +1865,7 @@
 		<module>viewers/restfulobjects</module>
 		<module>viewers/wicket</module>
 
-		<module>persistence/jdo</module>
+		<module>../persistence/jdo</module>
 
 		<!-- to break cyclic dependencies some tests needed to be moved to their 
 			own modules -->
