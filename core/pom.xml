@@ -1849,7 +1849,7 @@
 		<module>webapp</module>
 		<module>webboot-springboot</module>
 
-		<module>testsupport/unittestsupport</module>
+		<module>unittestsupport</module>
 
 		<module>security</module>
 		<module>../security/bypass</module>
