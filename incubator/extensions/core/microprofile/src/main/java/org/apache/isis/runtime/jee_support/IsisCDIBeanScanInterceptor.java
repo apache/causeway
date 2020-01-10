@@ -27,6 +27,7 @@ import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServlet;
 
 import org.springframework.stereotype.Component;
 
@@ -64,6 +65,7 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
     private static final List<Predicate<Class<?>>> vetoTests = _Lists.of(
         ExceptionRecognizer.class::isAssignableFrom,
         ServletContextListener.class::isAssignableFrom, // seems this has no effect anyway
+        HttpServlet.class::isAssignableFrom, // seems this has no effect either
         type->type.getName().startsWith("org.springframework."),
         type->type.getName().startsWith("org.apache.isis."), 
         type->_Annotations.isPresent(type, Component.class));

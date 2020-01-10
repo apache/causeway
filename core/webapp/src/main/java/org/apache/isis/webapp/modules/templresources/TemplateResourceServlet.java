@@ -23,12 +23,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.base._Strings;
@@ -53,10 +54,8 @@ public class TemplateResourceServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateResourceServlet_HtmlTemplateVariables templateVariables;
 
-    @Inject
-    private RestEasyConfiguration restEasyConfiguration;
-    @Inject
-    private WebAppContextPath webAppContextPath;
+    @Autowired private RestEasyConfiguration restEasyConfiguration;
+    @Autowired private WebAppContextPath webAppContextPath;
 
     @Override
     public void init(ServletConfig config) throws ServletException {

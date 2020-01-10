@@ -47,6 +47,8 @@ import lombok.Getter;
 @Qualifier("Default")
 public class WebAppContextPath implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * In the form "xxx/yyy" (no leading nor trailing '/').
      */

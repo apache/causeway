@@ -39,6 +39,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.factory.InstanceUtil;
@@ -153,10 +155,8 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         return Pattern.compile(".*\\." + input);
     };
 
-    @Inject
-    private IsisSessionFactory isisSessionFactory;
-    @Inject
-    private SpecificationLoader specificationLoader;
+    @Autowired private IsisSessionFactory isisSessionFactory;
+    @Autowired private SpecificationLoader specificationLoader;
     
     private List<String> passThruList = Collections.emptyList();
 

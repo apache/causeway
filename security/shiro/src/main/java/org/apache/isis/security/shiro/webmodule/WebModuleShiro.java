@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
@@ -45,6 +46,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
@@ -125,6 +127,14 @@ public class WebModuleShiro extends WebModuleAbstract {
         // testing support
         public EnvironmentLoaderListenerForIsis(ServiceInjector serviceInjector) {
             this.serviceInjector = serviceInjector;
+        }
+
+        @Override
+        public void contextInitialized(ServletContextEvent sce) {
+            System.err.println("intercepted: " + this);
+            _Exceptions.dumpStackTrace();
+            System.err.println("======================================================");
+            super.contextInitialized(sce);
         }
 
         @Override 
