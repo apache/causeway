@@ -49,11 +49,6 @@
             <artifactId>isis-core-config</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
 			<groupId>org.apache.isis.core</groupId>
@@ -73,12 +68,6 @@
 			<artifactId>isis-core-webboot-springboot</artifactId>
 			<scope>test</scope>
 		</dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-integtestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
         
         <!-- core plugins required to run this module's own tests -->
         <dependency>

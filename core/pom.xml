@@ -1855,7 +1855,7 @@
 		<module>webboot-springboot</module>
 
 		<module>testsupport/unittestsupport</module>
-		<module>testsupport/integtestsupport</module>
+		<module>../testing/integtestsupport</module>
 
 		<module>security</module>
 		<module>../security/bypass</module>
