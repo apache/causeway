@@ -167,16 +167,16 @@ content:
 
 # mappings
     - url: .
-      start_path: mappings/jaxrsclient/impl/src/main/doc # mappings
+      start_path: mappings/jaxrsclient/src/main/doc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/minio/impl/src/main/doc # mappings
+      start_path: mappings/minio/src/main/doc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/restclient/impl/src/main/doc # mappings
+      start_path: mappings/restclient/src/main/doc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/slack/impl/src/main/doc # mappings
+      start_path: mappings/slack/src/main/doc # mappings
       branches: HEAD
 
 # mavendeps
