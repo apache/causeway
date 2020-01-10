@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.integtestsupport;
+package org.apache.isis.testing.integtestsupport.applib;
 
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;

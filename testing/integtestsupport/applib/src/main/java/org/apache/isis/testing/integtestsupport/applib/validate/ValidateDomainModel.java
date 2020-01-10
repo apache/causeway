@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.integtestsupport.validate;
+package org.apache.isis.testing.integtestsupport.applib.validate;
 
 import java.util.Collection;
 import java.util.Collections;

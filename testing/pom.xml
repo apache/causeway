@@ -129,8 +129,10 @@
 		<module>hsqldbmgr</module>
 		<module>specsupport</module>
 
+		<module>integtestsupport</module>
+		<module>integtestsupport/applib</module>
+
 		<module>unittestsupport</module>
-		<module>unittestsupport/applib</module>
 	</modules>
 
 	<profiles>
