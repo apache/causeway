@@ -1849,7 +1849,7 @@
 		<module>applib</module>
 		<module>metamodel</module>
 		<module>runtime</module>
-		<module>runtime-services</module>
+		<module>runtimeservices</module>
 		<module>webapp</module>
 		<module>webboot-springboot</module>
 
