@@ -17,26 +17,26 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
         <version>2.0.0-M3-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
-	<artifactId>isis-viewer-restfulobjects</artifactId>
-	<name>Apache Isis Viewer - RO</name>
+    <artifactId>isis-viewer-wicket</artifactId>
+    <name>Apache Isis Viewer - Wicket</name>
 
     <packaging>pom</packaging>
 
     <modules>
-        <module>applib</module>
-        <module>rendering</module>
+        <module>model</module>
         <module>viewer</module>
-        <module>jaxrs-resteasy-4</module>
+        <module>ui</module>
     </modules>
 
 </project>

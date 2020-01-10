@@ -1856,8 +1856,8 @@
 		<module>../security/shiro</module>
 		<module>../security/keycloak</module>
 
-		<module>viewers/restfulobjects</module>
-		<module>viewers/wicket</module>
+		<module>../viewers/restfulobjects</module>
+		<module>../viewers/wicket</module>
 
 		<module>../persistence/jdo</module>
 
