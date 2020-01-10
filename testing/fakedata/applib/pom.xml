@@ -39,7 +39,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
+            <artifactId>isis-core-applib</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.javafaker</groupId>
