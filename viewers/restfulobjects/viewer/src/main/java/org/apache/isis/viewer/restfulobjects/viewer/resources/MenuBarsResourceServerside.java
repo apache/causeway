@@ -31,7 +31,6 @@ import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService;
-import org.apache.isis.core.config.ConfigurationConstants;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -45,6 +44,8 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.Seri
 
 @Component
 public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {
+
+    public static final String SERVICE_IDENTIFIER = "1";
 
     @Inject
     public MenuBarsResourceServerside(
@@ -86,7 +87,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
                 final String objectType = actionLayoutData.getObjectType();
                 final String relativeUrl = String.format(
                         "objects/%s/%s/actions/%s",
-                        objectType, ConfigurationConstants.SERVICE_IDENTIFIER, actionLayoutData.getId());
+                        objectType, SERVICE_IDENTIFIER, actionLayoutData.getId());
                 Link link = new Link(
                         Rel.ACTION.getName(),
                         HttpMethod.GET,

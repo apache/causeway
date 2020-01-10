@@ -38,7 +38,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.IsisModuleConfig;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
@@ -50,7 +50,7 @@ import lombok.val;
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
         IsisBeanFactoryPostProcessorForSpring.class,
-        IsisModuleConfig.class,
+        IsisModuleCoreConfig.class,
         ServiceInjectorLegacy.class,
         ServiceRegistryDefault.class,
         ServiceInjectorLegacyTest.Producers.class,

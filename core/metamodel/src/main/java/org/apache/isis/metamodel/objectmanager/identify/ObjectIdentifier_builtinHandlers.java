@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.objectmanager.identify;
 import java.util.UUID;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.ConfigurationConstants;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
@@ -34,6 +33,7 @@ import lombok.val;
 
 class ObjectIdentifier_builtinHandlers {
 
+    public static final String SERVICE_IDENTIFIER = "1";
 
     static class GuardAgainstRootOid implements Handler {
 
@@ -60,7 +60,7 @@ class ObjectIdentifier_builtinHandlers {
 
         @Override
         public RootOid handle(ManagedObject managedObject) {
-            final String identifier = ConfigurationConstants.SERVICE_IDENTIFIER;
+            final String identifier = SERVICE_IDENTIFIER;
             return Oid.Factory.persistentOf(managedObject.getSpecification().getSpecId(), identifier);
         }
 

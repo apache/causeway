@@ -19,11 +19,9 @@
 
 package org.apache.isis.security.api.authorization.standard;
 
-import org.apache.isis.core.config.ConfigurationConstants;
-
 public final class AuthorizationConstants {
 
-    private static final String ROOT = ConfigurationConstants.ROOT + "authorization.";
+    private static final String ROOT = "isis.authorization.";
 
     public static final String LEARN = ROOT + "learn";
     public static final boolean LEARN_DEFAULT = false;

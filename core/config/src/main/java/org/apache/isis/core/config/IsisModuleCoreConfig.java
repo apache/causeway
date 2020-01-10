@@ -51,7 +51,7 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
         IsisConfiguration.class,
         RestEasyConfiguration.class,
 })
-public class IsisModuleConfig {
+public class IsisModuleCoreConfig {
     
     @ConfigurationProperties(prefix = "isis")
     @Bean("isis-settings")

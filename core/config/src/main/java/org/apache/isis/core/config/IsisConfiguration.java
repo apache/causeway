@@ -67,11 +67,12 @@ import lombok.Data;
  * 
  * @since 2.0
  */
-@ConfigurationProperties(ConfigurationConstants.ROOT_PREFIX)
+@ConfigurationProperties(IsisConfiguration.ROOT_PREFIX)
 @Data
 @Validated
 public class IsisConfiguration {
 
+    public static final String ROOT_PREFIX = "isis";
     @Autowired private ConfigurableEnvironment environment;
     
     @Inject @Named("isis-settings") private Map<String, String> isisSettings;
@@ -1147,7 +1148,7 @@ public class IsisConfiguration {
         private static Map<Pattern, String> toPatternMap(String cssClassPatterns) {
             final Map<Pattern,String> valueByPattern = _Maps.newLinkedHashMap();
             if(cssClassPatterns != null) {
-                final StringTokenizer regexToCssClasses = new StringTokenizer(cssClassPatterns, ConfigurationConstants.LIST_SEPARATOR);
+                final StringTokenizer regexToCssClasses = new StringTokenizer(cssClassPatterns, ",");
                 final Map<String,String> valueByRegex = _Maps.newLinkedHashMap();
                 while (regexToCssClasses.hasMoreTokens()) {
                     String regexToCssClass = regexToCssClasses.nextToken().trim();

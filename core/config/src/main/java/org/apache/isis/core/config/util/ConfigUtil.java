@@ -18,16 +18,20 @@
  */
 package org.apache.isis.core.config.util;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.config.ConfigurationConstants;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ConfigUtil {
+
+    public static final List<String> PROTECTED_KEYS =
+            _Lists.of("password", "apiKey", "authToken");
 
     public static Map<String, String> maskIfProtected(
             final Map<String, String> inMap,
@@ -50,7 +54,7 @@ public class ConfigUtil {
             return false;
         }
         final String toLowerCase = key.toLowerCase();
-        for (String protectedKey : ConfigurationConstants.PROTECTED_KEYS) {
+        for (String protectedKey : PROTECTED_KEYS) {
             if(toLowerCase.contains(protectedKey.toLowerCase())) {
                 return true;
             }
