@@ -23,12 +23,12 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

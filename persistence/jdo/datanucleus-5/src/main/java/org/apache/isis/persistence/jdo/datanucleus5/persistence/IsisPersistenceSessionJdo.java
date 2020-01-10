@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 

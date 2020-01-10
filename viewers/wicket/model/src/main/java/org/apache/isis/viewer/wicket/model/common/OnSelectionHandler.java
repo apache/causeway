@@ -24,7 +24,7 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Decouples the selecting of items (by a toggle box column) from the invocation of bulk actions on those items (by

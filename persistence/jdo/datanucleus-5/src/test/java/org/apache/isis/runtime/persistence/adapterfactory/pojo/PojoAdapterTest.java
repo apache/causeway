@@ -27,10 +27,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;

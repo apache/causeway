@@ -32,12 +32,12 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

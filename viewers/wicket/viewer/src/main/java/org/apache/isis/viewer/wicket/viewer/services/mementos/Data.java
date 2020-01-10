@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.viewer.services.mementos;
 
 import java.io.Serializable;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.AccessLevel;
 import lombok.Getter;

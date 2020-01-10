@@ -19,8 +19,8 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.column;
 
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
 /**
  * Derived by absence of an <tt>@Column</tt> method.

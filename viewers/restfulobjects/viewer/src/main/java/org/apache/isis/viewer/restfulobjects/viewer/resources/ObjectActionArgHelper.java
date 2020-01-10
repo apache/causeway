@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
@@ -37,7 +37,7 @@ import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for parsing arguments to be invoked by an
- * {@link org.apache.isis.metamodel.spec.feature.ObjectAction}.
+ * {@link ObjectAction}.
  */
 public class ObjectActionArgHelper {
 

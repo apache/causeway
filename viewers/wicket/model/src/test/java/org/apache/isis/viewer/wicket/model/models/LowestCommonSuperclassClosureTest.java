@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.metamodel.commons.matchers.IsisMatchers;
+import org.apache.isis.core.metamodel.commons.matchers.IsisMatchers;
 
 public class LowestCommonSuperclassClosureTest {
 

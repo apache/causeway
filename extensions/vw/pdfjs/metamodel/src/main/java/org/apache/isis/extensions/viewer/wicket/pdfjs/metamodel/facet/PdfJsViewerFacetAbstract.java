@@ -2,9 +2,9 @@ package org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
 

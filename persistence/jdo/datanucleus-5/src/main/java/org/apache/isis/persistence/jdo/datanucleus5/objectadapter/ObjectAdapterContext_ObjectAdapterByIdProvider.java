@@ -26,14 +26,14 @@ import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.PojoRecreationException;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.PojoRecreationException;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.context.session.RuntimeContext;
 import org.apache.isis.runtime.persistence.session.PersistenceSession;
 
@@ -88,7 +88,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider  {
      * will be {@link RootOid#setVersion(Version) set} to the current
      * value.  This allows the client to retry if they wish.
      *
-     * @throws {@link org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException} if the object does not exist.
+     * @throws {@link ObjectNotFoundException} if the object does not exist.
      */
      public ObjectAdapter adapterFor(final RootOid rootOid) {
 

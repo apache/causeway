@@ -22,10 +22,10 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.dat
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
-import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
 

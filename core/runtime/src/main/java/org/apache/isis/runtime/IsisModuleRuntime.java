@@ -21,7 +21,7 @@ package org.apache.isis.runtime;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.metamodel.IsisModuleMetamodel;
+import org.apache.isis.core.metamodel.IsisModuleMetamodel;
 import org.apache.isis.runtime.context.session.RuntimeEventService;
 import org.apache.isis.runtime.context.session.RuntimeEventSupport_Spring;
 import org.apache.isis.runtime.persistence.session.events.PersistenceEventService;

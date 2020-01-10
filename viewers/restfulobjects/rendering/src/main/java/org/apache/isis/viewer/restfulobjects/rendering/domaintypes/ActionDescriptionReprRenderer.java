@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

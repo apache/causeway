@@ -19,7 +19,7 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.persistence.query;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public abstract class PersistenceQueryAbstract implements PersistenceQuery {
 

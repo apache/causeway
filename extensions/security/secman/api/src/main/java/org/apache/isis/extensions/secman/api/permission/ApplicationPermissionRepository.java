@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.api.permission;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 public interface ApplicationPermissionRepository {
 

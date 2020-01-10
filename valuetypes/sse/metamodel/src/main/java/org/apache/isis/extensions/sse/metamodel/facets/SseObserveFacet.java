@@ -21,7 +21,7 @@ package org.apache.isis.extensions.sse.metamodel.facets;
 
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.extensions.sse.applib.annotations.SseSource;
-import org.apache.isis.metamodel.facets.SingleClassValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 
 /**
  * Corresponds to <tt>@???(observe=...)</tt> annotation in the Isis programming model.

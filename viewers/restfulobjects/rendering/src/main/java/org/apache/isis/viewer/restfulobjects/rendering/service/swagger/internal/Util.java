@@ -27,14 +27,14 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.metamodel.spec.ActionType;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import io.swagger.models.Response;
 

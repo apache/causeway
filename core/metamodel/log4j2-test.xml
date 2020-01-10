@@ -16,7 +16,7 @@
 	<Loggers>
 	
 	
-		<Logger name="org.apache.isis.metamodel.specloader.SpecificationLoaderDefault" level="warn" />
+		<Logger name="org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault" level="warn" />
 	
 		<Logger name="org.apache.catalina.startup.DigesterFactory" level="error" />
 		<Logger name="org.apache.catalina.util.LifecycleBase" level="error" />

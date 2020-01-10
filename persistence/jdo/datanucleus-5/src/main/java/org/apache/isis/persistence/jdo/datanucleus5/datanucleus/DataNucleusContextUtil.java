@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import org.datanucleus.ExecutionContext;
 
-import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

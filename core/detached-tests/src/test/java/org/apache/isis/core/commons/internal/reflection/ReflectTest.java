@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.commons.internal.reflection._Reflect.InterfacePolicy;
-import org.apache.isis.metamodel.services.user.UserServiceDefault;
+import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 
 import static org.apache.isis.core.commons.internal.reflection._Reflect.getAnnotation;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.streamAllMethods;
@@ -55,7 +55,7 @@ class ReflectTest {
                 .collect(Collectors.joining(",\n"));
 
         assertEquals(""
-                + "org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
+                + "UserServiceDefault$SudoServiceSpi,\n"
                 + "java.lang.Object", 
                 typeListLiteral);
 
@@ -71,7 +71,7 @@ class ReflectTest {
                 .collect(Collectors.joining(",\n"));
 
         assertEquals(
-                "org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
+                "UserServiceDefault$SudoServiceSpi,\n"
                         + "org.apache.isis.applib.services.sudo.SudoService$Spi,\n"
                         + "java.lang.Object", 
                         typeListLiteral);
@@ -91,8 +91,8 @@ class ReflectTest {
         assertEquals(""
                 + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.releaseRunAs(),\n"
                 + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.runAs(java.lang.String,java.util.List),\n"
-                + "public void org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi.releaseRunAs(),\n"
-                + "public void org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"
+                + "public void UserServiceDefault$SudoServiceSpi.releaseRunAs(),\n"
+                + "public void UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"
                 ,
                 typeListLiteral);
 

@@ -35,7 +35,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

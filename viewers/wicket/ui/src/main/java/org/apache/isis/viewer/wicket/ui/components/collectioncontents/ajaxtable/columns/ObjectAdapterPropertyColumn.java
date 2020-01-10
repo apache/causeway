@@ -26,8 +26,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

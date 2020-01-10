@@ -8,7 +8,7 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;

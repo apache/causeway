@@ -11,7 +11,7 @@ import org.apache.isis.extensions.sse.applib.annotations.ServerSentEvents;
  *
  */
 @Value(semanticsProviderName = 
-        "org.apache.isis.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
+        "MarkupValueSemanticsProvider")
 public class ListeningMarkup extends Markup {
 
     private static final long serialVersionUID = 1L;

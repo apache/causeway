@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.spec.ActionType;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 

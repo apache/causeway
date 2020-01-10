@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
-import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 /**
  * A behavior that prepends or appends the markup needed to show a Font Awesome icon

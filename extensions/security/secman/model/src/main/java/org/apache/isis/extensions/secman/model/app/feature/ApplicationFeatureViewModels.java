@@ -35,8 +35,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 
 @DomainService(
         nature = NatureOfService.VIEW,

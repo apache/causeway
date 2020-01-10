@@ -27,9 +27,9 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.metamodel.facets.SingleIntValueFacet;
-import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldStringModel;

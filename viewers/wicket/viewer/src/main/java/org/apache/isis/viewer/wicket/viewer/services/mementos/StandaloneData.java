@@ -22,10 +22,10 @@ package org.apache.isis.viewer.wicket.viewer.services.mementos;
 import java.io.Serializable;
 import java.util.function.Function;
 
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 

@@ -21,10 +21,10 @@ package org.apache.isis.extensions.sse.metamodel.facets;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.sse.applib.annotations.SseSource;
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public abstract class SseObserveFacetAbstract extends SingleClassValueFacetAbstract implements SseObserveFacet {
 

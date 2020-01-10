@@ -37,7 +37,7 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.metamodel.context.MetaModelContexts;
+import org.apache.isis.core.metamodel.context.MetaModelContexts;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingStereotypes;
 import org.apache.isis.testdomain.model.stereotypes.MyObject;
@@ -60,7 +60,7 @@ import lombok.val;
         properties = {
                 "logging.config=log4j2-test.xml",
                 // "isis.reflector.introspector.parallelize=false",
-                // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+                // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
     //IsisPresets.DebugDiscovery

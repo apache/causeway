@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.wicket.Component;
 
-import org.apache.isis.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 

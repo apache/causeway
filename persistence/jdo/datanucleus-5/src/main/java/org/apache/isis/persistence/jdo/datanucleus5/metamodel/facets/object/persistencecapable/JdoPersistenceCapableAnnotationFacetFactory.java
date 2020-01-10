@@ -23,13 +23,13 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
-import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
 

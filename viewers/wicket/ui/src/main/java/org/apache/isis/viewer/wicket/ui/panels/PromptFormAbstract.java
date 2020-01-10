@@ -39,7 +39,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;

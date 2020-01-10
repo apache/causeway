@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 public interface ActionArgumentModel extends IModel<ManagedObject> {

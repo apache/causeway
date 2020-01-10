@@ -36,9 +36,9 @@ import javax.jdo.identity.StringIdentity;
 import org.datanucleus.identity.DatastoreId;
 
 import org.apache.isis.core.commons.internal.context._Context;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 import lombok.val;

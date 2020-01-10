@@ -22,19 +22,19 @@ package org.apache.isis.runtimeservices.wrapper.internal.util;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.ADD_TO_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.CHOICES_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.CLEAR_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.DEFAULT_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.DISABLE_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.GET_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.HIDE_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.MODIFY_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.REMOVE_FROM_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.SET_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.VALIDATE_ADD_TO_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.VALIDATE_PREFIX;
-import static org.apache.isis.metamodel.facets.MethodLiteralConstants.VALIDATE_REMOVE_FROM_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.ADD_TO_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.CHOICES_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.CLEAR_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.DEFAULT_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.DISABLE_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.GET_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.HIDE_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.MODIFY_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.REMOVE_FROM_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.SET_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.VALIDATE_ADD_TO_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.VALIDATE_PREFIX;
+import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.VALIDATE_REMOVE_FROM_PREFIX;
 
 @Deprecated //no longer used
 final class MethodPrefixFinder {

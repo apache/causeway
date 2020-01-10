@@ -34,9 +34,9 @@ import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
-import org.apache.isis.metamodel.commons.InputStreamExtensions;
-import org.apache.isis.metamodel.commons.ResourceUtil;
-import org.apache.isis.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.commons.InputStreamExtensions;
+import org.apache.isis.core.metamodel.commons.ResourceUtil;
+import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 import static org.apache.isis.core.commons.internal.base._Strings.pair;
 import static org.apache.isis.core.commons.internal.base._With.ifPresentElseGet;

@@ -26,7 +26,7 @@ import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 

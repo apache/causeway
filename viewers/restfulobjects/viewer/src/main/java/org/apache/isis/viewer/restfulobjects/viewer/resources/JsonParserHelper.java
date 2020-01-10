@@ -21,9 +21,9 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
@@ -34,7 +34,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 /**
  * Utility class that encapsulates the logic for parsing some content (JSON, or a simple string that is JSON)
  * into an{@link ManagedObject} of a specified
- * {@link org.apache.isis.metamodel.spec.ObjectSpecification type}.
+ * {@link ObjectSpecification type}.
  */
 public class JsonParserHelper {
 

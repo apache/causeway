@@ -18,9 +18,9 @@
  */
 package org.apache.isis.webapp.context.memento;
 
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * @since 2.0

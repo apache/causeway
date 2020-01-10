@@ -24,8 +24,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;

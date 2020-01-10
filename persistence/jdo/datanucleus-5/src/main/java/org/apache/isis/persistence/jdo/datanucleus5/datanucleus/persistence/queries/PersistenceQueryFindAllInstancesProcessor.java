@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.que
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindAllInstances;
 

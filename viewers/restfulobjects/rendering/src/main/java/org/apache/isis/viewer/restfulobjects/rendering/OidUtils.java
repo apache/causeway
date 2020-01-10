@@ -18,9 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 

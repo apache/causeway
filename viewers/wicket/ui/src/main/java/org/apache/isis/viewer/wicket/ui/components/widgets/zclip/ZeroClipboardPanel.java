@@ -25,7 +25,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

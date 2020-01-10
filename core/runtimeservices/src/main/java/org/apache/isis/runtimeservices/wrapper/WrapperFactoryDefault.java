@@ -63,7 +63,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
-import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.runtimeservices.wrapper.handlers.ProxyContextHandler;

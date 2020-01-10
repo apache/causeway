@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 

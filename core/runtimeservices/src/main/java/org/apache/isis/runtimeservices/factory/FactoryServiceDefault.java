@@ -36,11 +36,11 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;

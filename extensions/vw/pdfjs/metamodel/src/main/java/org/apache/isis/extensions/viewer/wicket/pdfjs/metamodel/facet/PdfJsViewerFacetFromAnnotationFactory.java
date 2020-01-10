@@ -8,12 +8,12 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
-import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
 

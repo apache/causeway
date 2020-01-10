@@ -29,9 +29,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 
 /**
  * This service allows an XML document to be generated capturing the data of a root entity and specified related

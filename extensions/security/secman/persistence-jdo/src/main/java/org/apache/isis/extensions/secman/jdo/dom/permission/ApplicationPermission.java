@@ -48,10 +48,10 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMod
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 
 import lombok.Getter;
 import lombok.Setter;

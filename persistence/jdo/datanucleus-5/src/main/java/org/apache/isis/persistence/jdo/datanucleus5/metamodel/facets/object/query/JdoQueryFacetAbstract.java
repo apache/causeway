@@ -25,10 +25,10 @@ import java.util.Map;
 
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 public class JdoQueryFacetAbstract extends FacetAbstract implements

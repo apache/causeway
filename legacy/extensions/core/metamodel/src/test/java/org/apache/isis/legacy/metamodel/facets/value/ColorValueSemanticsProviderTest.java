@@ -27,10 +27,10 @@ import static org.junit.Assert.fail;
 
 import org.apache.isis.legacy.applib.value.Color;
 import org.apache.isis.legacy.metamodel.facets.value.color.ColorValueSemanticsProvider;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
-import org.apache.isis.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
 
 public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

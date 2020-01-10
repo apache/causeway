@@ -18,8 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.version;
 
-import org.apache.isis.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class JdoVersionFacetFromAnnotation extends FacetAbstract implements JdoVersionFacet {
 

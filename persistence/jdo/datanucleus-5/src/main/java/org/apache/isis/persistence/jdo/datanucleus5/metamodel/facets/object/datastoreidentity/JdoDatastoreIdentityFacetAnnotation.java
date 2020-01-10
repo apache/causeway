@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.dat
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 
-import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class JdoDatastoreIdentityFacetAnnotation extends JdoDatastoreIdentityFacetImpl {

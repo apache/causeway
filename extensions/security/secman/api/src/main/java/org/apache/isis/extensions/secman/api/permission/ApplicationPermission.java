@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.api.permission;
 
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 
 public interface ApplicationPermission {
 

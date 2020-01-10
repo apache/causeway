@@ -19,7 +19,7 @@
 package org.apache.isis.extensions.secman.api.permission;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 
 /**
  * Whether the permission {@link #ALLOW grants} or {@link #VETO denies} access to an

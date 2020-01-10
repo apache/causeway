@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 

@@ -24,9 +24,9 @@ import java.util.Locale;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 

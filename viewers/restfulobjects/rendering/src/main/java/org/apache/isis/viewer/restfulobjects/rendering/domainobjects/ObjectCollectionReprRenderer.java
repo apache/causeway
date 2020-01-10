@@ -25,10 +25,10 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanel;

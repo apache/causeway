@@ -8,7 +8,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;

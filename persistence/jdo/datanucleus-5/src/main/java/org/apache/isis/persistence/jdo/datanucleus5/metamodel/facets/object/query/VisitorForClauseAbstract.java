@@ -22,11 +22,11 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 import lombok.val;
 

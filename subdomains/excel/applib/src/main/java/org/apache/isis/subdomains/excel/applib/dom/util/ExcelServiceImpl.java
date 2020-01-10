@@ -20,8 +20,8 @@ import org.apache.isis.subdomains.excel.applib.dom.PivotRow;
 import org.apache.isis.subdomains.excel.applib.dom.PivotValue;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetContent;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
-import org.apache.isis.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.session.IsisSession;
 

@@ -68,7 +68,7 @@ import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissio
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 import lombok.Getter;
 import lombok.Setter;

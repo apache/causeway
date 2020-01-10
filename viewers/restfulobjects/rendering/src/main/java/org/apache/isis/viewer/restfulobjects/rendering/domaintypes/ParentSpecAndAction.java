@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public class ParentSpecAndAction extends ParentSpecAndFeature<ObjectAction> {
 

@@ -32,7 +32,6 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

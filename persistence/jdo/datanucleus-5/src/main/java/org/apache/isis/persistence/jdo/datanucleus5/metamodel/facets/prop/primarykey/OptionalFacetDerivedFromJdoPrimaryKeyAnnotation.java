@@ -20,9 +20,9 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.prima
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
-import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 
 
 /**

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui;
 
 import org.apache.wicket.Component;
 
-import org.apache.isis.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 /**
  * Enumerates the different types of {@link Component}s that can be constructed
@@ -157,7 +157,7 @@ public enum ComponentType {
 
     /**
      * Returns the {@link #name()} formatted as
-     * {@link org.apache.isis.metamodel.commons.StringExtensions#toCamelCase(String) case}.
+     * {@link StringExtensions#toCamelCase(String) case}.
      *
      * <p>
      * For example, <tt>OBJECT_EDIT</tt> becomes <tt>objectEdit</tt>.

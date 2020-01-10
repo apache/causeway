@@ -51,31 +51,31 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.PojoRefreshException;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.context.MetaModelContext;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.PersistingCallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.PersistingLifecycleEventFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
-import org.apache.isis.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.metamodel.spec.EntityState;
-import org.apache.isis.metamodel.spec.FreeStandingList;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
+import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
+import org.apache.isis.core.metamodel.spec.EntityState;
+import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
@@ -709,7 +709,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * lifecycle callback.
      *
      * <p>
-     * The implementation therefore uses Isis' {@link org.apache.isis.metamodel.adapter.oid.Oid#isTransient() oid}
+     * The implementation therefore uses Isis' {@link Oid#isTransient() oid}
      * to determine which callback to fire.
      */
     @Override
@@ -736,7 +736,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * fires the appropriate lifecycle callback
      *
      * <p>
-     * The implementation therefore uses Isis' {@link org.apache.isis.metamodel.adapter.oid.Oid#isTransient() oid}
+     * The implementation therefore uses Isis' {@link Oid#isTransient() oid}
      * to determine which callback to fire.
      */
     @Override

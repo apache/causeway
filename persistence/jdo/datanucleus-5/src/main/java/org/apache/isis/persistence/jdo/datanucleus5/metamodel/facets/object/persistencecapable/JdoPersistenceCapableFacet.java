@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.per
 
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 
 
 /**

@@ -24,8 +24,8 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
-import org.apache.isis.metamodel.context.MetaModelContext;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimeservices.wrapper.proxy.ProxyCreator;
 
 import lombok.NonNull;

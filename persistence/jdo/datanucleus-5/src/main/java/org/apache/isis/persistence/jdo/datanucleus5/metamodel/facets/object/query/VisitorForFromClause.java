@@ -21,10 +21,10 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.que
 import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.spec.Hierarchical;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.spec.Hierarchical;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 import lombok.val;
 

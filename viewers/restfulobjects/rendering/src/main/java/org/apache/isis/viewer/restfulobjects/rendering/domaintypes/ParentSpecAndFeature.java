@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 public abstract class ParentSpecAndFeature<T extends ObjectFeature> {
 

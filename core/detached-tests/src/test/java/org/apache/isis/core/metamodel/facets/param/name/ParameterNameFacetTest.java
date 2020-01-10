@@ -31,13 +31,13 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
+import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
+import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
 import lombok.val;
 

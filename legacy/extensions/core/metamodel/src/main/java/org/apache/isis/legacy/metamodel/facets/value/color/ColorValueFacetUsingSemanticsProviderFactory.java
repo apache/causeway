@@ -20,8 +20,8 @@
 package org.apache.isis.legacy.metamodel.facets.value.color;
 
 import org.apache.isis.legacy.applib.value.Color;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 public class ColorValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Color> {
 

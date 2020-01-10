@@ -31,7 +31,7 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRep
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 
 import lombok.val;
 

@@ -69,7 +69,7 @@ import lombok.val;
         },
         properties = {
                 // "isis.reflector.introspector.parallelize=false",
-                // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+                // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
     //IsisPresets.DebugDiscovery

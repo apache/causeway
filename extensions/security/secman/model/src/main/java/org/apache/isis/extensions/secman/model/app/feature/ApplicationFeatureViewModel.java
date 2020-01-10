@@ -43,10 +43,10 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 
 import lombok.val;
 

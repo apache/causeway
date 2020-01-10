@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.notpersistent;
 
-import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class JdoNotPersistentFacetImpl extends JdoNotPersistentFacetAbstract {

@@ -37,9 +37,9 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 
 import lombok.val;
 

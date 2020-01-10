@@ -26,7 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import io.swagger.models.Swagger;
 import io.swagger.util.Json;

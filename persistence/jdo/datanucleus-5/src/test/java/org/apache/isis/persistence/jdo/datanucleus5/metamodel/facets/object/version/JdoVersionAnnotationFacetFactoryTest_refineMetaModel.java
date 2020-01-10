@@ -30,13 +30,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.context.MetaModelContext;
-import org.apache.isis.metamodel.facets.all.deficiencies.DeficiencyFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 

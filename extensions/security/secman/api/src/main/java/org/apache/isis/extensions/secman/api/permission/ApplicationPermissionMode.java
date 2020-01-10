@@ -19,7 +19,7 @@
 package org.apache.isis.extensions.secman.api.permission;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 
 /**
  * Named after UNIX modes (<code>chmod</code> etc), determines that nature of access (of denial of access if vetoed)

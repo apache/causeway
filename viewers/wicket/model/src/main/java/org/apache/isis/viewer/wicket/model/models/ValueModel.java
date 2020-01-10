@@ -19,8 +19,8 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 

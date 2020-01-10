@@ -21,16 +21,16 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.ver
 
 import javax.jdo.annotations.Version;
 
-import org.apache.isis.metamodel.facetapi.FacetUtil;
-import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.metamodel.facets.Annotations;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
 public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract

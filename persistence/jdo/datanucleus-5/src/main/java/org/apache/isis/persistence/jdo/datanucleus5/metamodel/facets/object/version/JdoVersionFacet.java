@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.version;
 
-import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public interface JdoVersionFacet extends Facet {
 

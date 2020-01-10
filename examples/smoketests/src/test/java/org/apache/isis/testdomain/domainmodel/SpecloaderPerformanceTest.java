@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.internal.base._Timing;
 import org.apache.isis.core.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;

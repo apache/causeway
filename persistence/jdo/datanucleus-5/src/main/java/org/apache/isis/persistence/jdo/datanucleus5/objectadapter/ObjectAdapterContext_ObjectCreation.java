@@ -24,14 +24,14 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;
-import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtime.context.session.RuntimeContext;
 
 import lombok.extern.log4j.Log4j2;

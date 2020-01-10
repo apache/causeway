@@ -32,8 +32,8 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;

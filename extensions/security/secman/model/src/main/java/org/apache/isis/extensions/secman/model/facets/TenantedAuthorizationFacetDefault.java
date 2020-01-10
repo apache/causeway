@@ -28,11 +28,11 @@ import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.interactions.UsabilityContext;
-import org.apache.isis.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 public class TenantedAuthorizationFacetDefault extends FacetAbstract implements TenantedAuthorizationFacet {
 

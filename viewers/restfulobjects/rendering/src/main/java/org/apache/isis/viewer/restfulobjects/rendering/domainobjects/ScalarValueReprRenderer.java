@@ -20,9 +20,9 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;

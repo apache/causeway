@@ -18,11 +18,11 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.context.session.RuntimeContext;
 
 import lombok.val;

@@ -42,12 +42,12 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
-import org.apache.isis.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 

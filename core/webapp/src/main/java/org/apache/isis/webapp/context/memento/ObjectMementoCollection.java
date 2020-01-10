@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.Getter;
 import lombok.Value;

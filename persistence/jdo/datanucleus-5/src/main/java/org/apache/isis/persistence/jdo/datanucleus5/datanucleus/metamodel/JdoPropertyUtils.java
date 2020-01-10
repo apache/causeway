@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.util.JdoPrimaryKeyPropertyPredicate;
 

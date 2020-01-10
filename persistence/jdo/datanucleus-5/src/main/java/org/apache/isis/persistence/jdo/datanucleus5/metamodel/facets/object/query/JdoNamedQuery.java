@@ -20,8 +20,8 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.que
 
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.metamodel.services.metamodel.MetaModelExportSupport;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.services.metamodel.MetaModelExportSupport;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Value object that represents the information of a

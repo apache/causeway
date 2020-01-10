@@ -28,9 +28,9 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.isis.metamodel.facets.object.projection.ProjectionFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;

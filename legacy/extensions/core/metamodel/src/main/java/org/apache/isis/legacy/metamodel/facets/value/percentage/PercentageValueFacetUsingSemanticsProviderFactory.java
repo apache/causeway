@@ -20,8 +20,8 @@
 package org.apache.isis.legacy.metamodel.facets.value.percentage;
 
 import org.apache.isis.legacy.applib.value.Percentage;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 public class PercentageValueFacetUsingSemanticsProviderFactory 
 extends ValueFacetUsingSemanticsProviderFactory<Percentage> {

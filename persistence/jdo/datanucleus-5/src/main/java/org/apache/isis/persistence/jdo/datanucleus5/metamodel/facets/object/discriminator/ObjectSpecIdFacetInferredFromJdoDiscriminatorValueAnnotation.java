@@ -18,8 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.discriminator;
 
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
 
 
 public class ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation extends

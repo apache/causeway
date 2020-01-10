@@ -67,7 +67,7 @@ import lombok.val;
         properties = {
                 "logging.level.org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo=DEBUG",
                 // "isis.reflector.introspector.parallelize=false",
-                // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+                // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
     IsisPresets.SilenceWicket, // just to have any config properties at all

@@ -31,7 +31,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodParameters;
+import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodParameters;
 
 public class TypeExtractorMethodsParametersTest {
 

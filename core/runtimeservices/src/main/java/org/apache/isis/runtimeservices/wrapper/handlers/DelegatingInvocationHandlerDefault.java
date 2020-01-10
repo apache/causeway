@@ -28,9 +28,9 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
 import lombok.Setter;

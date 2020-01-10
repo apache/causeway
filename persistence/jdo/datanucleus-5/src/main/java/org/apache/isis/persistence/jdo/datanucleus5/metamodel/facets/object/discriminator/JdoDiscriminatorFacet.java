@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.discriminator;
 
-import org.apache.isis.metamodel.facets.SingleValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 public interface JdoDiscriminatorFacet extends SingleValueFacet<String> {
 

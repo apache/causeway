@@ -19,8 +19,8 @@
 
 package org.apache.isis.legacy.metamodel.facets.value.money;
 
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface MoneyValueFacet extends Facet {
 

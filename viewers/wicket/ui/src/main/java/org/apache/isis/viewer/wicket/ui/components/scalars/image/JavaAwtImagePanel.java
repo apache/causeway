@@ -26,8 +26,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource;
 
-import org.apache.isis.metamodel.facets.value.image.ImageValueFacet;
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 

@@ -40,16 +40,16 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.metamodel.facets.actions.homepage.HomePageFacet;
-import org.apache.isis.metamodel.services.homepage.HomePageAction;
-import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
+import org.apache.isis.core.metamodel.services.homepage.HomePageAction;
+import org.apache.isis.core.metamodel.services.homepage.HomePageResolverService;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 

@@ -33,8 +33,8 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v1.DomainClassDto;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -54,7 +54,7 @@ import lombok.val;
         properties = {
                 "isis.reflector.introspector.mode=FULL",
                 "isis.reflector.validator.explicitObjectType=FALSE", // does not override any of the imports
-                "logging.level.org.apache.isis.metamodel.facets.DependentArgUtils=DEBUG"
+                "logging.level.DependentArgUtils=DEBUG"
         })
 @TestPropertySource({
     //IsisPresets.DebugMetaModel,

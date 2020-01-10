@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 public abstract class ObjectAndMember<T extends ObjectMember> {
 

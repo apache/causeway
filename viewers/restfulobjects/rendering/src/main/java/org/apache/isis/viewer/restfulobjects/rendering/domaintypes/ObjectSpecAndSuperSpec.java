@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ObjectSpecAndSuperSpec {
 

@@ -22,11 +22,11 @@ package org.apache.isis.extensions.sse.metamodel.facets;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.extensions.sse.applib.annotations.ServerSentEvents;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
-import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 import lombok.val;
 

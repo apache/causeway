@@ -21,10 +21,10 @@ package org.apache.isis.runtimeservices.xmlsnapshot;
 import java.util.List;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.spec.ManagedObject;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.util.snapshot.XmlSchema;
-import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.util.snapshot.XmlSchema;
+import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 
 import lombok.RequiredArgsConstructor;
 

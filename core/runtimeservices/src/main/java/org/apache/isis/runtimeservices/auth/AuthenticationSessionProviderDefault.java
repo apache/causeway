@@ -27,7 +27,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.metamodel.services.user.UserServiceDefault;
+import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.AuthenticationSession;

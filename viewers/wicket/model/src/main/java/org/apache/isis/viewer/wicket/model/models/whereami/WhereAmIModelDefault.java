@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.models.whereami;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
-import org.apache.isis.metamodel.util.pchain.ParentChain;
+import org.apache.isis.core.metamodel.util.pchain.ParentChain;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.webapp.context.IsisWebAppCommonContext;
 

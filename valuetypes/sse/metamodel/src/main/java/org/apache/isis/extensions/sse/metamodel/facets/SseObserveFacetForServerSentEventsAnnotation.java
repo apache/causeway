@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.extensions.sse.applib.annotations.ServerSentEvents;
 import org.apache.isis.extensions.sse.applib.annotations.SseSource;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
  * 

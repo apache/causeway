@@ -19,8 +19,8 @@
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.primarykey;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
 
 
 /**

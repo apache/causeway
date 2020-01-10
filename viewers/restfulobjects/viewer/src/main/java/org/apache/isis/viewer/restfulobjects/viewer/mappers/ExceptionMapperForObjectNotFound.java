@@ -23,7 +23,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.metamodel.exceptions.persistence.ObjectNotFoundException;
+import org.apache.isis.core.metamodel.exceptions.persistence.ObjectNotFoundException;
 
 @Component
 @Provider

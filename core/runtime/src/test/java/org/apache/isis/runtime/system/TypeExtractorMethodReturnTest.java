@@ -28,7 +28,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodReturn;
+import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodReturn;
 
 import static org.apache.isis.runtime.system.TypeExtractorMethodsParametersTest.containsElementThat;
 

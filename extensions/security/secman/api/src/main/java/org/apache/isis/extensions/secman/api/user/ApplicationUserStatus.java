@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.api.user;
 
-import org.apache.isis.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 /**
  * Whether the user's account is enabled or disabled.

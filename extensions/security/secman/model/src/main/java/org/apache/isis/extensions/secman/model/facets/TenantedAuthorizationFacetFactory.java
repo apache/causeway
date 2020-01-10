@@ -26,10 +26,10 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
-import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 import lombok.val;
 

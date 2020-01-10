@@ -28,7 +28,7 @@ import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.fieldmanager.FieldManager;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.eventbus.EventBusServiceJdo;
 
 import lombok.extern.log4j.Log4j2;

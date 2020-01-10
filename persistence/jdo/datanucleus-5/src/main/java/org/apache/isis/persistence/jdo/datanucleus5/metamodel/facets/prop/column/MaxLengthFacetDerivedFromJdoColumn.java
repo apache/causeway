@@ -18,8 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.column;
 
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
 
 public class MaxLengthFacetDerivedFromJdoColumn extends MaxLengthFacetAbstract {

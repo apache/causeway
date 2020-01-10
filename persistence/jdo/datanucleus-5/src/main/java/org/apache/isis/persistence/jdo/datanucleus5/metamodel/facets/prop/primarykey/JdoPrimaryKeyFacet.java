@@ -20,8 +20,8 @@ package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.prop.prima
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 /**

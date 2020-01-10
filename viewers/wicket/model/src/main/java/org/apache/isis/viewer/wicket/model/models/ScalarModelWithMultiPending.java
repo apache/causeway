@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.webapp.context.memento.ObjectMemento;
 
 import lombok.val;

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.datanucleus;
 
-import org.apache.isis.metamodel.adapter.oid.ObjectPersistenceException;
+import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
 
 public class DataNucleusException extends ObjectPersistenceException {
 

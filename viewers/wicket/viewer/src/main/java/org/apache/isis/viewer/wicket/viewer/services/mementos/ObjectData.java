@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 import lombok.NoArgsConstructor;
 

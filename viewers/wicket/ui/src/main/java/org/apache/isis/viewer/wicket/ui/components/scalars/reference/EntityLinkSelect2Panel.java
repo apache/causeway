@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.wicketstuff.select2.Select2MultiChoice;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 

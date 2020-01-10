@@ -19,11 +19,11 @@
 package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import org.apache.isis.core.commons.internal.assertions._Assert;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.ParentedOid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.ObjectAdapterContext.ObjectAdapterFactories;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.runtime.session.IsisSession;

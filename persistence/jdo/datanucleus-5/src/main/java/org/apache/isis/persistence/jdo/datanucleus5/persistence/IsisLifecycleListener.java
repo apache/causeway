@@ -33,7 +33,7 @@ import javax.jdo.listener.StoreLifecycleListener;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public class IsisLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,

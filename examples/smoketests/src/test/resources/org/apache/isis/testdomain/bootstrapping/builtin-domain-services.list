@@ -9,8 +9,8 @@ org.apache.isis.applib.services.scratchpad.Scratchpad
 org.apache.isis.applib.services.tablecol.TableColumnOrderService$Default
 org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression
 org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts
-org.apache.isis.metamodel.services.registry.ServiceRegistryDefault
-org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi
+ServiceRegistryDefault
+UserServiceDefault$SudoServiceSpi
 org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault
 org.apache.isis.runtime.services.command.CommandDtoServiceInternalDefault
 org.apache.isis.runtime.services.confmenu.ConfigurationViewServiceDefault

@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 public class RedirectServlet extends HttpServlet {
 

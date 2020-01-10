@@ -19,7 +19,7 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.persistence.command;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class PersistenceCommandAbstract implements PersistenceCommand {
 

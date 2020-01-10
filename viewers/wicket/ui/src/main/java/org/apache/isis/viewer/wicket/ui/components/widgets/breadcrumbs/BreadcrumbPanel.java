@@ -33,8 +33,8 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;

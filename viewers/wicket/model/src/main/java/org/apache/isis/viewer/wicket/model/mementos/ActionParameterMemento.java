@@ -21,10 +21,10 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * {@link Serializable} representation of a {@link ObjectActionParameter parameter}

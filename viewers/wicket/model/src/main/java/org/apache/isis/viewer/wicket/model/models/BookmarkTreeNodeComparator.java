@@ -21,9 +21,9 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Comparator;
 
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
 

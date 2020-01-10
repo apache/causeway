@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actioninfo;
 
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 

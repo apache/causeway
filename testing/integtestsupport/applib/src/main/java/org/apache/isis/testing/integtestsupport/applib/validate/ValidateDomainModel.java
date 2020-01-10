@@ -27,10 +27,10 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.spec.DomainModelException;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailure;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.metamodel.spec.DomainModelException;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 

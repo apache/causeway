@@ -20,7 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;

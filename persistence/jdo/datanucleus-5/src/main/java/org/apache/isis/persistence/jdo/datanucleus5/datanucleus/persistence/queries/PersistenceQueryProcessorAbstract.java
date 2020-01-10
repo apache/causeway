@@ -27,7 +27,7 @@ import org.datanucleus.enhancement.Persistable;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;

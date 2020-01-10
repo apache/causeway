@@ -20,6 +20,8 @@ package org.apache.isis.viewer.wicket.ui;
 
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.core.metamodel.commons.StringExtensions;
+
 /**
  * <p>
  * An interface for all {@link org.apache.isis.viewer.wicket.ui.ComponentFactory component factories}
@@ -29,7 +31,7 @@ import org.apache.wicket.model.IModel;
  * <p>
  * If the {@link org.apache.isis.viewer.wicket.ui.ComponentFactory} doesn't implement this interface or the implementation
  * of any of its methods return {@code null} then {@link ComponentFactory#getName()} will be used as title and its
- * {@link org.apache.isis.metamodel.commons.StringExtensions#asLowerDashed(java.lang.String) dashed representation}
+ * {@link StringExtensions#asLowerDashed(java.lang.String) dashed representation}
  * as CSS class for the optional image.
  * </p>
  */

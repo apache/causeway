@@ -17,7 +17,7 @@ import org.hamcrest.core.StringStartsWith;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 
-import org.apache.isis.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 /**
  * Hamcrest {@link org.hamcrest.Matcher} implementations.
