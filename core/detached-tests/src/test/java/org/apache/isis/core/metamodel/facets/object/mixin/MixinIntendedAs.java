@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.facets.object.mixin;
+package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Method;
 

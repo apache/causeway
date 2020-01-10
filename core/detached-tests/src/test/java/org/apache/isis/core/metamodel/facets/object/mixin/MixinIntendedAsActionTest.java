@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.facets.object.mixin;
+package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

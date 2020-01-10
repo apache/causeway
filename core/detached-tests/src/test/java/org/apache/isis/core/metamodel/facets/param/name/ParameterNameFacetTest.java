@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.facets.param.name;
+package org.apache.isis.core.metamodel.facets.param.name;
 
 import java.lang.reflect.Method;
 
