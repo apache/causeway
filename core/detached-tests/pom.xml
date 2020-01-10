@@ -20,7 +20,7 @@
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-detached-tests</artifactId>
+	<artifactId>isis-core-detachedtests</artifactId>
 	<name>Apache Isis Core - Detached Tests</name>
 
 	<properties>
