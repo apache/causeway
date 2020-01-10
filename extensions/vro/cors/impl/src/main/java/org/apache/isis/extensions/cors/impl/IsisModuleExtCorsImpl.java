@@ -16,18 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.cors;
+package org.apache.isis.extensions.cors.impl;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.cors.webmodule.WebModuleCors;
+import org.apache.isis.extensions.cors.impl.webmodule.WebModuleCors;
 
 @Configuration
 @Import({
         // @Service's
         WebModuleCors.class
 })
-public class IsisModuleExtCors {
+public class IsisModuleExtCorsImpl {
 
 }

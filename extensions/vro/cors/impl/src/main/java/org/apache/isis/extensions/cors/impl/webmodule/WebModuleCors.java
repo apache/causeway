@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.cors.webmodule;
+package org.apache.isis.extensions.cors.impl.webmodule;
 
 import java.util.List;
 
