@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.factory.InstanceUtil;
 
 public abstract class WebModuleAbstract implements WebModule {
 
@@ -71,11 +72,18 @@ public abstract class WebModuleAbstract implements WebModule {
         return Optional.ofNullable(servletReg);
     }
 
+    /**
+     * Instantiates a new {@link ServletContextListener}
+     * @param ctx
+     * @param listenerCls
+     * @return
+     * @throws ServletException
+     */
     protected ServletContextListener createListener(
-            final ServletContext ctx,
             final Class<? extends ServletContextListener> listenerCls) throws ServletException {
-        final ServletContextListener listener = ctx.createListener(listenerCls);
-        // we don't add the listener here, they are all added at the end.
+        
+        final ServletContextListener listener = 
+                InstanceUtil.createInstance(listenerCls, ServletContextListener.class);
         serviceInjector.injectServicesInto(listener);
         return listener;
     }

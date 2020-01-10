@@ -18,8 +18,6 @@
  */
 package org.apache.isis.webapp.modules.templresources;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -32,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
 
 import lombok.Getter;
@@ -62,7 +61,7 @@ public final class WebModuleTemplateResources extends WebModuleAbstract {
     }
 
     @Override
-    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
+    public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
         registerFilter(ctx, FILTER_NAME, TemplateResourceCachingFilter.class)
             .ifPresent(filterReg -> {
@@ -81,7 +80,7 @@ public final class WebModuleTemplateResources extends WebModuleAbstract {
                 servletReg.addMapping(urlPatterns);
             });
 
-        return null; // does not provide a listener
+        return Can.empty(); // registers no listeners
     }
 
 }

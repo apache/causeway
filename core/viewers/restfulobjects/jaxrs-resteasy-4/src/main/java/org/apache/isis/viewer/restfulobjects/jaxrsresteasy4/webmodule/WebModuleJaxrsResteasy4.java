@@ -18,9 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.webmodule;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -33,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.config.RestEasyConfiguration;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsSessionFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisTransactionFilterForRestfulObjects;
@@ -87,7 +85,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     }
 
     @Override
-    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
+    public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
         registerFilter(ctx, ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class)
                 .ifPresent(filterReg -> {
@@ -123,7 +121,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
             });
 
 
-        return Collections.emptyList();
+        return Can.empty(); // registers no listeners
     }
 
 

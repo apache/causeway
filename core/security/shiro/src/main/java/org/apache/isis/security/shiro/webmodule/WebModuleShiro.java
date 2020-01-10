@@ -19,9 +19,7 @@
 package org.apache.isis.security.shiro.webmodule;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -44,6 +42,7 @@ import org.springframework.util.ReflectionUtils;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
@@ -118,13 +117,12 @@ public class WebModuleShiro extends WebModuleAbstract {
      * Adds support for dependency injection into security realms
      * @since 2.0
      */
-    @NoArgsConstructor
+    @NoArgsConstructor // don't remove, this is class is managed by Isis
     public static class EnvironmentLoaderListenerForIsis extends EnvironmentLoaderListener {
 
-        @Inject
-        private ServiceInjector serviceInjector;
+        @Inject private ServiceInjector serviceInjector;
 
-        // for testing
+        // testing support
         public EnvironmentLoaderListenerForIsis(ServiceInjector serviceInjector) {
             this.serviceInjector = serviceInjector;
         }
@@ -169,7 +167,7 @@ public class WebModuleShiro extends WebModuleAbstract {
     }
 
     @Override
-    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
+    public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
         registerFilter(ctx, SHIRO_FILTER_NAME, ShiroFilter.class)
             .ifPresent(filterReg -> {
@@ -184,8 +182,8 @@ public class WebModuleShiro extends WebModuleAbstract {
             ctx.setInitParameter("shiroEnvironmentClass", customShiroEnvironmentClassName);
         }
 
-        val listener = createListener(ctx, EnvironmentLoaderListenerForIsis.class);
-        return Collections.singletonList(listener);
+        val listener = createListener(EnvironmentLoaderListenerForIsis.class);
+        return Can.ofSingleton(listener);
 
     }
 
