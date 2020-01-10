@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-h2console-ui</artifactId>
-	<name>Apache Isis Testing - H2 Console (ui)</name>
+	<name>Apache Isis Tst - H2 Console (ui)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.testing.h2console.ui</jar-plugin.automaticModuleName>

@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>isis-testing-unittestsupport-applib</artifactId>
-    <name>Apache Isis Testing - Unit Test Support (applib)</name>
+    <name>Apache Isis Tst - Unit Test Support (applib)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.testing.unittestsupport.applib</jar-plugin.automaticModuleName>

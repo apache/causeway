@@ -2,9 +2,9 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehand
 
 import java.math.BigDecimal;
 
-import org.apache.isis.extensions.excel.dom.ExcelFixture2;
-import org.apache.isis.extensions.excel.dom.ExcelMetaDataEnabled;
-import org.apache.isis.extensions.excel.dom.FixtureAwareRowHandler;
+import org.apache.isis.subdomains.excel.testing.ExcelFixture2;
+import org.apache.isis.subdomains.excel.applib.dom.ExcelMetaDataEnabled;
+import org.apache.isis.subdomains.excel.testing.FixtureAwareRowHandler;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;

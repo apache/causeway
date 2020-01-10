@@ -263,8 +263,8 @@ msgstr ""
 #: org.apache.isis.applib.fixturescripts.FixtureScript#downloadLayoutXml()
 #: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#downloadLayoutXml()
 #: org.apache.isis.applib.services.config.ConfigurationProperty#downloadLayoutXml()
-#: org.apache.isis.extensions.excel.dom.ExcelFixture#downloadLayoutXml()
-#: org.apache.isis.extensions.excel.dom.ExcelFixture2#downloadLayoutXml()
+#:org.apache.isis.subdomains.excel.applib.ExcelFixture#downloadLayoutXml()
+#:org.apache.isis.subdomains.excel.applib.ExcelFixture2#downloadLayoutXml()
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#downloadLayoutXml()
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#downloadLayoutXml()
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#downloadLayoutXml()
@@ -533,8 +533,8 @@ msgstr ""
 #: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#openRestApi()
 #: org.apache.isis.applib.services.config.ConfigurationProperty#openRestApi()
 #: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#openRestApi()
-#: org.apache.isis.extensions.excel.dom.ExcelFixture#openRestApi()
-#: org.apache.isis.extensions.excel.dom.ExcelFixture2#openRestApi()
+#:org.apache.isis.subdomains.excel.applib.ExcelFixture#openRestApi()
+#:org.apache.isis.subdomains.excel.applib.ExcelFixture2#openRestApi()
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#openRestApi()
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#openRestApi()
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#openRestApi()
@@ -659,8 +659,8 @@ msgstr ""
 #: org.apache.isis.applib.fixturescripts.FixtureScript#rebuildMetamodel()
 #: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#rebuildMetamodel()
 #: org.apache.isis.applib.services.config.ConfigurationProperty#rebuildMetamodel()
-#: org.apache.isis.extensions.excel.dom.ExcelFixture#rebuildMetamodel()
-#: org.apache.isis.extensions.excel.dom.ExcelFixture2#rebuildMetamodel()
+#:org.apache.isis.subdomains.excel.applib.ExcelFixture#rebuildMetamodel()
+#:org.apache.isis.subdomains.excel.applib.ExcelFixture2#rebuildMetamodel()
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#rebuildMetamodel()
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem#rebuildMetamodel()
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategory#rebuildMetamodel()
@@ -711,8 +711,8 @@ msgstr ""
 #: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript
 #: org.apache.isis.applib.fixturescripts.FixtureScript
 #: org.apache.isis.applib.fixturescripts.SimpleFixtureScript
-#: org.apache.isis.extensions.excel.dom.ExcelFixture
-#: org.apache.isis.extensions.excel.dom.ExcelFixture2
+#:org.apache.isis.subdomains.excel.applib.ExcelFixture
+#:org.apache.isis.subdomains.excel.applib.ExcelFixture2
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_create_usingExcelFixture
 #: org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture

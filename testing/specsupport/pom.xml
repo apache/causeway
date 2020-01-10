@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-specsupport</artifactId>
-	<name>Apache Isis Testing - Spec/Cucumber (parent)</name>
+	<name>Apache Isis Tst - Spec/Cucumber (parent)</name>
 	<description>
 		Allows Cucumber to be used to write BDD-style specifications, generally as an alternative to integration tests.
 	</description>

@@ -3,10 +3,10 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturescri
 import com.google.common.io.Resources;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.extensions.excel.dom.ExcelFixture2;
-import org.apache.isis.extensions.excel.dom.WorksheetSpec;
-import org.apache.isis.extensions.excel.dom.util.Mode;
+import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
+import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
+import org.apache.isis.subdomains.excel.testing.ExcelFixture2;
 
 import lombok.Getter;
 import lombok.Setter;

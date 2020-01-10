@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-specsupport-applib</artifactId>
-	<name>Apache Isis Testing - Spec/Cucumber (applib)</name>
+	<name>Apache Isis Tst - Spec/Cucumber (applib)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.testing.specsupport.applib</jar-plugin.automaticModuleName>

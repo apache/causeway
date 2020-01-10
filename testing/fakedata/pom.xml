@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>isis-testing-fakedata</artifactId>
-    <name>Apache Isis Testing - FakeData (parent)</name>
+    <name>Apache Isis Tst - FakeData (parent)</name>
 
     <description>
         A module providing a domain service to generate fake random data

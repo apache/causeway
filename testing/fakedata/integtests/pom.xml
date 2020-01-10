@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>isis-testing-fakedata-integtests</artifactId>
-    <name>Apache Isis Testing - FakeData (Integ Tests)</name>
+    <name>Apache Isis Tst - FakeData (integ tests)</name>
     
     <properties>
 

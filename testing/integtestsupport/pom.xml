@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-integtestsupport</artifactId>
-	<name>Apache Isis Testing - Integ Test Support (parent)</name>
+	<name>Apache Isis Tst - Integ Test Support (parent)</name>
 
 	<description>
         Support for writing integ tests in JUnit 5; should be added as a dependency with scope=test only

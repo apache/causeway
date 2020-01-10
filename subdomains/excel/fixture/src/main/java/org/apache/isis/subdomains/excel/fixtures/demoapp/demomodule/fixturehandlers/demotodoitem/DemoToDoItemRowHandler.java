@@ -9,8 +9,8 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.extensions.excel.dom.ExcelFixture;
-import org.apache.isis.extensions.excel.dom.ExcelFixtureRowHandler;
+import org.apache.isis.subdomains.excel.testing.ExcelFixture;
+import org.apache.isis.subdomains.excel.testing.ExcelFixtureRowHandler;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;

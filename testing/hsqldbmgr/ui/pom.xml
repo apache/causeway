@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-hsqldbmgr-ui</artifactId>
-	<name>Apache Isis Testing - HSQLDB Manager</name>
+	<name>Apache Isis Tst - HSQLDB Manager</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.testing.hsqldbmgr.ui</jar-plugin.automaticModuleName>

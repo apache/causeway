@@ -10,7 +10,7 @@
 	
     <artifactId>isis-subdomains-base</artifactId>
 
-    <name>Apache Isis Sub - Base (applib)</name>
+    <name>Apache Isis Sub - Base (parent)</name>
     <description>
         A module providing Base utilities for other subdomain modules
     </description>

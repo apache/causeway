@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>isis-testing-fakedata-fixtures</artifactId>
-    <name>Apache Isis Testing - FakeData (Fixtures)</name>
+    <name>Apache Isis Tst - FakeData (fixtures)</name>
 
 	<properties>
         <jar-plugin.automaticModuleName>org.apache.isis.testing.fakedata.fixtures</jar-plugin.automaticModuleName>

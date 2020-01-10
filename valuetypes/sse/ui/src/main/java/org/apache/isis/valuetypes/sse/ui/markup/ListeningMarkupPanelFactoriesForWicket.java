@@ -22,6 +22,7 @@ package org.apache.isis.valuetypes.sse.ui.markup;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.valuetypes.sse.applib.value.ListeningMarkup;
 import org.apache.isis.valuetypes.sse.metamodel.facets.SseObserveFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;

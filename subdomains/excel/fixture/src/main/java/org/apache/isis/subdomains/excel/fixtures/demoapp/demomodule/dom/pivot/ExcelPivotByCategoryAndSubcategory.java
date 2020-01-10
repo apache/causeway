@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.extensions.excel.dom.AggregationType;
-import org.apache.isis.extensions.excel.dom.PivotColumn;
-import org.apache.isis.extensions.excel.dom.PivotRow;
-import org.apache.isis.extensions.excel.dom.PivotValue;
+import org.apache.isis.subdomains.excel.applib.dom.AggregationType;
+import org.apache.isis.subdomains.excel.applib.dom.PivotColumn;
+import org.apache.isis.subdomains.excel.applib.dom.PivotRow;
+import org.apache.isis.subdomains.excel.applib.dom.PivotValue;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;
 

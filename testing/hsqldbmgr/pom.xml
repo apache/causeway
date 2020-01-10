@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-hsqldbmgr</artifactId>
-	<name>Apache Isis Testing - HSQLDB Manager (parent)</name>
+	<name>Apache Isis Tst - HSQLDB Manager (parent)</name>
 	<description>Menu and configuration to open up HSQLDB Manager</description>
 	<packaging>pom</packaging>
 

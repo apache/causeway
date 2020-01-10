@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>isis-testing-fakedata-applib</artifactId>
-    <name>Apache Isis Testing - FakeData (applib)</name>
+    <name>Apache Isis Tst - FakeData (applib)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.testing.fakedata.applib</jar-plugin.automaticModuleName>

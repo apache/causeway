@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-h2console</artifactId>
-	<name>Apache Isis Testing - H2 Console (parent)</name>
+	<name>Apache Isis Tst - H2 Console (parent)</name>
 	<description>Menu and configuration to open up H2 Console</description>
 	<packaging>pom</packaging>
 

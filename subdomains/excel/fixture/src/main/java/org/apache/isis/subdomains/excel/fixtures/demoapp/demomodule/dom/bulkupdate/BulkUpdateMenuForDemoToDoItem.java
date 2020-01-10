@@ -1,12 +1,19 @@
 package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.dom.bulkupdate;
 
 import javax.inject.Inject;
+import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.extensions.excel.dom.ExcelService;
+import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;
 
@@ -32,10 +39,10 @@ public class BulkUpdateMenuForDemoToDoItem {
     }
 
 
-    @Inject private RepositoryService repositoryService;
-    @Inject private FactoryService factoryService;
-    @Inject private UserService userService;
-    @Inject private ExcelService excelService;
-    @Inject private BookmarkService bookmarkService;
+    @XmlTransient @Inject private RepositoryService repositoryService;
+    @XmlTransient @Inject private FactoryService factoryService;
+    @XmlTransient @Inject private UserService userService;
+    @XmlTransient @Inject private ExcelService excelService;
+    @XmlTransient @Inject private BookmarkService bookmarkService;
     
 }

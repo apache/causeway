@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-integtestsupport-applib</artifactId>
-	<name>Apache Isis Testing - Integ Test Support (applib)</name>
+	<name>Apache Isis Tst - Integ Test Support (applib)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.testing.integtestsupport.applib</jar-plugin.automaticModuleName>

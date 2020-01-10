@@ -18,15 +18,15 @@ import org.junit.jupiter.api.Test;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.extensions.fakedata.dom.services.FakeDataService;
+import org.apache.isis.testing.fakedata.applib.services.FakeDataService;
+import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.dom.EnumOf3;
+import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
+import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.dom.FakeDataDemoObjectWithAllMenu;
+import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_create3;
+import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_update_withFakeData;
 import org.apache.isis.testing.fakedata.integtests.FakeDataModuleIntegTestAbstract;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.EnumOf3;
-import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
-import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAllMenu;
-import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_create3;
-import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_update_withFakeData;
 
 public class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 

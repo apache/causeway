@@ -4,19 +4,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.excel.ExcelModule;
+import org.apache.isis.subdomains.excel.applib.IsisModuleSubExcelApplib;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown;
-import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTstFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.modules.Module;
+import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
 @Configuration
 @Import({
-        ExcelModule.class,
-        IsisExtFixturesModule.class
+        IsisModuleSubExcelApplib.class,
+        IsisModuleTstFixturesApplib.class
 })
 @ComponentScan
-public class IsisModuleSubExcelFixtures implements Module {
+public class IsisModuleSubExcelFixtures implements ModuleWithFixtures {
 
     @Override public FixtureScript getTeardownFixture() {
         return new ExcelDemoToDoItem_tearDown();

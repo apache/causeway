@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;

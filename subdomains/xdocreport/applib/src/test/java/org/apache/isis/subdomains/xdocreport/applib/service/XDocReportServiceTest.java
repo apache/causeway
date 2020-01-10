@@ -38,7 +38,7 @@ public class XDocReportServiceTest {
     public void simple() throws Exception {
 
         // given
-        InputStream in= new FileInputStream(new File("src/test/java/org/apache/isis/extensions/xdocreport/dom/impl/example/template/Project-template.docx"));
+        InputStream in= new FileInputStream(new File("src/test/java/org/apache/isis/subdomains/xdocreport/applib/service/example/template/Project-template.docx"));
         final byte[] templateBytes = IOUtils.toByteArray(in);
 
         Project project = new Project("XDocReport");

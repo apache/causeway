@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-subdomains-xdocreport-applib</artifactId>
-	<name>Apache Isis Sub - xdocreport (applib)</name>
+	<name>Apache Isis Sub - XdocReport (applib)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.subdomains.xdocreport.applib</jar-plugin.automaticModuleName>

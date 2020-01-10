@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-fixtures</artifactId>
-	<name>Apache Isis Testing - Fixtures (parent)</name>
+	<name>Apache Isis Tst - Fixtures (parent)</name>
 	<description>
 		Library to initialize the system under test, either for integration testing or for prototyping.
 	</description>

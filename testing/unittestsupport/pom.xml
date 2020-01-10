@@ -10,7 +10,7 @@
 
     <artifactId>isis-testing-unittestsupport</artifactId>
 
-    <name>Apache Isis Testing - Unit Test Support (parent)</name>
+    <name>Apache Isis Tst - Unit Test Support (parent)</name>
     <description>
         A module providing test utilities for unit testing of domain modules
     </description>

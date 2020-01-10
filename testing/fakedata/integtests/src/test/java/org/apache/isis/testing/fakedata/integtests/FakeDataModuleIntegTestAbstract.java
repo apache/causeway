@@ -7,16 +7,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.isis.config.IsisPresets;
-import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
+import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
+import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
+import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
+import org.apache.isis.testing.fakedata.fixtures.IsisModuleTstFakeDataFixtures;
 import org.apache.isis.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
-import org.apache.isis.jdo.IsisBootDataNucleus;
-import org.apache.isis.core.runtime.spring.IsisBoot;
-import org.apache.isis.security.bypass.IsisBootSecurityBypass;
-
-import org.isisaddons.module.fakedata.fixture.FakeDataFixturesModule;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTstFixturesApplib;
 
 @SpringBootTest(
         classes = FakeDataModuleIntegTestAbstract.AppManifest.class
@@ -33,11 +33,11 @@ public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTes
                 @PropertySource(IsisPresets.DataNucleusAutoCreate),
         })
         @Import({
-                IsisBoot.class,
-                IsisBootSecurityBypass.class,
-                IsisBootDataNucleus.class,
-                IsisExtFixturesModule.class,
-                FakeDataFixturesModule.class
+                IsisModuleCoreWebSpringBoot.class,
+                IsisModuleSecurityBypass.class,
+                IsisModuleJdoDataNucleus5.class,
+                IsisModuleTstFixturesApplib.class,
+                IsisModuleTstFakeDataFixtures.class
         })
         public static class AppManifest {
         }

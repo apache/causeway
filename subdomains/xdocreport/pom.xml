@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-subdomains-xdocreport</artifactId>
-	<name>Apache Isis Sub - xdocreport (parent)</name>
+	<name>Apache Isis Sub - XdocReport (parent)</name>
 	<description>Integrates XDoc Report Library</description>
 
 	<packaging>pom</packaging>

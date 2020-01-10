@@ -21,7 +21,7 @@
 	</parent>
 
 	<artifactId>isis-testing-fixtures-applib</artifactId>
-	<name>Apache Isis Testing - Fixtures (applib)</name>
+	<name>Apache Isis Tst - Fixtures (applib)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.testing.fixtures.applib</jar-plugin.automaticModuleName>
