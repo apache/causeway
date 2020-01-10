@@ -35,11 +35,11 @@ import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationSer
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
-import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
+import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
 
 @Configuration
 @Import({
-    IsisModuleSpringBoot.class,
+    IsisModuleCoreWebSpringBoot.class,
 
     IsisModuleSecurityShiro.class,
 

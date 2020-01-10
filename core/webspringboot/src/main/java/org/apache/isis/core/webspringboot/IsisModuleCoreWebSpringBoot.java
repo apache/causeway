@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webboot.springboot;
+package org.apache.isis.core.webspringboot;
 
 import javax.inject.Singleton;
 
@@ -36,7 +36,7 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
         // modules
         IsisModuleCoreRuntimeServices.class,
 })
-public class IsisModuleSpringBoot implements ApplicationContextAware {
+public class IsisModuleCoreWebSpringBoot implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

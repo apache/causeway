@@ -29,11 +29,11 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTstFixturesApplib;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
-import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
+import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
 
 @Configuration
 @Import({
-    IsisModuleSpringBoot.class,
+    IsisModuleCoreWebSpringBoot.class,
     IsisModuleSecurityBypass.class,
     IsisModuleJdoDataNucleus5.class,
     IsisModuleTstFixturesApplib.class

@@ -47,7 +47,7 @@ import org.apache.isis.valuetypes.asciidoc.ui.IsisModuleValAsciidocUi;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleWicketViewer;
-import org.apache.isis.webboot.springboot.IsisModuleSpringBoot;
+import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
 
 import demoapp.dom.DemoModule;
 import demoapp.utils.LibraryPreloadingService;
@@ -83,7 +83,7 @@ public class DemoApp extends SpringBootServletInitializer {
         @PropertySource(IsisPresets.DataNucleusAutoCreate),
     })
     @Import({
-        IsisModuleSpringBoot.class,
+        IsisModuleCoreWebSpringBoot.class,
         IsisModuleSecurityShiro.class,
         IsisModuleJdoDataNucleus5.class,
         IsisModuleWicketViewer.class,

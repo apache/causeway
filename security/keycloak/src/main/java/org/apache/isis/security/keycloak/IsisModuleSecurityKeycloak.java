@@ -25,7 +25,7 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.keycloak.authentication.AuthenticatorKeycloak;
 import org.apache.isis.security.keycloak.authorization.AuthorizorKeycloak;
 import org.apache.isis.security.keycloak.webmodule.WebModuleKeycloak;
-import org.apache.isis.core.webapp.IsisModuleWebapp;
+import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 
 /**
  * Configuration Bean to support Isis Security using Shiro.
@@ -36,7 +36,7 @@ import org.apache.isis.core.webapp.IsisModuleWebapp;
 @Import({
         // modules
         IsisModuleCoreRuntimeServices.class,
-        IsisModuleWebapp.class,
+        IsisModuleCoreWebapp.class,
 
         // @Service's
         AuthenticatorKeycloak.class,

@@ -22,11 +22,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.webapp.IsisModuleWebapp;
+import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 
 @Configuration
 @Import({
-        IsisModuleWebapp.class
+        IsisModuleCoreWebapp.class
 })
 @ComponentScan
 public class IsisModuleExtHsqldbMgr {

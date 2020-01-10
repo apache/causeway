@@ -1847,7 +1847,7 @@
 		<module>runtime</module>
 		<module>runtimeservices</module>
 		<module>webapp</module>
-		<module>webboot-springboot</module>
+		<module>webspringboot</module>
 
 		<module>unittestsupport</module>
 

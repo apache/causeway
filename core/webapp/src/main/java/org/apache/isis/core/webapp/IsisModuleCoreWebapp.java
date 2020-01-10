@@ -43,6 +43,6 @@ import org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer;
         IsisWebAppContextInitializer.class,
 
 })
-public class IsisModuleWebapp {
+public class IsisModuleCoreWebapp {
 
 }
