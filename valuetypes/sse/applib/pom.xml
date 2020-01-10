@@ -18,20 +18,37 @@
 		<groupId>org.apache.isis.valuetypes</groupId>
 		<artifactId>isis-valuetypes</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-valuetypes-sse</artifactId>
-	<name>Apache Isis Val - Server Sent Events (parent)</name>
-	<description>
-		Dynamically updating HTML markup
-	</description>
+	<artifactId>isis-valuetypes-sse-applib</artifactId>
+	<name>Apache Isis Val - Server Sent Events</name>
+	<description></description>
 
-	<packaging>pom</packaging>
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.sse.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/sse/applib</git-plugin.propertiesDir>
+	</properties>
 
-	<modules>
-		<module>applib</module>
-		<module>metamodel</module>
-		<module>ui</module>
-	</modules>
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-metamodel</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-webapp</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-viewer-wicket-ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
 
 </project>

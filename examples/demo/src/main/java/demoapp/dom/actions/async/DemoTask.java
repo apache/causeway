@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.LongAdder;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.extensions.sse.api.SseChannel;
-import org.apache.isis.extensions.sse.api.SseSource;
+import org.apache.isis.extensions.sse.applib.service.SseChannel;
+import org.apache.isis.extensions.sse.applib.annotations.SseSource;
 
 import lombok.RequiredArgsConstructor;
 

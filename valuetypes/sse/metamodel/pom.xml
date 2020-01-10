@@ -16,22 +16,30 @@
 
 	<parent>
 		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes</artifactId>
+		<artifactId>isis-valuetypes-sse</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-sse</artifactId>
-	<name>Apache Isis Val - Server Sent Events (parent)</name>
-	<description>
-		Dynamically updating HTML markup
-	</description>
+	<artifactId>isis-valuetypes-sse-metamodel</artifactId>
+	<name>Apache Isis Val - Server Sent Events (metamodel)</name>
 
-	<packaging>pom</packaging>
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.sse.metamodel</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/sse/metamodel</git-plugin.propertiesDir>
+	</properties>
 
-	<modules>
-		<module>applib</module>
-		<module>metamodel</module>
-		<module>ui</module>
-	</modules>
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-sse-applib</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-metamodel</artifactId>
+		</dependency>
+
+	</dependencies>
 
 </project>

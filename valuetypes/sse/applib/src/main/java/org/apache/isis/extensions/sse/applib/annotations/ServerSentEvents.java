@@ -16,19 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui;
+package org.apache.isis.extensions.sse.applib.annotations;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
-import org.apache.isis.valuetypes.asciidoc.ui.components.AsciiDocPanelFactoriesForWicket;
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ServerSentEvents {
+    
+    Class<? extends SseSource> observe() default SseSource.Noop.class;
 
-@Configuration
-@Import({
-    IsisModuleValAsciidocApplib.class,
-    AsciiDocPanelFactoriesForWicket.Parented.class,
-    AsciiDocPanelFactoriesForWicket.Standalone.class
-})
-public class IsisModuleValAsciidocUi {
 }

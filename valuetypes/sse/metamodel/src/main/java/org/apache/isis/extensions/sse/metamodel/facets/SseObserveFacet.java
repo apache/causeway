@@ -16,19 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.extensions.sse.metamodel.facets;
 
-import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
-import org.apache.isis.valuetypes.asciidoc.ui.components.AsciiDocPanelFactoriesForWicket;
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.extensions.sse.applib.annotations.SseSource;
+import org.apache.isis.metamodel.facets.SingleClassValueFacet;
 
-@Configuration
-@Import({
-    IsisModuleValAsciidocApplib.class,
-    AsciiDocPanelFactoriesForWicket.Parented.class,
-    AsciiDocPanelFactoriesForWicket.Standalone.class
-})
-public class IsisModuleValAsciidocUi {
+/**
+ * Corresponds to <tt>@???(observe=...)</tt> annotation in the Isis programming model.
+ */
+public interface SseObserveFacet extends SingleClassValueFacet {
+
+    Class<? extends SseSource> getEventStreamType();
+    
+    default LocalResourcePath getEventStreamResource() {
+        final String eventStreamId = getEventStreamType().getName();
+        final LocalResourcePath ssePath = new LocalResourcePath("/sse?eventStream=" + eventStreamId);
+        return ssePath;
+    }
+
 }

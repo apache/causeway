@@ -16,19 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.extensions.sse.applib.service;
 
-import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
-import org.apache.isis.valuetypes.asciidoc.ui.components.AsciiDocPanelFactoriesForWicket;
+import java.util.UUID;
+import java.util.function.Predicate;
 
-@Configuration
-@Import({
-    IsisModuleValAsciidocApplib.class,
-    AsciiDocPanelFactoriesForWicket.Parented.class,
-    AsciiDocPanelFactoriesForWicket.Standalone.class
-})
-public class IsisModuleValAsciidocUi {
+import org.apache.isis.extensions.sse.applib.annotations.SseSource;
+
+/**
+ * Server-sent events.
+ *  
+ * @see https://www.w3schools.com/html/html5_serversentevents.asp
+ * 
+ * @since 2.0
+ *
+ */
+public interface SseChannel {
+
+    UUID getId();
+    Class<?> getSourceType();
+
+    void listenWhile(Predicate<SseSource> listener);
+
+    void fire(SseSource source);
+
+    void close();
+
+    void awaitClose() throws InterruptedException;
+
+
 }

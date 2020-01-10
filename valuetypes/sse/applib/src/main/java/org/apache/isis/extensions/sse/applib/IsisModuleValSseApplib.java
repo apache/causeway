@@ -16,19 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui;
+package org.apache.isis.extensions.sse.applib;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
-import org.apache.isis.valuetypes.asciidoc.ui.components.AsciiDocPanelFactoriesForWicket;
+import org.apache.isis.extensions.sse.markup.ListeningMarkupPanelFactoriesForWicket;
+import org.apache.isis.extensions.sse.services.SseServiceDefault;
+import org.apache.isis.extensions.sse.webmodule.WebModuleServerSentEvents;
 
 @Configuration
 @Import({
-    IsisModuleValAsciidocApplib.class,
-    AsciiDocPanelFactoriesForWicket.Parented.class,
-    AsciiDocPanelFactoriesForWicket.Standalone.class
+        // @Component's
+        SseMetaModelPlugin.class,
+        ListeningMarkupPanelFactoriesForWicket.Parented.class,
+        ListeningMarkupPanelFactoriesForWicket.Standalone.class,
+        
+        // @Service's
+        SseServiceDefault.class,
+        WebModuleServerSentEvents.class
 })
-public class IsisModuleValAsciidocUi {
+public class IsisModuleValSseApplib {
+
 }

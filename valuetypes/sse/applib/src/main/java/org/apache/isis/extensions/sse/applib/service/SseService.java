@@ -16,19 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui;
+package org.apache.isis.extensions.sse.applib.service;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import java.util.Optional;
 
-import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
-import org.apache.isis.valuetypes.asciidoc.ui.components.AsciiDocPanelFactoriesForWicket;
+import org.apache.isis.extensions.sse.applib.annotations.SseSource;
 
-@Configuration
-@Import({
-    IsisModuleValAsciidocApplib.class,
-    AsciiDocPanelFactoriesForWicket.Parented.class,
-    AsciiDocPanelFactoriesForWicket.Standalone.class
-})
-public class IsisModuleValAsciidocUi {
+/**
+ * Server-sent events.
+ *  
+ * @see https://www.w3schools.com/html/html5_serversentevents.asp
+ * 
+ * @since 2.0
+ *
+ */
+public interface SseService {
+
+    public static enum ExecutionBehavior {
+        SIMPLE,
+        REQUIRES_NEW_SESSION
+    }
+
+    Optional<SseChannel> lookupByType(Class<?> sourceType);
+
+    void submit(SseSource task, ExecutionBehavior executionBehavior);
+
 }
