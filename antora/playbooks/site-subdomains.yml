@@ -38,7 +38,7 @@ content:
       start_path: subdomains/spring/src/main/doc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/xdocreport/impl/src/main/doc # subdomains
+      start_path: subdomains/xdocreport/src/main/doc # subdomains
       branches: HEAD
     - url: .
       start_path: subdomains/zip/impl/src/main/doc # subdomains
