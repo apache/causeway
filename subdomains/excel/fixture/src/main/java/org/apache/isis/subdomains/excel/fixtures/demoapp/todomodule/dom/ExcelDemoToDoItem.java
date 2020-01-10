@@ -160,13 +160,15 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
-    @javax.validation.constraints.Digits(integer=10, fraction=2)
+    //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
+    //@javax.validation.constraints.Digits(integer=10, fraction=2)
     @Property(editing = Editing.DISABLED, editingDisabledReason = "Update using action")
     @Getter @Setter
     private BigDecimal cost;
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
-    @javax.validation.constraints.Digits(integer=10, fraction=2)
+    //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
+    //@javax.validation.constraints.Digits(integer=10, fraction=2)
     @Property(
             editing = Editing.DISABLED,
             editingDisabledReason = "Update using action"
@@ -241,6 +243,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
             @Nullable
             @javax.validation.constraints.Digits(integer=10, fraction=2)
             final BigDecimal cost,
+            
             @Nullable
             @javax.validation.constraints.Digits(integer=10, fraction=2)
             final BigDecimal previousCost
