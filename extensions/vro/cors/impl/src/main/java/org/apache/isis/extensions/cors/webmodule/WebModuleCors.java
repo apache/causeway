@@ -94,7 +94,7 @@ public final class WebModuleCors extends WebModuleAbstract {
                 filterReg.addMappingForUrlPatterns(
                         null,
                         false,
-                        this.webModuleContext.getProtectedPaths());
+                        this.webModuleContext.getProtectedPaths().toArray(String.class));
 
             });
 
