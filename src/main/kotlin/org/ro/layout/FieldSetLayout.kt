@@ -46,7 +46,8 @@ data class FieldSetLayout(val name: String? = null,
                 }
             }
             val description = p.describedAs
-            val fi = FormItem(label, type, content, description = description, tab = tab)
+            val enabled = member?.disabledReason == ""
+            val fi = FormItem(label, type, content, description = description, enabled = enabled, tab = tab)
             items.add(fi)
         }
         return FormPanelFactory(items).panel

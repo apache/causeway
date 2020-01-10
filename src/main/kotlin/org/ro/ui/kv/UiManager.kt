@@ -34,9 +34,11 @@ object UiManager {
         window.addEventListener("keydown", fun(event) {
             when (event) {
                 is KeyboardEvent -> {
-                    event.stopPropagation()
                     if (event.keyCode == ESC_KEY) pop()
-                    if (event.ctrlKey && event.keyCode == 83) save()
+                    if (event.ctrlKey && event.keyCode == 83) {
+                        event.stopPropagation()
+                        save()
+                    }
                     if (event.ctrlKey && event.keyCode == 90) undo()
                 }
                 else -> {

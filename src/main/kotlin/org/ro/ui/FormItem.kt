@@ -8,6 +8,7 @@ class FormItem(
         val content: Any? = null,
         val size: Int = 1,
         val description: String? = "not set",
+        val enabled: Boolean = true,
         val tab: RoDisplay? = null) {
     fun changed() {
         if (tab != null) {

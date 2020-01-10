@@ -21,18 +21,10 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             margin = 10.px
             for (fi: FormItem in items) {
                 when (fi.type) {
-                    "Text" -> {
-                        add(createText(fi))
-                    }
-                    "Password" -> {
-                        add(createPassword(fi))
-                    }
-                    "TextArea" -> {
-                        add(createTextArea(fi))
-                    }
-                    "SimpleSelect" -> {
-                        add(createSelect(fi))
-                    }
+                    "Text" -> add(createText(fi))
+                    "Password" -> add(createPassword(fi))
+                    "TextArea" -> add(createTextArea(fi))
+                    "SimpleSelect" -> add(createSelect(fi))
                 }
             }
         }
@@ -40,27 +32,31 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createText(fi: FormItem): Text {
         val item = Text(label = fi.label, value = fi.content as String)
+        item.readonly = !fi.enabled
         item.onEvent {
             change = {
                 fi.changed()
                 it.stopPropagation()
             }
         }
-        item.enableTooltip()
-        item.name = fi.description
         return item
     }
 
     private fun createPassword(fi: FormItem): Password {
         val item = Password(label = fi.label, value = fi.content as String)
-        item.title = fi.description
         return item
     }
 
     private fun createTextArea(fi: FormItem): TextArea {
         val rowCnt = maxOf(3, fi.size)
         val item = TextArea(label = fi.label, value = fi.content as String, rows = rowCnt)
-        item.title = fi.description
+        item.readonly = !fi.enabled
+        item.onEvent {
+            change = {
+                fi.changed()
+                it.stopPropagation()
+            }
+        }
         return item
     }
 
@@ -72,7 +68,6 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             preSelectedValue = list.first().first
         }
         val item = SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
-        item.title = fi.description
         return item
     }
 
