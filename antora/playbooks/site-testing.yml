@@ -40,7 +40,7 @@ content:
       start_path: testing/specsupport/src/main/doc # testing
       branches: HEAD
     - url: .
-      start_path: testing/unittestsupport/impl/src/main/doc # testing
+      start_path: testing/unittestsupport/src/main/doc # testing
       branches: HEAD
 
 

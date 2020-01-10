@@ -109,7 +109,7 @@
 
 			<dependency>
 				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-unittestsupport-dom</artifactId>
+				<artifactId>isis-testing-unittestsupport-applib</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
@@ -123,7 +123,8 @@
 		<module>hsqldbmgr</module>
 		<module>specsupport</module>
 
-		<module>unittestsupport/impl</module>
+		<module>unittestsupport</module>
+		<module>unittestsupport/applib</module>
 	</modules>
 
 	<profiles>
