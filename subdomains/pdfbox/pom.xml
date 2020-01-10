@@ -18,20 +18,14 @@
 		<groupId>org.apache.isis.subdomains</groupId>
 		<artifactId>isis-subdomains</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-subdomains-ognl-dom</artifactId>
-	<name>Apache Isis Sub - Ognl</name>
-	<description>Integrates Ognl Library</description>
+	<artifactId>isis-subdomains-pdfbox</artifactId>
+	<name>Apache Isis Sub - PDF Box (parent)</name>
+	<description>Integrates PDF Box Library</description>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.subdomains.ognl.dom</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/subdomains/ognl/dom</git-plugin.propertiesDir>
-	</properties>
-
-	<dependencies>
-
-	</dependencies>
+	<modules>
+		<module>applib</module>
+	</modules>
 
 </project>

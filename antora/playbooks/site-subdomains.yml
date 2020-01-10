@@ -29,10 +29,10 @@ content:
       start_path: subdomains/freemarker/src/main/doc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/ognl/impl/src/main/doc # subdomains
+      start_path: subdomains/ognl/src/main/doc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/pdfbox/impl/src/main/doc # subdomains
+      start_path: subdomains/pdfbox/src/main/doc # subdomains
       branches: HEAD
     - url: .
       start_path: subdomains/spring/impl/src/main/doc # subdomains

@@ -22,7 +22,7 @@
 	</parent>
 
 	<artifactId>isis-subdomains-spring</artifactId>
-	<name>Apache Isis Sin - Spring</name>
+	<name>Apache Isis Sub - Spring (applib)</name>
 	<description>Utility services for interacting with the Spring application context (that hosts the Apache Isis application itself)</description>
 
 	<properties>

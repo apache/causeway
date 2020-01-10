@@ -24,6 +24,8 @@
 	<name>Apache Isis Sub - Docx (parent)</name>
 	<description>Uses the Apache POI library for mail merge functions of .docx Word documents</description>
 
+	<packaging>pom</packaging>
+
 	<modules>
 		<module>applib</module>
 	</modules>

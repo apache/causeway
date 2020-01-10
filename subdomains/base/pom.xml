@@ -10,12 +10,12 @@
 	
     <artifactId>isis-subdomains-base</artifactId>
 
-    <packaging>pom</packaging>
-
     <name>Apache Isis Sub - Base (applib)</name>
     <description>
         A module providing Base utilities for other subdomain modules
     </description>
+
+    <packaging>pom</packaging>
 
     <modules>
         <module>applib</module>

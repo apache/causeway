@@ -24,6 +24,8 @@
 	<name>Apache Isis Sub - Freemarker (parent)</name>
 	<description>Integrates Freemarker Library</description>
 
+	<packaging>pom</packaging>
+
 	<modules>
 		<module>applib</module>
 	</modules>
