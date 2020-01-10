@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
+import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.metamodel.context.MetaModelContext;

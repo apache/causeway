@@ -26,7 +26,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
+import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
 import org.apache.isis.runtimeservices.wrapper.proxy.ProxyCreator;
 

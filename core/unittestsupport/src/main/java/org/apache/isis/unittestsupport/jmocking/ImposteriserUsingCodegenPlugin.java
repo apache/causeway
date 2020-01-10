@@ -26,7 +26,7 @@ import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;
 import org.jmock.lib.JavaReflectionImposteriser;
 
-import org.apache.isis.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
+import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 
 class ImposteriserUsingCodegenPlugin implements Imposteriser {
