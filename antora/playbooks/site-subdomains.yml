@@ -23,10 +23,10 @@ content:
       start_path: subdomains/docx/src/main/doc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/excel/impl/src/main/doc # subdomains
+      start_path: subdomains/excel/src/main/doc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/freemarker/impl/src/main/doc # subdomains
+      start_path: subdomains/freemarker/src/main/doc # subdomains
       branches: HEAD
     - url: .
       start_path: subdomains/ognl/impl/src/main/doc # subdomains

@@ -16,29 +16,17 @@
 
 	<parent>
 		<groupId>org.apache.isis.subdomains</groupId>
-		<artifactId>isis-subdomains-docx</artifactId>
+		<artifactId>isis-subdomains</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-subdomains-docx-applib</artifactId>
-	<name>Apache Isis Sub - Docx (applib)</name>
+	<artifactId>isis-subdomains-freemarker</artifactId>
+	<name>Apache Isis Sub - Freemarker (parent)</name>
+	<description>Integrates Freemarker Library</description>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.subdomains.docx.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/subdomains/docx/applib</git-plugin.propertiesDir>
-	</properties>
+	<modules>
+		<module>applib</module>
+	</modules>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-applib</artifactId>
-		</dependency>
-<!--
-		<dependency>
-			<groupId>org.apache.isis.subdomains</groupId>
-			<artifactId>isis-subdomains-base-applib</artifactId>
-		</dependency>
--->
-	</dependencies>
 
 </project>

@@ -63,7 +63,11 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-applib</artifactId>
         </dependency>
-        
+    	<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-commons</artifactId>
+        </dependency>
+
 		<!-- IDE support (optional) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

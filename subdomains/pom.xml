@@ -97,6 +97,12 @@
 
 			<dependency>
 				<groupId>org.apache.isis.subdomains</groupId>
+				<artifactId>isis-subdomains-freemarker-applib</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.subdomains</groupId>
 				<artifactId>isis-subdomains-spring</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
@@ -126,11 +132,9 @@
 	<modules>
 
 		<module>base</module>
-<!--
 		<module>docx</module>
--->
-
 		<module>excel</module>
+		<module>freemarker</module>
 
 		<module>spring/impl</module>
 

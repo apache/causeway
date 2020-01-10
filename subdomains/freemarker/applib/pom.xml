@@ -16,22 +16,24 @@
 
 	<parent>
 		<groupId>org.apache.isis.subdomains</groupId>
-		<artifactId>isis-subdomains</artifactId>
+		<artifactId>isis-subdomains-freemarker</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-subdomains-freemarker-dom</artifactId>
-	<name>Apache Isis Sub - Freemarker</name>
-	<description>Integrates Freemarker Library</description>
+	<artifactId>isis-subdomains-freemarker-applib</artifactId>
+	<name>Apache Isis Sub - Freemarker (applib)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.subdomains.freemarker.dom</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/subdomains/freemarker/dom</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.subdomains.freemarker.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/subdomains/freemarker/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>
