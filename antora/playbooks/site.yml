@@ -100,9 +100,6 @@ content:
       start_path: core/testsupport/unittestsupport/src/main/doc # testing
       branches: HEAD
     - url: .
-      start_path: core/testsupport/integtestsupport/src/main/doc # testing
-      branches: HEAD
-    - url: .
       start_path: core/viewers/restfulobjects/jaxrs-resteasy-4/src/main/doc # vro
       branches: HEAD
     - url: .
@@ -232,6 +229,9 @@ content:
       branches: HEAD
     - url: .
       start_path: testing/hsqldbmgr/src/main/doc # testing
+      branches: HEAD
+    - url: .
+      start_path: testing/integtestsupport/src/main/doc # testing
       branches: HEAD
     - url: .
       start_path: testing/specsupport/src/main/doc # testing

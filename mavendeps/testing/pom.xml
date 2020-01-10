@@ -58,7 +58,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-integtestsupport</artifactId>
+			<artifactId>isis-testing-integtestsupport-applib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>

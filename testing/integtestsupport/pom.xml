@@ -21,8 +21,8 @@
 		<relativePath>../../core/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-integtestsupport</artifactId>
-	<name>Apache Isis Core - Integ Test Support</name>
+	<artifactId>isis-testing-integtestsupport-applib</artifactId>
+	<name>Apache Isis Testing - Integ Test Support</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.integtestsupport</jar-plugin.automaticModuleName>

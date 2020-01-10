@@ -19,9 +19,6 @@ content:
     - url: .
       start_path: core/testsupport/unittestsupport/src/main/doc # testing
       branches: HEAD
-    - url: .
-      start_path: core/testsupport/integtestsupport/src/main/doc # testing
-      branches: HEAD
 
 # testing
     - url: .
@@ -35,6 +32,9 @@ content:
       branches: HEAD
     - url: .
       start_path: testing/hsqldbmgr/impl/src/main/doc # testing
+      branches: HEAD
+    - url: .
+      start_path: testing/integtestsupport/src/main/doc # testing
       branches: HEAD
     - url: .
       start_path: testing/specsupport/src/main/doc # testing
