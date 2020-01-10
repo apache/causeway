@@ -26,7 +26,7 @@ Let's start with the basics...
 === Sign-in
 
 Apache Isis integrates with http://shiro.apache.org[Apache Shiro].
-The core framework supports file-based realms, while the xref:secman:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
+The core framework supports file-based realms, while the xref:security:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
 
 
 
@@ -182,7 +182,7 @@ image::what-is-apache-isis/isis-in-pictures/120-auditing.png[width="800px",link=
 
 
 
-In the security menu is access to the rich set of functionality provided by the xref:secman:ROOT:about.adoc[SecMan extension]:
+In the security menu is access to the rich set of functionality provided by the xref:security:ROOT:about.adoc[SecMan extension]:
 
 image::what-is-apache-isis/isis-in-pictures/130-security.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/130-security.png"]
 
@@ -208,7 +208,7 @@ image::what-is-apache-isis/isis-in-pictures/150-appsettings.png[width="800px",li
 
 === Multi-tenancy support
 
-One significant feature of the xref:secman:ROOT:about.adoc[SecMan extension] is the ability to associate users and objects with a "tenancy".
+One significant feature of the xref:security:ROOT:about.adoc[SecMan extension] is the ability to associate users and objects with a "tenancy".
 The todoapp uses this feature so that different users' list of todo items are kept separate from one another.
 A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
 
@@ -216,12 +216,12 @@ image::what-is-apache-isis/isis-in-pictures/160-switch-tenancy.png[width="800px"
 
 
 
-For more details, see the xref:secman:ROOT:about.adoc[SecMan extension].
+For more details, see the xref:security:ROOT:about.adoc[SecMan extension].
 
 
 === Me
 
-Most of the xref:secman:ROOT:about.adoc[SecMan extension]'s services are on the security menu, which would normally be provided only to administrators.
+Most of the xref:security:ROOT:about.adoc[SecMan extension]'s services are on the security menu, which would normally be provided only to administrators.
 Kept separate is the "me" action:
 
 image::what-is-apache-isis/isis-in-pictures/170-me.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/170-me.png"]

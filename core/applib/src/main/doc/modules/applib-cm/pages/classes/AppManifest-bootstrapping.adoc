@@ -93,7 +93,7 @@ As can be seen, the various (non-ASF) link:https://platform.incode.org[Incode Pl
 We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.
 However, there are certain use cases where the a service must be explicitly specified either because the service required does not (for whatever reason) have a xref:refguide:applib-ant:DomainService.adoc[`@DomainService`] annotation.
 
-For example, the xref:secman:ROOT:about.adoc[SecMan extension] allows the policy to evaluate conflicting permissions to be specified by explicitly registering either the `PermissionsEvaluationServiceAllowBeatsVeto` domain service or the `PermissionsEvaluationServiceVetoBeatsAllow` domain service:
+For example, the xref:security:ROOT:about.adoc[SecMan extension] allows the policy to evaluate conflicting permissions to be specified by explicitly registering either the `PermissionsEvaluationServiceAllowBeatsVeto` domain service or the `PermissionsEvaluationServiceVetoBeatsAllow` domain service:
 
 [source,java]
 ----

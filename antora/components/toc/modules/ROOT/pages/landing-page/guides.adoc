@@ -8,7 +8,7 @@ This page lists the user and reference guides available for developers to create
 * *xref:userguide:ROOT:about.adoc[User Guide]*
 * *xref:refguide:ROOT:about.adoc[Reference Guide]*
 * xref:security:ROOT:about.adoc[Security Guide]
-** xref:secman:ROOT:about.adoc[SecMan (extension)]
+** xref:security:ROOT:about.adoc[SecMan (extension)]
 * *xref:testing:ROOT:about.adoc[Testing]*
 
 

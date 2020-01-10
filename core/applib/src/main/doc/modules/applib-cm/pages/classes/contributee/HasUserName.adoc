@@ -16,9 +16,9 @@ public interface HasUsername {
 }
 ----
 
-Modules in the xref:secman:ROOT:about.adoc[SecMan extension] and also the (non-ASF) link:https://platform.incode.org[Incode Platform^] that either have domain entity that implement and/or services that contribute this interface are:
+Modules in the xref:security:ROOT:about.adoc[SecMan extension] and also the (non-ASF) link:https://platform.incode.org[Incode Platform^] that either have domain entity that implement and/or services that contribute this interface are:
 
-* xref:secman:ROOT:about.adoc[SecMan extension]: `ApplicationUser` entity, `HasUsernameContributions` service
+* xref:security:ROOT:about.adoc[SecMan extension]: `ApplicationUser` entity, `HasUsernameContributions` service
 * audit module: `AuditEntry` entity
 * command module: `CommandJdo` entity, `HasUsernameContributions` service
 * sessionlogger module: `SessionLogEntry` entity, `HasUsernameContributions` service

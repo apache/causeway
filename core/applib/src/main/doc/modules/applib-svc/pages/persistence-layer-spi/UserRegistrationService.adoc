@@ -54,7 +54,7 @@ The username and email address must both be unique (not being used by an existin
 The core Apache Isis framework itself defines only an API; there is no default implementation.
 Rather, the implementation will depend on the security mechanism being used.
 
-That said, if you have configured your app to use the xref:secman:ROOT:about.adoc[SecMan extension] then note that it _does_ provide an abstract implementation (`SecurityModuleAppUserRegistrationServiceAbstract`) of the `UserRegistrationService`.
+That said, if you have configured your app to use the xref:security:ROOT:about.adoc[SecMan extension] then note that it _does_ provide an abstract implementation (`SecurityModuleAppUserRegistrationServiceAbstract`) of the `UserRegistrationService`.
 You will need to extend that service and provide implementation for the two abstract methods: `getInitialRole()` and `getAdditionalInitialRoles()`.
 
 For example:

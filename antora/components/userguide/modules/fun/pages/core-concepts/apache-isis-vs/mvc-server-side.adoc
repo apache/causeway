@@ -17,7 +17,7 @@ More sophisticated UIs can be built either by xref:vw:ROOT:extending.adoc[extend
 Other frameworks can also be used to implement REST APIs, of course, but generally they require a significant amount of development to get anywhere near the level of sophistication provided automatically by Apache Isis' REST API.
 
 Although these frameworks all provide their own ecosystems of extensions, Apache Isis' equivalent link:https://platform.incode.org[Incode Platform^] modules (non-ASF) tend to work at a higher-level of abstraction.
-For example, each of these frameworks will integrate with various security mechanism, but the xref:secman:ROOT:about.adoc[SecMan extension] provides a full subdomain of users, roles, features and permissions that can be plugged into any Apache Isis application.
+For example, each of these frameworks will integrate with various security mechanism, but the xref:security:ROOT:about.adoc[SecMan extension] provides a full subdomain of users, roles, features and permissions that can be plugged into any Apache Isis application.
 Similarly, the link:https://platform.incode.org[Incode Platform^]'s command and audit modules in combination provide a support for auditing and traceability that can also be used for out of the box profiling.
 Again, these addons can be plugged into any Isis app.
 

@@ -5,7 +5,7 @@ include::extensions:flywayjdo:partial$module-nav.adoc[]
 
 * Security
 include::extensions:shiro-realm-ldap:partial$module-nav.adoc[]
-** xref:secman:ROOT:about.adoc[SecMan]
+** xref:security:ROOT:about.adoc[SecMan]
 
 * Wicket Viewer
 

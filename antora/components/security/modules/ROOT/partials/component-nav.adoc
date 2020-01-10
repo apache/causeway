@@ -5,3 +5,5 @@ include::security:shiro:partial$module-nav.adoc[]
 include::security:keycloak:partial$module-nav.adoc[]
 include::security:ROOT:partial$module-nav2.adoc[]
 
+* Secman (extension)
+include::security:secman:partial$module-nav.adoc[]

@@ -7,7 +7,7 @@ There is nothing to stop you from using some other `Realm` implementation (or in
 
 [WARNING]
 ====
-If you are happy to use a database then we strongly recommend you use the xref:secman:ROOT:about.adoc[SecMan extension] instead of a vanilla JDBC; it is far more sophisticated and moreover gives you the ability to administer the system from within your Apache Isis application.
+If you are happy to use a database then we strongly recommend you use the xref:security:ROOT:about.adoc[SecMan extension] instead of a vanilla JDBC; it is far more sophisticated and moreover gives you the ability to administer the system from within your Apache Isis application.
 ====
 
 If you go down this route, then the architecture is as follows:

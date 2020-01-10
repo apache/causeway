@@ -83,7 +83,7 @@ public class MySubscribingDomainService {
 ----
 <1> subscribers are typically not visible in the UI, so specify a `DOMAIN` nature
 <2> It's important that subscribers register before any domain services that might emit events on the event bus service.
-For example, the xref:secman:ROOT:about.adoc[SecMan extension] provides a domain service that automatically seeds certain domain entities; these will generate xref:refguide:applib-cm:classes/lifecycleevent.adoc[lifecycle events] and so any subscribers must be registered before such seed services.
+For example, the xref:security:ROOT:about.adoc[SecMan extension] provides a domain service that automatically seeds certain domain entities; these will generate xref:refguide:applib-cm:classes/lifecycleevent.adoc[lifecycle events] and so any subscribers must be registered before such seed services.
 The easiest way to do this is to use the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
 <3> register with the event bus service during xref:refguide:applib-ant:PostConstruct.adoc[`@PostConstruct`]
     initialization

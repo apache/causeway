@@ -1,6 +1,2 @@
-name: secman
-title: "SecMan"
+name: security
 version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc

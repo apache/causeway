@@ -31,7 +31,7 @@ Please note that these modules are not part of ASF, but they *are* all licensed 
 === Sign-in
 
 Apache Isis integrates with http://shiro.apache.org[Apache Shiro].
-The core framework supports file-based realms, while the xref:secman:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
+The core framework supports file-based realms, while the xref:security:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/toc/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/010-login.png[link="https://raw.githubusercontent.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/what-is-apache-isis/isis-in-pictures/010-login.png"]
 
@@ -143,7 +143,7 @@ Under the activity menu are four sets of services which provide support for link
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/toc/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/120-auditing.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/toc/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/120-auditing.png"]
 
-In the security menu is access to the rich set of functionality provided by the xref:secman:ROOT:about.adoc[SecMan extension]:
+In the security menu is access to the rich set of functionality provided by the xref:security:ROOT:about.adoc[SecMan extension]:
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/toc/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/130-security.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/toc/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/130-security.png"]
 
@@ -161,7 +161,7 @@ image::https://raw.githubusercontent.com/apache/isis/master/antora/components/to
 
 Of the various modules in the Incode Platform, the link:https://platform.incode.org/modules/spi/security/spi-security.html[security module] has the most features.
 
-NOTE: this module has now been integrated into the Apache Isis framework itself, as the xref:secman:ROOT:about.adoc[SecMan extension].
+NOTE: this module has now been integrated into the Apache Isis framework itself, as the xref:security:ROOT:about.adoc[SecMan extension].
 
 One significant feature of the is the ability to associate users and objects with a "tenancy".
 The todoapp uses this feature so that different users' list of todo items are kept separate from one another.
@@ -169,7 +169,7 @@ A user with administrator is able to switch their own "tenancy" to the tenancy o
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/toc/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/160-switch-tenancy.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/toc/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/160-switch-tenancy.png"]
 
-For more details, see the security module's link:https://platform.incode.org/modules/spi/security/spi-security.html[README] (or xref:secman:ROOT:about.adoc[SecMan extension])..
+For more details, see the security module's link:https://platform.incode.org/modules/spi/security/spi-security.html[README] (or xref:security:ROOT:about.adoc[SecMan extension])..
 
 === Me
 

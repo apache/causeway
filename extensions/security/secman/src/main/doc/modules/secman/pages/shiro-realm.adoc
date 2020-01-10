@@ -15,7 +15,7 @@ In the configuration above user passwords are stored in the database.  The modul
 
 
 
-The xref:secman:ROOT:about.adoc[SecMan extension] also supports a slightly more sophisticated configuration.
+The xref:security:ROOT:about.adoc[SecMan extension] also supports a slightly more sophisticated configuration.
 Most organizations use LDAP for user credentials, and maintaining two separate user accounts would be less than ideal.
 The `IsisModuleSecurityRealm` can therefore be configured with a subsidiary "delegate" realm that is responsible for performing the primary authentication of the user; if that passes then a user is created (as a domain entity) automatically.
 In most cases this delegate realm will be the LDAP realm, and so the architecture becomes:
@@ -23,7 +23,7 @@ In most cases this delegate realm will be the LDAP realm, and so the architectur
 image::configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-realm.PNG[width="600px",link="{imagesdir}/configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-realm.PNG"]
 
 
-The xref:secman:ROOT:about.adoc[SecMan extension] has many more features than are described here, all of which are described in the module's README.
+The xref:security:ROOT:about.adoc[SecMan extension] has many more features than are described here, all of which are described in the module's README.
 The README also explains in detail how to configure an existing app to use this module.
 
 //You can also look at the Isisaddons https://github.com/isisaddons/isis-app-todoapp[todoapp example] (not ASF), which is preconfigured to use the security module.

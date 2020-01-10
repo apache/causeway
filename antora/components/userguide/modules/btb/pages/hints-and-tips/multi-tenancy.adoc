@@ -4,8 +4,8 @@
 :page-partial:
 
 
-One significant feature provided by the xref:secman:ROOT:about.adoc[SecMan extension] is the ability to associate users and objects with a "tenancy".
+One significant feature provided by the xref:security:ROOT:about.adoc[SecMan extension] is the ability to associate users and objects with a "tenancy".
 
-For more details, see the xref:secman:ROOT:about.adoc[SecMan extension]'s documentation.
+For more details, see the xref:security:ROOT:about.adoc[SecMan extension]'s documentation.
 
 

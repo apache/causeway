@@ -39,7 +39,7 @@ That's a rather more interesting cross-cutting concern than boring old logging!
 Apache Isis also draws heavily on the AOP concept of interceptors.
 Whenever an object is rendered in the UI, it is filtered with respect to the user's permissions.
 That is, if a user is not authorized to either view or perhaps modify an object, then this is applied transparently by the framework.
-The xref:secman:ROOT:about.adoc[SecMan extension] provides a rich user/role/permissions subdomain to use out of the box; but you can integrate with a different security mechanism if you have one already.
+The xref:security:ROOT:about.adoc[SecMan extension] provides a rich user/role/permissions subdomain to use out of the box; but you can integrate with a different security mechanism if you have one already.
 
 Another example of interceptors are the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit modules.
 The command module captures every user interaction that modifies the state of the system (the "cause" of a change) while the audit module captures every change to every object (the "effect" of a change).
