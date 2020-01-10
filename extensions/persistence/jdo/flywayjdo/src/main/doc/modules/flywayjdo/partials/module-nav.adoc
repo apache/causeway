@@ -1,3 +1,3 @@
-** xref:extensions:flywayjdo:about.adoc[Flyway for JDO]
+** xref:pjdo:flywayjdo:about.adoc[Flyway for JDO]
 
 

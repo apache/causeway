@@ -1,2 +1,2 @@
-include::pjdo:flywayjdo:partial$component-nav.adoc[]
+include::pjdo:ROOT:partial$component-nav.adoc[]
 

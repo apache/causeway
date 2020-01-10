@@ -1,9 +1,18 @@
 include::extensions:ROOT:partial$module-nav.adoc[]
 
 * JDO Persistence
-include::extensions:flywayjdo:partial$module-nav.adoc[]
+
+include::pjdo:flywayjdo:partial$module-nav.adoc[]
+
+* Security
+include::security:shiro-realm-ldap:partial$module-nav.adoc[]
+include::security:secman:partial$module-nav.adoc[]
+
+* Restful Objects Viewer
+
+include::vro:cors:partial$module-nav.adoc[]
 
 * Wicket Viewer
 
-include::extensions:exceldownload:partial$module-nav.adoc[]
-include::extensions:pdfjs:partial$module-nav.adoc[]
+include::vw:exceldownload:partial$module-nav.adoc[]
+include::vw:pdfjs:partial$module-nav.adoc[]
