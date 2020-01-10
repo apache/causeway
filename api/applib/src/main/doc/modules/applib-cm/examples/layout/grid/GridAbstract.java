@@ -33,8 +33,8 @@ import org.apache.isis.applib.layout.component.FieldSetOwner;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.layout.LayoutService;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Maps;
 
 /**
  * All top-level page layout classes should implement this interface.

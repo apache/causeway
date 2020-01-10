@@ -55,7 +55,7 @@ Because these are not API, they should not be used by application code, _even th
 
 To help prevent accidental usage:
 
-* the package is `org.apache.isis.commons.internal`
+* the package is `org.apache.isis.core.commons.internal`
 * all of the types in this module are prefixed "_".
 
 For example, `o.a.i.commons.internal.resources._Resource` provides utilities for loading static resources from the classpath.

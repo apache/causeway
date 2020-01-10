@@ -59,7 +59,7 @@ import lombok.extern.log4j.Log4j2;
  * Implementation Note: ThreadPoolSupport::close is triggered by _Context.clear()
  * when application shuts down.
  *
- * @deprecated in favor of the {@code org.apache.isis.commons.internal.concurrent} API
+ * @deprecated in favor of the {@code org.apache.isis.core.commons.internal.concurrent} API
  */
 @Deprecated
 @Log4j2

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Maps;
 
 import lombok.val;
 

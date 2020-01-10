@@ -85,6 +85,14 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
 	<modules>
 		<module>jaxrsclient/api</module>
 		<module>restclient</module>

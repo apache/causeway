@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 /**
  * Represents a tab group containing one or more {@link BS3Tab tab}s.

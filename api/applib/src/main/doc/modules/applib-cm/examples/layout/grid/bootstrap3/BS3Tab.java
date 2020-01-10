@@ -32,7 +32,7 @@ import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 /**
  * Represents a tab within a {@link BS3TabGroup tab group}.

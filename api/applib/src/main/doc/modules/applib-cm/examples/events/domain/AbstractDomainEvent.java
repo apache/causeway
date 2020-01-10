@@ -25,8 +25,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 

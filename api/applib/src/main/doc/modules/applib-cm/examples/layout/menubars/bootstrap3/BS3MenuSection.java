@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutDataOwner;
 import org.apache.isis.applib.layout.menubars.MenuSection;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 /**
  * Corresponds to a domain service that contributes its serviceActions under a particular {@link BS3MenuBar}.

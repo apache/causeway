@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.MenuBar;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.isis.applib.annotation.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.

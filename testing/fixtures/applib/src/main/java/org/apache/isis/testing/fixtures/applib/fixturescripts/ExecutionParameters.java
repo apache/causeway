@@ -30,9 +30,9 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.ISODateTimeFormat;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Maps;
 
 public class ExecutionParameters {
 

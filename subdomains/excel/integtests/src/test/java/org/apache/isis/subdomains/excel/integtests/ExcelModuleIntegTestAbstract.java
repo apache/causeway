@@ -13,7 +13,7 @@ import org.apache.isis.subdomains.excel.fixtures.IsisModuleSubExcelFixtures;
 import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
 import org.apache.isis.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
 import org.apache.isis.jdo.IsisBootDataNucleus;
-import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.core.runtime.spring.IsisBoot;
 import org.apache.isis.security.bypass.IsisBootSecurityBypass;
 
 @SpringBootTest(

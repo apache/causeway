@@ -21,7 +21,7 @@ package org.apache.isis.applib.events.ui;
 import java.util.Map;
 
 import org.apache.isis.applib.events.domain.EventObjectBase;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Maps;
 
 public abstract class AbstractUiEvent<S> extends EventObjectBase<S> {
 

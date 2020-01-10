@@ -34,7 +34,7 @@ import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.FieldSetOwner;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 /**
  * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.

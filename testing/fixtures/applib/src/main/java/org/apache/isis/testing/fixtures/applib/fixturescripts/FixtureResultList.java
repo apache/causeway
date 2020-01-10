@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Maps;
 
 /**
  * Collecting parameter.

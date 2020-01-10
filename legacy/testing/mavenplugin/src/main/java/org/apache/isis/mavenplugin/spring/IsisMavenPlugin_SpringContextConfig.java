@@ -21,7 +21,7 @@ package org.apache.isis.mavenplugin.spring;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.core.runtime.spring.IsisBoot;
 import org.apache.isis.security.bypass.IsisBootSecurityBypass;
 
 /**

@@ -137,6 +137,14 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
 	<modules>
 		<module>security/secman</module>
 		<module>security/shiro-realm-ldap</module>

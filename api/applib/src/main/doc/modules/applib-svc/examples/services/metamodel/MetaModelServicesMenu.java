@@ -42,9 +42,9 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 @Named("isisApplib.MetaModelServicesMenu")

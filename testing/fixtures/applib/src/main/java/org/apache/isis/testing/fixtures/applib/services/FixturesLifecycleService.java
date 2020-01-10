@@ -30,9 +30,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.testing.fixtures.applib.legacy.FixtureClock;
-import org.apache.isis.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 @Service
 @Named("isisTstFixtures.FixturesLifecycleService")

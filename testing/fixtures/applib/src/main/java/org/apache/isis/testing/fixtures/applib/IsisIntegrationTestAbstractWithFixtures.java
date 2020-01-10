@@ -30,7 +30,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.fixtures.applib.legacy.FixtureClock;
 import org.apache.isis.testing.fixtures.applib.legacy.TickingFixtureClock;
-import org.apache.isis.integtestsupport.IsisIntegrationTestAbstract;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegrationTestAbstract {
 

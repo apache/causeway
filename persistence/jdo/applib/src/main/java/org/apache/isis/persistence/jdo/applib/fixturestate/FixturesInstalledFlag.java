@@ -20,7 +20,7 @@
 package org.apache.isis.persistence.jdo.applib.fixturestate;
 
 /**
- * For {@link org.apache.isis.runtime.system.persistence.PersistenceSessionFactory} 
+ * For {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory}
  * implementations that can cache the
  * {@link PersistenceSession#isFixturesInstalled()} so is only called once per
  * application scope.

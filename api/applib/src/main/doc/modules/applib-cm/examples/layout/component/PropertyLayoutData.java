@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 /**
  * Describes the layout of a single property, broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.

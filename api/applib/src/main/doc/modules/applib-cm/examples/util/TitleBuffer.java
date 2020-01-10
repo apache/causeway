@@ -22,7 +22,7 @@ package org.apache.isis.applib.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.core.commons.internal._Constants;
 
 /**
  * Title buffer is a utility class to help produce titles for objects without
