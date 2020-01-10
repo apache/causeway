@@ -26,7 +26,7 @@
         <version>2.0.0-M3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-runtime</artifactId>
+    <artifactId>isis-core-runtime</artifactId>
     <name>Apache Isis Core - Runtime</name>
 
     <properties>

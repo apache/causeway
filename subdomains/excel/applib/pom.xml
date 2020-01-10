@@ -35,7 +35,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
             <!-- so as not to pollute the classpath of the domain model in the IDE -->
             <optional>true</optional>
         </dependency>

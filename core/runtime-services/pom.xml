@@ -69,7 +69,7 @@
 	
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -84,7 +84,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
