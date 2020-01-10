@@ -6,7 +6,7 @@ package org.apache.isis.extensions.base.unittestsupport.dom.with;
  */
 @Deprecated
 public abstract class WithFieldUniqueContractTestAllAbstract<T> extends
-        org.apache.isis.extensions.base.dom.with.WithFieldUniqueContractTestAllAbstract<T> {
+        org.apache.isis.subdomains.base.applib.with.WithFieldUniqueContractTestAllAbstract<T> {
 
     public WithFieldUniqueContractTestAllAbstract(
             final String prefix,

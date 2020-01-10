@@ -1,6 +1,6 @@
 package org.apache.isis.extensions.base.unittestsupport.dom.with;
 
-import org.apache.isis.extensions.base.dom.with.WithReferenceComparable;
+import org.apache.isis.subdomains.base.applib.with.WithReferenceComparable;
 
 /**
  *
@@ -8,7 +8,7 @@ import org.apache.isis.extensions.base.dom.with.WithReferenceComparable;
  */
 @Deprecated
 public class InstantiatorForComparableByReference extends
-        org.apache.isis.extensions.base.dom.with.InstantiatorForComparableByReference {
+        org.apache.isis.subdomains.base.applib.with.InstantiatorForComparableByReference {
 
     public InstantiatorForComparableByReference(Class<? extends WithReferenceComparable<?>> cls) {
         super(cls);

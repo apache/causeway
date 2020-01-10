@@ -1,6 +1,6 @@
 package org.apache.isis.extensions.base.unittestsupport.dom.with;
 
-import org.apache.isis.extensions.base.dom.with.WithNameComparable;
+import org.apache.isis.subdomains.base.applib.with.WithNameComparable;
 
 /**
  *
@@ -8,7 +8,7 @@ import org.apache.isis.extensions.base.dom.with.WithNameComparable;
  */
 @Deprecated
 public class ComparableByNameContractTester<T extends WithNameComparable<T>> extends
-        org.apache.isis.extensions.base.dom.with.ComparableByNameContractTester<T> {
+        org.apache.isis.subdomains.base.applib.with.ComparableByNameContractTester<T> {
 
     public ComparableByNameContractTester(Class<T> cls) {
         super(cls);

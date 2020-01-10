@@ -1,6 +1,6 @@
 package org.apache.isis.extensions.base.unittestsupport.dom.with;
 
-import org.apache.isis.extensions.base.dom.with.WithIntervalMutable;
+import org.apache.isis.subdomains.base.applib.with.WithIntervalMutable;
 
 /**
  *
@@ -8,6 +8,6 @@ import org.apache.isis.extensions.base.dom.with.WithIntervalMutable;
  */
 @Deprecated
 public abstract class WithIntervalMutableContractTestAbstract_changeDates<T extends WithIntervalMutable<T>> extends
-        org.apache.isis.extensions.base.dom.with.WithIntervalMutableContractTestAbstract_changeDates<T> {
+        org.apache.isis.subdomains.base.applib.with.WithIntervalMutableContractTestAbstract_changeDates<T> {
 
 }

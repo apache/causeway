@@ -1,6 +1,6 @@
 package org.apache.isis.extensions.base.unittestsupport.dom.with;
 
-import org.apache.isis.extensions.base.dom.with.WithTitleComparable;
+import org.apache.isis.subdomains.base.applib.with.WithTitleComparable;
 
 /**
  *
@@ -8,7 +8,7 @@ import org.apache.isis.extensions.base.dom.with.WithTitleComparable;
  */
 @Deprecated
 public class ComparableByTitleContractTester<T extends WithTitleComparable<T>> extends
-        org.apache.isis.extensions.base.dom.with.ComparableByTitleContractTester<T> {
+        org.apache.isis.subdomains.base.applib.with.ComparableByTitleContractTester<T> {
 
     public ComparableByTitleContractTester(Class<T> cls) {
         super(cls);

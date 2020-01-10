@@ -2,7 +2,7 @@ package org.apache.isis.extensions.base.unittestsupport.dom.with;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.apache.isis.extensions.base.dom.with.WithDescriptionComparable;
+import org.apache.isis.subdomains.base.applib.with.WithDescriptionComparable;
 
 /**
  * Automatically tests all domain objects implementing {@link WithDescriptionComparable}.
@@ -15,7 +15,7 @@ import org.apache.isis.extensions.base.dom.with.WithDescriptionComparable;
  */
 @Deprecated
 public abstract class ComparableByDescriptionContractTestAbstract_compareTo extends
-        org.apache.isis.extensions.base.dom.with.ComparableByDescriptionContractTestAbstract_compareTo {
+        org.apache.isis.subdomains.base.applib.with.ComparableByDescriptionContractTestAbstract_compareTo {
 
     protected ComparableByDescriptionContractTestAbstract_compareTo(
             final String packagePrefix,
