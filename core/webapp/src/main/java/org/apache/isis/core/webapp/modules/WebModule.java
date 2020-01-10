@@ -92,7 +92,7 @@ public interface WebModule {
     /**
      * @return non-null Can of 'discovered' WebModules, whether applicable or not is not decided here
      * @apiNote order of filters is relevant/critical 
-     * and defined by the WebModules' {@link Order} annotations 
+     * and defined by the WebModules' {@link Order} or {@link Priority} annotations
      */
     static Can<WebModule> discoverWebModules(ServiceRegistry serviceRegistry) {
         val webModules = serviceRegistry.select(WebModule.class);

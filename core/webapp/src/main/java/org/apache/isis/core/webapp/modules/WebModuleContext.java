@@ -45,7 +45,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 @RequiredArgsConstructor
 public class WebModuleContext {
 
-    private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
 
     @NonNull @Getter private final ServletContext servletContext;
@@ -54,17 +53,6 @@ public class WebModuleContext {
     
     private Can<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
-
-    /**
-     *  Adds to the list of viewer names (<tt>isis.viewers</tt> context param)
-     * @param viewerName
-     */
-    public void addViewer(String viewerName) {
-        if(viewers.length()>0) {
-            viewers.append(",");
-        } 
-        viewers.append(viewerName);
-    }
 
     /**
      *  Adds to the list of protected path names (<tt>isis.protected</tt> context param)

@@ -31,6 +31,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.commons.internal.base._Oneshot;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
@@ -59,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisWebAppContextInitializer implements ServletContextInitializer {
     
-    private final static LongAdder instanceCount = new LongAdder();
+    private final static _Oneshot oneshot = new _Oneshot();
     
     @Inject private ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
     @Inject private IsisConfiguration isisConfiguration;
@@ -70,11 +71,9 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
 
-        { // onStartup(...) must be a one shot, otherwise just ignore 
-            if(instanceCount.intValue() > 0) {
-                return;
-            }
-            instanceCount.increment();
+        // onStartup(...) must be a one shot, otherwise just ignore
+        if(!oneshot.shoot()) {
+            return;
         }
         
         if(!isIsisProvisioned()) {
@@ -109,7 +108,7 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
             log.info("about to destroy the context");
             webModuleContext.shutdown(event);
         }
-        instanceCount.reset();
+        oneshot.reset();
         log.info("context destroyed");
     }
 
