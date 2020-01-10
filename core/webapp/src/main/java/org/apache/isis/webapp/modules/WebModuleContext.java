@@ -45,7 +45,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 @RequiredArgsConstructor
 public class WebModuleContext {
 
-    private boolean hasBootstrapper = false;
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
 
@@ -55,20 +54,6 @@ public class WebModuleContext {
     
     private Can<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
-
-    /**
-     * Tell other modules that a bootstrapper is present.
-     */
-    public void setHasBootstrapper() {
-        hasBootstrapper = true;
-    }
-
-    /**
-     * @return whether this context has a bootstrapper
-     */
-    public boolean hasBootstrapper() {
-        return hasBootstrapper;    
-    }
 
     /**
      *  Adds to the list of viewer names (<tt>isis.viewers</tt> context param)
@@ -126,9 +111,9 @@ public class WebModuleContext {
     private void addListener(ServletContext servletContext, WebModule webModule) {
         log.info(String.format("Setup ServletContext, adding WebModule '%s'", webModule.getName()));
         try {
-            final List<ServletContextListener> listeners = webModule.init(servletContext);
-            if(listeners != null) {
-                activeListeners.addAll(listeners);
+            final Can<ServletContextListener> listeners = webModule.init(servletContext);
+            if(listeners != null && !listeners.isEmpty()) {
+                activeListeners.addAll(listeners.toList());
             }
         } catch (ServletException e) {
             log.error(String.format("Failed to add WebModule '%s' to the ServletContext.", webModule.getName()), e);

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.viewer.webmodule;
 
-import java.util.List;
-
 import static java.util.Objects.requireNonNull;
 
 import javax.inject.Inject;
@@ -35,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
@@ -92,13 +91,12 @@ public final class WebModuleWicket extends WebModuleAbstract {
     @Override
     public void prepare(final WebModuleContext ctx) {
         super.prepare(ctx);
-        ctx.setHasBootstrapper();
         ctx.addViewer("wicket");
         ctx.addProtectedPath(this.urlPattern);
     }
 
     @Override
-    public List<ServletContextListener> init(final ServletContext ctx) throws ServletException {
+    public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
         registerFilter(ctx, WICKET_FILTER_NAME, WicketFilter.class)
             .ifPresent(filterReg -> {
@@ -111,7 +109,7 @@ public final class WebModuleWicket extends WebModuleAbstract {
                         urlPattern);
             });
 
-        return null; // does not provide a listener
+        return Can.empty(); // registers no listeners
     }
 
 }

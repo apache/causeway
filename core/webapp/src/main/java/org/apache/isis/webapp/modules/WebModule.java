@@ -18,8 +18,6 @@
  */
 package org.apache.isis.webapp.modules;
 
-import java.util.List;
-
 import javax.annotation.Priority;
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
@@ -73,9 +71,14 @@ public interface WebModule {
      * Sets this WebModule's {@link Filter}s, {@link Servlet}s or {@link WebListener}s 
      * up and registers them with the {@link ServletContext} as provided via {@code ctx}.
      * @param ctx ServletContext
-     * @return
+     * @return optionally any listeners to be registered
+     * @apiNote don't add {@link ServletContextListener}s to given {@code ctx} directly, because
+     * when on a JEE container, we have no means to veto it to be getting managed by the container;  
+     * {@link ServletContextListener}s should only be known to the {@link IsisWebAppContextInitializer}
+     * and not any of the containers, since the {@link IsisWebAppContextInitializer} acts as a delegator,
+     * that passes over any events to the registered {@link WebModule}s.    
      */
-    public List<ServletContextListener> init(ServletContext ctx) throws ServletException;
+    public Can<ServletContextListener> init(ServletContext ctx) throws ServletException;
 
     /**
      * Expected to be called after all WebModules had a chance to prepare the WebModuleContext.

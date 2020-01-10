@@ -18,8 +18,6 @@
  */
 package org.apache.isis.webapp.modules.logonlog;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -32,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.webapp.diagnostics.IsisLogOnExceptionFilter;
 import org.apache.isis.webapp.modules.WebModuleAbstract;
 
@@ -61,7 +60,7 @@ public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
 
 
     @Override
-    public List<ServletContextListener> init(ServletContext ctx) throws ServletException {
+    public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
         registerFilter(ctx, LOGONLOGGER_FILTER_NAME, IsisLogOnExceptionFilter.class)
             .ifPresent(filterReg -> {
@@ -71,7 +70,7 @@ public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
                         webModuleContext.getProtectedPaths().toArray(String.class));
             });
 
-        return null; // does not provide a listener
+        return Can.empty(); // registers no listeners
     }
 
 
