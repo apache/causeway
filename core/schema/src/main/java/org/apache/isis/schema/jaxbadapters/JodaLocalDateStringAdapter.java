@@ -22,8 +22,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.commons.internal.base._Strings;
-
 /**
  * Note: not actually registered as a JAXB adapter.
  */
@@ -32,7 +30,7 @@ public final class JodaLocalDateStringAdapter {
     }
 
     public static LocalDate parse(final String date) {
-        if (_Strings.isNullOrEmpty(date)) {
+        if (Strings.isNullOrEmpty(date)) {
             return null;
         }
         return LocalDate.parse(date);

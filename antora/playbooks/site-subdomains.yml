@@ -20,7 +20,7 @@ content:
       start_path: subdomains/base/src/main/doc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/docx/impl/src/main/doc # subdomains
+      start_path: subdomains/docx/src/main/doc # subdomains
       branches: HEAD
     - url: .
       start_path: subdomains/excel/impl/src/main/doc # subdomains

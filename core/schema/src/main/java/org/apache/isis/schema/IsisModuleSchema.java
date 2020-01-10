@@ -21,13 +21,7 @@ package org.apache.isis.schema;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.commons.IsisModuleCommons;
-
 @Configuration
-@Import({
-        IsisModuleCommons.class
-})
 public class IsisModuleSchema {
-
 
 }

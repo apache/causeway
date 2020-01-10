@@ -24,7 +24,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Note: not actually registered as a JAXB adapter.
@@ -36,7 +35,7 @@ public final class JodaDateTimeStringAdapter {
     private static DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
 
     public static DateTime parse(final String dateTimeStr) {
-        return !_Strings.isNullOrEmpty(dateTimeStr) ? formatter.parseDateTime(dateTimeStr) : null;
+        return !Strings.isNullOrEmpty(dateTimeStr) ? formatter.parseDateTime(dateTimeStr) : null;
     }
 
     public static String print(final DateTime date) {

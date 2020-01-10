@@ -18,20 +18,14 @@
 		<groupId>org.apache.isis.subdomains</groupId>
 		<artifactId>isis-subdomains</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-subdomains-docx-dom</artifactId>
-	<name>Apache Isis Sub - Docx</name>
+	<artifactId>isis-subdomains-docx</artifactId>
+	<name>Apache Isis Sub - Docx (parent)</name>
 	<description>Uses the Apache POI library for mail merge functions of .docx Word documents</description>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.subdomains.docx.dom</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/subdomains/docx/dom</git-plugin.propertiesDir>
-	</properties>
-
-	<dependencies>
-
-	</dependencies>
+	<modules>
+		<module>applib</module>
+	</modules>
 
 </project>
