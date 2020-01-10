@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.validation;
 
 import org.apache.wicket.validation.IValidator;
 
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.Getter;
 

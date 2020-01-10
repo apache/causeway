@@ -37,8 +37,8 @@ import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsSessionFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisTransactionFilterForRestfulObjects;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
-import org.apache.isis.webapp.modules.WebModuleAbstract;
-import org.apache.isis.webapp.modules.WebModuleContext;
+import org.apache.isis.core.webapp.modules.WebModuleAbstract;
+import org.apache.isis.core.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
 

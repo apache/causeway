@@ -73,7 +73,7 @@ import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 

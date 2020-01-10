@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.standard.SimpleSession;
-import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
+import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 import lombok.val;
 

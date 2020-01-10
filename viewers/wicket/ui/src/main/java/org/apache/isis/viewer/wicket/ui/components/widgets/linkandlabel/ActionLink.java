@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.Getter;
 import lombok.val;

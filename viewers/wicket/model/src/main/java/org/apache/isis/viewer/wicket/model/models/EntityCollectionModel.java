@@ -54,9 +54,9 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFinder;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
-import org.apache.isis.webapp.context.memento.ObjectMementoService;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 

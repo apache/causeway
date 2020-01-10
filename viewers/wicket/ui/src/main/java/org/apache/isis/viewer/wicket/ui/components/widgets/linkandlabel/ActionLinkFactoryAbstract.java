@@ -60,7 +60,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 

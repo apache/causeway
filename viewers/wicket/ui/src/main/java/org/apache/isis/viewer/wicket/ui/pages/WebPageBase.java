@@ -25,7 +25,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 /**
  * Provides all the system dependencies for sub-classes.

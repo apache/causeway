@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.Getter;
 import lombok.val;

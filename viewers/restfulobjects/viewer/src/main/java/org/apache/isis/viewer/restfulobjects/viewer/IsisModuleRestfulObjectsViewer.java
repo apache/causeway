@@ -36,7 +36,7 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.MenuBarsResourceSe
 import org.apache.isis.viewer.restfulobjects.viewer.resources.SwaggerSpecResource;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.UserResourceServerside;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.VersionResourceServerside;
-import org.apache.isis.webapp.IsisModuleWebapp;
+import org.apache.isis.core.webapp.IsisModuleWebapp;
 
 /**
  * 

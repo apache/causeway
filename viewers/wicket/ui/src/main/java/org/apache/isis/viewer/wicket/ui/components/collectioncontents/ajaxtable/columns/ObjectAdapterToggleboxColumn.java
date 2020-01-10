@@ -34,7 +34,7 @@ import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 

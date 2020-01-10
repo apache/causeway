@@ -26,7 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

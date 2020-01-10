@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.security.api.authentication.AuthenticationRequest;
 import org.apache.isis.security.api.authentication.AuthenticationSession;
 import org.apache.isis.security.api.authentication.standard.Authenticator;
-import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
+import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 @Service
 @Named("isisSecurityKeycloak.AuthenticatorKeycloak")

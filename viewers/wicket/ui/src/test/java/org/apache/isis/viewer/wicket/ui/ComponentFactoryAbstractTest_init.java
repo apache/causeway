@@ -27,7 +27,7 @@ import org.junit.rules.ExpectedException;
 
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public class ComponentFactoryAbstractTest_init {
 

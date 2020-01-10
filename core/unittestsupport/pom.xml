@@ -24,8 +24,8 @@
 	<name>Apache Isis Core - Unit Test Support</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.unittestsupport</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/unittestsupport</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.unittestsupport</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/unittestsupport</git-plugin.propertiesDir>
 	</properties>
 
 	<description>

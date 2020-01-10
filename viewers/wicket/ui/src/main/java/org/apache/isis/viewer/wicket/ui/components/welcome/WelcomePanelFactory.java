@@ -38,7 +38,7 @@ public class WelcomePanelFactory extends ComponentFactoryAbstract {
     private static final String DEFAULT_MESSAGE = 
             "Apache Isis' Wicket Viewer combines the power of Apache Wicket " + 
                     "for web UIs with Apache Isis for domain modelling.  " + 
-                    "Out-of-the box you get a fully-functional webapp just from " + 
+                    "Out-of-the box you get a fully-functional corewebapp just from " +
                     "your domain objects; you can then customize the UI by " + 
                     "writing custom Wicket components, replacing the page layouts or " + 
                     "simply by altering the CSS";

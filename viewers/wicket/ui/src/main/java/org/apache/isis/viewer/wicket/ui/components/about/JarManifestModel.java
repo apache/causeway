@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.commons.CloseableExtensions;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 

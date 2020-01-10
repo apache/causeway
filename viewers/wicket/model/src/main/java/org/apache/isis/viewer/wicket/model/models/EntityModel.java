@@ -45,8 +45,8 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 

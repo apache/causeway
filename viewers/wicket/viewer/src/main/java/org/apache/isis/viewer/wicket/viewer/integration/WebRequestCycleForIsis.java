@@ -66,7 +66,7 @@ import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

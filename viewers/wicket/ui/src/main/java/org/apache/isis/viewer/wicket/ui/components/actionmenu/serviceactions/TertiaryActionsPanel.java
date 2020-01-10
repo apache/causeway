@@ -39,7 +39,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
+import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.

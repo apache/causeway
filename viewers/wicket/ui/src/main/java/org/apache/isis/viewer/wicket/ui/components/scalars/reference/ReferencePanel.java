@@ -55,7 +55,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 

@@ -38,9 +38,9 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
-import org.apache.isis.webapp.context.memento.ObjectMementoCollection;
-import org.apache.isis.webapp.context.memento.ObjectMementoService;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.memento.ObjectMementoCollection;
+import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

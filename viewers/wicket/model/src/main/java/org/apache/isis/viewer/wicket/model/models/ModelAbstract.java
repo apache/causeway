@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.NonNull;
 

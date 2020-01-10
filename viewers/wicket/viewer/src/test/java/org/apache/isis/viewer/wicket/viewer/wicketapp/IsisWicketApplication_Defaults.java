@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 public class IsisWicketApplication_Defaults {
 

@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 

@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.util.pchain.ParentChain;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 

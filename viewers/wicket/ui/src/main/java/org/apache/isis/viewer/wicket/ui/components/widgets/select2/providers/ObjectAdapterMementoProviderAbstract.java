@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.Getter;
 import lombok.val;

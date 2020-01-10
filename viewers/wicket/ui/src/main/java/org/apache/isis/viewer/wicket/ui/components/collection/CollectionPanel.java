@@ -46,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 

@@ -39,7 +39,7 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 

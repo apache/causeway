@@ -32,7 +32,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import de.agilecoders.wicket.core.util.Attributes;
 

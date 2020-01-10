@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyDefault;
-import org.apache.isis.webapp.modules.templresources.TemplateResourceCachingFilter;
+import org.apache.isis.core.webapp.modules.templresources.TemplateResourceCachingFilter;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
@@ -134,7 +134,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
 
     /**
      * Init parameter key for which extensions should be ignored (typically,
-     * mappings for other viewers within the webapp context).
+     * mappings for other viewers within the corewebapp context).
      *
      * <p>
      * It can also be used to specify ignored static resources (though putting

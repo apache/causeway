@@ -36,8 +36,8 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.webapp.modules.WebModuleAbstract;
-import org.apache.isis.webapp.modules.WebModuleContext;
+import org.apache.isis.core.webapp.modules.WebModuleAbstract;
+import org.apache.isis.core.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
 import lombok.val;

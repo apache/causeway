@@ -43,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider
 import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 /**
  * Provides the <em>common context</em> for all implementing sub-classes.

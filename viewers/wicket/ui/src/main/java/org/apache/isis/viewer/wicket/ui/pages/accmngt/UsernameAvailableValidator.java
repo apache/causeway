@@ -24,7 +24,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 

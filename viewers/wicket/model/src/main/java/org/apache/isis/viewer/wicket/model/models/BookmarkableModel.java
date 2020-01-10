@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
 

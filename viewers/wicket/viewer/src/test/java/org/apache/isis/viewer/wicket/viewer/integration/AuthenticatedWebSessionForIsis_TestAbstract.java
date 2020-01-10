@@ -33,7 +33,7 @@ import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.security.api.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
 

@@ -54,7 +54,7 @@ import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 

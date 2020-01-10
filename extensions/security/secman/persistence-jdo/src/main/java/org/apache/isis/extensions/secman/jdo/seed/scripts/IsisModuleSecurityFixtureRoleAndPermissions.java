@@ -23,7 +23,7 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMod
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
 /**
- * Role to run in the prototype fixture scripts for the example webapp for the security module.
+ * Role to run in the prototype fixture scripts for the example corewebapp for the security module.
  */
 public class IsisModuleSecurityFixtureRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 

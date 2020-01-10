@@ -39,8 +39,8 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.webapp.wormhole.AuthenticationSessionWormhole;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 import lombok.Getter;
 import lombok.val;

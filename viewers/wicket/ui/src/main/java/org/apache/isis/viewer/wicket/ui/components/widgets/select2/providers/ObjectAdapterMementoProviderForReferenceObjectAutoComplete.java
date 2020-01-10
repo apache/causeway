@@ -24,7 +24,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 

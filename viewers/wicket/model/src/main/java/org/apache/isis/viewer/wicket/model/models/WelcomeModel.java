@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 /**
  * Model providing welcome text.

@@ -27,8 +27,8 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

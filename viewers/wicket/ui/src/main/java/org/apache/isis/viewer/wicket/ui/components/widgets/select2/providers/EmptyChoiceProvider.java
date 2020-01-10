@@ -23,7 +23,7 @@ import java.util.Collection;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 public class EmptyChoiceProvider extends ChoiceProvider<ObjectMemento> {
     private static final long serialVersionUID = 1L;

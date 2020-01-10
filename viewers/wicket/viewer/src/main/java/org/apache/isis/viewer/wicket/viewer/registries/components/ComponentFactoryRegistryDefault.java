@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 

@@ -91,8 +91,8 @@ import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapte
 import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.IsisResourceSettings;
 import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 

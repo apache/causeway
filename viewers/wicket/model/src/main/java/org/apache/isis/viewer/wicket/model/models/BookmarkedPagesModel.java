@@ -28,7 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 
 public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {

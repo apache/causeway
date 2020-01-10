@@ -33,7 +33,7 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {

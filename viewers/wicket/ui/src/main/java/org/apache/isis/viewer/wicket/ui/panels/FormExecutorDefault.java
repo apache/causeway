@@ -62,8 +62,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

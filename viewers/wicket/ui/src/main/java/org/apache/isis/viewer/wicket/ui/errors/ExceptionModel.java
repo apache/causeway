@@ -28,7 +28,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
-import org.apache.isis.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
