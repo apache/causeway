@@ -88,16 +88,16 @@ content:
       start_path: core/security/src/main/doc # security
       branches: HEAD
     - url: .
-      start_path: core/unittestsupport/src/main/doc # testing
+      start_path: unittestsupport/src/main/doc # testing
       branches: HEAD
     - url: .
-      start_path: core/viewers/restfulobjects/jaxrs-resteasy-4/src/main/doc # vro
+      start_path: viewers/restfulobjects/jaxrs-resteasy-4/src/main/doc # vro
       branches: HEAD
     - url: .
-      start_path: core/viewers/restfulobjects/src/main/doc # vro
+      start_path: viewers/restfulobjects/src/main/doc # vro
       branches: HEAD
     - url: .
-      start_path: core/viewers/wicket/src/main/doc # vw
+      start_path: viewers/wicket/src/main/doc # vw
       branches: HEAD
 
 # examples

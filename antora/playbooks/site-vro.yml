@@ -13,10 +13,10 @@ content:
 
 # core
     - url: .
-      start_path: core/viewers/restfulobjects/jaxrs-resteasy-4/src/main/doc # vro
+      start_path: viewers/restfulobjects/jaxrs-resteasy-4/src/main/doc # vro
       branches: HEAD
     - url: .
-      start_path: core/viewers/restfulobjects/src/main/doc # vro
+      start_path: viewers/restfulobjects/src/main/doc # vro
       branches: HEAD
 
 # extensions
