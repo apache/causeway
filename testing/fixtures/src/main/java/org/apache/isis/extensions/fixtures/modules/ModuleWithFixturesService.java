@@ -40,9 +40,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.spring.service.BeanDescriptor;
-import org.apache.isis.extensions.spring.service.ContextBeans;
-import org.apache.isis.extensions.spring.service.SpringBeansService;
+import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
+import org.apache.isis.subdomains.spring.applib.service.ContextBeans;
+import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
 import org.apache.isis.metamodel.facets.Annotations;
 
 import lombok.Data;

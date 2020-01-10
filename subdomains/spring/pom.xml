@@ -18,11 +18,12 @@
 		<groupId>org.apache.isis.subdomains</groupId>
 		<artifactId>isis-subdomains</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-subdomains-pdfbox</artifactId>
-	<name>Apache Isis Sub - PDF Box (parent)</name>
-	<description>Integrates PDF Box Library</description>
+	<artifactId>isis-subdomains-spring</artifactId>
+	<name>Apache Isis Sub - Spring (parent)</name>
+	<description>Utility services for interacting with the Spring application context (that hosts the Apache Isis application itself)</description>
 
 	<packaging>pom</packaging>
 

@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.spring.service;
+package org.apache.isis.subdomains.spring.applib.service;
 
 import java.util.Arrays;
 import java.util.Collections;

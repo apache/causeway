@@ -16,17 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.spring;
+package org.apache.isis.subdomains.spring.applib;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.spring.service.SpringBeansService;
+import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
 
 @Configuration
 @Import({
     SpringBeansService.class
 })
-public class IsisModuleExtSpring {
+public class IsisModuleSubSpringApplib {
 
 }

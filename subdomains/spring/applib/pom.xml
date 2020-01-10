@@ -16,21 +16,24 @@
 
 	<parent>
 		<groupId>org.apache.isis.subdomains</groupId>
-		<artifactId>isis-subdomains</artifactId>
+		<artifactId>isis-subdomains-spring</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-subdomains-spring</artifactId>
+	<artifactId>isis-subdomains-spring-applib</artifactId>
 	<name>Apache Isis Sub - Spring (applib)</name>
-	<description>Utility services for interacting with the Spring application context (that hosts the Apache Isis application itself)</description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.subdomains.spring</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/subdomains/spring</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.subdomains.spring.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/subdomains/spring.applib</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

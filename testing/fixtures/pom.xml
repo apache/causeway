@@ -58,7 +58,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.subdomains</groupId>
-			<artifactId>isis-subdomains-spring</artifactId>
+			<artifactId>isis-subdomains-spring-applib</artifactId>
 		</dependency>
 
 		<!-- JDO API (non transient, provided by plugin) -->

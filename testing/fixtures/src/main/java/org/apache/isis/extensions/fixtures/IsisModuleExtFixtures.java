@@ -25,12 +25,12 @@ import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersSer
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlDefault;
 import org.apache.isis.extensions.fixtures.modules.ModuleWithFixturesService;
-import org.apache.isis.extensions.spring.IsisModuleExtSpring;
+import org.apache.isis.subdomains.spring.applib.IsisModuleSubSpringApplib;
 
 @Configuration
 @Import({
         // modules
-        IsisModuleExtSpring.class,
+        IsisModuleSubSpringApplib.class,
 
         // @Service's
         FixturesLifecycleService.class,
