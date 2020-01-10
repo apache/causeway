@@ -32,7 +32,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.presets.IsisPresets;
 import org.apache.isis.extensions.asciidoc.ui.IsisModuleExtAsciidocUi;
-import org.apache.isis.extensions.fixtures.IsisModuleExtFixtures;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTstFixturesApplib;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
@@ -100,7 +100,7 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleSecmanPersistenceJdo.class,
         IsisModuleSecmanEncryptionJbcrypt.class,
 
-        IsisModuleExtFixtures.class,
+        IsisModuleTstFixturesApplib.class,
 
         IsisModuleIncModelMetaModel.class, // @Model support (incubator)
         

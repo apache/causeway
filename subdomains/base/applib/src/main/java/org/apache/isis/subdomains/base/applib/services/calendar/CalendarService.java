@@ -14,7 +14,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 
 @Service
-@Named("isisExtBase.calendarService")
+@Named("isisSubBase.calendarService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

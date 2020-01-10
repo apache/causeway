@@ -28,7 +28,7 @@ import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisExtExcel.ExcelService")
+@Named("isisSubExcel.ExcelService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

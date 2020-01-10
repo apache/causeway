@@ -13,9 +13,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2;
 import org.apache.isis.subdomains.excel.integtests.ExcelModuleIntegTestAbstract;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
 

@@ -16,8 +16,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
 

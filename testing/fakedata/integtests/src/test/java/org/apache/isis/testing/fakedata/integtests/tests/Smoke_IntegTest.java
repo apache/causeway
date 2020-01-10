@@ -20,7 +20,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.fakedata.dom.services.FakeDataService;
 import org.apache.isis.testing.fakedata.integtests.FakeDataModuleIntegTestAbstract;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.EnumOf3;
 import org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;

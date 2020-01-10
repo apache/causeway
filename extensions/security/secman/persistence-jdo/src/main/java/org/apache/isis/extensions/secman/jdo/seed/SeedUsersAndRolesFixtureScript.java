@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.jdo.seed;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.GlobalTenancy;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisExtFixturesFixtureResultsRoleAndPermissions;

@@ -1,7 +1,7 @@
 package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.fixturescripts;
 
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
-import org.apache.isis.extensions.fixtures.legacy.teardown.TeardownFixtureAbstract2;
+import org.apache.isis.testing.fixtures.applib.legacy.teardown.TeardownFixtureAbstract2;
 
 public class ExcelDemoToDoItem_tearDown extends TeardownFixtureAbstract2 {
 

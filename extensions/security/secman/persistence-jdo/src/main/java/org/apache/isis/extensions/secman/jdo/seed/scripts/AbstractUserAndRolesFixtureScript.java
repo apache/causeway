@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;

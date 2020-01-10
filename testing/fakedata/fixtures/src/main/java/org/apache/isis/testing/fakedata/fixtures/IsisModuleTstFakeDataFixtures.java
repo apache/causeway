@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.fakedata.dom.IsisModuleExtFakeData;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.modules.ModuleWithFixtures;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_tearDown;
 
 @Configuration

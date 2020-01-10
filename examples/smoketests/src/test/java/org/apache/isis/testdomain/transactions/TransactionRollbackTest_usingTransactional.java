@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.config.presets.IsisPresets;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;

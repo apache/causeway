@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.testing.fakedata.applib.services.FakeDataService;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
 
 import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_create_withFakeData;

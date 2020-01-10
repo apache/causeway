@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;

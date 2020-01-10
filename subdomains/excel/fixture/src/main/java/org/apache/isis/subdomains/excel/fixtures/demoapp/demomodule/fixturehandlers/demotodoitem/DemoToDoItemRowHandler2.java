@@ -7,7 +7,7 @@ import org.apache.isis.extensions.excel.dom.ExcelMetaDataEnabled;
 import org.apache.isis.extensions.excel.dom.FixtureAwareRowHandler;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 import lombok.Setter;

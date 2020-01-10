@@ -23,10 +23,10 @@ import java.util.HashSet;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
-import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptAbstract;
-import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptWithResult;
-import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptWithoutResult;
+import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithResult;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithoutResult;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.extensions.excel.ExcelModule;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown;
 import org.apache.isis.extensions.fixtures.IsisExtFixturesModule;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.modules.Module;
 
 @Configuration

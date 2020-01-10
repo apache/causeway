@@ -13,7 +13,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.extensions.excel.dom.ExcelFixture;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 

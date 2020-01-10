@@ -22,9 +22,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResultList;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -43,7 +43,7 @@ import lombok.Getter;
  * @since 2.0
  */
 @Service
-@Named("isisExtCors.WebModuleServerCors")
+@Named("isisMapCors.WebModuleServerCors")
 @Qualifier("CORS")
 @Order(OrderPrecedence.HIGH)
 public final class WebModuleCors extends WebModuleAbstract {

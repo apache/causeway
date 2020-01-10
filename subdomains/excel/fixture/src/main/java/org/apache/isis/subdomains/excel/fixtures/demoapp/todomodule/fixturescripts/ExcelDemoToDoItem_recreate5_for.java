@@ -9,7 +9,7 @@ import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
 

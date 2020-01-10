@@ -44,7 +44,7 @@ import lombok.Getter;
 import lombok.val;
 
 @Service
-@Named("isisExtH2Console.WebModuleH2Console")
+@Named("isisTstH2Console.WebModuleH2Console")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("H2Console")
 public class WebModuleH2Console extends WebModuleAbstract {

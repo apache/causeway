@@ -63,7 +63,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Service
-@Named("isisExtSse.SseServiceDefault")
+@Named("isisValSse.SseServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

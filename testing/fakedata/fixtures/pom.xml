@@ -65,7 +65,7 @@
 
         <dependency>
             <groupId>org.apache.isis.testing</groupId>
-            <artifactId>isis-testing-fixtures</artifactId>
+            <artifactId>isis-testing-fixtures-applib</artifactId>
         </dependency>
 
         <dependency>

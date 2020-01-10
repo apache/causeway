@@ -3,7 +3,7 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.fixturescri
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
-import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
 
