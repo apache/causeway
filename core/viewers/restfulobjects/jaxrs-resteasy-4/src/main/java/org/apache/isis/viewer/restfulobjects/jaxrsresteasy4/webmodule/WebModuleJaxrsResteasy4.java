@@ -46,6 +46,13 @@ import lombok.Getter;
  * WebModule that provides the RestfulObjects Viewer.
  * 
  * @since 2.0
+ * 
+ * @implNote CDI feels responsible to resolve injection points for any Servlet or Filter 
+ * we register programmatically on the ServletContext. 
+ * As long as injection points are considered to be resolved by Spring, we can workaround this fact:
+ * By replacing annotations {@code @Inject} with {@code @Autowire} for any Servlet or Filter,
+ * that get contributed by a WebModule, these will be ignored by CDI.
+ * 
  */
 @Service
 @Named("isisRoViewer.WebModuleJaxrsRestEasy4")
@@ -77,6 +84,8 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     @Override
     public void prepare(WebModuleContext ctx) {
         
+        // forces RuntimeDelegate.getInstance() to be provided by RestEasy
+        // (and not by eg. the JEE container if any)
         ResteasyProviderFactory.setInstance(new ResteasyProviderFactoryImpl());
         
         super.prepare(ctx);
@@ -92,8 +101,6 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        ResteasyProviderFactory.setInstance(new ResteasyProviderFactoryImpl());
-        
         registerFilter(ctx, ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class)
                 .ifPresent(filterReg -> {
                     // this is mapped to the entire application;
