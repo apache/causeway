@@ -19,7 +19,6 @@
 package org.apache.isis.webapp.modules;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.annotation.Priority;
 import javax.servlet.Filter;
@@ -32,6 +31,7 @@ import javax.servlet.annotation.WebListener;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.webapp.webappctx.IsisWebAppContextInitializer;
 
 import lombok.val;
@@ -87,14 +87,12 @@ public interface WebModule {
     // -- DISCOVERY 
 
     /**
-     * @return Stream of 'discovered' WebModules, whether applicable or not is not decided here 
+     * @return Stream of 'discovered' WebModules, whether applicable or not is not decided here
+     * @apiNote order of filters is relevant/critical 
      */
-    static Stream<WebModule> discoverWebModules(ServiceRegistry serviceRegistry) {
-
-        // modules are discovered by Spring, order of filters is relevant/critical 
-
+    static Can<WebModule> discoverWebModules(ServiceRegistry serviceRegistry) {
         val webModules = serviceRegistry.select(WebModule.class);
-        return webModules.stream();
+        return webModules;
     }
 
 

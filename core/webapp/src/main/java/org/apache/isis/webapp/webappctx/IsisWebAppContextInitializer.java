@@ -18,11 +18,14 @@
  */
 package org.apache.isis.webapp.webappctx;
 
+import java.util.EventListener;
+
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -32,6 +35,8 @@ import org.apache.isis.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
+import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -51,9 +56,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisWebAppContextInitializer implements ServletContextInitializer {
     
-    @Autowired private ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
-    @Autowired private IsisConfiguration isisConfiguration;
-    @Autowired private WebAppContextPath webAppContextPath;
+    @Inject private ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
+    @Inject private IsisConfiguration isisConfiguration;
+    @Inject private WebAppContextPath webAppContextPath;
 
     // -- INTERFACE IMPLEMENTATION
     
@@ -65,8 +70,8 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
             return;
         }
         
-        //[ahuber] set the ServletContext initializing thread as preliminary default until overridden by
-        // IsisWicketApplication#init() or others that better know what ClassLoader to use as application default.
+        // set the ServletContext initializing thread as preliminary default until overridden by
+        // IsisWicketApplication#init() or others, that better know what ClassLoader to use as application default.
         _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
 
         val contextPath = servletContext.getContextPath();
@@ -78,24 +83,34 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
         val webModuleContext = new WebModuleContext(servletContext, isisConfiguration, serviceRegistry);
         webModuleContext.prepare();
 
-        _Context.putSingleton(WebModuleContext.class, webModuleContext);
-
         log.info("=== PHASE 2 === Initializing the ServletContext");
 
-        webModuleContext.init();	
+        webModuleContext.init();
+        servletContext.addListener(new ShutdownHook(webModuleContext));
+        
         log.info("=== DONE === ServletContext initialized.");
 
     }
 
-    //@Override
-    public void contextDestroyed(ServletContextEvent event) {
-        val webModuleContext = _Context.getIfAny(WebModuleContext.class);
+    public void contextDestroyed(WebModuleContext webModuleContext, ServletContextEvent event) {
         if(webModuleContext!=null) {
+            log.info("about to destroy the context");
             webModuleContext.shutdown(event);
         }
+        log.info("context destroyed");
     }
 
     // -- HELPER
+    
+    @Value
+    private class ShutdownHook implements EventListener, ServletContextListener {
+        @NonNull WebModuleContext webModuleContext;
+        
+        @Override
+        public void contextDestroyed(ServletContextEvent sce) {
+            IsisWebAppContextInitializer.this.contextDestroyed(webModuleContext, sce);
+        }
+    }
 
     private boolean isIsisProvisioned() {
         return serviceRegistry!=null;
