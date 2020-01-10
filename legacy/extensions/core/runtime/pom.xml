@@ -92,7 +92,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-unittestsupport</artifactId>
+			<artifactId>isis-core-unittestsupport</artifactId>
 			<scope>test</scope>
 			<exclusions>
 				<!-- whatever unittestsupport is dependent on, it should not be transitive -->

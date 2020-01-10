@@ -21,7 +21,7 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-unittestsupport</artifactId>
+	<artifactId>isis-core-unittestsupport</artifactId>
 	<name>Apache Isis Core - Unit Test Support</name>
 
 	<properties>

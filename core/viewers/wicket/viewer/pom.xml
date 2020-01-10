@@ -158,7 +158,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-unittestsupport</artifactId>
+            <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
