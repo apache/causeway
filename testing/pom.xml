@@ -87,7 +87,7 @@
 
 			<dependency>
 				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-specsupport</artifactId>
+				<artifactId>isis-testing-specsupport-applib</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
@@ -119,10 +119,10 @@
 	<modules>
 		<module>fakedata</module>
 		<module>fixtures</module>
-
 		<module>h2console</module>
 		<module>hsqldbmgr</module>
 		<module>specsupport</module>
+
 		<module>unittestsupport/impl</module>
 	</modules>
 

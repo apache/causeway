@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.specsupport.integration;
+package org.apache.isis.testing.specsupport.applib.integration;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;

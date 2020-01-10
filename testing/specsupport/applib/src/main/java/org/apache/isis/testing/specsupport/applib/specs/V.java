@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.specsupport.specs;
+package org.apache.isis.testing.specsupport.applib.specs;
 
 import org.joda.time.format.DateTimeFormat;
 
