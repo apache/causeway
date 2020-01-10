@@ -51,7 +51,7 @@
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-metamodel</artifactId>
+            <artifactId>isis-core-metamodel</artifactId>
             <scope>test</scope>
         </dependency>
 
