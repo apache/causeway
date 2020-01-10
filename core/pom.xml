@@ -851,7 +851,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-security-api</artifactId>
+				<artifactId>isis-core-security</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -1857,10 +1857,10 @@
 		<module>testsupport/unittestsupport</module>
 		<module>testsupport/integtestsupport</module>
 
-		<module>security/api</module>
-		<module>security/bypass</module>
-		<module>security/shiro</module>
-		<module>security/keycloak</module>
+		<module>security</module>
+		<module>../security/bypass</module>
+		<module>../security/shiro</module>
+		<module>../security/keycloak</module>
 
 		<module>viewers/restfulobjects</module>
 		<module>viewers/wicket</module>

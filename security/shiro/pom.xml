@@ -24,19 +24,19 @@
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
     	<version>2.0.0-M3-SNAPSHOT</version>
-    	<relativePath>../../pom.xml</relativePath>
+        <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-security-keycloak</artifactId>
+    <artifactId>isis-security-shiro</artifactId>
 
-    <name>Apache Isis Security - Keycloak</name>
+    <name>Apache Isis Security - Shiro</name>
 	<description>
-        Authentication and Authorization using Keycloak
+        Authentication and Authorization using Apache Shiro.
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.security.keycloak</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/security/keycloak</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.security.shiro</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/security/shiro</git-plugin.propertiesDir>
     </properties>
 
 
@@ -45,7 +45,7 @@
     	<dependencies>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-security-keycloak</artifactId>
+                <artifactId>isis-security-shiro</artifactId>
                 <version>2.0.0-M3-SNAPSHOT</version>
             </dependency>
     	</dependencies>
@@ -74,6 +74,21 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.slf4j</groupId>
+            		<artifactId>slf4j-api</artifactId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
         </dependency>
 
     </dependencies>
