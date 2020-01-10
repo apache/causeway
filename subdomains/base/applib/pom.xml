@@ -9,7 +9,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 	
-    <artifactId>isis-subdomains-base-dom</artifactId>
+    <artifactId>isis-subdomains-base-applib</artifactId>
 
     <packaging>jar</packaging>
 

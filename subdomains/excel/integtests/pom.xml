@@ -87,7 +87,7 @@
 <!--
         <dependency>
             <groupId>org.apache.isis.subdomains</groupId>
-            <artifactId>isis-subdomains-base-dom</artifactId>
+            <artifactId>isis-subdomains-base-applib</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
