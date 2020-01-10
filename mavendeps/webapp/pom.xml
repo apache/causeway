@@ -72,7 +72,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-schema</artifactId>
+			<artifactId>isis-core-schema</artifactId>
 			<!--
             excluded to make consistent with JDK11 where these have been removed from the JDK and must be explicitly included.
             -->
