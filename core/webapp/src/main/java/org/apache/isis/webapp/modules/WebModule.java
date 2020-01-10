@@ -39,12 +39,10 @@ import lombok.val;
  * <p>
  * WebModule instances are used by the {@link IsisWebAppContextInitializer} to setup 
  * the ServletContext programmatically.
- * </p>
  * <p>
  * The order in which all enabled/applicable WebModules are registered with the 
  * filter-chain is determined by their specified {@link Order} or {@link Priority} 
  * annotation. 
- * </p>
  * 
  * @since 2.0
  */
@@ -92,7 +90,7 @@ public interface WebModule {
     /**
      * @return non-null Can of 'discovered' WebModules, whether applicable or not is not decided here
      * @apiNote order of filters is relevant/critical 
-     * and defined by the WebModules' {@link Order} annotations 
+     * and defined by the WebModules' {@link Order} or {@link Priority} annotations 
      */
     static Can<WebModule> discoverWebModules(ServiceRegistry serviceRegistry) {
         val webModules = serviceRegistry.select(WebModule.class);

@@ -94,7 +94,6 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
             return;
         }
 
-        ctx.addViewer("restfulobjects");
         ctx.addProtectedPath(urlPattern);
     }
 

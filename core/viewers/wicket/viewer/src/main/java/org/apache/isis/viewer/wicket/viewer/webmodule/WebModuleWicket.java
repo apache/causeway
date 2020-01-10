@@ -91,7 +91,6 @@ public final class WebModuleWicket extends WebModuleAbstract {
     @Override
     public void prepare(final WebModuleContext ctx) {
         super.prepare(ctx);
-        ctx.addViewer("wicket");
         ctx.addProtectedPath(this.urlPattern);
     }
 

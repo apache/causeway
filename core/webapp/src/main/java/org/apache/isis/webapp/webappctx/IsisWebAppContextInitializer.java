@@ -21,7 +21,6 @@ package org.apache.isis.webapp.webappctx;
 import java.util.EventListener;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
