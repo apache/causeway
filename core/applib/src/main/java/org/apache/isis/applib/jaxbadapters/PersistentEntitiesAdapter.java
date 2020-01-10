@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.jaxbadapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,7 +26,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.schema.common.v1.OidsDto;
 
 import lombok.val;
@@ -37,7 +37,7 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
     @Override
     public List<Object> unmarshal(final OidsDto oidsDto) {
 
-        List<Object> domainObjects = _Lists.newArrayList();
+        List<Object> domainObjects = new ArrayList<>();
         for (val oidDto : oidsDto.getOid()) {
             val bookmark = Bookmark.from(oidDto);
             val domainObject = bookmarkService.lookup(bookmark);

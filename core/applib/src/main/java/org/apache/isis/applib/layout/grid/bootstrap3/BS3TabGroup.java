@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -26,7 +27,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * Represents a tab group containing one or more {@link BS3Tab tab}s.
@@ -79,7 +79,7 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
 
 
 
-    private List<BS3Tab> tabs = _Lists.newArrayList();
+    private List<BS3Tab> tabs = new ArrayList<>();
 
     // no wrapper; required=false because may be auto-generated
     @Override

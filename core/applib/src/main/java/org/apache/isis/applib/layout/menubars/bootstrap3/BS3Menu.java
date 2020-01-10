@@ -19,6 +19,7 @@
 package org.apache.isis.applib.layout.menubars.bootstrap3;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -27,7 +28,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.Menu;
-import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.ToString;
 
@@ -82,7 +82,7 @@ public class BS3Menu implements Menu, Serializable {
 
 
 
-    private List<BS3MenuSection> sections = _Lists.newArrayList();
+    private List<BS3MenuSection> sections = new ArrayList<>();
 
     // no wrapper
     @XmlElement(name = "section", required = true)

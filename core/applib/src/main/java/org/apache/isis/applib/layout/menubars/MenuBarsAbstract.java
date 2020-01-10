@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.commons.internal.collections._Maps;
+
 
 import lombok.val;
 
@@ -55,7 +55,7 @@ public abstract class MenuBarsAbstract implements MenuBars, Serializable {
     public LinkedHashMap<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId() {
 
         val serviceActionsByObjectTypeAndId = 
-                _Maps.<String, ServiceActionLayoutData>newLinkedHashMap();
+                new LinkedHashMap<String, ServiceActionLayoutData>();
 
         visit(serviceActionLayoutData -> {
             serviceActionsByObjectTypeAndId

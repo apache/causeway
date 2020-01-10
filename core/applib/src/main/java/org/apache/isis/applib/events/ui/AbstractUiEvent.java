@@ -18,10 +18,10 @@
  */
 package org.apache.isis.applib.events.ui;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.applib.events.domain.EventObjectBase;
-import org.apache.isis.commons.internal.collections._Maps;
 
 public abstract class AbstractUiEvent<S> extends EventObjectBase<S> {
 
@@ -42,7 +42,7 @@ public abstract class AbstractUiEvent<S> extends EventObjectBase<S> {
     /**
      * Provides a mechanism to pass data around.
      */
-    private final Map<Object, Object> userData = _Maps.newHashMap();
+    private final Map<Object, Object> userData = new HashMap<>();
 
     /**
      * Obtain user-data, as set by any other subscribers.

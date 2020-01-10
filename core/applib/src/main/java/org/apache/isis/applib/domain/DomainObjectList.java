@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -35,7 +36,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
-import org.apache.isis.commons.internal.collections._Lists;
 
 @XmlRootElement(name = "list")
 @XmlType(
@@ -161,7 +161,7 @@ public class DomainObjectList {
     public static class ObjectsDomainEvent extends CollectionDomainEvent<Object> {  }
 
     @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
-    private List<Object> objects = _Lists.newArrayList();
+    private List<Object> objects = new ArrayList<>();
 
     @Collection(
             domainEvent = ObjectsDomainEvent.class,

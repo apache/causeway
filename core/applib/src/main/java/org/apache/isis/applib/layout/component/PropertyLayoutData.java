@@ -19,6 +19,7 @@
 package org.apache.isis.applib.layout.component;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -33,7 +34,6 @@ import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
-import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * Describes the layout of a single property, broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
@@ -234,7 +234,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.repainting = repainting;
     }
 
-    private List<ActionLayoutData> actions = _Lists.newArrayList();
+    private List<ActionLayoutData> actions = new ArrayList<>();
 
     // no wrapper
     @Override

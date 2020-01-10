@@ -26,7 +26,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.commons.internal.encoding.Encodable;
 
 /**
  * Indicates that the class should have a default, by providing a link to a
@@ -41,8 +40,8 @@ import org.apache.isis.commons.internal.encoding.Encodable;
  * of {@link DefaultsProvider} could adjust the default it provides according to
  * circumstance, for example).
  *
- * @see Encodable
- * @see Parseable
+ * @see <code>Encodable</code>
+ * @see <code>Parseable</code>
  * @see Value
  *
  * <p>

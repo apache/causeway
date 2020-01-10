@@ -19,6 +19,7 @@
 package org.apache.isis.applib.layout.menubars.bootstrap3;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutDataOwner;
 import org.apache.isis.applib.layout.menubars.MenuSection;
-import org.apache.isis.commons.internal.collections._Lists;
+
 
 /**
  * Corresponds to a domain service that contributes its serviceActions under a particular {@link BS3MenuBar}.
@@ -46,7 +47,7 @@ public class BS3MenuSection implements MenuSection, Serializable, ServiceActionL
     }
 
 
-    private List<ServiceActionLayoutData> serviceActions = _Lists.newArrayList();
+    private List<ServiceActionLayoutData> serviceActions = new ArrayList<>();
 
     // no wrapper
     @Override

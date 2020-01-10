@@ -13,8 +13,8 @@
     <name>Apache Isis Sub - Excel (Fixtures)</name>
     
     <properties>
-    	<jar-plugin.automaticModuleName>org.apache.isis.subdomains.excel.fixtures</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/subdomains/excel/fixtures</git-plugin.propertiesDir>
+    	<jar-plugin.automaticModuleName>org.apache.isis.subdomains.excel.fixture</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/subdomains/excel/fixture</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -56,7 +56,12 @@
 
         <dependency>
             <groupId>org.apache.isis.subdomains</groupId>
-            <artifactId>isis-subdomains-excel-dom</artifactId>
+            <artifactId>isis-subdomains-excel-applib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.subdomains</groupId>
+            <artifactId>isis-subdomains-excel-testing</artifactId>
         </dependency>
 
         <dependency>
