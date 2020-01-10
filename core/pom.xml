@@ -1862,6 +1862,7 @@
 		<module>security/shiro</module>
 		<module>security/keycloak</module>
 
+		<module>viewers/restfulobjects</module>
 		<module>viewers/restfulobjects/applib</module>
 		<module>viewers/restfulobjects/rendering</module>
 		<module>viewers/restfulobjects/jaxrs-resteasy-4</module>
