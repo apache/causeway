@@ -114,7 +114,7 @@
 
 	<modules>
 
-		<module>base/applib</module>
+		<module>base</module>
 <!--
 		<module>excel/fixture</module>
 		<module>excel/integtests</module>
