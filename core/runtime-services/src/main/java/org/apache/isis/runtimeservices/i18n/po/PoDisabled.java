@@ -16,30 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.bypass;
+package org.apache.isis.runtimeservices.i18n.po;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.isis.applib.services.i18n.TranslationService;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
-import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
+class PoDisabled extends PoAbstract {
 
-/**
- * Auth/bypass for eg. Integration Testing
- *  
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
-        IsisModuleRuntimeServices.class,
+    PoDisabled(TranslationServicePo translationServicePo) {
+        super(translationServicePo, TranslationService.Mode.DISABLED);
+    }
 
-        // @Service's
-        AuthenticatorBypass.class,
-        AuthorizorBypass.class,
+    @Override
+    String translate(String context, String msgId) {
+        return msgId;
+    }
 
-})
-public class IsisModuleSecurityBypass {
+    @Override
+    String translate(String context, String msgId, String msgIdPlural, int num) {
+        return msgId;
+    }
 
 }

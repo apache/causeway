@@ -27,8 +27,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
-import org.apache.isis.runtime.services.wrapper.handlers.DelegatingInvocationHandler;
-import org.apache.isis.runtime.services.wrapper.proxy.ProxyCreator;
+import org.apache.isis.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
+import org.apache.isis.runtimeservices.wrapper.proxy.ProxyCreator;
 
 public class ProxyCreatorTestUsingCodegenPlugin {
 

@@ -16,30 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.bypass;
+package org.apache.isis.runtimeservices.i18n.po;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.junit.Test;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
-import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-/**
- * Auth/bypass for eg. Integration Testing
- *  
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
-        IsisModuleRuntimeServices.class,
+public class PoWriterTest_escape {
 
-        // @Service's
-        AuthenticatorBypass.class,
-        AuthorizorBypass.class,
+    @Test
+    public void no_quotes() throws Exception {
+        String escape = PoWriter.escape("abc");
+        assertThat(escape, is(equalTo("abc")));
+    }
 
-})
-public class IsisModuleSecurityBypass {
+    @Test
+    public void with_quotes() throws Exception {
+        String escape = PoWriter.escape(str('a', '"', 'b', '"', 'c'));
+        assertThat(escape, is(equalTo(str('a', '\\', '"', 'b', '\\', '"', 'c'))));
+    }
 
+    private static String str(char... params) {
+        return new String(params);
+    }
 }

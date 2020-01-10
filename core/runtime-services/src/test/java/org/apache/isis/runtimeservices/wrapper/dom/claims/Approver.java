@@ -16,30 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.bypass;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.runtimeservices.wrapper.dom.claims;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
-import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
-
-/**
- * Auth/bypass for eg. Integration Testing
- *  
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
-        IsisModuleRuntimeServices.class,
-
-        // @Service's
-        AuthenticatorBypass.class,
-        AuthorizorBypass.class,
-
-})
-public class IsisModuleSecurityBypass {
+public interface Approver {
 
 }

@@ -16,30 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.bypass;
+package org.apache.isis.runtimeservices.email;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.junit.Test;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
-import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-/**
- * Auth/bypass for eg. Integration Testing
- *  
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
-        IsisModuleRuntimeServices.class,
+public class EmailServiceDefaultTest_notEmpty {
 
-        // @Service's
-        AuthenticatorBypass.class,
-        AuthorizorBypass.class,
+    @Test
+    public void when_not_empty() throws Exception {
+        assertThat(EmailServiceDefault.notEmpty(new String[] { "joey@tribiani.com", "rachel@green.com" }), is(true));
+        assertThat(EmailServiceDefault.notEmpty(new String[] { "rachel@green.com" }), is(true));
+    }
 
-})
-public class IsisModuleSecurityBypass {
+    @Test
+    public void when_null() throws Exception {
+        assertThat(EmailServiceDefault.notEmpty(null), is(false));
+    }
+
+    @Test
+    public void when_empty() throws Exception {
+        assertThat(EmailServiceDefault.notEmpty(new String[]{}), is(false));
+    }
+
 
 }

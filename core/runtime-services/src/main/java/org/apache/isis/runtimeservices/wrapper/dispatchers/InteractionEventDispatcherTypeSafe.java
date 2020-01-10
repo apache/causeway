@@ -16,30 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.bypass;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.runtimeservices.wrapper.dispatchers;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
-import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.commons.internal.base._Casts;
 
-/**
- * Auth/bypass for eg. Integration Testing
- *  
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
-        IsisModuleRuntimeServices.class,
+public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent> 
+implements InteractionEventDispatcher {
 
-        // @Service's
-        AuthenticatorBypass.class,
-        AuthorizorBypass.class,
+    public abstract void dispatchTypeSafe(T interactionEvent);
 
-})
-public class IsisModuleSecurityBypass {
+    @Override
+    public void dispatch(final InteractionEvent interactionEvent) {
+        dispatchTypeSafe(_Casts.<T>uncheckedCast(interactionEvent));
+    }
 
 }

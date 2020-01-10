@@ -16,30 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.bypass;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.runtimeservices;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
-import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
+import org.apache.isis.commons.exceptions.IsisException;
 
 /**
- * Auth/bypass for eg. Integration Testing
- *  
- * @since 2.0
+ * Indicates a problem initialising the Apache Isis framework.
  */
-@Configuration
-@Import({
-        // modules
-        IsisModuleRuntimeServices.class,
+public class InitialisationException extends IsisException {
+    private static final long serialVersionUID = 1L;
 
-        // @Service's
-        AuthenticatorBypass.class,
-        AuthorizorBypass.class,
+    public InitialisationException() {
+        super();
+    }
 
-})
-public class IsisModuleSecurityBypass {
+    public InitialisationException(final String s) {
+        super(s);
+    }
 
+    public InitialisationException(final Throwable cause) {
+        super(cause);
+    }
+
+    public InitialisationException(final String msg, final Throwable cause) {
+        super(msg, cause);
+    }
 }

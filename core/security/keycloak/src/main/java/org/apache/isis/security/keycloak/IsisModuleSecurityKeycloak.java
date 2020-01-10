@@ -21,7 +21,7 @@ package org.apache.isis.security.keycloak;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
+import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
 import org.apache.isis.security.keycloak.authentication.AuthenticatorKeycloak;
 import org.apache.isis.security.keycloak.authorization.AuthorizorKeycloak;
 import org.apache.isis.security.keycloak.webmodule.WebModuleKeycloak;

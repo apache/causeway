@@ -16,30 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.bypass;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.runtimeservices.wrapper.handlers;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
-import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
+import java.lang.reflect.InvocationHandler;
 
-/**
- * Auth/bypass for eg. Integration Testing
- *  
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
-        IsisModuleRuntimeServices.class,
+public interface DelegatingInvocationHandler<T> extends InvocationHandler {
 
-        // @Service's
-        AuthenticatorBypass.class,
-        AuthorizorBypass.class,
+    T getDelegate();
 
-})
-public class IsisModuleSecurityBypass {
+    public boolean isResolveObjectChangedEnabled();
+
+    public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled);
 
 }

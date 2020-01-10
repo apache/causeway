@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import org.apache.isis.runtime.services.IsisModuleRuntimeServices;
+import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
 
 @Configuration
 @Import({

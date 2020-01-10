@@ -16,30 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.bypass;
+package org.apache.isis.runtimeservices.menubars.bootstrap3;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
-import org.apache.isis.runtimeservices.IsisModuleRuntimeServices;
-import org.apache.isis.security.bypass.authentication.AuthenticatorBypass;
-import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
+class ServiceAndAction {
+    final String serviceName;
+    final ManagedObject serviceAdapter;
+    final ObjectAction objectAction;
 
-/**
- * Auth/bypass for eg. Integration Testing
- *  
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
-        IsisModuleRuntimeServices.class,
+    public boolean separator;
 
-        // @Service's
-        AuthenticatorBypass.class,
-        AuthorizorBypass.class,
+    ServiceAndAction(
+            final String serviceName,
+            final ManagedObject serviceAdapter,
+            final ObjectAction objectAction) {
+        this.serviceName = serviceName;
+        this.serviceAdapter = serviceAdapter;
+        this.objectAction = objectAction;
+    }
 
-})
-public class IsisModuleSecurityBypass {
+    @Override
+    public String toString() {
+        return serviceName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
+    }
 
 }
