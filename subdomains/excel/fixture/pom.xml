@@ -83,7 +83,7 @@
 
         <dependency>
             <groupId>org.apache.isis.testing</groupId>
-            <artifactId>isis-testing-fakedata-dom</artifactId>
+            <artifactId>isis-testing-fakedata-applib</artifactId>
         </dependency>
 -->
 

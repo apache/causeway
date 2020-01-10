@@ -25,7 +25,7 @@ content:
 
 # testing
     - url: .
-      start_path: testing/fakedata/impl/src/main/doc # testing
+      start_path: testing/fakedata/src/main/doc # testing
       branches: HEAD
     - url: .
       start_path: testing/fixtures/src/main/doc # testing

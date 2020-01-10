@@ -38,7 +38,19 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-viewer-restfulobjects-applib</artifactId>
 		</dependency>
-		
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-commons</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
 		<!-- TESTING -->
 		<dependency>
             <groupId>org.apache.isis.core</groupId>

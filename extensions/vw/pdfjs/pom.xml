@@ -38,6 +38,9 @@
     <modules>
         <module>applib</module>
         <module>metamodel</module>
+<!--
+        <module>fixtures</module>
+-->
         <module>ui</module>
     </modules>
 
