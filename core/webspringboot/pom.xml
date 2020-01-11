@@ -26,11 +26,11 @@
         <version>2.0.0-M3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-core-webboot-springboot</artifactId>
-    <name>Apache Isis Core - Web Boot using Spring Boot</name>
+    <artifactId>isis-core-webspringboot</artifactId>
+    <name>Apache Isis Core - Web Spring Boot</name>
     <description>
-        Defines the main Spring @Configuration, which transitively depends on the rest of core.
-        Viewers don't have dependencies on this module.
+        Bootstraps the webapp using Spring Bppt, by defining the main Spring @Configuration, transitively depending on
+        the rest of core. Viewers don't have dependencies on this module.
     </description>
 
     <properties>
