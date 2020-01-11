@@ -2,18 +2,11 @@ image:https://github.com/apache-isis-committers/isis-nightly/workflows/Nightly/b
 
 = Demo App
 
-This app demonstrates some of the new features available with http://isis.apache.org/[Apache Isis] version 2 (also including some from earlier framework versions).
-
-Apache Isis version 2 is still work in progress and only made available as milestone release yet.
-
-The app is built against the latest https://github.com/apache/isis/tree/v2[snapshot] builds of Apache Isis v2 and is published as a Docker image on https://hub.docker.com/u/apacheisis/[Docker hub].
-
+The Demo App demonstrates features available in Apache Isis, accompanied by introductory descriptions. While constant work in progress, it still may well be used to interactively learn the very basics of the framework and also to discover some of the more advanced features, the framework has to offer. See the Docker section below on how to get started.
 
 == Docker
 
-The demo-app demonstrates features available in Apache Isis, accompanied by introductory description text. While the demo-app is still work in progress, it might be used to learn the very basics of the framework interactively.
-
-NOTE: With the following *<tag>* is used as a placeholder for the docker image tag of your choice. Actual tag names might be changed without notice. Currently we have tag *springboot*. See https://hub.docker.com/r/apacheisis/isis-2-demo/tags/[apacheisis/isis-2-demo] (Docker-Hub)
+NOTE: Further on *<tag>* is used as a placeholder for the docker image tag of your choice. Actual tag names might be changed without notice. Currently we have tag *springboot*. See https://hub.docker.com/r/apacheisis/isis-2-demo/tags/[apacheisis/isis-2-demo] (Docker-Hub)
 
 === Prereqs
 
