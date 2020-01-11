@@ -94,7 +94,7 @@
 	</dependencies>
 
 	<modules>
-		<module>jaxrsclient/api</module>
+		<module>jaxrsclient</module>
 		<module>restclient</module>
 	</modules>
 

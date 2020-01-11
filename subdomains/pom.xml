@@ -161,7 +161,7 @@
 		<module>pdfbox</module>
 		<module>spring</module>
 		<module>xdocreport</module>
-		<module>zip/applib</module>
+		<module>zip</module>
 	</modules>
 
 	<profiles>

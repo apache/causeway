@@ -36,7 +36,6 @@
     </description>
 
 	<properties>
-		<revision>2.0.0-M3-SNAPSHOT</revision>
 
 		<isis.skipTests>false</isis.skipTests>
 		<maven.test.skip>${isis.skipTests}</maven.test.skip>
