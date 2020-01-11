@@ -18,6 +18,7 @@
 	<artifactId>isis-all</artifactId>
 	<version>2.0.0-M3-SNAPSHOT</version>
 
+
 	<packaging>pom</packaging>
 
 	<name>Apache Isis (Aggregator)</name>
