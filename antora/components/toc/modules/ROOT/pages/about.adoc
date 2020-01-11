@@ -35,12 +35,22 @@
 [discrete]
 == Guides
 
+_Core_
+
 * *xref:userguide:ROOT:about.adoc[User Guide]*
 * *xref:refguide:ROOT:about.adoc[Reference Guide]*
-* xref:security:ROOT:about.adoc[Security Guide]
-** xref:security:ROOT:about.adoc[SecMan (extension)]
 * *xref:testing:ROOT:about.adoc[Testing]*
 
+_Libraries_
+
+*  xref:subdomains:ROOT:about.adoc[Subdomains]
+*  xref:valuetypes:ROOT:about.adoc[Value Types]
+*  xref:mappings:ROOT:about.adoc[Bounded Context Mappings]
+
+_Resources_
+
+* *xref:toc:devguide:about.adoc[Developers' Guide]*
+** xref:toc:mavendeps:about.adoc[Maven dependencies]
 
 |
 [discrete]
@@ -51,25 +61,17 @@ _Viewers_
 * xref:vw:ROOT:about.adoc[Wicket UI]
 * xref:vro:ROOT:about.adoc[Restful Objects (REST API)]
 
+_Security_
+
+* xref:security:ROOT:about.adoc[Security Guide]
+
 _Persistence_
 
 * xref:pjdo:ROOT:about.adoc[DataNucleus Object Store]
 
+_Extensions_
 
-
-|
-[discrete]
-== Catalogs
-
-*  xref:subdomains:ROOT:about.adoc[Subdomains]
-*  xref:valuetypes:ROOT:about.adoc[Value Types]
-*  xref:extensions:ROOT:about.adoc[Extensions]
-*  xref:mappings:ROOT:about.adoc[Mappings between Bounded Contexts]
-
-_Also:_
-
-*  xref:incubator:ROOT:about.adoc[Incubator Catalog]
-*  xref:legacy:ROOT:about.adoc[Legacy Catalog]
+*  xref:extensions:ROOT:about.adoc[Extensions Catalog]
 
 |
 [discrete]
@@ -80,16 +82,9 @@ _Also:_
 * link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA]
 
 
-_Resources_
-
-
-* *xref:toc:devguide:about.adoc[Developers' Guide]*
-** xref:toc:mavendeps:about.adoc[Maven dependencies]
 * link:https://stackoverflow.com/questions/tagged/isis[Stack Overflow]
-* link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
-* link:https://twitter.com/ApacheIsis[Twitter]
 
-|
+
 [discrete]
 == Releases
 
@@ -107,23 +102,9 @@ _Nightly Builds (not ASF)_
 
 |
 [discrete]
-== Internal
+== Further Resources
 
-*  xref:toc:comguide:about.adoc[Committers' Guide]
-** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
-** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
-* xref:core:ROOT:about.adoc[Core Framework]
-* xref:more-thanks/more-thanks.adoc[Acknowledgements]
-
-
-_Analysis_
-
-* link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
-* link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
-
-|
-[discrete]
-== Further reading
+_Reading_
 
 * xref:going-deeper/articles-and-presentations.adoc[Articles & Presentations]
 * xref:going-deeper/books.adoc[Books]
@@ -134,6 +115,30 @@ _Academia_
 * link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD] (Pawson)
 * https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Bachelors dissertation, Ginn)
 * https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
+
+
+|
+[discrete]
+== Internal
+
+*  xref:toc:comguide:about.adoc[Committers' Guide]
+** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
+** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
+* xref:core:ROOT:about.adoc[Core Design]
+* xref:more-thanks/more-thanks.adoc[Acknowledgements]
+
+_More Libraries_
+
+*  xref:incubator:ROOT:about.adoc[Incubator Catalog]
+*  xref:legacy:ROOT:about.adoc[Legacy Catalog]
+
+
+_Analysis_
+
+* link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
+* link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
+
+
 
 
 |
@@ -156,7 +161,7 @@ _Experiments_
 * https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
 
 
-|
+
 [discrete]
 == 3rd party
 
@@ -165,9 +170,6 @@ _Restful Objects viewers_
 * link:https://github.com/sebastianslutzky/AngularViewerCLI[AngularViewer]
 * link:https://github.com/sebastianslutzky/rob[ROB]
 * link:https://github.com/joerg-rade/kroviz[Kroviz]
-
-_nb: not ASF_
-
 
 
 |===

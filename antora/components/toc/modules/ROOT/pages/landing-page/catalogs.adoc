@@ -3,10 +3,6 @@
 
 Included with the framework are a number of catalogs:
 
-* xref:extensions:ROOT:about.adoc[Extensions]
-+
-Extends the functionality of particular components of the framework itself.
-For example, the "Excel Download" allows collections to be downloaded as an Excel `.xlsx` spreadsheet.
 
 * xref:subdomains:ROOT:about.adoc[Subdomains]
 +

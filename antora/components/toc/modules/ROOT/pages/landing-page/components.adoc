@@ -7,10 +7,35 @@ This page provides user/config guides for each of the main components of the fra
 
 == Viewers
 
-* xref:vw:ROOT:about.adoc[Wicket UI]
+The framework provides two viewers that will automatically render the domain objects in your application into the presentation layer:
+
+* xref:vw:ROOT:about.adoc[Wicket]
++
+Provides a human-usable UI, styled using Bootstrap.
+
 * xref:vro:ROOT:about.adoc[Restful Objects (REST API)]
++
+Presents your domain objects in JSON representations, conformant either with link:http://restfulobjects.org[Restful Objects] specification or one of a number of other representations.
+
+
+== Security
+
+The xref:security:ROOT:about.adoc[Security Guide] describes how to configure each of the various security implementations that integrate with Apache Isis.
+
 
 == Persistence
 
-*  xref:pjdo:ROOT:about.adoc[DataNucleus Object Store]
+The framework allows xref:userguide:fun:building-blocks/types-of-domain-objects/domain-entities.adoc[domain entities] to be persisted using the xref:pjdo:ROOT:about.adoc[DataNucleus Object Store], for use with the JDO API.
+
+Alternatively, if you restrict yourself to xref:userguide:fun:building-blocks/types-of-domain-objects/view-models.adoc[view models] then these can be persisted with any data persistence technology that is supported by Spring Boot.
+
+
+== Extensions
+
+The xref:extensions:ROOT:about.adoc[Extensions Catalog] describes a number of extensions for the various components of the framework itself.
+
+For example, the "Excel Download" extension allows collections to be downloaded as an Excel `.xlsx` spreadsheet in the Wicket viewer.
+
+As well as the current extensions,  the xref:incubator:ROOT:about.adoc[Incubator Catalog] has additional extensions that may end up graduating to the extensions catalog, while the xref:legacy:ROOT:about.adoc[Legacy Catalog] may contain extensions that have been deprecated and are on the way out.
+
 

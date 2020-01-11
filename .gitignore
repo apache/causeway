@@ -50,3 +50,4 @@ rebel.xml
 .flattened-pom.xml
 
 /site*.yml
+/.antora-cache-dir/
