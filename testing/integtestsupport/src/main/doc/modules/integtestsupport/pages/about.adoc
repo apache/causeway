@@ -15,9 +15,9 @@ We'll get to all that shortly, but let's start by taking a look at what a typica
 
 
 
-include::./integ-test-support/typical-usage.adoc[leveloffset=+1]
-include::./integ-test-support/bootstrapping.adoc[leveloffset=+1]
-include::./integ-test-support/abstract-class.adoc[leveloffset=+1]
-include::./integ-test-support/configuration-properties.adoc[leveloffset=+1]
-include::./integ-test-support/wrapper-factory.adoc[leveloffset=+1]
-include::./integ-test-support/maven-configuration.adoc[leveloffset=+1]
+include::typical-usage.adoc[leveloffset=+1]
+include::bootstrapping.adoc[leveloffset=+1]
+include::abstract-class.adoc[leveloffset=+1]
+include::configuration-properties.adoc[leveloffset=+1]
+include::wrapper-factory.adoc[leveloffset=+1]
+include::maven-configuration.adoc[leveloffset=+1]

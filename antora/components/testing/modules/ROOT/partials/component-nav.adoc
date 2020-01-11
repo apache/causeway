@@ -1,7 +1,6 @@
 include::testing:ROOT:partial$module-nav.adoc[]
 include::testing:unittestsupport:partial$module-nav.adoc[]
-include::testing:unittestsupport-ext:partial$module-nav.adoc[]
-include::testing:integ-test-support:partial$module-nav.adoc[]
+include::testing:integtestsupport:partial$module-nav.adoc[]
 include::testing:specsupport:partial$module-nav.adoc[]
 include::testing:fixtures:partial$module-nav.adoc[]
 include::testing:fakedata:partial$module-nav.adoc[]

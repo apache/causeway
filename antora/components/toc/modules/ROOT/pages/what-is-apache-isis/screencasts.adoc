@@ -95,7 +95,7 @@ Writing xref:testing:unittestsupport:about.adoc[unit tests] for a domain object 
 
 
 |link:https://www.youtube.com/watch?v=-lAt4UWiBjE[008^] +
-Writing end-to-end xref:testing:integ-test-support:about.adoc[integration tests] for a domain object responsibility
+Writing end-to-end xref:testing:integtestsupport:about.adoc[integration tests] for a domain object responsibility
 ||x|||||||||
 
 
@@ -278,7 +278,7 @@ Using the xref:refguide:applib-ant:Title.adoc[`@Title`] annotation (instead of t
 
 
 |link:https://www.youtube.com/watch?v=yi52Gbd3lmY[027^] +
-How to write an xref:testing:integ-test-support:about.adoc[integration test] for an xref:refguide:applib-ant:Mixin.adoc[mixin].
+How to write an xref:testing:integtestsupport:about.adoc[integration test] for an xref:refguide:applib-ant:Mixin.adoc[mixin].
 ||x|||||||||
 
 

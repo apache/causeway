@@ -6,14 +6,14 @@
 
 When writing integration tests, it's easiest to inherit from the `IntegrationTestAbstract3` base class.
 
-This base class xref:testing:integ-test-support:about.adoc#bootstrapping[bootstraps] the framework (caching the framework on a thread-local), and provides various utility methods and framework-provided services for use by your application's subclass tests.
+This base class xref:testing:integtestsupport:about.adoc#bootstrapping[bootstraps] the framework (caching the framework on a thread-local), and provides various utility methods and framework-provided services for use by your application's subclass tests.
 
 
 
 == `IntegrationTestAbstract3`
 
 We recommend that your integration tests inherit from Apache Isis' `IntegrationTestAbstract3` class.
-The primary benefit over its predecessor, `IntegrationTestAbstract2` (discussed xref:testing:integ-test-support:about.adoc#IntegrationTestAbstract2[below] is that it allows the test to be bootstrapped by passing in a `Module` rather than an `AppManifest`.
+The primary benefit over its predecessor, `IntegrationTestAbstract2` (discussed xref:testing:integtestsupport:about.adoc#IntegrationTestAbstract2[below] is that it allows the test to be bootstrapped by passing in a `Module` rather than an `AppManifest`.
 
 For example:
 

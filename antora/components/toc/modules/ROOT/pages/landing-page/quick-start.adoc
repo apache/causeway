@@ -37,7 +37,7 @@ mvn clean install
 mvn -pl webapp spring-boot:run
 ----
 +
-It also includes some xref:testing:integ-test-support[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:spec-support[BDD (Cucumber)] specs.
+It also includes some xref:testing:integtestsupport:about.adoc[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:specsupport[BDD (Cucumber)] specs.
 
 In both cases you can bump to newer versions of the framework just by updating the `<version>` of the `<parent>`:
 

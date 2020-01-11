@@ -125,7 +125,7 @@ There are two sets of changes relating to integration tests.
 
 === Builder
 
-The `IsisSystemForTest.Builder` class is used to link:https://isis.apache.org/versions/1.13.0/guides/ugtst/ugtst.html#_ugtst_integ-test-support_bootstrapping[bootstrap integration tests].
+The `IsisSystemForTest.Builder` class is used to bootstrap integration tests.
 
 A number of the clauses within this class have been removed:
 
