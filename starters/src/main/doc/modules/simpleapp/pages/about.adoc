@@ -532,7 +532,7 @@ The files in `src/main/jettyconsole` provide a splash image (if not run in headl
 This uses the Dockerfile residing in `docker/Dockerfile` (under `src/main/resources`).
 
 // FIXME: currently removed in v2, may reinstate
-//* also, the xref:refguide:mvn:about.adoc[Apache Isis Maven plugin] is also configured to generate a xref:refguide:mvn:swagger.adoc[swagger] spec file for the entire application, in the `xxx-corewebapp` module
+//* also, the xref:refguide:mvn:about.adoc[Apache Isis Maven plugin] is also configured to generate a xref:refguide:mvn:swagger.adoc[swagger] spec file for the entire application, in the `xxx-webapp` module
 
 Under `src/main/resources` there is:
 

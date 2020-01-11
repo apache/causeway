@@ -95,11 +95,11 @@ import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
  * {@link #setResourcePath(String)} to an 'ini' file with a [roles] section, eg:
  * <p/>
  * <pre>
- * ldapRealm.resourcePath=classpath:corewebapp/myroles.ini
+ * ldapRealm.resourcePath=classpath:webapp/myroles.ini
  * </pre>
  * <p/>
  * <p>
- * where <tt>myroles.ini</tt> is in <tt>src/main/resources/corewebapp</tt>, and takes the form:
+ * where <tt>myroles.ini</tt> is in <tt>src/main/resources/webapp</tt>, and takes the form:
  * <p/>
  * <pre>
  * [roles]
@@ -416,11 +416,11 @@ public class IsisLdapRealm extends DefaultLdapRealm {
 
     /**
      * <pre>
-     * ldapRealm.resourcePath=classpath:corewebapp/myroles.ini
+     * ldapRealm.resourcePath=classpath:webapp/myroles.ini
      * </pre>
      * <p/>
      * <p/>
-     * where <tt>myroles.ini</tt> is in <tt>src/main/resources/corewebapp</tt>, and takes the form:
+     * where <tt>myroles.ini</tt> is in <tt>src/main/resources/webapp</tt>, and takes the form:
      * <p/>
      * <pre>
      * [roles]

@@ -39,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * Specifically, if the request is to "/" but the Accept header is anything
  * other than "application/json" (eg is set to "text/html" and suggesting that
- * the user is using a browser to access the corewebapp) then the filter redirects
+ * the user is using a browser to access the core webapp) then the filter redirects
  * to /index.html (the documentation pages).
  *
  * <p>

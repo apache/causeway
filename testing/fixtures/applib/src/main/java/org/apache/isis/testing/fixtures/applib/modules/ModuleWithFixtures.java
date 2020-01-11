@@ -35,7 +35,7 @@ public interface ModuleWithFixtures {
      *
      * <p>
      * These are automatically executed whenever running integration tests (but are ignored when bootstrapping the
-     * runtime as a corewebapp).
+     * runtime as a webapp).
      * </p>
      *
      * <p>
@@ -52,7 +52,7 @@ public interface ModuleWithFixtures {
      *
      * <p>
      * These are automatically executed whenever running integration tests (but are ignored when bootstrapping the
-     * runtime as a corewebapp).
+     * runtime as a webapp).
      * </p>
      *
      * <p>

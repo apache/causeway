@@ -134,7 +134,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
 
     /**
      * Init parameter key for which extensions should be ignored (typically,
-     * mappings for other viewers within the corewebapp context).
+     * mappings for other viewers within the webapp context).
      *
      * <p>
      * It can also be used to specify ignored static resources (though putting
