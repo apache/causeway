@@ -49,6 +49,6 @@ import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
         PersistenceEventService_Spring.class,
 
 })
-public class IsisCoreModuleRuntime {
+public class IsisModuleCoreRuntime {
 
 }

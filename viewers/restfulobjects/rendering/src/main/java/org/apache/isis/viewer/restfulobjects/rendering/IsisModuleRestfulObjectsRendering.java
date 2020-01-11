@@ -3,8 +3,8 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.runtime.IsisCoreModuleRuntime;
-import org.apache.isis.viewer.restfulobjects.applib.IsisModuleRestfulObjectsApplib;
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
+import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator;
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
@@ -21,8 +21,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
 @Configuration
 @Import({
         // modules
-        IsisModuleRestfulObjectsApplib.class,
-        IsisCoreModuleRuntime.class,
+        IsisModuleViewerRestfulObjectsApplib.class,
+        IsisModuleCoreRuntime.class,
 
         // @Component's
         ClassExcluderDefault.class,

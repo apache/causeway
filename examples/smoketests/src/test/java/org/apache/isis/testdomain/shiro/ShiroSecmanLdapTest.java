@@ -42,10 +42,10 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.jdo.IsisModuleSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.model.IsisModuleSecmanModel;
-import org.apache.isis.extensions.secman.shiro.IsisModuleSecmanRealmShiro;
+import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
+import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
@@ -72,10 +72,10 @@ import lombok.val;
     LdapServerService.class,
 
     // Security Manager Extension (secman)
-    IsisModuleSecmanModel.class,
-    IsisModuleSecmanRealmShiro.class,
-    IsisModuleSecmanPersistenceJdo.class,
-    IsisModuleSecmanEncryptionJbcrypt.class,
+    IsisModuleExtSecmanModel.class,
+    IsisModuleExtSecmanRealmShiro.class,
+    IsisModuleExtSecmanPersistenceJdo.class,
+    IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
 @Incubating("does not work with surefire")
 class ShiroSecmanLdapTest extends AbstractShiroTest {

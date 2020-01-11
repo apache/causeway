@@ -66,6 +66,6 @@ import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
         AcceptHeaderServiceForRest.ResponseFilter.class,
 
 })
-public class IsisModuleRestfulObjectsViewer {
+public class IsisModuleViewerRestfulObjectsViewer {
 
 }

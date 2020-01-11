@@ -16,17 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.shiro;
+package org.apache.isis.testing.fixtures.applib;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.secman.shiro.services.SecurityRealmServiceUsingShiro;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.ExecutionParametersService;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.fixtures.applib.legacy.queryresultscache.QueryResultsCacheControlDefault;
+import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService;
+import org.apache.isis.subdomains.spring.applib.IsisModuleSubdomainsSpringApplib;
+import org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService;
 
 @Configuration
 @Import({
-    SecurityRealmServiceUsingShiro.class
+        // modules
+        IsisModuleSubdomainsSpringApplib.class,
+
+        // @Service's
+        FixturesLifecycleService.class,
+        ExecutionParametersService.class,
+        ModuleWithFixturesService.class,
+        QueryResultsCacheControlDefault.class,
+
+        // @DomainService's
+        FixtureScripts.class,
 })
-public class IsisModuleSecmanRealmShiro {
+public class IsisModuleTestingFixturesApplib {
 
 }

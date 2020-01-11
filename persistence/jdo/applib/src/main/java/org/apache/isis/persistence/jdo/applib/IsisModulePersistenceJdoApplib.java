@@ -16,16 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model;
+package org.apache.isis.persistence.jdo.applib;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(
-        basePackageClasses= {
-                IsisModuleSecmanModel.class
-        })
-public class IsisModuleSecmanModel {
-
+public class IsisModulePersistenceJdoApplib {
 }

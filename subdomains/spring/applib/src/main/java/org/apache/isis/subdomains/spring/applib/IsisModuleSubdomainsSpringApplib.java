@@ -27,6 +27,6 @@ import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
 @Import({
     SpringBeansService.class
 })
-public class IsisModuleSubSpringApplib {
+public class IsisModuleSubdomainsSpringApplib {
 
 }

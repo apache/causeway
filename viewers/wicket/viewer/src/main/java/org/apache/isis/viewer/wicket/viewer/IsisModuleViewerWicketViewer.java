@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.viewer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.viewer.wicket.ui.IsisModuleWicketUi;
+import org.apache.isis.viewer.wicket.ui.IsisModuleViewerWicketUi;
 import org.apache.isis.viewer.wicket.viewer.mixins.Object_clearHints;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
@@ -46,7 +46,7 @@ import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
 @Configuration
 @Import({
         // modules
-        IsisModuleWicketUi.class,
+        IsisModuleViewerWicketUi.class,
 
         // @Service's
         BookmarkUiServiceWicket.class,
@@ -68,6 +68,6 @@ import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
         Object_clearHints.class,
 
 })
-public class IsisModuleWicketViewer {
+public class IsisModuleViewerWicketViewer {
 
 }

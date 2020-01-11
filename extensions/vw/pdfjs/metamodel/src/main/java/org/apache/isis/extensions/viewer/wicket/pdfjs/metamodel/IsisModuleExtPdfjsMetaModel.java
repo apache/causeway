@@ -10,5 +10,5 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewe
         // @Component's
         PdfJsViewerFacetFromAnnotationFactory.Register.class
 })
-public class IsisModuleExtViewerWicketPdfjsMetaModel {
+public class IsisModuleExtPdfjsMetaModel {
 }

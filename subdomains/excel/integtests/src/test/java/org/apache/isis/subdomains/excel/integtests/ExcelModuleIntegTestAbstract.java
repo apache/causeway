@@ -13,9 +13,9 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
-import org.apache.isis.subdomains.excel.fixtures.IsisModuleSubExcelFixtures;
+import org.apache.isis.subdomains.excel.fixtures.IsisModuleSubdomainsExcelFixtures;
 import org.apache.isis.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTstFixturesApplib;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @SpringBootTest(
         classes = ExcelModuleIntegTestAbstract.AppManifest.class
@@ -35,13 +35,13 @@ public abstract class ExcelModuleIntegTestAbstract extends IsisIntegrationTestAb
             IsisModuleCoreWebSpringBoot.class,
             IsisModuleSecurityBypass.class,
             IsisModuleJdoDataNucleus5.class,
-            IsisModuleTstFixturesApplib.class,
+            IsisModuleTestingFixturesApplib.class,
 
             /*
             new ExcelFixturesModule(),
             FakeDataModule.class
              */
-            IsisModuleSubExcelFixtures.class
+            IsisModuleSubdomainsExcelFixtures.class
     })
     public static class AppManifest {
     }

@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleRestfulObjectsJaxrsResteasy4;
+import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 
 import lombok.val;
 
@@ -45,7 +45,7 @@ import lombok.val;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Import({
     Configuration_usingJdo.class,
-    IsisModuleRestfulObjectsJaxrsResteasy4.class
+    IsisModuleViewerRestfulObjectsJaxrsResteasy4.class
 })
 class RestServiceTest {
 

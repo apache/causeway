@@ -16,13 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.pdfbox.applib;
+package org.apache.isis.extensions.secman.jdo;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan
-public class IsisModuleSubPdfBoxApplib {
+@ComponentScan(
+        basePackageClasses= {
+                IsisModuleExtSecmanPersistenceJdo.class
+        })
+public class IsisModuleExtSecmanPersistenceJdo {
 
 }

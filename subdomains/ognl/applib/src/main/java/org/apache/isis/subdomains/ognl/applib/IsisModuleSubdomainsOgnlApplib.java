@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.xdocreport.applib;
+package org.apache.isis.subdomains.ognl.applib;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan
-public class IsisModuleSubXDocReportApplib {
+public class IsisModuleSubdomainsOgnlApplib {
 
 }

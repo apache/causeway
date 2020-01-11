@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.persistence.jdo.applib.IsisModuleJdoApplib;
+import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.JdoPersistenceLifecycleService;
 import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerCompositeForJdoObjectStore;
@@ -39,13 +39,13 @@ import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingMode
 import org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory5;
-import org.apache.isis.core.runtime.IsisCoreModuleRuntime;
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
 @Configuration
 @Import({
         // modules
-        IsisCoreModuleRuntime.class,
-        IsisModuleJdoApplib.class,
+        IsisModuleCoreRuntime.class,
+        IsisModulePersistenceJdoApplib.class,
 
         // @Component's
         JdoProgrammingModelPlugin.class,

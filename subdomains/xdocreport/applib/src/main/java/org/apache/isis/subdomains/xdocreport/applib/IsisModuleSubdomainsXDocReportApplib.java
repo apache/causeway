@@ -16,17 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.encryption.jbcrypt;
+package org.apache.isis.subdomains.xdocreport.applib;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.apache.isis.extensions.secman.encryption.jbcrypt.services.PasswordEncryptionServiceUsingJBcrypt;
 
 @Configuration
-@Import({
-    PasswordEncryptionServiceUsingJBcrypt.class
-})
-public class IsisModuleSecmanEncryptionJbcrypt {
+@ComponentScan
+public class IsisModuleSubdomainsXDocReportApplib {
 
 }

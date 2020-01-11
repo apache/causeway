@@ -16,12 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.docx.applib;
+package org.apache.isis.extensions.viewer.wicket.exceldownload.ui;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory;
 
 @Configuration
-public class IsisModuleSubDocxApplib {
-
+@Import({
+        // @Component's
+        CollectionContentsAsExcelFactory.class
+})
+public class IsisModuleExtExcelDownloadUi {
 }

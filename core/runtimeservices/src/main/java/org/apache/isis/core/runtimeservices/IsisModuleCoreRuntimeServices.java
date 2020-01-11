@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
-import org.apache.isis.core.runtime.IsisCoreModuleRuntime;
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.auth.AuthenticationSessionProviderDefault;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceInternalDefault;
 import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
@@ -53,7 +53,7 @@ import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
 @Configuration
 @Import({
         // modules
-        IsisCoreModuleRuntime.class,
+        IsisModuleCoreRuntime.class,
         IsisModuleCoreCodegenByteBuddy.class,
 
         // @Service's

@@ -28,7 +28,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTstFixturesApplib;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
@@ -44,7 +44,7 @@ import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
     IsisModuleSecurityShiro.class,
 
     IsisModuleJdoDataNucleus5.class,
-    IsisModuleTstFixturesApplib.class
+    IsisModuleTestingFixturesApplib.class
 })
 @ComponentScan(
         basePackageClasses= {               

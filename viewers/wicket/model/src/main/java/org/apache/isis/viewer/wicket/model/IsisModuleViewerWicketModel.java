@@ -10,5 +10,5 @@ import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
         // modules
         IsisModuleCoreWebapp.class,
 })
-public class IsisModuleWicketModel {
+public class IsisModuleViewerWicketModel {
 }

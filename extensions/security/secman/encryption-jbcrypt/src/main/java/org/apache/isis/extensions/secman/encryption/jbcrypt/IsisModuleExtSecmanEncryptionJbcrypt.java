@@ -16,17 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.viewer.wicket.exceldownload.ui;
+package org.apache.isis.extensions.secman.encryption.jbcrypt;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory;
+import org.apache.isis.extensions.secman.encryption.jbcrypt.services.PasswordEncryptionServiceUsingJBcrypt;
 
 @Configuration
 @Import({
-        // @Component's
-        CollectionContentsAsExcelFactory.class
+    PasswordEncryptionServiceUsingJBcrypt.class
 })
-public class IsisModuleExtViewerWicketExcelDownloadUi {
+public class IsisModuleExtSecmanEncryptionJbcrypt {
+
 }

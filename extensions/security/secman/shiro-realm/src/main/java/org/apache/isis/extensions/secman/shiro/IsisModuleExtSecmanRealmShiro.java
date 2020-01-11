@@ -16,10 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.applib;
+package org.apache.isis.extensions.secman.shiro;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.secman.shiro.services.SecurityRealmServiceUsingShiro;
 
 @Configuration
-public class IsisModuleJdoApplib {
+@Import({
+    SecurityRealmServiceUsingShiro.class
+})
+public class IsisModuleExtSecmanRealmShiro {
+
 }

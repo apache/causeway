@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo;
+package org.apache.isis.extensions.secman.model;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +24,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(
         basePackageClasses= {
-                IsisModuleSecmanPersistenceJdo.class
+                IsisModuleExtSecmanModel.class
         })
-public class IsisModuleSecmanPersistenceJdo {
+public class IsisModuleExtSecmanModel {
 
 }

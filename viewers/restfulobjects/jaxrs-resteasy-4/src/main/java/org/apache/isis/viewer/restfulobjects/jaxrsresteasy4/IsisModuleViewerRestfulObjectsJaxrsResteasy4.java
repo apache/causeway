@@ -5,12 +5,12 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.conneg.RestfulObjectsJaxbWriterForXml;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.webmodule.WebModuleJaxrsResteasy4;
-import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
+import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
 
 @Configuration
 @Import({
         // modules
-        IsisModuleRestfulObjectsViewer.class,
+        IsisModuleViewerRestfulObjectsViewer.class,
 
         // @Service's
         WebModuleJaxrsResteasy4.class,
@@ -20,6 +20,6 @@ import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsView
 
 
 })
-public class IsisModuleRestfulObjectsJaxrsResteasy4 {
+public class IsisModuleViewerRestfulObjectsJaxrsResteasy4 {
 
 }

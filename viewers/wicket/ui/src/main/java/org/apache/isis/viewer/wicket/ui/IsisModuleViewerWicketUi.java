@@ -16,32 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib;
+package org.apache.isis.viewer.wicket.ui;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.ExecutionParametersService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.testing.fixtures.applib.legacy.queryresultscache.QueryResultsCacheControlDefault;
-import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService;
-import org.apache.isis.subdomains.spring.applib.IsisModuleSubSpringApplib;
-import org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService;
+import org.apache.isis.viewer.wicket.model.IsisModuleViewerWicketModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault;
 
 @Configuration
 @Import({
         // modules
-        IsisModuleSubSpringApplib.class,
+        IsisModuleViewerWicketModel.class,
 
         // @Service's
-        FixturesLifecycleService.class,
-        ExecutionParametersService.class,
-        ModuleWithFixturesService.class,
-        QueryResultsCacheControlDefault.class,
-
-        // @DomainService's
-        FixtureScripts.class,
+        IsisWicketThemeSupportDefault.class,
 })
-public class IsisModuleTstFixturesApplib {
-
+public class IsisModuleViewerWicketUi {
 }

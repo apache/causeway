@@ -31,22 +31,22 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTstFixturesApplib;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.jdo.IsisModuleSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.model.IsisModuleSecmanModel;
-import org.apache.isis.extensions.secman.shiro.IsisModuleSecmanRealmShiro;
+import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
+import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.valuetypes.sse.applib.IsisModuleValSseApplib;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.valuetypes.asciidoc.ui.IsisModuleValAsciidocUi;
-import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleRestfulObjectsJaxrsResteasy4;
-import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleRestfulObjectsViewer;
-import org.apache.isis.viewer.wicket.viewer.IsisModuleWicketViewer;
+import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
+import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
 
 import demoapp.dom.DemoModule;
@@ -86,21 +86,21 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleCoreWebSpringBoot.class,
         IsisModuleSecurityShiro.class,
         IsisModuleJdoDataNucleus5.class,
-        IsisModuleWicketViewer.class,
+        IsisModuleViewerWicketViewer.class,
         IsisModuleValSseApplib.class, // server sent events
         IsisModuleValAsciidocUi.class, // ascii-doc rendering support
         
         // REST
-        IsisModuleRestfulObjectsViewer.class,
-        IsisModuleRestfulObjectsJaxrsResteasy4.class,
+        IsisModuleViewerRestfulObjectsViewer.class,
+        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
         // Security Manager Extension (secman)
-        IsisModuleSecmanModel.class,
-        IsisModuleSecmanRealmShiro.class,
-        IsisModuleSecmanPersistenceJdo.class,
-        IsisModuleSecmanEncryptionJbcrypt.class,
+        IsisModuleExtSecmanModel.class,
+        IsisModuleExtSecmanRealmShiro.class,
+        IsisModuleExtSecmanPersistenceJdo.class,
+        IsisModuleExtSecmanEncryptionJbcrypt.class,
 
-        IsisModuleTstFixturesApplib.class,
+        IsisModuleTestingFixturesApplib.class,
 
         IsisModuleIncModelMetaModel.class, // @Model support (incubator)
         

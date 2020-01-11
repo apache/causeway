@@ -21,7 +21,7 @@ package org.apache.isis.core.webapp;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.runtime.IsisCoreModuleRuntime;
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.isis.core.webapp.modules.templresources.WebModuleTemplateResources;
 import org.apache.isis.core.webapp.health.HealthIndicatorUsingHealthCheckService;
@@ -30,7 +30,7 @@ import org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer;
 @Configuration
 @Import({
         // modules
-        IsisCoreModuleRuntime.class,
+        IsisModuleCoreRuntime.class,
 
         // @Service's
         WebModuleLogOnExceptionLogger.class,
