@@ -27,6 +27,7 @@
         <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
+    <groupId>org.apache.isis.security</groupId>
     <artifactId>isis-security-shiro</artifactId>
 
     <name>Apache Isis Security - Shiro</name>
@@ -44,7 +45,7 @@
     	<!-- for benefit of application developers, using scope=import -->
     	<dependencies>
             <dependency>
-                <groupId>org.apache.isis.core</groupId>
+                <groupId>org.apache.isis.security</groupId>
                 <artifactId>isis-security-shiro</artifactId>
                 <version>2.0.0-M3-SNAPSHOT</version>
             </dependency>

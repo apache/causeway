@@ -78,7 +78,7 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
+			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-bypass</artifactId>
 		</dependency>
 

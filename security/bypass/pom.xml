@@ -27,6 +27,7 @@
         <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
+    <groupId>org.apache.isis.security</groupId>
     <artifactId>isis-security-bypass</artifactId>
     <name>Apache Isis Security - Bypass</name>
 

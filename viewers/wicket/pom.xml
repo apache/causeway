@@ -28,6 +28,7 @@
         <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
+    <groupId>org.apache.isis.viewer</groupId>
     <artifactId>isis-viewer-wicket</artifactId>
     <name>Apache Isis Viewer - Wicket</name>
 

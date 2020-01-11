@@ -809,36 +809,36 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-viewer</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-viewer</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
@@ -850,17 +850,17 @@
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.security</groupId>
 				<artifactId>isis-security-bypass</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.security</groupId>
 				<artifactId>isis-security-shiro</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.security</groupId>
 				<artifactId>isis-security-keycloak</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
@@ -880,41 +880,41 @@
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-viewer</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-viewer</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>test</scope>

@@ -21,7 +21,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.core</groupId>
+        <groupId>org.apache.isis.viewer</groupId>
         <artifactId>isis-viewer-restfulobjects</artifactId>
         <version>2.0.0-M3-SNAPSHOT</version>
     </parent>
@@ -42,7 +42,7 @@
             <artifactId>isis-core-runtime</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
+            <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-restfulobjects-applib</artifactId>
         </dependency>
         
