@@ -6,7 +6,7 @@ This app demonstrates some of the new features available with http://isis.apache
 
 Apache Isis version 2 is still work in progress and only made available as milestone release yet.
 
-The app is built against the latest https://github.com/apache/isis/tree/v2[snapshot] builds of Apache Isis v2 and is published as a Docker image on https://hub.docker.com/repository/docker/apacheisis/isis-2-demo[Docker hub].
+The app is built against the latest https://github.com/apache/isis/tree/v2[snapshot] builds of Apache Isis v2 and is published as a Docker image on https://hub.docker.com/u/apacheisis/[Docker hub].
 
 
 == Docker
