@@ -20,6 +20,7 @@
 		<relativePath>../../core/pom.xml</relativePath>
 	</parent>
 
+	<groupId>org.apache.isis.persistence</groupId>
 	<artifactId>isis-persistence-jdo</artifactId>
 
 	<name>Apache Isis Persistence - JDO</name>
