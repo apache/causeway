@@ -19,7 +19,6 @@
 package org.apache.isis.core.webapp.webappctx;
 
 import java.util.EventListener;
-import java.util.concurrent.atomic.LongAdder;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -71,8 +70,10 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
 
-        // onStartup(...) must be a one shot, otherwise just ignore
+        // onStartup(...) must be a one shot, otherwise ignore with warning
         if(!oneshot.shoot()) {
+            log.warn("Spring tries to startup this initializer more than once."
+                    + " This is most likely a Spring configuration issue, check your bootstrapping setup.");
             return;
         }
         
