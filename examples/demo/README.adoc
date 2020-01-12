@@ -2,7 +2,9 @@ image:https://github.com/apache-isis-committers/isis-nightly/workflows/Nightly/b
 
 = Demo App
 
-The Demo App demonstrates features available in Apache Isis, accompanied by introductory descriptions. While constant work in progress, it still may well be used to interactively learn the very basics and also to discover some of the more advanced features, the framework has to offer. See the Docker section below on how to get started.
+The Demo App is an introduction to the features and components available in Apache Isis.
+
+It allows you to learn the very basics and also to discover some of the more advanced features, the framework has to offer. See the Docker section below on how to get started. 
 
 == Docker
 
@@ -61,10 +63,9 @@ docker run --name demo -it -p8080:8080 apacheisis/isis-2-demo:<tag>
 
 == Contributing
 
-If you like to get involved (with this demo), please feel free to open new issues https://github.com/andi-huber/isis-2-roadmap/issues[here] or just join the discussion and provide feedback.
+If you like to get involved quickly, please feel free to open new pull requests (at github) or just join the discussion and provide feedback.
 
 If you are interested in contributing to Apache Isis, see the https://isis.apache.org/guides/dg/dg.html[Developers' Guide] for details. 
-
 
 == Credits
 
