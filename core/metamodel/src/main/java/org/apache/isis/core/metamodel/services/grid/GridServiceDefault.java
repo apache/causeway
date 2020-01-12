@@ -159,7 +159,7 @@ public class GridServiceDefault implements GridService {
             }
         }
         return parts.stream()
-                .collect(Collectors.joining(""));
+                .collect(Collectors.joining(" "));
     }
 
     ////////////////////////////////////////////////////////

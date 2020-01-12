@@ -3,10 +3,12 @@ package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
 import java.util.Objects;
 
 import javax.activation.MimeType;
+import javax.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -22,6 +24,7 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    @Inject
     public PdfJsViewerPanelComponentFactory() {
         super(ComponentType.SCALAR_NAME_AND_VALUE, PdfJsViewerPanel.class);
     }

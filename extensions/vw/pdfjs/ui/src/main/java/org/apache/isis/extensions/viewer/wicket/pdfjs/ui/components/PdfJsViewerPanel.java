@@ -64,9 +64,6 @@ class PdfJsViewerPanel extends ScalarPanelAbstract implements IRequestListener {
 
     String pdfJsViewerPanelCallbacksTemplateJs;
 
-    private ServiceInjector serviceInjector;
-    private ServiceRegistry serviceRegistry;
-
     PdfJsViewerPanel(String id, ScalarModel scalarModel) {
         super(id, scalarModel);
 
@@ -175,12 +172,12 @@ class PdfJsViewerPanel extends ScalarPanelAbstract implements IRequestListener {
 
     private void updateAdvisors(final Updater updater) {
         val instanceKey = buildKey();
-        serviceRegistry.select(PdfJsViewerAdvisor.class)
+        getServiceRegistry().select(PdfJsViewerAdvisor.class)
                 .forEach(advisor -> updater.update(advisor, instanceKey));
     }
 
     private PdfJsViewerAdvisor.InstanceKey buildKey() {
-        return serviceRegistry.lookupService(UserService.class)
+        return getServiceRegistry().lookupService(UserService.class)
             .map(this::toInstanceKey)
             .orElseThrow(() -> new IllegalStateException(
                                     "Could not locate UserService"));
