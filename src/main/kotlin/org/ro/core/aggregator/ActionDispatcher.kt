@@ -44,6 +44,9 @@ class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator(
     }
 
     private fun processPut(action: Action) {
+        // sample:
+        // url: http://localhost:8080/restful/objects/simple.SimpleObject/0/properties/notes
+        // body:   {"value": "FoolOnTheHill"}
         throw Exception("[ActionAggregator.processPut] notImplementedYet $action")
     }
 
