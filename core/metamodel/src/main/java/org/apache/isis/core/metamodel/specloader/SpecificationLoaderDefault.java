@@ -203,19 +203,27 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
 
-        val scannedSpecs = _Lists.<ObjectSpecification>newArrayList();
-        val domainServiceSpecs = _Lists.<ObjectSpecification>newArrayList();
-        val domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
+        val knownSpecs = _Lists.<ObjectSpecification>newArrayList();
+
+        val stopWatch = _Timing.now();
+
+        log.info(" - adding types from ValueTypeProviders");
+
+        val valueTypeSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         valueTypeRegistry.classes().forEach(clazz -> {
             val spec = loadSpecification(clazz, IntrospectionState.NOT_INTROSPECTED);
             if(spec!=null) {
-                scannedSpecs.add(spec);
+                knownSpecs.add(spec);
+                valueTypeSpecs.add(spec);
             }
         });
 
         log.info(" - categorizing types from class-path scan");
-        
+
+        val domainServiceSpecs = _Lists.<ObjectSpecification>newArrayList();
+        val domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
+
         typeRegistry.snapshotIntrospectableTypes().entrySet()
         .forEach(entry->{
 
@@ -224,7 +232,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
             val spec = loadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
             if(spec!=null) {
-                scannedSpecs.add(spec);
+                knownSpecs.add(spec);
             } else {
                 typeRegistry.veto(type);
             }
@@ -239,19 +247,24 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 domainObjectSpecs.add(spec);
                 return;
 
+            case VALUE:
+            case COLLECTION:
+                // handled by ValueTypeRegistry earlier
+            case UNKNOWN:
             default:
-                return;
+                // ignore
             }
 
         });
 
-        val stopWatch = _Timing.now();
-        
 
-        SpecificationLoaderDefault_debug.logBefore(log, cache, scannedSpecs);
+        SpecificationLoaderDefault_debug.logBefore(log, cache, knownSpecs);
 
-        log.info(" - introspecting {} type hierarchies", scannedSpecs.size());
-        introspect(scannedSpecs, IntrospectionState.TYPE_INTROSPECTED);
+        log.info(" - introspecting {} type hierarchies", knownSpecs.size());
+        introspect(knownSpecs, IntrospectionState.TYPE_INTROSPECTED);
+
+        log.info(" - introspecting {} value types", valueTypeSpecs.size());
+        introspect(domainServiceSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         log.info(" - introspecting {} domain services", domainServiceSpecs.size());
         introspect(domainServiceSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
@@ -261,7 +274,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info(" - introspecting {} view models", typeRegistry.getViewModelTypes().size());
         introspect(domainObjectSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        SpecificationLoaderDefault_debug.logAfter(log, cache, scannedSpecs);
+        SpecificationLoaderDefault_debug.logAfter(log, cache, knownSpecs);
 
         if(isFullIntrospect()) {
             val snapshot = cache.snapshotSpecs();
