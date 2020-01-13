@@ -90,8 +90,8 @@
 	</dependencies>
 
 	<modules>
-		<module>extensions/core/model</module>
-		<module>extensions/core/microprofile</module>
+		<module>core/model</module>
+		<module>mappings/microprofile</module>
 	</modules>
 
 </project>
