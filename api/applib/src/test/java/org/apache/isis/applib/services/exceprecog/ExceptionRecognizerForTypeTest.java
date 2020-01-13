@@ -20,7 +20,7 @@
 package org.apache.isis.applib.services.exceprecog;
 
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.junit.Test;
 
@@ -45,12 +45,7 @@ public class ExceptionRecognizerForTypeTest {
         }
     }
 
-    private Function<String,String> prepend = new Function<String, String>() {
-        @Override
-        public String apply(String input) {
-            return "pre: " + input;
-        }
-    };
+    private UnaryOperator<String> prepend = $ -> "pre: " + $;
 
     @Test
     public void whenRecognized() {

@@ -18,8 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.exceprecog;
 
-import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -39,14 +39,14 @@ abstract class ExceptionRecognizerForJDODataStoreExceptionAbstract extends Excep
     protected ExceptionRecognizerForJDODataStoreExceptionAbstract(
             Category category,
             final Predicate<Throwable> predicate,
-            final Function<String, String> messageParser) {
+            final UnaryOperator<String> messageParser) {
         super(category, predicate, messageParser);
     }
     
     protected ExceptionRecognizerForJDODataStoreExceptionAbstract(
             Category category,
             final Class<? extends Exception> exceptionType,
-            final Function<String,String> messageParser) {
+            final UnaryOperator<String> messageParser) {
         this(category, ofType(exceptionType), messageParser);
     }
     

@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.viewer.integration;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
@@ -293,12 +292,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     // special case handling for PageExpiredException, otherwise infinite loop
     private final static ExceptionRecognizerForType pageExpiredExceptionRecognizer =
-            new ExceptionRecognizerForType(PageExpiredException.class, new Function<String,String>(){
-                @Override
-                public String apply(String input) {
-                    return "Requested page is no longer available.";
-                }
-            });
+            new ExceptionRecognizerForType(PageExpiredException.class, $->"Requested page is no longer available.");
 
     protected IRequestablePage errorPageFor(Exception ex) {
 

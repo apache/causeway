@@ -28,10 +28,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-
+//import org.springframework.beans.factory.annotation.Autowired;
+//
+//import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+//import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
+//import org.apache.isis.core.commons.collections.Can;
+//
+//import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -40,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisLogOnExceptionFilter implements Filter {
     
-    @Autowired ExceptionRecognizer r;
+    //@Autowired private ExceptionRecognizerService exceptionRecognizerService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -54,17 +57,36 @@ public class IsisLogOnExceptionFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
             chain.doFilter(request, response);
-        } catch (IOException ex) {
-            logRequestUrl(request, ex);
+        } catch (Exception ex) {
+            if(ex instanceof IOException
+                    || ex instanceof ServletException
+                    || ex instanceof RuntimeException) {
+                logRequestUrl(request, ex);
+            }
+            
+//            val recognition = exceptionRecognizerService.recognize(ex, Can.ofSingleton(connectionAbortRecognizer));
+//            
+//            if(recognition.isPresent()) {
+//                log.error(recognition.get().toMessage(null), ex);
+//                // swallow exception
+//                return;
+//            }
+            
             throw ex;
-        } catch (ServletException ex) {
-            logRequestUrl(request, ex);
-            throw ex;
-        } catch (RuntimeException ex) {
-            logRequestUrl(request, ex);
-            throw ex;
-        }
+        } 
     }
+    
+    // -- HELPER
+    
+//    private final static ExceptionRecognizerForType connectionAbortRecognizer =
+//            new ExceptionRecognizerForType(IOException.class, originalMsg->{
+//                if(originalMsg!=null 
+//                        && originalMsg.contains("connection")
+//                        && originalMsg.contains("aborted")) {
+//                    return "client connection was aborted";
+//                }
+//                return null;
+//            });
 
     private static void logRequestUrl(ServletRequest request, Exception e) {
         if(!(request instanceof HttpServletRequest)) {
