@@ -76,9 +76,6 @@ content:
       start_path: core/runtime/src/main/doc # core
       branches: HEAD
     - url: .
-      start_path: core/webspringboot/src/main/doc # core
-      branches: HEAD
-    - url: .
       start_path: core/runtimeservices/src/main/doc # core
       branches: HEAD
     - url: .
