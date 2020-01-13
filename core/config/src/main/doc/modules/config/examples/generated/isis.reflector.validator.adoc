@@ -1,0 +1,85 @@
+| isis.reflector.validator. +
+action-collection-parameter- +
+choices
+|  true
+| 
+
+| isis.reflector.validator. +
+allow-deprecated
+|  true
+| 
+
+| isis.reflector.validator. +
+check-module-extent
+|  true
+| 
+
+| isis.reflector.validator. +
+ensure-unique-object-types
+|  true
+| 
+
+| isis.reflector.validator. +
+explicit-object-type
+| 
+| 
+
+| isis.reflector.validator. +
+jaxb-view-model-date-time- +
+type-adapter
+|  true
+| 
+
+| isis.reflector.validator. +
+jaxb-view-model-no-arg- +
+constructor
+| 
+| 
+
+| isis.reflector.validator. +
+jaxb-view-model-not-abstract
+|  true
+| 
+
+| isis.reflector.validator. +
+jaxb-view-model-not-inner- +
+class
+|  true
+| 
+
+| isis.reflector.validator. +
+jaxb-view-model-reference- +
+type-adapter
+|  true
+| 
+
+| isis.reflector.validator. +
+jdoql-from-clause
+|  true
+| 
+
+| isis.reflector.validator. +
+jdoql-variables-clause
+|  true
+| 
+
+| isis.reflector.validator. +
+no-params-only
+| 
+| 
+
+| isis.reflector.validator. +
+parallelize
+|  true
+|  Whether to perform metamodel validation in parallel.
+
+| isis.reflector.validator. +
+mixins-only
+|  true
+| 
+
+| isis.reflector.validator. +
+service-actions-only
+|  true
+| 
+

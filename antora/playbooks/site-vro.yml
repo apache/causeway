@@ -21,10 +21,7 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/vro/cors/src/main/adoc # vro
-      branches: HEAD
-    - url: .
-      start_path: extensions/vro/restclient/src/main/adoc # vro
+      start_path: extensions/vro/cors/adoc # vro
       branches: HEAD
 
 

@@ -15,17 +15,16 @@ content:
       start_path: antora/components/valuetypes # valuetypes
       branches: HEAD
 
-    # valuetypes
+# valuetypes
     - url: .
-      start_path: valuetypes/asciidoc/src/main/adoc # vw
+      start_path: valuetypes/asciidoc/adoc # vw
       branches: HEAD
     - url: .
-      start_path: valuetypes/markdown/src/main/adoc # vw
+      start_path: valuetypes/markdown/adoc # vw
       branches: HEAD
     - url: .
-      start_path: valuetypes/sse/src/main/adoc # vw
+      start_path: valuetypes/sse/adoc # vw
       branches: HEAD
-
 
 ui:
   bundle:

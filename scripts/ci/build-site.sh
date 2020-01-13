@@ -9,12 +9,23 @@ fi
 
 bash $SCRIPT_DIR/_print-environment.sh "build-site"
 
-bash $SCRIPT_DIR/_adoc-copy-examples.sh
-bash $SCRIPT_DIR/_adoc-gen-config.sh
+if [[ "$SKIP_EXAMPLES" == "true" ]]; then
+  echo "skipping examples"
+else
+  bash $SCRIPT_DIR/_adoc-copy-examples.sh
+fi
 
 
-# check if any examples have not been sync'd
-if [ "$CHECK_FOR_STALE_EXAMPLES" != "skip" ]; then
+if [[ "$SKIP_CONFIGS" == "true" ]]; then
+  echo "skipping config generation"
+else
+  bash $SCRIPT_DIR/_adoc-gen-config.sh
+fi
+
+
+if [ "$SKIP_STALE_EXAMPLE_CHECK" == "true" ]; then
+  echo "skipping stale example check"
+else
   WC=$(git status --porcelain | grep examples | wc -l)
   if [ "$WC" -ne "0" ]; then
     git status --porcelain
@@ -23,7 +34,13 @@ if [ "$CHECK_FOR_STALE_EXAMPLES" != "skip" ]; then
   fi
 fi
 
-bash $SCRIPT_DIR/_adoc-antora.sh $*
+if [ "$SKIP_GENERATION" == "true" ]; then
+  echo "skipping building..."
+else
+  echo "building ..."
+  bash $SCRIPT_DIR/_adoc-antora.sh $*
+  echo "site built in ${SECONDS}s"
+fi
 
 # add a marker, that tells github not to use jekyll on the github pages folder
 touch ${PROJECT_ROOT_PATH}/antora/target/site/.nojekyll

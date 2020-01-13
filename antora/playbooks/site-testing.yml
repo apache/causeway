@@ -22,25 +22,25 @@ content:
 
 # testing
     - url: .
-      start_path: testing/fakedata/src/main/adoc # testing
+      start_path: testing/fakedata/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/fixtures/src/main/adoc # testing
+      start_path: testing/fixtures/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/h2console/src/main/adoc # testing
+      start_path: testing/h2console/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/hsqldbmgr/impl/src/main/adoc # testing
+      start_path: testing/hsqldbmgr/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/integtestsupport/src/main/adoc # testing
+      start_path: testing/integtestsupport/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/specsupport/src/main/adoc # testing
+      start_path: testing/specsupport/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/unittestsupport/src/main/adoc # testing
+      start_path: testing/unittestsupport/adoc # testing
       branches: HEAD
 
 

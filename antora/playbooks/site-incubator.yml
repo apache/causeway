@@ -17,17 +17,10 @@ content:
 
 # incubator
     - url: .
-<<<<<<< HEAD
-      start_path: incubator/core/model/src/main/doc # incubator
+      start_path: incubator/core/model/src/main/adoc # incubator
       branches: HEAD
     - url: .
-      start_path: incubator/mappings/microprofile/src/main/doc # incubator
-=======
-      start_path: incubator/extensions/core/model/src/main/adoc # incubator
-      branches: HEAD
-    - url: .
-      start_path: incubator/extensions/core/microprofile/src/main/adoc # incubator
->>>>>>> ISIS-2062: moves src/main/doc to src/main/adoc
+      start_path: incubator/mappings/microprofile/src/main/adoc # incubator
       branches: HEAD
 
 

@@ -1,5 +1,0 @@
-include::vro:ROOT:partial$module-nav.adoc[]
-include::vro:jaxrs-resteasy-4:partial$module-nav.adoc[]
-
-* Extensions
-include::vro:cors:partial$module-nav.adoc[]

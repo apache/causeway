@@ -20,6 +20,14 @@ content:
       start_path: core/security/src/main/adoc # security
       branches: HEAD
 
+# extensions
+    - url: .
+      start_path: extensions/security/secman/adoc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/shiro-realm-ldap/adoc # security
+      branches: HEAD
+
 # security
     - url: .
       start_path: security/bypass/src/main/adoc # security
@@ -31,13 +39,6 @@ content:
       start_path: security/keycloak/src/main/adoc # security
       branches: HEAD
 
-# extensions
-    - url: .
-      start_path: extensions/security/secman/src/main/adoc # security
-      branches: HEAD
-    - url: .
-      start_path: extensions/security/shiro-realm-ldap/src/main/adoc # security
-      branches: HEAD
 
 
 ui:

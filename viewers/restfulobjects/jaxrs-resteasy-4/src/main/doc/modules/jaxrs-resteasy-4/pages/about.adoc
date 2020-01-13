@@ -1,3 +1,0 @@
-= JAX-RS: RestEasy v4
-
-

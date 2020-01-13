@@ -1,0 +1,28 @@
+| isis.as-map
+| 
+| 
+
+| isis.isis-settings
+| 
+| 
+
+| isis.locale
+| 
+|  Set to override {@link Locale#getDefault()}
+
+| isis.objects.editing
+| 
+| 
+
+| isis.timezone
+| 
+| 
+
+| isis.value.format
+| 
+| 
+
+| isis.value.money.currency
+| 
+| 
+

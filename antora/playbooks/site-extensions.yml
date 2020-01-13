@@ -17,39 +17,24 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/persistence/flywayjdo/src/main/adoc # extensions
+      start_path: extensions/persistence/jdo/flywayjdo/adoc # extensions
       branches: HEAD
 
     - url: .
-      start_path: extensions/security/secman/src/main/adoc # security
+      start_path: extensions/security/secman/adoc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/secman/api/src/main/adoc # security
-      branches: HEAD
-    - url: .
-      start_path: extensions/security/secman/encryption-jbcrypt/src/main/adoc # security
-      branches: HEAD
-    - url: .
-      start_path: extensions/security/secman/model/src/main/adoc # security
-      branches: HEAD
-    - url: .
-      start_path: extensions/security/secman/persistence-jdo/src/main/adoc # security
-      branches: HEAD
-    - url: .
-      start_path: extensions/security/secman/shiro-realm/src/main/adoc # security
-      branches: HEAD
-    - url: .
-      start_path: extensions/security/shiro-realm-ldap/src/main/adoc # security
+      start_path: extensions/security/shiro-realm-ldap/adoc # security
       branches: HEAD
 
     - url: .
-      start_path: extensions/vro/cors/src/main/adoc # vro
+      start_path: extensions/vro/cors/adoc # vro
       branches: HEAD
     - url: .
-      start_path: extensions/vw/exceldownload/src/main/adoc # vw
+      start_path: extensions/vw/exceldownload/adoc # vw
       branches: HEAD
     - url: .
-      start_path: extensions/vw/pdfjs/src/main/adoc # vw
+      start_path: extensions/vw/pdfjs/adoc # vw
       branches: HEAD
 
 

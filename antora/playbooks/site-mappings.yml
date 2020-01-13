@@ -15,18 +15,18 @@ content:
       start_path: antora/components/mappings # mappings
       branches: HEAD
 
-    # mappings
+# mappings
     - url: .
-      start_path: mappings/jaxrsclient/src/main/adoc # mappings
+      start_path: mappings/jaxrsclient/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/minio/src/main/adoc # mappings
+      start_path: mappings/minio/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/restclient/src/main/adoc # mappings
+      start_path: mappings/restclient/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/slack/src/main/adoc # mappings
+      start_path: mappings/slack/adoc # mappings
       branches: HEAD
 
 

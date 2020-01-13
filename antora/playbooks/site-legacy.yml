@@ -26,10 +26,10 @@ content:
       start_path: legacy/extensions/core/runtime/src/main/adoc # legacy
       branches: HEAD
     - url: .
-      start_path: legacy/mappings/restclient/src/main/adoc # legacy
+      start_path: legacy/mappings/restclient/adoc # legacy
       branches: HEAD
     - url: .
-      start_path: legacy/subdomains/servletapi/impl/src/main/adoc # legacy
+      start_path: legacy/subdomains/servletapi/adoc # legacy
       branches: HEAD
 
 

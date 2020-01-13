@@ -1,0 +1,20 @@
+| isis.persistor.datanucleus. +
+class-metadata-loaded- +
+listener
+|  org.apache.isis.persistence. +
+jdo.datanucleus5.datanucleus. +
+CreateSchemaObjectFromClassMet +
+adata
+| 
+
+| isis.persistor.datanucleus. +
+install-fixtures
+| 
+| 
+
+| isis.persistor.datanucleus. +
+standalone-collection. +
+bulk-load
+| 
+| 
+

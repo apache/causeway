@@ -32,14 +32,7 @@ content:
       start_path: core/runtime/src/main/adoc # core
       branches: HEAD
     - url: .
-<<<<<<< HEAD
       start_path: core/runtimeservices/src/main/doc # core
-=======
-      start_path: core/webspringboot/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: core/runtimeservices/src/main/adoc # core
->>>>>>> ISIS-2062: moves src/main/doc to src/main/adoc
       branches: HEAD
     - url: .
       start_path: core/webapp/src/main/adoc # core

@@ -76,14 +76,7 @@ content:
       start_path: core/runtime/src/main/adoc # core
       branches: HEAD
     - url: .
-<<<<<<< HEAD
       start_path: core/runtimeservices/src/main/doc # core
-=======
-      start_path: core/webspringboot/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: core/runtimeservices/src/main/adoc # core
->>>>>>> ISIS-2062: moves src/main/doc to src/main/adoc
       branches: HEAD
     - url: .
       start_path: core/webapp/src/main/adoc # core
@@ -95,13 +88,10 @@ content:
       start_path: core/unittestsupport/src/main/adoc # testing
       branches: HEAD
     - url: .
-      start_path: viewers/restfulobjects/jaxrs-resteasy-4/src/main/adoc # vro
+      start_path: viewers/restfulobjects/adoc # vro
       branches: HEAD
     - url: .
-      start_path: viewers/restfulobjects/src/main/adoc # vro
-      branches: HEAD
-    - url: .
-      start_path: viewers/wicket/src/main/adoc # vw
+      start_path: viewers/wicket/adoc # vw
       branches: HEAD
 
 # examples
@@ -114,39 +104,32 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/persistence/jdo/flywayjdo/src/main/adoc # extensions
+      start_path: extensions/persistence/jdo/flywayjdo/adoc # extensions
       branches: HEAD
 
     - url: .
-      start_path: extensions/security/secman/src/main/adoc # security
+      start_path: extensions/security/secman/adoc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/shiro-realm-ldap/src/main/adoc # security
+      start_path: extensions/security/shiro-realm-ldap/adoc # security
       branches: HEAD
 
     - url: .
-      start_path: extensions/vro/cors/src/main/adoc # vro
+      start_path: extensions/vro/cors/adoc # vro
       branches: HEAD
     - url: .
-      start_path: extensions/vw/exceldownload/src/main/adoc # vw
+      start_path: extensions/vw/exceldownload/adoc # vw
       branches: HEAD
     - url: .
-      start_path: extensions/vw/pdfjs/src/main/adoc # vw
+      start_path: extensions/vw/pdfjs/adoc # vw
       branches: HEAD
 
 # incubator
     - url: .
-<<<<<<< HEAD
-      start_path: incubator/core/model/src/main/doc # incubator
+      start_path: incubator/core/model/src/main/adoc # incubator
       branches: HEAD
     - url: .
       start_path: incubator/mappings/microprofile/src/main/doc # incubator
-=======
-      start_path: incubator/extensions/core/model/src/main/adoc # incubator
-      branches: HEAD
-    - url: .
-      start_path: incubator/extensions/core/microprofile/src/main/adoc # incubator
->>>>>>> ISIS-2062: moves src/main/doc to src/main/adoc
       branches: HEAD
 
 # legacy
@@ -163,26 +146,26 @@ content:
       start_path: legacy/mappings/restclient/src/main/adoc # legacy
       branches: HEAD
     - url: .
-      start_path: legacy/subdomains/servletapi/impl/src/main/adoc # legacy
+      start_path: legacy/subdomains/servletapi/src/main/adoc # legacy
       branches: HEAD
 
 # mappings
     - url: .
-      start_path: mappings/jaxrsclient/src/main/adoc # mappings
+      start_path: mappings/jaxrsclient/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/minio/src/main/adoc # mappings
+      start_path: mappings/minio/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/restclient/src/main/adoc # mappings
+      start_path: mappings/restclient/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/slack/src/main/adoc # mappings
+      start_path: mappings/slack/adoc # mappings
       branches: HEAD
 
 # mavendeps
     - url: .
-      start_path: mavendeps/src/main/adoc # toc
+      start_path: mavendeps/adoc # toc
       branches: HEAD
 
 # security
@@ -198,70 +181,70 @@ content:
 
 # starters
     - url: .
-      start_path: starters/src/main/adoc # toc
+      start_path: starters/adoc # toc
       branches: HEAD
 
 # subdomains
     - url: .
-      start_path: subdomains/base/src/main/adoc # subdomains
+      start_path: subdomains/base/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/docx/src/main/adoc # subdomains
+      start_path: subdomains/docx/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/excel/src/main/adoc # subdomains
+      start_path: subdomains/excel/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/freemarker/src/main/adoc # subdomains
+      start_path: subdomains/freemarker/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/ognl/src/main/adoc # subdomains
+      start_path: subdomains/ognl/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/pdfbox/src/main/adoc # subdomains
+      start_path: subdomains/pdfbox/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/spring/src/main/adoc # subdomains
+      start_path: subdomains/spring/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/xdocreport/src/main/adoc # subdomains
+      start_path: subdomains/xdocreport/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/zip/src/main/adoc # subdomains
+      start_path: subdomains/zip/adoc # subdomains
       branches: HEAD
 
 # testing
     - url: .
-      start_path: testing/fakedata/src/main/adoc # testing
+      start_path: testing/fakedata/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/fixtures/src/main/adoc # testing
+      start_path: testing/fixtures/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/h2console/src/main/adoc # testing
+      start_path: testing/h2console/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/hsqldbmgr/src/main/adoc # testing
+      start_path: testing/hsqldbmgr/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/integtestsupport/src/main/adoc # testing
+      start_path: testing/integtestsupport/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/specsupport/src/main/adoc # testing
+      start_path: testing/specsupport/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/unittestsupport/src/main/adoc # testing
+      start_path: testing/unittestsupport/adoc # testing
       branches: HEAD
 
 # valuetypes
     - url: .
-      start_path: valuetypes/asciidoc/src/main/adoc # vw
+      start_path: valuetypes/asciidoc/adoc # vw
       branches: HEAD
     - url: .
-      start_path: valuetypes/markdown/src/main/adoc # vw
+      start_path: valuetypes/markdown/adoc # vw
       branches: HEAD
     - url: .
-      start_path: valuetypes/sse/src/main/adoc # vw
+      start_path: valuetypes/sse/adoc # vw
       branches: HEAD
 
 ui:
