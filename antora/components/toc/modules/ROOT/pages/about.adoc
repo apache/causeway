@@ -39,18 +39,18 @@ _Core_
 
 * *xref:userguide:ROOT:about.adoc[User Guide]*
 * *xref:refguide:ROOT:about.adoc[Reference Guide]*
-* *xref:testing:ROOT:about.adoc[Testing]*
+* *xref:testing:ROOT:about.adoc[Testing Guide]*
 
 _Libraries_
 
-*  xref:subdomains:ROOT:about.adoc[Subdomains]
+*  xref:subdomains:ROOT:about.adoc[Subdomain Libraries]
 *  xref:valuetypes:ROOT:about.adoc[Value Types]
-*  xref:mappings:ROOT:about.adoc[Bounded Context Mappings]
+*  xref:mappings:ROOT:about.adoc[Bounded Context Mapping Libraries]
 
 _Resources_
 
 * *xref:toc:devguide:about.adoc[Developers' Guide]*
-** xref:toc:mavendeps:about.adoc[Maven dependencies]
+* xref:toc:mavendeps:about.adoc[Maven dependencies]
 
 |
 [discrete]
@@ -67,7 +67,7 @@ _Security_
 
 _Persistence_
 
-* xref:pjdo:ROOT:about.adoc[DataNucleus Object Store]
+* xref:pjdo:ROOT:about.adoc[DataNucleus (JDO)]
 
 _Extensions_
 
