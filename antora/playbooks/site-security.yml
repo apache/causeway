@@ -17,26 +17,26 @@ content:
 
 # core
     - url: .
-      start_path: core/security/src/main/doc # security
+      start_path: core/security/src/main/adoc # security
       branches: HEAD
 
 # security
     - url: .
-      start_path: security/bypass/src/main/doc # security
+      start_path: security/bypass/src/main/adoc # security
       branches: HEAD
     - url: .
-      start_path: security/shiro/src/main/doc # security
+      start_path: security/shiro/src/main/adoc # security
       branches: HEAD
     - url: .
-      start_path: security/keycloak/src/main/doc # security
+      start_path: security/keycloak/src/main/adoc # security
       branches: HEAD
 
 # extensions
     - url: .
-      start_path: extensions/security/secman/src/main/doc # security
+      start_path: extensions/security/secman/src/main/adoc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/shiro-realm-ldap/src/main/doc # security
+      start_path: extensions/security/shiro-realm-ldap/src/main/adoc # security
       branches: HEAD
 
 

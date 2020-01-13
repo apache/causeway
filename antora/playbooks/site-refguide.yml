@@ -17,15 +17,15 @@ content:
 
 # api
     - url: .
-      start_path: api/applib/src/main/doc # refguide
+      start_path: api/applib/src/main/adoc # refguide
       branches: HEAD
     - url: .
-      start_path: api/schema/src/main/doc # refguide
+      start_path: api/schema/src/main/adoc # refguide
       branches: HEAD
 
 # core
     - url: .
-      start_path: core/config/src/main/doc # refguide
+      start_path: core/config/src/main/adoc # refguide
       branches: HEAD
 
 

@@ -17,13 +17,13 @@ content:
 
     # valuetypes
     - url: .
-      start_path: valuetypes/asciidoc/src/main/doc # vw
+      start_path: valuetypes/asciidoc/src/main/adoc # vw
       branches: HEAD
     - url: .
-      start_path: valuetypes/markdown/src/main/doc # vw
+      start_path: valuetypes/markdown/src/main/adoc # vw
       branches: HEAD
     - url: .
-      start_path: valuetypes/sse/src/main/doc # vw
+      start_path: valuetypes/sse/src/main/adoc # vw
       branches: HEAD
 
 

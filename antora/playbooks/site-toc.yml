@@ -13,12 +13,12 @@ content:
 
 # starters
     - url: .
-      start_path: starters/src/main/doc # toc
+      start_path: starters/src/main/adoc # toc
       branches: HEAD
 
 # mavendeps
     - url: .
-      start_path: mavendeps/src/main/doc # toc
+      start_path: mavendeps/src/main/adoc # toc
       branches: HEAD
 
 

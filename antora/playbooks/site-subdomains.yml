@@ -17,31 +17,31 @@ content:
 
     # subdomains
     - url: .
-      start_path: subdomains/base/src/main/doc # subdomains
+      start_path: subdomains/base/src/main/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/docx/src/main/doc # subdomains
+      start_path: subdomains/docx/src/main/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/excel/src/main/doc # subdomains
+      start_path: subdomains/excel/src/main/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/freemarker/src/main/doc # subdomains
+      start_path: subdomains/freemarker/src/main/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/ognl/src/main/doc # subdomains
+      start_path: subdomains/ognl/src/main/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/pdfbox/src/main/doc # subdomains
+      start_path: subdomains/pdfbox/src/main/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/spring/src/main/doc # subdomains
+      start_path: subdomains/spring/src/main/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/xdocreport/src/main/doc # subdomains
+      start_path: subdomains/xdocreport/src/main/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/zip/src/main/doc # subdomains
+      start_path: subdomains/zip/src/main/adoc # subdomains
       branches: HEAD
 
 

@@ -17,30 +17,30 @@ content:
 
 # core
     - url: .
-      start_path: core/unittestsupport/src/main/doc # testing
+      start_path: core/unittestsupport/src/main/adoc # testing
       branches: HEAD
 
 # testing
     - url: .
-      start_path: testing/fakedata/src/main/doc # testing
+      start_path: testing/fakedata/src/main/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/fixtures/src/main/doc # testing
+      start_path: testing/fixtures/src/main/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/h2console/src/main/doc # testing
+      start_path: testing/h2console/src/main/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/hsqldbmgr/impl/src/main/doc # testing
+      start_path: testing/hsqldbmgr/impl/src/main/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/integtestsupport/src/main/doc # testing
+      start_path: testing/integtestsupport/src/main/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/specsupport/src/main/doc # testing
+      start_path: testing/specsupport/src/main/adoc # testing
       branches: HEAD
     - url: .
-      start_path: testing/unittestsupport/src/main/doc # testing
+      start_path: testing/unittestsupport/src/main/adoc # testing
       branches: HEAD
 
 

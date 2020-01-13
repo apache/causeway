@@ -13,18 +13,18 @@ content:
 
 # core
     - url: .
-      start_path: viewers/restfulobjects/jaxrs-resteasy-4/src/main/doc # vro
+      start_path: viewers/restfulobjects/jaxrs-resteasy-4/src/main/adoc # vro
       branches: HEAD
     - url: .
-      start_path: viewers/restfulobjects/src/main/doc # vro
+      start_path: viewers/restfulobjects/src/main/adoc # vro
       branches: HEAD
 
 # extensions
     - url: .
-      start_path: extensions/vro/cors/src/main/doc # vro
+      start_path: extensions/vro/cors/src/main/adoc # vro
       branches: HEAD
     - url: .
-      start_path: extensions/vro/restclient/src/main/doc # vro
+      start_path: extensions/vro/restclient/src/main/adoc # vro
       branches: HEAD
 
 

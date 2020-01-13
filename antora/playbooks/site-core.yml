@@ -17,30 +17,37 @@ content:
 
 # core
     - url: .
-      start_path: core/codegen-bytebuddy/src/main/doc # core
+      start_path: core/codegen-bytebuddy/src/main/adoc # core
       branches: HEAD
     - url: .
-      start_path: core/commons/src/main/doc # core
+      start_path: core/commons/src/main/adoc # core
       branches: HEAD
     - url: .
-      start_path: core/detached-tests/src/main/doc # core
+      start_path: core/detached-tests/src/main/adoc # core
       branches: HEAD
     - url: .
-      start_path: core/metamodel/src/main/doc # core
+      start_path: core/metamodel/src/main/adoc # core
       branches: HEAD
     - url: .
-      start_path: core/runtime/src/main/doc # core
+      start_path: core/runtime/src/main/adoc # core
       branches: HEAD
     - url: .
+<<<<<<< HEAD
       start_path: core/runtimeservices/src/main/doc # core
+=======
+      start_path: core/webspringboot/src/main/adoc # core
       branches: HEAD
     - url: .
-      start_path: core/webapp/src/main/doc # core
+      start_path: core/runtimeservices/src/main/adoc # core
+>>>>>>> ISIS-2062: moves src/main/doc to src/main/adoc
+      branches: HEAD
+    - url: .
+      start_path: core/webapp/src/main/adoc # core
       branches: HEAD
 
 # examples
     - url: .
-      start_path: examples/smoketests/src/main/doc # core
+      start_path: examples/smoketests/src/main/adoc # core
       branches: HEAD
 
 ui:
