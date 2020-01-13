@@ -444,8 +444,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             Class<ExceptionRecognizer> serviceClass = ExceptionRecognizer.class;
             final Iterable<ExceptionRecognizer> exceptionRecognizers = lookupServices(serviceClass);
             for (ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
-                final ExceptionRecognizer.Recognition recognition =
-                        exceptionRecognizer.recognize2(e);
+                val recognition = exceptionRecognizer.recognize(e).orElse(null);
                 if(recognition != null) {
                     if(recognition.getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
                         throw new ObjectNotFoundException(rootOid, e);

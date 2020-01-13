@@ -19,11 +19,10 @@
 package org.apache.isis.applib.services.exceprecog;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -32,6 +31,8 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -46,6 +47,10 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
+    
+    @Inject protected TranslationService translationService;
+    
+    @Getter @Setter private boolean disabled = false;
 
 //    /**
 //     * Normally recognized exceptions are not logged (because they are expected and handled).
@@ -116,24 +121,10 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         this(Category.OTHER, predicate);
     }
 
-    @Override
-    @PostConstruct
-    public void init() {
-        //FIXME[2039] IsisConfiguration is not accessible from applib, move this abstract class to config?    
-        //        final String prop = properties.get(KEY_LOG_RECOGNIZED_EXCEPTIONS);
-        //        this.logRecognizedExceptions = Boolean.parseBoolean(prop);
-    }
-
-    @Override
-    @PreDestroy
-    public void shutdown() {
-    }
 
     // //////////////////////////////////////
 
-    @Override
-    @Programmatic
-    public String recognize(Throwable ex) {
+    private Optional<String> recognizeRootCause(Throwable ex) {
 
         return _Exceptions.streamCausalChain(ex)
                 .filter(predicate)
@@ -155,17 +146,18 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                     return parsedMessage;
                 })
                 .filter(_NullSafe::isPresent)
-                .findFirst()
-                .orElse(null);
-
+                .findFirst();
     }
 
     @Programmatic
     @Override
-    public Recognition recognize2(Throwable ex) {
-        return Recognition.of(category, recognize(ex));
+    public Optional<Recognition> recognize(Throwable ex) {
+        if(disabled) {
+            return Optional.empty();
+        }
+        return Recognition.of(category, recognizeRootCause(ex).orElse(null));
     }
 
-    @Inject protected TranslationService translationService;
+    
 
 }

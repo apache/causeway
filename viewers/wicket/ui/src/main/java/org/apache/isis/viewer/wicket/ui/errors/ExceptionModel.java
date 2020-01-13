@@ -19,16 +19,20 @@
 package org.apache.isis.viewer.wicket.ui.errors;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
+
+import lombok.val;
 
 public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
@@ -44,9 +48,14 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     private final String mainMessage;
 
     public static ExceptionModel create(
-            IsisWebAppCommonContext commonContext, String recognizedMessageIfAny, Exception ex) {
+            IsisWebAppCommonContext commonContext, 
+            Optional<Recognition> recognition, 
+            Exception ex) {
         
-        return new ExceptionModel(commonContext, recognizedMessageIfAny, ex);
+        val translationService = commonContext.getTranslationService();
+        val recognizedMessage = recognition.map($->$.toMessage(translationService));
+        
+        return new ExceptionModel(commonContext, recognizedMessage.orElse(null), ex);
     }
 
     /**

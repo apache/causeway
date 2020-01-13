@@ -19,18 +19,19 @@
 
 package org.apache.isis.core.metamodel.services.exceprecog;
 
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
-public class ExceptionRecognizerDocDefault_recognizes_Test {
+public class ExceptionRecognizerForRecoverableException_recognizes_Test {
 
     static class SomeRandomException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -41,17 +42,17 @@ public class ExceptionRecognizerDocDefault_recognizes_Test {
 
     private Exception ex;
 
-    private ExceptionRecognizerDocDefault excepRecognizer;
+    private ExceptionRecognizerForRecoverableException excepRecognizer;
 
     @Before
     public void setUp() throws Exception {
-        excepRecognizer = new ExceptionRecognizerDocDefault();
+        excepRecognizer = new ExceptionRecognizerForRecoverableException();
     }
 
     @Test
     public void whenSomeRandomException_is_not_recognized() throws Exception {
         ex = new SomeRandomException();
-        assertThat(excepRecognizer.recognize(ex), is(nullValue()));
+        assertThat(excepRecognizer.recognize(ex), is(Optional.empty()));
     }
 
 }

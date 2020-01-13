@@ -16,28 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus5.exceprecog;
+
+package org.apache.isis.core.metamodel.services.exceprecog;
 
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
+/**
+ * Framework-provided implementation of {@link ExceptionRecognizer},
+ * which will automatically recognize any {@link org.apache.isis.applib.RecoverableException}s.
+ */
 @Service
-@Named("isisJdoDn5.ExceptionRecognizerForJDOObjectNotFoundException")
+@Named("isisMetaModel.ExceptionRecognizerForRecoverableException")
 @Order(OrderPrecedence.MIDPOINT)
+@Primary
 @Qualifier("Default")
-public class ExceptionRecognizerForJDOObjectNotFoundException 
-extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
-
-    public ExceptionRecognizerForJDOObjectNotFoundException() {
-        super(Category.NOT_FOUND,
-                javax.jdo.JDOObjectNotFoundException.class,
-                prefix("Unable to load object.  " +
-                        "Has it been deleted by someone else?"));
+public class ExceptionRecognizerForRecoverableException extends ExceptionRecognizerForType {
+    
+    public ExceptionRecognizerForRecoverableException() {
+        super(Category.CLIENT_ERROR, RecoverableException.class);
     }
+
 
 }

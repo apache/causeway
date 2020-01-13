@@ -23,7 +23,6 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
@@ -45,10 +44,10 @@ import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -58,6 +57,7 @@ import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -66,7 +66,6 @@ import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -226,14 +225,10 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                 return respondGracefully(cycle);
             }
 
-
             // handle recognized exceptions gracefully also
-            final Stream<ExceptionRecognizer> exceptionRecognizers = getCommonContext().getServiceRegistry()
-                    .select(ExceptionRecognizer.class)
-                    .stream();
-
-            String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-            if(recognizedMessageIfAny != null) {
+            val exceptionRecognizerService = getExceptionRecognizerService();
+            val recognizedIfAny = exceptionRecognizerService.recognize(ex);
+            if(recognizedIfAny.isPresent()) {
                 return respondGracefully(cycle);
             }
 
@@ -306,14 +301,20 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             });
 
     protected IRequestablePage errorPageFor(Exception ex) {
-        List<ExceptionRecognizer> exceptionRecognizers = _Lists.newArrayList();
-        exceptionRecognizers.add(pageExpiredExceptionRecognizer);
 
+        final Optional<Recognition> recognition;
+        
         if(inIsisSession()) {
-            getCommonContext().getServiceRegistry()
-            .select(ExceptionRecognizer.class)
-            .forEach(exceptionRecognizers::add);
+            val exceptionRecognizerService = getCommonContext().getServiceRegistry()
+            .lookupServiceElseFail(ExceptionRecognizerService.class);
+            
+            recognition = exceptionRecognizerService
+                    .recognize(ex, Can.ofSingleton(pageExpiredExceptionRecognizer));
+            
         } else {
+            
+            recognition = Optional.empty();
+            
             val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
             if(validationResult.hasFailures()) {
                 return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
@@ -322,8 +323,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             log.warn("Unable to obtain exceptionRecognizers (no session), "
                     + "will be treated as unrecognized exception", ex);
         }
-        String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        ExceptionModel exceptionModel = ExceptionModel.create(getCommonContext(), recognizedMessageIfAny, ex);
+        val exceptionModel = ExceptionModel.create(getCommonContext(), recognition, ex);
 
         return isSignedIn() ? new ErrorPage(exceptionModel) : newSignInPage(exceptionModel);
     }
@@ -383,6 +383,10 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     
     public IsisWebAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    }
+    
+    private ExceptionRecognizerService getExceptionRecognizerService() {
+        return getCommonContext().getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
     }
 
     private boolean inIsisSession() {

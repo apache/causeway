@@ -28,6 +28,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -35,6 +39,8 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class IsisLogOnExceptionFilter implements Filter {
+    
+    @Autowired ExceptionRecognizer r;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

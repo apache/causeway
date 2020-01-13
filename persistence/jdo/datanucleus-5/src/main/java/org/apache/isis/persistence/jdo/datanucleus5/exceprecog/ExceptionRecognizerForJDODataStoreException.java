@@ -18,9 +18,20 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.exceprecog;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import javax.inject.Named;
 
-public class ExceptionRecognizerForJDODataStoreException extends ExceptionRecognizerForType {
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
+
+@Service
+@Named("isisJdoDn5.ExceptionRecognizerForJDODataStoreException")
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("Default")
+public class ExceptionRecognizerForJDODataStoreException 
+extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
     public ExceptionRecognizerForJDODataStoreException() {
         super(Category.SERVER_ERROR,
@@ -31,7 +42,6 @@ public class ExceptionRecognizerForJDODataStoreException extends ExceptionRecogn
                 prefix("Unable to save changes.  " +
                         "Does similar data already exist, or has referenced data been deleted?"));
     }
-    
 
 
 }

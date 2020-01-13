@@ -57,7 +57,9 @@ public class ExceptionRecognizerTranslate implements MethodRule {
     }
 
     /**
-     * Simply invokes {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer#recognize(Throwable)} for all registered {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}s for the provided exception, so that the message will be translated.
+     * Simply invokes {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer#recognize(Throwable)} 
+     * for all registered {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}s 
+     * for the provided exception, so that the message will be translated.
      */
     private void recognize(final Throwable ex) {
         serviceRegistry

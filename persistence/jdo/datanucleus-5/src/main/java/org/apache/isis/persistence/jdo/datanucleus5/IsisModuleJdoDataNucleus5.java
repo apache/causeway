@@ -26,10 +26,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.JdoPersistenceLifecycleService;
-import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerCompositeForJdoObjectStore;
+import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForJDODataStoreException;
+import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException;
+import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForJDOObjectNotFoundException;
+import org.apache.isis.persistence.jdo.datanucleus5.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusIdLong;
 import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionLong;
@@ -39,7 +43,6 @@ import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingMode
 import org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory5;
-import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
 @Configuration
 @Import({
@@ -49,10 +52,14 @@ import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
         // @Component's
         JdoProgrammingModelPlugin.class,
-
+        
         // @Service's
         DataNucleusSettings.class,
-        ExceptionRecognizerCompositeForJdoObjectStore.class,
+        ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
+        ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
+        ExceptionRecognizerForJDOObjectNotFoundException.class,
+        ExceptionRecognizerForJDODataStoreException.class,
+        
         IsisJdoSupportDN5.class,
         IsisPlatformTransactionManagerForJdo.class,
         JdoPersistenceLifecycleService.class,

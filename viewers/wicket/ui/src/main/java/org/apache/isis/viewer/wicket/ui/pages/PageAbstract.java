@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -59,8 +58,7 @@ import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.core.commons.internal.ioc.BeanSort;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -85,6 +83,7 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.Bootstrap;
@@ -182,17 +181,13 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
         } catch(final RuntimeException ex) {
 
             log.error("Failed to construct page, going back to sign in page", ex);
+            
+            val exceptionRecognizerService = getCommonContext().getServiceRegistry()
+                    .lookupServiceElseFail(ExceptionRecognizerService.class);
 
-            // REVIEW: similar code in WebRequestCycleForIsis
-            final Stream<ExceptionRecognizer> exceptionRecognizers = getCommonContext().getServiceRegistry()
-                    .select(ExceptionRecognizer.class)
-                    .stream();
-
-            final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+            val recognition = exceptionRecognizerService.recognize(ex);
             
-            final ExceptionModel exceptionModel = ExceptionModel.create(getCommonContext(), recognizedMessageIfAny, ex);
-            
-            
+            val exceptionModel = ExceptionModel.create(getCommonContext(), recognition, ex);
 
             getSession().invalidate();
             getSession().clear();

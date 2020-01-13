@@ -23,7 +23,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -38,8 +39,11 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.collections._Sets;
@@ -52,6 +56,8 @@ import org.apache.isis.core.runtime.session.IsisRequestCycle;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
@@ -62,9 +68,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -114,9 +119,9 @@ implements FormExecutor {
             // no concurrency exception, so continue...
 
             // validate the proposed property value/action arguments
-            final String invalidReasonIfAny = getReasonInvalidIfAny();
-            if (invalidReasonIfAny != null) {
-                raiseWarning(targetIfAny, feedbackFormIfAny, invalidReasonIfAny);
+            final Optional<Recognition> invalidReasonIfAny = getReasonInvalidIfAny();
+            if (invalidReasonIfAny.isPresent()) {
+                raiseWarning(targetIfAny, feedbackFormIfAny, invalidReasonIfAny.get());
                 return false;
             }
 
@@ -219,7 +224,9 @@ implements FormExecutor {
 
             // otherwise, attempt to recognize this exception using the ExceptionRecognizers
             if(message == null) {
-                message = recognizeException(ex, targetIfAny, feedbackFormIfAny);
+                message = recognizeException(ex, targetIfAny, feedbackFormIfAny)
+                        .map($->$.toMessage(getTranslationService()))
+                        .orElse(null);
             }
 
             // if we did recognize the message, and not inline prompt, then display to user as a growl pop-up
@@ -229,7 +236,7 @@ implements FormExecutor {
                 messageBroker.setApplicationError(message);
 
                 //TODO [2089] hotfix to render the error on the same page instead of redirecting;
-                // previous behavior was to fall through and rethrow, which lead to the error never shown
+                // previous behavior was to fall through and re-throw, which lead to the error never shown
                 return false;
                 //--
             }
@@ -442,55 +449,47 @@ implements FormExecutor {
         }
     }
 
-    private String recognizeException(RuntimeException ex, AjaxRequestTarget target, Form<?> feedbackForm) {
+    private Optional<Recognition> recognizeException(RuntimeException ex, AjaxRequestTarget target, Form<?> feedbackForm) {
+        val exceptionRecognizerService = getExceptionRecognizerService();
 
-        // REVIEW: similar code also in WebRequestCycleForIsis; combine?
-
-        // see if the exception is recognized as being a non-serious error
-        // (nb: similar code in WebRequestCycleForIsis, as a fallback)
-        final Stream<ExceptionRecognizer> exceptionRecognizers = getServiceRegistry()
-                .select(ExceptionRecognizer.class)
-                .stream();
-        String recognizedErrorIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        if (recognizedErrorIfAny != null) {
-
-            // recognized
-            raiseWarning(target, feedbackForm, recognizedErrorIfAny);
-
-            //val txState = getCommonContext().getTransactionService().currentTransactionState();
-
-            //FIXME[2125] what's the replacement for this?
-            //txManager.getCurrentTransaction().clearAbortCause();
-
-            // there's no need to abort the transaction, it will have already been done
-            // (in IsisTransactionManager#executeWithinTransaction(...)).
-        }
-        return recognizedErrorIfAny;
+        val recognition = exceptionRecognizerService.recognize(ex);
+        recognition.ifPresent($->raiseWarning(target, feedbackForm, $));
+        return recognition;
     }
 
     private void raiseWarning(
-            final AjaxRequestTarget targetIfAny,
-            final Form<?> feedbackFormIfAny,
-            final String error) {
+            @Nullable final AjaxRequestTarget targetIfAny,
+            @Nullable final Form<?> feedbackFormIfAny,
+            @NonNull final Recognition recognition) {
 
+        val errorMsg = recognition.toMessage(getTranslationService());
+        
         if(targetIfAny != null && feedbackFormIfAny != null) {
             targetIfAny.add(feedbackFormIfAny);
-            feedbackFormIfAny.error(error);
+            feedbackFormIfAny.error(errorMsg);
         } else {
-            final MessageService messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
-            messageService.warnUser(error);
+            getMessageService().warnUser(errorMsg);
         }
     }
 
-
-    // ///////////////////////////////////////////////////////////////////
-    // Dependencies (from IsisContext)
-    // ///////////////////////////////////////////////////////////////////
+    // -- DEPENDENCIES 
 
     private IsisWebAppCommonContext getCommonContext() {
         return model.getCommonContext();
     }
 
+    protected ExceptionRecognizerService getExceptionRecognizerService() {
+        return getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
+    }
+    
+    protected TranslationService getTranslationService() {
+        return getServiceRegistry().lookupServiceElseFail(TranslationService.class);
+    }
+    
+    protected MessageService getMessageService() {
+        return getServiceRegistry().lookupServiceElseFail(MessageService.class);
+    }
+    
     protected ServiceRegistry getServiceRegistry() {
         return getCommonContext().getServiceRegistry();
     }
@@ -507,10 +506,6 @@ implements FormExecutor {
         return getCommonContext().getAuthenticationSession();
     }
 
-//    private MessageService getMessageService() {
-//        return getCommonContext().lookupServiceElseFail(MessageService.class);
-//    }
-
     protected WicketViewerSettings getSettings() {
         return getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
     }
@@ -526,8 +521,10 @@ implements FormExecutor {
         return formExecutorStrategy.obtainTargetAdapter();
     }
 
-    private String getReasonInvalidIfAny() {
-        return formExecutorStrategy.getReasonInvalidIfAny();
+    private Optional<Recognition> getReasonInvalidIfAny() {
+        val reason = formExecutorStrategy.getReasonInvalidIfAny(); 
+        val category = Category.CONSTRAINT_VIOLATION;
+        return ExceptionRecognizer.Recognition.of(category, reason);
     }
 
     private void onExecuteAndProcessResults(final AjaxRequestTarget target) {

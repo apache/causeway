@@ -19,12 +19,12 @@
 
 package org.apache.isis.applib.services.exceprecog;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class ExceptionRecognizerGeneralTest {
@@ -44,19 +44,19 @@ public class ExceptionRecognizerGeneralTest {
     @Test
     public void whenRecognized() {
         ersGeneral = new ExceptionRecognizerAbstract(ALWAYS_TRUE){};
-        assertThat(ersGeneral.recognize(new FooException()), is("foo"));
+        assertThat(ersGeneral.recognize(new FooException()).get().getReason(), is("foo"));
     }
 
     @Test
     public void whenDoesNotRecognize() {
         ersGeneral = new ExceptionRecognizerAbstract(ALWAYS_FALSE){};
-        assertThat(ersGeneral.recognize(new FooException()), is(nullValue()));
+        assertThat(ersGeneral.recognize(new FooException()), is(Optional.empty()));
     }
 
     @Test
     public void whenRecognizedWithMessageParser() {
         ersGeneral = new ExceptionRecognizerAbstract(ALWAYS_TRUE, s->"pre: " + s){};
-        assertThat(ersGeneral.recognize(new FooException()), is("pre: foo"));
+        assertThat(ersGeneral.recognize(new FooException()).get().getReason(), is("pre: foo"));
     }
 
 }

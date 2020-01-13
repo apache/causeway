@@ -24,8 +24,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class ExceptionRecognizerForSQLIntegrityConstraintViolationExceptionTest {
 
@@ -40,16 +43,17 @@ public class ExceptionRecognizerForSQLIntegrityConstraintViolationExceptionTest 
     public void uniqueConstraintOrIndexViolation() throws Exception {
         final String msg = "initial gumph: unique constraint or index violation; further details";
         final SQLIntegrityConstraintViolationException ex = new SQLIntegrityConstraintViolationException(msg);
-        String recognize = exceptionRecognizer.recognize(ex);
-        assertThat(recognize, is("Data already exists: " + msg));
+        val recognized = exceptionRecognizer.recognize(ex).orElse(null);
+        assertThat(recognized, is(not(nullValue())));
+        assertThat(recognized.getReason(), is("Data already exists: " + msg));
     }
 
     @Test
     public void notNullCheckConstraintViolation() throws Exception {
         final String msg = "initial gumph: NOT NULL check constraint; further details";
         final SQLIntegrityConstraintViolationException ex = new SQLIntegrityConstraintViolationException(msg);
-        String recognize = exceptionRecognizer.recognize(ex);
-        assertThat(recognize, is(nullValue()));
+        val recognized = exceptionRecognizer.recognize(ex).orElse(null);
+        assertThat(recognized, is(nullValue()));
     }
 
 }

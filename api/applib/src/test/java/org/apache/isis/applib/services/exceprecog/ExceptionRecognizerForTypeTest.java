@@ -19,12 +19,12 @@
 
 package org.apache.isis.applib.services.exceprecog;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class ExceptionRecognizerForTypeTest {
@@ -55,19 +55,19 @@ public class ExceptionRecognizerForTypeTest {
     @Test
     public void whenRecognized() {
         ersForType = new ExceptionRecognizerForType(FooException.class);
-        assertThat(ersForType.recognize(new FooException()), is("foo"));
+        assertThat(ersForType.recognize(new FooException()).get().getReason(), is("foo"));
     }
 
     @Test
     public void whenDoesNotRecognize() {
         ersForType = new ExceptionRecognizerForType(FooException.class);
-        assertThat(ersForType.recognize(new BarException()), is(nullValue()));
+        assertThat(ersForType.recognize(new BarException()), is(Optional.empty()));
     }
 
     @Test
     public void whenRecognizedWithMessageParser() {
         ersForType = new ExceptionRecognizerForType(FooException.class, prepend);
-        assertThat(ersForType.recognize(new FooException()), is("pre: foo"));
+        assertThat(ersForType.recognize(new FooException()).get().getReason(), is("pre: foo"));
     }
 
 

@@ -18,12 +18,21 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.exceprecog;
 
+import javax.inject.Named;
 import javax.jdo.JDODataStoreException;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
+
+@Service
+@Named("isisJdoDn5.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException")
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("Default")
 public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
-extends ExceptionRecognizerForType {
+extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
     public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException() {
         super(Category.CONSTRAINT_VIOLATION,

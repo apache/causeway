@@ -18,10 +18,21 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.exceprecog;
 
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
+@Service
+@Named("isisJdoDn5.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException")
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("Default")
 public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
-extends ExceptionRecognizerForType {
+extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
     public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException() {
         super(Category.CONSTRAINT_VIOLATION,
