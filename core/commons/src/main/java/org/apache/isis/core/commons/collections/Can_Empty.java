@@ -81,6 +81,11 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
+    public Can<T> addAll(@NonNull Can<T> other) {
+        return other;
+    }
+    
+    @Override
     public Can<T> add(int index, @NonNull T element) {
         if(index!=0) {
             throw new IndexOutOfBoundsException(

@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.exceprecog;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -147,14 +148,14 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
     public ExceptionRecognizerForType(
             Category category,
             final Class<? extends Exception> exceptionType,
-            final Function<String,String> messageParser) {
+            final UnaryOperator<String> messageParser) {
         this(category, ofType(exceptionType), messageParser);
     }
 
     public ExceptionRecognizerForType(
             Category category,
             final Predicate<Throwable> predicate,
-            final Function<String,String> messageParser) {
+            final UnaryOperator<String> messageParser) {
         super(category, predicate, messageParser);
     }
 
@@ -164,13 +165,13 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 
     public ExceptionRecognizerForType(
             final Class<? extends Exception> exceptionType,
-            final Function<String,String> messageParser) {
+            final UnaryOperator<String> messageParser) {
         this(Category.OTHER, exceptionType, messageParser);
     }
 
     public ExceptionRecognizerForType(
             final Predicate<Throwable> predicate,
-            final Function<String,String> messageParser) {
+            final UnaryOperator<String> messageParser) {
         this(Category.OTHER, predicate, messageParser);
     }
 

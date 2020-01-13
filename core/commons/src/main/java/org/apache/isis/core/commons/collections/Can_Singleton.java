@@ -19,6 +19,7 @@
 package org.apache.isis.core.commons.collections;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -75,6 +76,20 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public Can<T> add(@NonNull T element) {
         return Can.ofStream(Stream.of(this.element, element)); // append
+    }
+    
+    @Override
+    public Can<T> addAll(@NonNull Can<T> other) {
+        if(other.isEmpty()) {
+            return this;
+        }
+        if(other.isCardinalityOne()) {
+            return add(other.getSingleton().get());
+        }
+        val newElements = new ArrayList<T>(other.size()+1);
+        newElements.add(element);
+        other.forEach(newElements::add);
+        return Can_Multiple.of(newElements);
     }
     
     @Override

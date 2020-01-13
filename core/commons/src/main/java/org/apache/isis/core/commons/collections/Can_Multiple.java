@@ -92,6 +92,17 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
+    public Can<T> addAll(@NonNull Can<T> other) {
+        if(other.isEmpty()) {
+            return this;
+        }
+        val newElements = new ArrayList<T>(this.size() + other.size());
+        newElements.addAll(elements);
+        other.forEach(newElements::add);
+        return Can_Multiple.of(newElements);
+    }
+    
+    @Override
     public Can<T> add(int index, @NonNull T element) {
         val newElements = new ArrayList<T>(elements);
         newElements.add(index, element);

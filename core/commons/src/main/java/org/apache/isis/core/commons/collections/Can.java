@@ -371,6 +371,7 @@ public interface Can<T> extends Iterable<T> {
     // -- MANIPULATION
     
     Can<T> add(T element);
+    Can<T> addAll(Can<T> other);
     
     /**
      * Inserts the specified element at the specified position in this list

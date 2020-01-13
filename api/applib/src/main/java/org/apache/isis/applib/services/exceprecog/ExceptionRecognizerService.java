@@ -38,18 +38,23 @@ public interface ExceptionRecognizerService {
     Can<ExceptionRecognizer> getExceptionRecognizers();
 
     /**
+     * Takes into consideration ExceptionRecognizers as given by {@link #getExceptionRecognizers()}.
      * @param ex
      * @return optionally a recognition object, that describes both the category and reason, 
      * that will be included with the user-friendly message. 
      */
-    Optional<Recognition> recognize(Exception ex);
+    default Optional<Recognition> recognize(Exception ex) {
+        return recognizeFromSelected(getExceptionRecognizers(), ex);
+    }
 
     /**
-     * Extends {@link #recognize(Exception)} with additional recognizers to be taken into consideration,
-     * with least precedence order.  
+     * Takes into consideration ExceptionRecognizers as given by {@code recognizers}.
+     * @param recognizers
      * @param ex
-     * @param additionalRecognizers
+     * @return optionally a recognition object, that describes both the category and reason, 
+     * that will be included with the user-friendly message. 
      */
-    Optional<Recognition> recognize(Exception ex, Can<ExceptionRecognizer> additionalRecognizers);
+    Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Exception ex);
+
 
 }

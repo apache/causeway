@@ -32,12 +32,29 @@ public interface ExceptionRecognizerService {
 
     /**
      * 
-     * @return all ExceptionRecognizer implementations as discovered by the IoC container. 
+     * @return all ExceptionRecognizer implementations as discovered by the IoC container, 
+     * honoring order of precedence. 
      */
     Can<ExceptionRecognizer> getExceptionRecognizers();
 
-    Optional<Recognition> recognize(Exception ex);
+    /**
+     * Takes into consideration ExceptionRecognizers as given by {@link #getExceptionRecognizers()}.
+     * @param ex
+     * @return optionally a recognition object, that describes both the category and reason, 
+     * that will be included with the user-friendly message. 
+     */
+    default Optional<Recognition> recognize(Exception ex) {
+        return recognizeFromSelected(getExceptionRecognizers(), ex);
+    }
 
-    Optional<Recognition> recognize(Exception ex, Can<ExceptionRecognizer> additionalRecognizers);
+    /**
+     * Takes into consideration ExceptionRecognizers as given by {@code recognizers}.
+     * @param recognizers
+     * @param ex
+     * @return optionally a recognition object, that describes both the category and reason, 
+     * that will be included with the user-friendly message. 
+     */
+    Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Exception ex);
+
 
 }

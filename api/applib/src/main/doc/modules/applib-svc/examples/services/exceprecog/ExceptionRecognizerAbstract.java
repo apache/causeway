@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
@@ -79,14 +80,8 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
      * Convenience for subclass implementations that always prefixes the exception message
      * with the supplied text
      */
-    protected static Function<String, String> prefix(final String prefix) {
-        return new Function<String, String>() {
-
-            @Override
-            public String apply(String input) {
-                return prefix + ": " + input;
-            }
-        };
+    protected static UnaryOperator<String> prefix(final String prefix) {
+        return $->prefix + ": " + $;
     }
 
     // //////////////////////////////////////

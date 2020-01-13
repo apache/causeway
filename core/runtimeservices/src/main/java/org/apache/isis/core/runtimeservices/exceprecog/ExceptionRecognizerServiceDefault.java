@@ -58,22 +58,16 @@ public class ExceptionRecognizerServiceDefault implements ExceptionRecognizerSer
     public Can<ExceptionRecognizer> getExceptionRecognizers() {
         return exceptionRecognizers.get();
     }
-    
-    @Override
-    public Optional<Recognition> recognize(@NonNull final Exception ex) {
-        return handleMultiple(getExceptionRecognizers(), ex);
-    }
 
     @Override
-    public Optional<Recognition> recognize(
-            @NonNull final Exception ex, 
-            @NonNull final Can<ExceptionRecognizer> additionalRecognizers) {
+    public Optional<Recognition> recognizeFromSelected(
+            @NonNull final Can<ExceptionRecognizer> recognizers,
+            @NonNull final Exception ex) {
         
-        val recognized = recognize(ex);
-        if(recognized.isPresent()) {
-            return recognized; 
-        }
-        return handleMultiple(additionalRecognizers, ex);
+        return recognizers.stream()
+                .map($->handleSingle($, ex))
+                .filter(_NullSafe::isPresent)
+                .findFirst();
     }
     
     // -- HELPER
@@ -92,16 +86,5 @@ public class ExceptionRecognizerServiceDefault implements ExceptionRecognizerSer
         return recognized.get();
         
     }
-    
-    private static Optional<Recognition> handleMultiple(
-            @NonNull final Can<ExceptionRecognizer> recognizers, 
-            @NonNull final Exception ex) {
-        
-        return recognizers.stream()
-            .map($->handleSingle($, ex))
-            .filter(_NullSafe::isPresent)
-            .findFirst();
-    }
-
     
 }

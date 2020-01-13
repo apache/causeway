@@ -43,6 +43,7 @@ import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
@@ -303,7 +304,10 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             .lookupServiceElseFail(ExceptionRecognizerService.class);
             
             recognition = exceptionRecognizerService
-                    .recognize(ex, Can.ofSingleton(pageExpiredExceptionRecognizer));
+                    .recognizeFromSelected(
+                            Can.<ExceptionRecognizer>ofSingleton(pageExpiredExceptionRecognizer)
+                            .addAll(exceptionRecognizerService.getExceptionRecognizers()),
+                            ex);
             
         } else {
             
