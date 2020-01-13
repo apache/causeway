@@ -10,7 +10,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.subdomains.excel.fixtures.IsisModuleSubdomainsExcelFixtures;
@@ -32,7 +32,7 @@ public abstract class ExcelModuleIntegTestAbstract extends IsisIntegrationTestAb
             @PropertySource(IsisPresets.DataNucleusAutoCreate),
     })
     @Import({
-            IsisModuleCoreWebSpringBoot.class,
+            IsisModuleCoreRuntimeServices.class,
             IsisModuleSecurityBypass.class,
             IsisModuleJdoDataNucleus5.class,
             IsisModuleTestingFixturesApplib.class,

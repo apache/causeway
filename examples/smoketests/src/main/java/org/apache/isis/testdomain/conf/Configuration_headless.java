@@ -37,13 +37,13 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
-import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
 
 @Configuration
 @Import({
-    IsisModuleCoreWebSpringBoot.class,
+    IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
     IsisModuleIncModelMetaModel.class // @Model support
 })

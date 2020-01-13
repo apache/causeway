@@ -25,15 +25,15 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
-import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @Configuration
 @Import({
-    IsisModuleCoreWebSpringBoot.class,
+    IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
     IsisModuleJdoDataNucleus5.class,
     IsisModuleTestingFixturesApplib.class

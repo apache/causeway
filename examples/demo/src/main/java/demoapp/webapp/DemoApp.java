@@ -31,7 +31,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.webspringboot.IsisModuleCoreWebSpringBoot;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
@@ -83,7 +83,7 @@ public class DemoApp extends SpringBootServletInitializer {
         @PropertySource(IsisPresets.DataNucleusAutoCreate),
     })
     @Import({
-        IsisModuleCoreWebSpringBoot.class,
+        IsisModuleCoreRuntimeServices.class,
         IsisModuleSecurityShiro.class,
         IsisModuleJdoDataNucleus5.class,
         IsisModuleViewerWicketViewer.class,

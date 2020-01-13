@@ -63,12 +63,6 @@
 			<scope>test</scope>
 		</dependency>
         
-        <dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-webspringboot</artifactId>
-			<scope>test</scope>
-		</dependency>
-        
         <!-- core plugins required to run this module's own tests -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
