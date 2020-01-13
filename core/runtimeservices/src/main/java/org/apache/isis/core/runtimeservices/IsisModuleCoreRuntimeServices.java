@@ -29,6 +29,9 @@ import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDef
 import org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandServiceDefault;
 import org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault;
+import org.apache.isis.core.runtimeservices.email.EmailServiceDefault;
+import org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring;
+import org.apache.isis.core.runtimeservices.exceprecog.ExceptionRecognizerServiceDefault;
 import org.apache.isis.core.runtimeservices.factory.FactoryServiceDefault;
 import org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefault;
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo;
@@ -41,14 +44,12 @@ import org.apache.isis.core.runtimeservices.publish.PublisherDispatchServiceDefa
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.sessmgmt.SessionManagementServiceDefault;
+import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
 import org.apache.isis.core.runtimeservices.userprof.UserProfileServiceDefault;
 import org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.isis.core.runtimeservices.xactn.TransactionServiceSpring;
 import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
-import org.apache.isis.core.runtimeservices.email.EmailServiceDefault;
-import org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring;
-import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
 
 @Configuration
 @Import({
@@ -65,6 +66,7 @@ import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
         ConfigurationViewServiceDefault.class,
         EmailNotificationServiceDefault.class,
         EmailServiceDefault.class,
+        ExceptionRecognizerServiceDefault.class,
         EventBusServiceSpring.class,
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
