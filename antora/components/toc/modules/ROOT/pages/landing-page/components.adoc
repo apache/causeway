@@ -36,6 +36,6 @@ The xref:extensions:ROOT:about.adoc[Extensions Catalog] describes a number of ex
 
 For example, the "Excel Download" extension allows collections to be downloaded as an Excel `.xlsx` spreadsheet in the Wicket viewer.
 
-As well as the current extensions,  the xref:incubator:ROOT:about.adoc[Incubator Catalog] has additional extensions that may end up graduating to the extensions catalog, while the xref:legacy:ROOT:about.adoc[Legacy Catalog] may contain extensions that have been deprecated and are on the way out.
+As well as the current extensions,  the xref:incubator:ROOT:about.adoc[Incubator] has additional extensions that may end up graduating to the extensions catalog, while the xref:legacy:ROOT:about.adoc[Legacy Catalog] may contain extensions that have been deprecated and are on the way out.
 
 

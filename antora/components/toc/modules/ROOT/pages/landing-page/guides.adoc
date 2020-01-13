@@ -42,7 +42,7 @@ Some/many of these libraries are for code hosted outside of the Apache Isis appl
 Others are SPIs that are called by the framework implicitly rather than by your domain logic directly.
 
 
-As well as the current libraries, the xref:incubator:ROOT:about.adoc[Incubator Catalog] may have additional libraries that may end up graduating to the extensions catalog, while the xref:legacy:ROOT:about.adoc[Legacy Catalog] may contain libraries that have been deprecated and are on the way out.
+As well as the current libraries, the xref:incubator:ROOT:about.adoc[Incubator] may have additional libraries that may end up graduating to the extensions catalog, while the xref:legacy:ROOT:about.adoc[Legacy Catalog] may contain libraries that have been deprecated and are on the way out.
 
 == Resources
 

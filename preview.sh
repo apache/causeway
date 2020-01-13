@@ -40,6 +40,7 @@ sh build-site.sh $PLAYBOOK_FILE || exit 1
 
 if [[ "$SKIP_SERVE" == "true" ]]; then
   echo "skipping serving"
+  echo ""
 else
   echo ""
   echo "http://localhost:5000"
