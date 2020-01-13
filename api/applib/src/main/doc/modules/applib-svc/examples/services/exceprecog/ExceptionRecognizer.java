@@ -18,10 +18,17 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.services.i18n.TranslationService;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.val;
 
 
 /**
@@ -35,8 +42,8 @@ import org.apache.isis.applib.annotation.Programmatic;
  *
  * <p>
  * More than one implementation of {@link ExceptionRecognizer} can
- * be registered; they will all be consulted (in the order specified in
- * <tt>isis.properties</tt>) to determine if they recognize the exception.
+ * be registered; they will all be consulted (in the order as specified by the @Order annotation) 
+ * to determine if they recognize the exception.
  * The message returned by the first service recognizing the exception is
  * used.
  *
@@ -55,78 +62,82 @@ public interface ExceptionRecognizer {
 
     /**
      * (Attempt to) recognize the exception and return a user-friendly
-     * message to render instead.
+     * message to render instead. 
      *
-     * @return user-friendly message to render, or <tt>null</tt> otherwise.
+     * @return optionally a 
+     * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition recognition} object, 
+     * that describes both the 
+     * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category category} 
+     * and reason that will be included with the user-friendly message. 
      */
-    @Programmatic
-    public String recognize(Throwable ex);
+    public Optional<Recognition> recognize(Throwable ex);
 
-    /**
-     * An extension to {@link #recognize(Throwable)} that allows recognized exceptions
-     * to be {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category categorize}d.
-     */
-    @Programmatic
-    Recognition recognize2(Throwable ex);
-
-    @Programmatic
-    @PostConstruct
-    public void init();
-
-    @Programmatic
-    @PreDestroy
-    public void shutdown();
-
+    @RequiredArgsConstructor
     enum Category {
         /**
          * A violation of some declarative constraint (eg uniqueness or referential integrity) was detected.
          */
-        CONSTRAINT_VIOLATION,
+        CONSTRAINT_VIOLATION("violation of some declarative constraint"),
         /**
          * The object to be acted upon cannot be found (404)
          */
-        NOT_FOUND,
+        NOT_FOUND("object not found"),
         /**
          * A concurrency exception, in other words some other user has changed this object.
          */
-        CONCURRENCY,
+        CONCURRENCY("concurrent modification"),
         /**
          * Recognized, but for some other reason... 40x error
          */
-        CLIENT_ERROR,
+        CLIENT_ERROR("client side error"),
         /**
          * 50x error
          */
-        SERVER_ERROR,
+        SERVER_ERROR("server side error"),
         /**
          * Recognized, but uncategorized (typically: a recognizer of the original ExceptionRecognizer API).
          */
-        OTHER
+        OTHER("other")
+        ;
+        
+        @Getter private final String friendlyName;
+        
     }
 
+    @Value
     class Recognition {
 
         /**
-         * Returns a recognition of the specified type (assuming a non-null reason); else null.
+         * @return optionally a recognition of the specified type, based on a whether given reason is non-null 
          */
-        public static Recognition of(final Category category, final String reason) {
-            return reason != null? new Recognition(category, reason): null;
+        public static Optional<Recognition> of(
+                @Nullable final Category category, 
+                @Nullable final String reason) {
+            
+            if(reason==null) {
+                return Optional.empty();
+            }
+            
+            val nonNullCategory = category!=null? category: Category.OTHER;  
+            return Optional.of(new Recognition(nonNullCategory, reason));
         }
 
-        private final Category category;
-        private final String reason;
+        @NonNull private final Category category;
+        @NonNull private final String reason;
 
-        public Recognition(final Category category, final String reason) {
-            this.category = category;
-            this.reason = reason;
-        }
-
-        public Category getCategory() {
-            return category;
-        }
-
-        public String getReason() {
-            return reason;
+        public String toMessage(@Nullable TranslationService translationService) {
+            
+            val categoryLiteral = translationService!=null
+                    ? translationService.translate(
+                            ExceptionRecognizer.Category.class.getName(), getCategory().getFriendlyName())
+                            : getCategory().getFriendlyName();
+                            
+            val reasonLiteral = translationService!=null
+                    ? translationService.translate(
+                            ExceptionRecognizer.Recognition.class.getName(), getReason())
+                            : getReason();
+            
+            return String.format("[%s]: %s", categoryLiteral, reasonLiteral);
         }
     }
 }
