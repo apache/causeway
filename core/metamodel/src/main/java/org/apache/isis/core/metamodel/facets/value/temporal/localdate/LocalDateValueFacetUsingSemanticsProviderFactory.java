@@ -17,11 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.value.datejdk8local;
+package org.apache.isis.core.metamodel.facets.value.temporal.localdate;
 
 import java.time.LocalDate;
-import java.util.function.Function;
 
-interface TimeParser extends Function<String, LocalDate> {
+import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacetUsingSemanticsProviderFactory;
+
+public class LocalDateValueFacetUsingSemanticsProviderFactory 
+extends TemporalValueFacetUsingSemanticsProviderFactory<LocalDate> {
+
+    public LocalDateValueFacetUsingSemanticsProviderFactory() {
+        super(LocalDate.class, LocalDateValueSemanticsProvider::new);
+    }
 
 }

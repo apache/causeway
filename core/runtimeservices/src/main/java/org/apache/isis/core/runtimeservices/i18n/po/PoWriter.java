@@ -18,10 +18,11 @@
  */
 package org.apache.isis.core.runtimeservices.i18n.po;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.SortedMap;
 import java.util.SortedSet;
-
-import org.joda.time.LocalDateTime;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.collections._Maps;
@@ -80,11 +81,15 @@ class PoWriter extends PoAbstract {
         log.info(buf.toString());
     }
 
+    final static DateTimeFormatter timestampFormat = 
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss+Z", Locale.US);
+    
     /**
      * As per <a href="http://pology.nedohodnik.net/doc/user/en_US/ch-poformat.html">section 2.6</a>.
      */
     protected void header(final StringBuilder buf) {
-        final String createdAt = LocalDateTime.now().toString("yyyy-MM-dd HH:mm:ss+Z");
+        
+        final String createdAt = LocalDateTime.now().format(timestampFormat);
         buf.append("#, fuzzy").append("\n");
         buf.append("msgid \"\"").append("\n");
         buf.append("msgstr \"\"").append("\n");

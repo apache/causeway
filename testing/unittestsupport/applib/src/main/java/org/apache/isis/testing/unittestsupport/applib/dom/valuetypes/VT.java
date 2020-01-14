@@ -35,7 +35,7 @@ public final class VT {
 //    }
 //
 //    public static LocalDate ld(int yyyy, int mm, int dd) {
-//        return new LocalDate(yyyy,mm,dd);
+//        return LocalDate.of(yyyy,mm,dd);
 //    }
 //
 //    // //////////////////////////////////////

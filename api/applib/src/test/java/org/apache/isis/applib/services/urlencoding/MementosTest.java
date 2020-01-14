@@ -22,9 +22,9 @@ package org.apache.isis.applib.services.urlencoding;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Date;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -93,7 +93,7 @@ public class MementosTest {
         memento.put("someBooleanFalse", Boolean.FALSE);
         memento.put("someBigInteger", new BigInteger("123456789012345678901234567890"));
         memento.put("someBigDecimal", new BigDecimal("123456789012345678901234567890.123456789"));
-        memento.put("someLocalDate", new LocalDate(2013,9,3));
+        memento.put("someLocalDate", LocalDate.of(2013,9,3));
         memento.put("someJavaUtilDate", new Date(300_000_000));
 
         memento.put("someBookmark", new Bookmark("CUS", "12345"));
@@ -117,7 +117,7 @@ public class MementosTest {
         assertThat(memento2.get("someBooleanFalse", Boolean.class), is(Boolean.FALSE));
         assertThat(memento2.get("someBigInteger", BigInteger.class), is(new BigInteger("123456789012345678901234567890")));
         assertThat(memento2.get("someBigDecimal", BigDecimal.class), is(new BigDecimal("123456789012345678901234567890.123456789")));
-        assertThat(memento2.get("someLocalDate", LocalDate.class), is(new LocalDate(2013,9,3)));
+        assertThat(memento2.get("someLocalDate", LocalDate.class), is(LocalDate.of(2013,9,3)));
         assertThat(memento2.get("someJavaUtilDate", Date.class), is(new Date(300_000_000)));
         assertThat(memento2.get("someBookmark", Bookmark.class), is(new Bookmark("CUS", "12345")));
 

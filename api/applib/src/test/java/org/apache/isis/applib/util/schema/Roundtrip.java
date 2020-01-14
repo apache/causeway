@@ -21,16 +21,16 @@ import java.io.CharArrayWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.hamcrest.Matchers;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -133,20 +133,20 @@ public class Roundtrip {
         .addParamArg(interactionDto, "nullBigDecimal", java.math.BigDecimal.class, (java.math.BigDecimal) null, null);
 
         InteractionDtoUtils
-        .addParamArg(interactionDto, "aJodaDateTime", org.joda.time.DateTime.class, new org.joda.time.DateTime(2015, 5, 23, 9, 54, 1), null);
+        .addParamArg(interactionDto, "aOffsetDateTime", java.time.OffsetDateTime.class, OffsetDateTime.of(2015, 5, 23, 9, 54, 1, 0, null), null);
         InteractionDtoUtils
-        .addParamArg(interactionDto, "nullJodaDateTime", org.joda.time.DateTime.class, (org.joda.time.DateTime) null, null);
+        .addParamArg(interactionDto, "nullOffsetDateTime", java.time.OffsetDateTime.class, (OffsetDateTime) null, null);
 
         InteractionDtoUtils
-        .addParamArg(interactionDto, "aJodaLocalDate", org.joda.time.LocalDate.class, new org.joda.time.LocalDate(2015, 5, 23), null);
-        InteractionDtoUtils.addParamArg(interactionDto, "nullJodaLocalDate", org.joda.time.LocalDate.class, (org.joda.time.LocalDate) null, null);
+        .addParamArg(interactionDto, "aLocalDate", java.time.LocalDate.class, LocalDate.of(2015, 5, 23), null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullLocalDate", java.time.LocalDate.class, (LocalDate) null, null);
 
-        InteractionDtoUtils.addParamArg(interactionDto, "aJodaLocalDateTime", org.joda.time.LocalDateTime.class, new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1), null);
-        InteractionDtoUtils.addParamArg(interactionDto, "nullJodaLocalDateTime", org.joda.time.LocalDateTime.class, (org.joda.time.LocalDateTime) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aLocalDateTime", java.time.LocalDateTime.class, LocalDateTime.of(2015, 5, 23, 9, 54, 1), null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullLocalDateTime", java.time.LocalDateTime.class, (LocalDateTime) null, null);
 
         InteractionDtoUtils
-        .addParamArg(interactionDto, "aJodaLocalTime", org.joda.time.LocalTime.class, new org.joda.time.LocalTime(9, 54, 1), null);
-        InteractionDtoUtils.addParamArg(interactionDto, "nullJodaLocalTime", org.joda.time.LocalTime.class, (org.joda.time.LocalTime) null, null);
+        .addParamArg(interactionDto, "aLocalTime", java.time.LocalTime.class, LocalTime.of(9, 54, 1), null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullLocalTime", java.time.LocalTime.class, (LocalTime) null, null);
 
         InteractionDtoUtils.addParamArg(interactionDto, "aReference", null, new Bookmark("ORD", "12345"), null);
         InteractionDtoUtils.addParamArg(interactionDto, "nullReference", null, null, null);
@@ -292,52 +292,52 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaDateTime"));
-        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_DATE_TIME));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aOffsetDateTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.OFFSET_DATE_TIME));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
         // bit hacky... regular comparison fails but toString() works... must be some additional data that differs, not sure what tho'
         assertThat(
-                InteractionDtoUtils.getParameterArgValue(invocationDto, param, DateTime.class).toString(), is(new DateTime(2015, 5, 23, 9, 54, 1).toString()));
+                InteractionDtoUtils.getParameterArgValue(invocationDto, param, OffsetDateTime.class).toString(), is(OffsetDateTime.of(2015, 5, 23, 9, 54, 1, 0, null).toString()));
 
         param++;
-        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaDateTime"));
-        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_DATE_TIME));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullOffsetDateTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.OFFSET_DATE_TIME));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalDate"));
-        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aLocalDate"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LOCAL_DATE));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
         final LocalDate actual = InteractionDtoUtils.getParameterArgValue(invocationDto, param, LocalDate.class);
-        final LocalDate expected = new LocalDate(2015, 5, 23);
+        final LocalDate expected = LocalDate.of(2015, 5, 23);
         assertThat(actual, equalTo(expected));
 
         param++;
-        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalDate"));
-        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullLocalDate"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LOCAL_DATE));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalDateTime"));
-        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE_TIME));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aLocalDateTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LOCAL_DATE_TIME));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, LocalDateTime.class), is(new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1)));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, LocalDateTime.class), is(LocalDateTime.of(2015, 5, 23, 9, 54, 1)));
 
         param++;
-        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalDateTime"));
-        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE_TIME));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullLocalDateTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LOCAL_DATE_TIME));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalTime"));
-        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_TIME));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aLocalTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LOCAL_TIME));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
         assertThat(
-                InteractionDtoUtils.getParameterArgValue(invocationDto, param, LocalTime.class), is(new org.joda.time.LocalTime(9, 54, 1)));
+                InteractionDtoUtils.getParameterArgValue(invocationDto, param, LocalTime.class), is(LocalTime.of(9, 54, 1)));
 
         param++;
-        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalTime"));
-        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_TIME));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullLocalTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LOCAL_TIME));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;

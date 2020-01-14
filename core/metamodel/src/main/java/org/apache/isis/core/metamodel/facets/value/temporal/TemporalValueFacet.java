@@ -16,12 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.value.temporal;
 
-package org.apache.isis.core.metamodel.facets.value.datetimejdk8local;
+import java.time.temporal.Temporal;
 
-import java.time.LocalDateTime;
-import java.util.function.Function;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-interface TimeParser extends Function<String, LocalDateTime> {
+/**
+ * Common base for {@link java.time.temporal.Temporal} types.
+ * 
+ * @since 2.0
+ *
+ * @param <T> implementing {@link java.time.temporal.Temporal} type
+ */
+public interface TemporalValueFacet<T extends Temporal> extends Facet {
+
+    T temporalValue(ManagedObject object);
+    ManagedObject createValue(T temporal);
+    
+//    TemporalCategory getTemporalCategory();
+//    
+//    static enum TemporalCategory {
+//        TIME_ONLY,
+//        DATE_ONLY,
+//        DATE_TIME
+//    }
 
 }
