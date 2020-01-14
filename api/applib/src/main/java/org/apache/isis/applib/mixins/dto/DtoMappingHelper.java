@@ -29,8 +29,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.schema.common.v2.BookmarkObjectState;
 import org.apache.isis.schema.common.v2.OidDto;
 
 @Service
@@ -52,26 +50,11 @@ public class DtoMappingHelper {
         if (reference != null) {
             argValue = new OidDto();
             argValue.setObjectType(reference.getObjectType());
-            argValue.setObjectState(bookmarkObjectStateOf(reference));
             argValue.setObjectIdentifier(reference.getIdentifier());
         } else {
             argValue = null;
         }
         return argValue;
-    }
-
-    private static BookmarkObjectState bookmarkObjectStateOf(final Bookmark bookmark) {
-        switch (bookmark.getObjectState()) {
-        case PERSISTENT:
-            return BookmarkObjectState.PERSISTENT;
-        case TRANSIENT:
-            return BookmarkObjectState.TRANSIENT;
-        case VIEW_MODEL:
-            return BookmarkObjectState.VIEW_MODEL;
-        default:
-            throw _Exceptions.illegalArgument("objectState '%s' not recognized", bookmark.getObjectState());
-        }
-
     }
 
     

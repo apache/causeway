@@ -24,7 +24,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
@@ -88,14 +87,10 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
     private Oid_Marshaller(){}
 
-    // -- public constants
-    public static final String VIEWMODEL_INDICATOR =
-            Bookmark.ObjectState.VIEW_MODEL.getCode(); // "*"
-
-
-    // -- private constants
-    private static final String TRANSIENT_INDICATOR =
-            Bookmark.ObjectState.TRANSIENT.getCode() ; // "!"
+    @Deprecated
+    private static final String VIEWMODEL_INDICATOR = "*";
+    @Deprecated
+    private static final String TRANSIENT_INDICATOR = "!";
 
     private static final String SEPARATOR = ":";
     private static final String SEPARATOR_NESTING = "~";
@@ -147,15 +142,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
             throw _Exceptions.illegalArgument("Could not parse OID '" + oidStr + "'; should match pattern: " + OIDSTR_PATTERN.pattern());
         }
 
-        final String isTransientOrViewModelStr = getGroup(matcher, 3);
-        final Bookmark.ObjectState state;
-        if("!".equals(isTransientOrViewModelStr)) {
-            state = Bookmark.ObjectState.TRANSIENT;
-        } else if("*".equals(isTransientOrViewModelStr)) {
-            state = Bookmark.ObjectState.VIEW_MODEL;
-        } else {
-            state = Bookmark.ObjectState.PERSISTENT;
-        }
+        final String isTransientOrViewModelStr = getGroup(matcher, 3); // deprecated
 
         final String rootObjectType = getGroup(matcher, 4);
         final String rootIdentifier = getGroup(matcher, 5);
@@ -184,7 +171,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, RootOid.class);
                 return _Casts.uncheckedCast(
-                        Oid_Root.of(ObjectSpecId.of(rootObjectType), rootIdentifier, state));
+                        Oid_Root.of(ObjectSpecId.of(rootObjectType), rootIdentifier));
             } else {
                 throw _Exceptions.illegalArgument("Aggregated Oids are no longer supported");
             }
@@ -240,9 +227,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
     @Override
     public final String marshal(RootOid rootOid) {
         _Assert.assertFalse("can not marshal values", rootOid.isValue());
-        final String transientIndicator = rootOid.isTransient()? TRANSIENT_INDICATOR : "";
-        final String viewModelIndicator = rootOid.isViewModel()? VIEWMODEL_INDICATOR : "";
-        return transientIndicator + viewModelIndicator + rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
+        return rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
     }
 
     @Override

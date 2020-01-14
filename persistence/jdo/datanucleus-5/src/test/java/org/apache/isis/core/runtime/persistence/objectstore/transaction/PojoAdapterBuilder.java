@@ -58,7 +58,7 @@ public class PojoAdapterBuilder {
         PERSISTENT {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
-                return Factory.persistentOf(objectSpecId, identifier);
+                return Factory.of(objectSpecId, identifier);
             }
         },
         VALUE {

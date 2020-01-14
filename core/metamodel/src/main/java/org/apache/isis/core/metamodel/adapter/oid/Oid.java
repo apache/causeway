@@ -41,23 +41,15 @@ public interface Oid extends Serializable {
      */
     String enString();
 
-    /**
-     * Flags whether this OID is for a transient (not-yet-persisted) object,
-     * or a view model object, or for a persistent object.
-     *
-     * <p>
-     * In the case of an {@link ParentedOid}, is determined by the state
-     * of its {@link ParentedOid#getParentOid() root}'s {@link RootOid#isTransient() state}.
-     */
-    boolean isTransient();
-
-    boolean isViewModel();
-
-    boolean isPersistent();
-
     default boolean isValue() {
         return false; // default, only overridden by Oid_Value
     }
+    
+    @Deprecated
+    default boolean isTransient() {
+        return false;
+    }
+
     
     /**
      * {@link ObjectSpecId} of the domain object this instance is representing, or when parented,
@@ -109,22 +101,23 @@ public interface Oid extends Serializable {
         public static RootOid ofBookmark(Bookmark bookmark) {
             return Oid_Root.of(
                     ObjectSpecId.of(bookmark.getObjectType()), 
-                    bookmark.getIdentifier(), 
-                    bookmark.getObjectState());
+                    bookmark.getIdentifier());
         }
 
-        public static RootOid viewmodelOf(ObjectSpecId objectSpecId, String mementoStr) {
-            return Oid_Root.of(objectSpecId, mementoStr, Bookmark.ObjectState.VIEW_MODEL);
+        public static RootOid of(ObjectSpecId objectSpecId, String mementoStr) {
+            return Oid_Root.of(objectSpecId, mementoStr);
+        }
+        
+        @Deprecated
+        public static RootOid persistentOf(ObjectSpecId objectSpecId, String mementoStr) {
+            return of(objectSpecId, mementoStr);
         }
 
+        @Deprecated
         public static RootOid transientOf(ObjectSpecId objectSpecId, String identifier) {
-            return Oid_Root.of(objectSpecId, identifier, Bookmark.ObjectState.TRANSIENT);
+            return of(objectSpecId, identifier);
         }
-
-        public static RootOid persistentOf(ObjectSpecId objectSpecId, String identifier) {
-            return Oid_Root.of(objectSpecId, identifier, Bookmark.ObjectState.PERSISTENT);
-        }
-
+        
         // -- PARENTED COLLECTIONS
 
         public static ParentedOid parentedOfOneToMany(RootOid parentRootOid, OneToManyAssociation oneToMany) {

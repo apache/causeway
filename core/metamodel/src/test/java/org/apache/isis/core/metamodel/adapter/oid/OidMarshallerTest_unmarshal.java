@@ -69,7 +69,6 @@ public class OidMarshallerTest_unmarshal {
         final String oidStr = "CUS:123";
 
         final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-        assertThat(rootOid.isTransient(), is(false));
         assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
         assertThat(rootOid.getIdentifier(), is("123"));
 
@@ -82,7 +81,6 @@ public class OidMarshallerTest_unmarshal {
         final String oidStr = "com.planchase.ClassName:8";
 
         final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-        assertThat(rootOid.isTransient(), is(false));
         assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("com.planchase.ClassName")));
         assertThat(rootOid.getIdentifier(), is("8"));
 
@@ -104,7 +102,6 @@ public class OidMarshallerTest_unmarshal {
         final String oidStr = "!CUS:123";
 
         final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-        assertThat(rootOid.isTransient(), is(true));
         assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
         assertThat(rootOid.getIdentifier(), is("123"));
 
@@ -117,7 +114,6 @@ public class OidMarshallerTest_unmarshal {
         final String oidStr = "CUS:123$items";
 
         final ParentedOid collectionOid = oidMarshaller.unmarshal(oidStr, ParentedOid.class);
-        assertThat(collectionOid.isTransient(), is(false));
         assertThat(collectionOid.getParentOid(), is(oidMarshaller.unmarshal("CUS:123", RootOid.class)));
         assertThat(collectionOid.getName(), is("items"));
 
@@ -130,7 +126,6 @@ public class OidMarshallerTest_unmarshal {
         final String oidStr = "!CUS:123$items";
 
         final ParentedOid collectionOid = oidMarshaller.unmarshal(oidStr, ParentedOid.class);
-        assertThat(collectionOid.isTransient(), is(true));
         assertThat(collectionOid.getParentOid(), is(oidMarshaller.unmarshal("!CUS:123", RootOid.class)));
         assertThat(collectionOid.getName(), is("items"));
 

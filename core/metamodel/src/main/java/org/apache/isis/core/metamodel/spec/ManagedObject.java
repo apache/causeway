@@ -563,13 +563,15 @@ public interface ManagedObject {
     }
     
     static EntityState _entityState(ManagedObject adapter) {
-
-        if(adapter==null || adapter.getPojo()==null) {
-            return null;
+        if(adapter==null) {
+            return EntityState.not_Persistable;
         }
+        return _entityState(adapter.getSpecification(), adapter.getPojo());
+    }
+    
+    static EntityState _entityState(ObjectSpecification spec, Object pojo) {
 
-        val spec = adapter.getSpecification();
-        if(!spec.isEntity()) {
+        if(spec==null || pojo==null || !spec.isEntity()) {
             return EntityState.not_Persistable;
         }
 
@@ -578,8 +580,9 @@ public interface ManagedObject {
             throw _Exceptions.unrecoverable("Entity types must have an EntityFacet");
         }
 
-        return entityFacet.getEntityState(adapter.getPojo());
+        return entityFacet.getEntityState(pojo);
     }
+    
 
     static boolean _isDestroyed(ManagedObject adapter) {
         return _entityState(adapter) == EntityState.persistable_Destroyed;
@@ -598,17 +601,14 @@ public interface ManagedObject {
                 return;
             }
 
-            val oid = ManagedObject._identify(second);
-
-            if(oid.isTransient()) {
-
-                // TODO: I've never seen this exception, and in any case DataNucleus supports persistence-by-reachability; so probably not required
+            val entityState = _entityState(second);
+            if(entityState != EntityState.persistable_Attached) {
                 throw _Exceptions.illegalArgument(
                         "can't set a reference to a transient object [%s] from a persistent one [%s]",
                         second,
                         first.titleString(null));
             }
-
+            
         }
 
     }

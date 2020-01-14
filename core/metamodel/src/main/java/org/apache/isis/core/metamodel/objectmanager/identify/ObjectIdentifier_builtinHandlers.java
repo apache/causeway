@@ -114,7 +114,7 @@ class ObjectIdentifier_builtinHandlers {
             val spec = managedObject.getSpecification();
             val recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             val identifier = recreatableObjectFacet.memento(managedObject.getPojo());
-            return Oid.Factory.viewmodelOf(spec.getSpecId(), identifier);
+            return Oid.Factory.of(spec.getSpecId(), identifier);
         }
 
     }

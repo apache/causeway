@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRecreationException;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.session.RuntimeContext;
@@ -84,7 +85,8 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider  {
      * If the version differs, then a {@link ConcurrencyException} is thrown.
      *
      * <p>
-     * ALSO, even if a {@link ConcurrencyException}, then the provided {@link RootOid oid}'s {@link Version version}
+     * ALSO, even if a {@link ConcurrencyException}, then the provided {@link RootOid oid}'s 
+     * {@link Version version}
      * will be {@link RootOid#setVersion(Version) set} to the current
      * value.  This allows the client to retry if they wish.
      *
@@ -121,10 +123,10 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider  {
             // else recreate
             try {
                 final Object pojo;
-                if(rootOid.isTransient() || rootOid.isViewModel()) {
-                    pojo = recreatePojoTransientOrViewModel(rootOid);
-                } else {
+                if(spec.isEntity()) {
                     pojo = persistenceSession.fetchPersistentPojo(rootOid);
+                } else {
+                    pojo = recreatePojoTransientOrViewModel(rootOid);
                 }
                 adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
             } catch(ObjectNotFoundException ex) {
@@ -138,51 +140,51 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider  {
 
     }
 
-    public Map<RootOid,ObjectAdapter> adaptersFor(final Stream<RootOid> rootOids) {
-
-        final Map<RootOid, ObjectAdapter> adapterByOid = _Maps.newLinkedHashMap();
-
-        List<RootOid> notYetLoadedOids = _Lists.newArrayList();
-
-        rootOids.forEach(rootOid->{
-            // attempt to locate adapter for the Oid
-            ObjectAdapter adapter = null;
-            // handle view models or transient
-            if (rootOid.isTransient() || rootOid.isViewModel()) {
-                final Object pojo = recreatePojoTransientOrViewModel(rootOid);
-                adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
-            }
-            if (adapter != null) {
-                adapterByOid.put(rootOid, adapter);
-            } else {
-                // persistent oid, to load in bulk
-                notYetLoadedOids.add(rootOid);
-            }
-        });
-
-        // recreate, in bulk, all those not yet loaded
-        final Map<RootOid, Object> pojoByOid = persistenceSession.fetchPersistentPojos(notYetLoadedOids);
-        for (Map.Entry<RootOid, Object> entry : pojoByOid.entrySet()) {
-            final RootOid rootOid = entry.getKey();
-            final Object pojo = entry.getValue();
-            if(pojo != null) {
-                ObjectAdapter adapter;
-                try {
-                    adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
-                    adapterByOid.put(rootOid, adapter);
-                } catch(ObjectNotFoundException ex) {
-                    throw ex; // just rethrow
-                } catch(RuntimeException ex) {
-                    throw new PojoRecreationException(rootOid, ex);
-                }
-            } else {
-                // null indicates it couldn't be loaded
-                // do nothing here...
-            }
-        }
-
-        return adapterByOid;
-    }
+//    public Map<RootOid,ObjectAdapter> adaptersFor(final Stream<RootOid> rootOids) {
+//
+//        final Map<RootOid, ObjectAdapter> adapterByOid = _Maps.newLinkedHashMap();
+//
+//        List<RootOid> notYetLoadedOids = _Lists.newArrayList();
+//
+//        rootOids.forEach(rootOid->{
+//            // attempt to locate adapter for the Oid
+//            ObjectAdapter adapter = null;
+//            // handle view models or transient
+//            if (rootOid.isTransient() || rootOid.isViewModel()) {
+//                final Object pojo = recreatePojoTransientOrViewModel(rootOid);
+//                adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
+//            }
+//            if (adapter != null) {
+//                adapterByOid.put(rootOid, adapter);
+//            } else {
+//                // persistent oid, to load in bulk
+//                notYetLoadedOids.add(rootOid);
+//            }
+//        });
+//
+//        // recreate, in bulk, all those not yet loaded
+//        final Map<RootOid, Object> pojoByOid = persistenceSession.fetchPersistentPojos(notYetLoadedOids);
+//        for (Map.Entry<RootOid, Object> entry : pojoByOid.entrySet()) {
+//            final RootOid rootOid = entry.getKey();
+//            final Object pojo = entry.getValue();
+//            if(pojo != null) {
+//                ObjectAdapter adapter;
+//                try {
+//                    adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
+//                    adapterByOid.put(rootOid, adapter);
+//                } catch(ObjectNotFoundException ex) {
+//                    throw ex; // just rethrow
+//                } catch(RuntimeException ex) {
+//                    throw new PojoRecreationException(rootOid, ex);
+//                }
+//            } else {
+//                // null indicates it couldn't be loaded
+//                // do nothing here...
+//            }
+//        }
+//
+//        return adapterByOid;
+//    }
 
     // -- HELPER
 
@@ -190,11 +192,11 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider  {
         final ObjectSpecification spec =
                 specificationLoader.lookupBySpecIdElseLoad(rootOid.getObjectSpecId());
         final Object pojo;
-        if(rootOid.isViewModel()) {
+        if(rootOid.isTransient()) {
+            pojo = objectAdapterContext.instantiateAndInjectServices(spec);
+        } else {
             final String memento = rootOid.getIdentifier();
             pojo = recreateViewModel(spec, memento);
-        } else {
-            pojo = objectAdapterContext.instantiateAndInjectServices(spec);
         }
 
         _Assert.assertFalse("Pojo most likely should not be an Oid", (pojo instanceof Oid));

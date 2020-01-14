@@ -37,14 +37,15 @@ public class OidMarshallerTest_marshall {
 
     @Test
     public void rootOid() {
-        final String marshal = oidMarshaller.marshal(Oid.Factory.persistentOf(ObjectSpecId.of("CUS"),  "123"));
+        final String marshal = oidMarshaller.marshal(Oid.Factory.of(ObjectSpecId.of("CUS"),  "123"));
         assertThat(marshal, equalTo("CUS:123"));
     }
 
-    @Test
-    public void rootOid_transient() {
-        final String marshal = oidMarshaller.marshal(Oid.Factory.transientOf(ObjectSpecId.of("CUS"),  "123"));
-        assertThat(marshal, equalTo("!CUS:123"));
-    }
+//deprecated    
+//    @Test
+//    public void rootOid_transient() {
+//        final String marshal = oidMarshaller.marshal(Oid.Factory.transientOf(ObjectSpecId.of("CUS"),  "123"));
+//        assertThat(marshal, equalTo("!CUS:123"));
+//    }
 
 }

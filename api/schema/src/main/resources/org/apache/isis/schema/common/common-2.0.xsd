@@ -70,11 +70,6 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
-        <xs:attribute name="objectState" type="bookmarkObjectState">
-            <xs:annotation>
-                <xs:documentation>In previous versions of this schema the 'objectState' attribute was defaulted, but is now assumed to be 'persistent'</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
         <xs:attribute name="type" type="xs:string"/>
         <xs:attribute name="id" type="xs:string"/>
     </xs:complexType>
@@ -132,13 +127,6 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:simpleType name="bookmarkObjectState">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="persistent"/>
-            <xs:enumeration value="transient"/>
-            <xs:enumeration value="viewModel"/>
-        </xs:restriction>
-    </xs:simpleType>
 
     <xs:simpleType name="valueType">
         <xs:restriction base="xs:string">
