@@ -32,15 +32,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testing.integtestsupport.applib.validate.ValidateDomainModel;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.schema.metamodel.v1.DomainClassDto;
+import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Product;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
+import org.apache.isis.testing.integtestsupport.applib.validate.ValidateDomainModel;
 
 import lombok.val;
 
