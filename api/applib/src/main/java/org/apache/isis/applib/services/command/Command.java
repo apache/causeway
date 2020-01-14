@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 
 /**
  * Represents the <i>intention to</i> invoke either an action or modify a property.  There can be only one such

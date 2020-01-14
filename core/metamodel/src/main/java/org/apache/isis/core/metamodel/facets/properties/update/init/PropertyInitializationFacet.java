@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.properties.update.init;
 
-import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**

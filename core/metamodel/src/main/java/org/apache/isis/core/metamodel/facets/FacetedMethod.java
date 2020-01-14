@@ -27,14 +27,14 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
-import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
+import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 
 /**
  * non-final only so it can be mocked if need be.

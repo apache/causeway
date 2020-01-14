@@ -45,7 +45,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.schema.metamodel.v1.MetamodelDto;
+import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
 @Named("isisApplib.MetaModelServicesMenu")
 @DomainService(objectType = "isisApplib.MetaModelServicesMenu")

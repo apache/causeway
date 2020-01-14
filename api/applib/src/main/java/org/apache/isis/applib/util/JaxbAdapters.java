@@ -19,9 +19,14 @@
 package org.apache.isis.applib.util;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.Period;
+import java.time.ZonedDateTime;
 import java.util.Base64;
 
 import javax.activation.MimeType;
@@ -156,6 +161,20 @@ public final class JaxbAdapters {
 
     }
 
+    public static final class LocalTimeAdapter extends XmlAdapter<String, LocalTime> {
+
+        @Override
+        public LocalTime unmarshal(String v) throws Exception {
+            return LocalTime.parse(v);
+        }
+
+        @Override
+        public String marshal(LocalTime v) throws Exception {
+            return v.toString();
+        }
+
+    }
+    
     public static final class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 
         @Override
@@ -183,6 +202,20 @@ public final class JaxbAdapters {
         }
 
     }
+    
+    public static final class OffsetTimeAdapter extends XmlAdapter<String, OffsetTime> {
+
+        @Override
+        public OffsetTime unmarshal(String v) throws Exception {
+            return OffsetTime.parse(v);
+        }
+
+        @Override
+        public String marshal(OffsetTime v) throws Exception {
+            return v.toString();
+        }
+
+    }
 
     public static final class OffsetDateTimeAdapter extends XmlAdapter<String, OffsetDateTime> {
 
@@ -197,5 +230,49 @@ public final class JaxbAdapters {
         }
 
     }
+    
+    public static final class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
+
+        @Override
+        public ZonedDateTime unmarshal(String v) throws Exception {
+            return ZonedDateTime.parse(v);
+        }
+
+        @Override
+        public String marshal(ZonedDateTime v) throws Exception {
+            return v.toString();
+        }
+
+    }
+    
+    public static final class DurationAdapter extends XmlAdapter<String, Duration> {
+
+        @Override
+        public Duration unmarshal(String v) throws Exception {
+            return Duration.parse(v);
+        }
+
+        @Override
+        public String marshal(Duration v) throws Exception {
+            return v.toString();
+        }
+
+    }
+    
+    public static final class PeriodAdapter extends XmlAdapter<String, Period> {
+
+        @Override
+        public Period unmarshal(String v) throws Exception {
+            return Period.parse(v);
+        }
+
+        @Override
+        public String marshal(Period v) throws Exception {
+            return v.toString();
+        }
+
+    }
+    
+    
 
 }

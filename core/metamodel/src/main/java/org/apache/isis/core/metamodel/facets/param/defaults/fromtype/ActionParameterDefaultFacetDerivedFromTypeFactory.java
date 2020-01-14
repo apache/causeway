@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.param.defaults.fromtype;
 
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

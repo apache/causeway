@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 

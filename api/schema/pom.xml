@@ -117,11 +117,11 @@
 								<configuration>
 									<schemaDirectory>src/main/resources/org/apache/isis/schema</schemaDirectory>
 									<schemaIncludes>
-										<schemaInclude>common/common-1.1.xsd</schemaInclude>
-										<schemaInclude>cmd/cmd-1.4.xsd</schemaInclude>
-										<schemaInclude>ixn/ixn-1.3.xsd</schemaInclude>
-										<schemaInclude>chg/chg-1.1.xsd</schemaInclude>
-										<schemaInclude>metamodel/metamodel-1.0.xsd</schemaInclude>
+										<schemaInclude>common/common-2.0.xsd</schemaInclude>
+										<schemaInclude>cmd/cmd-2.0.xsd</schemaInclude>
+										<schemaInclude>ixn/ixn-2.0.xsd</schemaInclude>
+										<schemaInclude>chg/chg-2.0.xsd</schemaInclude>
+										<schemaInclude>metamodel/metamodel-2.0.xsd</schemaInclude>
 									</schemaIncludes>
 									<bindingDirectory>src/main/resources/org/apache/isis/schema</bindingDirectory>
 									<bindingIncludes>

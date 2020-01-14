@@ -30,9 +30,9 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 
 /**
  * Installs the {@link HiddenObjectFacetViaMethod} on the

@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -37,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 public class TitleAnnotationFacetFactory extends FacetFactoryAbstract

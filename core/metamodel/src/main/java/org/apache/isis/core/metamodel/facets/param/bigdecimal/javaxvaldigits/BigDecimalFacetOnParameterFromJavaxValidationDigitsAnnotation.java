@@ -20,10 +20,10 @@ package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
 
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 
 public class BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation extends BigDecimalValueFacetAbstract {
 

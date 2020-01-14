@@ -34,7 +34,6 @@ import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
@@ -46,16 +45,17 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.metamodel.v1.Action;
-import org.apache.isis.schema.metamodel.v1.Collection;
-import org.apache.isis.schema.metamodel.v1.DomainClassDto;
-import org.apache.isis.schema.metamodel.v1.FacetAttr;
-import org.apache.isis.schema.metamodel.v1.Member;
-import org.apache.isis.schema.metamodel.v1.MetamodelDto;
-import org.apache.isis.schema.metamodel.v1.Param;
-import org.apache.isis.schema.metamodel.v1.Property;
-import org.apache.isis.schema.metamodel.v1.ScalarParam;
-import org.apache.isis.schema.metamodel.v1.VectorParam;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.schema.metamodel.v2.Action;
+import org.apache.isis.schema.metamodel.v2.Collection;
+import org.apache.isis.schema.metamodel.v2.DomainClassDto;
+import org.apache.isis.schema.metamodel.v2.FacetAttr;
+import org.apache.isis.schema.metamodel.v2.Member;
+import org.apache.isis.schema.metamodel.v2.MetamodelDto;
+import org.apache.isis.schema.metamodel.v2.Param;
+import org.apache.isis.schema.metamodel.v2.Property;
+import org.apache.isis.schema.metamodel.v2.ScalarParam;
+import org.apache.isis.schema.metamodel.v2.VectorParam;
 
 import lombok.val;
 
@@ -198,7 +198,7 @@ class MetaModelExporter {
 
         final DomainClassDto domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
         if(domainClass.getFacets() == null) {
-            domainClass.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
+            domainClass.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
         }
         addFacets(specification, domainClass.getFacets(), config);
 
@@ -287,7 +287,7 @@ class MetaModelExporter {
 
         Property propertyType = new Property();
         propertyType.setId(otoa.getId());
-        propertyType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
+        propertyType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
         final ObjectSpecification specification = otoa.getSpecification();
         final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         propertyType.setType(value);
@@ -302,7 +302,7 @@ class MetaModelExporter {
             final MetaModelService.Config config) {
         Collection collectionType = new Collection();
         collectionType.setId(otoa.getId());
-        collectionType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
+        collectionType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
         final ObjectSpecification specification = otoa.getSpecification();
         final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         collectionType.setType(value);
@@ -317,7 +317,7 @@ class MetaModelExporter {
             final MetaModelService.Config config) {
         Action actionType = new Action();
         actionType.setId(oa.getId());
-        actionType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
+        actionType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
         actionType.setParams(new Action.Params());
 
         final ObjectSpecification specification = oa.getReturnType();
@@ -356,7 +356,7 @@ class MetaModelExporter {
                 ? new ScalarParam()
                         : new VectorParam();
                 parameterType.setId(parameter.getId());
-                parameterType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
+                parameterType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
 
                 final ObjectSpecification specification = parameter.getSpecification();
                 final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
@@ -368,10 +368,10 @@ class MetaModelExporter {
 
     private void addFacets(
             final FacetHolder facetHolder,
-            final org.apache.isis.schema.metamodel.v1.FacetHolder.Facets facets,
+            final org.apache.isis.schema.metamodel.v2.FacetHolder.Facets facets,
             final MetaModelService.Config config) {
 
-        final List<org.apache.isis.schema.metamodel.v1.Facet> facetList = facets.getFacet();
+        final List<org.apache.isis.schema.metamodel.v2.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
         .filter(facet -> !facet.isFallback() || !config.isIgnoreNoop())
         .map(facet -> asXsdType(facet, config))
@@ -380,10 +380,10 @@ class MetaModelExporter {
         sortFacets(facetList);
     }
 
-    private org.apache.isis.schema.metamodel.v1.Facet asXsdType(
+    private org.apache.isis.schema.metamodel.v2.Facet asXsdType(
             final Facet facet,
             final MetaModelService.Config config) {
-        final org.apache.isis.schema.metamodel.v1.Facet facetType = new org.apache.isis.schema.metamodel.v1.Facet();
+        final org.apache.isis.schema.metamodel.v2.Facet facetType = new org.apache.isis.schema.metamodel.v2.Facet();
         facetType.setId(facet.facetType().getCanonicalName());
         facetType.setFqcn(facet.getClass().getCanonicalName());
 
@@ -394,7 +394,7 @@ class MetaModelExporter {
 
     private void addFacetAttributes(
             final Facet facet,
-            final org.apache.isis.schema.metamodel.v1.Facet facetType,
+            final org.apache.isis.schema.metamodel.v2.Facet facetType,
             final MetaModelService.Config config) {
 
         Map<String, Object> attributeMap = _Maps.newTreeMap();
@@ -414,7 +414,7 @@ class MetaModelExporter {
     }
 
     private void addAttribute(
-            final org.apache.isis.schema.metamodel.v1.Facet facetType,
+            final org.apache.isis.schema.metamodel.v2.Facet facetType,
             final String key, final String str) {
         if(str == null) {
             return;
@@ -451,9 +451,10 @@ class MetaModelExporter {
         });
     }
 
-    private void sortFacets(final List<org.apache.isis.schema.metamodel.v1.Facet> facets) {
-        Collections.sort(facets, new Comparator<org.apache.isis.schema.metamodel.v1.Facet>() {
-            @Override public int compare(final org.apache.isis.schema.metamodel.v1.Facet o1, final org.apache.isis.schema.metamodel.v1.Facet o2) {
+    private void sortFacets(final List<org.apache.isis.schema.metamodel.v2.Facet> facets) {
+        Collections.sort(facets, new Comparator<org.apache.isis.schema.metamodel.v2.Facet>() {
+            @Override public int compare(final org.apache.isis.schema.metamodel.v2.Facet o1, 
+                    final org.apache.isis.schema.metamodel.v2.Facet o2) {
                 return o1.getId().compareTo(o2.getId());
             }
         });

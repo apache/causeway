@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v2.OidDto;
 
 final class Oid_Value implements RootOid {
 

@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
 /**
  * A {@link FacetFactory} which is applied to only for {@link ContributeeMember}s.

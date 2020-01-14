@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.objectmanager.identify;
 import java.util.UUID;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier.Handler;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

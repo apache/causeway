@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
 public class ActionSemanticsFacetFallbackToNonIdempotent extends ActionSemanticsFacetAbstract {
 

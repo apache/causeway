@@ -30,8 +30,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 

@@ -20,9 +20,9 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class ActionPositionFacetForActionXml extends ActionPositionFacetAbstract {
 

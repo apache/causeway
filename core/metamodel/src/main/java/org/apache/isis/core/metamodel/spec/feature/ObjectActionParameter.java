@@ -26,10 +26,10 @@ import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

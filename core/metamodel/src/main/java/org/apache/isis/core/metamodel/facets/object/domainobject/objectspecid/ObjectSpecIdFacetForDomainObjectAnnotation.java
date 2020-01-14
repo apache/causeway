@@ -23,9 +23,9 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class ObjectSpecIdFacetForDomainObjectAnnotation extends ObjectSpecIdFacetAbstract {
 

@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * The css class of a class, a property, collection, or an action.

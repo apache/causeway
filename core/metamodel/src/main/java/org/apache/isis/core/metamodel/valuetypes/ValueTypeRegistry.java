@@ -34,7 +34,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.schema.common.v1.ValueType;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 

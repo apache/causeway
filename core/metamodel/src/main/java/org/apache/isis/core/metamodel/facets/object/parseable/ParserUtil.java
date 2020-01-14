@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 

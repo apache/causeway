@@ -24,11 +24,11 @@
            xmlns:com="http://isis.apache.org/schema/common"
 >
 
-    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.1.xsd"/>
+    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
 
     <xs:element name="changesDto">
         <xs:annotation>
-            <xs:documentation>Represents v1.1 of this schema (as per majorVersion.minorVersion @default attribute, below).  The changes (create/update/delete) to one or more domain objects within a transaction.  (nb: only published objects are included in these lists).
+            <xs:documentation>Represents v2.0 of this schema (as per majorVersion.minorVersion @default attribute, below).  The changes (create/update/delete) to one or more domain objects within a transaction.  (nb: only published objects are included in these lists).
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>

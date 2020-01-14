@@ -20,10 +20,10 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.domainevents;
 
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
-import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 
 /**
  * This does <i>NOT</i> implement {@link ActionDomainEventFacet}, rather it is to record the default type to use

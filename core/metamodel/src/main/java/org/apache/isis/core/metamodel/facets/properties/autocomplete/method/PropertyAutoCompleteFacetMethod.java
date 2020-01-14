@@ -31,9 +31,9 @@ import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
+import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacetAbstract;
 
 import lombok.val;
 

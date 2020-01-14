@@ -23,9 +23,9 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Redirect;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class RedirectFacetFromActionLayoutAnnotation extends RedirectFacetAbstract {
 

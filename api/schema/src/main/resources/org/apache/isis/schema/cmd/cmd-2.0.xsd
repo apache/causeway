@@ -23,7 +23,7 @@
            xmlns="http://isis.apache.org/schema/cmd"
            xmlns:com="http://isis.apache.org/schema/common">
 
-    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.1.xsd"/>
+    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
 
     <xs:element name="commandsDto">
         <xs:annotation>
@@ -38,7 +38,7 @@
 
     <xs:element name="commandDto">
         <xs:annotation>
-            <xs:documentation>Represents v1.4 of this schema (as per majorVersion.minorVersion @default attribute, below).  Adds in 'commandsDto' and extending 'commandDto' to allow additional implementation-specific fields to be attached in 'userData' (a map).
+            <xs:documentation>Represents v2.0 of this schema (as per majorVersion.minorVersion @default attribute, below).  Adds in 'commandsDto' and extending 'commandDto' to allow additional implementation-specific fields to be attached in 'userData' (a map).
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>

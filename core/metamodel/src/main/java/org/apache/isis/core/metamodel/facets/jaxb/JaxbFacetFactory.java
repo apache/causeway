@@ -21,6 +21,11 @@ package org.apache.isis.core.metamodel.facets.jaxb;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -32,10 +37,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -44,9 +45,13 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetForXmlRootElementAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 /**
  * just adds a validator
@@ -229,6 +234,11 @@ implements MetaModelRefiner {
         }
         if(configuration.getReflector().getValidator().isJaxbViewModelDateTimeTypeAdapter()) {
             propertyValidators.add(new PropertyValidatorForDateTypes(java.sql.Timestamp.class));
+            propertyValidators.add(new PropertyValidatorForDateTypes(ZonedDateTime.class));
+            propertyValidators.add(new PropertyValidatorForDateTypes(OffsetDateTime.class));
+            propertyValidators.add(new PropertyValidatorForDateTypes(LocalDate.class));
+            propertyValidators.add(new PropertyValidatorForDateTypes(LocalDateTime.class));
+            propertyValidators.add(new PropertyValidatorForDateTypes(LocalTime.class));
             propertyValidators.add(new PropertyValidatorForDateTypes(org.joda.time.DateTime.class));
             propertyValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalDate.class));
             propertyValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalDateTime.class));

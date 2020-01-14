@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.param.hide;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**

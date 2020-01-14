@@ -25,13 +25,13 @@ import java.util.stream.Stream;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 
 /**
  * There is no check that the value is a {@link Comparator}; instead this is done through

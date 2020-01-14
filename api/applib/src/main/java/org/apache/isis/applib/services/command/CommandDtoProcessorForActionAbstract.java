@@ -18,10 +18,10 @@
  */
 package org.apache.isis.applib.services.command;
 
-import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.ParamDto;
-import org.apache.isis.schema.cmd.v1.ParamsDto;
+import org.apache.isis.schema.cmd.v2.ActionDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.ParamDto;
+import org.apache.isis.schema.cmd.v2.ParamsDto;
 
 /**
  * Convenience adapter for command processors for action invocations.

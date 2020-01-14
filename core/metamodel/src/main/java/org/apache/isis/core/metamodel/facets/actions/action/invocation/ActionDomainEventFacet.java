@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
+import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 
 /**
  * Corresponds to <tt>@Action(domainEvent=...)</tt> annotation in the Isis programming model.

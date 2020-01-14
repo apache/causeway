@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 
 /**
  * Indicates that this class can parse an entry string.

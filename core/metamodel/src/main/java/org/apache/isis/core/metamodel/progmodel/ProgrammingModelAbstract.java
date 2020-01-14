@@ -29,11 +29,11 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Multimaps;
 import org.apache.isis.core.commons.internal.collections._Multimaps.SetMultimap;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;

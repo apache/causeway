@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.ixn.v1.PropertyEditDto;
+import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 

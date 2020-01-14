@@ -24,9 +24,9 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.PropertyDto;
+import org.apache.isis.schema.cmd.v2.ActionDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.PropertyDto;
 
 /**
  * Used to create mementos of a command, such that it can be persisted and then executed either immediately (ie invoke

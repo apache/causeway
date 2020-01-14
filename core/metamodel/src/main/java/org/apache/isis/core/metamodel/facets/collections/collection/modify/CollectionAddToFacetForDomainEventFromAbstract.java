@@ -30,9 +30,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 
 import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 

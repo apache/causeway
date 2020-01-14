@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.param.validate;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**

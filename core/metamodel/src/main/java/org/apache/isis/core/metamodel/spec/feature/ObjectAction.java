@@ -39,6 +39,8 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
@@ -48,14 +50,12 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 

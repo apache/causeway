@@ -25,9 +25,9 @@ import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.val;
 

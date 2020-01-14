@@ -23,9 +23,9 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class HiddenFacetForActionAnnotation extends HiddenFacetAbstract {

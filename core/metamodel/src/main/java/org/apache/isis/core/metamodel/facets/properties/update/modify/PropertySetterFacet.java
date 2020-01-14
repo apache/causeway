@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.properties.update.modify;
 
-import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 

@@ -30,8 +30,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.schema.common.v1.BookmarkObjectState;
-import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v2.BookmarkObjectState;
+import org.apache.isis.schema.common.v2.OidDto;
 
 @Service
 @Named("isisApplib.DtoMappingHelper")

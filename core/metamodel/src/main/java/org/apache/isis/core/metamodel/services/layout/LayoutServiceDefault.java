@@ -42,8 +42,8 @@ import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 

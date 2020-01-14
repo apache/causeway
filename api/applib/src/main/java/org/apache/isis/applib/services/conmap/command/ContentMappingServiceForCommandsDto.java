@@ -31,8 +31,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
-import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.CommandsDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 @Service
 @Named("isisApplib.ContentMappingServiceForCommandsDto")

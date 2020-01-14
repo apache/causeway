@@ -18,6 +18,13 @@
  */
 package org.apache.isis.schema.jaxbadapters;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.function.Function;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -25,22 +32,140 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
+public class XmlCalendarFactory {
+    
+    // -- JAVA TIME - FROM XML
 
-class XmlCalendarFactory {
-	
-	public static XMLGregorianCalendar create(DateTime dateTime) {
+    public static LocalDate toLocalDate(XMLGregorianCalendar cal) {
+        return LocalDate.of(cal.getYear(), cal.getMonth(), cal.getDay());
+    }
+
+    public static LocalTime toLocalTime(XMLGregorianCalendar cal) {
+        return LocalTime.of(cal.getHour(), cal.getMinute(), cal.getSecond(), 
+                cal.getMillisecond()*1000_000);
+    }
+
+    public static LocalDateTime toLocalDateTime(XMLGregorianCalendar cal) {
+        return LocalDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay(),
+                cal.getHour(), cal.getMinute(), cal.getSecond(), 
+                cal.getMillisecond()*1000_000);
+    }
+
+    public static OffsetDateTime toOffsetDateTime(XMLGregorianCalendar cal) {
+        return OffsetDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay(),
+                cal.getHour(), cal.getMinute(), cal.getSecond(), 
+                cal.getMillisecond()*1000_000,
+                ZoneOffset.ofTotalSeconds(cal.getTimezone()*60));
+    }
+
+    public static OffsetTime toOffsetTime(XMLGregorianCalendar cal) {
+        return OffsetTime.of(
+                cal.getHour(), cal.getMinute(), cal.getSecond(), 
+                cal.getMillisecond()*1000_000,
+                ZoneOffset.ofTotalSeconds(cal.getTimezone()*60));
+    }
+
+    public static ZonedDateTime toZonedDateTime(XMLGregorianCalendar cal) {
+        return ZonedDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay(),
+                cal.getHour(), cal.getMinute(), cal.getSecond(), 
+                cal.getMillisecond()*1000_000,
+                ZoneOffset.ofTotalSeconds(cal.getTimezone()*60));
+    }
+    
+    // -- JAVA TIME - TO XML
+    
+    public static XMLGregorianCalendar create(LocalDate localDate) {
+        return localDate!=null 
+                ? withTypeFactoryDo($->$.newXMLGregorianCalendarDate(
+                        localDate.getYear(),
+                        localDate.getMonthValue(),
+                        localDate.getDayOfMonth(),
+                        DatatypeConstants.FIELD_UNDEFINED // timezone offset in minutes
+                        ))  
+                : null;
+    }
+    
+    public static XMLGregorianCalendar create(LocalTime localTime) {
+        return localTime!=null 
+                ? withTypeFactoryDo($->$.newXMLGregorianCalendarTime(
+                        localTime.getHour(),
+                        localTime.getMinute(),
+                        localTime.getSecond(),
+                        localTime.getNano()/1000_000, // millis
+                        DatatypeConstants.FIELD_UNDEFINED // timezone offset in minutes
+                        )) 
+                : null;
+    }
+    
+    public static XMLGregorianCalendar create(LocalDateTime localDateTime) {
+        return localDateTime!=null 
+                ? withTypeFactoryDo($->$.newXMLGregorianCalendar(
+                        localDateTime.getYear(),
+                        localDateTime.getMonthValue(),
+                        localDateTime.getDayOfMonth(),
+                        localDateTime.getHour(),
+                        localDateTime.getMinute(),
+                        localDateTime.getSecond(),
+                        localDateTime.getNano()/1000_000, // millis
+                        DatatypeConstants.FIELD_UNDEFINED // timezone offset in minutes
+                        )) 
+                : null;
+    }
+    
+    public static XMLGregorianCalendar create(OffsetTime offsetTime) {
+        return offsetTime!=null 
+                ? withTypeFactoryDo($->$.newXMLGregorianCalendarTime(
+                        offsetTime.getHour(),
+                        offsetTime.getMinute(),
+                        offsetTime.getSecond(),
+                        offsetTime.getNano()/1000_000, // millis
+                        offsetTime.getOffset().getTotalSeconds()/60 // timezone offset in minutes
+                        ))  
+                : null;
+    }
+    
+    public static XMLGregorianCalendar create(OffsetDateTime offsetDateTime) {
+        return offsetDateTime!=null 
+                ? withTypeFactoryDo($->$.newXMLGregorianCalendar(
+                        offsetDateTime.getYear(),
+                        offsetDateTime.getMonthValue(),
+                        offsetDateTime.getDayOfMonth(),
+                        offsetDateTime.getHour(),
+                        offsetDateTime.getMinute(),
+                        offsetDateTime.getSecond(),
+                        offsetDateTime.getNano()/1000_000, // millis
+                        offsetDateTime.getOffset().getTotalSeconds()/60 // timezone offset in minutes
+                        )) 
+                : null;
+    }
+    
+    public static XMLGregorianCalendar create(ZonedDateTime zonedDateTime) {
+        return zonedDateTime!=null 
+                ? withTypeFactoryDo($->$.newXMLGregorianCalendar(
+                        zonedDateTime.getYear(),
+                        zonedDateTime.getMonthValue(),
+                        zonedDateTime.getDayOfMonth(),
+                        zonedDateTime.getHour(),
+                        zonedDateTime.getMinute(),
+                        zonedDateTime.getSecond(),
+                        zonedDateTime.getNano()/1000_000, // millis
+                        zonedDateTime.getOffset().getTotalSeconds()/60 // timezone offset in minutes
+                        )) 
+                : null;
+    }
+    
+    
+    // -- JODA TIME
+    
+	public static XMLGregorianCalendar create(org.joda.time.DateTime dateTime) {
 		return dateTime!=null 
-				? withTypeFactoryDo(dtf->dtf.newXMLGregorianCalendar(dateTime.toGregorianCalendar())) 
+				? withTypeFactoryDo($->$.newXMLGregorianCalendar(dateTime.toGregorianCalendar())) 
 				: null;
 	}
 
-	public static XMLGregorianCalendar create(LocalDateTime localDateTime) {
+	public static XMLGregorianCalendar create(org.joda.time.LocalDateTime localDateTime) {
 		return localDateTime!=null 
-				? withTypeFactoryDo(dtf->dtf.newXMLGregorianCalendar(
+				? withTypeFactoryDo($->$.newXMLGregorianCalendar(
 						localDateTime.getYear(),
 				        localDateTime.getMonthOfYear(),
 				        localDateTime.getDayOfMonth(),
@@ -53,9 +178,9 @@ class XmlCalendarFactory {
 				: null;
 	}
 
-	public static XMLGregorianCalendar create(LocalDate localDate) {
+	public static XMLGregorianCalendar create(org.joda.time.LocalDate localDate) {
 		return localDate!=null 
-				? withTypeFactoryDo(dtf->dtf.newXMLGregorianCalendarDate(
+				? withTypeFactoryDo($->$.newXMLGregorianCalendarDate(
 						localDate.getYear(),
 						localDate.getMonthOfYear(),
 						localDate.getDayOfMonth(),
@@ -64,9 +189,9 @@ class XmlCalendarFactory {
 				: null;
 	}
 
-	public static XMLGregorianCalendar create(LocalTime localTime) {
+	public static XMLGregorianCalendar create(org.joda.time.LocalTime localTime) {
 		return localTime!=null 
-				? withTypeFactoryDo(dtf->dtf.newXMLGregorianCalendarTime(
+				? withTypeFactoryDo($->$.newXMLGregorianCalendarTime(
 				        localTime.getHourOfDay(),
 				        localTime.getMinuteOfHour(),
 				        localTime.getSecondOfMinute(),
@@ -79,10 +204,7 @@ class XmlCalendarFactory {
 	// -- HELPER
 	
 	/*
-	 * Gets an instance of DatatypeFactory and passes it to the factory argument for single use.
-	 * 
-	 * [ahuber] we don't want to store the DatatypeFactory.newInstance() into a static field for 
-	 * reuse, because then we would need to cleanup after IsisContext.destroy() as well.
+	 * Gets an instance of DatatypeFactory and passes it to the factory argument. (thread-safe)
 	 */
 	private static XMLGregorianCalendar withTypeFactoryDo(
 			Function<DatatypeFactory, XMLGregorianCalendar> factory) {

@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

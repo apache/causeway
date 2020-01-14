@@ -18,6 +18,7 @@ static_files:
 - schema/common/common.xsd
 - schema/common/common-1.0.xsd
 - schema/common/common-1.1.xsd
+- schema/common/common-1.2.xsd
 - schema/ixn/ixn.xsd
 - schema/ixn/ixn-1.0.xsd
 - schema/ixn/ixn-1.1.xsd

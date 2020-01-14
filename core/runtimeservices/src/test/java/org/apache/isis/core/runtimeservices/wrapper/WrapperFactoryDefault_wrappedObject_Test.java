@@ -66,16 +66,16 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.Employee;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepositoryImpl;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.core.unittestsupport.config.internal._Config;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 

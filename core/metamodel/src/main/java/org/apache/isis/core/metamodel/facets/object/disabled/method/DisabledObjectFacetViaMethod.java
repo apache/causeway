@@ -31,8 +31,8 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract implements ImperativeFacet {
 

@@ -24,8 +24,8 @@ import java.util.Objects;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.schema.common.v1.BookmarkObjectState;
-import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v2.BookmarkObjectState;
+import org.apache.isis.schema.common.v2.OidDto;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 

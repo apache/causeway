@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

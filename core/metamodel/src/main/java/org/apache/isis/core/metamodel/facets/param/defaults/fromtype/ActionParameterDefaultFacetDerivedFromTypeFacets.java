@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.param.defaults.fromtype;
 
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 

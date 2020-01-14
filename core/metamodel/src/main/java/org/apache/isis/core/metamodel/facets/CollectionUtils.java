@@ -41,8 +41,8 @@ import org.apache.isis.core.commons.internal.base._With;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

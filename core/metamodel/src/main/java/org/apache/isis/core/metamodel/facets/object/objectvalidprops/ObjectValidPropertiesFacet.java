@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectvalidprops;
 
-import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Object-level {@link ValidatingInteractionAdvisor validator} that ensures that

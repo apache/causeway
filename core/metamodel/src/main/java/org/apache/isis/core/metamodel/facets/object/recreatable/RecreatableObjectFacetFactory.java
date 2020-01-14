@@ -30,17 +30,17 @@ import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner, PostConstructMethodCache {

@@ -64,11 +64,11 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

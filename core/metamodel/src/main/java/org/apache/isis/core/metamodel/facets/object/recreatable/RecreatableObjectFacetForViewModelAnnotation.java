@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 
 public class RecreatableObjectFacetForViewModelAnnotation extends
 RecreatableObjectFacetDeclarativeInitializingAbstract {

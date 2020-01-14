@@ -44,14 +44,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.ParamDto;
-import org.apache.isis.schema.cmd.v1.ParamsDto;
-import org.apache.isis.schema.cmd.v1.PropertyDto;
-import org.apache.isis.schema.common.v1.InteractionType;
-import org.apache.isis.schema.common.v1.OidsDto;
-import org.apache.isis.schema.common.v1.ValueWithTypeDto;
+import org.apache.isis.schema.cmd.v2.ActionDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.ParamDto;
+import org.apache.isis.schema.cmd.v2.ParamsDto;
+import org.apache.isis.schema.cmd.v2.PropertyDto;
+import org.apache.isis.schema.common.v2.InteractionType;
+import org.apache.isis.schema.common.v2.OidsDto;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.val;
 

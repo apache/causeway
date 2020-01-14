@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.fallback;
 
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 public class PagedFacetFromConfiguration extends PagedFacetAbstract {
 

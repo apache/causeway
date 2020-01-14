@@ -25,8 +25,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.MapDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.MapDto;
 
 public class CommandDtoUtils_Test {
 

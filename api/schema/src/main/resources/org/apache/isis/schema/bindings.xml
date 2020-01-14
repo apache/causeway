@@ -24,65 +24,65 @@
                xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
 			  http://jaxb2-commons.dev.java.net/namespace-prefix http://java.net/projects/jaxb2-commons/sources/svn/content/namespace-prefix/trunk/src/main/resources/prefix-namespace-schema.xsd"
 >
-    <jaxb:bindings schemaLocation="chg/chg-1.1.xsd">
+    <jaxb:bindings schemaLocation="chg/chg-2.0.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.isis.schema.chg.v1"/>
+            <jaxb:package name="org.apache.isis.schema.chg.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="chg" />
         </jaxb:bindings>
     </jaxb:bindings>
 
-    <jaxb:bindings schemaLocation="ixn/ixn-1.3.xsd">
+    <jaxb:bindings schemaLocation="ixn/ixn-2.0.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.isis.schema.ixn.v1"/>
+            <jaxb:package name="org.apache.isis.schema.ixn.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="ixn" />
         </jaxb:bindings>
     </jaxb:bindings>
-    <!-- since ixn-1.3.xsd does an xs:import of common-1.1.xsd, we need to specify common's package bindings -->
-    <jaxb:bindings schemaLocation="common/common-1.1.xsd">
+    <!-- since ixn-1.3.xsd does an xs:import of common-1.2.xsd, we need to specify common's package bindings -->
+    <jaxb:bindings schemaLocation="common/common-2.0.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.isis.schema.common.v1"/>
+            <jaxb:package name="org.apache.isis.schema.common.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="com" />
         </jaxb:bindings>
     </jaxb:bindings>
     <!-- since ixn-1.3.xsd does an xs:import of cmd-1.4.xsd, we need to specify common's package bindings -->
-    <jaxb:bindings schemaLocation="cmd/cmd-1.4.xsd">
+    <jaxb:bindings schemaLocation="cmd/cmd-2.0.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.isis.schema.cmd.v1"/>
+            <jaxb:package name="org.apache.isis.schema.cmd.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="cmd" />
         </jaxb:bindings>
     </jaxb:bindings>
 
-    <jaxb:bindings schemaLocation="metamodel/metamodel-1.0.xsd">
+    <jaxb:bindings schemaLocation="metamodel/metamodel-2.0.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.isis.schema.metamodel.v1"/>
+            <jaxb:package name="org.apache.isis.schema.metamodel.v2"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
             <namespace:prefix name="mml" />

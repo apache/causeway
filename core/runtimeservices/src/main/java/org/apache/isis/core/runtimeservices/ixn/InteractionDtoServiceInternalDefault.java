@@ -43,12 +43,12 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.cmd.v1.ParamDto;
-import org.apache.isis.schema.cmd.v1.PropertyDto;
-import org.apache.isis.schema.common.v1.ValueWithTypeDto;
-import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
-import org.apache.isis.schema.ixn.v1.PropertyEditDto;
+import org.apache.isis.schema.cmd.v2.ActionDto;
+import org.apache.isis.schema.cmd.v2.ParamDto;
+import org.apache.isis.schema.cmd.v2.PropertyDto;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
+import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
+import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 @Service
 @Named("isisRuntimeServices.InteractionDtoServiceInternalDefault")

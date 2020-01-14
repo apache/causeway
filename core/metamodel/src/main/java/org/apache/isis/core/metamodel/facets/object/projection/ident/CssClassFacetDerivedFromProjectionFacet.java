@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.projection.ident;
 
 import java.util.Map;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract2;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 

@@ -28,10 +28,10 @@ import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
 
