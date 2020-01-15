@@ -216,6 +216,11 @@ domainEvent.postForDefault
 |isis.applib.annotation.action. +
 domain-event.post-for-default
 
+|isis.reflector.facet.collectionAnnotation. +
+domainEvent.postForDefault
+|isis.applib.annotation.collection. +
+domain-event.post-for-default
+
 
 |
 |

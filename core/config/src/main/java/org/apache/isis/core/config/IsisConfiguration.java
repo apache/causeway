@@ -121,6 +121,17 @@ public class IsisConfiguration {
                 }
 
             }
+
+            private final Collection collection = new Collection();
+            @Data
+            public static class Collection {
+
+                private final DomainEvent domainEvent = new DomainEvent();
+                @Data
+                public static class DomainEvent {
+                    private boolean postForDefault = true;
+                }
+            }
         }
     }
 
@@ -403,15 +414,6 @@ public class IsisConfiguration {
             private boolean filterVisibility = true;
 
 
-            private final CollectionAnnotation collectionAnnotation = new CollectionAnnotation();
-            @Data
-            public static class CollectionAnnotation {
-                private final DomainEvent domainEvent = new DomainEvent();
-                @Data
-                public static class DomainEvent {
-                    private boolean postForDefault = true;
-                }
-            }
 
             private final CssClass cssClass = new CssClass();
             @Data

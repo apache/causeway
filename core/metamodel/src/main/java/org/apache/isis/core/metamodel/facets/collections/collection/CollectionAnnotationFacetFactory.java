@@ -136,7 +136,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 collectionDomainEventFacet.getEventType(),
                 CollectionDomainEvent.Noop.class,
                 CollectionDomainEvent.Default.class,
-                getConfiguration().getReflector().getFacet().getCollectionAnnotation().getDomainEvent().isPostForDefault()
+                getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault()
                 )) {
             super.addFacet(collectionDomainEventFacet);
         }
