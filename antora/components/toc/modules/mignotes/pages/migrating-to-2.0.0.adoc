@@ -318,6 +318,10 @@ view-model-semantic-checking.enable
 |isis.reflector.facets.ignoreDeprecated
 |isis.core.metamodel.programming-model.ignore-deprecated
 
+|isis.reflector.introspector.parallelize
+|isis.core.metamodel.introspector.parallelize
+
+
 |
 |
 

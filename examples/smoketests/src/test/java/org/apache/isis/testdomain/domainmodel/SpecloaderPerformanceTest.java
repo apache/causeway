@@ -64,7 +64,7 @@ class SpecloaderPerformanceTest {
     
     @BeforeEach
     void setup() {
-        config.getReflector().getIntrospector().setParallelize(true);
+        config.getCore().getMetaModel().getIntrospector().setParallelize(true);
     }
     
     static long ITERATIONS = 100; /* should typically run in ~10s */

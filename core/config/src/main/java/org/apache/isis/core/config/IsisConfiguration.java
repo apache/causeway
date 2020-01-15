@@ -296,6 +296,23 @@ public class IsisConfiguration {
                 private boolean ignoreDeprecated = false;
             }
 
+            private final Introspector introspector = new Introspector();
+            @Data
+            public static class Introspector {
+                /**
+                 * Whether to perform introspection in parallel.
+                 */
+                private boolean parallelize = true;
+            }
+
+            private final Validator validator = new Validator();
+            @Data
+            public static class Validator {
+//                /**
+//                 * Whether to perform validation in parallel.
+//                 */
+//                private boolean parallelize = true;
+            }
         }
 
 
@@ -563,10 +580,6 @@ public class IsisConfiguration {
         private final Introspector introspector = new Introspector();
         @Data
         public static class Introspector {
-            /**
-             * Whether to perform introspection in parallel.
-             */
-            private boolean parallelize = true;
             /**
              * Whether all known types should be fully introspected as part of the bootstrapping, or should only be
              * partially introspected initially.

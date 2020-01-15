@@ -491,7 +491,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final Collection<ObjectSpecification> specs, 
             final IntrospectionState upTo) {
 
-        val isConcurrentFromConfig = isisConfiguration.getReflector().getIntrospector().isParallelize();
+        val isConcurrentFromConfig = isisConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
 
         val runSequential = !isConcurrentFromConfig;
         
