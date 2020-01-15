@@ -21,6 +21,7 @@ package org.apache.isis.core.config.viewer.wicket;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -62,36 +63,50 @@ public class WebAppContextPath implements Serializable {
     public void setContextPath(final String contextPath) {
         this.contextPath = normalizeContextPath(contextPath);
     }
-
-    public final String prependContextPath(String path) {
-
-        if(path==null) {
-            return getContextPath();
-        }
-
-        final String contextPath = getContextPath();
-        if(_Strings.isNullOrEmpty(contextPath)) {
-            return path;
-        }
-
-        return contextPath +  _Strings.prefix(path, "/");
+    
+    /**
+     * @return whether a context-path is in use
+     */
+    public boolean hasContextPath() {
+        return _Strings.isNotEmpty(contextPath);
     }
 
-    public String prependContextPathIfLocal(String url) {
+    /**
+     * @param localPath - last part of an URL to be prefixed (nullable)
+     * @return (non-null)
+     */
+    public String prependContextPath(@Nullable String localPath) {
+        if(localPath==null) {
+            return getContextPath();
+        }
+        if(!hasContextPath()) {
+            return localPath;
+        }
+        return getContextPath() + _Strings.prefix(localPath, "/");
+    }
 
-        if(url==null) {
+    /**
+     * @param urlOrLocalPath - when detected to be a localPath prepends the context-path if any, 
+     * identity operator otherwise
+     */
+    @Nullable
+    public String prependContextPathIfLocal(@Nullable String urlOrLocalPath) {
+        if(urlOrLocalPath==null) {
             return null;
         }
-        if(_Resources.isLocalResource(url)) {
-            return this.prependContextPath(url);
+        if(_Resources.isLocalResource(urlOrLocalPath)) {
+            return this.prependContextPath(urlOrLocalPath);
         }
-        return url;
+        return urlOrLocalPath;
     }
     
     // -- HELPER
     
     private final Pattern pattern = Pattern.compile("^[/]*(.+?)[/]*$");
     
+    /**
+     * make sure result is either empty or has a leading slash followed by a non-empty string
+     */
     private String normalizeContextPath(final String contextPath) {
         if(contextPath == null) {
             return "";
