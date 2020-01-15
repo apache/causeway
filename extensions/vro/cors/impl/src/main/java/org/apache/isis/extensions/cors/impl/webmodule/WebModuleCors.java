@@ -88,6 +88,7 @@ public final class WebModuleCors extends WebModuleAbstract {
             .ifPresent(filterReg -> {
                 filterReg.setInitParameter("cors.allowed.origins", "*");
                 filterReg.setInitParameter("cors.allowed.headers", "Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Cache-Control,If-Modified-Since,Pragma");
+                filterReg.setInitParameter("cors.allowed.methods", "GET,PUT,DELETE,POST,OPTIONS");
                 filterReg.setInitParameter("cors.exposed.headers", "Authorization");
 
                 filterReg.addMappingForUrlPatterns(
