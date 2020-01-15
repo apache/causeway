@@ -375,18 +375,6 @@ public class IsisConfiguration {
                 private boolean bulkLoad = false;
             }
         }
-        /**
-         * Default is <code>false</code> only for backward compatibility (to avoid lots of breakages in existing code);
-         * in future might change to <code>true</code>.
-         *
-         * <p>
-         *     currently disabled (in ISIS-921); to reinstate in ISIS-922? else delete.
-         * </p>
-         *
-         * @deprecated
-         */
-        @Deprecated
-        private boolean enforceSafeSemantics = false;
     }
 
     private final Reflector reflector = new Reflector();

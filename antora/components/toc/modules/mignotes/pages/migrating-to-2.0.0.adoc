@@ -205,7 +205,7 @@ standalone-collection.bulk-load
 standalone-collection.bulk-load
 
 |isis.persistor.enforceSafeSemantics
-|isis.persistence.enforce-safe-semantics
+|(removed)
 
 
 
