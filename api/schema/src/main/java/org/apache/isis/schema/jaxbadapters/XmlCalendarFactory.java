@@ -76,7 +76,7 @@ public class XmlCalendarFactory {
     
     public static XMLGregorianCalendar create(LocalDate localDate) {
         return localDate!=null 
-                ? withTypeFactoryDo($->$.newXMLGregorianCalendarDate(
+                ? withTypeFactoryDo(factory->factory.newXMLGregorianCalendarDate(
                         localDate.getYear(),
                         localDate.getMonthValue(),
                         localDate.getDayOfMonth(),
@@ -87,7 +87,7 @@ public class XmlCalendarFactory {
     
     public static XMLGregorianCalendar create(LocalTime localTime) {
         return localTime!=null 
-                ? withTypeFactoryDo($->$.newXMLGregorianCalendarTime(
+                ? withTypeFactoryDo(factory->factory.newXMLGregorianCalendarTime(
                         localTime.getHour(),
                         localTime.getMinute(),
                         localTime.getSecond(),
@@ -99,7 +99,7 @@ public class XmlCalendarFactory {
     
     public static XMLGregorianCalendar create(LocalDateTime localDateTime) {
         return localDateTime!=null 
-                ? withTypeFactoryDo($->$.newXMLGregorianCalendar(
+                ? withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(
                         localDateTime.getYear(),
                         localDateTime.getMonthValue(),
                         localDateTime.getDayOfMonth(),
@@ -114,7 +114,7 @@ public class XmlCalendarFactory {
     
     public static XMLGregorianCalendar create(OffsetTime offsetTime) {
         return offsetTime!=null 
-                ? withTypeFactoryDo($->$.newXMLGregorianCalendarTime(
+                ? withTypeFactoryDo(factory->factory.newXMLGregorianCalendarTime(
                         offsetTime.getHour(),
                         offsetTime.getMinute(),
                         offsetTime.getSecond(),
@@ -126,7 +126,7 @@ public class XmlCalendarFactory {
     
     public static XMLGregorianCalendar create(OffsetDateTime offsetDateTime) {
         return offsetDateTime!=null 
-                ? withTypeFactoryDo($->$.newXMLGregorianCalendar(
+                ? withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(
                         offsetDateTime.getYear(),
                         offsetDateTime.getMonthValue(),
                         offsetDateTime.getDayOfMonth(),
@@ -141,7 +141,7 @@ public class XmlCalendarFactory {
     
     public static XMLGregorianCalendar create(ZonedDateTime zonedDateTime) {
         return zonedDateTime!=null 
-                ? withTypeFactoryDo($->$.newXMLGregorianCalendar(
+                ? withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(
                         zonedDateTime.getYear(),
                         zonedDateTime.getMonthValue(),
                         zonedDateTime.getDayOfMonth(),
@@ -159,13 +159,13 @@ public class XmlCalendarFactory {
     
 	public static XMLGregorianCalendar create(org.joda.time.DateTime dateTime) {
 		return dateTime!=null 
-				? withTypeFactoryDo($->$.newXMLGregorianCalendar(dateTime.toGregorianCalendar())) 
+				? withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(dateTime.toGregorianCalendar())) 
 				: null;
 	}
 
 	public static XMLGregorianCalendar create(org.joda.time.LocalDateTime localDateTime) {
 		return localDateTime!=null 
-				? withTypeFactoryDo($->$.newXMLGregorianCalendar(
+				? withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(
 						localDateTime.getYear(),
 				        localDateTime.getMonthOfYear(),
 				        localDateTime.getDayOfMonth(),
@@ -180,7 +180,7 @@ public class XmlCalendarFactory {
 
 	public static XMLGregorianCalendar create(org.joda.time.LocalDate localDate) {
 		return localDate!=null 
-				? withTypeFactoryDo($->$.newXMLGregorianCalendarDate(
+				? withTypeFactoryDo(factory->factory.newXMLGregorianCalendarDate(
 						localDate.getYear(),
 						localDate.getMonthOfYear(),
 						localDate.getDayOfMonth(),
@@ -191,7 +191,7 @@ public class XmlCalendarFactory {
 
 	public static XMLGregorianCalendar create(org.joda.time.LocalTime localTime) {
 		return localTime!=null 
-				? withTypeFactoryDo($->$.newXMLGregorianCalendarTime(
+				? withTypeFactoryDo(factory->factory.newXMLGregorianCalendarTime(
 				        localTime.getHourOfDay(),
 				        localTime.getMinuteOfHour(),
 				        localTime.getSecondOfMinute(),
