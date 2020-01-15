@@ -88,11 +88,31 @@ public class IsisConfiguration {
             private boolean autoLogoutIfAlreadyAuthenticated = false;
         }
     }
-    
-    /**
-     * Set to override {@link Locale#getDefault()}
-     */
-    private Optional<String> locale = Optional.empty();
+
+
+    private final Core core = new Core();
+    @Data
+    public static class Core {
+
+        private final MetaModel metaModel = new MetaModel();
+        @Data
+        public static class MetaModel {
+
+        }
+
+        private final Runtime runtime = new Runtime();
+        @Data
+        public static class Runtime {
+
+            /**
+             * Set to override {@link Locale#getDefault()}
+             */
+            private Optional<String> locale = Optional.empty();
+
+        }
+
+    }
+
 
     private final Objects objects = new Objects();
     @Data

@@ -30,7 +30,7 @@ import lombok.extern.log4j.Log4j2;
 public class IsisLocaleInitializer {
 
     public void initLocale(final IsisConfiguration configuration) {
-        final Optional<String> localeSpecOpt = configuration.getLocale();
+        final Optional<String> localeSpecOpt = configuration.getCore().getRuntime().getLocale();
         localeSpecOpt.map(IsisLocaleInitializer::toLocale).ifPresent(IsisLocaleInitializer::setLocaleDefault);
         log.debug("locale is {}", Locale.getDefault());
     }

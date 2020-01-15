@@ -102,7 +102,12 @@ autoLogoutIfAlreadyAuthenticated
 |isis.security.shiro. +
 auto-logout-if-already-authenticated
 
+|isis.locale
+|isis.core.runtime.locale
+
 |
+
+
 - isis.objects.editing -> isis.core.metamodel.objects.editing
 - isis.xxx -> isis.core.xxx
 - isis.persistor -> isis.persistence
