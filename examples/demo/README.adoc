@@ -8,7 +8,7 @@ It allows you to learn the very basics and also to discover some of the more adv
 
 == Docker
 
-NOTE: Further on *<tag>* is used as a placeholder for the docker image tag of your choice. When omitted the latest version is used. Actual tag names might be changed without notice. Currently we have tag *nightly*. See https://hub.docker.com/r/apacheisis/demo-springboot/tags/[apacheisis/isis-2-demo] (Docker-Hub)
+NOTE: Further on *<tag>* is used as a placeholder for the docker image tag of your choice. When omitted the latest version is used. Actual tag names might be changed without notice. Currently we have tag *nightly*. See https://hub.docker.com/r/apacheisis/demo-springboot/tags/[apacheisis/demo-springboot] (Docker-Hub)
 
 === Prereqs
 
