@@ -105,16 +105,14 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
         // -- validators
         
-        val validator = config.getReflector().getValidator();
-        
         addValidatorToEnsureIdentityType();
         addValidatorToCheckForUnsupportedAnnotations();
         
-        if(validator.isEnsureUniqueObjectTypes()) {
+        if(config.getCore().getMetaModel().getValidator().isEnsureUniqueObjectTypes()) {
             addValidatorToEnsureUniqueObjectIds();
         }
         
-        if(validator.isCheckModuleExtent()) {
+        if(config.getCore().getMetaModel().getValidator().isCheckModuleExtent()) {
             addValidatorToCheckModuleExtent();
         }
 

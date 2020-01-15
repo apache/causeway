@@ -361,7 +361,34 @@ public class IsisConfiguration {
                 private boolean parallelize = true;
 
                 private boolean allowDeprecated = true;
+                private boolean ensureUniqueObjectTypes = true;
+                private boolean checkModuleExtent = true;
+                private boolean noParamsOnly = false;
+                private boolean actionCollectionParameterChoices = true;
 
+                @Deprecated
+                private boolean serviceActionsOnly = true;
+                @Deprecated
+                private boolean mixinsOnly = true;
+
+                private boolean explicitObjectType = false;
+
+                private final JaxbViewModel jaxbViewModel = new JaxbViewModel();
+                @Data
+                public static class JaxbViewModel {
+                    private boolean notAbstract = true;
+                    private boolean notInnerClass = true;
+                    private boolean noArgConstructor = false;
+                    private boolean referenceTypeAdapter = true;
+                    private boolean dateTimeTypeAdapter = true;
+                }
+
+                private final Jdoql jdoql = new Jdoql();
+                @Data
+                public static class Jdoql {
+                    private boolean fromClause = true;
+                    private boolean variablesClause = true;
+                }
             }
         }
 
@@ -621,36 +648,6 @@ public class IsisConfiguration {
         }
     }
 
-    private final Reflector reflector = new Reflector();
-    @Data
-    public static class Reflector {
-
-        private final Validator validator = new Validator();
-        @Data
-        public static class Validator {
-
-
-            private boolean ensureUniqueObjectTypes = true;
-            private boolean checkModuleExtent = true;
-            private boolean noParamsOnly = false;
-            private boolean actionCollectionParameterChoices = true;
-            @Deprecated
-            private boolean serviceActionsOnly = true;
-            @Deprecated
-            private boolean mixinsOnly = true;
-            private boolean explicitObjectType = false;
-
-            private boolean jaxbViewModelNotAbstract = true;
-            private boolean jaxbViewModelNotInnerClass = true;
-            private boolean jaxbViewModelNoArgConstructor = false;
-            private boolean jaxbViewModelReferenceTypeAdapter = true;
-            private boolean jaxbViewModelDateTimeTypeAdapter = true;
-
-            private boolean jdoqlFromClause = true;
-            private boolean jdoqlVariablesClause = true;
-
-        }
-    }
 
     private final Service service = new Service();
     @Data

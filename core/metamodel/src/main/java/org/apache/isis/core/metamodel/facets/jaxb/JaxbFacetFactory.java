@@ -219,13 +219,13 @@ implements MetaModelRefiner {
     private List<TypeValidator> getTypeValidators(IsisConfiguration configuration) {
 
         final List<TypeValidator> typeValidators = _Lists.newArrayList();
-        if(configuration.getReflector().getValidator().isJaxbViewModelNotAbstract()) {
+        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isNotAbstract()) {
             typeValidators.add(new JaxbViewModelNotAbstractValidator());
         }
-        if(configuration.getReflector().getValidator().isJaxbViewModelNotInnerClass()) {
+        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isNotInnerClass()) {
             typeValidators.add(new JaxbViewModelNotInnerClassValidator());
         }
-        if(configuration.getReflector().getValidator().isJaxbViewModelNoArgConstructor()) {
+        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isNoArgConstructor()) {
             typeValidators.add(new JaxbViewModelPublicNoArgConstructorValidator());
         }
         return typeValidators;
@@ -233,10 +233,10 @@ implements MetaModelRefiner {
 
     private List<PropertyValidator> getPropertyValidators(IsisConfiguration configuration) {
         final List<PropertyValidator> propertyValidators = _Lists.newArrayList();
-        if(configuration.getReflector().getValidator().isJaxbViewModelReferenceTypeAdapter()) {
+        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isReferenceTypeAdapter()) {
             propertyValidators.add(new PropertyValidatorForReferenceTypes());
         }
-        if(configuration.getReflector().getValidator().isJaxbViewModelDateTimeTypeAdapter()) {
+        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isDateTimeTypeAdapter()) {
             propertyValidators.add(new PropertyValidatorForDateTypes(java.sql.Timestamp.class));
             propertyValidators.add(new PropertyValidatorForDateTypes(ZonedDateTime.class));
             propertyValidators.add(new PropertyValidatorForDateTypes(OffsetDateTime.class));

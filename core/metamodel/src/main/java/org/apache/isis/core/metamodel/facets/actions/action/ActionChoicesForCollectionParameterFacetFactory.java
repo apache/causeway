@@ -59,7 +59,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        val shouldCheck = getConfiguration().getReflector().getValidator().isActionCollectionParameterChoices();
+        val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isActionCollectionParameterChoices();
         if(!shouldCheck) {
             return;
         }

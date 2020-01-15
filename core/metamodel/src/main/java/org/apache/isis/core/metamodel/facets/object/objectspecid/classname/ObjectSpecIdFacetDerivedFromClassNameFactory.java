@@ -113,7 +113,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
 
 
 
-        val shouldCheck = getConfiguration().getReflector().getValidator().isExplicitObjectType();
+        val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitObjectType();
         if(!shouldCheck) {
             return;
         }

@@ -340,6 +340,62 @@ validate-incrementally
 |isis.reflector.validator.allowDeprecated
 |isis.core.metamodel.validator.allow-deprecated
 
+|isis.reflector.validator.ensureUniqueObjectTypes
+|isis.core.metamodel.validator.ensure-unique-object-types
+
+|isis.reflector.validator.checkModuleExtent
+|isis.core.metamodel.validator.check-module-extent
+
+|isis.reflector.validator.noParamsOnly
+|isis.core.metamodel.validator.no-params-only
+
+|isis.reflector.validator.actionCollectionParameterChoices
+|isis.core.metamodel.validator.action-collection-parameter-choices
+
+|isis.reflector.validator.serviceActionsOnly
+|isis.core.metamodel.validator.service-actions-only
+
+|isis.reflector.validator.mixinsOnly
+|isis.core.metamodel.validator.mixins-only
+
+|isis.reflector.validator.explicitObjectType
+|isis.core.metamodel.validator.explicit-object-type
+
+|isis.reflector.validator. +
+jaxbViewModelNotAbstract
+|isis.core.metamodel.validator. +
+jaxb-view-model.not-abstract
+
+|isis.reflector.validator. +
+jaxbViewModelNotInnerClass
+|isis.core.metamodel.validator. +
+jaxb-view-model.not-inner-class
+
+|isis.reflector.validator. +
+jaxbViewModelNoArgConstructor
+|isis.core.metamodel.validator. +
+jaxb-view-model.no-arg-constructor
+
+|isis.reflector.validator. +
+jaxbViewModelReferenceTypeAdapter
+|isis.core.metamodel.validator. +
+jaxb-view-model.reference-type-adapter
+
+|isis.reflector.validator. +
+jaxbViewModelDateTimeTypeAdapter
+|isis.core.metamodel.validator. +
+jaxb-view-model.date-time-type-adapter
+
+|isis.reflector.validator. +
+jdoqlFromClause
+|isis.core.metamodel.validator. +
+jdoql.from-clause
+
+|isis.reflector.validator. +
+jdoqlVariablesClause
+|isis.core.metamodel.validator. +
+jdoql.variables-clause
+
 
 |
 |

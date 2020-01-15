@@ -62,7 +62,7 @@ public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetF
         Method hideMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
         if (hideMethod == null) {
 
-            boolean noParamsOnly = getConfiguration().getReflector().getValidator().isNoParamsOnly();
+            boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
             boolean searchExactMatch = !noParamsOnly;
             if(searchExactMatch) {
                 hideMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, getter.getParameterTypes());

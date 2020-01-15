@@ -64,7 +64,7 @@ implements MethodPrefixBasedFacetFactory {
             return;
         }
         
-        val noParamsOnly = getConfiguration().getReflector().getValidator().isNoParamsOnly();
+        val noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
 
         programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
 

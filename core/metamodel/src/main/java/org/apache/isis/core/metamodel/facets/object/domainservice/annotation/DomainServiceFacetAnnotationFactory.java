@@ -100,7 +100,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        val isServiceActionsOnly = getConfiguration().getReflector().getValidator().isServiceActionsOnly();
+        val isServiceActionsOnly = getConfiguration().getCore().getMetaModel().getValidator().isServiceActionsOnly();
         if (isServiceActionsOnly) {
             
             programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
@@ -142,7 +142,7 @@ implements MetaModelRefiner {
             });
         }
 
-        val isMixinsOnly = getConfiguration().getReflector().getValidator().isMixinsOnly();
+        val isMixinsOnly = getConfiguration().getCore().getMetaModel().getValidator().isMixinsOnly();
         if (isMixinsOnly) {
             programmingModel.addValidator(mixinOnlyValidator);
         }
