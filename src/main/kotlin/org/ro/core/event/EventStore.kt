@@ -143,12 +143,12 @@ object EventStore {
         return diffCnt <= allowedDiff
     }
 
-    fun isCached(url: String): Boolean {
+    fun isCached(url: String, method: String): Boolean {
         var answer = false
         val le = this.find(url)
         if (le != null) {
             when {
-                le.hasResponse() -> answer = true
+                le.hasResponse() && le.method == method -> answer = true
                 le.isView() -> answer = true
             }
         }

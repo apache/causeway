@@ -18,7 +18,6 @@ class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator(
                     Method.GET.name -> processGet(action, it)
                     Method.POST.name -> processPost(action)
                     Method.PUT.name -> processPut(action)
-                    Method.DELETE.name -> processDelete(action)
                 }
             }
         }
@@ -48,10 +47,6 @@ class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator(
         // url: http://localhost:8080/restful/objects/simple.SimpleObject/0/properties/notes
         // body:   {"value": "FoolOnTheHill"}
         throw Exception("[ActionAggregator.processPut] notImplementedYet $action")
-    }
-
-    private fun processDelete(action: Action) {
-        throw Exception("[ActionAggregator.processDelete] notImplementedYet $action")
     }
 
 

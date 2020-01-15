@@ -1,7 +1,6 @@
 package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
-import org.ro.core.model.BaseDisplayable
 import org.ro.core.model.DisplayList
 import org.ro.layout.Layout
 import org.ro.to.Property
@@ -18,7 +17,9 @@ import org.ro.ui.kv.UiManager
  */
 class ListAggregator(actionTitle: String) : BaseAggregator() {
 
-    override var dsp: BaseDisplayable = DisplayList(actionTitle)
+    init {
+        dsp = DisplayList(actionTitle)
+    }
 
     override fun update(logEntry: LogEntry) {
 
@@ -72,7 +73,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
         }
     }
 
-    override fun reset() : ListAggregator {
+    override fun reset(): ListAggregator {
         dsp.reset()
         return this
     }

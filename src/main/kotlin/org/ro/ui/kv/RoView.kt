@@ -49,7 +49,7 @@ object RoView {
 
     fun findActive() : SimplePanel? {
         val index = tabPanel.activeIndex
-        if (index != null) {
+        if (index > 0) {
             val tab = tabPanel.getChildComponent(index) as SimplePanel
             return(tab)
         }

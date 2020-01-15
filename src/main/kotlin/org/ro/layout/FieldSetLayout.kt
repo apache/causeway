@@ -28,8 +28,10 @@ data class FieldSetLayout(val name: String? = null,
     }
 
     fun build(tObject: TObject, tab: RoDisplay): FormPanel<String>? {
-        val members = tObject.members
+        val members = tObject.getProperties()
         val items = mutableListOf<FormItem>()
+        console.log("[FSL.build] property")
+        console.log(property)
         for (p in property) {
             val label = p.id ?: "label not set"
             var type = "Text"
@@ -38,16 +40,12 @@ data class FieldSetLayout(val name: String? = null,
             }
             //TODO handle numbers, dates, etc. as well
             var content = ""
-            val member = members[label]
+            val member = members.firstOrNull() { it.id == label }
             if (member != null) {
-                val value = member.value
-                if (value != null) {
-                    content = value.content.toString()
-                }
+                content = member.value?.content.toString()
             }
             val description = p.describedAs
-            val enabled = member?.disabledReason == ""
-            val fi = FormItem(label, type, content, description = description, enabled = enabled, tab = tab)
+            val fi = FormItem(label, type, content, description = description, member = member, tab = tab)
             items.add(fi)
         }
         return FormPanelFactory(items).panel

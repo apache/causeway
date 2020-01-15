@@ -2,6 +2,7 @@ package org.ro.ui.kv
 
 import org.ro.core.aggregator.ActionDispatcher
 import org.ro.to.Link
+import org.ro.to.Member
 import org.ro.to.TObject
 import org.ro.ui.IconManager
 import pl.treksoft.kvision.core.Component
@@ -100,6 +101,15 @@ object MenuFactory {
     private fun switchCssClass(menuItem: Component, from:String, to:String) {
         menuItem.removeCssClass(from)
         menuItem.addCssClass(to)
+    }
+
+    fun Member.getInvokeLink(): Link? {
+        for (l in links) {
+            if (l.rel.indexOf(id) > 0) {
+                return l
+            }
+        }
+        return null
     }
 
 }

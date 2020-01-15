@@ -32,7 +32,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createText(fi: FormItem): Text {
         val item = Text(label = fi.label, value = fi.content as String)
-        item.readonly = !fi.enabled
+        item.readonly = fi.member?.isReadOnly()
         item.onEvent {
             change = {
                 fi.changed()
@@ -43,14 +43,13 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createPassword(fi: FormItem): Password {
-        val item = Password(label = fi.label, value = fi.content as String)
-        return item
+        return Password(label = fi.label, value = fi.content as String)
     }
 
     private fun createTextArea(fi: FormItem): TextArea {
         val rowCnt = maxOf(3, fi.size)
         val item = TextArea(label = fi.label, value = fi.content as String, rows = rowCnt)
-        item.readonly = !fi.enabled
+        item.readonly = fi.readOnly
         item.onEvent {
             change = {
                 fi.changed()
@@ -67,8 +66,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         if (list.isNotEmpty()) {
             preSelectedValue = list.first().first
         }
-        val item = SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
-        return item
+        return SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
     }
 
 }

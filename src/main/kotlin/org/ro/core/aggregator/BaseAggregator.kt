@@ -8,7 +8,7 @@ import org.ro.to.TObject
 
 /**
  * An Aggregator:
- * @item is initially created in a ResponseHandler, (//TODO except it is called from a menu ???)
+ * @item is initially created in ResponseHandlers, DisplayObjects, Menus
  * @item is assigned to at least one LogEntry,
  * @item is passed on to related LogEntries (eg. sibblings in a list, Layout),
  * @item is notified about changes to related LogEntries,
@@ -28,6 +28,10 @@ abstract class BaseAggregator {
     open fun reset(): BaseAggregator {
         //do nothing and
         return this
+    }
+
+    open fun getObject(): TObject? {
+        return null
     }
 
     protected fun log(logEntry: LogEntry) {

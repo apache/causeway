@@ -1,14 +1,41 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
+import org.ro.core.Utils
 import org.ro.handler.TObjectHandler
 import org.ro.snapshots.ai1_16_0.SO_0
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @UnstableDefault
 class TObjectTest {
+
+    @Test
+    fun testPropertiesChanged() {
+        console.log("[TOT.testPropertiesChanged]")
+        //given
+        val jsonStr = SO_0.str
+        // when
+        val tObject = TObjectHandler().parse(jsonStr) as TObject
+        val properties = tObject.getProperties()
+        // then
+        val mutable = properties.filter { it.isReadWrite() }
+        assertEquals(1, mutable.size)
+
+        //when
+        console.log(mutable.first())
+        console.log(mutable.first().value)
+        mutable.first().value!!.content = "l on the hill"
+        //then
+        val putBody = Utils.propertiesAsBody(tObject)
+        assertTrue(putBody.contains("notes") )
+        assertTrue(putBody.contains("value") )
+        assertTrue(putBody.contains("l on the hill") )
+        // should contain as well: 3*{, 3*}, 2*:, 6*"
+        console.log(putBody)
+    }
 
     @Test
     fun testLinksMembersProperties() {

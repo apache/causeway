@@ -2,6 +2,7 @@ package org.ro.core
 
 import org.ro.to.Argument
 import org.ro.to.Link
+import org.ro.to.TObject
 
 object Utils {
 
@@ -55,6 +56,25 @@ object Utils {
             }
         }
         return output
+    }
+
+    //IMPROVE use JSON.stringify on a Map consisting of member.id, member.value
+    fun propertiesAsBody(tObject: TObject): String {
+        val members = tObject.members
+        val mutableProperties = members.filter { it.value.isReadWrite() }
+        //FIXME Request Payload={{ "notes":{"value": ""}}}
+        //Status Code: 400 Bad Request
+        // content not set correctly yet
+        var body = "{"
+        mutableProperties.forEach {
+            val m = it.value
+            body += "{ \"${m.id}\":"
+            val content = m.value?.content.toString()
+            body += enbrace("value", quote(content)) + "},"
+        }
+        val len = body.length
+        body = body.replaceRange(len - 1, len, "}")
+        return body
     }
 
     fun argumentsAsBody(link: Link): String {

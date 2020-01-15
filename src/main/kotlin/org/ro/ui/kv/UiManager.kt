@@ -32,37 +32,27 @@ object UiManager {
 
     init {
         window.addEventListener("keydown", fun(event) {
-            when (event) {
-                is KeyboardEvent -> {
-                    if (event.keyCode == ESC_KEY) pop()
-                    if (event.ctrlKey && event.keyCode == 83) {
-                        event.stopPropagation()
-                        save()
-                    }
-                    if (event.ctrlKey && event.keyCode == 90) undo()
-                }
-                else -> {
-                }
+            event.stopPropagation()
+            val ke = event as KeyboardEvent
+            if (ke.keyCode == ESC_KEY) {
+                pop()
+            }
+            if (ke.ctrlKey && ke.keyCode == 83) { // S
+                activeObject()?.save()
+                event.preventDefault()
+            }
+            if (ke.ctrlKey && ke.keyCode == 90) { // Z
+                activeObject()?.undo()
             }
         })
     }
 
-    private fun save() {
-        console.log("[UiManager.save] CTRL-S")
+    private fun activeObject(): DisplayObject? {
         val activeTab = RoView.findActive()
         if (activeTab != null) {
-            val displayObject = (activeTab as RoDisplay).displayObject
-            displayObject.save()
+            return (activeTab as RoDisplay).displayObject
         }
-    }
-
-    private fun undo() {
-        console.log("[UiManager.undo] CTRL-Z")
-        val activeTab = RoView.findActive()
-        if (activeTab != null) {
-            val displayObject = (activeTab as RoDisplay).displayObject
-            //displayObject.save()
-        }
+        return null
     }
 
     fun add(title: String, panel: SimplePanel, aggregator: BaseAggregator = UndefinedDispatcher()) {

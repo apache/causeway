@@ -1,18 +1,39 @@
 package org.ro.ui
 
+import org.ro.to.Member
 import org.ro.ui.kv.RoDisplay
 
 class FormItem(
         val label: String,
         val type: String,
-        val content: Any? = null,
+        var content: Any? = null,
         val size: Int = 1,
         val description: String? = "not set",
-        val enabled: Boolean = true,
+        val member: Member? = null,
         val tab: RoDisplay? = null) {
-    fun changed() {
-        if (tab != null) {
-            tab.setDirty(true)
+
+    private var originalContent: Any?
+    var readOnly = false
+
+    init {
+        originalContent = content
+        if (member != null) {
+            readOnly = member.isReadOnly()
         }
     }
+
+    fun changed() {
+        tab?.setDirty(true)
+        if (member != null) {
+            member.value?.content = content
+        }
+    }
+
+    fun reset() {
+        tab?.setDirty(false)
+        if (member != null) {
+            content = originalContent
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package org.ro.core.model
 
 import org.ro.layout.Layout
+import org.ro.to.TObject
 import org.ro.to.TransferObject
 
 abstract class BaseDisplayable {
@@ -14,6 +15,11 @@ abstract class BaseDisplayable {
     abstract fun canBeDisplayed(): Boolean
 
     abstract fun addData(obj: TransferObject)
+
+    open fun getObject(): TObject? {
+       // subclass responsibility
+        return null
+    }
 
     open fun reset() {
         // subclass responsibility

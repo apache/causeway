@@ -20,10 +20,10 @@ class Parameter(val id: String,
         for (c in choices) {
             when (c.content) {
                 is Link -> {
-                    result.add((c.content).title)
+                    result.add((c.content as Link).title)
                 }
                 is String -> {
-                    result.add(c.content)
+                    result.add(c.content as String)
                 }
             }
         }

@@ -1,7 +1,6 @@
 package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
-import org.ro.core.model.BaseDisplayable
 import org.ro.core.model.DisplayObject
 import org.ro.layout.Layout
 import org.ro.to.HttpError
@@ -11,7 +10,9 @@ import org.ro.ui.kv.UiManager
 
 class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
 
-    override var dsp: BaseDisplayable = DisplayObject(actionTitle)
+    init {
+        dsp = DisplayObject(actionTitle)
+    }
 
     override fun update(logEntry: LogEntry) {
 
@@ -33,6 +34,10 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
         if (l != null) {
             invoke(l)
         }
+    }
+
+    override fun getObject(): TObject? {
+        return dsp.getObject()
     }
 
     private fun handleLayout(layout: Layout) {
