@@ -18,10 +18,10 @@
  */
 package demoapp.webapp;
 
-import javax.inject.Singleton;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -49,6 +49,9 @@ import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRest
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
 import demoapp.dom.DemoModule;
 import demoapp.utils.LibraryPreloadingService;
 
@@ -59,6 +62,7 @@ import demoapp.utils.LibraryPreloadingService;
 @Import({
     DemoApp.AppManifest.class,
 })
+@Log4j2
 public class DemoApp extends SpringBootServletInitializer {
 
     /**
@@ -114,7 +118,7 @@ public class DemoApp extends SpringBootServletInitializer {
     )
     public static class AppManifest {
 
-        @Bean @Singleton
+        @Bean
         public SecurityModuleConfig securityModuleConfigBean() {
             return SecurityModuleConfig.builder()
                     .adminUserName("sven")
@@ -123,10 +127,28 @@ public class DemoApp extends SpringBootServletInitializer {
                     .build();
         }
 
-        @Bean @Singleton
+        @Bean
         public PermissionsEvaluationService permissionsEvaluationService() {
             return new PermissionsEvaluationServiceAllowBeatsVeto();
         }
+        
+        /**
+         * If available from {@code System.getProperty("ContextPath")},
+         * sets the context path for the web server. The context should start with a "/" character 
+         * but not end with a "/" character. The default context path can be
+         * specified using an empty string.
+         */
+        @Bean
+        public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer() {
+            return factory -> {
+                val contextPath = System.getProperty("ContextPath");
+                if(contextPath!=null) {
+                    factory.setContextPath(contextPath);
+                    log.info("Setting context path to '{}'", contextPath);
+                }
+            };
+        }
+        
     }
 
 }
