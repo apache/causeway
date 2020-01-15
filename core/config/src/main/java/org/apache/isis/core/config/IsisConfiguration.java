@@ -103,6 +103,12 @@ public class IsisConfiguration {
                 private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
             }
 
+            private final Action action = new Action();
+            @Data
+            public static class Action {
+
+            }
+
         }
     }
 
