@@ -98,11 +98,12 @@ public class IsisConfiguration {
         @Data
         public static class MetaModel {
 
-            private final Objects objects = new Objects();
+            private final DomainObject domainObject = new DomainObject();
             @Data
-            public static class Objects {
+            public static class DomainObject {
                 private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
             }
+
 
         }
 

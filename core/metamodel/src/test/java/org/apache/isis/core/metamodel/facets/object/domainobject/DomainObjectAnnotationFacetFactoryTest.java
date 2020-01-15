@@ -111,7 +111,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     void allowingObjectsEditingToReturn(EditingObjectsConfiguration value) {
         if(value!=null) {
             val config = super.metaModelContext.getConfiguration();
-            config.getCore().getMetaModel().getObjects().setEditing(value);
+            config.getCore().getMetaModel().getDomainObject().setEditing(value);
         }
     }
 
