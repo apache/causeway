@@ -98,6 +98,12 @@ public class IsisConfiguration {
         @Data
         public static class MetaModel {
 
+            private final Objects objects = new Objects();
+            @Data
+            public static class Objects {
+                private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
+            }
+
         }
 
         private final Runtime runtime = new Runtime();
@@ -114,11 +120,6 @@ public class IsisConfiguration {
     }
 
 
-    private final Objects objects = new Objects();
-    @Data
-    public static class Objects {
-        private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
-    }
 
     private final Persistor persistor = new Persistor();
     @Data

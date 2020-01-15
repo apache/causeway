@@ -108,7 +108,9 @@ auto-logout-if-already-authenticated
 |
 
 
-- isis.objects.editing -> isis.core.metamodel.objects.editing
+|isis.objects.editing
+|isis.core.metamodel.objects.editing
+
 - isis.xxx -> isis.core.xxx
 - isis.persistor -> isis.persistence
 - isis.persistor.datanucleus -> isis.persistence.jdo
