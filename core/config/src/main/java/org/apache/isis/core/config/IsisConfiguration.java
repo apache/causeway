@@ -290,8 +290,14 @@ public class IsisConfiguration {
 
             private boolean filterVisibility = true;
 
+            private final ProgrammingModel programmingModel = new ProgrammingModel();
+            @Data
+            public static class ProgrammingModel {
+                private boolean ignoreDeprecated = false;
+            }
 
         }
+
 
         private final Runtime runtime = new Runtime();
         @Data
@@ -553,18 +559,6 @@ public class IsisConfiguration {
     public static class Reflector {
 
 
-        private final Facet facet = new Facet();
-        @Data
-        public static class Facet {
-
-
-        }
-
-        private final Facets facets = new Facets();
-        @Data
-        public static class Facets {
-            private boolean ignoreDeprecated = false;
-        }
 
         private final Introspector introspector = new Introspector();
         @Data

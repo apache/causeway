@@ -52,7 +52,7 @@ public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFi
     @PostConstruct
     public void init() {
         val isIgnoreDeprecated = 
-                configuration.getReflector().getFacets().isIgnoreDeprecated();
+                configuration.getCore().getProgrammingModel().isIgnoreDeprecated();
         
         this.filterOnMarker = isIgnoreDeprecated 
                 ? excluding(EnumSet.of(ProgrammingModel.Marker.DEPRECATED))

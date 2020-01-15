@@ -315,6 +315,9 @@ view-model-semantic-checking.enable
 |isis.reflector.facet.filterVisibility
 |isis.core.metamodel.filter-visibility
 
+|isis.reflector.facets.ignoreDeprecated
+|isis.core.metamodel.programming-model.ignore-deprecated
+
 |
 |
 
