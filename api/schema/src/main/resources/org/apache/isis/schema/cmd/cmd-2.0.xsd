@@ -43,13 +43,13 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="majorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="1">
+                <xs:element name="majorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="2">
                     <xs:annotation>
                         <xs:documentation>The major version of the schema that an XML instance was created using.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="4">
+                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="0">
                     <xs:annotation>
                         <xs:documentation>The minor version of the schema that an XML instance was created using.
                         </xs:documentation>

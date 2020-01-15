@@ -40,7 +40,7 @@
             <xs:complexContent>
                 <xs:extension base="facetHolder">
                     <xs:sequence>
-                        <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+                        <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="2">
                             <xs:annotation>
                                 <xs:documentation>The major version of the schema that an XML instance was created using.
                                 </xs:documentation>
