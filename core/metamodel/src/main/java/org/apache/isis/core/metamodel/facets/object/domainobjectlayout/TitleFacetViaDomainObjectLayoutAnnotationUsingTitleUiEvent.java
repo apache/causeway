@@ -52,7 +52,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                         titleUiEvent,
                         TitleUiEvent.Noop.class,
                         TitleUiEvent.Default.class,
-                        configuration.getReflector().getFacet().getDomainObjectLayoutAnnotation().getTitleUiEvent().isPostForDefault()))
+                        configuration.getApplib().getAnnotation().getDomainObjectLayout().getTitleUiEvent().isPostForDefault()))
                 .map(titleUiEventClass -> {
                     final String translationContext;
                     if(facetHolder instanceof ObjectSpecification) {

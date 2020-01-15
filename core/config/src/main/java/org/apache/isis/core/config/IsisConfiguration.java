@@ -146,6 +146,36 @@ public class IsisConfiguration {
 
             }
 
+            private final DomainObjectLayout domainObjectLayout = new DomainObjectLayout();
+            @Data
+            public static class DomainObjectLayout {
+
+                private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
+                @Data
+                public static class CssClassUiEvent {
+                    private boolean postForDefault = true;
+                }
+
+                private final IconUiEvent iconUiEvent = new IconUiEvent();
+                @Data
+                public static class IconUiEvent {
+                    private boolean postForDefault = true;
+                }
+
+                private final LayoutUiEvent layoutUiEvent = new LayoutUiEvent();
+                @Data
+                public static class LayoutUiEvent {
+                    private boolean postForDefault = true;
+                }
+
+                private final TitleUiEvent titleUiEvent = new TitleUiEvent();
+                @Data
+                public static class TitleUiEvent {
+                    private boolean postForDefault = true;
+                }
+
+            }
+
             private final Action action = new Action();
             @Data
             public static class Action {
@@ -474,31 +504,6 @@ public class IsisConfiguration {
 
             private boolean filterVisibility = true;
 
-
-            private final DomainObjectLayoutAnnotation domainObjectLayoutAnnotation = new DomainObjectLayoutAnnotation();
-            @Data
-            public static class DomainObjectLayoutAnnotation {
-                private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
-                @Data
-                public static class CssClassUiEvent {
-                    private boolean postForDefault = true;
-                }
-                private final IconUiEvent iconUiEvent = new IconUiEvent();
-                @Data
-                public static class IconUiEvent {
-                    private boolean postForDefault = true;
-                }
-                private final LayoutUiEvent layoutUiEvent = new LayoutUiEvent();
-                @Data
-                public static class LayoutUiEvent {
-                    private boolean postForDefault = true;
-                }
-                private final TitleUiEvent titleUiEvent = new TitleUiEvent();
-                @Data
-                public static class TitleUiEvent {
-                    private boolean postForDefault = true;
-                }
-            }
 
             private final PropertyAnnotation propertyAnnotation = new PropertyAnnotation();
             @Data

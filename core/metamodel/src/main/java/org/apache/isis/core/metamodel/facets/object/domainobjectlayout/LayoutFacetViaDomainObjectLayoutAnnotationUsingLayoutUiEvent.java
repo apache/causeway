@@ -50,7 +50,7 @@ implements LayoutFacet {
                         layoutUiEvent,
                         LayoutUiEvent.Noop.class,
                         LayoutUiEvent.Default.class,
-                        configuration.getReflector().getFacet().getDomainObjectLayoutAnnotation().getLayoutUiEvent().isPostForDefault()))
+                        configuration.getApplib().getAnnotation().getDomainObjectLayout().getLayoutUiEvent().isPostForDefault()))
                 .map(layoutUiEvent -> {
 
                     return new LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(

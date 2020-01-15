@@ -52,7 +52,7 @@ implements CssClassFacet {
                         cssClassUiEventClass,
                         CssClassUiEvent.Noop.class,
                         CssClassUiEvent.Default.class,
-                        configuration.getReflector().getFacet().getDomainObjectLayoutAnnotation().getCssClassUiEvent().isPostForDefault()))
+                        configuration.getApplib().getAnnotation().getDomainObjectLayout().getCssClassUiEvent().isPostForDefault()))
                 .map(cssClassUiEventClass -> {
                     return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
                             cssClassUiEventClass, metamodelEventService, facetHolder);

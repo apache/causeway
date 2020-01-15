@@ -261,6 +261,21 @@ updatingLifecycleEvent.postForDefault
 |isis.applib.annotation.domain-object. +
 updating-lifecycle-event.post-for-default
 
+|isis.reflector.facet.domainObjectLayoutAnnotation. +
+cssClassUiEvent.postForDefault
+|isis.applib.annotation.domain-object-layout. +
+css-class-ui-event.post-for-default
+
+|isis.reflector.facet.domainObjectLayoutAnnotation. +
+layoutUiEvent.postForDefault
+|isis.applib.annotation.domain-object-layout. +
+layout-ui-event.post-for-default
+
+|isis.reflector.facet.domainObjectLayoutAnnotation. +
+titleUiEvent.postForDefault
+|isis.applib.annotation.domain-object-layout. +
+title-ui-event.post-for-default
+
 
 |
 |

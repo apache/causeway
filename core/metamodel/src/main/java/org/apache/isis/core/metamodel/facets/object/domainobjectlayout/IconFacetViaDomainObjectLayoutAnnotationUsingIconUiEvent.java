@@ -49,7 +49,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
                         iconUiEvent,
                         IconUiEvent.Noop.class,
                         IconUiEvent.Default.class,
-                        configuration.getReflector().getFacet().getDomainObjectLayoutAnnotation().getIconUiEvent().isPostForDefault()))
+                        configuration.getApplib().getAnnotation().getDomainObjectLayout().getIconUiEvent().isPostForDefault()))
                 .map(iconUiEvent -> {
                     return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
                             iconUiEvent, metamodelEventService, facetHolder);
