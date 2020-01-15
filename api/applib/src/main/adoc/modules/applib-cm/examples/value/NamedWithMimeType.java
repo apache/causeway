@@ -93,7 +93,7 @@ public interface NamedWithMimeType extends Serializable {
         TIFF("image/tiff", "tif"),
         TS("video/mp2t"),
         TTF("font/ttf"),
-        TXT("text/plain"),
+        TXT("text/plain"), /*aliases*/ LOG("text/plain"), PROPERTIES("text/plain"),
         VSD("application/vnd.visio"),
         WAV("audio/wav"),
         WEBA("audio/webm"),
