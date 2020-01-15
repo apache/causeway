@@ -52,7 +52,7 @@ public class TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent extends Tit
                         titleUiEvent,
                         TitleUiEvent.Noop.class,
                         TitleUiEvent.Default.class,
-                        configuration.getReflector().getFacet().getViewModelLayoutAnnotation().getTitleUiEvent().isPostForDefault()))
+                        configuration.getApplib().getAnnotation().getViewModelLayout().getTitleUiEvent().isPostForDefault()))
                 .map(titleUiEventClass -> {
                     final String translationContext;
                     if(facetHolder instanceof ObjectSpecification) {

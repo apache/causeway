@@ -51,7 +51,7 @@ public class CssClassFacetViaViewModelLayoutAnnotationUsingCssClassUiEvent exten
                         cssClassUiEventClass,
                         CssClassUiEvent.Noop.class,
                         CssClassUiEvent.Default.class,
-                        configuration.getReflector().getFacet().getViewModelLayoutAnnotation().getCssClassUiEvent().isPostForDefault()))
+                        configuration.getApplib().getAnnotation().getViewModelLayout().getCssClassUiEvent().isPostForDefault()))
                 .map(cssClassUiEventClass -> {
                     return new CssClassFacetViaViewModelLayoutAnnotationUsingCssClassUiEvent(
                             cssClassUiEventClass, metamodelEventService, facetHolder);

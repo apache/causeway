@@ -49,7 +49,7 @@ implements LayoutFacet {
                         layoutUiEvent,
                         LayoutUiEvent.Noop.class,
                         LayoutUiEvent.Default.class,
-                        configuration.getReflector().getFacet().getViewModelLayoutAnnotation().getLayoutUiEvent().isPostForDefault()))
+                        configuration.getApplib().getAnnotation().getViewModelLayout().getLayoutUiEvent().isPostForDefault()))
                 .map(layoutUiEvent -> {
 
                     return new LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(

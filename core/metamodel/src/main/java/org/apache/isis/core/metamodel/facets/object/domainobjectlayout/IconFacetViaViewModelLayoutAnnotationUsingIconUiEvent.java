@@ -49,7 +49,7 @@ public class IconFacetViaViewModelLayoutAnnotationUsingIconUiEvent extends IconF
                         iconUiEvent,
                         IconUiEvent.Noop.class,
                         IconUiEvent.Default.class,
-                        configuration.getReflector().getFacet().getViewModelLayoutAnnotation().getIconUiEvent().isPostForDefault()))
+                        configuration.getApplib().getAnnotation().getViewModelLayout().getIconUiEvent().isPostForDefault()))
                 .map(iconUiEvent -> {
 
                     return new IconFacetViaViewModelLayoutAnnotationUsingIconUiEvent(

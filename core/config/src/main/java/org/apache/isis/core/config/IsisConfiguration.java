@@ -234,6 +234,36 @@ public class IsisConfiguration {
                     private boolean postForDefault = true;
                 }
             }
+
+            private final ViewModelLayout viewModelLayout = new ViewModelLayout();
+            @Data
+            public static class ViewModelLayout {
+
+                private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
+                @Data
+                public static class CssClassUiEvent {
+                    private boolean postForDefault =true;
+                }
+
+                private final IconUiEvent iconUiEvent = new IconUiEvent();
+                @Data
+                public static class IconUiEvent {
+                    private boolean postForDefault =true;
+                }
+
+                private final LayoutUiEvent layoutUiEvent = new LayoutUiEvent();
+                @Data
+                public static class LayoutUiEvent {
+                    private boolean postForDefault =true;
+                }
+
+                private final TitleUiEvent titleUiEvent = new TitleUiEvent();
+                @Data
+                public static class TitleUiEvent {
+                    private boolean postForDefault =true;
+                }
+
+            }
         }
     }
 
@@ -515,31 +545,6 @@ public class IsisConfiguration {
 
             private boolean filterVisibility = true;
 
-
-            private final ViewModelLayoutAnnotation viewModelLayoutAnnotation = new ViewModelLayoutAnnotation();
-            @Data
-            public static class ViewModelLayoutAnnotation {
-                private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
-                @Data
-                public static class CssClassUiEvent {
-                    private boolean postForDefault =true;
-                }
-                private final IconUiEvent iconUiEvent = new IconUiEvent();
-                @Data
-                public static class IconUiEvent {
-                    private boolean postForDefault =true;
-                }
-                private final LayoutUiEvent layoutUiEvent = new LayoutUiEvent();
-                @Data
-                public static class LayoutUiEvent {
-                    private boolean postForDefault =true;
-                }
-                private final TitleUiEvent titleUiEvent = new TitleUiEvent();
-                @Data
-                public static class TitleUiEvent {
-                    private boolean postForDefault =true;
-                }
-            }
         }
 
         private final Facets facets = new Facets();
