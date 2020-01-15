@@ -324,6 +324,11 @@ view-model-semantic-checking.enable
 |isis.reflector.introspector.mode
 |isis.core.metamodel.introspector.mode
 
+|isis.reflector.introspect. +
+lockAfterFullIntrospection
+|isis.core.metamodel.introspector. +
+lock-after-full-introspection
+
 
 |
 |

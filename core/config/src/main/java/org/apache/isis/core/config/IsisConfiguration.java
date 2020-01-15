@@ -317,6 +317,17 @@ public class IsisConfiguration {
                  */
                 private IntrospectionMode mode = IntrospectionMode.LAZY_UNLESS_PRODUCTION;
 
+                /**
+                 * If true, then no new specifications will be allowed to be loaded once introspection has been complete.
+                 *
+                 * <p>
+                 * Only applies if the introspector is configured to perform full introspection up-front (either because of
+                 * {@link IntrospectionMode#FULL} or {@link IntrospectionMode#LAZY_UNLESS_PRODUCTION} when in production);
+                 * otherwise is ignored.
+                 * </p>
+                 */
+                private boolean lockAfterFullIntrospection = true;
+
             }
 
             private final Validator validator = new Validator();
@@ -595,22 +606,12 @@ public class IsisConfiguration {
         @Data
         public static class Introspector {
             /**
-             * If true, then no new specifications will be allowed to be loaded once introspection has been complete.
-             *
-             * <p>
-             * Only applies if the introspector is configured to perform full introspection up-front (either because of
-             * {@link IntrospectionMode#FULL} or {@link IntrospectionMode#LAZY_UNLESS_PRODUCTION} when in production);
-             * otherwise is ignored.
-             * </p>
-             */
-            private boolean lockAfterFullIntrospection = true;
-            /**
              * If true, then metamodel validation is performed after any new specification has been loaded (after the
              * initial bootstrapping).
              *
              * <p>
              * This does <i>not</i> apply if the introspector is configured to perform full introspection up-front
-             * AND when the metamodel is {@link #isLockAfterFullIntrospection() locked} after initial bootstrapping
+             * AND when the metamodel is {@link Core.MetaModel.Introspector#isLockAfterFullIntrospection() locked} after initial bootstrapping
              * (because in that case the lock check will simply prevent any new specs from being loaded).
              * But it will apply otherwise.
              * </p>

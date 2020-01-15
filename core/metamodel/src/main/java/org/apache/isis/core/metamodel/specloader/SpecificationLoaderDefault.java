@@ -454,7 +454,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      */
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
-        if(isMetamodelFullyIntrospected() && isisConfiguration.getReflector().getIntrospector().isLockAfterFullIntrospection()) {
+        if(isMetamodelFullyIntrospected() && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
             throw _Exceptions.illegalState(
                     "Cannot introspect class '%s' because the metamodel has been fully introspected and is now locked. " +
                     "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
