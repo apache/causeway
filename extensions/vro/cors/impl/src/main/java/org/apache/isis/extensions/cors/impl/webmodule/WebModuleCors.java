@@ -18,8 +18,12 @@
  */
 package org.apache.isis.extensions.cors.impl.webmodule;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -32,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 
 import lombok.Getter;
@@ -51,10 +56,13 @@ public final class WebModuleCors extends WebModuleAbstract {
 
     @Getter
     private final String name = "CORS";
+    private final IsisConfiguration configuration;
 
     @Inject
-    public WebModuleCors(ServiceInjector serviceInjector) {
+    public WebModuleCors(final ServiceInjector serviceInjector,
+                         final IsisConfiguration configuration) {
         super(serviceInjector);
+        this.configuration = configuration;
     }
 
 
@@ -86,10 +94,26 @@ public final class WebModuleCors extends WebModuleAbstract {
 
         registerFilter(ctx, CORS_FILTER_NAME, CORSFilter.class)
             .ifPresent(filterReg -> {
-                filterReg.setInitParameter("cors.allowed.origins", "*");
-                filterReg.setInitParameter("cors.allowed.headers", "Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Cache-Control,If-Modified-Since,Pragma");
-                filterReg.setInitParameter("cors.allowed.methods", "GET,PUT,DELETE,POST,OPTIONS");
-                filterReg.setInitParameter("cors.exposed.headers", "Authorization");
+
+                setInitParameterIfConfigured(
+                        filterReg,
+                        "cors.allowed.origins",
+                        configuration.getExtensions().getCors().getAllowedOrigins());
+
+                setInitParameterIfConfigured(
+                        filterReg,
+                        "cors.allowed.headers",
+                        configuration.getExtensions().getCors().getAllowedHeaders());
+
+                setInitParameterIfConfigured(
+                        filterReg,
+                        "cors.allowed.methods",
+                        configuration.getExtensions().getCors().getAllowedMethods());
+
+                setInitParameterIfConfigured(
+                        filterReg,
+                        "cors.exposed.headers",
+                        configuration.getExtensions().getCors().getExposedHeaders());
 
                 filterReg.addMappingForUrlPatterns(
                         null,
@@ -99,6 +123,15 @@ public final class WebModuleCors extends WebModuleAbstract {
             });
 
         return Can.empty(); // registers no listeners
+    }
+
+    private void setInitParameterIfConfigured(FilterRegistration.Dynamic filterReg, String name, List<String> values) {
+        Optional.of(String.join(",",
+                values))
+                .filter(x -> x.length() != 0)
+                .ifPresent(value -> {
+                    filterReg.setInitParameter(name, value);
+                });
     }
 
 

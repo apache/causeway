@@ -19,6 +19,7 @@
 package org.apache.isis.core.config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -1226,8 +1227,32 @@ public class IsisConfiguration {
         
         
     }
-    
-    
+
+    private final Extensions extensions = new Extensions();
+    @Data
+    public static class Extensions {
+        private final Cors cors = new Cors();
+        @Data
+        public static class Cors {
+            private List<String> allowedOrigins = listOf("*");
+            private List<String> allowedHeaders = listOf(
+                    "Content-Type",
+                    "Accept",
+                    "Origin",
+                    "Access-Control-Request-Method",
+                    "Access-Control-Request-Headers",
+                    "Authorization",
+                    "Cache-Control",
+                    "If-Modified-Since",
+                    "Pragma");
+            private List<String> allowedMethods = listOf("GET","PUT","DELETE","POST","OPTIONS");
+            private List<String> exposedHeaders = listOf("Authorization");
+        }
+    }
+
+    private static List<String> listOf(final String ...values) {
+        return new ArrayList<>(Arrays.asList(values));
+    }
 
 
 }

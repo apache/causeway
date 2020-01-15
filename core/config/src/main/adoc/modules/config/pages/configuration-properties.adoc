@@ -200,6 +200,21 @@ include::refguide:config:example$generated/resteasy.adoc[]
 
 
 
+== Extensions
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.extensions.adoc[]
+
+|===
+
+
+
 == Other
 
 [cols="2a,2a,3a", options="header"]

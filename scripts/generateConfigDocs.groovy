@@ -153,6 +153,13 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
+    prefix = "isis.extensions"
+    name = "Extensions"
+    description = "Configuration that applies to the catalogue of extensions to the framework"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
     prefix = "resteasy"
     name = "RestEasy Configuration"
     description = "Configuration that applies to the RestEasy framework (that bootstraps the Restful Objects viewer)"
