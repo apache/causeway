@@ -38,7 +38,9 @@ extends TemporalValueSemanticsProviderAbstract<LocalTime> {
     public static final int TYPICAL_LENGTH = MAX_LENGTH;
 
     public LocalTimeValueSemanticsProvider(final FacetHolder holder) {
-        super(TemporalValueFacet.class, holder, LocalTime.class, TYPICAL_LENGTH, MAX_LENGTH,
+        super(TemporalValueFacet.class,
+                TemporalCharacteristic.TIME_ONLY, OffsetCharacteristic.LOCAL,
+                holder, LocalTime.class, TYPICAL_LENGTH, MAX_LENGTH,
                 LocalTime::from,
                 TemporalAdjust::adjustLocalTime);
         

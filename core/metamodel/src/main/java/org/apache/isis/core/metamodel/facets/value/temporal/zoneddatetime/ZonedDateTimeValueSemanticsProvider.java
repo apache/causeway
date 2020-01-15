@@ -36,9 +36,10 @@ extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
     public static final int MAX_LENGTH = 36;
     public static final int TYPICAL_LENGTH = 22;
     
-    //TODO adjust formats and config options (just copied over from OffsetDateTime... )
     public ZonedDateTimeValueSemanticsProvider(final FacetHolder holder) {
-        super(TemporalValueFacet.class, holder, ZonedDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
+        super(TemporalValueFacet.class,
+                TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
+                holder, ZonedDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
                 ZonedDateTime::from,
                 TemporalAdjust::adjustZonedDateTime);
         

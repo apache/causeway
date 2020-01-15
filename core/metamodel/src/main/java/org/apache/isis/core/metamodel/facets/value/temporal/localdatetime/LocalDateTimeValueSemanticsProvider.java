@@ -39,7 +39,9 @@ extends TemporalValueSemanticsProviderAbstract<LocalDateTime> {
     public static final int TYPICAL_LENGTH = 22;
     
     public LocalDateTimeValueSemanticsProvider(final FacetHolder holder) {
-        super(TemporalValueFacet.class, holder, LocalDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
+        super(TemporalValueFacet.class,
+                TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.LOCAL,
+                holder, LocalDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
                 LocalDateTime::from,
                 TemporalAdjust::adjustLocalDateTime);
         

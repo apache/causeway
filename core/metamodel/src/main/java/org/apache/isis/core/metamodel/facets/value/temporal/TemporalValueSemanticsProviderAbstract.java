@@ -59,6 +59,9 @@ public abstract class TemporalValueSemanticsProviderAbstract<T extends Temporal>
 extends ValueSemanticsProviderAndFacetAbstract<T>
 implements TemporalValueFacet<T> {
     
+    @Getter(onMethod = @__(@Override)) protected final TemporalCharacteristic temporalCharacteristic;
+    @Getter(onMethod = @__(@Override)) protected final OffsetCharacteristic offsetCharacteristic;
+    
     @Getter private DateTimeFormatter encodingFormatter;
     @Getter @Setter private DateTimeFormatter titleFormatter;
     
@@ -73,7 +76,9 @@ implements TemporalValueFacet<T> {
     protected final BiFunction<TemporalAdjust, T, T> adjuster;
     
     public TemporalValueSemanticsProviderAbstract(
-            Class<? extends Facet> adapterFacetType, 
+            Class<? extends Facet> adapterFacetType,
+            TemporalCharacteristic temporalCharacteristic,
+            OffsetCharacteristic offsetCharacteristic,
             FacetHolder holder,
             Class<T> valueType, 
             int typicalLength, 
@@ -83,6 +88,9 @@ implements TemporalValueFacet<T> {
         
         super(adapterFacetType, holder, valueType, typicalLength, maxLength, 
                 Immutability.IMMUTABLE, EqualByContent.HONOURED, /*DEFAULT_VALUE*/ null);
+        
+        this.temporalCharacteristic = temporalCharacteristic;
+        this.offsetCharacteristic = offsetCharacteristic;
         
         this.query = query;
         this.adjuster = adjuster;

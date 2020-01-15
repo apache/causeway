@@ -32,15 +32,41 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  */
 public interface TemporalValueFacet<T extends Temporal> extends Facet {
 
+    static enum TemporalCharacteristic {
+        
+        /**
+         * Temporal value type has no date information, just time.
+         */
+        TIME_ONLY,
+        
+        /**
+         * Temporal value type has no time information, just date.
+         */
+        DATE_ONLY,
+        
+        /**
+         * Temporal value type has both date and time information.
+         */
+        DATE_TIME
+    }
+    
+    static enum OffsetCharacteristic {
+        
+        /**
+         * Temporal value type has no time-zone data.
+         */
+        LOCAL,
+        
+        /**
+         * Temporal value type has time-zone data.
+         */
+        OFFSET,
+    }
+    
     T temporalValue(ManagedObject object);
     ManagedObject createValue(T temporal);
     
-//    TemporalCategory getTemporalCategory();
-//    
-//    static enum TemporalCategory {
-//        TIME_ONLY,
-//        DATE_ONLY,
-//        DATE_TIME
-//    }
+    TemporalCharacteristic getTemporalCharacteristic();
+    OffsetCharacteristic getOffsetCharacteristic();
 
 }

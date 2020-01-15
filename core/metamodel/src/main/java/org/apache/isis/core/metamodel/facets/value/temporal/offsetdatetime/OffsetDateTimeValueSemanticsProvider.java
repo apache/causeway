@@ -39,7 +39,9 @@ extends TemporalValueSemanticsProviderAbstract<OffsetDateTime> {
     public static final int TYPICAL_LENGTH = 22;
     
     public OffsetDateTimeValueSemanticsProvider(final FacetHolder holder) {
-        super(TemporalValueFacet.class, holder, OffsetDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
+        super(TemporalValueFacet.class,
+                TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
+                holder, OffsetDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
                 OffsetDateTime::from,
                 TemporalAdjust::adjustOffsetDateTime);
         
