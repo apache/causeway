@@ -404,6 +404,44 @@ public class IsisConfiguration {
 
         }
 
+        private final RuntimeServices runtimeServices = new RuntimeServices();
+
+        @Data
+        public static class RuntimeServices {
+
+            private final Email email = new Email();
+            @Data
+            public static class Email {
+                private int port = 587;
+                private int socketConnectionTimeout = 2000;
+                private int socketTimeout = 2000;
+                private boolean throwExceptionOnFail = true;
+
+                private final Override override = new Override();
+                @Data
+                public static class Override {
+                    private String to;
+                    private String cc;
+                    private String bcc;
+                }
+
+                private final Sender sender = new Sender();
+                @Data
+                public static class Sender {
+                    private String hostname;
+                    private String username;
+                    private String password;
+                    private String address;
+                }
+
+                private final Tls tls = new Tls();
+                @Data
+                public static class Tls {
+                    private boolean enabled = true;
+                }
+            }
+        }
+
     }
 
 
@@ -655,29 +693,10 @@ public class IsisConfiguration {
         private final Email email = new Email();
         @Data
         public static class Email {
-            private int port = 587;
-            private int socketConnectionTimeout = 2000;
-            private int socketTimeout = 2000;
-            private boolean throwExceptionOnFail = true;
-            private final Override override = new Override();
-            @Data
-            public static class Override {
-                private String to;
-                private String cc;
-                private String bcc;
-            }
-            private final Sender sender = new Sender();
-            @Data
-            public static class Sender {
-                private String username;
-                private String address;
-                private String password;
-                private String hostname;
-            }
+
             private final Tls tls = new Tls();
             @Data
             public static class Tls {
-                private boolean enabled = true;
             }
         }
     }

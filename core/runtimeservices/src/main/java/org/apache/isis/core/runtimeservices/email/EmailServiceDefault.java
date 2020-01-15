@@ -89,51 +89,51 @@ public class EmailServiceDefault implements EmailService {
     }
 
     protected String getSenderEmailUsername() {
-        return configuration.getService().getEmail().getSender().getUsername();
+        return configuration.getCore().getRuntimeServices().getEmail().getSender().getUsername();
     }
 
     protected String getSenderEmailAddress() {
-        return configuration.getService().getEmail().getSender().getAddress();
+        return configuration.getCore().getRuntimeServices().getEmail().getSender().getAddress();
     }
 
     protected String getSenderEmailPassword() {
-        return configuration.getService().getEmail().getSender().getPassword();
+        return configuration.getCore().getRuntimeServices().getEmail().getSender().getPassword();
     }
 
     protected String getSenderEmailHostName() {
-        return configuration.getService().getEmail().getSender().getHostname();
+        return configuration.getCore().getRuntimeServices().getEmail().getSender().getHostname();
     }
 
     protected Integer getSenderEmailPort() {
-        return configuration.getService().getEmail().getPort();
+        return configuration.getCore().getRuntimeServices().getEmail().getPort();
     }
 
     protected Boolean getSenderEmailTlsEnabled() {
-        return configuration.getService().getEmail().getTls().isEnabled();
+        return configuration.getCore().getRuntimeServices().getEmail().getTls().isEnabled();
     }
 
     protected Boolean isThrowExceptionOnFail() {
-        return configuration.getService().getEmail().isThrowExceptionOnFail();
+        return configuration.getCore().getRuntimeServices().getEmail().isThrowExceptionOnFail();
     }
 
     protected int getSocketTimeout() {
-        return configuration.getService().getEmail().getSocketTimeout();
+        return configuration.getCore().getRuntimeServices().getEmail().getSocketTimeout();
     }
 
     protected int getSocketConnectionTimeout() {
-        return configuration.getService().getEmail().getSocketConnectionTimeout();
+        return configuration.getCore().getRuntimeServices().getEmail().getSocketConnectionTimeout();
     }
 
     protected String getEmailOverrideTo() {
-        return configuration.getService().getEmail().getOverride().getTo();
+        return configuration.getCore().getRuntimeServices().getEmail().getOverride().getTo();
     }
 
     protected String getEmailOverrideCc() {
-        return configuration.getService().getEmail().getOverride().getCc();
+        return configuration.getCore().getRuntimeServices().getEmail().getOverride().getCc();
     }
 
     protected String getEmailOverrideBcc() {
-        return configuration.getService().getEmail().getOverride().getBcc();
+        return configuration.getCore().getRuntimeServices().getEmail().getOverride().getBcc();
     }
 
     @Override

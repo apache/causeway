@@ -396,6 +396,42 @@ jdoqlVariablesClause
 |isis.core.metamodel.validator. +
 jdoql.variables-clause
 
+|isis.service.email.port
+|isis.core.runtime-services.email.port
+
+|isis.service.email.socketConnectionTimeout
+|isis.core.runtime-services.email.socket-connection-timeout
+
+|isis.service.email.socketTimeout
+|isis.core.runtime-services.email.socket-timeout
+
+|isis.service.email.throwExceptionOnFail
+|isis.core.runtime-services.email.throw-exception-on-fail
+
+|isis.service.email.override.to
+|isis.core.runtime-services.email.override.to
+
+|isis.service.email.override.cc
+|isis.core.runtime-services.email.override.cc
+
+|isis.service.email.override.bcc
+|isis.core.runtime-services.email.override.bcc
+
+|isis.service.email.sender.hostname
+|isis.core.runtime-services.email.sender.hostname
+
+|isis.service.email.sender.username
+|isis.core.runtime-services.email.sender.username
+
+|isis.service.email.sender.password
+|isis.core.runtime-services.email.sender.password
+
+|isis.service.email.sender.address
+|isis.core.runtime-services.email.sender.address
+
+|isis.service.email.tls.enabled
+|isis.core.runtime-services.email.tls.enabled
+
 
 |
 |
