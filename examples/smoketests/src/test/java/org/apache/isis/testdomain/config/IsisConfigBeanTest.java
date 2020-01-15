@@ -50,7 +50,7 @@ class IsisConfigBeanTest {
     @Test
     void configurationBean_shouldBePickedUpBySpring() {
         assertNotNull(isisConfiguration);
-        assertTrue(isisConfiguration.getReflector().getExplicitAnnotations().isAction());
+        assertTrue(isisConfiguration.getApplib().getAnnotation().getAction().isExplicit());
     }
 
 }

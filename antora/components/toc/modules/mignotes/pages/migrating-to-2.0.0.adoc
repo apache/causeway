@@ -208,10 +208,11 @@ standalone-collection.bulk-load
 |isis.persistor.enforceSafeSemantics
 |(removed)
 
+|isis.reflector.explicitAnnotations.action
+|isis.applib.annotation.action.explicit
 
 
 |
-
 - isis.value.format -> isis.metamodel.ui.value.format
 - isis.value.money -> isis.valuetypes.money
 - isis.service.xxx -> isis.core.services.email

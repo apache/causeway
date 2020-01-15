@@ -56,7 +56,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        if(getConfiguration().getReflector().getExplicitAnnotations().isAction()) {
+        if(getConfiguration().getApplib().getAnnotation().getAction().isExplicit()) {
             return; // continue
         }
 

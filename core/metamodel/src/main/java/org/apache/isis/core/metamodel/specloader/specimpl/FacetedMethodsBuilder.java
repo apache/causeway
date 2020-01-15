@@ -174,7 +174,7 @@ public class FacetedMethodsBuilder {
 
         val isisConfiguration = mmContext.getConfiguration();
         
-        this.explicitAnnotationsForActions = isisConfiguration.getReflector().getExplicitAnnotations().isAction();
+        this.explicitAnnotationsForActions = isisConfiguration.getApplib().getAnnotation().getAction().isExplicit();
 
     }
 

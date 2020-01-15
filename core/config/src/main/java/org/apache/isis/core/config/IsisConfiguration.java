@@ -107,8 +107,13 @@ public class IsisConfiguration {
             @Data
             public static class Action {
 
+                /**
+                 * Whether or not a public method needs to be annotated with
+                 * @{@link org.apache.isis.applib.annotation.Action} in order to be picked up as an action in the
+                 * metamodel.
+                 */
+                private boolean explicit = false;
             }
-
         }
     }
 
@@ -136,7 +141,6 @@ public class IsisConfiguration {
         }
 
     }
-
 
 
     private final Persistence persistence = new Persistence();
@@ -384,16 +388,6 @@ public class IsisConfiguration {
     @Data
     public static class Reflector {
 
-        private final ExplicitAnnotations explicitAnnotations = new ExplicitAnnotations();
-        @Data
-        public static class ExplicitAnnotations {
-
-            /**
-             * Whether or not a public method needs to be annotated with
-             * @{@link org.apache.isis.applib.annotation.Action} in order to be picked up as an action in the metamodel.
-             */
-            private boolean action = false;
-        }
 
         private final Facet facet = new Facet();
         @Data

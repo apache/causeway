@@ -64,8 +64,7 @@ class DomainModelTest_usingBadDomain_noActionEnforced {
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
-    //@Inject private ApplicationContext applicationContext;
-    
+
     
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
@@ -74,7 +73,7 @@ class DomainModelTest_usingBadDomain_noActionEnforced {
     
     @Test
     void actionAnnotation_shouldBeOptionalByThisTestClass() {
-        assertFalse(configuration.getReflector().getExplicitAnnotations().isAction());
+        assertFalse(configuration.getApplib().getAnnotation().getAction().isExplicit());
     }
     
     @Test

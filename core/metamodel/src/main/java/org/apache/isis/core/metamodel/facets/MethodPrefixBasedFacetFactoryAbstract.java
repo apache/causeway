@@ -60,7 +60,7 @@ implements MethodPrefixBasedFacetFactory {
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
         if(orphanValidation == OrphanValidation.DONT_VALIDATE
-                || getConfiguration().getReflector().getExplicitAnnotations().isAction()) {
+                || getConfiguration().getApplib().getAnnotation().getAction().isExplicit()) {
             return;
         }
         
