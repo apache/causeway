@@ -67,7 +67,7 @@ final class ObjectMementoLegacy implements Serializable {
     static ObjectMementoLegacy createPersistent(
             RootOid rootOid, 
             SpecificationLoader specificationLoader) {
-        
+
         return new ObjectMementoLegacy(rootOid, specificationLoader);
     }
 
@@ -81,7 +81,7 @@ final class ObjectMementoLegacy implements Serializable {
             public ManagedObject asAdapter(
                     ObjectMementoLegacy memento,
                     SpecificationLoader specificationLoader) {
-                
+
                 return memento.recreateStrategy.recreateObject(memento, specificationLoader);
             }
 
@@ -116,7 +116,7 @@ final class ObjectMementoLegacy implements Serializable {
             public ManagedObject asAdapter(
                     ObjectMementoLegacy memento,
                     SpecificationLoader specificationLoader) {
-                
+
                 final List<Object> listOfPojos =
                         _Lists.map(memento.list, Functions.toPojo(specificationLoader));
 
@@ -175,7 +175,7 @@ final class ObjectMementoLegacy implements Serializable {
             public ManagedObject recreateObject(
                     ObjectMementoLegacy memento,
                     SpecificationLoader specificationLoader) {
-                
+
                 ObjectSpecId specId = memento.objectSpecId;
                 ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(specId);
                 EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
@@ -186,7 +186,7 @@ final class ObjectMementoLegacy implements Serializable {
             public boolean equals(
                     ObjectMementoLegacy memento, 
                     ObjectMementoLegacy otherMemento) {
-                
+
                 return otherMemento.recreateStrategy == ENCODEABLE && 
                         memento.encodableValue.equals(otherMemento.encodableValue);
             }
@@ -216,10 +216,10 @@ final class ObjectMementoLegacy implements Serializable {
             public ManagedObject recreateObject(
                     ObjectMementoLegacy memento,
                     SpecificationLoader specificationLoader) {
-                
+
                 RootOid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);
                 try {
-                    
+
                     return ManagedObject._adapterOfRootOid(specificationLoader, rootOid);
 
                 } finally {
@@ -237,10 +237,10 @@ final class ObjectMementoLegacy implements Serializable {
             public void resetVersion(
                     ObjectMementoLegacy memento,
                     SpecificationLoader specificationLoader) {
-                
+
                 //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
                 final ManagedObject adapter = recreateObject(memento, specificationLoader);
-                
+
                 Oid oid = ManagedObject._identify(adapter);
                 memento.persistentOidStr = oid.enString();
             }
@@ -261,7 +261,7 @@ final class ObjectMementoLegacy implements Serializable {
             }
 
         };
-        
+
         public abstract ManagedObject recreateObject(
                 ObjectMementoLegacy memento,
                 SpecificationLoader specificationLoader);
@@ -269,7 +269,7 @@ final class ObjectMementoLegacy implements Serializable {
         public abstract boolean equals(
                 ObjectMementoLegacy memento, 
                 ObjectMementoLegacy otherMemento);
-        
+
         public abstract int hashCode(ObjectMementoLegacy memento);
 
         public abstract String toString(ObjectMementoLegacy memento);
@@ -332,7 +332,7 @@ final class ObjectMementoLegacy implements Serializable {
     private ObjectMementoLegacy(
             ArrayList<ObjectMementoLegacy> list, 
             ObjectSpecId objectSpecId) {
-        
+
         this.cardinality = Cardinality.VECTOR;
         this.list = list;
         this.objectSpecId = objectSpecId;
@@ -355,18 +355,18 @@ final class ObjectMementoLegacy implements Serializable {
         this.cardinality = Cardinality.SCALAR;
 
         this.persistentOidStr = rootOid.enString();
-        
+
         requires(persistentOidStr, "persistentOidStr");
-        
+
         this.bookmark = rootOid.asBookmark();
         this.objectSpecId = rootOid.getObjectSpecId();
         this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
     private ObjectMementoLegacy(ManagedObject adapter) {
-        
+
         requires(adapter, "adapter");
-        
+
         this.cardinality = Cardinality.SCALAR;
         val spec = adapter.getSpecification();
         objectSpecId = spec.getSpecId();
@@ -430,59 +430,23 @@ final class ObjectMementoLegacy implements Serializable {
      * can call {@link #setAdapter(ManagedObject)} to keep this memento in sync.
      */
     ManagedObject reconstructObject(SpecificationLoader specificationLoader) {
-        
+
         val spec = specificationLoader.loadSpecification(objectSpecId);
         if(spec==null) {
             // eg. ill-formed request
             return null;
         }
-        
+
         // intercept when trivial
         if(spec.getBeanSort().isManagedBean()) {
             return spec.getMetaModelContext().lookupServiceAdapterById(objectSpecId.asString());
         }
-        
-        return cardinality.asAdapter(this, specificationLoader);
-    }
 
-    /**
-     * Updates the memento if the adapter's state has changed.
-     *
-     * @param adapter
-     */
-    void setAdapter(ManagedObject adapter) {
-        ensureScalar();
-        init(adapter);
+        return cardinality.asAdapter(this, specificationLoader);
     }
 
     ObjectSpecId getObjectSpecId() {
         return objectSpecId;
-    }
-
-    /**
-     * Analogous to {@link List#contains(Object)}, but does not perform
-     * {@link ConcurrencyChecking concurrency checking} of the OID.
-     */
-    boolean containedIn(
-            List<ObjectMementoLegacy> mementos,
-            SpecificationLoader specificationLoader) {
-
-        ensureScalar();
-
-        //XXX REVIEW: heavy handed, ought to be possible to just compare the OIDs
-        // ignoring the concurrency checking
-        val currAdapter = reconstructObject(specificationLoader);
-        
-        for (val memento : mementos) {
-            if(memento == null) {
-                continue;
-            }
-            val otherAdapter = memento.reconstructObject(specificationLoader);
-            if(currAdapter == otherAdapter) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -505,14 +469,13 @@ final class ObjectMementoLegacy implements Serializable {
         return cardinality.asString(this);
     }
 
-
     // -- FUNCTIONS
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    final static class Functions {
+    private final static class Functions {
 
-        public static Function<ObjectMementoLegacy, Object> toPojo(SpecificationLoader specificationLoader) {
-            
+        private static Function<ObjectMementoLegacy, Object> toPojo(SpecificationLoader specificationLoader) {
+
             return memento->{
                 if(memento == null) {
                     return null;
