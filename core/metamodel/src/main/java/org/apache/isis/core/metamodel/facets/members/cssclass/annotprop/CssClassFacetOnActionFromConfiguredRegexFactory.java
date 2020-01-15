@@ -111,7 +111,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
     private Map<Pattern, String> getCssClassByPattern() {
         if (cssClassByPattern == null) {
             // build lazily
-            this.cssClassByPattern = getConfiguration().getReflector().getFacet().getCssClass().getPatterns();
+            this.cssClassByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClass().getPatterns();
         }
         return cssClassByPattern;
     }

@@ -122,6 +122,18 @@ public class IsisConfiguration {
 
             }
 
+            private final ActionLayout actionLayout = new ActionLayout();
+            @Data
+            public static class ActionLayout {
+
+                private final CssClass cssClass = new CssClass();
+                @Data
+                public static class CssClass {
+                    private Map<Pattern, String> patterns = new HashMap<>();
+                }
+
+            }
+
             private final Collection collection = new Collection();
             @Data
             public static class Collection {
@@ -415,11 +427,6 @@ public class IsisConfiguration {
 
 
 
-            private final CssClass cssClass = new CssClass();
-            @Data
-            public static class CssClass {
-                private Map<Pattern, String> patterns = new HashMap<>();
-            }
             private final CssClassFa cssClassFa = new CssClassFa();
             @Data
             public static class CssClassFa {

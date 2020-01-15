@@ -221,6 +221,11 @@ domainEvent.postForDefault
 |isis.applib.annotation.collection. +
 domain-event.post-for-default
 
+|isis.reflector.facet. +
+cssClass.patterns
+|isis.applib.annotation.action-layout. +
+css-class.patterns
+
 
 |
 |
