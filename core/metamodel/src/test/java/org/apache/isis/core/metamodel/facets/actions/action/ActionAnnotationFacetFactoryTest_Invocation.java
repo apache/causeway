@@ -68,7 +68,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         expectRemoveMethod(actionMethod);
         
         super.metaModelContext.getConfiguration()
-        .getReflector().getFacet().getActionAnnotation().getDomainEvent().setPostForDefault(true);
+        .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
@@ -188,7 +188,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         expectRemoveMethod(actionMethod);
 
         super.metaModelContext.getConfiguration()
-        .getReflector().getFacet().getActionAnnotation().getDomainEvent().setPostForDefault(true);
+                .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(

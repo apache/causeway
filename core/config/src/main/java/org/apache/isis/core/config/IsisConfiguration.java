@@ -113,6 +113,13 @@ public class IsisConfiguration {
                  * metamodel.
                  */
                 private boolean explicit = false;
+
+                private final DomainEvent domainEvent = new DomainEvent();
+                @Data
+                public static class DomainEvent {
+                    private boolean postForDefault = true;
+                }
+
             }
         }
     }
@@ -395,15 +402,6 @@ public class IsisConfiguration {
 
             private boolean filterVisibility = true;
 
-            private final ActionAnnotation actionAnnotation = new ActionAnnotation();
-            @Data
-            public static class ActionAnnotation {
-                private final DomainEvent domainEvent = new DomainEvent();
-                @Data
-                public static class DomainEvent {
-                    private boolean postForDefault = true;
-                }
-            }
 
             private final CollectionAnnotation collectionAnnotation = new CollectionAnnotation();
             @Data

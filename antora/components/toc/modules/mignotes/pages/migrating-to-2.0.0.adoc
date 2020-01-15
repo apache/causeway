@@ -211,6 +211,16 @@ standalone-collection.bulk-load
 |isis.reflector.explicitAnnotations.action
 |isis.applib.annotation.action.explicit
 
+|isis.reflector.facet.actionAnnotation. +
+domainEvent.postForDefault
+|isis.applib.annotation.action. +
+domain-event.post-for-default
+
+
+|
+|
+
+|===
 
 |
 - isis.value.format -> isis.metamodel.ui.value.format
@@ -218,11 +228,6 @@ standalone-collection.bulk-load
 - isis.service.xxx -> isis.core.services.email
 - isis.services.container -> isis.core.services.repository-service
 
-
-|
-|
-
-|===
 
 
 

@@ -117,7 +117,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                     actionDomainEventFacet.getEventType(),
                     ActionDomainEvent.Noop.class,
                     ActionDomainEvent.Default.class,
-                    getConfiguration().getReflector().getFacet().getActionAnnotation().getDomainEvent().isPostForDefault())) {
+                    getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault())) {
                 super.addFacet(actionDomainEventFacet);
             }
 
