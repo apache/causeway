@@ -33,7 +33,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.core.commons.internal.resources._Resources;
-import org.apache.isis.schema.chg.v1.ChangesDto;
+import org.apache.isis.schema.chg.v2.ChangesDto;
 
 public final class ChangesDtoUtils {
 

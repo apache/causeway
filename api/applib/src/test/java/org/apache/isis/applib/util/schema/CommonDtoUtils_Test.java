@@ -29,10 +29,10 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.schema.cmd.v1.MapDto;
-import org.apache.isis.schema.common.v1.ValueDto;
-import org.apache.isis.schema.common.v1.ValueType;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.schema.cmd.v2.MapDto;
+import org.apache.isis.schema.common.v2.ValueDto;
+import org.apache.isis.schema.common.v2.ValueType;
 
 public class CommonDtoUtils_Test {
 

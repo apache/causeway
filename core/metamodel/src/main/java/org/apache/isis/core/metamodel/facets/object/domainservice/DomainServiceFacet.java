@@ -20,9 +20,9 @@ package org.apache.isis.core.metamodel.facets.object.domainservice;
 
 
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 /**

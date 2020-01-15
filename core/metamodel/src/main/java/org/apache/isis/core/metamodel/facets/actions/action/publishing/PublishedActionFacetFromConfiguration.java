@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
 
 public class PublishedActionFacetFromConfiguration extends PublishedActionFacetAbstract {
 

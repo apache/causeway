@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.schema.ixn.v1.InteractionDto;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 /**
  * Extends {@link HasUniqueId}, where the {@link HasUniqueId#getUniqueId()} is interpreted as an

@@ -20,17 +20,18 @@ package org.apache.isis.applib.util.schema;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -41,21 +42,22 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.schema.cmd.v1.MapDto;
-import org.apache.isis.schema.cmd.v1.ParamDto;
-import org.apache.isis.schema.common.v1.BlobDto;
-import org.apache.isis.schema.common.v1.ClobDto;
-import org.apache.isis.schema.common.v1.CollectionDto;
-import org.apache.isis.schema.common.v1.EnumDto;
-import org.apache.isis.schema.common.v1.OidDto;
-import org.apache.isis.schema.common.v1.ValueDto;
-import org.apache.isis.schema.common.v1.ValueType;
-import org.apache.isis.schema.common.v1.ValueWithTypeDto;
+import org.apache.isis.schema.cmd.v2.MapDto;
+import org.apache.isis.schema.cmd.v2.ParamDto;
+import org.apache.isis.schema.common.v2.BlobDto;
+import org.apache.isis.schema.common.v2.ClobDto;
+import org.apache.isis.schema.common.v2.CollectionDto;
+import org.apache.isis.schema.common.v2.EnumDto;
+import org.apache.isis.schema.common.v2.OidDto;
+import org.apache.isis.schema.common.v2.ValueDto;
+import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 import org.apache.isis.schema.jaxbadapters.JodaDateTimeXMLGregorianCalendarAdapter;
 import org.apache.isis.schema.jaxbadapters.JodaLocalDateTimeXMLGregorianCalendarAdapter;
 import org.apache.isis.schema.jaxbadapters.JodaLocalDateXMLGregorianCalendarAdapter;
 import org.apache.isis.schema.jaxbadapters.JodaLocalTimeXMLGregorianCalendarAdapter;
+import org.apache.isis.schema.jaxbadapters.XmlCalendarFactory;
 
 import static org.apache.isis.core.commons.internal.collections._Maps.entry;
 
@@ -88,10 +90,21 @@ public final class CommonDtoUtils {
                     entry(Double.class, ValueType.DOUBLE),
                     entry(BigInteger.class, ValueType.BIG_INTEGER),
                     entry(BigDecimal.class, ValueType.BIG_DECIMAL),
-                    entry(DateTime.class, ValueType.JODA_DATE_TIME),
-                    entry(LocalDateTime.class, ValueType.JODA_LOCAL_DATE_TIME),
-                    entry(LocalDate.class, ValueType.JODA_LOCAL_DATE),
-                    entry(LocalTime.class, ValueType.JODA_LOCAL_TIME),
+
+                    // java.time
+                    entry(LocalDate.class, ValueType.LOCAL_DATE),
+                    entry(LocalDateTime.class, ValueType.LOCAL_DATE_TIME),
+                    entry(LocalTime.class, ValueType.LOCAL_TIME),
+                    entry(OffsetDateTime.class, ValueType.OFFSET_DATE_TIME),
+                    entry(OffsetTime.class, ValueType.OFFSET_TIME),
+                    entry(ZonedDateTime.class, ValueType.ZONED_DATE_TIME),
+                    
+                    // joda.time
+                    entry(org.joda.time.DateTime.class, ValueType.JODA_DATE_TIME),
+                    entry(org.joda.time.LocalDateTime.class, ValueType.JODA_LOCAL_DATE_TIME),
+                    entry(org.joda.time.LocalDate.class, ValueType.JODA_LOCAL_DATE),
+                    entry(org.joda.time.LocalTime.class, ValueType.JODA_LOCAL_TIME),
+                    
                     entry(java.sql.Timestamp.class, ValueType.JAVA_SQL_TIMESTAMP),
                     entry(Blob.class, ValueType.BLOB),
                     entry(Clob.class, ValueType.CLOB)
@@ -211,23 +224,53 @@ public final class CommonDtoUtils {
             valueDto.setBigDecimal(argValue);
             return valueDto;
         }
+        case LOCAL_DATE: {
+            final LocalDate argValue = (LocalDate) val;
+            valueDto.setLocalDate(XmlCalendarFactory.create(argValue));
+            return valueDto;
+        }
+        case LOCAL_TIME: {
+            final LocalTime argValue = (LocalTime) val;
+            valueDto.setLocalTime(XmlCalendarFactory.create(argValue));
+            return valueDto;
+        }
+        case LOCAL_DATE_TIME: {
+            final LocalDateTime argValue = (LocalDateTime) val;
+            valueDto.setLocalDateTime(XmlCalendarFactory.create(argValue));
+            return valueDto;
+        }
+        case OFFSET_DATE_TIME: {
+            final OffsetDateTime argValue = (OffsetDateTime) val;
+            valueDto.setOffsetDateTime(XmlCalendarFactory.create(argValue));
+            return valueDto;
+        }
+        case OFFSET_TIME: {
+            final OffsetTime argValue = (OffsetTime) val;
+            valueDto.setOffsetTime(XmlCalendarFactory.create(argValue));
+            return valueDto;
+        }
+        case ZONED_DATE_TIME: {
+            final ZonedDateTime argValue = (ZonedDateTime) val;
+            valueDto.setZonedDateTime(XmlCalendarFactory.create(argValue));
+            return valueDto;
+        }
         case JODA_DATE_TIME: {
-            final DateTime argValue = (DateTime) val;
-            valueDto.setDateTime(JodaDateTimeXMLGregorianCalendarAdapter.print(argValue));
+            final org.joda.time.DateTime argValue = (org.joda.time.DateTime) val;
+            valueDto.setOffsetDateTime(JodaDateTimeXMLGregorianCalendarAdapter.print(argValue));
             return valueDto;
         }
         case JODA_LOCAL_DATE_TIME: {
-            final LocalDateTime argValue = (LocalDateTime) val;
+            final org.joda.time.LocalDateTime argValue = (org.joda.time.LocalDateTime) val;
             valueDto.setLocalDateTime(JodaLocalDateTimeXMLGregorianCalendarAdapter.print(argValue));
             return valueDto;
         }
         case JODA_LOCAL_DATE: {
-            final LocalDate argValue = (LocalDate) val;
+            final org.joda.time.LocalDate argValue = (org.joda.time.LocalDate) val;
             valueDto.setLocalDate(JodaLocalDateXMLGregorianCalendarAdapter.print(argValue));
             return valueDto;
         }
         case JODA_LOCAL_TIME: {
-            final LocalTime argValue = (LocalTime) val;
+            final org.joda.time.LocalTime argValue = (org.joda.time.LocalTime) val;
             valueDto.setLocalTime(JodaLocalTimeXMLGregorianCalendarAdapter.print(argValue));
             return valueDto;
         }
@@ -342,10 +385,24 @@ public final class CommonDtoUtils {
             return valueDto.getBigDecimal();
         case BIG_INTEGER:
             return valueDto.getBigInteger();
+         // JAVA TIME    
+        case LOCAL_DATE:
+            return XmlCalendarFactory.toLocalDate(valueDto.getLocalDate());
+        case LOCAL_TIME:
+            return XmlCalendarFactory.toLocalTime(valueDto.getLocalTime());
+        case LOCAL_DATE_TIME:
+            return XmlCalendarFactory.toLocalDateTime(valueDto.getLocalDateTime());
+        case OFFSET_DATE_TIME:
+            return XmlCalendarFactory.toOffsetDateTime(valueDto.getOffsetDateTime());
+        case OFFSET_TIME:
+            return XmlCalendarFactory.toOffsetTime(valueDto.getOffsetTime());
+        case ZONED_DATE_TIME:
+            return XmlCalendarFactory.toZonedDateTime(valueDto.getZonedDateTime());
         case JAVA_SQL_TIMESTAMP:
-            return JavaSqlTimestampXmlGregorianCalendarAdapter.parse(valueDto.getDateTime());
+            return JavaSqlTimestampXmlGregorianCalendarAdapter.parse(valueDto.getTimestamp());
+        // JODA
         case JODA_DATE_TIME:
-            return JodaDateTimeXMLGregorianCalendarAdapter.parse(valueDto.getDateTime());
+            return JodaDateTimeXMLGregorianCalendarAdapter.parse(valueDto.getOffsetDateTime());
         case JODA_LOCAL_DATE:
             return JodaLocalDateXMLGregorianCalendarAdapter.parse(valueDto.getLocalDate());
         case JODA_LOCAL_DATE_TIME:

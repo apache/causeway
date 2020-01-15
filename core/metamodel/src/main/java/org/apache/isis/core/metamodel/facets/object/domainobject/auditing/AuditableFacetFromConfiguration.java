@@ -19,8 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.auditing;
 
 
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
 
 
 /**

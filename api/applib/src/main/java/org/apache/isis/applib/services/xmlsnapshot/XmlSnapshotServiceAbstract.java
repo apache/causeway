@@ -21,6 +21,8 @@ package org.apache.isis.applib.services.xmlsnapshot;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import javax.xml.transform.OutputKeys;
@@ -30,8 +32,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -75,8 +75,9 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
         }
         if("isis:LocalDate".equals(dataType)) {
             final String str = getChildTextValue(chldEl);
-            final DateTimeFormatter forPattern = DateTimeFormat.forPattern("dd-MMM-yyyy").withLocale(Locale.ENGLISH);
-            return (T)forPattern.parseLocalDate(str);
+            final DateTimeFormatter parser = DateTimeFormatter
+                    .ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
+            return (T)parser.parse(str, LocalDate::from);
         }
         if("isis:Byte".equals(dataType)) {
             final String str = getChildTextValue(chldEl);

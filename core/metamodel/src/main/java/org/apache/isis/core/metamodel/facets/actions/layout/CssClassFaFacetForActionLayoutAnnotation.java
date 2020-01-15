@@ -23,10 +23,10 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbstract {
 

@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class PagedFacetForViewModelLayoutAnnotation extends PagedFacetAbstract {

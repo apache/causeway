@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 
 public class CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation extends
 CollectionRemoveFromFacetForDomainEventFromAbstract {

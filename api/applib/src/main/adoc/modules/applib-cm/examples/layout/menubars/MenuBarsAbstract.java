@@ -26,7 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 
-
 import lombok.val;
 
 @XmlTransient // ignore this class

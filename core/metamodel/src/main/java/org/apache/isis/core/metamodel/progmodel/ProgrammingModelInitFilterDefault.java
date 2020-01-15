@@ -28,10 +28,11 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
-import static org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilter.*;
+import static org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilter.excluding;
+import static org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilter.excludingNone;
 
 import lombok.val;
 

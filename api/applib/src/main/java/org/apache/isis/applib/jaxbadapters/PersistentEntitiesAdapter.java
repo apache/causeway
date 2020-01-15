@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.schema.common.v1.OidsDto;
+import org.apache.isis.schema.common.v2.OidsDto;
 
 import lombok.val;
 

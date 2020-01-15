@@ -17,11 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.value.datejdk8local;
+package org.apache.isis.core.metamodel.facets.value.temporal.zoneddatetime;
 
-import java.time.LocalDate;
-import java.util.function.Function;
+import java.time.ZonedDateTime;
 
-interface TimeParser extends Function<String, LocalDate> {
+import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacetUsingSemanticsProviderFactory;
+
+public class ZonedDateTimeValueFacetUsingSemanticsProviderFactory 
+extends TemporalValueFacetUsingSemanticsProviderFactory<ZonedDateTime> {
+
+    public ZonedDateTimeValueFacetUsingSemanticsProviderFactory() {
+        super(ZonedDateTime.class, ZonedDateTimeValueSemanticsProvider::new);
+    }
 
 }

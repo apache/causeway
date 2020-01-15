@@ -24,8 +24,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
-import org.apache.isis.schema.ixn.v1.PropertyEditDto;
+import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
+import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 public interface InteractionDtoServiceInternal {
 

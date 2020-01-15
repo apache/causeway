@@ -20,12 +20,12 @@
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.commons.ClassExtensions;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 
 public abstract class ParseableFacetAbstract 
 extends FacetAbstract

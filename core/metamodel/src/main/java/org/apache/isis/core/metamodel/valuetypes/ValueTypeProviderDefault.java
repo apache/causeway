@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
-import org.apache.isis.schema.common.v1.ValueType;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isisMetaModel.ValueTypeProviderBuiltIn")

@@ -32,13 +32,13 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testing.integtestsupport.applib.validate.ValidateDomainModel;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.badnoact.Configuration_usingInvalidDomain_noActionEnforced;
 import org.apache.isis.testdomain.model.badnoact.InvalidOrphanedActionSupportNoActionEnforced;
+import org.apache.isis.testing.integtestsupport.applib.validate.ValidateDomainModel;
 
 import lombok.val;
 

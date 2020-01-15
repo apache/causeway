@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.object.immutable.immutableannot;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class CopyImmutableFacetOntoMembersFactory extends FacetFactoryAbstract {
 

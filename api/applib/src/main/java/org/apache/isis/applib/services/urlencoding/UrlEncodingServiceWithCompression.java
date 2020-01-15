@@ -48,19 +48,5 @@ public class UrlEncodingServiceWithCompression implements UrlEncodingService {
         return _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
     }
 
-    // -- OVERRIDING DEFAULTS FOR STRING UNARY OPERATORS
-
-    //    @Override
-    //    public String encodeString(final String str) {
-    //    	return _Strings.convert(str, _Bytes.asCompressedUrlBase64, StandardCharsets.UTF_8);
-    //    }
-    //
-    //    @Override
-    //    public String decodeToString(final String str) {
-    //    	return _Strings.convert(str, _Bytes.ofCompressedUrlBase64, StandardCharsets.UTF_8);
-    //    }
-
-    // --
-
 
 }

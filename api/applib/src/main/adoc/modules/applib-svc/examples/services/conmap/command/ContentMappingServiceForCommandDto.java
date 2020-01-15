@@ -39,8 +39,8 @@ import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.applib.services.conmap.command.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.common.v1.PeriodDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.common.v2.PeriodDto;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 @Service

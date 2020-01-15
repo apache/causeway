@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.valuetypes;
 
 import java.util.Map;
 
-import org.apache.isis.schema.common.v1.ValueType;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Data;
 

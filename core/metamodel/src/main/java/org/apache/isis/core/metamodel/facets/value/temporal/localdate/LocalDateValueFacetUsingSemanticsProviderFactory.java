@@ -17,17 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.value.datetimejdk8offset;
+package org.apache.isis.core.metamodel.facets.value.temporal.localdate;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacetUsingSemanticsProviderFactory;
 
-public interface Jdk8OffsetDateTimeValueFacet extends Facet {
+public class LocalDateValueFacetUsingSemanticsProviderFactory 
+extends TemporalValueFacetUsingSemanticsProviderFactory<LocalDate> {
 
-    OffsetDateTime dateValue(ManagedObject object);
-
-    ManagedObject createValue(OffsetDateTime date);
+    public LocalDateValueFacetUsingSemanticsProviderFactory() {
+        super(LocalDate.class, LocalDateValueSemanticsProvider::new);
+    }
 
 }

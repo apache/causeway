@@ -24,22 +24,22 @@
            xmlns:com="http://isis.apache.org/schema/common"
 >
 
-    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.1.xsd"/>
+    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
 
     <xs:element name="changesDto">
         <xs:annotation>
-            <xs:documentation>Represents v1.1 of this schema (as per majorVersion.minorVersion @default attribute, below).  The changes (create/update/delete) to one or more domain objects within a transaction.  (nb: only published objects are included in these lists).
+            <xs:documentation>Represents v2.0 of this schema (as per majorVersion.minorVersion @default attribute, below).  The changes (create/update/delete) to one or more domain objects within a transaction.  (nb: only published objects are included in these lists).
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+                <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="2">
                     <xs:annotation>
                         <xs:documentation>The major version of the schema that an XML instance was created using.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+                <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="0">
                     <xs:annotation>
                         <xs:documentation>The minor version of the schema that an XML instance was created using.
                         </xs:documentation>

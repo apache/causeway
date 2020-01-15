@@ -31,11 +31,11 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.schema.common.v1.DifferenceDto;
-import org.apache.isis.schema.common.v1.PeriodDto;
-import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
-import org.apache.isis.schema.ixn.v1.MetricsDto;
-import org.apache.isis.schema.ixn.v1.ObjectCountsDto;
+import org.apache.isis.schema.common.v2.DifferenceDto;
+import org.apache.isis.schema.common.v2.PeriodDto;
+import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
+import org.apache.isis.schema.ixn.v2.MetricsDto;
+import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 
 public final class MemberExecutionDtoUtils {
 

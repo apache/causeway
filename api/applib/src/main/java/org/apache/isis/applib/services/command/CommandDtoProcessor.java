@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.command;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 
 public interface CommandDtoProcessor {
 

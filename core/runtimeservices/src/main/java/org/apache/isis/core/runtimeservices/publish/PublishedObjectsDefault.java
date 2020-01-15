@@ -35,10 +35,10 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.schema.chg.v1.ChangesDto;
-import org.apache.isis.schema.chg.v1.ObjectsDto;
-import org.apache.isis.schema.common.v1.OidDto;
-import org.apache.isis.schema.common.v1.OidsDto;
+import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.isis.schema.chg.v2.ObjectsDto;
+import org.apache.isis.schema.common.v2.OidDto;
+import org.apache.isis.schema.common.v2.OidsDto;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 import lombok.ToString;

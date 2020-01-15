@@ -19,9 +19,9 @@ package org.apache.isis.applib.services.xmlsnapshot;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.time.LocalDate;
 import java.util.Locale;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -65,7 +65,7 @@ public class XmlSnapshotServiceAbstractTest {
                 assertThat(
                         xmlSnapshotService.getChildElementValue(rootEl, "app:someString", String.class), is("OXF"));
                 assertThat(
-                        xmlSnapshotService.getChildElementValue(rootEl, "app:someLocalDate", LocalDate.class), is(new LocalDate(2013,4,1)));
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someLocalDate", LocalDate.class), is(LocalDate.of(2013,4,1)));
                 assertThat(
                         xmlSnapshotService.getChildElementValue(rootEl, "app:someBigDecimal", BigDecimal.class), is(new BigDecimal("123456789012345678901234567890.12345678")));
                 assertThat(

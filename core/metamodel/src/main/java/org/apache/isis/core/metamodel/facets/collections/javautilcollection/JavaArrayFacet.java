@@ -24,9 +24,9 @@ import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.isEmpty;
 import static org.apache.isis.core.commons.internal.collections._Arrays.toArray;

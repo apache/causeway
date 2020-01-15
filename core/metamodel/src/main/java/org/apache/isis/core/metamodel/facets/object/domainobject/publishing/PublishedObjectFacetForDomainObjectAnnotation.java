@@ -24,9 +24,9 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishObjectsConfiguration;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObjectFacetAbstract {
 

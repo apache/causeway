@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.facets.all.i18n;
 import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 
 public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
 

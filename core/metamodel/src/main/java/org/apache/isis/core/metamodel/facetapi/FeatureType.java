@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
 import java.util.EnumSet;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 /**
  * Enumerates the features that a particular Facet can be applied to.

@@ -49,9 +49,9 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.reflection._Annotations;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
+import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 

@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.value.timejodalocal;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacetSimple;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacetSimple;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 public class JodaLocalTimeValueFacetSimpleFactory extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {

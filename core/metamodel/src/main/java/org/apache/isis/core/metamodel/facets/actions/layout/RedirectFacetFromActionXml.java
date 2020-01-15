@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class RedirectFacetFromActionXml extends RedirectFacetAbstract {
 

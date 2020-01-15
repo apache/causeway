@@ -34,8 +34,6 @@ public class RootOidTest_create {
         RootOid oid = Oid.Factory.persistentOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
-
-        assertThat(oid.isTransient(), is(false));
     }
 
     @Test
@@ -44,8 +42,6 @@ public class RootOidTest_create {
         RootOid oid = Oid.Factory.transientOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
-
-        assertThat(oid.isTransient(), is(true));
     }
 
 
@@ -55,8 +51,6 @@ public class RootOidTest_create {
         RootOid oid = Oid.Factory.persistentOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
-
-        assertThat(oid.isTransient(), is(false));
     }
 
 }

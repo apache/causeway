@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.param.disable;
 
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.core.metamodel.interactions.ActionArgUsabilityContext;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.ActionArgUsabilityContext;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 public abstract class ActionParameterDisabledFacetAbstract 
 extends FacetAbstract 

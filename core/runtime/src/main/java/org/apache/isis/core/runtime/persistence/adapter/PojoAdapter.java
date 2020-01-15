@@ -116,19 +116,6 @@ public final class PojoAdapter implements ObjectAdapter {
         return specification;
     }
 
-    // -- getAggregateRoot
-    
-//    @Override
-//    public ObjectAdapter getAggregateRoot() {
-//        if(!isParentedCollection()) {
-//            return this;
-//        }
-//        val collectionOid = (ParentedOid) oid;
-//        val rootOid = collectionOid.getParentOid();
-//        val rootAdapter = persistenceSession.adapterFor(rootOid);
-//        return rootAdapter;
-//    }
-
     @Override
     public String toString() {
         final ToString str = new ToString(this);
@@ -165,9 +152,10 @@ public final class PojoAdapter implements ObjectAdapter {
         // this is an approximate re-implementation...
         final Oid oid = getOid();
         if(oid != null) {
-            if(oid.isPersistent()) return "P";
-            if(oid.isTransient()) return "T";
-            if(oid.isViewModel()) return "V";
+            return "B"; // bookmark-able
+//            if(oid.isPersistent()) return "P";
+//            if(oid.isTransient()) return "T";
+//            if(oid.isViewModel()) return "V";
         }
         return "S"; // standalone adapter (value)
     }

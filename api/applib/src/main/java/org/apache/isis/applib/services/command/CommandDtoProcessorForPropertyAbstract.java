@@ -18,8 +18,8 @@
  */
 package org.apache.isis.applib.services.command;
 
-import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.PropertyDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.PropertyDto;
 
 /**
  * Convenience adapter for command processors for property edits.

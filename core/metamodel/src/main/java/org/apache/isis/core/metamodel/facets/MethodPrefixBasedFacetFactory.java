@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 /**
  * Indicates that the {@link FacetFactory} works by recognizing methods with a

@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v2.OidDto;
 
 final class Oid_Value implements RootOid {
 
-    private final static long serialVersionUID = 1L;
+    private final static long serialVersionUID = 2L;
 
     static final Oid_Value INSTANCE = new Oid_Value();
 
@@ -37,21 +37,6 @@ final class Oid_Value implements RootOid {
     @Override
     public boolean isValue() { 
         return true; 
-    }
-
-    @Override
-    public boolean isTransient() {
-        return false;
-    }
-
-    @Override
-    public boolean isViewModel() {
-        return false;
-    }
-
-    @Override
-    public boolean isPersistent() {
-        return false;
     }
 
     @Override

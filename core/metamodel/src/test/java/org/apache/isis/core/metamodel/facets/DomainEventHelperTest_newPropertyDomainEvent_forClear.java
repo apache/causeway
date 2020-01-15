@@ -18,7 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
+
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -43,7 +44,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
 
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "someDateProperty");
-        LocalDate oldValue = new LocalDate(2013,4,1);
+        LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;
 
         Utils.domainEventHelper();
@@ -61,7 +62,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
 
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "someDateProperty");
-        LocalDate oldValue = new LocalDate(2013,4,1);
+        LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;
 
         Utils.domainEventHelper();

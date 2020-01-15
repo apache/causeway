@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.actions.notcontributed.derived;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class NotContributedFacetDerivedFromMixinFacetFactory extends FacetFactoryAbstract {

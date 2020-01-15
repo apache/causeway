@@ -25,9 +25,9 @@ import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 
 import lombok.val;
 

@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.background;
 
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 
 /**
  * Persists a {@link org.apache.isis.schema.cmd.v1.CommandDto command-reified} action such that it can be executed asynchronously,

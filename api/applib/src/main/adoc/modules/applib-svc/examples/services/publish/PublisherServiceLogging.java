@@ -29,8 +29,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.schema.chg.v1.ChangesDto;
-import org.apache.isis.schema.ixn.v1.InteractionDto;
+import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 import lombok.extern.log4j.Log4j2;
 

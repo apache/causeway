@@ -25,11 +25,12 @@ import java.util.Objects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
-import static org.apache.isis.core.metamodel.adapter.oid.Oid.*;
+import static org.apache.isis.core.metamodel.adapter.oid.Oid.marshaller;
+import static org.apache.isis.core.metamodel.adapter.oid.Oid.unmarshaller;
 
 final class Oid_Parented implements ParentedOid {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private final String oneToManyId;
     private final int hashCode;
@@ -55,21 +56,6 @@ final class Oid_Parented implements ParentedOid {
     @Override
     public ObjectSpecId getObjectSpecId() {
         return getParentOid().getObjectSpecId();
-    }
-
-    @Override
-    public boolean isTransient() {
-        return getParentOid().isTransient();
-    }
-
-    @Override
-    public boolean isViewModel() {
-        return getParentOid().isViewModel();
-    }
-
-    @Override
-    public boolean isPersistent() {
-        return getParentOid().isPersistent();
     }
 
     public static Oid_Parented deString(String oidStr) {

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
-import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v2.OidDto;
 
 public interface RootOid extends Oid {
 
@@ -41,6 +41,8 @@ public interface RootOid extends Oid {
     public static RootOid deString(final String oidStr) {
         return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
     }
+
+    
 
 
 }
