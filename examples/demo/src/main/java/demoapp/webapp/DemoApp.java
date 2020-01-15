@@ -135,7 +135,8 @@ public class DemoApp extends SpringBootServletInitializer {
         }
         
         /**
-         * If available from {@code System.getProperty("ContextPath")},
+         * If available from {@code System.getProperty("ContextPath")}
+         * or {@code System.getenv("ContextPath")},
          * sets the context path for the web server. The context should start with a "/" character 
          * but not end with a "/" character. The default context path can be
          * specified using an empty string.

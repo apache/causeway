@@ -89,9 +89,9 @@ public class WebAppConfiguration {
         this.applicationCss = ignoreLeadingSlash(application.getCss());
         this.applicationJs = ignoreLeadingSlash(application.getJs());
 
-        this.brandLogoHeader = webAppContextPath.prependContextPathIfLocal(application.getBrandLogoHeader());
-        this.brandLogoSignin = webAppContextPath.prependContextPathIfLocal(application.getBrandLogoSignin());
-        this.faviconUrl = webAppContextPath.prependContextPathIfLocal(application.getFaviconUrl());
+        this.brandLogoHeader = contextPathSensisitve(application.getBrandLogoHeader());
+        this.brandLogoSignin = contextPathSensisitve(application.getBrandLogoSignin());
+        this.faviconUrl = contextPathSensisitve(application.getFaviconUrl());
         
         this.faviconContentType = application.getFaviconContentType();
         
@@ -104,6 +104,10 @@ public class WebAppConfiguration {
 
     // -- HELPER
 
+    private String contextPathSensisitve(String url) {
+        return webAppContextPath.prependContextPathIfLocal(url); 
+    }
+    
     private String ignoreLeadingSlash(String url) {
         if(url==null || url.length()<2) {
             return url;

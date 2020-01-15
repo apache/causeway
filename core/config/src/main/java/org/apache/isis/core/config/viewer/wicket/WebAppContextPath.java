@@ -19,7 +19,6 @@
 package org.apache.isis.core.config.viewer.wicket;
 
 import java.io.Serializable;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Named;
@@ -35,6 +34,7 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.resources._Resources;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * This class is {@link Serializable} so that it can be injected into Wicket components.
@@ -48,23 +48,19 @@ import lombok.Getter;
 public class WebAppContextPath implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     /**
-     * In the form "xxx/yyy" (no leading nor trailing '/').
+     * Either "" or "/xxx".
      */
     @Getter
     private String contextPath = "";
-    private static final Pattern pattern = Pattern.compile("^[/]*(.+?)[/]*$");;
 
+    /**
+     * 
+     * @param contextPath - form of "xxx/yyy" (no leading nor trailing '/').
+     */
     public void setContextPath(final String contextPath) {
-        if(contextPath == null) {
-            this.contextPath = "";
-            return;
-        }
-        final Matcher matcher = pattern.matcher(contextPath);
-        this.contextPath = matcher.matches()
-                                ? matcher.group(1)
-                                : "";
+        this.contextPath = normalizeContextPath(contextPath);
     }
 
     public final String prependContextPath(String path) {
@@ -78,13 +74,7 @@ public class WebAppContextPath implements Serializable {
             return path;
         }
 
-        return contextPath + prefixed(path, "/");
-    }
-
-    private static String prefixed(final String path, final String prefix) {
-        return !path.startsWith(prefix)
-                ? prefix + path
-                : path;
+        return contextPath +  _Strings.prefix(path, "/");
     }
 
     public String prependContextPathIfLocal(String url) {
@@ -96,6 +86,35 @@ public class WebAppContextPath implements Serializable {
             return this.prependContextPath(url);
         }
         return url;
+    }
+    
+    // -- HELPER
+    
+    private final Pattern pattern = Pattern.compile("^[/]*(.+?)[/]*$");
+    
+    private String normalizeContextPath(final String contextPath) {
+        if(contextPath == null) {
+            return "";
+        }
+        val matcher = pattern.matcher(contextPath);
+        val path = matcher.matches()
+                ? matcher.group(1) 
+                        : "";
+                
+        if("".equals(path) || "/".equals(path)) {
+            return "";
+        }
+        
+        return ensureLeadingSlash(path);
+    }
+    
+    private String ensureLeadingSlash(String url) {
+        if(url==null || url.length()<2) {
+            return url;
+        }
+        return !url.startsWith("/")
+                ? "/" + url
+                        : url;
     }
 
 

@@ -28,7 +28,6 @@ import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public class BrandLogo extends WebComponent {
 
     private static final long serialVersionUID = 1L;

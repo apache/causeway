@@ -33,7 +33,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket.Credit;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
@@ -85,23 +84,26 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         val creditItems = new RepeatingView("creditItems");
         add(creditItems);
         
-        _NullSafe.stream(credits)
-        .forEach(credit->{
+        if(hasAnyCredits) {
+        
+            val webAppContextPath = getServiceRegistry().lookupServiceElseFail(WebAppContextPath.class);
             
-            val listItem = new WebMarkupContainer(creditItems.newChildId());
-            creditItems.add(listItem);
-            
-            val creditLink = newCreditLinkComponent(credit);
-            listItem.add(creditLink);
-
-            val imageUrl = getServiceRegistry().lookupService(WebAppContextPath.class)
-                                    .map(x -> x.prependContextPathIfLocal(credit.getImage()))
-                                    .orElseThrow(_Exceptions::unexpectedCodeReach);
-
-            creditLink.add(new CreditImage("creditImage", imageUrl));
-            creditLink.add(new CreditName("creditName", credit.getName()));
-            
-        });
+            _NullSafe.stream(credits)
+            .forEach(credit->{
+                
+                val listItem = new WebMarkupContainer(creditItems.newChildId());
+                creditItems.add(listItem);
+                
+                val creditLink = newCreditLinkComponent(credit);
+                listItem.add(creditLink);
+    
+                val imageUrl = webAppContextPath.prependContextPathIfLocal(credit.getImage());
+    
+                creditLink.add(new CreditImage("creditImage", imageUrl));
+                creditLink.add(new CreditName("creditName", credit.getName()));
+                
+            });
+        }
         
         val creditsLabel = new Label("creditsLabel", "Credits: ");
         add(creditsLabel);
