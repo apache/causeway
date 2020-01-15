@@ -196,10 +196,10 @@
 								</ports>
 							</container>
 							<to>
-								<image>docker.io/apacheisis/isis-2-demo:springboot</image>
-<!-- 								<tags> -->
-<!-- 									<tag>latest</tag> -->
-<!-- 								</tags> -->
+								<image>docker.io/apacheisis/demo-springboot</image>
+								<tags>
+									<tag>nightly</tag>
+								</tags>
 								<auth>
 									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
 									<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
@@ -246,7 +246,7 @@
 								</ports>
 							</container>
 							<to>
-								<image>docker.io/apacheisis/isis-2-demo:dryrun</image>
+								<image>docker.io/apacheisis/demo-dryrun</image>
 								<auth>
 									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
 									<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
@@ -287,7 +287,7 @@
 								<appRoot>/usr/local/tomcat/webapps/demo</appRoot>
 							</container>
 							<to>
-								<image>docker.io/apacheisis/isis-2-demo:tomcat</image>
+								<image>docker.io/apacheisis/demo-tomcat</image>
 								<auth>
 									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
 									<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
