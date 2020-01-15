@@ -201,8 +201,7 @@ javax.jdo.option.PersistenceManagerFactoryClass
 
 |isis.persistor.datanucleus. +
 standalone-collection.bulk-load
-|isis.persistence.jdo-datanucleus. +
-standalone-collection.bulk-load
+|(removed)
 
 |isis.persistor.enforceSafeSemantics
 |(removed)

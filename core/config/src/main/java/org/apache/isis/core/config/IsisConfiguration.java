@@ -361,19 +361,6 @@ public class IsisConfiguration {
                     }
                 }
             }
-
-            private final StandaloneCollection standaloneCollection = new StandaloneCollection();
-            @Data
-            public static class StandaloneCollection {
-
-                /**
-                 * This isn't supported
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private boolean bulkLoad = false;
-            }
         }
     }
 

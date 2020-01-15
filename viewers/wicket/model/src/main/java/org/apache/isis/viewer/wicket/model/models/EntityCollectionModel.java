@@ -167,8 +167,7 @@ implements LinksProvider, UiHintContainer {
             List<ManagedObject> load(EntityCollectionModel colModel) {
 
                 //XXX lombok issue, cannot use val here 
-                boolean isBulkLoad = colModel.getConfiguration()
-                        .getPersistence().getJdoDatanucleus().getStandaloneCollection().isBulkLoad();
+                boolean isBulkLoad = false;
 
                 return isBulkLoad
                         ? loadElementsInBulk(colModel).collect(Collectors.toList())
