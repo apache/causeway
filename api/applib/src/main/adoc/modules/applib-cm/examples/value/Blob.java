@@ -25,7 +25,10 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
+
+import org.apache.isis.core.commons.internal.base._Strings;
+
+import lombok.val;
 
 public final class Blob implements NamedWithMimeType {
 
@@ -38,17 +41,40 @@ public final class Blob implements NamedWithMimeType {
      * </pre>
      */
     private static final long serialVersionUID = 5659679806709601263L;
+    
+    // -- FACTORIES
+    
+    /**
+     * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and {@code content}.
+     * <p>
+     * {@code name} may or may not include the desired filename extension, anyway it 
+     * is guaranteed, that the resulting Blob has the appropriate extension as constraint by 
+     * the given {@code mimeType}.
+     * <p>
+     * For more fine-grained control use one of the {@link Blob} constructors directly. 
+     * @param name - may or may not include the desired filename extension
+     * @param mimeType
+     * @param content - bytes
+     * @return new {@link Blob}
+     */
+    public static Blob of(String name, CommonMimeType mimeType, byte[] content) {
+        val proposedFileExtension = mimeType.getProposedFileExtensions().getFirst().orElse("");
+        val fileName = _Strings.asFileNameWithExtension(name, proposedFileExtension);
+        return new Blob(fileName, mimeType.getMimeType(), content);
+    }
+    
+     // -- 
 
     private final MimeType mimeType;
     private final byte[] bytes;
     private final String name;
 
     public Blob(String name, String primaryType, String subtype, byte[] bytes) {
-        this(name, newMimeType(primaryType, subtype), bytes);
+        this(name, CommonMimeType.newMimeType(primaryType, subtype), bytes);
     }
 
     public Blob(String name, String mimeTypeBase, byte[] bytes) {
-        this(name, newMimeType(mimeTypeBase), bytes);
+        this(name, CommonMimeType.newMimeType(mimeTypeBase), bytes);
     }
 
     public Blob(String name, MimeType mimeType, byte[] bytes) {
@@ -67,22 +93,6 @@ public final class Blob implements NamedWithMimeType {
         this.name = name;
         this.mimeType = mimeType;
         this.bytes = bytes;
-    }
-
-    private static MimeType newMimeType(String primaryType, String subtype) {
-        try {
-            return new MimeType(primaryType, subtype);
-        } catch (MimeTypeParseException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    private static MimeType newMimeType(String baseType) {
-        try {
-            return new MimeType(baseType);
-        } catch (MimeTypeParseException e) {
-            throw new IllegalArgumentException(e);
-        }
     }
 
     @Override

@@ -30,7 +30,8 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.value.BlobClobFactory;
+import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -63,7 +64,7 @@ public class Dto_downloadXml {
             final String fileName) {
 
         val xmlString = jaxbService.toXml(holder);
-        return BlobClobFactory.clobXml(fileName, xmlString);
+        return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
     // -- PARAM 0

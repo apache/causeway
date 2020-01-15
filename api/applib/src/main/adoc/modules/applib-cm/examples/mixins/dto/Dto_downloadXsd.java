@@ -34,7 +34,9 @@ import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.util.ZipWriter;
-import org.apache.isis.applib.value.BlobClobFactory;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -81,7 +83,7 @@ public class Dto_downloadXsd {
 
         if(schemaMap.size() == 1) {
             val xmlString = schemaMap.values().iterator().next();
-            return BlobClobFactory.clob(BlobClobFactory.Type.xml, fileName, "xsd", xmlString);
+            return Clob.of(fileName, CommonMimeType.XSD, xmlString);
         }
 
         val zipWriter = ZipWriter.newInstance();
@@ -94,7 +96,7 @@ public class Dto_downloadXsd {
             });
         }
 
-        return BlobClobFactory.blobZip(fileName, zipWriter.toBytes());
+        return Blob.of(fileName, CommonMimeType.ZIP, zipWriter.toBytes());
 
     }
 

@@ -47,9 +47,9 @@ public final class Blob implements NamedWithMimeType {
     /**
      * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and {@code content}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, anyway it 
-     * is guaranteed, that the resulting Blob has the appropriate extension as constraint by 
-     * the given {@code mimeType}.
+     * {@code name} may or may not include the desired filename extension, it 
+     * is guaranteed, that the resulting {@link Blob} has the appropriate extension 
+     * as constraint by the given {@code mimeType}.
      * <p>
      * For more fine-grained control use one of the {@link Blob} constructors directly. 
      * @param name - may or may not include the desired filename extension

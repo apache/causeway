@@ -24,7 +24,10 @@ import java.io.Writer;
 import java.util.Objects;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
+
+import org.apache.isis.core.commons.internal.base._Strings;
+
+import lombok.val;
 
 public final class Clob implements NamedWithMimeType {
 
@@ -33,6 +36,30 @@ public final class Clob implements NamedWithMimeType {
     private final String name;
     private final MimeType mimeType;
     private final CharSequence chars;
+    
+    
+    // -- FACTORIES
+    
+    /**
+     * Returns a new {@link Clob} of given {@code name}, {@code mimeType} and {@code content}.
+     * <p>
+     * {@code name} may or may not include the desired filename extension, anyway it 
+     * is guaranteed, that the resulting Blob has the appropriate extension as constraint by 
+     * the given {@code mimeType}.
+     * <p>
+     * For more fine-grained control use one of the {@link Clob} constructors directly. 
+     * @param name - may or may not include the desired filename extension
+     * @param mimeType
+     * @param content - chars
+     * @return new {@link Clob}
+     */
+    public static Clob of(String name, CommonMimeType mimeType, CharSequence content) {
+        val proposedFileExtension = mimeType.getProposedFileExtensions().getFirst().orElse("");
+        val fileName = _Strings.asFileNameWithExtension(name, proposedFileExtension);
+        return new Clob(fileName, mimeType.getMimeType(), content);
+    }
+    
+    // --
 
     public Clob(String name, String primaryType, String subType, char[] chars) {
         this(name, primaryType, subType, new String(chars));
@@ -47,11 +74,11 @@ public final class Clob implements NamedWithMimeType {
     }
 
     public Clob(String name, String primaryType, String subType, CharSequence chars) {
-        this(name, newMimeType(primaryType, subType), chars);
+        this(name, CommonMimeType.newMimeType(primaryType, subType), chars);
     }
 
     public Clob(String name, String mimeTypeBase, CharSequence chars) {
-        this(name, newMimeType(mimeTypeBase), chars);
+        this(name, CommonMimeType.newMimeType(mimeTypeBase), chars);
     }
 
     public Clob(String name, MimeType mimeType, CharSequence chars) {
@@ -70,22 +97,6 @@ public final class Clob implements NamedWithMimeType {
         this.name = name;
         this.mimeType = mimeType;
         this.chars = chars;
-    }
-
-    private static MimeType newMimeType(String baseType) {
-        try {
-            return new MimeType(baseType);
-        } catch (MimeTypeParseException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    private static MimeType newMimeType(String primaryType, String subType) {
-        try {
-            return new MimeType(primaryType, subType);
-        } catch (MimeTypeParseException e) {
-            throw new IllegalArgumentException(e);
-        }
     }
 
     @Override
