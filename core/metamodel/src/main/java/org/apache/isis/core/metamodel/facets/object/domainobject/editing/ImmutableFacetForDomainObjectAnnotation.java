@@ -43,7 +43,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final EditingObjectsConfiguration setting = configuration.getCore().getMetaModel().getDomainObject().getEditing();
+        final EditingObjectsConfiguration setting = configuration.getApplib().getAnnotation().getDomainObject().getEditing();
 
         return domainObjectIfAny
                 .map(domainObject -> {

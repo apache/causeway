@@ -89,6 +89,22 @@ public class IsisConfiguration {
         }
     }
 
+    private final Applib applib = new Applib();
+    @Data
+    public static class Applib {
+
+        private final Annotation annotation = new Annotation();
+        @Data
+        public static class Annotation {
+
+            private final DomainObject domainObject = new DomainObject();
+            @Data
+            public static class DomainObject {
+                private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
+            }
+
+        }
+    }
 
     private final Core core = new Core();
     @Data
@@ -98,11 +114,6 @@ public class IsisConfiguration {
         @Data
         public static class MetaModel {
 
-            private final DomainObject domainObject = new DomainObject();
-            @Data
-            public static class DomainObject {
-                private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
-            }
 
 
         }

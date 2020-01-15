@@ -85,7 +85,10 @@ Very approximately:
 | Key prefix was (in v1.x)
 | Key prefix is now (in v2.x)
 
-|isis._xxx_                      |isis.core._xxx_
+|isis._xxx_
+|isis.applib._xxx_ or +
+isis.core._xxx_
+
 |isis.authentication             |isis.security
 |isis.persistor                  |isis.persistence
 |isis.persistor.datanucleus      |isis.persistence.jdo-datanucleus
@@ -126,7 +129,7 @@ auto-logout-if-already-authenticated
 
 
 |isis.objects.editing
-|isis.core.metamodel.domain-object.editing
+|isis.applib.metamodel.domain-object.editing
 
 |isis.persistor.datanucleus. +
 classMetadataLoadedListener
