@@ -83,7 +83,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         _Config.clear();
 
         val configuration = new IsisConfiguration();
-        configuration.getReflector().getFacets().getViewModelSemanticCheckingFacetFactory().setEnable(true);
+        configuration.getApplib().getAnnotation().getViewModel().getValidation().getViewModelSemanticChecking().setEnable(true);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .configuration(configuration)

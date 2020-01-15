@@ -58,7 +58,7 @@ implements MetaModelRefiner {
     public void process(final ProcessClassContext processClassContext) {
 
         // disable by default
-        final boolean enable = getConfiguration().getReflector().getFacets().getViewModelSemanticCheckingFacetFactory().isEnable();
+        final boolean enable = getConfiguration().getApplib().getAnnotation().getViewModel().getValidation().getViewModelSemanticChecking().isEnable();
         if(!enable) {
             return;
         }

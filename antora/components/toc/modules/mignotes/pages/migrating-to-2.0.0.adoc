@@ -306,7 +306,11 @@ titleUiEvent.postForDefault
 |isis.applib.annotation.view-model-layout. +
 title-ui-event.post-for-default
 
-
+|isis.reflector.facets. +
+viewModelSemanticCheckingFacetFactory.enable
+|isis.applib.annotation. +
+view-model.validation. +
+view-model-semantic-checking.enable
 
 |
 |

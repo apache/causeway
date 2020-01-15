@@ -235,6 +235,19 @@ public class IsisConfiguration {
                 }
             }
 
+            private final ViewModel viewModel = new ViewModel();
+            @Data
+            public static class ViewModel {
+                private final Validation validation = new Validation();
+                @Data
+                public static class Validation {
+                    private final ViewModelSemanticChecking viewModelSemanticChecking = new ViewModelSemanticChecking();
+                    @Data
+                    public static class ViewModelSemanticChecking {
+                        private boolean enable = false;
+                    }
+                }
+            }
             private final ViewModelLayout viewModelLayout = new ViewModelLayout();
             @Data
             public static class ViewModelLayout {
@@ -550,11 +563,6 @@ public class IsisConfiguration {
         private final Facets facets = new Facets();
         @Data
         public static class Facets {
-            private final ViewModelSemanticCheckingFacetFactory viewModelSemanticCheckingFacetFactory = new ViewModelSemanticCheckingFacetFactory();
-            @Data
-            public static class ViewModelSemanticCheckingFacetFactory {
-                private boolean enable = false;
-            }
             private boolean ignoreDeprecated = false;
         }
 
