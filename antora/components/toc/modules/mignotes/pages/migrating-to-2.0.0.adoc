@@ -321,6 +321,9 @@ view-model-semantic-checking.enable
 |isis.reflector.introspector.parallelize
 |isis.core.metamodel.introspector.parallelize
 
+|isis.reflector.introspector.mode
+|isis.core.metamodel.introspector.mode
+
 
 |
 |

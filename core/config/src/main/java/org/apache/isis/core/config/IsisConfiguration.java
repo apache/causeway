@@ -303,6 +303,20 @@ public class IsisConfiguration {
                  * Whether to perform introspection in parallel.
                  */
                 private boolean parallelize = true;
+
+                /**
+                 * Whether all known types should be fully introspected as part of the bootstrapping, or should only be
+                 * partially introspected initially.
+                 *
+                 * <p>
+                 * Leaving this as lazy means that there's a chance that metamodel validation errors will not be
+                 * discovered during bootstrap.  That said, metamodel validation is still run incrementally for any
+                 * classes introspected lazily after initial bootstrapping (unless {@link #isValidateIncrementally()} is
+                 * disabled.
+                 * </p>
+                 */
+                private IntrospectionMode mode = IntrospectionMode.LAZY_UNLESS_PRODUCTION;
+
             }
 
             private final Validator validator = new Validator();
@@ -581,18 +595,6 @@ public class IsisConfiguration {
         @Data
         public static class Introspector {
             /**
-             * Whether all known types should be fully introspected as part of the bootstrapping, or should only be
-             * partially introspected initially.
-             *
-             * <p>
-             * Leaving this as lazy means that there's a chance that metamodel validation errors will not be
-             * discovered during bootstrap.  That said, metamodel validation is still run incrementally for any
-             * classes introspected lazily after initial bootstrapping (unless {@link #isValidateIncrementally()} is
-             * disabled.
-             * </p>
-             */
-            private IntrospectionMode mode = IntrospectionMode.LAZY_UNLESS_PRODUCTION;
-            /**
              * If true, then no new specifications will be allowed to be loaded once introspection has been complete.
              *
              * <p>
@@ -613,7 +615,7 @@ public class IsisConfiguration {
              * But it will apply otherwise.
              * </p>
              *
-             * <p>In particular, this setting <i>can</i> still apply even if the {@link #getMode() introspection mode}
+             * <p>In particular, this setting <i>can</i> still apply even if the {@link Core.MetaModel.Introspector#getMode() introspection mode}
              * is set to {@link IntrospectionMode#FULL full}, because that in itself does not preclude some code
              * from attempting to load some previously unknown type.  For example, a fixture script could attempt to
              * invoke an action on some new type using the

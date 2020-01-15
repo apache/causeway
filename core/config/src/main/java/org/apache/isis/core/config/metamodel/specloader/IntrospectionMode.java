@@ -60,7 +60,7 @@ public enum IntrospectionMode {
     protected abstract boolean isFullIntrospect(final DeploymentType deploymentType);
 
     public static boolean isFullIntrospect(IsisConfiguration configuration, IsisSystemEnvironment isisSystemEnvironment) {
-        val introspectionMode = configuration.getReflector().getIntrospector().getMode();
+        val introspectionMode = configuration.getCore().getMetaModel().getIntrospector().getMode();
         return introspectionMode.isFullIntrospect(isisSystemEnvironment.getDeploymentType());
     }
     
