@@ -26,6 +26,13 @@ class WebAppContextPath_setContextPath_Test {
 
         Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("");
     }
+    
+    @Test
+    void when_slash() {
+        webAppContextPath.setContextPath("/");
+
+        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("");
+    }
 
     @Test
     void when_no_leading_slash() {

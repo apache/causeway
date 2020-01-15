@@ -56,8 +56,8 @@ public class WebAppContextPath implements Serializable {
     private String contextPath = "";
 
     /**
-     * 
-     * @param contextPath - form of "xxx/yyy" (no leading nor trailing '/').
+     * @param contextPath - any form allowed: leading or trailing '/', 
+     * no matter what, gets normalized
      */
     public void setContextPath(final String contextPath) {
         this.contextPath = normalizeContextPath(contextPath);
