@@ -132,6 +132,12 @@ public class IsisConfiguration {
                     private Map<Pattern, String> patterns = new HashMap<>();
                 }
 
+                private final CssClassFa cssClassFa = new CssClassFa();
+                @Data
+                public static class CssClassFa {
+                    private Map<Pattern, String> patterns = new HashMap<>();
+                }
+
             }
 
             private final Collection collection = new Collection();
@@ -427,11 +433,6 @@ public class IsisConfiguration {
 
 
 
-            private final CssClassFa cssClassFa = new CssClassFa();
-            @Data
-            public static class CssClassFa {
-                private Map<Pattern, String> patterns = new HashMap<>();
-            }
 
 
             private final DomainObjectAnnotation domainObjectAnnotation = new DomainObjectAnnotation();

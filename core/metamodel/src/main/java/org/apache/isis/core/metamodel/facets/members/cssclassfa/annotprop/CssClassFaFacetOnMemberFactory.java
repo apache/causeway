@@ -94,7 +94,7 @@ implements ContributeeMemberFacetFactory {
     private Map<Pattern, String> getFaIconByPattern() {
         if (faIconByPattern == null) {
             // build lazily
-            this.faIconByPattern = getConfiguration().getReflector().getFacet().getCssClassFa().getPatterns();
+            this.faIconByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatterns();
         }
         return faIconByPattern;
     }
