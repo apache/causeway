@@ -30,7 +30,7 @@ public enum CommandActionsConfiguration {
     NONE;
 
     public static CommandActionsConfiguration from(final IsisConfiguration configuration) {
-        return configuration.getServices().getCommand().getActions();
+        return configuration.getApplib().getAnnotation().getAction().getCommand();
     }
 
 }

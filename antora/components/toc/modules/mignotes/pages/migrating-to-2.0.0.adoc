@@ -438,6 +438,9 @@ jdoql.variables-clause
 |isis.services.audit.objects
 |isis.applib.annotation.domain-object.auditing
 
+|isis.services.command.actions
+|isis.applib.annotation.action.command
+
 
 |
 |

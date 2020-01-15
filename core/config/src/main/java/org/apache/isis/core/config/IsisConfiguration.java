@@ -183,6 +183,8 @@ public class IsisConfiguration {
             @Data
             public static class Action {
 
+                private CommandActionsConfiguration command = CommandActionsConfiguration.NONE;
+
                 /**
                  * Whether or not a public method needs to be annotated with
                  * @{@link org.apache.isis.applib.annotation.Action} in order to be picked up as an action in the
@@ -408,7 +410,6 @@ public class IsisConfiguration {
         }
 
         private final RuntimeServices runtimeServices = new RuntimeServices();
-
         @Data
         public static class RuntimeServices {
 
@@ -703,7 +704,7 @@ public class IsisConfiguration {
         private final Command command = new Command();
         @Data
         public static class Command {
-            private CommandActionsConfiguration actions = CommandActionsConfiguration.NONE;
+
             private CommandPropertiesConfiguration properties = CommandPropertiesConfiguration.NONE;
         }
 
