@@ -101,6 +101,49 @@ public class IsisConfiguration {
             @Data
             public static class DomainObject {
                 private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
+
+                private final CreatedLifecycleEvent createdLifecycleEvent = new CreatedLifecycleEvent();
+                @Data
+                public static class CreatedLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+
+                private final LoadedLifecycleEvent loadedLifecycleEvent = new LoadedLifecycleEvent();
+                @Data
+                public static class LoadedLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+
+                private final PersistingLifecycleEvent persistingLifecycleEvent = new PersistingLifecycleEvent();
+                @Data
+                public static class PersistingLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+
+                private final PersistedLifecycleEvent persistedLifecycleEvent = new PersistedLifecycleEvent();
+                @Data
+                public static class PersistedLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+
+                private final RemovingLifecycleEvent removingLifecycleEvent = new RemovingLifecycleEvent();
+                @Data
+                public static class RemovingLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+
+                private final UpdatedLifecycleEvent updatedLifecycleEvent = new UpdatedLifecycleEvent();
+                @Data
+                public static class UpdatedLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+
+                private final UpdatingLifecycleEvent updatingLifecycleEvent = new UpdatingLifecycleEvent();
+                @Data
+                public static class UpdatingLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+
             }
 
             private final Action action = new Action();
@@ -431,49 +474,6 @@ public class IsisConfiguration {
 
             private boolean filterVisibility = true;
 
-
-
-
-
-            private final DomainObjectAnnotation domainObjectAnnotation = new DomainObjectAnnotation();
-            @Data
-            public static class DomainObjectAnnotation {
-                private final CreatedLifecycleEvent createdLifecycleEvent = new CreatedLifecycleEvent();
-                @Data
-                public static class CreatedLifecycleEvent {
-                    private boolean postForDefault = true;
-                }
-                private final LoadedLifecycleEvent loadedLifecycleEvent = new LoadedLifecycleEvent();
-                @Data
-                public static class LoadedLifecycleEvent {
-                    private boolean postForDefault = true;
-                }
-                private final PersistingLifecycleEvent persistingLifecycleEvent = new PersistingLifecycleEvent();
-                @Data
-                public static class PersistingLifecycleEvent {
-                    private boolean postForDefault = true;
-                }
-                private final PersistedLifecycleEvent persistedLifecycleEvent = new PersistedLifecycleEvent();
-                @Data
-                public static class PersistedLifecycleEvent {
-                    private boolean postForDefault = true;
-                }
-                private final RemovingLifecycleEvent removingLifecycleEvent = new RemovingLifecycleEvent();
-                @Data
-                public static class RemovingLifecycleEvent {
-                    private boolean postForDefault = true;
-                }
-                private final UpdatedLifecycleEvent updatedLifecycleEvent = new UpdatedLifecycleEvent();
-                @Data
-                public static class UpdatedLifecycleEvent {
-                    private boolean postForDefault = true;
-                }
-                private final UpdatingLifecycleEvent updatingLifecycleEvent = new UpdatingLifecycleEvent();
-                @Data
-                public static class UpdatingLifecycleEvent {
-                    private boolean postForDefault = true;
-                }
-            }
 
             private final DomainObjectLayoutAnnotation domainObjectLayoutAnnotation = new DomainObjectLayoutAnnotation();
             @Data

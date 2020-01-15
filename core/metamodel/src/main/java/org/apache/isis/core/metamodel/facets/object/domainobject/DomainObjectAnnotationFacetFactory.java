@@ -355,7 +355,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 lifecycleEvent,
                 ObjectCreatedEvent.Noop.class,
                 ObjectCreatedEvent.Default.class,
-                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getCreatedLifecycleEvent().isPostForDefault())
+                getConfiguration().getApplib().getAnnotation().getDomainObject().getCreatedLifecycleEvent().isPostForDefault())
                 )
         .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -371,7 +371,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 lifecycleEvent,
                 ObjectLoadedEvent.Noop.class,
                 ObjectLoadedEvent.Default.class,
-                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getLoadedLifecycleEvent().isPostForDefault())
+                getConfiguration().getApplib().getAnnotation().getDomainObject().getLoadedLifecycleEvent().isPostForDefault())
                 )
         .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -387,7 +387,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 lifecycleEvent,
                 ObjectPersistingEvent.Noop.class,
                 ObjectPersistingEvent.Default.class,
-                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getPersistingLifecycleEvent().isPostForDefault())
+                getConfiguration().getApplib().getAnnotation().getDomainObject().getPersistingLifecycleEvent().isPostForDefault())
                 )
         .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -403,7 +403,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 lifecycleEvent,
                 ObjectPersistedEvent.Noop.class,
                 ObjectPersistedEvent.Default.class,
-                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getPersistedLifecycleEvent().isPostForDefault())
+                getConfiguration().getApplib().getAnnotation().getDomainObject().getPersistedLifecycleEvent().isPostForDefault())
                 )
         .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -419,7 +419,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 lifecycleEvent,
                 ObjectRemovingEvent.Noop.class,
                 ObjectRemovingEvent.Default.class,
-                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getRemovingLifecycleEvent().isPostForDefault())
+                getConfiguration().getApplib().getAnnotation().getDomainObject().getRemovingLifecycleEvent().isPostForDefault())
                 )
         .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -435,7 +435,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 lifecycleEvent,
                 ObjectUpdatedEvent.Noop.class,
                 ObjectUpdatedEvent.Default.class,
-                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getUpdatedLifecycleEvent().isPostForDefault())
+                getConfiguration().getApplib().getAnnotation().getDomainObject().getUpdatedLifecycleEvent().isPostForDefault())
                 )
         .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -451,7 +451,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 lifecycleEvent,
                 ObjectUpdatingEvent.Noop.class,
                 ObjectUpdatingEvent.Default.class,
-                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getUpdatingLifecycleEvent().isPostForDefault())
+                getConfiguration().getApplib().getAnnotation().getDomainObject().getUpdatingLifecycleEvent().isPostForDefault())
                 )
         .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))

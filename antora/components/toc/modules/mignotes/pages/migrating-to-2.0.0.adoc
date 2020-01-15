@@ -226,6 +226,41 @@ cssClass.patterns
 |isis.applib.annotation.action-layout. +
 css-class.patterns
 
+|isis.reflector.facet.domainObjectAnnotation. +
+createdLifecycleEvent.postForDefault
+|isis.applib.annotation.domain-object. +
+created-lifecycle-event.post-for-default
+
+|isis.reflector.facet.domainObjectAnnotation. +
+loadedLifecycleEvent.postForDefault
+|isis.applib.annotation.domain-object. +
+loaded-lifecycle-event.post-for-default
+
+|isis.reflector.facet.domainObjectAnnotation. +
+persistingLifecycleEvent.postForDefault
+|isis.applib.annotation.domain-object. +
+persisting-lifecycle-event.post-for-default
+
+|isis.reflector.facet.domainObjectAnnotation. +
+persistedLifecycleEvent.postForDefault
+|isis.applib.annotation.domain-object. +
+persisted-lifecycle-event.post-for-default
+
+|isis.reflector.facet.domainObjectAnnotation. +
+removingLifecycleEvent.postForDefault
+|isis.applib.annotation.domain-object. +
+removing-lifecycle-event.post-for-default
+
+|isis.reflector.facet.domainObjectAnnotation. +
+updatedLifecycleEvent.postForDefault
+|isis.applib.annotation.domain-object. +
+updated-lifecycle-event.post-for-default
+
+|isis.reflector.facet.domainObjectAnnotation. +
+updatingLifecycleEvent.postForDefault
+|isis.applib.annotation.domain-object. +
+updating-lifecycle-event.post-for-default
+
 
 |
 |
