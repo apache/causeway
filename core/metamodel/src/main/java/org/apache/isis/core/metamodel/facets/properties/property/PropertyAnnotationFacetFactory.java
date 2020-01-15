@@ -154,7 +154,7 @@ implements MetaModelRefiner {
                 propertyDomainEventFacet.getEventType(),
                 PropertyDomainEvent.Noop.class,
                 PropertyDomainEvent.Default.class,
-                getConfiguration().getReflector().getFacet().getPropertyAnnotation().getDomainEvent().isPostForDefault()
+                getConfiguration().getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault()
                 )) {
             super.addFacet(propertyDomainEventFacet);
         }

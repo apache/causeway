@@ -276,6 +276,11 @@ titleUiEvent.postForDefault
 |isis.applib.annotation.domain-object-layout. +
 title-ui-event.post-for-default
 
+|isis.reflector.facet.propertyAnnotation. +
+domainEvent.postForDefault
+|isis.applib.annotation.property. +
+domain-event.post-for-default
+
 
 |
 |

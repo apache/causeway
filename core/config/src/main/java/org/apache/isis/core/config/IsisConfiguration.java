@@ -210,6 +210,17 @@ public class IsisConfiguration {
                 public static class CssClassFa {
                     private Map<Pattern, String> patterns = new HashMap<>();
                 }
+            }
+
+            private final Property property = new Property();
+            @Data
+            public static class Property {
+
+                private final DomainEvent domainEvent = new DomainEvent();
+                @Data
+                public static class DomainEvent {
+                    private boolean postForDefault = true;
+                }
 
             }
 
@@ -505,15 +516,6 @@ public class IsisConfiguration {
             private boolean filterVisibility = true;
 
 
-            private final PropertyAnnotation propertyAnnotation = new PropertyAnnotation();
-            @Data
-            public static class PropertyAnnotation {
-                private final DomainEvent domainEvent = new DomainEvent();
-                @Data
-                public static class DomainEvent {
-                    private boolean postForDefault = true;
-                }
-            }
             private final ViewModelLayoutAnnotation viewModelLayoutAnnotation = new ViewModelLayoutAnnotation();
             @Data
             public static class ViewModelLayoutAnnotation {
