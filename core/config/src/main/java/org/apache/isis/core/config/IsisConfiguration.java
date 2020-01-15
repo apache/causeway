@@ -121,12 +121,12 @@ public class IsisConfiguration {
 
 
 
-    private final Persistor persistor = new Persistor();
+    private final Persistence persistence = new Persistence();
     @Data
-    public static class Persistor {
-        private final Datanucleus datanucleus = new Datanucleus();
+    public static class Persistence {
+        private final JdoDatanucleus jdoDatanucleus = new JdoDatanucleus();
         @Data
-        public static class Datanucleus {
+        public static class JdoDatanucleus {
             private String classMetadataLoadedListener = "org.apache.isis.persistence.jdo.datanucleus5.datanucleus.CreateSchemaObjectFromClassMetadata";
 
             private boolean installFixtures = false;
@@ -134,13 +134,9 @@ public class IsisConfiguration {
             private final Impl impl = new Impl();
             @Data
             public static class Impl {
-                private final DataNucleus datanucleus = new DataNucleus();
-                /**
-                 * slightly different capitalization is intentional here; cannot have nested class with same name as parent.
-                 * We rely on additional-spring-configuration-metadata.json to specify the desired property names.
-                 */
+                private final Datanucleus datanucleus = new Datanucleus();
                 @Data
-                public static class DataNucleus {
+                public static class Datanucleus {
 
                     /**
                      * 	The JNDI name for a connection factory for transactional connections.
@@ -152,6 +148,8 @@ public class IsisConfiguration {
                      * <p>
                      *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                      * </p>
+                     *
+                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
                      */
                     private String connectionFactoryName;
 
@@ -165,6 +163,8 @@ public class IsisConfiguration {
                      * <p>
                      *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                      * </p>
+                     *
+                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
                      */
                     private String connectionFactory2Name;
 
@@ -176,6 +176,8 @@ public class IsisConfiguration {
                      * <p>
                      *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                      * </p>
+                     *
+                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
                      */
                     private String connectionPasswordDecrypter;
 
@@ -193,6 +195,8 @@ public class IsisConfiguration {
                      * <p>
                      *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                      * </p>
+                     *
+                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
                      */
                     private boolean persistenceUnitLoadClasses = true;
 
@@ -211,6 +215,8 @@ public class IsisConfiguration {
                      * <p>
                      *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                      * </p>
+                     *
+                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
                      */
                     private TransactionTypeEnum transactionType;
 
@@ -231,6 +237,8 @@ public class IsisConfiguration {
                              * <p>
                              * See also Cache docs for JDO, and for JPA
                              * </p>
+                             *
+                             * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
                              */
                             private String type = "none";
                         }
@@ -262,6 +270,9 @@ public class IsisConfiguration {
                          * <p>
                          *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                          * </p>
+                         *
+                         *
+                         * @implNote - this config property isn't used by the core framework, but is used by one the flyway extension.
                          */
                         private boolean autoCreateAll = false;
 
@@ -272,6 +283,8 @@ public class IsisConfiguration {
                          * <p>
                          *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                          * </p>
+                         *
+                         * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
                          */
                         private boolean autoCreateDatabase = false;
 
@@ -279,6 +292,8 @@ public class IsisConfiguration {
                          * <p>
                          *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                          * </p>
+                         *
+                         * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
                          */
                         private boolean validateAll = true;
                     }
@@ -294,6 +309,8 @@ public class IsisConfiguration {
                          * <p>
                          *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                          * </p>
+                         *
+                         * @implNote - changing this property from its default is used to enable the flyway extension (in combination with {@link Datanucleus.Schema#isAutoCreateAll()}
                          */
                         private String persistenceManagerFactoryClass = "org.datanucleus.api.jdo.JDOPersistenceManagerFactory";
 
@@ -306,6 +323,8 @@ public class IsisConfiguration {
                              * <p>
                              *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                              * </p>
+                             *
+                             * @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
                              */
                             private String connectionDriverName;
                             /**
@@ -314,6 +333,8 @@ public class IsisConfiguration {
                              * <p>
                              *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                              * </p>
+                             *
+                             * @implNote - some extensions (H2Console, MsqlDbManager) peek at this URL to determine if they should be enabled.  Note that it is also mandatory if using JDO Datanucleus.
                              */
                             private String connectionUrl;
                             /**
@@ -322,6 +343,8 @@ public class IsisConfiguration {
                              * <p>
                              *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                              * </p>
+                             *
+                             * @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
                              */
                             private String connectionUserName;
                             /**
@@ -330,6 +353,8 @@ public class IsisConfiguration {
                              * <p>
                              *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                              * </p>
+                             *
+                             * @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete.  It is not necessarily mandatory, some databases accept an empty password.
                              */
                             private String connectionPassword;
                         }
@@ -340,6 +365,13 @@ public class IsisConfiguration {
             private final StandaloneCollection standaloneCollection = new StandaloneCollection();
             @Data
             public static class StandaloneCollection {
+
+                /**
+                 * This isn't supported
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private boolean bulkLoad = false;
             }
         }

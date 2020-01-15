@@ -209,7 +209,7 @@ public class DataNucleusApplicationComponents5 {
     }
 
     private MetaDataListener createMetaDataListener() {
-        final String classMetadataListenerClassName = configuration.getPersistor().getDatanucleus().getClassMetadataLoadedListener();
+        final String classMetadataListenerClassName = configuration.getPersistence().getJdoDatanucleus().getClassMetadataLoadedListener();
         return classMetadataListenerClassName != null
                 ? InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class)
                         : null;

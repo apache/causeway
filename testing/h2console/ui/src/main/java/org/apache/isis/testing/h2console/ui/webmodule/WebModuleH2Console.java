@@ -100,7 +100,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
     }
 
     private boolean isUsesH2MemConnection() {
-        val connectionUrl = isisConfiguration.getPersistor().getDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
+        val connectionUrl = isisConfiguration.getPersistence().getJdoDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
         return !_Strings.isNullOrEmpty(connectionUrl) && connectionUrl.contains(":h2:mem:");
     }
 

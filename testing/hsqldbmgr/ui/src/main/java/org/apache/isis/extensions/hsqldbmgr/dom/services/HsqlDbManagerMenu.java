@@ -50,7 +50,7 @@ public class HsqlDbManagerMenu {
     @Inject
     public HsqlDbManagerMenu(IsisConfiguration isisConfiguration) {
         this.url = isisConfiguration
-                .getPersistor().getDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
+                .getPersistence().getJdoDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
     }
 
     public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<HsqlDbManagerMenu> { }

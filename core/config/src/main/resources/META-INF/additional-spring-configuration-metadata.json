@@ -1,76 +1,76 @@
 {
   "properties": [
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.ConnectionFactoryName"
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionFactoryName"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.ConnectionFactory2Name"
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionFactory2Name"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.ConnectionPasswordDecrypter"
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionPasswordDecrypter"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.PersistenceUnitLoadClasses"
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.PersistenceUnitLoadClasses"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.objectProvider.className"
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.objectProvider.className"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateAll",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateAll",
       "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateDatabase",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateDatabase",
       "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.validateAll",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateAll",
       "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.validateTables",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateTables",
       "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.validateConstraints",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateConstraints",
       "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit",
       "type": "java.lang.Boolean"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.identifier.case",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.identifier.case",
       "type": "java.lang.String"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.cache.level2.mode",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.cache.level2.mode",
       "type": "java.lang.String",
       "description": "Values of javax.persistence.SharedCacheMode, capitalized"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName",
+      "name": "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionDriverName",
       "type": "java.lang.String"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL",
+      "name": "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL",
       "type": "java.lang.String"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName",
+      "name": "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName",
       "type": "java.lang.String"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword",
+      "name": "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword",
       "type": "java.lang.String"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass"
+      "name": "isis.persistence.jdo-datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass"
     }
   ],
   "hints": [
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.ConnectionPasswordDecrypter",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionPasswordDecrypter",
       "providers": [{
         "name": "class-reference",
         "parameters": {
@@ -79,7 +79,7 @@
       }]
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass",
+      "name": "isis.persistence.jdo-datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass",
       "providers": [{
         "name": "class-reference",
         "parameters": {
@@ -88,7 +88,7 @@
       }]
     },
     {
-      "name": "isis.persistor.datanucleus.impl.datanucleus.objectProvider.className",
+      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.objectProvider.className",
       "providers": [{
         "name": "class-reference",
         "parameters": {

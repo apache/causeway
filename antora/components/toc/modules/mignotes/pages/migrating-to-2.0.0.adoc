@@ -75,18 +75,38 @@ We've found that this schema works well with IDEs such as IntelliJ that provide 
 
 === Configuration property names
 
-Now follow, more or less, the ``groupId``s.
+These now follow, more or less, the ``groupId``s.
+Very approximately:
 
-[NOTE]
-====
-Spring Boot allows configuration properties to be specified using either `camelCase` or `kebab-case`.
+.Configuration property changes
+[cols="1m,1m", options="header",subs=+quotes]
+|===
+
+| Key prefix was (in v1.x)
+| Key prefix is now (in v2.x)
+
+|isis._xxx_                      |isis.core._xxx_
+|isis.authentication             |isis.security
+|isis.persistor                  |isis.persistence
+|isis.persistor.datanucleus      |isis.persistence.jdo-datanucleus
+|isis.persistor.datanucleus.impl |isis.persistence.jdo-datanucleus.impl
+|isis.viewers                    |isis.metamodel.ui.
+|isis.services._xxx_             |isis.core.runtime.services._xxx_
+
+|===
+
+Note also  Spring Boot allows configuration properties to be specified using either `camelCase` or `kebab-case`.
 In general it's fine to use either, with a preference for `kebab-case`.
 
-The only exception is the configuration properties that reside under `isis.persistence.jdo.datanucleus` (what in Isis v1.x was the `isis.persistor.datanucleus.impl` key); this prefix is stripped off and all remaining properties passed through unchanged to DataNucleus.
+[WARNING]
+====
+The only exception is the configuration properties that reside under `isis.persistence.jdo-datanucleus.impl` (what in Isis v1.x was the `isis.persistor.datanucleus.impl` key); this prefix is stripped off and all remaining properties passed through unchanged to DataNucleus.
 These must be kept in camel case format because DataNucleus doesn't recognise kebab case.
 
-For example, use `isis.persistence.jdo.datanucleus.javax.jdo.option.ConnectionURL` (and not `connection-url` for the last key).
+For example, use `isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL` (and not `connection-url` for the last part of the key).
 ====
+
+Here, in more detail, are the before and after for recognised configuration properties.
 
 .Configuration property changes
 [cols="1m,1m", options="header"]
@@ -94,7 +114,6 @@ For example, use `isis.persistence.jdo.datanucleus.javax.jdo.option.ConnectionUR
 
 | Key was (in v1.x)
 | Key is now (in v2.x)
-
 
 
 |isis.authentication.shiro. +
@@ -105,21 +124,96 @@ auto-logout-if-already-authenticated
 |isis.locale
 |isis.core.runtime.locale
 
-|
-
 
 |isis.objects.editing
 |isis.core.metamodel.objects.editing
 
-- isis.xxx -> isis.core.xxx
-- isis.persistor -> isis.persistence
-- isis.persistor.datanucleus -> isis.persistence.jdo
-- isis.persistor.datanucleus.impl -> isis.persistence.jdo.datanucleus
-- isis.viewers -> isis.metamodel.ui.
+|isis.persistor.datanucleus. +
+classMetadataLoadedListener
+|isis.persistence.jdo-datanucleus. +
+class-metadata-loaded-listener
+
+|isis.persistor.datanucleus. +
+installFixtures
+|isis.persistence.jdo-datanucleus. +
+install-fixtures
+
+
+|isis.persistor.datanucleus.impl. +
+datanucleus.schema.autoCreateAll
+|isis.persistence.jdo-datanucleus.impl. +
+datanucleus.schema.autoCreateAll
+
+|isis.persistor.datanucleus.impl. +
+datanucleus.schema.validateAll
+|isis.persistence.jdo-datanucleus.impl. +
+datanucleus.schema.validateAll
+
+|isis.persistor.datanucleus.impl. +
+datanucleus.schema.validateTables
+|isis.persistence.jdo-datanucleus.impl. +
+datanucleus.schema.validateTables
+
+|isis.persistor.datanucleus.impl. +
+datanucleus.schema.validateConstraints
+|isis.persistence.jdo-datanucleus.impl. +
+datanucleus.schema.validateConstraints
+
+|isis.persistor.datanucleus.impl. +
+datanucleus.persistenceByReachabilityAtCommit
+|isis.persistence.jdo-datanucleus.impl. +
+datanucleus.persistenceByReachabilityAtCommit
+
+|isis.persistor.datanucleus.impl. +
+datanucleus.identifier.case
+|isis.persistence.jdo-datanucleus.impl. +
+datanucleus.identifier.case
+
+|isis.persistor.datanucleus.impl. +
+datanucleus.cache.level2.mode
+|isis.persistence.jdo-datanucleus.impl. +
+datanucleus.cache.level2.mode
+
+|isis.persistor.datanucleus.impl. +
+javax.jdo.option.ConnectionDriverName
+|isis.persistence.jdo-datanucleus.impl. +
+javax.jdo.option.ConnectionDriverName
+
+|isis.persistor.datanucleus.impl. +
+javax.jdo.option.ConnectionURL
+|isis.persistence.jdo-datanucleus.impl. +
+javax.jdo.option.ConnectionURL
+
+|isis.persistor.datanucleus.impl. +
+javax.jdo.option.ConnectionUserName
+|isis.persistence.jdo-datanucleus.impl. +
+javax.jdo.option.ConnectionUserName
+
+|isis.persistor.datanucleus.impl. +
+javax.jdo.option.ConnectionPassword
+|isis.persistence.jdo-datanucleus.impl. +
+javax.jdo.option.ConnectionPassword
+
+|isis.persistor.datanucleus.impl. +
+javax.jdo.option.PersistenceManagerFactoryClass
+|isis.persistence.jdo-datanucleus.impl. +
+javax.jdo.option.PersistenceManagerFactoryClass
+
+|isis.persistor.datanucleus. +
+standalone-collection.bulk-load
+|isis.persistence.jdo-datanucleus. +
+standalone-collection.bulk-load
+
+|isis.persistor.enforceSafeSemantics
+|isis.persistence.enforce-safe-semantics
+
+
+
+|
+
 - isis.value.format -> isis.metamodel.ui.value.format
 - isis.value.money -> isis.valuetypes.money
 - isis.service.xxx -> isis.core.services.email
-- isis.services.xxx -> isis.core.services.xxx
 - isis.services.container -> isis.core.services.repository-service
 
 

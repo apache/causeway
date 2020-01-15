@@ -405,7 +405,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 //     * framework will run the fixtures to initialise the object store.
 //     *
 //     * <p>
-//     * Implementation looks for the {@link IsisConfiguration.Persistor.Datanucleus#isInstallFixtures()} property
+//     * Implementation looks for the {@link IsisConfiguration.Persistence.JdoDatanucleus#isInstallFixtures()} property
 //     * in the injected {@link #configuration configuration}.
 //     *
 //     * <p>
@@ -413,7 +413,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 //     * the fly during bootstrapping if required.
 //     */
 //    private FixturesInstalledState initialStateFromConfig() {
-//        val installFixtures = configuration.getPersistor().getDatanucleus().isInstallFixtures();
+//        val installFixtures = configuration.getPersistence().getJdoDatanucleus().isInstallFixtures();
 //        log.info("isFixturesInstalled: {} = {}", "'isis.persistor.datanucleus.install-fixtures'", installFixtures);
 //
 //        val objectStoreIsFixturesInstalled = !installFixtures;

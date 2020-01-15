@@ -168,7 +168,7 @@ implements LinksProvider, UiHintContainer {
 
                 //XXX lombok issue, cannot use val here 
                 boolean isBulkLoad = colModel.getConfiguration()
-                        .getPersistor().getDatanucleus().getStandaloneCollection().isBulkLoad();
+                        .getPersistence().getJdoDatanucleus().getStandaloneCollection().isBulkLoad();
 
                 return isBulkLoad
                         ? loadElementsInBulk(colModel).collect(Collectors.toList())
