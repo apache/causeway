@@ -360,6 +360,8 @@ public class IsisConfiguration {
                  */
                 private boolean parallelize = true;
 
+                private boolean allowDeprecated = true;
+
             }
         }
 
@@ -628,7 +630,6 @@ public class IsisConfiguration {
         public static class Validator {
 
 
-            private boolean allowDeprecated = true;
             private boolean ensureUniqueObjectTypes = true;
             private boolean checkModuleExtent = true;
             private boolean noParamsOnly = false;

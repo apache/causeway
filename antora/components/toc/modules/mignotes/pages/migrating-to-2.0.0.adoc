@@ -337,6 +337,9 @@ validate-incrementally
 |isis.reflector.validator.parallelize
 |isis.core.metamodel.validator.parallelize
 
+|isis.reflector.validator.allowDeprecated
+|isis.core.metamodel.validator.allow-deprecated
+
 
 |
 |

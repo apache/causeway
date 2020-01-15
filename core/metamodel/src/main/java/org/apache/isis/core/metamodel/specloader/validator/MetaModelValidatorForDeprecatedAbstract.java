@@ -40,7 +40,7 @@ abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidato
      */
     public <T extends Facet> T flagIfPresent(T facet, FacetFactory.AbstractProcessWithMethodContext<?> processMethodContext) {
         if(facet != null && 
-                !getConfiguration().getReflector().getValidator().isAllowDeprecated()) {
+                !getConfiguration().getCore().getMetaModel().getValidator().isAllowDeprecated()) {
             
             val holder = (IdentifiedHolder) facet.getFacetHolder();
             val identifier = holder.getIdentifier();
