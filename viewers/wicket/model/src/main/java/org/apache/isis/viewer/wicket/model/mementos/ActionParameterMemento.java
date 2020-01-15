@@ -41,13 +41,6 @@ public class ActionParameterMemento implements Serializable {
 
     private transient ObjectActionParameter actionParameter;
 
-    public ActionParameterMemento(
-            final ActionMemento actionMemento,
-            final int number,
-            final SpecificationLoader specificationLoader) {
-        this(actionMemento, number, actionParameterFor(actionMemento, number, specificationLoader));
-    }
-
     public ActionParameterMemento(final ObjectActionParameter actionParameter) {
         this(new ActionMemento(actionParameter.getAction()), actionParameter.getNumber(), actionParameter);
     }

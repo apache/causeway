@@ -60,7 +60,6 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 
     @Inject @Getter private SpecificationLoader specificationLoader;
     @Inject private ObjectManager objectManager;
-    private ObjectUnmarshaller objectUnmarshaller;
 
     @Override
     public ObjectMemento mementoForRootOid(RootOid rootOid) {
@@ -97,9 +96,6 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         if(memento==null) {
             return null;
         }
-        if(objectUnmarshaller==null) {
-            objectUnmarshaller = new ObjectUnmarshaller(objectManager, specificationLoader);
-        }
 
         if(memento instanceof ObjectMementoCollection) {
             val objectMementoCollection = (ObjectMementoCollection) memento;
@@ -111,19 +107,19 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
                     .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            return objectUnmarshaller.adapterForListOfPojos(listOfPojos);
+            return ManagedObject.of(specificationLoader::loadSpecification, listOfPojos);
         }
 
         if(memento instanceof ObjectMementoAdapter) {
             val objectMementoAdapter = (ObjectMementoAdapter) memento;
-            return objectMementoAdapter.reconstructObject(objectUnmarshaller);
+            return objectMementoAdapter.reconstructObject(specificationLoader);
         }
 
         throw _Exceptions.unrecoverableFormatted("unsupported ObjectMemento type %s", memento.getClass());
     }
 
     @RequiredArgsConstructor(staticName = "of")
-    static class ObjectMementoAdapter implements ObjectMemento {
+    private static class ObjectMementoAdapter implements ObjectMemento {
 
         private static final long serialVersionUID = 1L;
 
@@ -149,8 +145,8 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
             return delegate.getObjectSpecId();
         }
 
-        ManagedObject reconstructObject(ObjectUnmarshaller objectUnmarshaller) {
-            return delegate.reconstructObject(objectUnmarshaller, objectUnmarshaller.getSpecificationLoader());
+        ManagedObject reconstructObject(SpecificationLoader specificationLoader) {
+            return delegate.reconstructObject(specificationLoader);
         }
 
         @Override
