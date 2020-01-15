@@ -129,8 +129,6 @@ public class IsisConfiguration {
         public static class JdoDatanucleus {
             private String classMetadataLoadedListener = "org.apache.isis.persistence.jdo.datanucleus5.datanucleus.CreateSchemaObjectFromClassMetadata";
 
-            private boolean installFixtures = false;
-
             private final Impl impl = new Impl();
             @Data
             public static class Impl {

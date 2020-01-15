@@ -135,8 +135,7 @@ class-metadata-loaded-listener
 
 |isis.persistor.datanucleus. +
 installFixtures
-|isis.persistence.jdo-datanucleus. +
-install-fixtures
+|(removed)
 
 
 |isis.persistor.datanucleus.impl. +
