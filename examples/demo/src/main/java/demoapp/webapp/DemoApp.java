@@ -18,6 +18,8 @@
  */
 package demoapp.webapp;
 
+import java.util.Optional;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -141,7 +143,9 @@ public class DemoApp extends SpringBootServletInitializer {
         @Bean
         public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer() {
             return factory -> {
-                val contextPath = System.getProperty("ContextPath");
+                val contextPath = Optional
+                        .ofNullable(System.getProperty("ContextPath"))
+                        .orElse(System.getenv("ContextPath")); // fallback
                 if(contextPath!=null) {
                     factory.setContextPath(contextPath);
                     log.info("Setting context path to '{}'", contextPath);
