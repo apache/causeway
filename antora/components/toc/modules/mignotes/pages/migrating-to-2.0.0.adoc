@@ -334,6 +334,9 @@ validateIncrementally
 |isis.core.metamodel.introspector. +
 validate-incrementally
 
+|isis.reflector.validator.parallelize
+|isis.core.metamodel.validator.parallelize
+
 
 |
 |

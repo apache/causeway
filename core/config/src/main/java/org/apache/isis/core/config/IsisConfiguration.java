@@ -354,10 +354,12 @@ public class IsisConfiguration {
             private final Validator validator = new Validator();
             @Data
             public static class Validator {
-//                /**
-//                 * Whether to perform validation in parallel.
-//                 */
-//                private boolean parallelize = true;
+
+                /**
+                 * Whether to perform metamodel validation in parallel.
+                 */
+                private boolean parallelize = true;
+
             }
         }
 
@@ -621,21 +623,10 @@ public class IsisConfiguration {
     @Data
     public static class Reflector {
 
-
-
-        private final Introspector introspector = new Introspector();
-        @Data
-        public static class Introspector {
-        }
-
         private final Validator validator = new Validator();
         @Data
         public static class Validator {
 
-            /**
-             * Whether to perform metamodel validation in parallel.
-             */
-            private boolean parallelize = true;
 
             private boolean allowDeprecated = true;
             private boolean ensureUniqueObjectTypes = true;
