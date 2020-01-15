@@ -69,11 +69,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -274,12 +274,8 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
             PageParameters pageParameters) {
         
         val rootOid = oidFor(pageParameters);
-        if(rootOid.isTransient()) {
-            return null;
-        } else {
-            val memento = commonContext.mementoFor(rootOid);
-            return EntityModel.ofMemento(commonContext, memento);
-        }
+        val memento = commonContext.mementoFor(rootOid);
+        return EntityModel.ofMemento(commonContext, memento);
     }
 
     private static RootOid oidFor(final PageParameters pageParameters) {

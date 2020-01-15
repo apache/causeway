@@ -138,7 +138,7 @@ final class ObjectMarshaller {
 
         val refSpec = referencedAdapter.getSpecification();
         
-        if (refSpec.isParented() || refOid.isTransient()) {
+        if (refSpec.isParented()) {
             
             if(!oids.contains(refOid)) {
                 oids.add(refOid);

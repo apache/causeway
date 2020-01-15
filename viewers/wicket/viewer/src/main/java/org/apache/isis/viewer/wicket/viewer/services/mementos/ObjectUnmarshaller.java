@@ -87,12 +87,17 @@ final class ObjectUnmarshaller {
                     IsisSession.currentOrElseNull());
 
         } else {
-            _Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
+            _Assert.assertTrue("oid must be a RootOid representing an object because spec "
+                    + "is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
             // recreate an adapter for the original OID
             adapter = adapterForOid(typedOid);
 
-            updateObject(adapter, data);
+            if (!(data instanceof ObjectData)) {
+                throw new IsisException("Expected ObjectData but got " + data.getClass());
+            }
+            
+            updateObject(adapter, (ObjectData)data);
         }
 
         if (log.isDebugEnabled()) {
@@ -123,8 +128,9 @@ final class ObjectUnmarshaller {
         val referencedAdapter = adapterForOid(rootOid);
 
         if (data instanceof ObjectData) {
-            if (rootOid.isTransient()) {
-                updateObject(referencedAdapter, data);
+            val state = ManagedObject._entityState(referencedAdapter);
+            if (state.isDetached()) {
+                updateObject(referencedAdapter, (ObjectData)data);
             }
         }
         return referencedAdapter;
@@ -132,16 +138,14 @@ final class ObjectUnmarshaller {
 
 
 
-    private void updateObject(final ManagedObject adapter, final Data data) {
+    private void updateObject(final ManagedObject adapter, final ObjectData data) {
         
         val oid = objectManager.identifyObject(adapter);
         
         if (!Objects.equals(oid, data.getOid())) {
             throw new IllegalArgumentException(
-                    "This memento can only be used to update the ObjectAdapter with the Oid " + data.getOid() + " but is " + oid);
-        }
-        if (!(data instanceof ObjectData)) {
-            throw new IsisException("Expected ObjectData but got " + data.getClass());
+                    "This memento can only be used to update the ObjectAdapter with the Oid " 
+                            + data.getOid() + " but is " + oid);
         }
 
         updateFieldsAndResolveState(adapter, data);
@@ -167,32 +171,23 @@ final class ObjectUnmarshaller {
     private void updateFieldsAndResolveState(final ManagedObject adapter, final Data data) {
 
         val spec = adapter.getSpecification();
-        
-        boolean dataIsTransient = data.getOid().isTransient();
 
-        if (!dataIsTransient) {
-            updateFields(adapter, data);
+        val objectData = (ObjectData) data;
+        if (objectData.hasAnyField()) {
             
-        } else if (dataIsTransient 
-                && ManagedObject._entityState(adapter).isDetached()) {
-            updateFields(adapter, data);
-
-        } else if (spec.isParented()) {
-            // this branch is kind-a wierd, I think it's to handle aggregated adapters.
-            updateFields(adapter, data);
-
-        } else {
-            final ObjectData od = (ObjectData) data;
-            if (od.hasAnyField()) {
+            // TODO this is an experimental predicate, what's actually needed here?
+            if (spec.isValue() || spec.isParentedOrFreeCollection()) { 
                 throw _Exceptions.unrecoverableFormatted(
                         "Resolve state (for %s) inconsistent with fact that data exists for fields", 
-                        adapter); 
+                        spec); 
             }
+            
+            updateFields(adapter, objectData);
         }
+
     }
 
-    private void updateFields(final ManagedObject adapter, final Data state) {
-        val objectData = (ObjectData) state;
+    private void updateFields(final ManagedObject adapter, final ObjectData objectData) {
         
         adapter.getSpecification().streamAssociations(Contributed.EXCLUDED)
         .filter(field->{

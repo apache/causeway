@@ -45,12 +45,6 @@ public interface Oid extends Serializable {
         return false; // default, only overridden by Oid_Value
     }
     
-    @Deprecated
-    default boolean isTransient() {
-        return false;
-    }
-
-    
     /**
      * {@link ObjectSpecId} of the domain object this instance is representing, or when parented,
      * the ObjectSpecId of the parent domain object. When representing a value returns {@code null}.   

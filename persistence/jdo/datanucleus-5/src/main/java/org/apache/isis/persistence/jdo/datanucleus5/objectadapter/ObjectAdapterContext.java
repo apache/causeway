@@ -238,9 +238,7 @@ final public class ObjectAdapterContext {
 
         Objects.requireNonNull(persistentOid);
         _Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());
-        if(persistentOid.isTransient()) {
-            throw _Exceptions.unrecoverable("hintRootOid must be persistent");
-        }
+        
         final ObjectSpecId hintRootOidObjectSpecId = persistentOid.getObjectSpecId();
         final ObjectSpecId adapterObjectSpecId = rootAdapter.getSpecification().getSpecId();
         if(!hintRootOidObjectSpecId.equals(adapterObjectSpecId)) {

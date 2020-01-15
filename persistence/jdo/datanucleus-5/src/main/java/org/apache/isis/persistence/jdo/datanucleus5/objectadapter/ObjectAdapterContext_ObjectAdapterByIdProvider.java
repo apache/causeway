@@ -18,13 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
-
 import org.apache.isis.core.commons.internal.assertions._Assert;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
@@ -32,7 +26,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRecreationException;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.session.RuntimeContext;
@@ -192,15 +185,9 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider  {
         final ObjectSpecification spec =
                 specificationLoader.lookupBySpecIdElseLoad(rootOid.getObjectSpecId());
         final Object pojo;
-        if(rootOid.isTransient()) {
-            pojo = objectAdapterContext.instantiateAndInjectServices(spec);
-        } else {
-            final String memento = rootOid.getIdentifier();
-            pojo = recreateViewModel(spec, memento);
-        }
-
+        final String memento = rootOid.getIdentifier();
+        pojo = recreateViewModel(spec, memento);
         _Assert.assertFalse("Pojo most likely should not be an Oid", (pojo instanceof Oid));
-
         return pojo;
     }
 

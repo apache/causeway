@@ -27,9 +27,7 @@ import java.util.function.Function;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -292,47 +290,8 @@ final class ObjectMementoLegacy implements Serializable {
                 return oam.persistentOidStr;
             }
 
-        },
-        /**
-         * Uses Isis' own {@link Memento}, to capture the state of a transient
-         * object.
-         */
-        TRANSIENT {
-            /**
-             * {@link ConcurrencyChecking} is ignored for transients.
-             */
-            @Override
-            public ManagedObject recreateObject(
-                    ObjectMementoLegacy memento,
-                    ObjectUnmarshaller objectUnmarshaller, 
-                    SpecificationLoader specificationLoader) {
-                
-                return objectUnmarshaller.recreateObject(memento.transientMemento);
-            }
-
-            @Override
-            public boolean equals(ObjectMementoLegacy oam, ObjectMementoLegacy other) {
-                return other.recreateStrategy == TRANSIENT && oam.transientMemento.equals(other.transientMemento);
-            }
-
-            @Override
-            public int hashCode(ObjectMementoLegacy oam) {
-                return oam.transientMemento.hashCode();
-            }
-
-            @Override
-            public String toString(final ObjectMementoLegacy oam) {
-                return oam.transientMemento.toString();
-            }
-
-            @Override
-            public void resetVersion(
-                    ObjectMementoLegacy memento,
-                    ObjectUnmarshaller objectUnmarshaller,
-                    SpecificationLoader specificationLoader) {
-            }
         };
-
+        
         public abstract ManagedObject recreateObject(
                 ObjectMementoLegacy memento,
                 ObjectUnmarshaller objectUnmarshaller,
@@ -398,14 +357,6 @@ final class ObjectMementoLegacy implements Serializable {
     private String hintId;
 
     /**
-     * The current value, if {@link RecreateStrategy#TRANSIENT}, will be <tt>null</tt> otherwise.
-     *
-     * <p>
-     * Also, populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
-     */
-    private Data transientMemento;
-
-    /**
      * populated only if {@link #getCardinality() sort} is {@link Cardinality#VECTOR vector}
      */
     private ArrayList<ObjectMementoLegacy> list;
@@ -432,8 +383,6 @@ final class ObjectMementoLegacy implements Serializable {
             return;
         } 
         // -- //
-
-        _Assert.assertFalse("expected not to be transient", rootOid.isTransient());
 
         this.cardinality = Cardinality.SCALAR;
 
@@ -477,12 +426,6 @@ final class ObjectMementoLegacy implements Serializable {
         }
 
         val rootOid = (RootOid) ManagedObject._identify(adapter);
-        if (rootOid.isTransient()) {
-            transientMemento = new ObjectMarshaller().toData(adapter);
-            recreateStrategy = RecreateStrategy.TRANSIENT;
-            return;
-        }
-
         persistentOidStr = rootOid.enString();
         bookmark = rootOid.asBookmark();
         if(adapter.getPojo() instanceof HintStore.HintIdProvider) {

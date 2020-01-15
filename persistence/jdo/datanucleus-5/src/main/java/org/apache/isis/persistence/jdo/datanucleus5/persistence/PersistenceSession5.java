@@ -740,11 +740,18 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(final Persistable pojo) {
-        final ObjectAdapter adapter = adapterFor(pojo);
+        val adapter = adapterFor(pojo);
+        
+        val state = ManagedObject._entityState(adapter);
 
-        final RootOid rootOid = (RootOid) adapter.getOid(); // ok since this is for a Persistable
+        if (state.isAttached()) {
+            // updating;
+            // the callback and transaction.enlist are done in the preDirty callback
+            // (can't be done here, as the enlist requires to capture the 'before' values)
+            CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
+            objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatedLifecycleEventFacet.class);
 
-        if (rootOid.isTransient()) {
+        } else {
             // persisting
 
             objectAdapterContext.asPersistent(adapter, this);
@@ -753,13 +760,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             objectAdapterContext.postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
 
             changedObjectsServiceInternal.enlistCreated(adapter);
-
-        } else {
-            // updating;
-            // the callback and transaction.enlist are done in the preDirty callback
-            // (can't be done here, as the enlist requires to capture the 'before' values)
-            CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatedLifecycleEventFacet.class);
         }
         
     }
