@@ -440,6 +440,12 @@ public class IsisConfiguration {
                     private boolean enabled = true;
                 }
             }
+
+            private final ApplicationFeatures applicationFeatures = new ApplicationFeatures();
+            @Data
+            public static class ApplicationFeatures {
+                ApplicationFeaturesInitConfiguration init = ApplicationFeaturesInitConfiguration.NOT_SPECIFIED;
+            }
         }
 
     }
@@ -687,29 +693,10 @@ public class IsisConfiguration {
     }
 
 
-    private final Service service = new Service();
-    @Data
-    public static class Service {
-        private final Email email = new Email();
-        @Data
-        public static class Email {
-
-            private final Tls tls = new Tls();
-            @Data
-            public static class Tls {
-            }
-        }
-    }
-
     private final Services services = new Services();
     @Data
     public static class Services {
 
-        private final ApplicationFeatures applicationFeatures = new ApplicationFeatures();
-        @Data
-        public static class ApplicationFeatures {
-            ApplicationFeaturesInitConfiguration init = ApplicationFeaturesInitConfiguration.NOT_SPECIFIED;
-        }
 
         private final Audit audit = new Audit();
         @Data

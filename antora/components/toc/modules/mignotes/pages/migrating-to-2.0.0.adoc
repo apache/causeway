@@ -432,6 +432,9 @@ jdoql.variables-clause
 |isis.service.email.tls.enabled
 |isis.core.runtime-services.email.tls.enabled
 
+|isis.services.applicationFeatures.init
+|isis.core.runtime-services.application-features.init
+
 
 |
 |
