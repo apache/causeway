@@ -687,20 +687,6 @@ public interface ManagedObject {
         throw _Exceptions.unexpectedCodeReach();
     }
 
-    @Deprecated
-    static Stream<ManagedObject> _bulkLoadStream(Stream<RootOid> rootOids) {
-
-        throw _Exceptions.notImplemented();
-
-        //        PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
-        //                .orElseThrow(()->_Exceptions.unrecoverable("no PersistenceSession available"));
-        //        
-        //        final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
-        //        final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
-        //        return stream(adapterList)
-        //                .filter(_NullSafe::isPresent)
-        //                .map(ManagedObject.class::cast);
-    }
 
     static boolean _isParentedCollection(ManagedObject adapter) {
         

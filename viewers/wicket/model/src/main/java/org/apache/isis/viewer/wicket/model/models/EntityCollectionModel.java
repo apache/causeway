@@ -166,25 +166,12 @@ implements LinksProvider, UiHintContainer {
             @Override
             List<ManagedObject> load(EntityCollectionModel colModel) {
 
-                //XXX lombok issue, cannot use val here 
+                //XXX lombok issue, cannot use val here
                 boolean isBulkLoad = false;
 
-                return isBulkLoad
-                        ? loadElementsInBulk(colModel).collect(Collectors.toList())
-                                : loadElementsOneByOne(colModel).collect(Collectors.toList());
+                return loadElementsOneByOne(colModel).collect(Collectors.toList());
             }
 
-            private Stream<ManagedObject> loadElementsInBulk(EntityCollectionModel colModel) {
-
-                //XXX lombok issue, cannot use val here 
-
-                final Stream<RootOid> rootOids = stream(colModel.mementoList)
-                        .map(ObjectMemento::asBookmarkIfSupported)
-                        .filter(_NullSafe::isPresent)
-                        .map(Oid.Factory::ofBookmark);
-                
-                return ManagedObject._bulkLoadStream(rootOids);
-            }
 
             private Stream<ManagedObject> loadElementsOneByOne(final EntityCollectionModel model) {
 
