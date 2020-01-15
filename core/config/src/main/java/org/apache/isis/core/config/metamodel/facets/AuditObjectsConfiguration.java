@@ -25,7 +25,7 @@ public enum AuditObjectsConfiguration {
     NONE;
 
     public static AuditObjectsConfiguration from(IsisConfiguration configuration) {
-        return configuration.getServices().getAudit().getObjects();
+        return configuration.getApplib().getAnnotation().getDomainObject().getAuditing();
     }
 
 }

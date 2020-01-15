@@ -100,6 +100,9 @@ public class IsisConfiguration {
             private final DomainObject domainObject = new DomainObject();
             @Data
             public static class DomainObject {
+
+                private AuditObjectsConfiguration auditing = AuditObjectsConfiguration.NONE;
+
                 private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
 
                 private final CreatedLifecycleEvent createdLifecycleEvent = new CreatedLifecycleEvent();
@@ -447,7 +450,6 @@ public class IsisConfiguration {
                 ApplicationFeaturesInitConfiguration init = ApplicationFeaturesInitConfiguration.NOT_SPECIFIED;
             }
         }
-
     }
 
 
@@ -698,12 +700,6 @@ public class IsisConfiguration {
     public static class Services {
 
 
-        private final Audit audit = new Audit();
-        @Data
-        public static class Audit {
-            private AuditObjectsConfiguration objects = AuditObjectsConfiguration.NONE;
-        }
-        
         private final Command command = new Command();
         @Data
         public static class Command {
