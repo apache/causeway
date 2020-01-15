@@ -40,15 +40,10 @@ class DisplayObject(override val title: String) : BaseDisplayable() {
         if (dirty) {
             val tObject = data!!.delegate
             val getLink = tObject.links.first()
-            console.log(getLink)
-            // create an aggregator with tObject
             val href = getLink.href
             val putLink = Link(method = Method.PUT.operation, href = href)
-            console.log(putLink)
             val logEntry = EventStore.find(href)
-            console.log(logEntry)
             val aggDsp =  logEntry?.getAggregator()
-            console.log(aggDsp)
             aggDsp?.invoke(putLink)
         }
     }

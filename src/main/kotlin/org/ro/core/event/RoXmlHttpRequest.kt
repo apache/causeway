@@ -16,7 +16,6 @@ class RoXmlHttpRequest {
     fun invoke(link: Link, aggregator: BaseAggregator?) {
         val url = link.href
         if (EventStore.isCached(url, link.method)) {
-            console.log("[RoXmlHttpRequest.invoke] isCached: true")
             processCached(url)
         } else {
             process(link, aggregator)
@@ -53,9 +52,7 @@ class RoXmlHttpRequest {
             link.hasArguments()
             -> body = Utils.argumentsAsBody(link)
             link.method == Method.PUT.operation -> {
-                console.log("[RXHR.process]")
                 val tObject = aggregator?.getObject()!!
-                console.log(tObject)
                 body = Utils.propertiesAsBody(tObject)
             }
             else -> {

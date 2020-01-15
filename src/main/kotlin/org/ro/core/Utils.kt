@@ -62,13 +62,10 @@ object Utils {
     fun propertiesAsBody(tObject: TObject): String {
         val members = tObject.members
         val mutableProperties = members.filter { it.value.isReadWrite() }
-        //FIXME Request Payload={{ "notes":{"value": ""}}}
-        //Status Code: 400 Bad Request
-        // content not set correctly yet
         var body = "{"
         mutableProperties.forEach {
             val m = it.value
-            body += "{ \"${m.id}\":"
+            body += quote(m.id) + ":"
             val content = m.value?.content.toString()
             body += enbrace("value", quote(content)) + "},"
         }

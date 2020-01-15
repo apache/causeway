@@ -22,10 +22,10 @@ class FormItem(
         }
     }
 
-    fun changed() {
+    fun changed(value: String?) {
         tab?.setDirty(true)
         if (member != null) {
-            member.value?.content = content
+            member.value?.content = value
         }
     }
 

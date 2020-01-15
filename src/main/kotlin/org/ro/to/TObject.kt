@@ -8,8 +8,6 @@ data class TObject(val links: List<Link> = emptyList(),
                    val title: String = "",
                    val domainType: String = "",
                    val instanceId: String? = null,
-        //IMPROVE Shouldn't members be modeled as elements of Array/[] instead of Map/{} ?
-                   // https://github.com/restfulobjects/restfulobjects-spec/issues
                    val members: Map<String, Member> = emptyMap()
 ) : TransferObject {
 

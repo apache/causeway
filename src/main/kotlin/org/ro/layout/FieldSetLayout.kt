@@ -45,7 +45,10 @@ data class FieldSetLayout(val name: String? = null,
                 content = member.value?.content.toString()
             }
             val description = p.describedAs
-            val fi = FormItem(label, type, content, description = description, member = member, tab = tab)
+            val fi = FormItem(label, type, content,
+                    description = description,
+                    member = member,
+                    tab = tab)
             items.add(fi)
         }
         return FormPanelFactory(items).panel

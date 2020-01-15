@@ -35,7 +35,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         item.readonly = fi.member?.isReadOnly()
         item.onEvent {
             change = {
-                fi.changed()
+                fi.changed(item.value)
                 it.stopPropagation()
             }
         }
@@ -52,7 +52,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         item.readonly = fi.readOnly
         item.onEvent {
             change = {
-                fi.changed()
+                fi.changed(item.value)
                 it.stopPropagation()
             }
         }
