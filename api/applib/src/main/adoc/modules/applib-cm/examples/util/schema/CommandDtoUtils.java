@@ -32,12 +32,12 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.core.commons.internal.resources._Resources;
-import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.MapDto;
-import org.apache.isis.schema.cmd.v1.ParamsDto;
-import org.apache.isis.schema.common.v1.OidsDto;
-import org.apache.isis.schema.common.v1.PeriodDto;
+import org.apache.isis.schema.cmd.v2.ActionDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.MapDto;
+import org.apache.isis.schema.cmd.v2.ParamsDto;
+import org.apache.isis.schema.common.v2.OidsDto;
+import org.apache.isis.schema.common.v2.PeriodDto;
 
 public final class CommandDtoUtils {
 

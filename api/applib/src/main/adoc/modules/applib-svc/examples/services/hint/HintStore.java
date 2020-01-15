@@ -43,8 +43,7 @@ public interface HintStore {
          * Similar to {@link #toString()}, but using {@link #hintId} rather than {@link #identifier}.
          */
         public String toStringUsingHintId() {
-            return super.getObjectState().getCode() 
-                    + super.getObjectType() 
+            return super.getObjectType() 
                     + SEPARATOR 
                     + hintId;
         }

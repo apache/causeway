@@ -23,7 +23,7 @@ import java.sql.Timestamp;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.HasUsername;
-import org.apache.isis.schema.chg.v1.ChangesDto;
+import org.apache.isis.schema.chg.v2.ChangesDto;
 
 public interface PublishedObjects extends HasUniqueId, HasUsername {
 

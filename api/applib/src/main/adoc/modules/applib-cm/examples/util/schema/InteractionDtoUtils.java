@@ -41,17 +41,17 @@ import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.resources._Resources;
-import org.apache.isis.schema.cmd.v1.ParamDto;
-import org.apache.isis.schema.cmd.v1.ParamsDto;
-import org.apache.isis.schema.common.v1.InteractionType;
-import org.apache.isis.schema.common.v1.OidDto;
-import org.apache.isis.schema.common.v1.ValueDto;
-import org.apache.isis.schema.common.v1.ValueType;
-import org.apache.isis.schema.common.v1.ValueWithTypeDto;
-import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
-import org.apache.isis.schema.ixn.v1.InteractionDto;
-import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
-import org.apache.isis.schema.ixn.v1.PropertyEditDto;
+import org.apache.isis.schema.cmd.v2.ParamDto;
+import org.apache.isis.schema.cmd.v2.ParamsDto;
+import org.apache.isis.schema.common.v2.InteractionType;
+import org.apache.isis.schema.common.v2.OidDto;
+import org.apache.isis.schema.common.v2.ValueDto;
+import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
+import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
+import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
+import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 public final class InteractionDtoUtils {
 

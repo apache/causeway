@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.metrics;
 
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
+import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
 public interface MetricsService {
 
