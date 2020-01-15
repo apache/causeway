@@ -398,7 +398,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(!isMetamodelFullyIntrospected()) {
             return;
         }
-        if(!this.isisConfiguration.getReflector().getIntrospector().isValidateIncrementally()) {
+        if(!this.isisConfiguration.getCore().getMetaModel().getIntrospector().isValidateIncrementally()) {
             return;
         }
 

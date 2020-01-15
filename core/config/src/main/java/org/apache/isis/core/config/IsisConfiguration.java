@@ -328,6 +328,27 @@ public class IsisConfiguration {
                  */
                 private boolean lockAfterFullIntrospection = true;
 
+                /**
+                 * If true, then metamodel validation is performed after any new specification has been loaded (after the
+                 * initial bootstrapping).
+                 *
+                 * <p>
+                 * This does <i>not</i> apply if the introspector is configured to perform full introspection up-front
+                 * AND when the metamodel is {@link Core.MetaModel.Introspector#isLockAfterFullIntrospection() locked} after initial bootstrapping
+                 * (because in that case the lock check will simply prevent any new specs from being loaded).
+                 * But it will apply otherwise.
+                 * </p>
+                 *
+                 * <p>In particular, this setting <i>can</i> still apply even if the {@link Core.MetaModel.Introspector#getMode() introspection mode}
+                 * is set to {@link IntrospectionMode#FULL full}, because that in itself does not preclude some code
+                 * from attempting to load some previously unknown type.  For example, a fixture script could attempt to
+                 * invoke an action on some new type using the
+                 * {@link org.apache.isis.applib.services.wrapper.WrapperFactory} - this will cause introspection of that
+                 * new type to be performed.
+                 * </p>
+                 */
+                private boolean validateIncrementally = true;
+
             }
 
             private final Validator validator = new Validator();
@@ -605,26 +626,6 @@ public class IsisConfiguration {
         private final Introspector introspector = new Introspector();
         @Data
         public static class Introspector {
-            /**
-             * If true, then metamodel validation is performed after any new specification has been loaded (after the
-             * initial bootstrapping).
-             *
-             * <p>
-             * This does <i>not</i> apply if the introspector is configured to perform full introspection up-front
-             * AND when the metamodel is {@link Core.MetaModel.Introspector#isLockAfterFullIntrospection() locked} after initial bootstrapping
-             * (because in that case the lock check will simply prevent any new specs from being loaded).
-             * But it will apply otherwise.
-             * </p>
-             *
-             * <p>In particular, this setting <i>can</i> still apply even if the {@link Core.MetaModel.Introspector#getMode() introspection mode}
-             * is set to {@link IntrospectionMode#FULL full}, because that in itself does not preclude some code
-             * from attempting to load some previously unknown type.  For example, a fixture script could attempt to
-             * invoke an action on some new type using the
-             * {@link org.apache.isis.applib.services.wrapper.WrapperFactory} - this will cause introspection of that
-             * new type to be performed.
-             * </p>
-             */
-            private boolean validateIncrementally = true;
         }
 
         private final Validator validator = new Validator();

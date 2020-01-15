@@ -329,6 +329,11 @@ lockAfterFullIntrospection
 |isis.core.metamodel.introspector. +
 lock-after-full-introspection
 
+|isis.reflector.introspect. +
+validateIncrementally
+|isis.core.metamodel.introspector. +
+validate-incrementally
+
 
 |
 |
