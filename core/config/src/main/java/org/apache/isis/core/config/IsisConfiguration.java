@@ -79,9 +79,9 @@ public class IsisConfiguration {
     @Inject @Named("isis-settings") private Map<String, String> isisSettings;
     public Map<String, String> getAsMap() { return Collections.unmodifiableMap(isisSettings); }
     
-    private final Authentication authentication = new Authentication();
+    private final Security security = new Security();
     @Data
-    public static class Authentication {
+    public static class Security {
         private final Shiro shiro = new Shiro();
         @Data
         public static class Shiro {

@@ -291,7 +291,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     }
 
     private Locale findLocale() {
-        return getConfiguration().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault());
+        return getConfiguration().getCore().getRuntime().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault());
     }
 
     // //////////////////////////////////////////////////////////

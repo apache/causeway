@@ -2,9 +2,130 @@
 
 WARNING: this is work-in-progress.
 
-//dummy edit
-
 Search also for: "TODO: v2: " in the .adoc documentation.
+
+== to 2.0.0
+
+=== Maven ``groupId``s and ``artifactId``s
+
+These follow the format:
+
+[source,xml,subs=+quotes]
+.filename.xml
+----
+<groupId>org.apache.isis._group_</groupId>
+<artifactId>isis-_group_-_artifact_</artifactId>
+----
+
+where _group_ is one of:
+
+* `core`
++
+Core framework, includes applib
+
+* `viewers`
++
+Currently `wicket` and `restfulobjects`.
+
+* `persistence`
++
+Currently only `jdo` is supported.
++
+NOTE: it's also possible to run the framework without any configured persistence, in other words to use view models and "roll-your-own" persistence as required.
+
+* `security`
++
+Currently `bypass` (in other words, a no-op), `shiro` and `keycloak`.
++
+Shiro also has its own plugin architecture of ``Realm``s.
+Apache Isis provides two ``Realm`` implementations (in extensions, below).
+
+* `extensions`
+
+* `subdomains`
+
+* `mappings`
+
+* `valuetypes`
+
+* `incubator`
+
+
+
+=== `isis.properties` replaced by `application.properties`
+
+Apache Isis v1.x used `isis.properties` for configuration properties.
+Since in v2 the framework is bootstrapped and configured using Spring Boot, we decided to use the Spring Boot conventions for the configuration files.
+
+Accordingly, configuration properties should now be stored either in `application.properties` and/or `application.yml`.
+These are searched for in multiple locations (see link:https://docs.spring.io/spring-boot/docs/1.5.20.RELEASE/reference/html/boot-features-external-config.html[Spring docs]) and can be overridden using either system properties or environment variables.
+
+The starter apps use these two locations:
+
+* `./application.yml`
++
+in the default package (ie directly in `src/main/resources`) for static configuration that doesn't change between environments
+
+* `config/application.properties`
+
+in the `config` package (ie in `src/main/resources/config`) for dynamic configuration that changes between environments, for example JDBC URLs.
+
+We've found that this schema works well with IDEs such as IntelliJ that provide auto-complete of configuration properties.
+
+
+=== Configuration property names
+
+Now follow, more or less, the ``groupId``s.
+
+[NOTE]
+====
+Spring Boot allows configuration properties to be specified using either `camelCase` or `kebab-case`.
+In general it's fine to use either, with a preference for `kebab-case`.
+
+The only exception is the configuration properties that reside under `isis.persistence.jdo.datanucleus` (what in Isis v1.x was the `isis.persistor.datanucleus.impl` key); this prefix is stripped off and all remaining properties passed through unchanged to DataNucleus.
+These must be kept in camel case format because DataNucleus doesn't recognise kebab case.
+
+For example, use `isis.persistence.jdo.datanucleus.javax.jdo.option.ConnectionURL` (and not `connection-url` for the last key).
+====
+
+.Configuration property changes
+[cols="1m,1m", options="header"]
+|===
+
+| Key was (in v1.x)
+| Key is now (in v2.x)
+
+
+
+|isis.authentication.shiro. +
+autoLogoutIfAlreadyAuthenticated
+|isis.security.shiro. +
+auto-logout-if-already-authenticated
+
+|
+- isis.objects.editing -> isis.core.metamodel.objects.editing
+- isis.xxx -> isis.core.xxx
+- isis.persistor -> isis.persistence
+- isis.persistor.datanucleus -> isis.persistence.jdo
+- isis.persistor.datanucleus.impl -> isis.persistence.jdo.datanucleus
+- isis.viewers -> isis.metamodel.ui.
+- isis.value.format -> isis.metamodel.ui.value.format
+- isis.value.money -> isis.valuetypes.money
+- isis.service.xxx -> isis.core.services.email
+- isis.services.xxx -> isis.core.services.xxx
+- isis.services.container -> isis.core.services.repository-service
+
+
+|
+|
+
+|===
+
+
+
+=== No longer any archetypes
+
+TODO: document.
 
 == 2.0.0-M2 to 2.0.0-M3
 

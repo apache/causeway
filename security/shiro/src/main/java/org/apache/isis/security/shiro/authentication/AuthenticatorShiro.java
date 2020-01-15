@@ -82,7 +82,7 @@ public class AuthenticatorShiro implements Authenticator {
     public AuthenticatorShiro(IsisConfiguration configuration) {
         super();
         this.configuration = configuration;
-        this.autoLogout = this.configuration.getAuthentication().getShiro().isAutoLogoutIfAlreadyAuthenticated();
+        this.autoLogout = this.configuration.getSecurity().getShiro().isAutoLogoutIfAlreadyAuthenticated();
     }
 
 
