@@ -41,7 +41,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
 
-        final CommandPropertiesConfiguration setting = configuration.getServices().getCommand().getProperties();
+        final CommandPropertiesConfiguration setting = configuration.getApplib().getAnnotation().getProperty().getCommand();
 
         return propertyIfAny
                 .filter(property -> property.command() != CommandReification.NOT_SPECIFIED)

@@ -441,6 +441,9 @@ jdoql.variables-clause
 |isis.services.command.actions
 |isis.applib.annotation.action.command
 
+|isis.services.command.properties
+|isis.applib.annotation.property.command
+
 
 |
 |

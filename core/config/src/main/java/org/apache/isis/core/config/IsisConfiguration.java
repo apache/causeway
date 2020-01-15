@@ -221,6 +221,8 @@ public class IsisConfiguration {
             @Data
             public static class Property {
 
+                private CommandPropertiesConfiguration command = CommandPropertiesConfiguration.NONE;
+
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
                 public static class DomainEvent {
@@ -705,7 +707,6 @@ public class IsisConfiguration {
         @Data
         public static class Command {
 
-            private CommandPropertiesConfiguration properties = CommandPropertiesConfiguration.NONE;
         }
 
         private final Container container = new Container();
