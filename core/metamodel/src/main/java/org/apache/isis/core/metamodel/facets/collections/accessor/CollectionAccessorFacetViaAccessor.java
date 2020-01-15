@@ -74,7 +74,7 @@ implements ImperativeFacet {
 
         val collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
-        final boolean filterForVisibility = getConfiguration().getReflector().getFacet().isFilterVisibility();
+        final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
             final List<ManagedObject> visibleAdapters =
                     ManagedObject.VisibilityUtil.visibleAdapters(

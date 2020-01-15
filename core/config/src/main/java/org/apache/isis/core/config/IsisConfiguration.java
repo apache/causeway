@@ -248,6 +248,7 @@ public class IsisConfiguration {
                     }
                 }
             }
+
             private final ViewModelLayout viewModelLayout = new ViewModelLayout();
             @Data
             public static class ViewModelLayout {
@@ -275,7 +276,6 @@ public class IsisConfiguration {
                 public static class TitleUiEvent {
                     private boolean postForDefault =true;
                 }
-
             }
         }
     }
@@ -288,6 +288,7 @@ public class IsisConfiguration {
         @Data
         public static class MetaModel {
 
+            private boolean filterVisibility = true;
 
 
         }
@@ -556,7 +557,6 @@ public class IsisConfiguration {
         @Data
         public static class Facet {
 
-            private boolean filterVisibility = true;
 
         }
 

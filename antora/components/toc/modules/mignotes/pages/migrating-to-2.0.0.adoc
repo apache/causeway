@@ -312,6 +312,9 @@ viewModelSemanticCheckingFacetFactory.enable
 view-model.validation. +
 view-model-semantic-checking.enable
 
+|isis.reflector.facet.filterVisibility
+|isis.core.metamodel.filter-visibility
+
 |
 |
 

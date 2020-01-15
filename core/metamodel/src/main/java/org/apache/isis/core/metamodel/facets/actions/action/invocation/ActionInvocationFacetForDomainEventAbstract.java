@@ -354,7 +354,7 @@ implements ImperativeFacet {
             return null;
         }
 
-        final boolean filterForVisibility = getConfiguration().getReflector().getFacet().isFilterVisibility();
+        final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if (!filterForVisibility) {
             return resultAdapter;
         }
