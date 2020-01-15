@@ -31,49 +31,49 @@ class WebAppContextPath_setContextPath_Test {
     void when_no_leading_slash() {
         webAppContextPath.setContextPath("abc");
 
-        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("abc");
+        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("/abc");
     }
 
     @Test
     void when_leading_slash() {
         webAppContextPath.setContextPath("/abc");
 
-        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("abc");
+        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("/abc");
     }
 
     @Test
     void when_multiple_leading_slashes() {
         webAppContextPath.setContextPath("//abc");
 
-        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("abc");
+        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("/abc");
     }
 
     @Test
     void when_no_trailing_slash() {
         webAppContextPath.setContextPath("/abc");
 
-        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("abc");
+        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("/abc");
     }
 
     @Test
     void when_trailing_slash() {
         webAppContextPath.setContextPath("/abc/");
 
-        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("abc");
+        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("/abc");
     }
 
     @Test
     void when_multiple_trailing_slashes() {
         webAppContextPath.setContextPath("/abc//");
 
-        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("abc");
+        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("/abc");
     }
 
     @Test
     void when_multiple_contains_slashes() {
         webAppContextPath.setContextPath("/abc/def/");
 
-        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("abc/def");
+        Assertions.assertThat(webAppContextPath.getContextPath()).isEqualTo("/abc/def");
     }
 
 }
