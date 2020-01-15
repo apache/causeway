@@ -27,7 +27,6 @@ import java.util.function.UnaryOperator;
 
 import javax.annotation.Nullable;
 
-import static org.apache.isis.core.commons.internal.base._With.mapIfPresentElse;
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
 /**
@@ -131,7 +130,7 @@ public final class _Bytes {
      */
     public final static byte[] encodeToBase64(Base64.Encoder encoder, @Nullable final byte[] input) {
         requires(encoder, "encoder");
-        return mapIfPresentElse(input, encoder::encode, null);
+        return input!=null ? encoder.encode(input) : null;
     }
 
     /**
@@ -143,7 +142,7 @@ public final class _Bytes {
      */
     public final static byte[] decodeBase64(Base64.Decoder decoder, @Nullable final byte[] base64) {
         requires(decoder, "decoder");
-        return mapIfPresentElse(base64, decoder::decode, null);
+        return base64!=null ? decoder.decode(base64) : null;
     }
 
     // -- COMPRESSION
@@ -238,6 +237,21 @@ public final class _Bytes {
     public final static BytesOperator ofCompressedUrlBase64 = operator()
             .andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes))
             .andThen(_Bytes::decompress);
+    
+    public final static BytesOperator asBase64 = operator()
+            .andThen(bytes->encodeToBase64(Base64.getEncoder(), bytes));
+
+    public final static BytesOperator ofBase64 = operator()
+            .andThen(bytes->decodeBase64(Base64.getDecoder(), bytes));
+    
+    public final static BytesOperator asCompressedBase64 = operator()
+            .andThen(_Bytes::compress)
+            .andThen(bytes->encodeToBase64(Base64.getEncoder(), bytes));
+
+    public final static BytesOperator ofCompressedBase64 = operator()
+            .andThen(bytes->decodeBase64(Base64.getDecoder(), bytes))
+            .andThen(_Bytes::decompress);
+    
 
     // --
 

@@ -34,6 +34,7 @@ import javax.activation.MimeTypeParseException;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.base._Strings;
@@ -52,13 +53,32 @@ import org.apache.isis.core.commons.internal.base._Strings;
  * @since 2.0
  */
 public final class JaxbAdapters {
+    
+    // -- BYTES
+    
+    /**
+     * Uses compression. (thread-safe)
+     */
+    public static final class BytesAdapter extends XmlAdapter<String, byte[]> {
+
+        @Override
+        public byte[] unmarshal(String v) throws Exception {
+            return _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(v, StandardCharsets.UTF_8));
+        }
+
+        @Override
+        public String marshal(byte[] v) throws Exception {
+            return _Strings.ofBytes(_Bytes.asCompressedUrlBase64.apply(v), StandardCharsets.UTF_8);
+        }
+
+    }
 
     // -- MARKUP
 
     public static final class MarkupAdapter extends XmlAdapter<String, Markup> {
 
-        private final static Base64.Encoder encoder = Base64.getEncoder(); 
-        private final static Base64.Decoder decoder = Base64.getDecoder();
+        private final Base64.Encoder encoder = Base64.getEncoder(); // is thread-safe ?
+        private final Base64.Decoder decoder = Base64.getDecoder(); // is thread-safe ?
 
         @Override
         public Markup unmarshal(String v) throws Exception {
@@ -82,8 +102,13 @@ public final class JaxbAdapters {
 
     // -- BLOB
 
+    /**
+     * (thread-safe)
+     * @implNote see also BlobValueSemanticsProvider
+     */
     public static final class BlobAdapter extends XmlAdapter<String, Blob> {
-        // copy pasted code from BlobValueSemanticsProvider
+        
+        private final BytesAdapter bytesAdapter = new BytesAdapter(); // thread-safe
 
         @Override
         public Blob unmarshal(String data) throws Exception {
@@ -95,7 +120,7 @@ public final class JaxbAdapters {
             final int colon2Idx  = data.indexOf(":", colonIdx+1);
             final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
             final String payload = data.substring(colon2Idx+1);
-            final byte[] bytes = _Bytes.decodeBase64(Base64.getDecoder(), payload.getBytes(StandardCharsets.UTF_8));
+            final byte[] bytes = bytesAdapter.unmarshal(payload);
             try {
                 return new Blob(name, new MimeType(mimeTypeBase), bytes);
             } catch (MimeTypeParseException e) {
@@ -108,13 +133,61 @@ public final class JaxbAdapters {
             if(blob==null) {
                 return null;
             }
-            return blob.getName() + ":" + 
-            blob.getMimeType().getBaseType() + ":" + 
-            _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), 
-                    StandardCharsets.UTF_8);
+            return new StringBuilder()
+            .append(blob.getName())
+            .append(':')
+            .append(blob.getMimeType().getBaseType())
+            .append(':')
+            .append(bytesAdapter.marshal(blob.getBytes()))
+            .toString();
         }
 
     }
+    
+    // -- CLOB
+
+    /**
+     * (thread-safe)
+     * @implNote see also ClobValueSemanticsProvider
+     */
+    public static final class ClobAdapter extends XmlAdapter<String, Clob> {
+        
+        private final BytesAdapter bytesAdapter = new BytesAdapter(); // thread-safe
+
+        @Override
+        public Clob unmarshal(String data) throws Exception {
+            if(data==null) {
+                return null;
+            }
+            final int colonIdx = data.indexOf(':');
+            final String name  = data.substring(0, colonIdx);
+            final int colon2Idx  = data.indexOf(":", colonIdx+1);
+            final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
+            final String payload = data.substring(colon2Idx+1);
+            final byte[] bytes = bytesAdapter.unmarshal(payload);
+            try {
+                return new Clob(name, new MimeType(mimeTypeBase), new String(bytes, StandardCharsets.UTF_8));
+            } catch (MimeTypeParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public String marshal(Clob clob) throws Exception {
+            if(clob==null) {
+                return null;
+            }
+            return new StringBuilder()
+            .append(clob.getName())
+            .append(':')
+            .append(clob.getMimeType().getBaseType())
+            .append(':')
+            .append(bytesAdapter.marshal(clob.getChars().toString().getBytes(StandardCharsets.UTF_8)))
+            .toString();
+        }
+
+    }
+
 
 
     // -- TEMPORAL VALUE TYPES
@@ -123,12 +196,12 @@ public final class JaxbAdapters {
 
         @Override
         public java.util.Date unmarshal(String v) throws Exception {
-            return new java.util.Date(Long.parseLong(v));
+            return v!=null ? new java.util.Date(Long.parseLong(v)) : null;
         }
 
         @Override
         public String marshal(java.util.Date v) throws Exception {
-            return Long.toString(v.getTime());
+            return v!=null ? Long.toString(v.getTime()) : null;
         }
 
     }
@@ -137,12 +210,12 @@ public final class JaxbAdapters {
 
         @Override
         public java.sql.Date unmarshal(String v) throws Exception {
-            return java.sql.Date.valueOf(v);
+            return v!=null ? java.sql.Date.valueOf(v) : null;
         }
 
         @Override
         public String marshal(java.sql.Date v) throws Exception {
-            return v.toString();
+            return v!=null ? v.toString() : null;
         }
 
     }
@@ -151,12 +224,12 @@ public final class JaxbAdapters {
 
         @Override
         public java.sql.Timestamp unmarshal(String v) throws Exception {
-            return new java.sql.Timestamp(Long.parseLong(v));
+            return v!=null ? new java.sql.Timestamp(Long.parseLong(v)) : null;
         }
 
         @Override
         public String marshal(java.sql.Timestamp v) throws Exception {
-            return Long.toString(v.getTime());
+            return v!=null ? Long.toString(v.getTime()) : null;
         }
 
     }
@@ -165,12 +238,12 @@ public final class JaxbAdapters {
 
         @Override
         public LocalTime unmarshal(String v) throws Exception {
-            return LocalTime.parse(v);
+            return v!=null ? LocalTime.parse(v) : null;
         }
 
         @Override
         public String marshal(LocalTime v) throws Exception {
-            return v.toString();
+            return v!=null ? v.toString() : null;
         }
 
     }
@@ -179,12 +252,12 @@ public final class JaxbAdapters {
 
         @Override
         public LocalDate unmarshal(String v) throws Exception {
-            return LocalDate.parse(v);
+            return v!=null ? LocalDate.parse(v) : null;
         }
 
         @Override
         public String marshal(LocalDate v) throws Exception {
-            return v.toString();
+            return v!=null ? v.toString() : null;
         }
 
     }
@@ -193,12 +266,12 @@ public final class JaxbAdapters {
 
         @Override
         public LocalDateTime unmarshal(String v) throws Exception {
-            return LocalDateTime.parse(v);
+            return v!=null ? LocalDateTime.parse(v) : null;
         }
 
         @Override
         public String marshal(LocalDateTime v) throws Exception {
-            return v.toString();
+            return v!=null ? v.toString() : null;
         }
 
     }
@@ -207,12 +280,12 @@ public final class JaxbAdapters {
 
         @Override
         public OffsetTime unmarshal(String v) throws Exception {
-            return OffsetTime.parse(v);
+            return v!=null ? OffsetTime.parse(v) : null;
         }
 
         @Override
         public String marshal(OffsetTime v) throws Exception {
-            return v.toString();
+            return v!=null ? v.toString() : null;
         }
 
     }
@@ -221,12 +294,12 @@ public final class JaxbAdapters {
 
         @Override
         public OffsetDateTime unmarshal(String v) throws Exception {
-            return OffsetDateTime.parse(v);
+            return v!=null ? OffsetDateTime.parse(v) : null;
         }
 
         @Override
         public String marshal(OffsetDateTime v) throws Exception {
-            return v.toString();
+            return v!=null ? v.toString() : null;
         }
 
     }
@@ -235,12 +308,12 @@ public final class JaxbAdapters {
 
         @Override
         public ZonedDateTime unmarshal(String v) throws Exception {
-            return ZonedDateTime.parse(v);
+            return v!=null ? ZonedDateTime.parse(v) : null;
         }
 
         @Override
         public String marshal(ZonedDateTime v) throws Exception {
-            return v.toString();
+            return v!=null ? v.toString() : null;
         }
 
     }
@@ -249,12 +322,12 @@ public final class JaxbAdapters {
 
         @Override
         public Duration unmarshal(String v) throws Exception {
-            return Duration.parse(v);
+            return v!=null ? Duration.parse(v) : null;
         }
 
         @Override
         public String marshal(Duration v) throws Exception {
-            return v.toString();
+            return v!=null ? v.toString() : null;
         }
 
     }
@@ -263,12 +336,12 @@ public final class JaxbAdapters {
 
         @Override
         public Period unmarshal(String v) throws Exception {
-            return Period.parse(v);
+            return v!=null ? Period.parse(v) : null;
         }
 
         @Override
         public String marshal(Period v) throws Exception {
-            return v.toString();
+            return v!=null ? v.toString() : null;
         }
 
     }
