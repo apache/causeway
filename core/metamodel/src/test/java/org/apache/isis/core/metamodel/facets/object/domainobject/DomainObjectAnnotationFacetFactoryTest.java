@@ -34,6 +34,7 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishObjectsConfiguration;
@@ -110,7 +111,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     
     void allowingObjectsEditingToReturn(EditingObjectsConfiguration value) {
         if(value!=null) {
-            val config = super.metaModelContext.getConfiguration();
+            final IsisConfiguration config = super.metaModelContext.getConfiguration();
             config.getApplib().getAnnotation().getDomainObject().setEditing(value);
         }
     }

@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -61,7 +62,7 @@ implements MetaModelRefiner {
 
         programmingModel.addValidator((spec, validationFailures) -> {
 
-            val type = spec.getCorrespondingClass();
+            final Class<?> type = spec.getCorrespondingClass();
 
 //XXX for debugging ...            
 //            if(spec.getSpecId().asString().contains("ProperMemberSupport")) {
@@ -78,7 +79,7 @@ implements MetaModelRefiner {
 //            }
 
             // methods known to the meta-model
-            val recognizedMethods = spec.streamFacetHolders()
+            final HashSet<Method> recognizedMethods = spec.streamFacetHolders()
                     .flatMap(FacetHolder::streamFacets)
                     .filter(ImperativeFacet.class::isInstance)
                     .map(ImperativeFacet.class::cast)
@@ -87,22 +88,22 @@ implements MetaModelRefiner {
                     .collect(Collectors.toCollection(HashSet::new));
             
             // methods intended to be included with the meta-model
-            val intendedMethods = _Sets.<Method>newHashSet(); 
-            for(val method: type.getDeclaredMethods()) {
+            final HashSet<Method> intendedMethods = _Sets.<Method>newHashSet();
+            for(Method method: type.getDeclaredMethods()) {
                 if(method.getDeclaredAnnotation(Model.class)!=null) {
                     intendedMethods.add(method);
                 }
             }
 
             // methods intended to be included with the meta-model but missing
-            val notRecognizedMethods =
+            final Set<Method> notRecognizedMethods =
                     _Sets.minus(intendedMethods, recognizedMethods);
 
             // find reasons about why these are not recognized    
             notRecognizedMethods.forEach(notRecognizedMethod->{
-                val unmetContraints = unmetContraints(spec, notRecognizedMethod);
+                final List<String>  unmetContraints = unmetContraints(spec, notRecognizedMethod);
 
-                val messageFormat = "%s#%s: has annotation @%s, is assumed to support "
+                String messageFormat = "%s#%s: has annotation @%s, is assumed to support "
                         + "a property, collection or action. Unmet constraint(s): %s";
                 validationFailures.onFailure(
                         spec,
@@ -128,7 +129,7 @@ implements MetaModelRefiner {
             Method method) {
 
         //val type = spec.getCorrespondingClass();
-        val unmetContraints = _Lists.<String>newArrayList();
+        final List<String> unmetContraints = _Lists.<String>newArrayList();
 
         if (!MethodUtil.isPublic(method)) {
             unmetContraints.add("method must be 'public'");
