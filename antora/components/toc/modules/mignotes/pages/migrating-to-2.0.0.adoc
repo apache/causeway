@@ -584,12 +584,12 @@ standalone-collection.bulk-load
 |isis.viewers. +
 {nbsp}{nbsp}collectionLayout.defaultView
 |isis.applib.annotation. +
-{nbsp}{nbsp}collectionLayout.defaultView
+{nbsp}{nbsp}collection-layout.default-view
 
 |isis.viewers. +
 {nbsp}{nbsp}.paged.parented
 |isis.applib.annotation. +
-{nbsp}{nbsp}collectionLayout.paged
+{nbsp}{nbsp}collection-layout.paged
 
 
 |
