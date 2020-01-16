@@ -15,7 +15,7 @@ Search also for: "TODO: v2: " in the .adoc documentation.
 
 === Server-Sent-Event (SSE) Support (ISIS-2102)
 
-Experimental feature to allow for submission of background-tasks, that themselfes may fire UI-events to update eg. a progress-bar.
+Experimental feature to allow for submission of background-tasks, that themselves may fire UI-events to update eg. a progress-bar.
 
 To make this work we introduce following components:
 
@@ -24,7 +24,7 @@ To make this work we introduce following components:
 - An EventStreamSource interface for any designated background task to implement.
 - An EventStreamService, that allows for such EventStreamSource objects to be submitted for execution on a thread-pool.
 - An EventStreamSource is associated with an EventStream on which it may fire update events.
-- These update events are propagated to the SSE Servlet, which informs its listenening clients with the update event's payload data.
+- These update events are propagated to the SSE Servlet, which informs its listening clients with the update event's payload data.
 
 A first prototypical implementation of this mechanism also introduces a programming model extension, which for now only works for 'Markup' properties.
 
@@ -212,7 +212,7 @@ tree.expand(TreePath.of(0)); // expand the root node
 tree.expand(TreePath.of(0, 1)); // expand the second child of the root node
 ----
 
-A full example is showcased in the https://github.com/andi-huber/isis-2-demo/tree/master/src/main/java/domainapp/dom/tree[isis-2-demo] ...
+A full example is showcased in the https://github.com/apache/isis/tree/master/examples/demo/src/main/java/demoapp/dom/tree[isis-demo] ...
 
 Implementation of `TreeAdapter`
 
