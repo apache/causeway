@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.FreeStandingList;
 
 @Component
 @Named("isisMetaModel.ClassSubstitutorForCollections")
-@Order(OrderPrecedence.MIDPOINT + 1)
+@Order(OrderPrecedence.MIDPOINT - 10)
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override
