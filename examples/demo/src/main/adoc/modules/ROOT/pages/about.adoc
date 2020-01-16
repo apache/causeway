@@ -71,3 +71,5 @@ If you are interested in contributing to Apache Isis, see the https://isis.apach
 This Demo App uses icons made by link:http://www.freepik.com[Freepik] and
 link:https://www.flaticon.com/authors/smashicons[Smashicons].
 These are licensed by link:http://creativecommons.org/licenses/by/3.0/[Creative Commons BY 3.0^]
+
+We use link:https://github.com/asciidoctor/asciidoctorj[AsciidoctorJ] for Asciidoc rendering.
