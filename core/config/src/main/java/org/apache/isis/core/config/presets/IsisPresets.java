@@ -48,12 +48,7 @@ public final class IsisPresets  {
     public static final String SilenceWicket = "classpath:/org/apache/isis/core/config/presets/SilenceWicket.properties";
     public static final String UseLog4j2Test = "classpath:/org/apache/isis/core/config/presets/UseLog4j2Test.properties";
 
-    /**
-     * @deprecated seems no longer required anyway
-     */
-    @Deprecated
-    public static final String IsisIntegTest = "classpath:/org/apache/isis/core/config/presets/IsisIntegTest.properties";
-    
+
     /**
      * Use PROTOTYPING mode as the default. Does not override if the system-property 
      * 'PROTOTYPING' was already set.
