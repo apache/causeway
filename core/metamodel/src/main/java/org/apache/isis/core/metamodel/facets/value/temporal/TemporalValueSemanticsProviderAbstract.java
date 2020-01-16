@@ -118,10 +118,9 @@ implements TemporalValueFacet<T> {
     }
     
     protected DateTimeFormatter formatterFromConfig(FormatIdentifier formatIdentifier, String namedFallback) {
-        
+
         val configuredNameOrPattern = getConfiguration()
-                .getValue()
-                .getFormatOrElse(formatIdentifier, namedFallback);
+                .getValue().getFormat().getOrDefault(formatIdentifier.name().toLowerCase(), namedFallback);
         
         val formatter = lookupNamedFormatter(configuredNameOrPattern).orElse(null);
         if(formatter!=null) {

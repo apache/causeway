@@ -30,9 +30,11 @@ import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 
-public class LocalDateTimeValueSemanticsProvider 
+@Log4j2
+public class LocalDateTimeValueSemanticsProvider
 extends TemporalValueSemanticsProviderAbstract<LocalDateTime> {
 
     public static final int MAX_LENGTH = 36;
@@ -59,8 +61,27 @@ extends TemporalValueSemanticsProviderAbstract<LocalDateTime> {
 
         setEncodingFormatter(
                 DateTimeFormatter.ofPattern(dateHourMinuteSecondMillis, Locale.getDefault()));
-        setTitleFormatter(formatterFromConfig(FormatIdentifier.DATETIME, "medium"));
-        
+
+        val configuredNameOrPattern =
+                getConfiguration().getValueTypes().getJavaTime().getLocalDateTime().getFormat();
+
+        val formatter = lookupNamedFormatter(configuredNameOrPattern).orElse(null);
+
+        DateTimeFormatter titleFormatter = null;
+        if(formatter!=null) {
+            titleFormatter = formatter;
+        } else {
+            try {
+                titleFormatter = DateTimeFormatter.ofPattern(configuredNameOrPattern, Locale.getDefault());
+            } catch (Exception e) {
+                log.warn(e);
+            }
+            if (titleFormatter == null) {
+                titleFormatter = lookupNamedFormatterElseFail("medium");
+            }
+        }
+
+        setTitleFormatter(titleFormatter);
     }
 
 }

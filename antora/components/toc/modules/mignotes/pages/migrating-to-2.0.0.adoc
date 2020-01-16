@@ -656,6 +656,10 @@ isis.value-types. +
 |isis.value-types. +
 {nbsp}{nbsp}joda.local-date-time.format
 
+isis.value-types. +
+{nbsp}{nbsp}java-time.local-date-time.format
+
+
 |
 |
 

@@ -45,7 +45,7 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
         super(FormatIdentifier.DATE, holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
 
         String formatRequired = getConfiguration()
-                .getValue().getFormatOrElse(FormatIdentifier.DATE, null);
+                .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), null);
         
         if (formatRequired == null) {
             format = formats().get(defaultFormat());

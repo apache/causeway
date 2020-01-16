@@ -115,7 +115,7 @@ implements DateValueFacet {
 
         this.propertyType = formatIdentifier.name().toLowerCase();
         configuredFormat = getConfiguration()
-                .getValue().getFormatOrElse(formatIdentifier, defaultFormat()).toLowerCase().trim();
+                .getValue().getFormat().getOrDefault(formatIdentifier.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
                
         buildFormat(configuredFormat);
 

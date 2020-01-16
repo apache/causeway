@@ -283,7 +283,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
 
     protected NumberFormat determineNumberFormat(FormatIdentifier formatIdentifier) {
         final String formatRequired = getConfiguration()
-                .getValue().getFormatOrElse(formatIdentifier, null);
+                .getValue().getFormat().getOrDefault(formatIdentifier.name().toLowerCase(), null);
 
         return formatRequired != null
                 ? new DecimalFormat(formatRequired)

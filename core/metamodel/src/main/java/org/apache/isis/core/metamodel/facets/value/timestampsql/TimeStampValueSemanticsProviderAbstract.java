@@ -43,9 +43,9 @@ abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemantics
     @SuppressWarnings("unchecked")
     public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
         super(FormatIdentifier.TIMESTAMP, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
-        
+
         final String formatRequired = getConfiguration()
-                .getValue().getFormatOrElse(FormatIdentifier.TIMESTAMP, null);
+                .getValue().getFormat().getOrDefault(FormatIdentifier.TIMESTAMP.name().toLowerCase(), null);
         
         if (formatRequired == null) {
             format = formats().get(defaultFormat());

@@ -1239,7 +1239,11 @@ public class IsisConfiguration {
         private final JavaTime javaTime = new JavaTime();
         @Data
         public static class JavaTime {
-
+            private final Joda.LocalDateTime localDateTime = new Joda.LocalDateTime();
+            @Data
+            public static class LocalDateTime {
+                private String format = "medium";
+            }
         }
 
         private final JavaUtil javaUtil = new JavaUtil();
@@ -1305,11 +1309,7 @@ public class IsisConfiguration {
             TIMESTAMP, 
             TIME,
         }
-        
-        public String getFormatOrElse(FormatIdentifier formatIdentifier, String defaultFormat) {
-            return getFormat().getOrDefault(formatIdentifier.name().toLowerCase(), defaultFormat);
-        }
-        
+
         private final Money money = new Money();
         @Data
         public static class Money {

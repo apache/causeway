@@ -44,8 +44,7 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
     public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
         super(FormatIdentifier.DATE, holder, adaptedClass, 12, immutability, equalByContent, defaultValue);
 
-        final String formatRequired = getConfiguration().getValue()
-                .getFormatOrElse(FormatIdentifier.DATE, null);
+        final String formatRequired = getConfiguration().getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), null);
         
         if (formatRequired == null) {
             format = formats().get(defaultFormat());

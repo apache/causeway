@@ -130,7 +130,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
         String configuredNameOrPattern = getConfiguration()
-                .getValue().getFormatOrElse(FormatIdentifier.DATE, "medium");
+                .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), "medium");
         
         updateTitleStringFormatter(configuredNameOrPattern);
     }

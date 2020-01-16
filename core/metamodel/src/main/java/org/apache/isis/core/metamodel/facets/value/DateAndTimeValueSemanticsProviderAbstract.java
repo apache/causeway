@@ -49,7 +49,7 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
         super(FormatIdentifier.DATETIME, holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE);
 
         final String formatRequired = getConfiguration()
-                .getValue().getFormatOrElse(FormatIdentifier.DATETIME, null);
+                .getValue().getFormat().getOrDefault(FormatIdentifier.DATETIME.name().toLowerCase(), null);
                 
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
