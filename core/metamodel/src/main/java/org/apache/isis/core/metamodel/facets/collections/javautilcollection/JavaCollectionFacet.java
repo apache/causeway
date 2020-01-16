@@ -38,10 +38,10 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
 
     @Override
-    public <T extends ManagedObject> Object populatePojo(
+    public Object populatePojo(
             Supplier<Object> emptyCollectionPojoFactory, 
             ObjectSpecification collectionSpec,
-            Stream<T> initData, 
+            Stream<ManagedObject> initData, 
             int elementCount) {
 
         final Collection<? super Object> pojoCollection = _Casts.uncheckedCast(emptyCollectionPojoFactory.get());
@@ -56,14 +56,13 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
 
     @Override
-    public <T extends ManagedObject> Stream<T> stream(T collectionAdapter) {
+    public Stream<ManagedObject> stream(ManagedObject collectionAdapter) {
 
         val objectManager = super.getObjectManager();
 
         return pojoCollection(collectionAdapter)
                 .stream()
-                .map(objectManager::adapt)
-                .map(x->_Casts.<T>uncheckedCast(x));
+                .map(objectManager::adapt);
     }
 
     /**

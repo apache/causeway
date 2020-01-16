@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -40,10 +39,10 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     }
 
     @Override
-    public <T extends ManagedObject> Object populatePojo(
+    public Object populatePojo(
             Supplier<Object> emptyCollectionPojoFactory, 
             ObjectSpecification collectionSpec,
-            Stream<T> initData, 
+            Stream<ManagedObject> initData, 
             int elementCount) {
 
         final Object[] array = initData
@@ -53,7 +52,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     }
 
     @Override
-    public <T extends ManagedObject> Stream<T> stream(T arrayAdapter) {
+    public Stream<ManagedObject> stream(ManagedObject arrayAdapter) {
         final Object[] array = pojoArray(arrayAdapter);
         if(isEmpty(array)) {
             return Stream.of();
@@ -62,8 +61,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
         val objectManager = super.getObjectManager();
 
         return Stream.of(array)
-                .map(objectManager::adapt)
-                .map(x->_Casts.<T>uncheckedCast(x));
+                .map(objectManager::adapt);
     }
 
     /**

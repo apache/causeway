@@ -38,8 +38,8 @@ public class CollectionFacetOnContainer extends CollectionFacetAbstract {
     }
 
     @Override
-    public Stream<ManagedObject> stream(ManagedObject wrappedObjectList) {
-        val list = unwrap(wrappedObjectList);
+    public Stream<ManagedObject> stream(ManagedObject container) {
+        val list = unwrap(container);
         return list.stream();
     }
 
@@ -53,10 +53,10 @@ public class CollectionFacetOnContainer extends CollectionFacetAbstract {
     }
 
     @Override
-    public <T extends ManagedObject> Object populatePojo(
+    public Object populatePojo(
             Supplier<Object> emptyCollectionPojoFactory,
             ObjectSpecification collectionSpec,
-            Stream<T> elements, 
+            Stream<ManagedObject> elements, 
             int elementCount) {
 
         throw _Exceptions.unexpectedCodeReach();

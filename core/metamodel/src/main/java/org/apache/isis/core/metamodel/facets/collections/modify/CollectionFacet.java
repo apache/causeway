@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -36,8 +37,7 @@ import lombok.val;
 /**
  * Attached to {@link ObjectSpecification}s that represent a collection.
  *
- * <p>
- * Factories of (implementations of this) facet should ensure that a
+ * @implNote Factories of (implementations of this) facet should ensure that a
  * {@link TypeOfFacet} is also attached to the same facet holder. The
  * {@link #getTypeOfFacet()} is a convenience for this.
  */
@@ -51,10 +51,10 @@ public interface CollectionFacet extends Facet {
      * (typically the elements of a collection or array)
      * @since 2.0
      */
-    <T extends ManagedObject> Stream<T> stream(T collectionAdapter);
+    Stream<ManagedObject> stream(ManagedObject collectionAdapter);
 
-    default <T extends ManagedObject> T firstElement(T collectionAdapter) {
-        return stream(collectionAdapter).findFirst().orElse(null);
+    default Optional<ManagedObject> firstElement(ManagedObject collectionAdapter) {
+        return stream(collectionAdapter).findFirst();
     }
 
     /**
@@ -68,10 +68,10 @@ public interface CollectionFacet extends Facet {
      * @return a possibly new instance
      * @since 2.0
      */
-    <T extends ManagedObject> Object populatePojo(
+    Object populatePojo(
             Supplier<Object> emptyCollectionPojoFactory, 
             ObjectSpecification collectionSpec, 
-            Stream<T> elements, 
+            Stream<ManagedObject> elements, 
             int elementCount);
 
     /**
