@@ -1164,16 +1164,6 @@ public class IsisConfiguration {
         }
     }
 
-    private final Viewers viewers = new Viewers();
-    @Data
-    public static class Viewers {
-
-
-
-
-    }
-
-
 
     //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
     private final Value value = new Value();
