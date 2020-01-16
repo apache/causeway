@@ -97,7 +97,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     void allowingAuditObjectsToReturn(AuditObjectsConfiguration value) {
         if(value!=null) {
             val config = super.metaModelContext.getConfiguration();
-            config.getServices().getAudit().setObjects(value);
+            config.getApplib().getAnnotation().getDomainObject().setAuditing(value);
         }
     }
     
