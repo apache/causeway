@@ -614,6 +614,9 @@ standalone-collection.bulk-load
 {nbsp}{nbsp}.propertyLayout.label
 |(removed)
 
+|isis.timezone
+|isis.core.runtime.timezone
+
 
 |
 |

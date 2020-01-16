@@ -437,6 +437,9 @@ public class IsisConfiguration {
              */
             private Optional<String> locale = Optional.empty();
 
+            //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
+            private String timezone;
+
         }
 
         private final RuntimeServices runtimeServices = new RuntimeServices();
@@ -1171,9 +1174,7 @@ public class IsisConfiguration {
     }
 
 
-    //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
-    private String timezone;
-    
+
     //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
     private final Value value = new Value();
     @Data

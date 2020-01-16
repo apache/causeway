@@ -29,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
 public class IsisTimeZoneInitializer {
 
     public void initTimeZone(final IsisConfiguration configuration) {
-        final String timeZoneSpec = configuration.getTimezone();
+        final String timeZoneSpec = configuration.getCore().getRuntime().getTimezone();
         if (timeZoneSpec != null) {
             TimeZone timeZone;
             timeZone = TimeZone.getTimeZone(timeZoneSpec);
