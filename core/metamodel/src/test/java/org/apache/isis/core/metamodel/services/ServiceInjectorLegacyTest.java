@@ -47,17 +47,6 @@ import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import lombok.Data;
 import lombok.val;
 
-@ActiveProfiles("test")
-@SpringBootTest(classes = {
-        IsisBeanFactoryPostProcessorForSpring.class,
-        IsisModuleCoreConfig.class,
-        ServiceInjectorLegacy.class,
-        ServiceRegistryDefault.class,
-        ServiceInjectorLegacyTest.Producers.class,
-},
-properties = {
-        "isis.services.injector.setPrefix=true"
-})
 @Disabled("legacy injector is no longer used")
 class ServiceInjectorLegacyTest {
 
@@ -121,46 +110,5 @@ class ServiceInjectorLegacyTest {
         private Service2 d;
     }
 
-    // -- TESTS
-
-    @Inject private ServiceInjector injector;
-    @Inject private ServiceRegistry registry;
-    //@Inject private ApplicationContext applicationContext;
-    @Inject private IsisConfiguration isisConfiguration;
-
-    @BeforeEach
-    void setup() {
-        //_Spring.reinit(applicationContext);    
-    }
-    
-    @Test
-    void configInjector_shouldSetPrefix() {
-        assertTrue(isisConfiguration.getServices().getInjector().isSetPrefix());
-    }
-
-    @Test
-    void shouldInject_RepositoryService() {
-
-        val mockDomainObject = new SomeDomainObject();
-
-        injector.injectServicesInto(mockDomainObject, onNotResolvable->{
-            // ignore, checked below
-        });
-
-
-        assertNotNull(mockDomainObject.getA());
-        //FIXME[2112] does not get injected ... 
-        //assertNotNull(mockDomainObject.getB());
-        assertNotNull(mockDomainObject.getC());
-        assertNotNull(mockDomainObject.getD());
-
-    }
-
-    @Test
-    void shouldStreamRegisteredServices() {
-        long registeredServiceCount = registry.streamRegisteredBeans()
-                .count();
-        assertTrue(registeredServiceCount>=3);
-    }
 
 }
