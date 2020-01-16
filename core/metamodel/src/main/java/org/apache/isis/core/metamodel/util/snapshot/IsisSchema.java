@@ -174,8 +174,7 @@ final class IsisSchema {
     void setIsisCollection(final Element element, final String prefix, final String fullyQualifiedClassName, final ManagedObject collection) {
         setAttribute(element, "feature", FEATURE_COLLECTION);
         setAttribute(element, "type", prefix + ":" + fullyQualifiedClassName);
-        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
-        setAttribute(element, "size", "" + facet.size(collection));
+        setAttribute(element, "size", "" + CollectionFacet.elementCount(collection));
     }
 
 }

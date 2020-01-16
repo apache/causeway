@@ -45,13 +45,14 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 
-public class CollectionUtilsTest {
+public class CollectionFacetUtilsTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    Iterable<Object> iterable;
+    List<Object> iterable;
 
     @Before
     public void setUp() throws Exception {
@@ -77,7 +78,7 @@ public class CollectionUtilsTest {
                 Collection.class
                 );
         for (Class<?> collectionType : collectionTypes) {
-            Object o = CollectionUtils.copyOf(iterable, collectionType);
+            Object o = CollectionFacet.Utils.collect(iterable.stream(), collectionType);
             assertThat(o, is(not(nullValue())));
             assertThat(collectionType.isAssignableFrom(o.getClass()), is(true));
 
@@ -90,7 +91,7 @@ public class CollectionUtilsTest {
 
     @Test
     public void whenArray() throws Exception {
-        Object o = CollectionUtils.copyOf(iterable, String[].class);
+        Object o = CollectionFacet.Utils.collect(iterable.stream(), String[].class);
         assertThat(o instanceof String[], is(true));
 
         String[] copy = (String[])o;
@@ -99,7 +100,7 @@ public class CollectionUtilsTest {
 
     @Test
     public void whenNotSupported() throws Exception {
-        Object o = CollectionUtils.copyOf(iterable, Map.class);
+        Object o = CollectionFacet.Utils.collect(iterable.stream(), Map.class);
         assertThat(o, is(nullValue()));
     }
 
@@ -108,7 +109,7 @@ public class CollectionUtilsTest {
 
         expectedException.expect(IllegalArgumentException.class);
 
-        CollectionUtils.copyOf(iterable, null);
+        CollectionFacet.Utils.collect(iterable.stream(), null);
     }
 
     @Test
@@ -116,7 +117,7 @@ public class CollectionUtilsTest {
 
         expectedException.expect(IllegalArgumentException.class);
 
-        CollectionUtils.copyOf(null, List.class);
+        CollectionFacet.Utils.collect(null, List.class);
     }
 
 

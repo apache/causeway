@@ -137,7 +137,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         case LIST:
 
             final Stream<ManagedObject> collectionAdapters =
-            CollectionFacet.Utils.streamAdapters(returnedAdapter);
+                CollectionFacet.streamAdapters(returnedAdapter);
 
             final ListReprRenderer listReprRenderer =
                     new ListReprRenderer(resourceContext, null, representation).withElementRel(Rel.ELEMENT);

@@ -19,20 +19,42 @@
 
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
+import java.util.AbstractList;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.internal.base._Casts;
+import javax.annotation.Nullable;
+
+import org.apache.isis.core.commons.internal.base._With;
+import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import static org.apache.isis.core.commons.internal.base._With.requires;
+
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Attached to {@link ObjectSpecification}s that represent a collection.
@@ -79,34 +101,105 @@ public interface CollectionFacet extends Facet {
      * {@link #getFacetHolder() holder}.
      */
     TypeOfFacet getTypeOfFacet();
-
-    public static class Utils {
-
-        public static CollectionFacet getCollectionFacetFromSpec(ManagedObject objectRepresentingCollection) {
-            val collectionSpec = objectRepresentingCollection.getSpecification();
-            return collectionSpec.getFacet(CollectionFacet.class);
+    
+    // -- UTILS
+    
+    public static Optional<CollectionFacet> lookup(@Nullable ManagedObject container) {
+        if(container==null) {
+            return Optional.empty();
         }
-
-        public static int size(ManagedObject collection) {
-            val collectionFacet = getCollectionFacetFromSpec(collection);
-            return collectionFacet.size(collection);
-        }
-
-        public static <T extends ManagedObject> Stream<T> streamAdapters(T collectionAdapter) {
-            val collectionFacet = getCollectionFacetFromSpec(collectionAdapter);
-            return Utils.<T>downCast(collectionFacet.stream(collectionAdapter));
-        }
-
-        public static <T extends ManagedObject> List<T> toAdapterList(T collectionAdapter) {
-            return streamAdapters(collectionAdapter)
-                    .collect(Collectors.toList());
-        }
-
-        private static <T extends ManagedObject> Stream<T> downCast(Stream<ManagedObject> stream) {
-            final Function<ManagedObject, T> uncheckedCast = _Casts::uncheckedCast;
-            return stream.map(uncheckedCast);
-        }
-
+        val collectionSpec = container.getSpecification();
+        return Optional.ofNullable(collectionSpec.getFacet(CollectionFacet.class));
     }
+
+    public static int elementCount(@Nullable ManagedObject container) {
+        return lookup(container)
+                .map(collectionFacet->collectionFacet.size(container))
+                .orElse(0);
+    }
+    
+    public static Stream<ManagedObject> streamAdapters(ManagedObject container) {
+        return lookup(container)
+                .map(collectionFacet->collectionFacet.stream(container))
+                .orElse(Stream.empty());
+    }
+    
+    public static Object[] toArrayOfPojos(ManagedObject container) {
+        val elementAdapters = streamAdapters(container)
+                .collect(Collectors.toList());
+        return ManagedObject.unwrapMultipleAsArray(elementAdapters);
+    }
+
+    @UtilityClass
+    public static class Utils {
+        
+        /**
+         * Copies the iterable into the specified type.
+         */
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public static Object collect(
+                final Stream<?> stream, 
+                final Class<?> requiredType) {
+            
+            requires(stream, "stream");
+            requires(requiredType, "requiredType");
+
+            Stream rawStream = stream;
+            
+            val factoryIfAny = factoriesByType.get(requiredType);
+            if(factoryIfAny!=null) {
+                Supplier rawFactory = factoryIfAny;
+                Collector rawCollector = Collectors.toCollection(rawFactory);
+                return rawStream.collect(rawCollector);
+            }
+
+            // array
+            if (requiredType.isArray()) {
+                Class<?> elementType = requiredType.getComponentType();
+                return rawStream.collect(_Arrays.toArray(elementType));
+            }
+            
+            // not recognized
+            return null;
+
+        }
+
+        public static Object[] collectAsPojoArray(
+                final Stream<Object> pojoStream, 
+                final ObjectSpecification spec, 
+                final ObjectManager objectManger) {
+            
+            val optionPojo = pojoStream.collect(Collectors.toList());
+            final ManagedObject collection = objectManger.adapt(optionPojo);
+            return toArrayOfPojos(collection);
+        }
+        
+        
+        // -- HELPER
+        
+        private final static Map<Class<?>, Supplier<Collection<?>>> factoriesByType = _With.hashMap(
+                map-> {
+                    // specific list implementations
+                    map.put(CopyOnWriteArrayList.class, _Lists::newConcurrentList);
+                    map.put(LinkedList.class, _Lists::newLinkedList);
+                    map.put(ArrayList.class, _Lists::newArrayList);
+                    map.put(AbstractList.class, _Lists::newArrayList);
+
+                    // specific set implementations
+                    map.put(CopyOnWriteArraySet.class, _Sets::newCopyOnWriteArraySet);
+                    map.put(LinkedHashSet.class, _Sets::newLinkedHashSet);
+                    map.put(HashSet.class, _Sets::newHashSet);
+                    map.put(TreeSet.class, _Sets::newTreeSet);
+                    map.put(AbstractSet.class, _Sets::newLinkedHashSet);
+
+                    // interfaces
+                    map.put(List.class, _Lists::newArrayList);
+                    map.put(SortedSet.class, _Sets::newTreeSet);
+                    map.put(Set.class, _Sets::newLinkedHashSet);
+                    map.put(Collection.class, _Lists::newArrayList);
+                });
+        
+    }
+    
 
 }

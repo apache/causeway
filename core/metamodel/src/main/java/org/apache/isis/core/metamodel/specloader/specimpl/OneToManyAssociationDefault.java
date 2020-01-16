@@ -177,8 +177,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         // REVIEW should we be able to determine if a collection is empty
         // without loading it?
         final ManagedObject collection = get(parentAdapter, interactionInitiatedBy);
-        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
-        return facet.size(collection) == 0;
+        return CollectionFacet.elementCount(collection) == 0;
     }
 
     // -- add, clear

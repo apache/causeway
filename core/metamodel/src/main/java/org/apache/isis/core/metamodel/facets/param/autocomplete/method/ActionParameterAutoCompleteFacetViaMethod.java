@@ -25,16 +25,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class ActionParameterAutoCompleteFacetViaMethod 
 extends ActionParameterAutoCompleteFacetAbstract 
@@ -94,15 +94,11 @@ implements ImperativeFacet {
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
         final Class<?> parameterType = facetedMethodParameter.getType();
 
-        final List<ManagedObject> visibleAdapters =
-                ManagedObject.VisibilityUtil.visibleAdapters(
-                        collectionAdapter,
-                        interactionInitiatedBy);
-        final List<Object> visibleObjects =
-                _Lists.map(visibleAdapters, ManagedObject::unwrapSingle);
+        val visiblePojoStream = ManagedObject.VisibilityUtil
+                .streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
 
-        final ObjectSpecification parameterSpec = getSpecification(parameterType);
-        return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectManager());
+        val parameterSpec = getSpecification(parameterType);
+        return CollectionFacet.Utils.collectAsPojoArray(visiblePojoStream, parameterSpec, getObjectManager());
     }
 
     @Override

@@ -26,8 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
@@ -57,7 +55,6 @@ import org.apache.isis.core.metamodel.commons.MethodInvocationPreprocessor;
 import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
@@ -363,15 +360,12 @@ implements ImperativeFacet {
 
         if(result instanceof Collection || result.getClass().isArray()) {
 
-            final Stream<ManagedObject> adapters = CollectionFacet.Utils.streamAdapters(resultAdapter);
-
-            final Object visibleObjects =
-                    CollectionUtils.copyOf(
-                            adapters
-                            .filter(ManagedObject.VisibilityUtil.filterOn(interactionInitiatedBy))
-                            .map(ManagedObject::unwrapSingle)
-                            .collect(Collectors.toList()),
-                            method.getReturnType());
+            val requiredContainerType = method.getReturnType();
+            
+            val visiblePojoStream = ManagedObject.VisibilityUtil
+                    .streamVisiblePojos(resultAdapter, interactionInitiatedBy);
+            
+            final Object visibleObjects = CollectionFacet.Utils.collect(visiblePojoStream, requiredContainerType); 
 
             if (visibleObjects != null) {
                 return getObjectManager().adapt(visibleObjects);

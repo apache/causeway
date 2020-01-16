@@ -251,7 +251,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             //final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
 
             final Stream<ManagedObject> collectionAdapters = 
-                    CollectionFacet.Utils.streamAdapters(returnedAdapter);
+                    CollectionFacet.streamAdapters(returnedAdapter);
 
             appendStreamTo(resourceContext, collectionAdapters, rootRepresentation, suppression);
 
@@ -400,7 +400,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             return;
         }
 
-        final Stream<ManagedObject> adapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
+        final Stream<ManagedObject> adapters = CollectionFacet.streamAdapters(valueAdapter);
         appendStreamTo(resourceContext, adapters, representation, suppression);
     }
 

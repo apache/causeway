@@ -51,8 +51,7 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
 
         final ManagedObject parentAdapter = determineParentAdapter(target);
         final ManagedObject objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
-        final List<ManagedObject> objectAdapters = CollectionFacet.Utils.toAdapterList(objectAdapter);
-        return ManagedObject.unwrapMultipleAsArray(objectAdapters);
+        return CollectionFacet.toArrayOfPojos(objectAdapter);
     }
 
     /**

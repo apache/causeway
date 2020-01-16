@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -366,19 +365,27 @@ public interface ManagedObject {
         }
 
         /**
-         * Filters a collection (an adapter around either a Collection or an Object[]) and returns a list of
+         * Filters a collection (an adapter around either a Collection or an Object[]) and returns a stream of
          * {@link ManagedObject}s of those that are visible (as per any facet(s) installed on the element class
          * of the collection).
-         *  @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
+         * @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
          * @param interactionInitiatedBy
          */
-        public static List<ManagedObject> visibleAdapters(
+        public static Stream<ManagedObject> streamVisibleAdapters(
                 final ManagedObject collectionAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
     
-            return CollectionFacet.Utils.streamAdapters(collectionAdapter)
-            .filter(VisibilityUtil.filterOn(interactionInitiatedBy))
-            .collect(Collectors.toList());
+            return CollectionFacet.streamAdapters(collectionAdapter)
+                    .filter(VisibilityUtil.filterOn(interactionInitiatedBy));
+        }
+        
+        public static Stream<Object> streamVisiblePojos(
+                final ManagedObject collectionAdapter,
+                final InteractionInitiatedBy interactionInitiatedBy) {
+    
+            return CollectionFacet.streamAdapters(collectionAdapter)
+                    .filter(VisibilityUtil.filterOn(interactionInitiatedBy))
+                    .map(ManagedObject::unwrapSingle);
         }
         
         /**

@@ -523,12 +523,12 @@ public class XmlSnapshot implements Snapshot {
 
             if (log.isDebugEnabled()) {
                 log.debug("includeField(Pl, Vec, Str): 1->M: {}",
-                        log("collection.size", "" + CollectionFacet.Utils.size(collection)));
+                        log("collection.size", "" + CollectionFacet.elementCount(collection)));
             }
 
             final boolean[] allFieldsNavigated = { true }; // fast non-thread-safe value reference
 
-            CollectionFacet.Utils.streamAdapters(collection).forEach(referencedObject -> {
+            CollectionFacet.streamAdapters(collection).forEach(referencedObject -> {
                 final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names,
                         annotation);
                 if (log.isDebugEnabled()) {

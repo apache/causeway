@@ -24,14 +24,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.commons.ObjectExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {
 
@@ -66,16 +67,36 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     public Object[] getChoices(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
+        
+        
         final Object options = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
         if (options == null) {
             return null;
         }
-        if (options.getClass().isArray()) {
-            return ObjectExtensions.asArray(options);
-        }
-        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(choicesClass);
-        return CollectionUtils.getCollectionAsObjectArray(options, specification, getObjectManager());
+
+        val collectionAdapter = getObjectManager().adapt(options);
+
+        final FacetedMethod facetedMethod = (FacetedMethod) getFacetHolder();
+        final Class<?> propertyType = facetedMethod.getType();
+
+        val visiblePojoStream = ManagedObject.VisibilityUtil
+                .streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
+
+        val propertySpec = getSpecification(propertyType);
+        return CollectionFacet.Utils.collectAsPojoArray(visiblePojoStream, propertySpec, getObjectManager());
+        
+        
+        //XXX legacy of
+
+//        final Object options = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
+//        if (options == null) {
+//            return null;
+//        }
+//        if (options.getClass().isArray()) {
+//            return ObjectExtensions.asArray(options);
+//        }
+//        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(choicesClass);
+//        return CollectionUtils.getCollectionAsObjectArray(options, specification, getObjectManager());
     }
 
     @Override

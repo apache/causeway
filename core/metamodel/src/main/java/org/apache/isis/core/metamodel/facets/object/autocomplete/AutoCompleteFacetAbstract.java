@@ -90,13 +90,12 @@ implements AutoCompleteFacet {
                 });
 
         // check a collection was returned
-        if(CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter) == null) {
+        if(CollectionFacet.lookup(resultAdapter) == null) {
             return Collections.emptyList();
         }
 
-        return CollectionFacet.Utils.streamAdapters(resultAdapter)
-        .filter(ManagedObject.VisibilityUtil.filterOn(interactionInitiatedBy))
-        .collect(Collectors.toList());
+        return ManagedObject.VisibilityUtil.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
+                .collect(Collectors.toList());
 
     }
 

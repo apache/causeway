@@ -24,15 +24,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -91,21 +89,17 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             final Object collectionOrArray,
             final Class<?> parameterType,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         if (collectionOrArray == null) {
             return null;
         }
 
-        final ManagedObject collectionAdapter = getObjectManager().adapt(collectionOrArray);
+        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
+        val visiblePojoStream = ManagedObject.VisibilityUtil
+                .streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
 
-        final List<ManagedObject> visibleAdapters =
-                ManagedObject.VisibilityUtil.visibleAdapters(
-                        collectionAdapter,
-                        interactionInitiatedBy);
-        final List<Object> filteredObjects =
-                _Lists.map(visibleAdapters, ManagedObject::unwrapSingle);
-
-        final ObjectSpecification parameterSpec = getSpecification(parameterType);
-        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getObjectManager());
+        val parameterSpec = getSpecification(parameterType);
+        return CollectionFacet.Utils.collectAsPojoArray(visiblePojoStream, parameterSpec, getObjectManager());
     }
 
     @Override

@@ -19,10 +19,20 @@
 
 package org.apache.isis.core.metamodel.services.classsubstitutor;
 
+import java.util.function.Supplier;
+
+import lombok.Value;
+
 /**
  * Provides capability to translate or ignore classes.
  */
 public interface ClassSubstitutor {
+    
+    @Value
+    static class Substitution<S> {
+        Class<S> substitutedType;
+        Supplier<S> factory;
+    }
 
     Class<?> getClass(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls);
 }

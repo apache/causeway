@@ -99,7 +99,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         final LinkFollowSpecs followHref = linkFollower.follow("href");
         boolean eagerlyRender = resourceContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
 
-        final Stream<ManagedObject> elementAdapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
+        final Stream<ManagedObject> elementAdapters = CollectionFacet.streamAdapters(valueAdapter);
 
         final List<JsonRepresentation> list = _Lists.newArrayList();
 
