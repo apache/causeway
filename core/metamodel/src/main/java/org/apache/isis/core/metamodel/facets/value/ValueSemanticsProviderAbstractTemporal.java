@@ -95,29 +95,24 @@ implements DateValueFacet {
 
     private final DateFormat encodingFormat;
     protected DateFormat format;
-    private String configuredFormat;
     private String propertyType;
 
     /**
      * Uses {@link #type()} as the facet type.
      */
-    public ValueSemanticsProviderAbstractTemporal(final FormatIdentifier formatIdentifier, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        this(formatIdentifier, type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
+    public ValueSemanticsProviderAbstractTemporal(final FormatIdentifier formatIdentifier, String propertyType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
+        this(formatIdentifier, propertyType, type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
     }
 
     /**
      * Allows the specific facet subclass to be specified (rather than use
      * {@link #type()}.
      */
-    public ValueSemanticsProviderAbstractTemporal(final FormatIdentifier formatIdentifier, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
+    public ValueSemanticsProviderAbstractTemporal(final FormatIdentifier formatIdentifier, String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
         super(facetType, holder, adaptedClass, typicalLength, -1, immutability, equalByContent, defaultValue);
         configureFormats();
 
-        this.propertyType = formatIdentifier.name().toLowerCase();
-        configuredFormat = getConfiguration()
-                .getValue().getFormat().getOrDefault(formatIdentifier.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
-               
-        buildFormat(configuredFormat);
+        this.propertyType = propertyType;
 
         encodingFormat = formats().get(ISO_ENCODING_FORMAT);
     }
@@ -136,14 +131,17 @@ implements DateValueFacet {
     protected void buildDefaultFormatIfRequired() {
         final Map<String, String> map = FORMATS.get();
         final String currentlyConfiguredFormat = map.get(propertyType);
-        if (currentlyConfiguredFormat == null || configuredFormat.equals(currentlyConfiguredFormat)) {
+        if (currentlyConfiguredFormat == null || getConfiguredFormat().equals(currentlyConfiguredFormat)) {
             return;
         }
 
         // (re)create format
-        configuredFormat = currentlyConfiguredFormat;
-        buildFormat(configuredFormat);
+        setConfiguredFormat(currentlyConfiguredFormat);
+        buildFormat(getConfiguredFormat());
     }
+
+    protected abstract String getConfiguredFormat();
+    protected abstract void setConfiguredFormat(final String configuredFormat);
 
     protected void buildFormat(final String configuredFormat) {
         final Map<String, DateFormat> formats = formats();
@@ -367,7 +365,6 @@ implements DateValueFacet {
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("configuredFormat", configuredFormat);
         attributeMap.put("propertyType", propertyType);
     }
 }

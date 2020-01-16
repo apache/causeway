@@ -30,6 +30,9 @@ import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
+import lombok.Getter;
+import lombok.Setter;
+
 abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static final Object DEFAULT_VALUE = null; // no default
@@ -40,9 +43,17 @@ abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemantics
         formats.put("short", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG));
     }
 
+    @Getter @Setter
+    private String configuredFormat;
+
     @SuppressWarnings("unchecked")
     public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
-        super(FormatIdentifier.TIMESTAMP, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
+        super(FormatIdentifier.TIMESTAMP, FormatIdentifier.TIMESTAMP.name().toLowerCase(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
+
+        configuredFormat = getConfiguration()
+                .getValue().getFormat().getOrDefault(FormatIdentifier.TIMESTAMP.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
+
+        buildFormat(configuredFormat);
 
         final String formatRequired = getConfiguration()
                 .getValue().getFormat().getOrDefault(FormatIdentifier.TIMESTAMP.name().toLowerCase(), null);
@@ -98,4 +109,11 @@ abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemantics
 
         return formats;
     }
+
+    @Override
+    public void appendAttributesTo(Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("configuredFormat", configuredFormat);
+    }
+
 }

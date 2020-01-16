@@ -30,6 +30,9 @@ import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class TimeValueSemanticsProviderAbstract<T> 
 extends ValueSemanticsProviderAbstractTemporal<T> {
 
@@ -41,9 +44,17 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
         formats.put("short", DateFormat.getTimeInstance(DateFormat.SHORT));
     }
 
+    @Getter @Setter
+    private String configuredFormat;
+
     @SuppressWarnings("unchecked")
     public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
-        super(FormatIdentifier.TIME, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
+        super(FormatIdentifier.TIME, FormatIdentifier.TIME.name().toLowerCase(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
+
+        configuredFormat = getConfiguration()
+                .getValue().getFormat().getOrDefault(FormatIdentifier.TIME.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
+
+        buildFormat(configuredFormat);
 
         final String formatRequired = getConfiguration()
                 .getValue().getFormat().getOrDefault(FormatIdentifier.TIME.name().toLowerCase(), null);
@@ -108,4 +119,11 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
 
         return formats;
     }
+
+    @Override
+    public void appendAttributesTo(Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("configuredFormat", configuredFormat);
+    }
+
 }

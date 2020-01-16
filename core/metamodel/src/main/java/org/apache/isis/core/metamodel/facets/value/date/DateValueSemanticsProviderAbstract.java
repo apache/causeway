@@ -31,6 +31,9 @@ import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static Map<String, DateFormat> formats = _Maps.newHashMap();
@@ -41,8 +44,16 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         formats.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
     }
 
+    @Getter @Setter
+    private String configuredFormat;
+
     public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        super(FormatIdentifier.DATE, holder, adaptedClass, 12, immutability, equalByContent, defaultValue);
+        super(FormatIdentifier.DATE, FormatIdentifier.DATE.name().toLowerCase(), holder, adaptedClass, 12, immutability, equalByContent, defaultValue);
+
+        configuredFormat = getConfiguration()
+                .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
+
+        buildFormat(configuredFormat);
 
         final String formatRequired = getConfiguration().getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), null);
         
@@ -51,6 +62,8 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         } else {
             setMask(formatRequired); //TODO fails when using format names eg 'medium'
         }
+
+
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -117,4 +130,9 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         return formats;
     }
 
+    @Override
+    public void appendAttributesTo(Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("configuredFormat", configuredFormat);
+    }
 }

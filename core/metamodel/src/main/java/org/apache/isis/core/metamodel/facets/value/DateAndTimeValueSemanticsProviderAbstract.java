@@ -30,6 +30,9 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class DateAndTimeValueSemanticsProviderAbstract<T> 
 extends ValueSemanticsProviderAbstractTemporal<T> {
 
@@ -44,9 +47,18 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
     private static final Object DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 18;
 
+    @Getter @Setter
+    private String configuredFormat;
+
+
     @SuppressWarnings("unchecked")
     public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent) {
-        super(FormatIdentifier.DATETIME, holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE);
+        super(FormatIdentifier.DATETIME, FormatIdentifier.DATETIME.name().toLowerCase(), holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE);
+
+        configuredFormat = getConfiguration()
+                .getValue().getFormat().getOrDefault(FormatIdentifier.DATETIME.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
+
+        buildFormat(configuredFormat);
 
         final String formatRequired = getConfiguration()
                 .getValue().getFormat().getOrDefault(FormatIdentifier.DATETIME.name().toLowerCase(), null);
@@ -111,6 +123,12 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
         }
 
         return formats;
+    }
+
+    @Override
+    public void appendAttributesTo(Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("configuredFormat", configuredFormat);
     }
 
 }

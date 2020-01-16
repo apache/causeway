@@ -31,6 +31,9 @@ import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static final Map<String, DateFormat> FORMATS = _Maps.newHashMap();
@@ -41,8 +44,16 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
         FORMATS.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
     }
 
+    @Getter @Setter
+    private String configuredFormat;
+
     public JodaDateTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final T defaultValue) {
-        super(FormatIdentifier.DATE, holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
+        super(FormatIdentifier.DATE, FormatIdentifier.DATE.name().toLowerCase(), holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
+
+        configuredFormat = getConfiguration()
+                .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
+
+        buildFormat(configuredFormat);
 
         String formatRequired = getConfiguration()
                 .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), null);
@@ -118,4 +129,9 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
         return formats;
     }
 
+    @Override
+    public void appendAttributesTo(Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("configuredFormat", configuredFormat);
+    }
 }
