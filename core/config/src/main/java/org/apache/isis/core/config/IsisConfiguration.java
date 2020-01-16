@@ -1197,6 +1197,13 @@ public class IsisConfiguration {
             public static class Double {
                 private String format;
             }
+
+            // capitalized to avoid clash with keyword
+            private final Float Float = new Float();
+            @Data
+            public static class Float {
+                private String format;
+            }
         }
 
         private final JavaMath javaMath = new JavaMath();
@@ -1267,7 +1274,7 @@ public class IsisConfiguration {
             TIMESTAMP, 
             TIME,
             
-            FLOAT, LONG, SHORT,
+            LONG, SHORT,
             PERCENTAGE
         }
         

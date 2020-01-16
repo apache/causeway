@@ -636,6 +636,10 @@ isis.value-types. +
 |isis.value-types. +
 {nbsp}{nbsp}java-lang.double.format
 
+|isis.value.format["float"]
+|isis.value-types. +
+{nbsp}{nbsp}java-lang.float.format
+
 |
 |
 
