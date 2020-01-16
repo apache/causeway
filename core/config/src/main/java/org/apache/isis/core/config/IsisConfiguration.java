@@ -1207,15 +1207,9 @@ public class IsisConfiguration {
         private final Money money = new Money();
         @Data
         public static class Money {
-            
             private Optional<String> currency = Optional.empty();
-
-            public String getCurrencyOrElse(String fallback) { 
-                return getCurrency().filter(_Strings::isNotEmpty).orElse(fallback);
-            }
         }
-        
-        
+
     }
 
     private final Extensions extensions = new Extensions();

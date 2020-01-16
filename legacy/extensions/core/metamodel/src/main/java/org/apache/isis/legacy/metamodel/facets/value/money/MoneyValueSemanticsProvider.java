@@ -60,10 +60,6 @@ implements MoneyValueFacet {
         LOCAL_CURRENCY_CODE = getDefaultCurrencyCode();
     }
 
-    static final boolean isAPropertyDefaultFacet() {
-        return PropertyDefaultFacet.class.isAssignableFrom(MoneyValueSemanticsProvider.class);
-    }
-
     private static String getDefaultCurrencyCode() {
         try {
             return DEFAULT_CURRENCY_FORMAT.getCurrency().getCurrencyCode();
