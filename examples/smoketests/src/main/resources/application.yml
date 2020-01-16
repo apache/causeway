@@ -1,37 +1,34 @@
 isis:
-  reflector:
 
-    validator:
-      allowDeprecated: false
-      noParamsOnly: true
-      #explicitObjectType: true # DON'T DEFINE HERE
-      #serviceActionsOnly: true # DEPRECATED
-      #mixinsOnly: true         # DEPRECATED
+  applib:
+    annotation:
+      action-layout:
+        css-class-fa:
+          patterns:
+            new.*:fa-plus,\
+            add.*:fa-plus-square,\
+            create.*:fa-plus,\
+            update.*:fa-edit,\
+            delete.*:fa-trash,\
+            find.*:fa-search,\
+            list.*:fa-list
+        css-class:
+          patterns:
+            delete.*:btn-danger
+      action:
+        explicit: true
+      domain-object:
+        editing: false
 
-    facet:
-      cssClassFa:
-        patterns:
-          new.*:fa-plus,\
-          add.*:fa-plus-square,\
-          create.*:fa-plus,\
-          update.*:fa-edit,\
-          delete.*:fa-trash,\
-          find.*:fa-search,\
-          list.*:fa-list
-
-      cssClass:
-        patterns:
-          delete.*:btn-danger
-
-    explicitAnnotations:
-      action: true
-
-    introspector:
-      lock-after-full-introspection: false
-      validate-incrementally: false
-
-  objects:
-    editing: false
+  core:
+    meta-model:
+      validator:
+        allow-deprecated: false
+        no-params-only: true
+        #explicit-object-type: true # DON'T DEFINE HERE
+      introspector:
+        lock-after-full-introspection: false
+        validate-incrementally: false
 
   viewer:
     wicket:

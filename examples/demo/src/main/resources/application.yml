@@ -18,33 +18,39 @@
 # See also config/application.properties
 #
 isis:
-  reflector:
-    explicit-annotations:
-      action: true
-    validator:
-      allow-deprecated: false
-      no-params-only: true
-      explicit-object-type: true
-      service-actions-only: true
-      mixins-only: true
 
-    facet:
-      css-class-fa:
-        patterns:
-          new.*:fa-plus,
-          add.*:fa-plus-square,
-          create.*:fa-plus,
-          update.*:fa-edit,
-          delete.*:fa-trash,
-          find.*:fa-search,
-          list.*:fa-list
+  applib:
+    annotation:
+      action:
+        explicit: true
+      action-layout:
+        css-class-fa:
+          patterns:
+            new.*:fa-plus,
+            add.*:fa-plus-square,
+            create.*:fa-plus,
+            update.*:fa-edit,
+            delete.*:fa-trash,
+            find.*:fa-search,
+            list.*:fa-list
+        css-class:
+          patterns:
+            delete.*:btn-danger
+      domain-object:
+        editing: false
 
-      css-class:
-        patterns:
-          delete.*:btn-danger
-
-  objects:
-    editing: false
+  core:
+    meta-model:
+      validator:
+        allow-deprecated: false
+        no-params-only: true
+        explicit-object-type: true
+        service-actions-only: true
+        mixins-only: true
+    runtime-services:
+      translation:
+        po:
+          mode: disable
 
   viewer:
     wicket:
@@ -80,8 +86,8 @@ isis:
       dialog-mode: sidebar
       dialog-mode-for-menu: modal
 
-  persistor:
-    datanucleus:
+  persistence:
+    jdo-datanucleus:
       impl:
         # note that properties under 'isis.persistor.datanucleus.impl' are passed through directly
         # to DataNucleus, and must use camelCase rather than kebab-case
@@ -98,16 +104,14 @@ isis:
             level2:
               type: none
               mode: ENABLE_SELECTIVE
-  services:
-    translation:
-      po:
-        mode: disable
-spring:
-  banner:
-    location: banner.txt
 
 resteasy:
   jaxrs:
     app:
       registration: beans
     defaultPath: "/restful"
+
+spring:
+  banner:
+    location: banner.txt
+
