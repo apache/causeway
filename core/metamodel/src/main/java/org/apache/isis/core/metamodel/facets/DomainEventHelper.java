@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,6 +33,7 @@ import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -42,6 +42,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFromValue;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -161,40 +164,36 @@ public class DomainEventHelper {
             final Object... arguments) 
         throws InstantiationException, IllegalAccessException, IllegalArgumentException, 
         InvocationTargetException, NoSuchMethodException, SecurityException {
-        
-        final Constructor<?>[] constructors = type.getConstructors();
 
-        // no-arg constructor
-        for (final Constructor<?> constructor : type.getConstructors()) {
-            if(constructor.getParameterCount() == 0) {
-                final Object event = constructor.newInstance();
-                final ActionDomainEvent<S> ade = uncheckedCast(event);
-                
-                ade.initSource(source);
-                ade.setIdentifier(identifier);
-                ade.setArguments(asList(arguments));
-                return ade;
-            }
+        val constructors = _Reflect.getPublicConstructors(type);
+
+        val noArgConstructors = constructors.filter(paramCount(0));
+        
+        for (val constructor : noArgConstructors) {
+            
+            final Object event = constructor.newInstance();
+            final ActionDomainEvent<S> ade = uncheckedCast(event);
+            
+            ade.initSource(source);
+            ade.setIdentifier(identifier);
+            ade.setArguments(asList(arguments));
+            return ade;
         }
 
-
-        for (final Constructor<?> constructor : constructors) {
-            final Class<?>[] parameterTypes = constructor.getParameterTypes();
-            if(parameterTypes.length != 3) {
-                continue;
-            }
-            if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
-                continue;
-            }
-            if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
-                continue;
-            }
-            if(!parameterTypes[2].isAssignableFrom(Object[].class)) {
-                continue;
-            }
-            final Object event = constructor.newInstance(source, identifier, arguments);
+        // else
+        
+        val updateEventConstructors = constructors
+                .filter(paramCount(3)
+                        .and(paramAssignableFrom(0, source.getClass()))
+                        .and(paramAssignableFrom(1, Identifier.class))
+                        .and(paramAssignableFrom(2, Object[].class))
+                        );
+        
+        for (val constructor : updateEventConstructors) {
+            val event = constructor.newInstance(source, identifier, arguments);
             return uncheckedCast(event);
         }
+        
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", [Ljava.lang.Object;)");
     }
 
@@ -261,43 +260,35 @@ public class DomainEventHelper {
                     final T oldValue,
                     final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
 
-        final Constructor<?>[] constructors = type.getConstructors();
+        val constructors = _Reflect.getPublicConstructors(type);
 
-        // no-arg constructor
-        for (final Constructor<?> constructor : constructors) {
-            if(constructor.getParameterCount() == 0) {
-                final Object event = constructor.newInstance();
-                final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
-                pde.initSource(source);
-                pde.setIdentifier(identifier);
-                pde.setOldValue(oldValue);
-                pde.setNewValue(newValue);
-                return pde;
-            }
+        val noArgConstructors = constructors.filter(paramCount(0));
+        
+        for (val constructor : noArgConstructors) {
+            final Object event = constructor.newInstance();
+            final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
+            pde.initSource(source);
+            pde.setIdentifier(identifier);
+            pde.setOldValue(oldValue);
+            pde.setNewValue(newValue);
+            return pde;
         }
 
         // else
-        for (final Constructor<?> constructor : constructors) {
-            final Class<?>[] parameterTypes = constructor.getParameterTypes();
-            if(parameterTypes.length != 4) {
-                continue;
-            }
-            if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
-                continue;
-            }
-            if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
-                continue;
-            }
-            if(oldValue != null && !parameterTypes[2].isAssignableFrom(oldValue.getClass())) {
-                continue;
-            }
-            if(newValue != null && !parameterTypes[3].isAssignableFrom(newValue.getClass())) {
-                continue;
-            }
-            final Object event = constructor.newInstance(source, identifier, oldValue, newValue);
+        val updateEventConstructors = constructors
+                .filter(paramCount(4)
+                        .and(paramAssignableFrom(0, source.getClass()))
+                        .and(paramAssignableFrom(1, Identifier.class))
+                        .and(paramAssignableFromValue(2, oldValue))
+                        .and(paramAssignableFromValue(3, newValue))
+                        );
+        
+        for (val constructor : updateEventConstructors) {
+            val event = constructor.newInstance(source, identifier, oldValue, newValue);
             return uncheckedCast(event);
         }
 
+        // else
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object, java.lang.Object)");
     }
 
@@ -352,88 +343,57 @@ public class DomainEventHelper {
                             throws NoSuchMethodException, SecurityException, InstantiationException,
                             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
-        final Constructor<?>[] constructors = type.getConstructors();
+        val constructors = _Reflect.getPublicConstructors(type);
 
-        // no-arg constructor
-        for (final Constructor<?> constructor : constructors) {
-            if(constructor.getParameterCount() == 0) {
-                final Object event = constructor.newInstance();
-                final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
+        val noArgConstructors = constructors.filter(paramCount(0));
+        
+        for (val constructor : noArgConstructors) {
+            final Object event = constructor.newInstance();
+            final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
 
-                cde.initSource(source);
-                cde.setIdentifier(identifier);
-                cde.setOf(of);
-                cde.setValue(value);
-                return cde;
-            }
+            cde.initSource(source);
+            cde.setIdentifier(identifier);
+            cde.setOf(of);
+            cde.setValue(value);
+            return cde;
         }
-
+        
+        // else
         // search for constructor accepting source, identifier, type, value
-        for (final Constructor<?> constructor : constructors) {
-            final Class<?>[] parameterTypes = constructor.getParameterTypes();
-            if(parameterTypes.length != 4) {
-                continue;
-            }
-            if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
-                continue;
-            }
-            if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
-                continue;
-            }
-            if(!parameterTypes[2].isAssignableFrom(CollectionDomainEvent.Of.class)) {
-                continue;
-            }
-            if(value != null && !parameterTypes[3].isAssignableFrom(value.getClass())) {
-                continue;
-            }
-            final Object event = constructor.newInstance(source, identifier, of, value);
+        val updateEventConstructors = constructors
+                .filter(paramCount(4)
+                        .and(paramAssignableFrom(0, source.getClass()))
+                        .and(paramAssignableFrom(1, Identifier.class))
+                        .and(paramAssignableFrom(2, CollectionDomainEvent.Of.class))
+                        .and(paramAssignableFromValue(3, value))
+                        );
+        
+        for (val constructor : updateEventConstructors) {
+            val event = constructor.newInstance(source, identifier, of, value);
             return uncheckedCast(event);
         }
+        
+        // else
 
         if(phase == AbstractDomainEvent.Phase.EXECUTED) {
-            if(of == CollectionDomainEvent.Of.ADD_TO) {
-                // support for @PostsCollectionAddedTo annotation:
+            if(of == CollectionDomainEvent.Of.ADD_TO 
+                    || of == CollectionDomainEvent.Of.REMOVE_FROM) {
+                // support for annotations @PostsCollectionAddedTo and @PostsCollectionRemovedFrom:
                 // search for constructor accepting source, identifier, value
-                for (final Constructor<?> constructor : constructors) {
-                    final Class<?>[] parameterTypes = constructor.getParameterTypes();
-                    if(parameterTypes.length != 3) {
-                        continue;
-                    }
-                    if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
-                        continue;
-                    }
-                    if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
-                        continue;
-                    }
-                    if(value != null && !parameterTypes[2].isAssignableFrom(value.getClass())) {
-                        continue;
-                    }
-                    final Object event = constructor.newInstance(source, identifier, value);
-                    return uncheckedCast(event);
-                }
-            } else if(of == CollectionDomainEvent.Of.REMOVE_FROM) {
-                // support for @PostsCollectionRemovedFrom annotation:
-                // search for constructor accepting source, identifier, value
-                for (final Constructor<?> constructor : constructors) {
-                    final Class<?>[] parameterTypes = constructor.getParameterTypes();
-                    if(parameterTypes.length != 3) {
-                        continue;
-                    }
-                    if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
-                        continue;
-                    }
-                    if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
-                        continue;
-                    }
-                    if(value != null && !parameterTypes[2].isAssignableFrom(value.getClass())) {
-                        continue;
-                    }
-                    final Object event = constructor.newInstance(
-                            source, identifier, value);
+                val eventConstructors = constructors
+                        .filter(paramCount(3)
+                                .and(paramAssignableFrom(0, source.getClass()))
+                                .and(paramAssignableFrom(1, Identifier.class))
+                                .and(paramAssignableFromValue(2, value))
+                                );
+                for (val constructor : eventConstructors) {
+                    val event = constructor.newInstance(source, identifier, of, value);
                     return uncheckedCast(event);
                 }
             }
         }
+        
+        // else
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
     }
 

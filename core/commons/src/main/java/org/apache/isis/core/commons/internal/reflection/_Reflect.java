@@ -27,11 +27,11 @@ import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -43,14 +43,15 @@ import javax.annotation.Nullable;
 
 import org.springframework.core.annotation.AnnotationUtils;
 
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.base._With;
-
-import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
+import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.functions._Predicates;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
@@ -407,29 +408,42 @@ public final class _Reflect {
         return null;
     }
     
+    
     // -- COMMON CONSTRUCTOR IDIOMS
-
-    public static boolean hasPublic1ArgConstructor(Class<?> cls) {
-        val constructors = cls.getConstructors();
-        for (val constructor : constructors) {
-            if(constructor.getParameterCount()==1 && 
-                    Modifier.isPublic(constructor.getModifiers())) {
-                return true;
-            }
-        }
-        return false;
+    
+    public static Can<Constructor<?>> getDeclaredConstructors(Class<?> cls) {
+        return Can.ofArray(cls.getDeclaredConstructors());
     }
-
-    public static Optional<Constructor<?>> getPublic1ArgConstructor(Class<?> cls) {
-        val constructors = cls.getConstructors();
-        for (val constructor : constructors) {
-            if(constructor.getParameterCount()==1 && 
-                    Modifier.isPublic(constructor.getModifiers())) {
-                return Optional.of(constructor);
-            }
-        }
-        return Optional.empty();
+    
+    public static Can<Constructor<?>> getPublicConstructors(Class<?> cls) {
+        return Can.ofArray(cls.getConstructors());
     }
-
+    
+    // -- FILTER
+    
+    @UtilityClass
+    public static class Filter {
+        
+        public static Predicate<Executable> isPublic() {
+            return ex->Modifier.isPublic(ex.getModifiers());
+        }
+        
+        public static Predicate<Executable> paramCount(int paramCount) {
+            return ex->ex.getParameterCount() == paramCount;
+        }
+        
+        public static Predicate<Executable> paramAssignableFrom(int paramIndex, Class<?> paramType) {
+            return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
+        }
+        
+        public static Predicate<Executable> paramAssignableFromValue(int paramIndex, @Nullable Object value) {
+            if(value==null) {
+                return _Predicates.alwaysTrue();
+            }
+            return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(value.getClass());
+        }
+        
+    }
+    
 
 }

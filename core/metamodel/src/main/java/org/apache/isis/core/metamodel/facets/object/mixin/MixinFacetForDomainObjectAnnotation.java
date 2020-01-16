@@ -29,7 +29,9 @@ import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-import lombok.val;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
+
+import lombok.val; 
 
 public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
 
@@ -56,9 +58,11 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
                 .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                 .map(domainObject -> {
                     
-                    val constructorIfAny = _Reflect.getPublic1ArgConstructor(candidateMixinType);
+                    val mixinContructors = _Reflect
+                            .getPublicConstructors(candidateMixinType)
+                            .filter(paramCount(1));
                     
-                    return constructorIfAny
+                    return mixinContructors.getSingleton() // empty if cardinality!=1
                     .map(constructor -> new MixinFacetForDomainObjectAnnotation(
                                 candidateMixinType, 
                                 domainObject.mixinMethod(), 

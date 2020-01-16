@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtimeservices.factory;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Inject;
@@ -30,20 +29,21 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.val;
 
@@ -60,37 +60,38 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T instantiate(final Class<T> domainClass) {
-        final ObjectSpecification spec = specificationLoader.loadSpecification(domainClass);
-        final ManagedObject adapter = ManagedObject._newTransientInstance(spec); 
+        val spec = specificationLoader.loadSpecification(domainClass);
+        val adapter = ManagedObject._newTransientInstance(spec); 
         return _Casts.uncheckedCast(adapter.getPojo());
     }
 
     @Override
     public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(mixinClass);
-        final MixinFacet mixinFacet = objectSpec.getFacet(MixinFacet.class);
+        val objectSpec = specificationLoader.loadSpecification(mixinClass);
+        val mixinFacet = objectSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
-            throw new NonRecoverableException("Class '" + mixinClass.getName() + " is not a mixin");
+            throw _Exceptions.illegalArgument("Class '%s'  is not a mixin", mixinClass.getName());
         }
         if(!mixinFacet.isMixinFor(mixedIn.getClass())) {
-            throw new NonRecoverableException("Mixin class '" + mixinClass.getName() + " is not a mixin for supplied object '" + mixedIn + "'");
+            throw _Exceptions.illegalArgument("Mixin class '%s' is not a mixin for supplied object '%s'",
+                    mixinClass.getName(), mixedIn);
         }
-        final Constructor<?>[] constructors = mixinClass.getConstructors();
-        for (Constructor<?> constructor : constructors) {
-            if(constructor.getParameterTypes().length == 1 &&
-                    constructor.getParameterTypes()[0].isAssignableFrom(mixedIn.getClass())) {
-                final Object mixin;
-                try {
-                    mixin = constructor.newInstance(mixedIn);
-                    return _Casts.uncheckedCast(serviceInjector.injectServicesInto(mixin));
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    throw new NonRecoverableException(e);
-                }
-            }
+        val mixinConstructor = _Reflect
+                .getPublicConstructors(mixinClass) 
+                        .filter(paramCount(1).and(paramAssignableFrom(0, mixedIn.getClass())))
+                .getSingleton()
+                .orElseThrow(()->_Exceptions.illegalArgument(
+                        "Failed to locate constructor in '%s' to instantiate using '%s'", 
+                        mixinClass.getName(), mixedIn));
+        
+        try {
+            val mixin = mixinConstructor.newInstance(mixedIn);
+            return _Casts.uncheckedCast(serviceInjector.injectServicesInto(mixin));
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw _Exceptions.illegalArgument(
+                    "Failed to invoke constructor of '%s' using single argument '%s'", 
+                    mixinClass.getName(), mixedIn);
         }
-        // should never get here because of previous guards
-        throw new NonRecoverableException( String.format(
-                "Failed to locate constructor in %s to instantiate using %s", mixinClass.getName(), mixedIn));
     }
 
     @Override
@@ -99,16 +100,9 @@ public class FactoryServiceDefault implements FactoryService {
 
         val spec = specificationLoader.loadSpecification(viewModelClass);
         if (!spec.containsFacet(ViewModelFacet.class)) {
-            val msg = String.format("Type '%s' must be recogniced as a ViewModel, that is the type's meta-model "
+            throw _Exceptions.illegalArgument("Type '%s' must be recogniced as a ViewModel, "
+                    + "that is the type's meta-model "
                     + "must have an associated ViewModelFacet: ", viewModelClass.getName());
-            throw new IllegalArgumentException(msg);
-        }
-
-        if(ViewModel.class.isAssignableFrom(viewModelClass)) {
-            //FIXME[2152] is this execution branch required, or does the below code suffice for all cases?
-            val viewModel = (ViewModel) instantiate(viewModelClass);
-            viewModel.viewModelInit(mementoStr);
-            return _Casts.uncheckedCast(viewModel);
         }
 
         val viewModelFacet = spec.getFacet(ViewModelFacet.class);

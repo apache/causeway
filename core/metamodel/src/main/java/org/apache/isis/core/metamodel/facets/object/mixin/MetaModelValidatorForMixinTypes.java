@@ -23,7 +23,10 @@ import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
+
 import lombok.NonNull;
+import lombok.val;
 
 public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValidationFailures {
 
@@ -37,17 +40,30 @@ public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValida
             @NonNull FacetHolder facetHolder,
             final Class<?> candidateMixinType) {
 
-        if (_Reflect.hasPublic1ArgConstructor(candidateMixinType)) {
-            return true;
+        val mixinContructors = _Reflect
+                .getPublicConstructors(candidateMixinType)
+                .filter(paramCount(1));
+        
+        if(mixinContructors.getCardinality().isOne()) {
+            return true; // happy case
         }
         
-        onFailure(
-                facetHolder,
-                Identifier.classIdentifier(candidateMixinType),
-                "%s: annotated with %s annotation but does not have a public 1-arg constructor",
-                candidateMixinType.getName(), 
-                annotation);
-        
+        if(mixinContructors.getCardinality().isZero()) {
+            onFailure(
+                    facetHolder,
+                    Identifier.classIdentifier(candidateMixinType),
+                    "%s: annotated with %s annotation but does not have a public 1-arg constructor",
+                    candidateMixinType.getName(), 
+                    annotation);
+        } else {
+            onFailure(
+                    facetHolder,
+                    Identifier.classIdentifier(candidateMixinType),
+                    "%s: annotated with %s annotation needs a single public 1-arg constructor but has %d",
+                    candidateMixinType.getName(), 
+                    annotation,
+                    mixinContructors.size());
+        }
         return false;
     }
 

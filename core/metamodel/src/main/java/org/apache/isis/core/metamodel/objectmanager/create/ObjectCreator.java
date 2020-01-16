@@ -75,7 +75,7 @@ public interface ObjectCreator {
         return request -> chainOfRespo
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "ObjectLoader failed to hanlde request %s", request));
+                        "ObjectCreator failed to hanlde request %s", request));
         
     }
     

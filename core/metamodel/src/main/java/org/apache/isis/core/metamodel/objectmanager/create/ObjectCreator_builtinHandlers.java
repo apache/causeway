@@ -60,8 +60,6 @@ final class ObjectCreator_builtinHandlers {
         @Override
         public ManagedObject handle(ObjectCreator.Request objectCreateRequest) {
             
-            //XXX legacy of objectAdapterContext.objectCreationMixin.newInstance(objectSpec);
-            
             val spec = objectCreateRequest.getObjectSpecification();
             
             if (log.isDebugEnabled()) {
@@ -107,9 +105,6 @@ final class ObjectCreator_builtinHandlers {
             .forEach(field->field.toDefault(adapter));
 
              val pojo = adapter.getPojo();
-            
-            //XXX pojo already got everything injected above
-            //metaModelContext.getServiceInjector().injectServicesInto(pojo);
 
             CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
 

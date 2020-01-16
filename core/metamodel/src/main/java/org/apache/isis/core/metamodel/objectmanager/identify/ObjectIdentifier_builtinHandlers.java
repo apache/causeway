@@ -61,7 +61,7 @@ class ObjectIdentifier_builtinHandlers {
         @Override
         public RootOid handle(ManagedObject managedObject) {
             final String identifier = SERVICE_IDENTIFIER;
-            return Oid.Factory.persistentOf(managedObject.getSpecification().getSpecId(), identifier);
+            return Oid.Factory.of(managedObject.getSpecification().getSpecId(), identifier);
         }
 
     }
@@ -83,7 +83,7 @@ class ObjectIdentifier_builtinHandlers {
                 throw _Exceptions.unrecoverable(msg);
             }
             val identifier = entityFacet.identifierFor(spec, pojo);
-            return Oid.Factory.persistentOf(spec.getSpecId(), identifier);
+            return Oid.Factory.of(spec.getSpecId(), identifier);
         }
 
     }
@@ -130,7 +130,7 @@ class ObjectIdentifier_builtinHandlers {
         public RootOid handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val identifier = UUID.randomUUID().toString();
-            return Oid.Factory.transientOf(spec.getSpecId(), identifier);
+            return Oid.Factory.of(spec.getSpecId(), identifier);
         }
 
     }

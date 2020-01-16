@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.jaxb;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,8 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -52,6 +51,11 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.isPublic;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
+
+import lombok.val;
 
 /**
  * just adds a validator
@@ -385,25 +389,33 @@ implements MetaModelRefiner {
                 final ObjectSpecification objectSpec,
                 final MetaModelValidator validator) {
 
-            final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-            final Constructor<?>[] constructors = correspondingClass.getDeclaredConstructors();
-            for (Constructor<?> constructor : constructors) {
-                if(constructor.getParameterCount() == 0) {
-                    if (!MethodUtil.isPublic(constructor)) {
-                        validator.onFailure(
-                                objectSpec,
-                                objectSpec.getIdentifier(),
-                                "JAXB view model '%s' has a no-arg constructor, however it is not public",
-                                objectSpec.getFullIdentifier());
-                    }
-                    return;
-                }
+            val correspondingClass = objectSpec.getCorrespondingClass();
+            
+            val publicNoArgConstructors = _Reflect
+                    .getPublicConstructors(correspondingClass)
+                    .filter(paramCount(0));
+            
+            if(publicNoArgConstructors.getCardinality().isOne()) {
+                return; // happy case
             }
-            validator.onFailure(
-                    objectSpec,
-                    objectSpec.getIdentifier(),
-                    "JAXB view model '%s' does not have a public no-arg constructor", 
-                    objectSpec.getFullIdentifier());
+            
+            val privateNoArgConstructors = _Reflect
+                    .getDeclaredConstructors(correspondingClass)
+                    .filter(paramCount(0).and(isPublic().negate()));
+            
+            if(privateNoArgConstructors.isNotEmpty()) {
+                validator.onFailure(
+                        objectSpec,
+                        objectSpec.getIdentifier(),
+                        "JAXB view model '%s' has a no-arg constructor, however it is not public",
+                        objectSpec.getFullIdentifier());
+            } else {
+                validator.onFailure(
+                        objectSpec,
+                        objectSpec.getIdentifier(),
+                        "JAXB view model '%s' does not have a public no-arg constructor", 
+                        objectSpec.getFullIdentifier());
+            }
         }
     }
 }
