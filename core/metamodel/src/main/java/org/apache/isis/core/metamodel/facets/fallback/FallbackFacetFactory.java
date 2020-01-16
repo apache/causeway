@@ -107,7 +107,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             super.addFacet(new ActionChoicesFacetNone(facetedMethod));
         }
         if (featureType.isCollection()) {
-            super.addFacet(new PagedFacetFromConfiguration(getConfiguration().getViewers().getPaged().getParented(), facetedMethod));
+            super.addFacet(new PagedFacetFromConfiguration(getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(), facetedMethod));
         }
         
     }

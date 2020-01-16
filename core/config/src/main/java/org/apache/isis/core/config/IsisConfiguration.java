@@ -252,6 +252,8 @@ public class IsisConfiguration {
             @Data
             public static class CollectionLayout {
                 private DefaultViewConfiguration defaultView = DefaultViewConfiguration.HIDDEN;
+
+                private int paged = 12;
             }
 
             private final ViewModel viewModel = new ViewModel();
@@ -1153,7 +1155,6 @@ public class IsisConfiguration {
         private final Paged paged = new Paged();
         @Data
         public static class Paged {
-            private int parented = 12;
             private int standalone = 25;
         }
 
