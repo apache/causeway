@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.commons.IsisModuleCoreCommons;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.isis.core.config.converters.PatternsConverter;
 import org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
@@ -39,7 +40,7 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
     IsisModuleCoreCommons.class,
 
     // @Component's
-    IsisConfiguration.PatternsConverter.class,
+    PatternsConverter.class,
     IsisBeanFactoryPostProcessorForSpring.class,
     PatternOptionalStringConstraintValidator.class,
 

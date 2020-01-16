@@ -100,7 +100,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             super.addFacet(new MaxLengthFacetUnlimited(facetedMethod));
             super.addFacet(new MultiLineFacetNone(true, facetedMethod));
 
-            super.addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getViewers().getPropertyLayout()));
+            super.addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
         }
         if (featureType.isAction()) {
             super.addFacet(new ActionDefaultsFacetNone(facetedMethod));
@@ -124,21 +124,17 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
             super.addFacet(new MaxLengthFacetUnlimited(typedHolder));
 
-            super.addFacet(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getViewers().getParameterLayout()));
+            super.addFacet(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getApplib().getAnnotation().getParameterLayout()));
         }
 
     }
 
-    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, IsisConfiguration.Viewers.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
         final LabelPosition labelPosition = from(configPropsHolder);
         return new LabelAtFacetFromLayoutConfiguration(labelPosition, facetHolder);
     }
 
-    private static LabelPosition from(IsisConfiguration.Viewers.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
-        final LabelPosition labelPosition = configPropsHolder.getLabelPosition();
-        if(labelPosition != LabelPosition.NOT_SPECIFIED) {
-            return labelPosition;
-        }
-        return configPropsHolder.getLabel();
+    private static LabelPosition from(IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+        return configPropsHolder.getLabelPosition();
     }
 }

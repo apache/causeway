@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
@@ -35,17 +33,13 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
@@ -98,6 +92,11 @@ public class IsisConfiguration {
         public static class Annotation {
 
             private final DomainObject domainObject = new DomainObject();
+
+            public interface ConfigPropsForPropertyOrParameterLayout {
+                LabelPosition getLabelPosition();
+            }
+
             @Data
             public static class DomainObject {
 
@@ -239,6 +238,12 @@ public class IsisConfiguration {
 
             }
 
+            private final PropertyLayout propertyLayout = new PropertyLayout();
+            @Data
+            public static class PropertyLayout implements Applib.Annotation.ConfigPropsForPropertyOrParameterLayout {
+                private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
+            }
+
             private final Collection collection = new Collection();
             @Data
             public static class Collection {
@@ -300,6 +305,13 @@ public class IsisConfiguration {
                     private boolean postForDefault =true;
                 }
             }
+
+            private final ParameterLayout parameterLayout = new ParameterLayout();
+            @Data
+            public static class ParameterLayout implements Applib.Annotation.ConfigPropsForPropertyOrParameterLayout {
+                private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
+            }
+
         }
     }
 
@@ -1155,27 +1167,7 @@ public class IsisConfiguration {
 
 
 
-        private final ParameterLayout parameterLayout = new ParameterLayout();
-        @Data
-        public static class ParameterLayout implements ConfigPropsForPropertyOrParameterLayout {
-            private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
-            private LabelPosition label = LabelPosition.NOT_SPECIFIED;
-        }
-        private final PropertyLayout propertyLayout = new PropertyLayout();
-        @Data
-        public static class PropertyLayout implements ConfigPropsForPropertyOrParameterLayout {
-            private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
-            private LabelPosition label = LabelPosition.NOT_SPECIFIED;
-        }
 
-        public interface ConfigPropsForPropertyOrParameterLayout {
-            public LabelPosition getLabelPosition();
-
-            /**
-             * Alias for {@link #getLabelPosition()}
-             */
-            public LabelPosition getLabel();
-        }
     }
 
 

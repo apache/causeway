@@ -596,6 +596,24 @@ standalone-collection.bulk-load
 |isis.applib.annotation. +
 {nbsp}{nbsp}domain-object-layout.paged
 
+|isis.viewers. +
+{nbsp}{nbsp}.parameterLayout.labelPosition
+|isis.applib.annotation. +
+{nbsp}{nbsp}parameter-layout.label-position
+
+|isis.viewers. +
+{nbsp}{nbsp}.parameterLayout.label
+|(removed)
+
+|isis.viewers. +
+{nbsp}{nbsp}.propertyLayout.labelPosition
+|isis.applib.annotation. +
+{nbsp}{nbsp}property-layout.label-position
+
+|isis.viewers. +
+{nbsp}{nbsp}.propertyLayout.label
+|(removed)
+
 
 |
 |
