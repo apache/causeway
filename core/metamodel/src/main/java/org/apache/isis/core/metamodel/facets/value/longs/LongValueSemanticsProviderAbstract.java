@@ -22,9 +22,11 @@ package org.apache.isis.core.metamodel.facets.value.longs;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
+import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -46,8 +48,13 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
 
     public LongValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Long> adaptedClass) {
         super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        format = determineNumberFormat(FormatIdentifier.LONG);
+        final String formatRequired = getConfiguration().getValueTypes().getJavaLang().getLong().getFormat();
+
+        format = formatRequired != null
+                ? new DecimalFormat(formatRequired)
+                : NumberFormat.getNumberInstance(getConfiguration().getCore().getRuntime().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault()));
     }
+
 
     // //////////////////////////////////////////////////////////////////
     // Parser

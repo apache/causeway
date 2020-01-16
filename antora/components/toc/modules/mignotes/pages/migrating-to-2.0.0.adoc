@@ -640,6 +640,10 @@ isis.value-types. +
 |isis.value-types. +
 {nbsp}{nbsp}java-lang.float.format
 
+|isis.value.format["long"]
+|isis.value-types. +
+{nbsp}{nbsp}java-lang.long.format
+
 |
 |
 
