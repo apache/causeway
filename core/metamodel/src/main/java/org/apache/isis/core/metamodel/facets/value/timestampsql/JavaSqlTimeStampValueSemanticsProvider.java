@@ -21,19 +21,120 @@ package org.apache.isis.core.metamodel.facets.value.timestampsql;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class JavaSqlTimeStampValueSemanticsProvider
-extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
+extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
+
+    private static final Object DEFAULT_VALUE = null; // no default
+    private static final int TYPICAL_LENGTH = 25;
+
+    protected static void initFormats(final Map<String, DateFormat> formats) {
+        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS"));
+        formats.put("short", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG));
+    }
+
+    @Getter @Setter
+    private String configuredFormat;
+
+    /**
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
+     */
+    public JavaSqlTimeStampValueSemanticsProvider() {
+        this(null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder) {
+        this(IsisConfiguration.Value.FormatIdentifier.TIMESTAMP, holder, 25, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
+
+        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("timestamp", "short").toLowerCase().trim();
+
+        buildFormat(configuredFormat);
+
+        final String formatRequired = getConfiguration().getValue().getFormat().get("timestamp");
+
+        if (formatRequired == null) {
+            format = formats().get(defaultFormat());
+        } else {
+            setMask(formatRequired);
+        }
+    }
+
+    private JavaSqlTimeStampValueSemanticsProvider(final IsisConfiguration.Value.FormatIdentifier formatIdentifier, final FacetHolder holder, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final Timestamp defaultValue) {
+        super(formatIdentifier.name().toLowerCase(), type(), holder, java.sql.Timestamp.class, typicalLength, immutability, equalByContent, defaultValue);
+    }
+
+    @Override
+    protected Timestamp add(final Timestamp original, final int years, final int months, final int days, final int hours, final int minutes) {
+        return original;
+    }
+
+    @Override
+    protected String defaultFormat() {
+        return "short";
+    }
+
+    @Override
+    public String toString() {
+        return "TimeStampValueSemanticsProvider: " + format;
+    }
+
+    @Override
+    protected DateFormat format() {
+
+        final Locale locale = Locale.getDefault();
+        final TimeZone timeZone = TimeZone.getDefault();
+
+        final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG, locale);
+        dateFormat.setTimeZone(timeZone);
+
+        return dateFormat;
+    }
+
+    @Override
+    protected List<DateFormat> formatsToTry() {
+        final List<DateFormat> formats = new ArrayList<DateFormat>();
+
+        final Locale locale = Locale.getDefault();
+        final TimeZone timeZone = TimeZone.getDefault();
+
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG, locale));
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG, locale));
+        formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
+
+        for (final DateFormat format : formats) {
+            format.setTimeZone(timeZone);
+        }
+
+        return formats;
+    }
+
+    @Override
+    public void appendAttributesTo(Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("configuredFormat", configuredFormat);
+    }
+
+
 
     public static final boolean isAPropertyDefaultFacet() {
         return PropertyDefaultFacet.class.isAssignableFrom(JavaSqlTimeStampValueSemanticsProvider.class);
@@ -45,17 +146,6 @@ extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
         initFormats(formats);
     }
 
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public JavaSqlTimeStampValueSemanticsProvider() {
-        this(null, null);
-    }
-
-    public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder, final ServiceInjector context) {
-        super(holder, java.sql.Timestamp.class);
-    }
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff
