@@ -59,7 +59,7 @@ public class FormatTest {
 
     @Test
     public void real_world() {
-        Assertions.assertEquals("isis.persistor.\ndatanucleus.\nclass-metadata-\nloaded-listener", format("isis.persistor.datanucleus.class-metadata-loaded-listener", 20));
+        Assertions.assertEquals("isis.persistence.\njdo-datanucleus.\nclass-metadata-\nloaded-listener", format("isis.persistence.jdo-datanucleus.class-metadata-loaded-listener", 20));
     }
 
 

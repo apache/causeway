@@ -75,7 +75,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessi
 public class IsisModuleJdoDataNucleus5 {
     
     // reserved for datanucleus' own config props
-    @ConfigurationProperties(prefix = "isis.persistor.datanucleus.impl")
+    @ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")
     @Bean("dn-settings")
     public Map<String, String> getAsMap() {
         return new HashMap<>();
