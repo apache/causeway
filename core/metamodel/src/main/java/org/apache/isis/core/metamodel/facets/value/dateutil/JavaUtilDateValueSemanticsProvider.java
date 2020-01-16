@@ -19,16 +19,26 @@
 
 package org.apache.isis.core.metamodel.facets.value.dateutil;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.DateAndTimeValueSemanticsProviderAbstract;
+import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * An adapter that handles {@link java.util.Date} as both a date AND time
@@ -37,7 +47,19 @@ import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSeman
  * @see JavaSqlDateValueSemanticsProvider
  * @see JavaSqlTimeValueSemanticsProvider
  */
-public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemanticsProviderAbstract<java.util.Date> {
+public class JavaUtilDateValueSemanticsProvider extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
+
+    private static Map<String, DateFormat> formats = _Maps.newHashMap();
+
+    static {
+        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS"));
+        formats.put("iso", createDateFormat("yyyy-MM-dd HH:mm"));
+        formats.put("medium", DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT));
+    }
+
+    @Getter
+    @Setter
+    private String configuredFormat;
 
     /**
      * Required because implementation of {@link Parser} and
@@ -48,8 +70,85 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
     }
 
     public JavaUtilDateValueSemanticsProvider(final FacetHolder holder) {
-        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED);
+        super("datetime", type(), holder, Date.class, 18, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
+
+        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("datetime", "medium").toLowerCase().trim();
+
+        buildFormat(configuredFormat);
+
+        final String formatRequired = getConfiguration().getValue().getFormat().get("datetime");
+
+        if (formatRequired == null) {
+            format = formats().get(defaultFormat());
+        } else {
+            setMask(formatRequired);
+        }
     }
+
+
+    // //////////////////////////////////////////////////////////////////
+    // temporal-specific stuff
+    // //////////////////////////////////////////////////////////////////
+
+    @Override
+    protected String defaultFormat() {
+        return "medium";
+    }
+
+    @Override
+    protected Map<String, DateFormat> formats() {
+        return formats;
+    }
+
+    @Override
+    protected DateFormat format() {
+        final Locale locale = Locale.getDefault();
+        final TimeZone timeZone = TimeZone.getDefault();
+
+        final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale);
+        dateFormat.setTimeZone(timeZone);
+        return dateFormat;
+    }
+
+    @Override
+    public String toString() {
+        return "JavaDateTimeValueSemanticsProvider: " + format;
+    }
+
+    @Override
+    protected List<DateFormat> formatsToTry() {
+        List<DateFormat> formats = new ArrayList<>();
+
+        final Locale locale = Locale.getDefault();
+        final TimeZone timeZone = TimeZone.getDefault();
+
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale));
+        formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
+        formats.add(createDateFormat("yyyyMMdd'T'HHmmssSSS"));
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale));
+        formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss"));
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale));
+        formats.add(createDateFormat("yyyyMMdd'T'HHmmss"));
+        formats.add(createDateFormat("yyyy-MM-dd HH:mm"));
+        formats.add(createDateFormat("yyyyMMdd'T'HHmm"));
+        formats.add(createDateFormat("dd-MMM-yyyy HH:mm"));
+
+        for (DateFormat format : formats) {
+            format.setTimeZone(timeZone);
+        }
+
+        return formats;
+    }
+
+    @Override
+    public void appendAttributesTo(Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("configuredFormat", configuredFormat);
+    }
+
+
+
+
 
     @Override
     protected Date dateValue(final Object value) {
