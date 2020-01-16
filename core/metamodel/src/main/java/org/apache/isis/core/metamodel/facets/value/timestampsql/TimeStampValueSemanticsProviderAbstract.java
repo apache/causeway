@@ -47,20 +47,18 @@ abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemantics
     private String configuredFormat;
 
     public TimeStampValueSemanticsProviderAbstract(final FormatIdentifier formatIdentifier, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        super(formatIdentifier, formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
+        super(formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
     }
 
     @SuppressWarnings("unchecked")
     public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
         this(FormatIdentifier.TIMESTAMP, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
 
-        configuredFormat = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.TIMESTAMP.name().toLowerCase(), "short").toLowerCase().trim();
+        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("timestamp", "short").toLowerCase().trim();
 
         buildFormat(configuredFormat);
 
-        final String formatRequired = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.TIMESTAMP.name().toLowerCase(), null);
+        final String formatRequired = getConfiguration().getValue().getFormat().get("timestamp");
         
         if (formatRequired == null) {
             format = formats().get(defaultFormat());

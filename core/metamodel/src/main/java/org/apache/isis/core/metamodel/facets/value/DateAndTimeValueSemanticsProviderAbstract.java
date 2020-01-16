@@ -52,15 +52,14 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
 
 
     public DateAndTimeValueSemanticsProviderAbstract(final FormatIdentifier formatIdentifier, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        super(formatIdentifier, formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
+        super(formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
     }
 
     @SuppressWarnings("unchecked")
     public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent) {
         this(FormatIdentifier.DATETIME, holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE);
 
-        configuredFormat = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.DATETIME.name().toLowerCase(), "medium").toLowerCase().trim();
+        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault(FormatIdentifier.DATETIME.name().toLowerCase(), "medium").toLowerCase().trim();
 
         buildFormat(configuredFormat);
 

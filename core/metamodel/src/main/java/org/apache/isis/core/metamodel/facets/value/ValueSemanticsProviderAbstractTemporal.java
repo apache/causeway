@@ -33,7 +33,6 @@ import java.util.TimeZone;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -98,17 +97,10 @@ implements DateValueFacet {
     private String propertyType;
 
     /**
-     * Uses {@link #type()} as the facet type.
-     */
-    public ValueSemanticsProviderAbstractTemporal(final FormatIdentifier formatIdentifier, String propertyType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        this(formatIdentifier, propertyType, type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
-    }
-
-    /**
      * Allows the specific facet subclass to be specified (rather than use
      * {@link #type()}.
      */
-    public ValueSemanticsProviderAbstractTemporal(final FormatIdentifier formatIdentifier, String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
+    public ValueSemanticsProviderAbstractTemporal(String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
         super(facetType, holder, adaptedClass, typicalLength, -1, immutability, equalByContent, defaultValue);
         configureFormats();
 

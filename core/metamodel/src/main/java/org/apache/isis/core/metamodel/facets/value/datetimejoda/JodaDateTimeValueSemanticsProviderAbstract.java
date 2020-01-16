@@ -48,19 +48,17 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
     private String configuredFormat;
 
     public JodaDateTimeValueSemanticsProviderAbstract(final FormatIdentifier formatIdentifier, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        super(formatIdentifier, formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
+        super(formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
     }
 
     public JodaDateTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final T defaultValue) {
         this(FormatIdentifier.DATE, holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
 
-        configuredFormat = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), "medium").toLowerCase().trim();
+        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("date", "medium").toLowerCase().trim();
 
         buildFormat(configuredFormat);
 
-        String formatRequired = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), null);
+        String formatRequired = getConfiguration().getValue().getFormat().get("date");
         
         if (formatRequired == null) {
             format = formats().get(defaultFormat());

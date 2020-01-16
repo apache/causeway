@@ -48,20 +48,18 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
     private String configuredFormat;
 
     public TimeValueSemanticsProviderAbstract(final FormatIdentifier formatIdentifier, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        super(formatIdentifier, formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
+        super(formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
     }
 
     @SuppressWarnings("unchecked")
     public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
         this(FormatIdentifier.TIME, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
 
-        configuredFormat = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.TIME.name().toLowerCase(), "short").toLowerCase().trim();
+        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("time", "short").toLowerCase().trim();
 
         buildFormat(configuredFormat);
 
-        final String formatRequired = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.TIME.name().toLowerCase(), null);
+        final String formatRequired = getConfiguration().getValue().getFormat().get("time");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {
