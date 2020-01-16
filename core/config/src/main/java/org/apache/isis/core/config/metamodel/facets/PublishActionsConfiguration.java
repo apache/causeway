@@ -30,7 +30,7 @@ public enum PublishActionsConfiguration {
     NONE;
 
     public static PublishActionsConfiguration from(IsisConfiguration configuration) {
-        return configuration.getServices().getPublish().getActions();
+        return configuration.getApplib().getAnnotation().getAction().getPublishing();
     }
 
 }

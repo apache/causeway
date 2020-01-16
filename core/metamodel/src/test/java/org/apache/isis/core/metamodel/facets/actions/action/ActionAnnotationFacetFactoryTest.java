@@ -112,7 +112,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     void allowingPublishingConfigurationToReturn(PublishActionsConfiguration value) {
         val config = metaModelContext.getConfiguration();
-        config.getServices().getPublish().setActions(value);
+        config.getApplib().getAnnotation().getAction().setPublishing(value);
     }
 
 }

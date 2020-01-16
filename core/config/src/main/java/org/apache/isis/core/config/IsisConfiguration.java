@@ -198,6 +198,8 @@ public class IsisConfiguration {
                     private boolean postForDefault = true;
                 }
 
+                private PublishActionsConfiguration publishing = PublishActionsConfiguration.NONE;
+
             }
 
             private final ActionLayout actionLayout = new ActionLayout();
@@ -739,7 +741,6 @@ public class IsisConfiguration {
         private final Publish publish = new Publish();
         @Data
         public static class Publish {
-            private PublishActionsConfiguration actions = PublishActionsConfiguration.NONE;
             private PublishObjectsConfiguration objects = PublishObjectsConfiguration.NONE;
             private PublishPropertiesConfiguration properties = PublishPropertiesConfiguration.NONE;
         }

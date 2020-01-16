@@ -561,6 +561,12 @@ standalone-collection.bulk-load
 |isis.services.injector.injectPrefix
 |(removed)
 
+|isis.services.publishing. +
+{nbsp}{nbsp}actions
+|isis.applib.annotation. +
+{nbsp}{nbsp}action.publishing
+
+
 |
 |
 
