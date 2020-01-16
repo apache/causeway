@@ -30,8 +30,10 @@ import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 
+@Log4j2
 public class OffsetDateTimeValueSemanticsProvider 
 extends TemporalValueSemanticsProviderAbstract<OffsetDateTime> {
 
@@ -56,10 +58,27 @@ extends TemporalValueSemanticsProviderAbstract<OffsetDateTime> {
         
         super.updateParsers();
 
-        setEncodingFormatter(
-                DateTimeFormatter.ofPattern(basicDateTime, Locale.getDefault()));
-        
-        setTitleFormatter(formatterFromConfig(FormatIdentifier.DATETIME, "medium"));
+        setEncodingFormatter(DateTimeFormatter.ofPattern(basicDateTime, Locale.getDefault()));
+
+        val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getOffsetDateTime().getFormat();
+
+        val formatter = lookupNamedFormatter(configuredNameOrPattern).orElse(null);
+
+        DateTimeFormatter result = null;
+        if(formatter!=null) {
+            result = formatter;
+        } else {
+            try {
+                result = DateTimeFormatter.ofPattern(configuredNameOrPattern, Locale.getDefault());
+            } catch (Exception e) {
+                log.warn(e);
+            }
+            if (result == null) {
+                result = lookupNamedFormatterElseFail("medium");
+            }
+        }
+
+        setTitleFormatter(result);
         
         
     }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.config;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1242,6 +1243,12 @@ public class IsisConfiguration {
             private final Joda.LocalDateTime localDateTime = new Joda.LocalDateTime();
             @Data
             public static class LocalDateTime {
+                private String format = "medium";
+            }
+
+            private final OffsetDateTime offsetDateTime = new OffsetDateTime();
+            @Data
+            public static class OffsetDateTime {
                 private String format = "medium";
             }
         }

@@ -659,6 +659,9 @@ isis.value-types. +
 isis.value-types. +
 {nbsp}{nbsp}java-time.local-date-time.format
 
+isis.value-types. +
+{nbsp}{nbsp}java-time.offset-date-time.format
+
 
 |
 |
