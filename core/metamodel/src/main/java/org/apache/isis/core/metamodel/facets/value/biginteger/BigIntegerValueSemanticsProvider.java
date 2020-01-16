@@ -59,7 +59,7 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
 
         super(type(), holder, BigInteger.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
         final String formatRequired =
-                getConfiguration().getValue().getFormat().getOrDefault(FormatIdentifier.INT.name().toLowerCase(), null);
+                getConfiguration().getValue().getFormat().get(FormatIdentifier.INT.name().toLowerCase());
 
         NumberFormat result;
         if (formatRequired != null) {
