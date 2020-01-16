@@ -1,0 +1,12 @@
+| resteasy.as-map
+| 
+| 
+
+| resteasy.environment
+| 
+| 
+
+| resteasy.resteasy-settings
+| 
+| 
+

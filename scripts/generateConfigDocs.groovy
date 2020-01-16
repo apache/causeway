@@ -61,25 +61,33 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.metamodel"
-    name = "Metamodel"
+    prefix = "isis.core.metamodel"
+    name = "Core Metamodel"
     description = "The component responsible for building up the metamodel"
     searchOrder = 2
 }}
 
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.metamodel.introspector"
+    prefix = "isis.core.metamodel.introspector"
     name = "MetaModel Introspection"
     description = "MetaModel Introspection"
     searchOrder = 1
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.metamodel.validator"
+    prefix = "isis.core.metamodel.validator"
     name = "MetaModel Validator"
     description = "Configuration of the validator that checks the well-formedness of the inferred metamodel (how strict to be etc.)"
     searchOrder = 1
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "isis.core.runtimeservices"
+    name = "Core Runtime Services configurations"
+    description = "Configuration of individual domain services"
+    properties: []
+    searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
@@ -104,14 +112,6 @@ groups+= new PropertyGroup() {{
     description = "Passed thru directly to DataNucleus, for the most part unused by Apache Isis itself"
     properties: []
     searchOrder = 500
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "isis.runtimeservices"
-    name = "Domain Service configurations"
-    description = "Configuration of individual domain services"
-    properties: []
-    searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{

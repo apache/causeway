@@ -1,0 +1,20 @@
+| isis.extensions.cors. +
+allowed-headers
+| 
+| 
+
+| isis.extensions.cors. +
+allowed-methods
+| 
+| 
+
+| isis.extensions.cors. +
+allowed-origins
+|  *
+| 
+
+| isis.extensions.cors. +
+exposed-headers
+|  Authorization
+| 
+

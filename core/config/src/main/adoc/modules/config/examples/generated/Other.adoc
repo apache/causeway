@@ -1,0 +1,237 @@
+| isis.as-map
+| 
+| 
+
+| isis.core.meta-model. +
+filter-visibility
+|  true
+| 
+
+| isis.core.meta-model. +
+introspector. +
+lock-after-full-introspection
+|  true
+|  If true, then no new specifications will be allowed to be loaded once introspection has been complete.  +
+ Only applies if the introspector is configured to perform full introspection up-front (either because of {@link IntrospectionMode#FULL} or {@link IntrospectionMode#LAZY_UNLESS_PRODUCTION} when in production); otherwise is ignored. 
+
+| isis.core.meta-model. +
+introspector.mode
+| 
+|  Whether all known types should be fully introspected as part of the bootstrapping, or should only be partially introspected initially.  +
+ Leaving this as lazy means that there's a chance that metamodel validation errors will not be discovered during bootstrap.  That said, metamodel validation is still run incrementally for any classes introspected lazily after initial bootstrapping (unless {@link #isValidateIncrementally()} is disabled. 
+
+| isis.core.meta-model. +
+introspector.parallelize
+|  true
+|  Whether to perform introspection in parallel.
+
+| isis.core.meta-model. +
+introspector. +
+validate-incrementally
+|  true
+|  If true, then metamodel validation is performed after any new specification has been loaded (after the initial bootstrapping).  +
+ This does _not</i> apply if the introspector is configured to perform full introspection up-front AND when the metamodel is {@link Core.MetaModel.Introspector#isLockAfterFullIntrospection() locked} after initial bootstrapping (because in that case the lock check will simply prevent any new specs from being loaded). But it will apply otherwise.   +
+In particular, this setting _can</i> still apply even if the {@link Core.MetaModel.Introspector#getMode() introspection mode} is set to {@link IntrospectionMode#FULL full}, because that in itself does not preclude some code from attempting to load some previously unknown type.  For example, a fixture script could attempt to invoke an action on some new type using the {@link org.apache.isis.applib.services.wrapper.WrapperFactory} - this will cause introspection of that new type to be performed. 
+
+| isis.core.meta-model. +
+programming-model. +
+ignore-deprecated
+| 
+| 
+
+| isis.core.meta-model. +
+validator. +
+action-collection-parameter- +
+choices
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.allow-deprecated
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.check-module-extent
+|  true
+| 
+
+| isis.core.meta-model. +
+validator. +
+ensure-unique-object-types
+|  true
+| 
+
+| isis.core.meta-model. +
+validator. +
+explicit-object-type
+| 
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+date-time-type-adapter
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+no-arg-constructor
+| 
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+not-abstract
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+not-inner-class
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+reference-type-adapter
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jdoql.from-clause
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jdoql. +
+variables-clause
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.no-params-only
+| 
+| 
+
+| isis.core.meta-model. +
+validator.parallelize
+|  true
+|  Whether to perform metamodel validation in parallel.
+
+| isis.core.runtime-services. +
+application-features.init
+| 
+| 
+
+| isis.core.runtime-services. +
+email.override.bcc
+| 
+| 
+
+| isis.core.runtime-services. +
+email.override.cc
+| 
+| 
+
+| isis.core.runtime-services. +
+email.override.to
+| 
+| 
+
+| isis.core.runtime-services. +
+email.port
+|  587
+| 
+
+| isis.core.runtime-services. +
+email.sender.address
+| 
+| 
+
+| isis.core.runtime-services. +
+email.sender.hostname
+| 
+| 
+
+| isis.core.runtime-services. +
+email.sender.password
+| 
+| 
+
+| isis.core.runtime-services. +
+email.sender.username
+| 
+| 
+
+| isis.core.runtime-services. +
+email. +
+socket-connection-timeout
+|  2000
+| 
+
+| isis.core.runtime-services. +
+email.socket-timeout
+|  2000
+| 
+
+| isis.core.runtime-services. +
+email.throw-exception-on-fail
+|  true
+| 
+
+| isis.core.runtime-services. +
+email.tls.enabled
+|  true
+| 
+
+| isis.core.runtime-services. +
+exception-recognizer.jdo. +
+disable
+| 
+| 
+
+| isis.core.runtime-services. +
+repository-service. +
+disable-auto-flush
+| 
+|  Normally any queries are automatically preceded by flushing pending executions.  +
+ This key allows this behaviour to be disabled.  +
+     Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectstore)     where it was found that the autoflush behaviour was causing a (now unrepeatable)     data integrity error (see <a href="https://issues.apache.org/jira/browse/ISIS-1134?focusedCommentId=14500638&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-14500638">ISIS-1134 comment</a>, in the isis-module-security.     However, that this could be circumvented by removing the call to flush().     We don't want to break existing apps that might rely on this behaviour, on the     other hand we want to fix the memory leak.  Adding this configuration property     seems the most prudent way forward. 
+
+| isis.core.runtime-services. +
+translation.po.mode
+| 
+| 
+
+| isis.core.runtime.locale
+| 
+|  Set to override {@link Locale#getDefault()}
+
+| isis.isis-settings
+| 
+| 
+
+| isis.timezone
+| 
+| 
+
+| isis.value.format
+| 
+| 
+
+| isis.value.money.currency
+| 
+| 
+
+| isis.core.meta-model. +
+validator.mixins-only
+|  true
+| 
+
+| isis.core.meta-model. +
+validator. +
+service-actions-only
+|  true
+| 
+
