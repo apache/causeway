@@ -44,7 +44,7 @@ import lombok.val;
 public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 
     /**
-     * Introduced in support of eg. {@link javax.jdo.JDODataStoreException}
+     * Introduced in support of eg. <code>JDODataStoreException</code>
      * @since 2.0
      */
     @FunctionalInterface

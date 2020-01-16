@@ -528,6 +528,13 @@ standalone-collection.bulk-load
 |isis.core.runtime-services. +
 {nbsp}{nbsp}repository-service.disable-auto-flush
 
+|isis.services. +
+{nbsp}{nbsp}ExceptionRecognizerCompositeForJdoObjectStore. +
+{nbsp}{nbsp}{nbsp}{nbsp}disable
+|isis.core.runtime-services. +
+{nbsp}{nbsp}exception-recognizer.jdo. +
+{nbsp}{nbsp}{nbsp}{nbsp}disable
+
 
 |
 |

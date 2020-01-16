@@ -53,7 +53,7 @@ abstract class ExceptionRecognizerForJDODataStoreExceptionAbstract extends Excep
     @PostConstruct
     public void init() {
         val disabled = isisConfiguration
-                .getServices().getExceptionRecognizerCompositeForJdoObjectStore().isDisable();
+                .getCore().getRuntimeServices().getExceptionRecognizer().getJdo().isDisable();
         super.setDisabled(disabled);
     }
 

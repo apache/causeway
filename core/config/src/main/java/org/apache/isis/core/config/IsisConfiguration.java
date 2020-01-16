@@ -475,6 +475,17 @@ public class IsisConfiguration {
                 private boolean disableAutoFlush = false;
 
             }
+
+            private final ExceptionRecognizer exceptionRecognizer = new ExceptionRecognizer();
+            @Data
+            public static class ExceptionRecognizer {
+
+                private final Jdo jdo = new Jdo();
+                @Data
+                public static class Jdo {
+                    private boolean disable = false;
+                }
+            }
         }
     }
 
@@ -728,7 +739,6 @@ public class IsisConfiguration {
         private final ExceptionRecognizerCompositeForJdoObjectStore exceptionRecognizerCompositeForJdoObjectStore = new ExceptionRecognizerCompositeForJdoObjectStore();
         @Data
         public static class ExceptionRecognizerCompositeForJdoObjectStore {
-            private boolean disable = false;
         }
 
         private final Injector injector = new Injector();
