@@ -60,7 +60,7 @@ public class TranslationServicePo implements TranslationService {
     @PostConstruct
     public void init() {
 
-        final Mode translationMode = configuration.getServices().getTranslation().getPo().getMode();
+        final Mode translationMode = configuration.getCore().getRuntimeServices().getTranslation().getPo().getMode();
 
         final boolean translationDisabled = (Mode.DISABLED == translationMode || Mode.DISABLE == translationMode);
         if(translationDisabled) {

@@ -576,6 +576,11 @@ standalone-collection.bulk-load
 |isis.applib.annotation. +
 {nbsp}{nbsp}property.publishing
 
+|isis.services. +
+{nbsp}{nbsp}translation.po.mode
+|isis.core.runtime-services. +
+{nbsp}{nbsp}translation.po.mode
+
 
 |
 |
