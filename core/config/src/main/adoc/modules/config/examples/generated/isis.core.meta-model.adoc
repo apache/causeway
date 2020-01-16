@@ -1,0 +1,11 @@
+| isis.core.meta-model. +
+filter-visibility
+|  true
+| 
+
+| isis.core.meta-model. +
+programming-model. +
+ignore-deprecated
+| 
+| 
+

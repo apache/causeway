@@ -1,0 +1,91 @@
+| isis.core.meta-model. +
+validator. +
+action-collection-parameter- +
+choices
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.allow-deprecated
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.check-module-extent
+|  true
+| 
+
+| isis.core.meta-model. +
+validator. +
+ensure-unique-object-types
+|  true
+| 
+
+| isis.core.meta-model. +
+validator. +
+explicit-object-type
+| 
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+date-time-type-adapter
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+no-arg-constructor
+| 
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+not-abstract
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+not-inner-class
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jaxb-view-model. +
+reference-type-adapter
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jdoql.from-clause
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.jdoql. +
+variables-clause
+|  true
+| 
+
+| isis.core.meta-model. +
+validator.no-params-only
+| 
+| 
+
+| isis.core.meta-model. +
+validator.parallelize
+|  true
+|  Whether to perform metamodel validation in parallel.
+
+| isis.core.meta-model. +
+validator.mixins-only
+|  true
+| 
+
+| isis.core.meta-model. +
+validator. +
+service-actions-only
+|  true
+| 
+

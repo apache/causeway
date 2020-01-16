@@ -1,0 +1,89 @@
+| isis.core.runtime-services. +
+application-features.init
+| 
+| 
+
+| isis.core.runtime-services. +
+email.override.bcc
+| 
+| 
+
+| isis.core.runtime-services. +
+email.override.cc
+| 
+| 
+
+| isis.core.runtime-services. +
+email.override.to
+| 
+| 
+
+| isis.core.runtime-services. +
+email.port
+|  587
+| 
+
+| isis.core.runtime-services. +
+email.sender.address
+| 
+| 
+
+| isis.core.runtime-services. +
+email.sender.hostname
+| 
+| 
+
+| isis.core.runtime-services. +
+email.sender.password
+| 
+| 
+
+| isis.core.runtime-services. +
+email.sender.username
+| 
+| 
+
+| isis.core.runtime-services. +
+email. +
+socket-connection-timeout
+|  2000
+| 
+
+| isis.core.runtime-services. +
+email.socket-timeout
+|  2000
+| 
+
+| isis.core.runtime-services. +
+email.throw-exception-on-fail
+|  true
+| 
+
+| isis.core.runtime-services. +
+email.tls.enabled
+|  true
+| 
+
+| isis.core.runtime-services. +
+exception-recognizer.jdo. +
+disable
+| 
+| 
+
+| isis.core.runtime-services. +
+repository-service. +
+disable-auto-flush
+| 
+|  Normally any queries are automatically preceded by flushing pending executions.  +
+ This key allows this behaviour to be disabled.  +
+     Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectstore)     where it was found that the autoflush behaviour was causing a (now unrepeatable)     data integrity error (see <a href="https://issues.apache.org/jira/browse/ISIS-1134?focusedCommentId=14500638&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-14500638">ISIS-1134 comment</a>, in the isis-module-security.     However, that this could be circumvented by removing the call to flush().     We don't want to break existing apps that might rely on this behaviour, on the     other hand we want to fix the memory leak.  Adding this configuration property     seems the most prudent way forward. 
+
+| isis.core.runtime-services. +
+translation.po.mode
+| 
+| 
+
+| isis.core.runtime.locale
+| 
+|  Set to override {@link Locale#getDefault()}
+
