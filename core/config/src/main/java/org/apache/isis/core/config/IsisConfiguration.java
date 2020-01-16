@@ -227,6 +227,8 @@ public class IsisConfiguration {
 
                 private CommandPropertiesConfiguration command = CommandPropertiesConfiguration.NONE;
 
+                private PublishPropertiesConfiguration publishing = PublishPropertiesConfiguration.NONE;
+
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
                 public static class DomainEvent {
@@ -740,11 +742,6 @@ public class IsisConfiguration {
     @Data
     public static class Services {
 
-        private final Publish publish = new Publish();
-        @Data
-        public static class Publish {
-            private PublishPropertiesConfiguration properties = PublishPropertiesConfiguration.NONE;
-        }
 
         private final Translation translation = new Translation();
         @Data

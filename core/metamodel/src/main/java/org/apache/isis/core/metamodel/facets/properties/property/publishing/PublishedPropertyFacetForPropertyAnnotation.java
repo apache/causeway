@@ -36,7 +36,7 @@ public class PublishedPropertyFacetForPropertyAnnotation extends PublishedProper
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final PublishPropertiesConfiguration setting = configuration.getServices().getPublish().getProperties();
+        final PublishPropertiesConfiguration setting = configuration.getApplib().getAnnotation().getProperty().getPublishing();
 
         return propertyIfAny
                 .map(Property::publishing)
