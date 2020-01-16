@@ -26,6 +26,9 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
 import lombok.val;
 
 /**
@@ -90,8 +93,8 @@ public abstract class Clock {
     }
 
     /**
-     * Returns the {@link #getTime() time} as {@link OffsetDateTime},
-     * using the {@link ZoneId.systemDefault()} timezone.
+     * Returns the time as {@link OffsetDateTime},
+     * using the {@link ZoneId#systemDefault() system default} timezone.
      */
     public static OffsetDateTime getTimeAsOffsetDateTime() {
         val zoneId = ZoneId.systemDefault();
@@ -103,6 +106,14 @@ public abstract class Clock {
         return new java.sql.Timestamp(getEpochMillis());
     }
 
+    /**
+     * Returns the time as a Joda {@link DateTime},
+     * using the {@link ZoneId#systemDefault() system default} timezone.
+     */
+    public static DateTime getTimeAsJodaDateTime() {
+        final ZoneId zoneId = ZoneId.systemDefault();
+        return new DateTime(getInstance().now().toEpochMilli(), DateTimeZone.forID(zoneId.getId()));
+    }
 
     /**
      * Allows subclasses to remove their implementation.
