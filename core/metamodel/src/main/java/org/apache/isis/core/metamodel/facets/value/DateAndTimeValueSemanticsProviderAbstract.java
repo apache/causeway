@@ -60,7 +60,7 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
         this(FormatIdentifier.DATETIME, holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE);
 
         configuredFormat = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.DATETIME.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
+                .getValue().getFormat().getOrDefault(FormatIdentifier.DATETIME.name().toLowerCase(), "medium").toLowerCase().trim();
 
         buildFormat(configuredFormat);
 

@@ -56,7 +56,7 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
         this(FormatIdentifier.TIME, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
 
         configuredFormat = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.TIME.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
+                .getValue().getFormat().getOrDefault(FormatIdentifier.TIME.name().toLowerCase(), "short").toLowerCase().trim();
 
         buildFormat(configuredFormat);
 
@@ -68,10 +68,6 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
             setMask(formatRequired);
         }
     }
-
-    // //////////////////////////////////////////////////////////////////
-    // DateValueFacet
-    // //////////////////////////////////////////////////////////////////
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff

@@ -55,7 +55,7 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         this(FormatIdentifier.DATE, holder, adaptedClass, 12, immutability, equalByContent, defaultValue);
 
         configuredFormat = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
+                .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), "medium").toLowerCase().trim();
 
         buildFormat(configuredFormat);
 
@@ -69,10 +69,6 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
 
 
     }
-
-    // //////////////////////////////////////////////////////////////////
-    // DateValueFacet
-    // //////////////////////////////////////////////////////////////////
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff
