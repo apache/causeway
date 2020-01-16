@@ -24,6 +24,7 @@ import java.util.Map;
 
 import javax.jdo.Query;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -46,7 +47,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     }
 
     @Override
-    public List<ObjectAdapter> process(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
+    public Can<ManagedObject> process(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
         final String queryName = persistenceQuery.getQueryName();
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
 

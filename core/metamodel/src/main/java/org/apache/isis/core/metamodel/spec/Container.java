@@ -16,14 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries;
+package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQuery;
+/**
+ * possibly just temporary for refactoring
+ * 
+ * @since 2.0
+ */
+public interface Container {
 
-public interface PersistenceQueryProcessor<T extends PersistenceQuery> {
-    
-    Can<ManagedObject> process(T query);
+    ObjectSpecification getElementSpecification();
+
+    String titleString();
+
 }
-

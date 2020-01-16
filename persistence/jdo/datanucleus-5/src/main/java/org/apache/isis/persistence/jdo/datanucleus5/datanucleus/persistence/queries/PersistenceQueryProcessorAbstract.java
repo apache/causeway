@@ -25,13 +25,17 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisLifecycleListener;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQuery;
+
+import lombok.val;
 
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
 implements PersistenceQueryProcessor<T> {
@@ -49,9 +53,9 @@ implements PersistenceQueryProcessor<T> {
      * {@link IsisLifecycleListener#postLoad(InstanceLifecycleEvent) {
      * to be called.
      */
-    protected List<ObjectAdapter> loadAdapters(final List<?> pojos) {
-        final List<ObjectAdapter> adapters = _Lists.newArrayList();
-        for (final Object pojo : pojos) {
+    protected Can<ManagedObject> loadAdapters(final List<?> pojos) {
+        val adapters = _Lists.<ManagedObject>newArrayList();
+        for (val pojo : pojos) {
             // ought not to be necessary, however for some queries it seems that the
             // lifecycle listener is not called
             ObjectAdapter adapter;
@@ -66,7 +70,7 @@ implements PersistenceQueryProcessor<T> {
             }
             adapters.add(adapter);
         }
-        return adapters;
+        return Can.ofCollection(adapters);
     }
 
     // -- HELPER

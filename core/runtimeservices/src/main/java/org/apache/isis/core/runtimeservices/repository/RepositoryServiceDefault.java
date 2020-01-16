@@ -186,8 +186,6 @@ public class RepositoryServiceDefault implements RepositoryService {
         return _Casts.uncheckedCast(ManagedObject.unwrapMultipleAsList(allMatching));
     }
 
-
-
     @Override
     public <T> Optional<T> uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
         final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.

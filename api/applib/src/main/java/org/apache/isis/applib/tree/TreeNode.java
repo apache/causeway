@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 
+//@Container
 public interface TreeNode<T> {
 
     // -- VALUE

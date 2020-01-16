@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetOnStandaloneList;
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.Container;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -42,9 +42,9 @@ import static org.apache.isis.core.commons.internal.base._With.mapIfPresentElse;
 
 /**
  * A custom {@link ObjectSpecification} that is designed to treat the
- * {@link FreeStandingList} class as a "standalone" collection.
+ * {@link Container} class as a "standalone" collection.
  */
-public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbstract {
+public class ObjectSpecificationOnContainer extends ObjectSpecificationAbstract {
 
     private static final String NAME = "Instances";
     private static final String DESCRIBED_AS = "Typed instances";
@@ -52,10 +52,10 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
 
     // -- constructor
 
-    public ObjectSpecificationOnStandaloneList(
+    public ObjectSpecificationOnContainer(
             final FacetProcessor facetProcessor,
             final PostProcessor postProcessor) {
-        super(FreeStandingList.class, NAME, facetProcessor, postProcessor);
+        super(Container.class, NAME, facetProcessor, postProcessor);
         this.specId = ObjectSpecId.of(getCorrespondingClass().getName());
 
         FacetUtil.addFacet(
@@ -70,7 +70,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     protected void introspectTypeHierarchy() {
         loadSpecOfSuperclass(Object.class);
 
-        addFacet(new CollectionFacetOnStandaloneList(this));
+        addFacet(new CollectionFacetOnContainer(this));
         addFacet(new TypeOfFacetDefaultToObject(this) {
         });
 
@@ -120,7 +120,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
 
     @Override
     public String getTitle(ManagedObject contextAdapterIfAny, ManagedObject targetAdapter) {
-        return ((FreeStandingList) targetAdapter.getPojo()).titleString();
+        return ((Container) targetAdapter.getPojo()).titleString();
     }
 
     @Override

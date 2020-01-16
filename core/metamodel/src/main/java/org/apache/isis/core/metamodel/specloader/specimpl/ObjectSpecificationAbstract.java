@@ -88,7 +88,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
-import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
+import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnContainer;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
@@ -704,7 +704,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * The association with the given {@link ObjectAssociation#getId() id}.
      *
      * <p>
-     * This is overridable because {@link ObjectSpecificationOnStandaloneList}
+     * This is overridable because {@link ObjectSpecificationOnContainer}
      * simply returns <tt>null</tt>.
      *
      * <p>
@@ -712,7 +712,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      *
      * <p>
      * TODO: could this be made final? (ie does the framework ever call this
-     * method for an {@link ObjectSpecificationOnStandaloneList})
+     * method for an {@link ObjectSpecificationOnContainer})
      */
     @Override
     public ObjectAssociation getAssociation(final String id) {

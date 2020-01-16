@@ -56,7 +56,7 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.Container;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -64,7 +64,7 @@ import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
+import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnContainer;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
@@ -374,7 +374,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
 
         requires(upTo, "upTo");
-
+        
         val substitutedType = classSubstitutorRegistry.getClass(type);
         if (substitutedType == null) {
             return null;
@@ -454,7 +454,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      */
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
-        if(isMetamodelFullyIntrospected() && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
+        if(isMetamodelFullyIntrospected() 
+                && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
             throw _Exceptions.illegalState(
                     "Cannot introspect class '%s' because the metamodel has been fully introspected and is now locked. " +
                     "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
@@ -465,9 +466,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         // ... and create the specs
         final ObjectSpecificationAbstract objectSpec;
-        if (FreeStandingList.class.isAssignableFrom(cls)) {
+        if (Container.class.isAssignableFrom(cls)) {
 
-            objectSpec = new ObjectSpecificationOnStandaloneList(facetProcessor, postProcessor);
+            objectSpec = new ObjectSpecificationOnContainer(facetProcessor, postProcessor);
             objectSpec.setMetaModelContext(metaModelContext);
 
         } else {

@@ -19,65 +19,47 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import java.util.AbstractList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.ToString;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * A list returned from an action, ie not associated or owned by any entity.
  */
-public class FreeStandingList extends AbstractList<ManagedObject> {
+@RequiredArgsConstructor(staticName = "of")
+public class FreeStandingList implements Container {
 
-    private final List<ManagedObject> instances;
-    private final ObjectSpecification instanceSpecification;
-
-    public static <T extends ManagedObject> FreeStandingList of(
-            final ObjectSpecification instanceSpecification, 
-            final List<T> instances) {
-
-        return new FreeStandingList(instanceSpecification, instances.stream()
-                .map(x->(T)x)
-                .collect(Collectors.toList()));
+    @Getter(onMethod = @__(@Override))
+    @NonNull private final ObjectSpecification elementSpecification;
+    @NonNull private final Can<ManagedObject> elements;
+    
+    public Stream<ManagedObject> stream() {
+        return elements.stream();
     }
 
-    private FreeStandingList(
-            final ObjectSpecification instanceSpecification, 
-            final List<ManagedObject> instances) {
-
-        this.instanceSpecification = instanceSpecification;
-        this.instances = instances;
-    }
-
-    /**
-     * Required implementation of {@link AbstractList}.
-     */
-    @Override
-    public ManagedObject get(final int index) {
-        return instances.get(index);
-    }
-
-    /**
-     * Required implementation of {@link AbstractList}.
-     */
-    @Override
     public int size() {
-        return instances.size();
+        return elements.size();
     }
 
-    public ObjectSpecification getElementSpecification() {
-        return instanceSpecification;
-    }
-
+    @Override
     public String titleString() {
-        return instanceSpecification.getPluralName() + ", " + size();
+        switch(elements.getCardinality()) {
+        case ONE:
+            return getElementSpecification().getSingularName();
+        default:
+            return getElementSpecification().getPluralName() + ", " + size();
+        }
     }
 
     @Override
     public String toString() {
         final ToString s = new ToString(this);
-        s.append("elements", instanceSpecification.getFullIdentifier());
+        s.append("elements", getElementSpecification().getFullIdentifier());
 
         // title
         String title;
@@ -88,9 +70,11 @@ public class FreeStandingList extends AbstractList<ManagedObject> {
         }
         s.append("title", title);
 
-        s.append("vector", instances);
+        s.append("vector", elements);
 
         return s.toString();
     }
+
+
 
 }

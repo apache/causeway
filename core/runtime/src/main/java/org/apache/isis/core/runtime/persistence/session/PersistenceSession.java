@@ -20,12 +20,12 @@ package org.apache.isis.core.runtime.persistence.session;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.context._Context;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.EntityState;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -88,14 +88,8 @@ public interface PersistenceSession {
     /**@since 2.0*/
     Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
 
-    // -------------------------------------------------------------------------------------------------
-    // -- API NOT STABLE YET - SUBJECT TO REFACTORING
-    // -------------------------------------------------------------------------------------------------
-    
-    // -- TODO remove ObjectAdapter references from API
-
-    <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
-    <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
+    Can<ManagedObject> allMatchingQuery(final Query<?> query);
+    Optional<ManagedObject> firstMatchingQuery(final Query<?> query);
 
     /**
      * Removes the specified object from the system. The specified object's data

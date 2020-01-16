@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -48,6 +49,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -57,7 +59,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.PojoRefreshException;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
@@ -73,9 +74,9 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.EntityState;
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
@@ -92,7 +93,6 @@ import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.Persiste
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQuery;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
@@ -220,7 +220,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         completeCommandFromInteractionAndClearDomainEvents();
 
-        //TODO[2125] shold no longer be required		
+        //TODO[2125] should no longer be required		
         //		try {
         //			val currentTransaction = transactionManager.getCurrentTransaction();
         //			transactionManager.flushTransaction(currentTransaction);
@@ -307,17 +307,16 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         interaction.clear();
     }
 
-    // -- QuerySubmitter impl, findInstancesInTransaction
     @Override
-    public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
-        final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
-        return CollectionFacet.Utils.toAdapterList(instances);
+    public Can<ManagedObject> allMatchingQuery(final Query<?> query) {
+        val instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
+        return instances;
     }
+    
     @Override
-    public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
-        final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.SINGLE);
-        final List<ObjectAdapter> list = CollectionFacet.Utils.toAdapterList(instances);
-        return list.size() > 0 ? list.get(0) : null;
+    public Optional<ManagedObject> firstMatchingQuery(final Query<?> query) {
+        val instances = findInstancesInTransaction(query, QueryCardinality.SINGLE);
+        return instances.getFirst();
     }
 
     /**
@@ -330,7 +329,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * @throws org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException
      *             if the criteria is not support by this persistor
      */
-    private <T> ObjectAdapter findInstancesInTransaction(final Query<T> query, final QueryCardinality cardinality) {
+    private Can<ManagedObject> findInstancesInTransaction(
+            final Query<?> query, 
+            final QueryCardinality cardinality) {
+        
         if (log.isDebugEnabled()) {
             log.debug("findInstances using (applib) Query: {}", query);
         }
@@ -343,11 +345,15 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
 
-        final List<ObjectAdapter> instances = transactionService.executeWithinTransaction(
+        final Can<ManagedObject> instances = transactionService.executeWithinTransaction(
                 ()->processPersistenceQuery(processor, persistenceQuery) );
-        final ObjectSpecification specification = persistenceQuery.getSpecification();
-        final FreeStandingList results = FreeStandingList.of(specification, instances);
-        return adapterFor(results);
+        
+        return instances;
+        
+        //XXX legacy of
+        //final ObjectSpecification specification = persistenceQuery.getSpecification();
+        //final FreeStandingList results = FreeStandingList.of(specification, instances);
+        //return adapterFor(results);
     }
 
     /**
@@ -378,7 +384,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return processor;
     }
     @SuppressWarnings("unchecked")
-    private <Q extends PersistenceQuery> List<ObjectAdapter> processPersistenceQuery(
+    private <Q extends PersistenceQuery> Can<ManagedObject> processPersistenceQuery(
             final PersistenceQueryProcessor<Q> persistenceQueryProcessor,
             final PersistenceQuery persistenceQuery) {
         return persistenceQueryProcessor.process((Q) persistenceQuery);
@@ -861,8 +867,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             log.debug("refresh immediately; oid={}", oid.enString());
         }
     }
-
-
 
 
 }

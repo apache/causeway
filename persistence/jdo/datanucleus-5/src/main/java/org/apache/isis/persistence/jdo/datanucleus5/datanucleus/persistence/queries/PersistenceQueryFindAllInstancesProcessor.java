@@ -18,9 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries;
 
-import java.util.List;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFindAllInstances;
 
@@ -35,7 +34,7 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
     }
 
     @Override
-    public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {
+    public Can<ManagedObject> process(final PersistenceQueryFindAllInstances persistenceQuery) {
 
         val spec = persistenceQuery.getSpecification();
         val cls = spec.getCorrespondingClass();

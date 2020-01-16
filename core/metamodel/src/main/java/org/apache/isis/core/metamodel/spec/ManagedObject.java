@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -281,6 +282,21 @@ public interface ManagedObject {
                 .map(ManagedObject::unwrapSingle)
                 .collect(_Lists.toUnmodifiable());
     }
+    
+    /**
+     * 
+     * @param adapters
+     * @return non-null, unmodifiable
+     */
+    public static List<Object> unwrapMultipleAsList(@Nullable final Can<? extends ManagedObject> adapters) {
+        if (adapters == null) {
+            return Collections.emptyList();
+        }
+        return adapters.stream()
+                .map(ManagedObject::unwrapSingle)
+                .collect(_Lists.toUnmodifiable());
+    }
+
 
     /**
      * 

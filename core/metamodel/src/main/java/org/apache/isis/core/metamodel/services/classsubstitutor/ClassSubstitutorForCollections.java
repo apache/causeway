@@ -31,7 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.Container;
 
 @Component
 @Named("isisMetaModel.ClassSubstitutorForCollections")
@@ -40,8 +40,8 @@ public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override
     public Class<?> getClass(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls) {
-        if(FreeStandingList.class.isAssignableFrom(cls)) {
-            return FreeStandingList.class;
+        if(Container.class.isAssignableFrom(cls)) {
+            return Container.class;
         }
         // legacy
         if(Vector.class.isAssignableFrom(cls)) {

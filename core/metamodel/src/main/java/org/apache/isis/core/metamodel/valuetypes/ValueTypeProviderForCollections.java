@@ -31,7 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.Container;
 
 @Component
 @Named("isisMetaModel.ValueTypeProviderCollections")
@@ -44,7 +44,7 @@ public class ValueTypeProviderForCollections implements ValueTypeProvider {
                     ValueTypeDefinition.collection(List.class),
                     ValueTypeDefinition.collection(Set.class),
                     ValueTypeDefinition.collection(SortedSet.class),
-                    ValueTypeDefinition.collection(FreeStandingList.class)
+                    ValueTypeDefinition.collection(Container.class)
                 ));
     }
 

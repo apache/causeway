@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
 
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -30,19 +29,18 @@ import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
+import lombok.val;
 
-public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
+public class CollectionFacetOnContainer extends CollectionFacetAbstract {
 
-    public CollectionFacetOnStandaloneList(final FacetHolder holder) {
+    public CollectionFacetOnContainer(final FacetHolder holder) {
         super(holder);
     }
 
     @Override
-    public <T extends ManagedObject> Stream<T> stream(T wrappedObjectList) {
-        final List<ManagedObject> list = collection(wrappedObjectList);
-        return list.stream()
-                .map(x->uncheckedCast(x));
+    public Stream<ManagedObject> stream(ManagedObject wrappedObjectList) {
+        val list = unwrap(wrappedObjectList);
+        return list.stream();
     }
 
     /**
@@ -51,7 +49,7 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
      */
     @Override
     public int size(final ManagedObject wrappedInstanceCollectionVector) {
-        return collection(wrappedInstanceCollectionVector).size();
+        return unwrap(wrappedInstanceCollectionVector).size();
     }
 
     @Override
@@ -66,7 +64,7 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
 
     // -- HELPER
 
-    private List<ManagedObject> collection(final ManagedObject wrappedObjectList) {
+    private FreeStandingList unwrap(final ManagedObject wrappedObjectList) {
         return (FreeStandingList) wrappedObjectList.getPojo();
     }
 
