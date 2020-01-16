@@ -40,14 +40,14 @@ else
     # generate automated site content (adoc files)
     echo "doc gen: generating config .adoc from Spring metadata ..."
 
-    rm -rf $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
+    rm -rf $PROJECT_ROOT_PATH/core/config/src/main/adoc/modules/config/examples/generated
 
     ${GROOVY_CMD} $SCRIPT_DIR/../generateConfigDocs.groovy \
       -f $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json \
-      -o $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated
+      -o $PROJECT_ROOT_PATH/core/config/src/main/adoc/modules/config/examples/generated
 
     if [ ! -z "${DOS2UNIX_CMD}" ]; then
-      for FILE in $PROJECT_ROOT_PATH/core/config/src/main/doc/modules/config/examples/generated/*
+      for FILE in $PROJECT_ROOT_PATH/core/config/src/main/adoc/modules/config/examples/generated/*
       do
         ${DOS2UNIX_CMD} $FILE
       done
