@@ -463,68 +463,88 @@ standalone-collection.bulk-load
 |isis.core.metamodel.validator. +
 {nbsp}{nbsp}jdoql.variables-clause
 
-|isis.service.email.port
+|isis.service. +
+{nbsp}{nbsp}email.port
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.port
 
-|isis.service.email.socketConnectionTimeout
+|isis.service. +
+{nbsp}{nbsp}email.socketConnectionTimeout
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.socket-connection-timeout
 
-|isis.service.email.socketTimeout
+|isis.service. +
+{nbsp}{nbsp}email.socketTimeout
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.socket-timeout
 
-|isis.service.email.throwExceptionOnFail
+|isis.service. +
+{nbsp}{nbsp}email.throwExceptionOnFail
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.throw-exception-on-fail
 
-|isis.service.email.override.to
+|isis.service. +
+{nbsp}{nbsp}email.override.to
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.override.to
 
-|isis.service.email.override.cc
+|isis.service. +
+{nbsp}{nbsp}email.override.cc
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.override.cc
 
-|isis.service.email.override.bcc
+|isis.service. +
+{nbsp}{nbsp}email.override.bcc
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.override.bcc
 
-|isis.service.email.sender.hostname
+|isis.service. +
+{nbsp}{nbsp}email.sender.hostname
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.sender.hostname
 
-|isis.service.email.sender.username
+|isis.service. +
+{nbsp}{nbsp}email.sender.username
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.sender.username
 
-|isis.service.email.sender.password
+|isis.service. +
+{nbsp}{nbsp}email.sender.password
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.sender.password
 
-|isis.service.email.sender.address
+|isis.service. +
+{nbsp}{nbsp}email.sender.address
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.sender.address
 
-|isis.service.email.tls.enabled
+|isis.service. +
+{nbsp}{nbsp}email.tls.enabled
 |isis.core.runtime-services. +
 {nbsp}{nbsp}email.tls.enabled
 
-|isis.services.applicationFeatures.init
+|isis.services. +
+{nbsp}{nbsp}applicationFeatures.init
 |isis.core.runtime-services. +
 {nbsp}{nbsp}application-features.init
 
-|isis.services.audit.objects
-|isis.applib.annotation.domain-object.auditing
+|isis.services.audit. +
+{nbsp}{nbsp}objects
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object.auditing
 
-|isis.services.command.actions
-|isis.applib.annotation.action.command
+|isis.services.command. +
+{nbsp}{nbsp}actions
+|isis.applib.annotation. +
+{nbsp}{nbsp}action.command
 
-|isis.services.command.properties
-|isis.applib.annotation.property.command
+|isis.services.command. +
+{nbsp}{nbsp}properties
+|isis.applib.annotation. +
+{nbsp}{nbsp}property.command
 
-|isis.services.container.disableAutoFlush
+|isis.services. +
+{nbsp}{nbsp}container.disableAutoFlush
 |isis.core.runtime-services. +
 {nbsp}{nbsp}repository-service.disable-auto-flush
 
