@@ -120,320 +120,400 @@ Here, in more detail, are the before and after for recognised configuration prop
 
 
 |isis.authentication.shiro. +
-autoLogoutIfAlreadyAuthenticated
+{nbsp}{nbsp}autoLogoutIfAlreadyAuthenticated
 |isis.security.shiro. +
-auto-logout-if-already-authenticated
+{nbsp}{nbsp}auto-logout-if-already-authenticated
 
 |isis.locale
 |isis.core.runtime.locale
 
 
 |isis.objects.editing
-|isis.applib.metamodel.domain-object.editing
+|isis.applib.metamodel. +
+{nbsp}{nbsp}domain-object.editing
 
 |isis.persistor.datanucleus. +
-classMetadataLoadedListener
+{nbsp}{nbsp}classMetadataLoadedListener
 |isis.persistence.jdo-datanucleus. +
-class-metadata-loaded-listener
+{nbsp}{nbsp}class-metadata-loaded-listener
 
-|isis.persistor.datanucleus. +
-installFixtures
+|isis.persistor.datanucleus.installFixtures
 |(removed)
 
 
 |isis.persistor.datanucleus.impl. +
-datanucleus.schema.autoCreateAll
+{nbsp}{nbsp}datanucleus.schema.autoCreateAll
 |isis.persistence.jdo-datanucleus.impl. +
-datanucleus.schema.autoCreateAll
+{nbsp}{nbsp}datanucleus.schema.autoCreateAll
 
 |isis.persistor.datanucleus.impl. +
-datanucleus.schema.validateAll
+{nbsp}{nbsp}datanucleus.schema.validateAll
 |isis.persistence.jdo-datanucleus.impl. +
-datanucleus.schema.validateAll
+{nbsp}{nbsp}datanucleus.schema.validateAll
 
 |isis.persistor.datanucleus.impl. +
-datanucleus.schema.validateTables
+{nbsp}{nbsp}datanucleus.schema.validateTables
 |isis.persistence.jdo-datanucleus.impl. +
-datanucleus.schema.validateTables
+{nbsp}{nbsp}datanucleus.schema.validateTables
 
 |isis.persistor.datanucleus.impl. +
-datanucleus.schema.validateConstraints
+{nbsp}{nbsp}datanucleus.schema.validateConstraints
 |isis.persistence.jdo-datanucleus.impl. +
-datanucleus.schema.validateConstraints
+{nbsp}{nbsp}datanucleus.schema.validateConstraints
 
 |isis.persistor.datanucleus.impl. +
-datanucleus.persistenceByReachabilityAtCommit
+{nbsp}{nbsp}datanucleus.persistenceByReachabilityAtCommit
 |isis.persistence.jdo-datanucleus.impl. +
-datanucleus.persistenceByReachabilityAtCommit
+{nbsp}{nbsp}datanucleus.persistenceByReachabilityAtCommit
 
 |isis.persistor.datanucleus.impl. +
-datanucleus.identifier.case
+{nbsp}{nbsp}datanucleus.identifier.case
 |isis.persistence.jdo-datanucleus.impl. +
-datanucleus.identifier.case
+{nbsp}{nbsp}datanucleus.identifier.case
 
 |isis.persistor.datanucleus.impl. +
-datanucleus.cache.level2.mode
+{nbsp}{nbsp}datanucleus.cache.level2.mode
 |isis.persistence.jdo-datanucleus.impl. +
-datanucleus.cache.level2.mode
+{nbsp}{nbsp}datanucleus.cache.level2.mode
 
 |isis.persistor.datanucleus.impl. +
-javax.jdo.option.ConnectionDriverName
+{nbsp}{nbsp}javax.jdo.option.ConnectionDriverName
 |isis.persistence.jdo-datanucleus.impl. +
-javax.jdo.option.ConnectionDriverName
+{nbsp}{nbsp}javax.jdo.option.ConnectionDriverName
 
 |isis.persistor.datanucleus.impl. +
-javax.jdo.option.ConnectionURL
+{nbsp}{nbsp}javax.jdo.option.ConnectionURL
 |isis.persistence.jdo-datanucleus.impl. +
-javax.jdo.option.ConnectionURL
+{nbsp}{nbsp}javax.jdo.option.ConnectionURL
 
 |isis.persistor.datanucleus.impl. +
-javax.jdo.option.ConnectionUserName
+{nbsp}{nbsp}javax.jdo.option.ConnectionUserName
 |isis.persistence.jdo-datanucleus.impl. +
-javax.jdo.option.ConnectionUserName
+{nbsp}{nbsp}javax.jdo.option.ConnectionUserName
 
 |isis.persistor.datanucleus.impl. +
-javax.jdo.option.ConnectionPassword
+{nbsp}{nbsp}javax.jdo.option.ConnectionPassword
 |isis.persistence.jdo-datanucleus.impl. +
-javax.jdo.option.ConnectionPassword
+{nbsp}{nbsp}javax.jdo.option.ConnectionPassword
 
 |isis.persistor.datanucleus.impl. +
-javax.jdo.option.PersistenceManagerFactoryClass
+{nbsp}{nbsp}javax.jdo.option. +
+{nbsp}{nbsp}{nbsp}{nbsp}PersistenceManagerFactoryClass
 |isis.persistence.jdo-datanucleus.impl. +
-javax.jdo.option.PersistenceManagerFactoryClass
+{nbsp}{nbsp}javax.jdo.option. +
+{nbsp}{nbsp}{nbsp}{nbsp}PersistenceManagerFactoryClass
 
 |isis.persistor.datanucleus. +
+{nbsp}{nbsp}
 standalone-collection.bulk-load
 |(removed)
 
 |isis.persistor.enforceSafeSemantics
 |(removed)
 
-|isis.reflector.explicitAnnotations.action
-|isis.applib.annotation.action.explicit
-
-|isis.reflector.facet.actionAnnotation. +
-domainEvent.postForDefault
-|isis.applib.annotation.action. +
-domain-event.post-for-default
-
-|isis.reflector.facet.collectionAnnotation. +
-domainEvent.postForDefault
-|isis.applib.annotation.collection. +
-domain-event.post-for-default
+|isis.reflector.explicitAnnotations. +
+{nbsp}{nbsp}action
+|isis.applib.annotation.action +
+{nbsp}{nbsp}.explicit
 
 |isis.reflector.facet. +
-cssClass.patterns
-|isis.applib.annotation.action-layout. +
-css-class.patterns
+{nbsp}{nbsp}actionAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}domainEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}action. +
+{nbsp}{nbsp}{nbsp}{nbsp}domain-event.post-for-default
 
-|isis.reflector.facet.domainObjectAnnotation. +
-createdLifecycleEvent.postForDefault
-|isis.applib.annotation.domain-object. +
-created-lifecycle-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}collectionAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}domainEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}collection. +
+{nbsp}{nbsp}{nbsp}{nbsp}domain-event.post-for-default
 
-|isis.reflector.facet.domainObjectAnnotation. +
-loadedLifecycleEvent.postForDefault
-|isis.applib.annotation.domain-object. +
-loaded-lifecycle-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}cssClass.patterns
+|isis.applib.annotation. +
+{nbsp}{nbsp}action-layout. +
+{nbsp}{nbsp}{nbsp}{nbsp}css-class.patterns
 
-|isis.reflector.facet.domainObjectAnnotation. +
-persistingLifecycleEvent.postForDefault
-|isis.applib.annotation.domain-object. +
-persisting-lifecycle-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}createdLifecycleEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object. +
+{nbsp}{nbsp}{nbsp}{nbsp}created-lifecycle-event.post-for-default
 
-|isis.reflector.facet.domainObjectAnnotation. +
-persistedLifecycleEvent.postForDefault
-|isis.applib.annotation.domain-object. +
-persisted-lifecycle-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}loadedLifecycleEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object. +
+{nbsp}{nbsp}{nbsp}{nbsp}loaded-lifecycle-event.post-for-default
 
-|isis.reflector.facet.domainObjectAnnotation. +
-removingLifecycleEvent.postForDefault
-|isis.applib.annotation.domain-object. +
-removing-lifecycle-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}persistingLifecycleEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object. +
+{nbsp}{nbsp}{nbsp}{nbsp}persisting-lifecycle-event.post-for-default
 
-|isis.reflector.facet.domainObjectAnnotation. +
-updatedLifecycleEvent.postForDefault
-|isis.applib.annotation.domain-object. +
-updated-lifecycle-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}persistedLifecycleEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object. +
+{nbsp}{nbsp}{nbsp}{nbsp}persisted-lifecycle-event.post-for-default
 
-|isis.reflector.facet.domainObjectAnnotation. +
-updatingLifecycleEvent.postForDefault
-|isis.applib.annotation.domain-object. +
-updating-lifecycle-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}removingLifecycleEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object. +
+{nbsp}{nbsp}{nbsp}{nbsp}removing-lifecycle-event.post-for-default
 
-|isis.reflector.facet.domainObjectLayoutAnnotation. +
-cssClassUiEvent.postForDefault
-|isis.applib.annotation.domain-object-layout. +
-css-class-ui-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}updatedLifecycleEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object. +
+{nbsp}{nbsp}{nbsp}{nbsp}updated-lifecycle-event.post-for-default
 
-|isis.reflector.facet.domainObjectLayoutAnnotation. +
-iconUiEvent.postForDefault
-|isis.applib.annotation.domain-object-layout. +
-icon-ui-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}updatingLifecycleEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object. +
+{nbsp}{nbsp}{nbsp}{nbsp}updating-lifecycle-event.post-for-default
 
-|isis.reflector.facet.domainObjectLayoutAnnotation. +
-layoutUiEvent.postForDefault
-|isis.applib.annotation.domain-object-layout. +
-layout-ui-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectLayoutAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}cssClassUiEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object-layout. +
+{nbsp}{nbsp}{nbsp}{nbsp}css-class-ui-event.post-for-default
 
-|isis.reflector.facet.domainObjectLayoutAnnotation. +
-titleUiEvent.postForDefault
-|isis.applib.annotation.domain-object-layout. +
-title-ui-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectLayoutAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}iconUiEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object-layout. +
+{nbsp}{nbsp}{nbsp}{nbsp}icon-ui-event.post-for-default
 
-|isis.reflector.facet.propertyAnnotation. +
-domainEvent.postForDefault
-|isis.applib.annotation.property. +
-domain-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectLayoutAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}layoutUiEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object-layout. +
+{nbsp}{nbsp}{nbsp}{nbsp}layout-ui-event.post-for-default
 
-|isis.reflector.facet.viewModelLayoutAnnotation. +
-cssClassUiEvent.postForDefault
-|isis.applib.annotation.view-model-layout. +
-css-class-ui-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}domainObjectLayoutAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}titleUiEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object-layout. +
+{nbsp}{nbsp}{nbsp}{nbsp}title-ui-event.post-for-default
 
-|isis.reflector.facet.viewModelLayoutAnnotation. +
-iconUiEvent.postForDefault
-|isis.applib.annotation.view-model-layout. +
-icon-ui-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}propertyAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}domainEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}property. +
+{nbsp}{nbsp}{nbsp}{nbsp}domain-event.post-for-default
 
-|isis.reflector.facet.viewModelLayoutAnnotation. +
-layoutUiEvent.postForDefault
-|isis.applib.annotation.view-model-layout. +
-layout-ui-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}viewModelLayoutAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}cssClassUiEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}view-model-layout. +
+{nbsp}{nbsp}{nbsp}{nbsp}css-class-ui-event.post-for-default
 
-|isis.reflector.facet.viewModelLayoutAnnotation. +
-titleUiEvent.postForDefault
-|isis.applib.annotation.view-model-layout. +
-title-ui-event.post-for-default
+|isis.reflector.facet. +
+{nbsp}{nbsp}viewModelLayoutAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}iconUiEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}view-model-layout. +
+{nbsp}{nbsp}{nbsp}{nbsp}icon-ui-event.post-for-default
+
+|isis.reflector.facet. +
+{nbsp}{nbsp}viewModelLayoutAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}layoutUiEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}view-model-layout. +
+{nbsp}{nbsp}{nbsp}{nbsp}layout-ui-event.post-for-default
+
+|isis.reflector.facet. +
+{nbsp}{nbsp}viewModelLayoutAnnotation. +
+{nbsp}{nbsp}{nbsp}{nbsp}titleUiEvent.postForDefault
+|isis.applib.annotation. +
+{nbsp}{nbsp}view-model-layout. +
+{nbsp}{nbsp}{nbsp}{nbsp}title-ui-event.post-for-default
 
 |isis.reflector.facets. +
-viewModelSemanticCheckingFacetFactory.enable
+{nbsp}{nbsp}viewModelSemanticCheckingFacetFactory. +
+{nbsp}{nbsp}{nbsp}{nbsp}enable
 |isis.applib.annotation. +
-view-model.validation. +
-view-model-semantic-checking.enable
+{nbsp}{nbsp}view-model.validation. +
+{nbsp}{nbsp}{nbsp}{nbsp}semantic-checking.enable
 
-|isis.reflector.facet.filterVisibility
-|isis.core.metamodel.filter-visibility
+|isis.reflector.facet. +
+{nbsp}{nbsp}filterVisibility
+|isis.core.metamodel. +
+{nbsp}{nbsp}filter-visibility
 
-|isis.reflector.facets.ignoreDeprecated
-|isis.core.metamodel.programming-model.ignore-deprecated
+|isis.reflector.facets. +
+{nbsp}{nbsp}ignoreDeprecated
+|isis.core.metamodel.programming-model. +
+{nbsp}{nbsp}ignore-deprecated
 
-|isis.reflector.introspector.parallelize
-|isis.core.metamodel.introspector.parallelize
+|isis.reflector.introspector. +
+{nbsp}{nbsp}parallelize
+|isis.core.metamodel.introspector. +
+{nbsp}{nbsp}parallelize
 
-|isis.reflector.introspector.mode
-|isis.core.metamodel.introspector.mode
+|isis.reflector.introspector. +
+{nbsp}{nbsp}mode
+|isis.core.metamodel.introspector. +
+{nbsp}{nbsp}mode
 
 |isis.reflector.introspect. +
-lockAfterFullIntrospection
+{nbsp}{nbsp}lockAfterFullIntrospection
 |isis.core.metamodel.introspector. +
-lock-after-full-introspection
+{nbsp}{nbsp}lock-after-full-introspection
 
 |isis.reflector.introspect. +
-validateIncrementally
+{nbsp}{nbsp}validateIncrementally
 |isis.core.metamodel.introspector. +
-validate-incrementally
+{nbsp}{nbsp}validate-incrementally
 
-|isis.reflector.validator.parallelize
-|isis.core.metamodel.validator.parallelize
+|isis.reflector.validator. +
+{nbsp}{nbsp}parallelize
+|isis.core.metamodel.validator. +
+{nbsp}{nbsp}parallelize
 
-|isis.reflector.validator.allowDeprecated
-|isis.core.metamodel.validator.allow-deprecated
+|isis.reflector.validator. +
+{nbsp}{nbsp}allowDeprecated
+|isis.core.metamodel.validator. +
+{nbsp}{nbsp}allow-deprecated
 
-|isis.reflector.validator.ensureUniqueObjectTypes
-|isis.core.metamodel.validator.ensure-unique-object-types
+|isis.reflector.validator. +
+{nbsp}{nbsp}ensureUniqueObjectTypes
+|isis.core.metamodel.validator. +
+{nbsp}{nbsp}ensure-unique-object-types
 
-|isis.reflector.validator.checkModuleExtent
-|isis.core.metamodel.validator.check-module-extent
+|isis.reflector.validator. +
+{nbsp}{nbsp}checkModuleExtent
+|isis.core.metamodel.validator. +
+{nbsp}{nbsp}check-module-extent
 
-|isis.reflector.validator.noParamsOnly
-|isis.core.metamodel.validator.no-params-only
+|isis.reflector.validator. +
+{nbsp}{nbsp}noParamsOnly
+|isis.core.metamodel.validator. +
+{nbsp}{nbsp}no-params-only
 
-|isis.reflector.validator.actionCollectionParameterChoices
-|isis.core.metamodel.validator.action-collection-parameter-choices
+|isis.reflector.validator. +
+{nbsp}{nbsp}actionCollectionParameterChoices
+|isis.core.metamodel.validator. +
+{nbsp}{nbsp}action-collection-parameter-choices
 
-|isis.reflector.validator.serviceActionsOnly
-|isis.core.metamodel.validator.service-actions-only
+|isis.reflector.validator. +
+{nbsp}{nbsp}serviceActionsOnly
+|isis.core.metamodel.validator. +
+{nbsp}{nbsp}service-actions-only
 
 |isis.reflector.validator.mixinsOnly
-|isis.core.metamodel.validator.mixins-only
+|isis.core.metamodel.validator. +
+{nbsp}{nbsp}mixins-only
 
 |isis.reflector.validator.explicitObjectType
-|isis.core.metamodel.validator.explicit-object-type
+|isis.core.metamodel.validator. +
+{nbsp}{nbsp}explicit-object-type
 
 |isis.reflector.validator. +
-jaxbViewModelNotAbstract
+{nbsp}{nbsp}jaxbViewModelNotAbstract
 |isis.core.metamodel.validator. +
-jaxb-view-model.not-abstract
+{nbsp}{nbsp}jaxb-view-model.not-abstract
 
 |isis.reflector.validator. +
-jaxbViewModelNotInnerClass
+{nbsp}{nbsp}jaxbViewModelNotInnerClass
 |isis.core.metamodel.validator. +
-jaxb-view-model.not-inner-class
+{nbsp}{nbsp}jaxb-view-model.not-inner-class
 
 |isis.reflector.validator. +
-jaxbViewModelNoArgConstructor
+{nbsp}{nbsp}jaxbViewModelNoArgConstructor
 |isis.core.metamodel.validator. +
-jaxb-view-model.no-arg-constructor
+{nbsp}{nbsp}jaxb-view-model.no-arg-constructor
 
 |isis.reflector.validator. +
-jaxbViewModelReferenceTypeAdapter
+{nbsp}{nbsp}jaxbViewModelReferenceTypeAdapter
 |isis.core.metamodel.validator. +
-jaxb-view-model.reference-type-adapter
+{nbsp}{nbsp}jaxb-view-model.reference-type-adapter
 
 |isis.reflector.validator. +
-jaxbViewModelDateTimeTypeAdapter
+{nbsp}{nbsp}jaxbViewModelDateTimeTypeAdapter
 |isis.core.metamodel.validator. +
-jaxb-view-model.date-time-type-adapter
+{nbsp}{nbsp}jaxb-view-model.date-time-type-adapter
 
 |isis.reflector.validator. +
-jdoqlFromClause
+{nbsp}{nbsp}jdoqlFromClause
 |isis.core.metamodel.validator. +
-jdoql.from-clause
+{nbsp}{nbsp}jdoql.from-clause
 
 |isis.reflector.validator. +
-jdoqlVariablesClause
+{nbsp}{nbsp}jdoqlVariablesClause
 |isis.core.metamodel.validator. +
-jdoql.variables-clause
+{nbsp}{nbsp}jdoql.variables-clause
 
 |isis.service.email.port
-|isis.core.runtime-services.email.port
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.port
 
 |isis.service.email.socketConnectionTimeout
-|isis.core.runtime-services.email.socket-connection-timeout
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.socket-connection-timeout
 
 |isis.service.email.socketTimeout
-|isis.core.runtime-services.email.socket-timeout
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.socket-timeout
 
 |isis.service.email.throwExceptionOnFail
-|isis.core.runtime-services.email.throw-exception-on-fail
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.throw-exception-on-fail
 
 |isis.service.email.override.to
-|isis.core.runtime-services.email.override.to
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.override.to
 
 |isis.service.email.override.cc
-|isis.core.runtime-services.email.override.cc
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.override.cc
 
 |isis.service.email.override.bcc
-|isis.core.runtime-services.email.override.bcc
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.override.bcc
 
 |isis.service.email.sender.hostname
-|isis.core.runtime-services.email.sender.hostname
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.sender.hostname
 
 |isis.service.email.sender.username
-|isis.core.runtime-services.email.sender.username
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.sender.username
 
 |isis.service.email.sender.password
-|isis.core.runtime-services.email.sender.password
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.sender.password
 
 |isis.service.email.sender.address
-|isis.core.runtime-services.email.sender.address
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.sender.address
 
 |isis.service.email.tls.enabled
-|isis.core.runtime-services.email.tls.enabled
+|isis.core.runtime-services. +
+{nbsp}{nbsp}email.tls.enabled
 
 |isis.services.applicationFeatures.init
-|isis.core.runtime-services.application-features.init
+|isis.core.runtime-services. +
+{nbsp}{nbsp}application-features.init
 
 |isis.services.audit.objects
 |isis.applib.annotation.domain-object.auditing
@@ -443,6 +523,10 @@ jdoql.variables-clause
 
 |isis.services.command.properties
 |isis.applib.annotation.property.command
+
+|isis.services.container.disableAutoFlush
+|isis.core.runtime-services. +
+{nbsp}{nbsp}repository-service.disable-auto-flush
 
 
 |

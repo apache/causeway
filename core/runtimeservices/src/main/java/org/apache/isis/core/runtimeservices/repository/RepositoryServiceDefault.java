@@ -63,7 +63,7 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     @PostConstruct
     public void init() {
-        val disableAutoFlush = isisConfiguration.getServices().getContainer().isDisableAutoFlush();
+        val disableAutoFlush = isisConfiguration.getCore().getRuntimeServices().getRepositoryService().isDisableAutoFlush();
         this.autoFlush = !disableAutoFlush;
     }
 

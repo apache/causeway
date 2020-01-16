@@ -248,9 +248,9 @@ public class IsisConfiguration {
                 private final Validation validation = new Validation();
                 @Data
                 public static class Validation {
-                    private final ViewModelSemanticChecking viewModelSemanticChecking = new ViewModelSemanticChecking();
+                    private final SemanticChecking semanticChecking = new SemanticChecking();
                     @Data
-                    public static class ViewModelSemanticChecking {
+                    public static class SemanticChecking {
                         private boolean enable = false;
                     }
                 }
@@ -451,6 +451,29 @@ public class IsisConfiguration {
             @Data
             public static class ApplicationFeatures {
                 ApplicationFeaturesInitConfiguration init = ApplicationFeaturesInitConfiguration.NOT_SPECIFIED;
+            }
+
+            private final RepositoryService repositoryService = new RepositoryService();
+            @Data
+            public static class RepositoryService {
+                /**
+                 * Normally any queries are automatically preceded by flushing pending executions.
+                 *
+                 * <p>
+                 * This key allows this behaviour to be disabled.
+                 *
+                 * <p>
+                 *     Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectstore)
+                 *     where it was found that the autoflush behaviour was causing a (now unrepeatable)
+                 *     data integrity error (see <a href="https://issues.apache.org/jira/browse/ISIS-1134?focusedCommentId=14500638&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-14500638">ISIS-1134 comment</a>, in the isis-module-security.
+                 *     However, that this could be circumvented by removing the call to flush().
+                 *     We don't want to break existing apps that might rely on this behaviour, on the
+                 *     other hand we want to fix the memory leak.  Adding this configuration property
+                 *     seems the most prudent way forward.
+                 * </p>
+                 */
+                private boolean disableAutoFlush = false;
+
             }
         }
     }
@@ -701,37 +724,6 @@ public class IsisConfiguration {
     private final Services services = new Services();
     @Data
     public static class Services {
-
-
-        private final Command command = new Command();
-        @Data
-        public static class Command {
-
-        }
-
-        private final Container container = new Container();
-        @Data
-        public static class Container {
-
-            /**
-             * Normally any queries are automatically preceded by flushing pending executions.
-             *
-             * <p>
-             * This key allows this behaviour to be disabled.
-             *
-             * <p>
-             *     Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectstore)
-             *     where it was found that the autoflush behaviour was causing a (now unrepeatable)
-             *     data integrity error (see <a href="https://issues.apache.org/jira/browse/ISIS-1134?focusedCommentId=14500638&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-14500638">ISIS-1134 comment</a>, in the isis-module-security.
-             *     However, that this could be circumvented by removing the call to flush().
-             *     We don't want to break existing apps that might rely on this behaviour, on the
-             *     other hand we want to fix the memory leak.  Adding this configuration property
-             *     seems the most prudent way forward.
-             * </p>
-             */
-            private boolean disableAutoFlush = false;
-
-        }
 
         private final ExceptionRecognizerCompositeForJdoObjectStore exceptionRecognizerCompositeForJdoObjectStore = new ExceptionRecognizerCompositeForJdoObjectStore();
         @Data
