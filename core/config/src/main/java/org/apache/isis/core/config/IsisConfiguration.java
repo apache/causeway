@@ -155,6 +155,8 @@ public class IsisConfiguration {
             @Data
             public static class DomainObjectLayout {
 
+                private int paged = 25;
+
                 private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
                 @Data
                 public static class CssClassUiEvent {
@@ -1152,11 +1154,6 @@ public class IsisConfiguration {
     public static class Viewers {
 
 
-        private final Paged paged = new Paged();
-        @Data
-        public static class Paged {
-            private int standalone = 25;
-        }
 
         private final ParameterLayout parameterLayout = new ParameterLayout();
         @Data

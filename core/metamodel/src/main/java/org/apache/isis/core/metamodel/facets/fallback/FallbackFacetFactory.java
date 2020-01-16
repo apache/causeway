@@ -69,7 +69,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
         final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
 
-        final int pagedStandalone = getConfiguration().getViewers().getPaged().getStandalone();
+        final int pagedStandalone = getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getPaged();
         final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
 
         super.addFacet(describedAsFacet);

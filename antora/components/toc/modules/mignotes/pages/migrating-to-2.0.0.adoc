@@ -591,6 +591,11 @@ standalone-collection.bulk-load
 |isis.applib.annotation. +
 {nbsp}{nbsp}collection-layout.paged
 
+|isis.viewers. +
+{nbsp}{nbsp}.paged.standAlone
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object-layout.paged
+
 
 |
 |
