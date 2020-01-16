@@ -624,6 +624,10 @@ standalone-collection.bulk-load
 isis.value-types. +
 {nbsp}{nbsp}primitives.integer.format
 
+|isis.value.format["decimal"]
+|isis.value-types. +
+{nbsp}{nbsp}java-math.big-decimal.format
+
 |
 |
 

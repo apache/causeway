@@ -28,7 +28,7 @@ import java.util.Map;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
+import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -58,7 +58,14 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
 
     public BigDecimalValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        format = determineNumberFormat(FormatIdentifier.DECIMAL);
+        final String formatRequired = getConfiguration().getValueTypes().getJavaMath().getBigDecimal().getFormat();
+
+        if (formatRequired != null) {
+            format = new DecimalFormat(formatRequired);
+        } else {
+            final Locale inLocale = getConfiguration().getCore().getRuntime().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault());
+            format = NumberFormat.getNumberInstance(inLocale);
+        }
     }
 
     public void setLocale(final Locale l) {

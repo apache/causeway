@@ -1187,6 +1187,12 @@ public class IsisConfiguration {
             public static class BigInteger {
                 private String format;
             }
+
+            private final BigDecimal bigDecimal = new BigDecimal();
+            @Data
+            public static class BigDecimal {
+                private String format;
+            }
         }
 
         private final JavaTime javaTime = new JavaTime();
@@ -1241,7 +1247,7 @@ public class IsisConfiguration {
             TIMESTAMP, 
             TIME,
             
-            DECIMAL, BYTE, DOUBLE, FLOAT, LONG, SHORT,
+            BYTE, DOUBLE, FLOAT, LONG, SHORT,
             PERCENTAGE
         }
         
