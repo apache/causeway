@@ -57,14 +57,14 @@ groups+= new PropertyGroup() {{
     prefix = "isis.applib"
     name = "Applib"
     description = "Default configuration for applib annotations"
-    searchOrder = 2
+    searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
     prefix = "isis.core.meta-model"
     name = "Core MetaModel"
     description = "The component responsible for building and validating the metamodel"
-    searchOrder = 2
+    searchOrder = 501
 }}
 
 
@@ -72,14 +72,14 @@ groups+= new PropertyGroup() {{
     prefix = "isis.core.meta-model.introspector"
     name = "Core MetaModel Introspection"
     description = "Configuration of the introspector component that actually builds the metamodel by introspecting the domain object classes"
-    searchOrder = 1
+    searchOrder = 100
 }}
 
 groups+= new PropertyGroup() {{
     prefix = "isis.core.meta-model.validator"
     name = "MetaModel Validator"
     description = "Configuration of the validator component that checks the well-formedness of the built metamodel (how strict to be etc.)"
-    searchOrder = 1
+    searchOrder = 101
 }}
 
 groups+= new PropertyGroup() {{
@@ -95,7 +95,7 @@ groups+= new PropertyGroup() {{
     name = "Core Runtime Services configurations"
     description = "Configuration of individual domain services"
     properties: []
-    searchOrder = 501
+    searchOrder = 101
 }}
 
 groups+= new PropertyGroup() {{
@@ -103,7 +103,7 @@ groups+= new PropertyGroup() {{
     name = "Shiro Security Implementation"
     description = "Configuration of the Shiro implementation of the Authenticator and Authorizor APIs"
     properties: []
-    searchOrder = 1
+    searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
@@ -119,7 +119,7 @@ groups+= new PropertyGroup() {{
     name = "DataNucleus Configuration"
     description = "Passed thru directly to DataNucleus, for the most part unused by Apache Isis itself"
     properties: []
-    searchOrder = 500
+    searchOrder = 100
 }}
 
 groups+= new PropertyGroup() {{
