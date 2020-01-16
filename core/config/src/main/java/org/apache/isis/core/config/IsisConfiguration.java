@@ -1172,9 +1172,21 @@ public class IsisConfiguration {
         @Data
         public static class Primitives {
 
-            private final Integer integer = new Integer();
+            // capitalized to avoid clash with keyword
+            private final Int Int = new Int();
             @Data
-            public static class Integer {
+            public static class Int {
+                private String format;
+            }
+        }
+
+        private final JavaLang javaLang = new JavaLang();
+        @Data
+        public static class JavaLang {
+            // capitalized to avoid clash with keyword
+            private final Byte Byte = new Byte();
+            @Data
+            public static class Byte {
                 private String format;
             }
         }
@@ -1247,7 +1259,7 @@ public class IsisConfiguration {
             TIMESTAMP, 
             TIME,
             
-            BYTE, DOUBLE, FLOAT, LONG, SHORT,
+            DOUBLE, FLOAT, LONG, SHORT,
             PERCENTAGE
         }
         

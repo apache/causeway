@@ -622,11 +622,15 @@ standalone-collection.bulk-load
 {nbsp}{nbsp}java-math.big-integer.format +
 
 isis.value-types. +
-{nbsp}{nbsp}primitives.integer.format
+{nbsp}{nbsp}primitives.int.format
 
 |isis.value.format["decimal"]
 |isis.value-types. +
 {nbsp}{nbsp}java-math.big-decimal.format
+
+|isis.value.format["byte"]
+|isis.value-types. +
+{nbsp}{nbsp}java-lang.byte.format
 
 |
 |

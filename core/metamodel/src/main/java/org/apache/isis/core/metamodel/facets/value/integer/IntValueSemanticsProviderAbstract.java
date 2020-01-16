@@ -48,7 +48,7 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
 
     public IntValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Integer> adaptedClass) {
         super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        final String formatRequired = getConfiguration().getValueTypes().getPrimitives().getInteger().getFormat();
+        final String formatRequired = getConfiguration().getValueTypes().getPrimitives().getInt().getFormat();
 
         NumberFormat result;
         if (formatRequired != null) {

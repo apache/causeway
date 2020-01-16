@@ -1,6 +1,14 @@
 {
   "properties": [
     {
+      "name": "isis.value-types.primitives.integer.format",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "isis.value-types.java-lang.byte.format",
+      "type": "java.lang.String"
+    },
+    {
       "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionFactoryName"
     },
     {
