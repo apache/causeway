@@ -1164,12 +1164,57 @@ public class IsisConfiguration {
         }
     }
 
+    private final ValueTypes valueTypes = new ValueTypes();
+    @Data
+    public static class ValueTypes {
+
+        private final Primitives primitives = new Primitives();
+        @Data
+        public static class Primitives {
+
+            private final Integer integer = new Integer();
+            @Data
+            public static class Integer {
+                private String format;
+            }
+        }
+
+        private final JavaMath javaMath = new JavaMath();
+        @Data
+        public static class JavaMath {
+            private final BigInteger bigInteger = new BigInteger();
+            @Data
+            public static class BigInteger {
+                private String format;
+            }
+        }
+
+        private final JavaTime javaTime = new JavaTime();
+        @Data
+        public static class JavaTime {
+
+        }
+
+        private final JavaUtil javaUtil = new JavaUtil();
+        @Data
+        public static class JavaUtil {
+
+        }
+
+        private final Joda joda = new Joda();
+        @Data
+        public static class Joda {
+
+        }
+
+
+    }
 
     //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
     private final Value value = new Value();
     @Data
     public static class Value {
-        
+
         private Map<String, String> format = new HashMap<>();
         
         public enum FormatIdentifier {
@@ -1196,7 +1241,7 @@ public class IsisConfiguration {
             TIMESTAMP, 
             TIME,
             
-            INT, DECIMAL, BYTE, DOUBLE, FLOAT, LONG, SHORT, 
+            DECIMAL, BYTE, DOUBLE, FLOAT, LONG, SHORT,
             PERCENTAGE
         }
         

@@ -159,7 +159,7 @@ public class V {
     }
 
     /**
-     * Converts {@link java.lang.String}s to {@link java.lang.BigInteger}, but also recognizing the
+     * Converts {@link java.lang.String}s to {@link java.math.BigInteger}, but also recognizing the
      * keyword 'null'.
      */
     public static class BigInteger extends Transformer<java.math.BigInteger> {

@@ -617,6 +617,12 @@ standalone-collection.bulk-load
 |isis.timezone
 |isis.core.runtime.timezone
 
+|isis.value.format["int"]
+|isis.value-types. +
+{nbsp}{nbsp}java-math.big-integer.format +
+
+isis.value-types. +
+{nbsp}{nbsp}primitives.integer.format
 
 |
 |
